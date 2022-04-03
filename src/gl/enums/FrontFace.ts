@@ -7,9 +7,9 @@ export enum FrontFace
     /**
      * Clock-wise winding.
      */
-    CW = "CW",
+    CW = 'CW',
     /**
      *  Counter-clock-wise winding.
      */
-    CCW = "CCW",
+    CCW = 'CCW',
 }

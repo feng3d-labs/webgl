@@ -1,5 +1,5 @@
-import { RenderParams } from "../data/RenderParams";
-import { shaderMacroUtils } from "./ShaderMacroUtils";
+import { RenderParams } from '../data/RenderParams';
+import { shaderMacroUtils } from './ShaderMacroUtils';
 
 /**
  * 着色器库，由shader.ts初始化
@@ -38,6 +38,7 @@ export class ShaderLib
     get shaderConfig()
     {
         this._shaderConfig = this._shaderConfig || { shaders: {}, modules: {} };
+
         return this._shaderConfig;
     }
     set shaderConfig(v)
@@ -54,17 +55,18 @@ export class ShaderLib
     getShader(shaderName: string)
     {
         if (this._shaderCache[shaderName])
-            return this._shaderCache[shaderName];
+        { return this._shaderCache[shaderName]; }
 
-        var shader = shaderlib.shaderlib.shaderConfig.shaders[shaderName];
+        const shader = shaderlib.shaderlib.shaderConfig.shaders[shaderName];
         //
-        var vertex = shaderlib.uninclude(shader.vertex);
+        const vertex = shaderlib.uninclude(shader.vertex);
         //
-        var fragment = shaderlib.uninclude(shader.fragment);
-        var vertexMacroVariables = shaderMacroUtils.getMacroVariablesFromCode(vertex);
-        var fragmentMacroVariables = shaderMacroUtils.getMacroVariablesFromCode(fragment);
+        const fragment = shaderlib.uninclude(shader.fragment);
+        const vertexMacroVariables = shaderMacroUtils.getMacroVariablesFromCode(vertex);
+        const fragmentMacroVariables = shaderMacroUtils.getMacroVariablesFromCode(fragment);
 
-        this._shaderCache[shaderName] = { vertex: vertex, fragment: fragment, vertexMacroVariables: vertexMacroVariables, fragmentMacroVariables: fragmentMacroVariables };
+        this._shaderCache[shaderName] = { vertex, fragment, vertexMacroVariables, fragmentMacroVariables };
+
         return this._shaderCache[shaderName];
     }
 
@@ -73,13 +75,13 @@ export class ShaderLib
      */
     uninclude(shaderCode: string)
     {
-        //#include 正则表达式
-        var includeRegExp = /#include<(.+)>/g;
+        // #include 正则表达式
+        const includeRegExp = /#include<(.+)>/g;
         //
-        var match = includeRegExp.exec(shaderCode);
+        let match = includeRegExp.exec(shaderCode);
         while (match !== null)
         {
-            var moduleshader = this.shaderConfig.modules[match[1]];
+            let moduleshader = this.shaderConfig.modules[match[1]];
             if (!moduleshader)
             {
                 debugger;
@@ -90,6 +92,7 @@ export class ShaderLib
             includeRegExp.lastIndex = 0;
             match = includeRegExp.exec(shaderCode);
         }
+
         return shaderCode;
     }
 

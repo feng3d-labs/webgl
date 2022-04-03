@@ -7,15 +7,15 @@ export enum BlendEquation
     /**
      *  source + destination
      */
-    FUNC_ADD = "FUNC_ADD",
+    FUNC_ADD = 'FUNC_ADD',
     /**
      * source - destination
      */
-    FUNC_SUBTRACT = "FUNC_SUBTRACT",
+    FUNC_SUBTRACT = 'FUNC_SUBTRACT',
     /**
      * destination - source
      */
-    FUNC_REVERSE_SUBTRACT = "FUNC_REVERSE_SUBTRACT",
+    FUNC_REVERSE_SUBTRACT = 'FUNC_REVERSE_SUBTRACT',
     // /**
     //  * When using the EXT_blend_minmax extension:
     //  * Minimum of source and destination

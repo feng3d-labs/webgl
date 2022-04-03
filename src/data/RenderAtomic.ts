@@ -1,11 +1,11 @@
-import { Lazy, lazy, LazyObject } from "@feng3d/polyfill";
-import { ShaderMacro } from "../shader/Macro";
-import { Attribute } from "./Attribute";
-import { Attributes } from "./Attributes";
-import { Index } from "./Index";
-import { RenderParams } from "./RenderParams";
-import { Shader } from "./Shader";
-import { LazyUniforms, Uniforms } from "./Uniform";
+import { Lazy, lazy, LazyObject } from '@feng3d/polyfill';
+import { ShaderMacro } from '../shader/Macro';
+import { Attribute } from './Attribute';
+import { Attributes } from './Attributes';
+import { Index } from './Index';
+import { RenderParams } from './RenderParams';
+import { Shader } from './Shader';
+import { LazyUniforms, Uniforms } from './Uniform';
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -55,6 +55,7 @@ export class RenderAtomic
     getIndexBuffer(): Index
     {
         if (this.indexBuffer !== undefined) return this.indexBuffer;
+
         return (this.next && this.next.getIndexBuffer());
     }
 
@@ -62,12 +63,14 @@ export class RenderAtomic
     {
         this.next && this.next.getAttributes(attributes);
         Object.assign(attributes, this.attributes);
+
         return attributes;
     }
 
     getAttributeByKey(key: string): Attribute
     {
         if (this.attributes[key] !== undefined) return this.attributes[key];
+
         return (this.next && this.next.getAttributeByKey(key));
     }
 
@@ -75,24 +78,28 @@ export class RenderAtomic
     {
         this.next && this.next.getUniforms(uniforms);
         Object.assign(uniforms, this.uniforms);
+
         return uniforms;
     }
 
     getUniformByKey(key: string): Uniforms
     {
         if (this.uniforms[key] !== undefined) return lazy.getvalue(this.uniforms[key]);
+
         return (this.next && this.next.getUniformByKey(key));
     }
 
     getInstanceCount(): number
     {
         if (this.instanceCount !== undefined) return lazy.getvalue(this.instanceCount);
+
         return this.next && this.next.getInstanceCount();
     }
 
     getShader(): Shader
     {
         if (this.shader !== undefined) return this.shader;
+
         return this.next && this.next.getShader();
     }
 
@@ -100,6 +107,7 @@ export class RenderAtomic
     {
         this.next && this.next.getRenderParams(renderParams);
         Object.assign(renderParams, this.renderParams);
+
         return renderParams;
     }
 
@@ -107,6 +115,7 @@ export class RenderAtomic
     {
         this.next && this.next.getShaderMacro(shaderMacro);
         Object.assign(shaderMacro, this.shaderMacro);
+
         return shaderMacro;
     }
 }

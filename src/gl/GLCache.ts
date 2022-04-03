@@ -1,17 +1,24 @@
-import { Attribute } from "../data/Attribute";
-import { FrameBuffer } from "../data/FrameBuffer";
-import { Index } from "../data/Index";
-import { CompileShaderResult } from "../data/Shader";
-import { Texture } from "../data/Texture";
-import { RenderBuffer } from "../RenderBuffer";
-import { GL } from "./GL";
+import { Attribute } from '../data/Attribute';
+import { FrameBuffer } from '../data/FrameBuffer';
+import { Index } from '../data/Index';
+import { CompileShaderResult } from '../data/Shader';
+import { Texture } from '../data/Texture';
+import { RenderBuffer } from '../RenderBuffer';
+import { GL } from './GL';
 
 export interface GLCache extends MixinsGLCache { }
+
+declare global
+{
+    interface MixinsGLCache
+    {
+    }
+}
 
 /**
  * GL 缓存
  */
-export class GLCache 
+export class GLCache
 {
     compileShaderResults: { [key: string]: CompileShaderResult } = {};
 

@@ -1,6 +1,6 @@
 /**
- * A GLenum specifying the test function. The default function is gl.ALWAYS. 
- * 
+ * A GLenum specifying the test function. The default function is gl.ALWAYS.
+ *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
  */
 export enum StencilFunc
@@ -8,39 +8,39 @@ export enum StencilFunc
     /**
      * Never pass.
      */
-    NEVER = "NEVER",
+    NEVER = 'NEVER',
     /**
      * Pass if (ref & mask) <  (stencil & mask).
      */
-    LESS = "LESS",
+    LESS = 'LESS',
 
     /**
      * Pass if (ref & mask) = (stencil & mask).
      */
-    EQUAL = "EQUAL",
+    EQUAL = 'EQUAL',
 
     /**
      * Pass if (ref & mask) <= (stencil & mask).
      */
-    LEQUAL = "LEQUAL",
+    LEQUAL = 'LEQUAL',
 
     /**
      * Pass if (ref & mask) > (stencil & mask).
      */
-    GREATER = "GREATER",
+    GREATER = 'GREATER',
 
     /**
      * Pass if (ref & mask) !== (stencil & mask).
      */
-    NOTEQUAL = "NOTEQUAL",
+    NOTEQUAL = 'NOTEQUAL',
 
     /**
      * Pass if (ref & mask) >= (stencil & mask).
      */
-    GEQUAL = "GEQUAL",
+    GEQUAL = 'GEQUAL',
 
     /**
      * Always pass.
      */
-    ALWAYS = "ALWAYS",
+    ALWAYS = 'ALWAYS',
 }

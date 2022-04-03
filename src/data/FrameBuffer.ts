@@ -1,4 +1,4 @@
-import { GL } from "../gl/GL";
+import { GL } from '../gl/GL';
 
 export class FrameBuffer
 {
@@ -16,17 +16,19 @@ export class FrameBuffer
         }
 
         // Create a framebuffer object (FBO)
-        var buffer = gl.cache.frameBuffers.get(frameBuffer);
+        let buffer = gl.cache.frameBuffers.get(frameBuffer);
         if (!buffer)
         {
             buffer = gl.createFramebuffer();
             if (!buffer)
             {
                 alert('Failed to create frame buffer object');
+
                 return null;
             }
             gl.cache.frameBuffers.set(frameBuffer, buffer);
         }
+
         return buffer;
     }
 
@@ -35,9 +37,9 @@ export class FrameBuffer
      */
     static clear(frameBuffer: FrameBuffer)
     {
-        GL.glList.forEach(gl =>
+        GL.glList.forEach((gl) =>
         {
-            var buffer = gl.cache.frameBuffers.get(frameBuffer);
+            const buffer = gl.cache.frameBuffers.get(frameBuffer);
             if (buffer)
             {
                 gl.deleteFramebuffer(buffer);

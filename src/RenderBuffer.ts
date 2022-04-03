@@ -1,14 +1,13 @@
-import { watch } from "@feng3d/watcher";
-import { GL } from "./gl/GL";
+import { watch } from '@feng3d/watcher';
+import { GL } from './gl/GL';
 
 export class RenderBuffer
 {
+    @watch('invalidate')
+        OFFSCREEN_WIDTH = 1024;
 
-    @watch("invalidate")
-    OFFSCREEN_WIDTH = 1024;
-
-    @watch("invalidate")
-    OFFSCREEN_HEIGHT = 1024;
+    @watch('invalidate')
+        OFFSCREEN_HEIGHT = 1024;
 
     /**
      * 是否失效
@@ -25,7 +24,7 @@ export class RenderBuffer
 
     /**
      * 激活
-     * @param gl 
+     * @param gl
      */
     static active(gl: GL, renderBuffer: RenderBuffer)
     {
@@ -35,7 +34,7 @@ export class RenderBuffer
             renderBuffer._invalid = false;
         }
 
-        var buffer = gl.cache.renderBuffers.get(renderBuffer);
+        let buffer = gl.cache.renderBuffers.get(renderBuffer);
         if (!buffer)
         {
             // Create a renderbuffer object and Set its size and parameters
@@ -43,12 +42,14 @@ export class RenderBuffer
             if (!buffer)
             {
                 alert('Failed to create renderbuffer object');
+
                 return;
             }
             gl.cache.renderBuffers.set(renderBuffer, buffer);
             gl.bindRenderbuffer(gl.RENDERBUFFER, buffer);
             gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, renderBuffer.OFFSCREEN_WIDTH, renderBuffer.OFFSCREEN_HEIGHT);
         }
+
         return buffer;
     }
 
@@ -57,9 +58,9 @@ export class RenderBuffer
      */
     static clear(renderBuffer: RenderBuffer)
     {
-        GL.glList.forEach(gl =>
+        GL.glList.forEach((gl) =>
         {
-            var buffer = gl.cache.renderBuffers.get(renderBuffer);
+            const buffer = gl.cache.renderBuffers.get(renderBuffer);
             if (buffer)
             {
                 gl.deleteRenderbuffer(buffer);

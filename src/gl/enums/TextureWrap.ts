@@ -8,7 +8,7 @@ export enum TextureWrap
     /**
      * (default value)
      */
-    REPEAT = "REPEAT",
-    CLAMP_TO_EDGE = "CLAMP_TO_EDGE",
-    MIRRORED_REPEAT = "MIRRORED_REPEAT",
+    REPEAT = 'REPEAT',
+    CLAMP_TO_EDGE = 'CLAMP_TO_EDGE',
+    MIRRORED_REPEAT = 'MIRRORED_REPEAT',
 }

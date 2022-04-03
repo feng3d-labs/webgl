@@ -1,4 +1,3 @@
-
 /**
  * 纹理类型
  * A GLenum specifying the binding point (target). Possible values:
@@ -9,11 +8,11 @@ export enum TextureType
     /**
      * gl.TEXTURE_2D: A two-dimensional texture.
      */
-    TEXTURE_2D = "TEXTURE_2D",
+    TEXTURE_2D = 'TEXTURE_2D',
     /**
      * gl.TEXTURE_CUBE_MAP: A cube-mapped texture.
      */
-    TEXTURE_CUBE_MAP = "TEXTURE_CUBE_MAP",
+    TEXTURE_CUBE_MAP = 'TEXTURE_CUBE_MAP',
     // /**
     //  * using a WebGL 2 context
     //  * gl.TEXTURE_3D: A three-dimensional texture.

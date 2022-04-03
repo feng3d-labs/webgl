@@ -1,8 +1,8 @@
-import { GL } from "./GL";
+import { GL } from './GL';
 
 /**
  * WEBGL 支持功能
- * 
+ *
  * @see https://webglreport.com
  * @see http://html5test.com
  */
@@ -76,10 +76,10 @@ export class GLCapabilities
     /**
      * Shader中支持浮点类型的最高精度
      */
-    maxPrecision: "highp" | "mediump" | "lowp";
+    maxPrecision: 'highp' | 'mediump' | 'lowp';
 
     /**
-     * 
+     *
      */
     maxSamples: number;
 
@@ -95,8 +95,8 @@ export class GLCapabilities
         {
             if (precision === 'highp')
             {
-                if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0 &&
-                    gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
+                if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
+                    && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
                 {
                     return 'highp';
                 }
@@ -104,17 +104,18 @@ export class GLCapabilities
             }
             if (precision === 'mediump')
             {
-                if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0 &&
-                    gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
+                if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
+                    && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
                 {
                     return 'mediump';
                 }
             }
+
             return 'lowp';
         }
 
         this.isWebGL2 = false;
-        var gl2: WebGL2RenderingContext = null;
+        let gl2: WebGL2RenderingContext = null;
         if (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext)
         {
             gl2 = gl;
@@ -123,7 +124,8 @@ export class GLCapabilities
         if (gl.extensions.EXT_texture_filter_anisotropic)
         {
             this.maxAnisotropy = gl.getParameter(gl.extensions.EXT_texture_filter_anisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-        } else
+        }
+        else
         {
             this.maxAnisotropy = 0;
         }
@@ -146,6 +148,5 @@ export class GLCapabilities
         this.maxSamples = this.isWebGL2 ? gl.getParameter(gl2.MAX_SAMPLES) : 0;
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
     }
-
 }
 

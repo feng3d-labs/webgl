@@ -1,20 +1,19 @@
 import { objectIsEmpty } from '@feng3d/polyfill';
-import { GL } from "../gl/GL";
-import { ShaderMacro } from "../shader/Macro";
-import { shaderlib } from "../shader/ShaderLib";
+import { GL } from '../gl/GL';
+import { ShaderMacro } from '../shader/Macro';
+import { shaderlib } from '../shader/ShaderLib';
 
 /**
  * shader
  */
 export class Shader
 {
-
     /**
      * shader 中的 宏
      */
     shaderMacro: ShaderMacro = {} as any;
 
-    constructor(shaderName = "")
+    constructor(shaderName = '')
     {
         this.shaderName = shaderName;
     }
@@ -32,19 +31,22 @@ export class Shader
     {
         this.updateShaderCode();
 
-        var shaderKey = this.vertex + this.fragment;
-        var result = gl.cache.compileShaderResults[shaderKey];
+        const shaderKey = this.vertex + this.fragment;
+        let result = gl.cache.compileShaderResults[shaderKey];
         if (result) return result;
 
-        //渲染程序
+        // 渲染程序
         try
         {
             result = gl.cache.compileShaderResults[shaderKey] = this.compileShaderProgram(gl, this.vertex, this.fragment);
-        } catch (error)
+        }
+        catch (error)
         {
-            console.error(`${this.shaderName} 编译失败！\n${error}`)
+            console.error(`${this.shaderName} 编译失败！\n${error}`);
+
             return null;
         }
+
         return result;
     }
 
@@ -59,7 +61,7 @@ export class Shader
     /**
      * 片段着色器代码
      */
-    private fragment: string
+    private fragment: string;
 
     /**
      * 更新渲染代码
@@ -69,11 +71,11 @@ export class Shader
         if (!this.shaderName) return;
 
         // 获取着色器代码
-        var result = shaderlib.getShader(this.shaderName);
+        const result = shaderlib.getShader(this.shaderName);
 
-        var vMacroCode = this.getMacroCode(result.vertexMacroVariables, this.shaderMacro);
+        const vMacroCode = this.getMacroCode(result.vertexMacroVariables, this.shaderMacro);
         this.vertex = vMacroCode + result.vertex;
-        var fMacroCode = this.getMacroCode(result.fragmentMacroVariables, this.shaderMacro);
+        const fMacroCode = this.getMacroCode(result.fragmentMacroVariables, this.shaderMacro);
         this.fragment = fMacroCode + result.fragment;
     }
 
@@ -86,7 +88,7 @@ export class Shader
      */
     private compileShaderCode(gl: GL, type: number, code: string)
     {
-        var shader = gl.createShader(type);
+        const shader = gl.createShader(type);
         if (objectIsEmpty(shader))
         {
             debugger;
@@ -97,13 +99,13 @@ export class Shader
         gl.compileShader(shader);
 
         // 检查编译结果
-        var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+        const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
         if (!compiled)
         {
-            var error = gl.getShaderInfoLog(shader);
+            const error = gl.getShaderInfoLog(shader);
             gl.deleteShader(shader);
             debugger;
-            throw 'Failed to compile shader: ' + error;
+            throw `Failed to compile shader: ${error}`;
         }
 
         return shader;
@@ -112,11 +114,11 @@ export class Shader
     private createLinkProgram(gl: GL, vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
         // 创建程序对象
-        var program = gl.createProgram();
+        const program = gl.createProgram();
         if (!program)
         {
             debugger;
-            throw "创建 WebGLProgram 失败！"
+            throw '创建 WebGLProgram 失败！';
         }
 
         // 添加着色器
@@ -127,16 +129,17 @@ export class Shader
         gl.linkProgram(program);
 
         // 检查结果
-        var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+        const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
         if (!linked)
         {
-            var error = gl.getProgramInfoLog(program);
+            const error = gl.getProgramInfoLog(program);
             gl.deleteProgram(program);
             gl.deleteShader(fragmentShader);
             gl.deleteShader(vertexShader);
             debugger;
-            throw 'Failed to link program: ' + error;
+            throw `Failed to link program: ${error}`;
         }
+
         return program;
     }
 
@@ -144,42 +147,42 @@ export class Shader
     {
         // 创建着色器程序
         // 编译顶点着色器
-        var vertexShader = this.compileShaderCode(gl, gl.VERTEX_SHADER, vshader);
+        const vertexShader = this.compileShaderCode(gl, gl.VERTEX_SHADER, vshader);
 
         // 编译片段着色器
-        var fragmentShader = this.compileShaderCode(gl, gl.FRAGMENT_SHADER, fshader);
+        const fragmentShader = this.compileShaderCode(gl, gl.FRAGMENT_SHADER, fshader);
 
         // 创建着色器程序
-        var shaderProgram = this.createLinkProgram(gl, vertexShader, fragmentShader);
+        const shaderProgram = this.createLinkProgram(gl, vertexShader, fragmentShader);
 
-        //获取属性信息
-        var numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
-        var attributes: { [name: string]: AttributeInfo } = {};
+        // 获取属性信息
+        const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
+        const attributes: { [name: string]: AttributeInfo } = {};
         var i = 0;
         while (i < numAttributes)
         {
             var activeInfo = gl.getActiveAttrib(shaderProgram, i++);
             attributes[activeInfo.name] = { name: activeInfo.name, size: activeInfo.size, type: activeInfo.type, location: gl.getAttribLocation(shaderProgram, activeInfo.name) };
         }
-        //获取uniform信息
-        var numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
-        var uniforms: { [name: string]: UniformInfo } = {};
+        // 获取uniform信息
+        const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
+        const uniforms: { [name: string]: UniformInfo } = {};
         var i = 0;
-        var textureID = 0;
+        let textureID = 0;
         while (i < numUniforms)
         {
             var activeInfo = gl.getActiveUniform(shaderProgram, i++);
-            var reg = /(\w+)/g;
+            const reg = /(\w+)/g;
 
-            var name = activeInfo.name;
-            var names = [name];
+            let name = activeInfo.name;
+            const names = [name];
             if (activeInfo.size > 1)
             {
-                console.assert(name.substr(-3, 3) === "[0]");
-                var baseName = name.substring(0, name.length - 3);
-                for (var j = 1; j < activeInfo.size; j++)
+                console.assert(name.substr(-3, 3) === '[0]');
+                const baseName = name.substring(0, name.length - 3);
+                for (let j = 1; j < activeInfo.size; j++)
                 {
-                    names[j] = baseName + `[${j}]`;
+                    names[j] = `${baseName}[${j}]`;
                 }
             }
 
@@ -187,12 +190,12 @@ export class Shader
             {
                 name = names[j];
                 var result: RegExpExecArray;
-                var paths: string[] = [];
+                const paths: string[] = [];
                 while (result = reg.exec(name))
                 {
                     paths.push(result[1]);
                 }
-                uniforms[name] = { name: paths[0], paths: paths, size: activeInfo.size, type: activeInfo.type, location: gl.getUniformLocation(shaderProgram, name), textureID: textureID };
+                uniforms[name] = { name: paths[0], paths, size: activeInfo.size, type: activeInfo.type, location: gl.getUniformLocation(shaderProgram, name), textureID };
                 if (activeInfo.type === gl.SAMPLER_2D || activeInfo.type === gl.SAMPLER_CUBE)
                 {
                     textureID++;
@@ -200,24 +203,26 @@ export class Shader
             }
         }
 
-        return { program: shaderProgram, vertex: vertexShader, fragment: fragmentShader, attributes: attributes, uniforms: uniforms };
+        return { program: shaderProgram, vertex: vertexShader, fragment: fragmentShader, attributes, uniforms };
     }
 
     private getMacroCode(variables: string[], valueObj: Object)
     {
-        var macroHeader = "";
-        variables.forEach(macroName =>
+        let macroHeader = '';
+        variables.forEach((macroName) =>
         {
-            var value = valueObj[macroName];
-            if (typeof value === "boolean")
+            const value = valueObj[macroName];
+            if (typeof value === 'boolean')
             {
                 value && (macroHeader += `#define ${macroName}\n`);
-            } else if (typeof value === "number")
+            }
+            else if (typeof value === 'number')
             {
                 macroHeader += `#define ${macroName} ${value}\n`;
             }
         });
-        return macroHeader.length > 0 ? (macroHeader + "\n") : macroHeader;
+
+        return macroHeader.length > 0 ? (`${macroHeader}\n`) : macroHeader;
     }
 }
 

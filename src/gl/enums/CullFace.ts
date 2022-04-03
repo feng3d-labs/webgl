@@ -7,17 +7,17 @@ export enum CullFace
     /**
      * 关闭裁剪面
      */
-    NONE = "NONE",
+    NONE = 'NONE',
     /**
      * 正面
      */
-    FRONT = "FRONT",
+    FRONT = 'FRONT',
     /**
      * 背面
      */
-    BACK = "BACK",
+    BACK = 'BACK',
     /**
      * 正面与背面
      */
-    FRONT_AND_BACK = "FRONT_AND_BACK",
+    FRONT_AND_BACK = 'FRONT_AND_BACK',
 }

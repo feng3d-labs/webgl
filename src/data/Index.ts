@@ -1,6 +1,6 @@
-import { watch } from "@feng3d/watcher";
-import { GLArrayType } from "../gl/enums/GLArrayType";
-import { GL } from "../gl/GL";
+import { watch } from '@feng3d/watcher';
+import { GLArrayType } from '../gl/enums/GLArrayType';
+import { GL } from '../gl/GL';
 
 /**
  * 索引渲染数据
@@ -11,8 +11,8 @@ export class Index
     /**
      * 索引数据
      */
-    @watch("invalidate")
-    indices: number[];
+    @watch('invalidate')
+        indices: number[];
 
     constructor(indices?: number[])
     {
@@ -30,7 +30,8 @@ export class Index
     get count()
     {
         if (!this.indices)
-            return 0;
+        { return 0; }
+
         return this.indices.length;
     }
 
@@ -51,11 +52,11 @@ export class Index
 
     /**
      * 激活缓冲
-     * @param gl 
+     * @param gl
      */
     static active(gl: GL, index: Index)
     {
-        var buffer = Index.getBuffer(gl, index);
+        const buffer = Index.getBuffer(gl, index);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 
@@ -69,14 +70,14 @@ export class Index
             this.clear(index);
             index._invalid = false;
         }
-        var buffer = gl.cache.indices.get(index);
+        let buffer = gl.cache.indices.get(index);
         if (!buffer)
         {
             buffer = gl.createBuffer();
             if (!buffer)
             {
-                console.error("createBuffer 失败！");
-                throw "";
+                console.error('createBuffer 失败！');
+                throw '';
             }
             gl.cache.indices.set(index, buffer);
 
@@ -85,6 +86,7 @@ export class Index
 
             index.glList.push(gl);
         }
+
         return buffer;
     }
 
@@ -95,9 +97,9 @@ export class Index
      */
     static clear(index: Index)
     {
-        index.glList.forEach(gl =>
+        index.glList.forEach((gl) =>
         {
-            var buffer = gl.cache.indices.get(index);
+            const buffer = gl.cache.indices.get(index);
             if (buffer)
             {
                 gl.deleteBuffer(buffer);

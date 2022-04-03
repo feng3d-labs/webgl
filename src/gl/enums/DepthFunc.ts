@@ -1,6 +1,6 @@
 /**
  * 深度检测方法枚举
- * A GLenum specifying the depth comparison function, which sets the conditions under which the pixel will be drawn. The default value is gl.LESS. 
+ * A GLenum specifying the depth comparison function, which sets the conditions under which the pixel will be drawn. The default value is gl.LESS.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
  */
 export enum DepthFunc
@@ -8,33 +8,33 @@ export enum DepthFunc
     /**
      * (never pass)
      */
-    NEVER = "NEVER",
+    NEVER = 'NEVER',
     /**
      *  (pass if the incoming value is less than the depth buffer value)
      */
-    LESS = "LESS",
+    LESS = 'LESS',
     /**
      *  (pass if the incoming value equals the the depth buffer value)
      */
-    EQUAL = "EQUAL",
+    EQUAL = 'EQUAL',
     /**
      *  (pass if the incoming value is less than or equal to the depth buffer value)
      */
-    LEQUAL = "LEQUAL",
+    LEQUAL = 'LEQUAL',
     /**
      * (pass if the incoming value is greater than the depth buffer value)
      */
-    GREATER = "GREATER",
+    GREATER = 'GREATER',
     /**
      * (pass if the incoming value is not equal to the depth buffer value)
      */
-    NOTEQUAL = "NOTEQUAL",
+    NOTEQUAL = 'NOTEQUAL',
     /**
      * (pass if the incoming value is greater than or equal to the depth buffer value)
      */
-    GEQUAL = "GEQUAL",
+    GEQUAL = 'GEQUAL',
     /**
      *  (always pass)
      */
-    ALWAYS = "ALWAYS",
+    ALWAYS = 'ALWAYS',
 }

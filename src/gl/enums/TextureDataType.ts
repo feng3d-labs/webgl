@@ -8,19 +8,19 @@ export enum TextureDataType
     /**
      * 8 bits per channel for gl.RGBA
      */
-    UNSIGNED_BYTE = "UNSIGNED_BYTE",
+    UNSIGNED_BYTE = 'UNSIGNED_BYTE',
     /**
      * 5 red bits, 6 green bits, 5 blue bits.
      */
-    UNSIGNED_SHORT_5_6_5 = "UNSIGNED_SHORT_5_6_5",
+    UNSIGNED_SHORT_5_6_5 = 'UNSIGNED_SHORT_5_6_5',
     /**
      * 4 red bits, 4 green bits, 4 blue bits, 4 alpha bits.
      */
-    UNSIGNED_SHORT_4_4_4_4 = "UNSIGNED_SHORT_4_4_4_4",
+    UNSIGNED_SHORT_4_4_4_4 = 'UNSIGNED_SHORT_4_4_4_4',
     /**
      * 5 red bits, 5 green bits, 5 blue bits, 1 alpha bit.
      */
-    UNSIGNED_SHORT_5_5_5_1 = "UNSIGNED_SHORT_5_5_5_1",
+    UNSIGNED_SHORT_5_5_5_1 = 'UNSIGNED_SHORT_5_5_5_1',
     // /**
     //  * When using the WEBGL_depth_texture extension:
     //  */

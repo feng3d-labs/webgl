@@ -8,23 +8,23 @@ export enum TextureFormat
     /**
      * Discards the red, green and blue components and reads the alpha component.
      */
-    ALPHA = "ALPHA",
+    ALPHA = 'ALPHA',
     /**
      *  Discards the alpha components and reads the red, green and blue components.
      */
-    RGB = "RGB",
+    RGB = 'RGB',
     /**
      * Red, green, blue and alpha components are read from the color buffer.
      */
-    RGBA = "RGBA",
+    RGBA = 'RGBA',
     /**
      * Each color component is a luminance component, alpha is 1.0.
      */
-    LUMINANCE = "LUMINANCE",
+    LUMINANCE = 'LUMINANCE',
     /**
      * Each component is a luminance/alpha component.
      */
-    LUMINANCE_ALPHA = "LUMINANCE_ALPHA",
+    LUMINANCE_ALPHA = 'LUMINANCE_ALPHA',
 
     // /**
     //  * When using the WEBGL_depth_texture extension:

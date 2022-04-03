@@ -10,7 +10,7 @@ export enum ColorMask
     A = 8,
     RGB = R | G | B,
     /**
-     * 
+     *
      */
     RGBA = R | G | B | A,
 }

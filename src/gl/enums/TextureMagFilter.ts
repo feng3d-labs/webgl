@@ -8,6 +8,6 @@ export enum TextureMagFilter
     /**
      *  (default value)
      */
-    LINEAR = "LINEAR",
-    NEAREST = "NEAREST",
+    LINEAR = 'LINEAR',
+    NEAREST = 'NEAREST',
 }

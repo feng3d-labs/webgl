@@ -1,7 +1,7 @@
-import { serialize } from "@feng3d/serialization";
-import { watch } from "@feng3d/watcher";
-import { GLArrayType } from "../gl/enums/GLArrayType";
-import type { GL } from "../gl/GL";
+import { serialize } from '@feng3d/serialization';
+import { watch } from '@feng3d/watcher';
+import { GLArrayType } from '../gl/enums/GLArrayType';
+import type { GL } from '../gl/GL';
 
 /**
  * 属性渲染数据
@@ -10,22 +10,22 @@ import type { GL } from "../gl/GL";
 export class Attribute
 {
     @serialize
-    name: string;
+        name: string;
 
     /**
      * 属性数据
      */
     @serialize
-    @watch("invalidate")
-    data: number[];
+    @watch('invalidate')
+        data: number[];
 
     /**
      * 数据尺寸
-     * 
+     *
      * A GLint specifying the number of components per vertex attribute. Must be 1, 2, 3, or 4.
      */
     @serialize
-    size = 3;
+        size = 3;
 
     /**
      *  A GLenum specifying the data type of each component in the array. Possible values:
@@ -57,18 +57,18 @@ export class Attribute
 
     /**
      * drawElementsInstanced时将会用到的因子，表示divisor个geometry共用一个数据
-     * 
+     *
      * A GLuint specifying the number of instances that will pass between updates of the generic attribute.
      * @see https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/vertexAttribDivisorANGLE
      */
     @serialize
-    divisor = 0;
+        divisor = 0;
 
     // /**
-    //  * A GLenum specifying the intended usage pattern of the data store for optimization purposes. 
-    //  * 
+    //  * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
+    //  *
     //  * 为优化目的指定数据存储的预期使用模式的GLenum。
-    //  * 
+    //  *
     //  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
     //  */
     // @serialize
@@ -96,14 +96,14 @@ export class Attribute
     }
 
     /**
-     * 
-     * @param gl 
+     *
+     * @param gl
      * @param location A GLuint specifying the index of the vertex attribute that is to be modified.
      */
     static active(gl: GL, location: number, attribute: Attribute)
     {
         gl.enableVertexAttribArray(location);
-        var buffer = Attribute.getBuffer(gl, attribute);
+        const buffer = Attribute.getBuffer(gl, attribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.vertexAttribPointer(location, attribute.size, gl[attribute.type], attribute.normalized, attribute.stride, attribute.offset);
 
@@ -126,8 +126,8 @@ export class Attribute
             var buffer = gl.createBuffer();
             if (!buffer)
             {
-                console.error("createBuffer 失败！");
-                throw "";
+                console.error('createBuffer 失败！');
+                throw '';
             }
             gl.cache.attributes.set(attribute, buffer);
 
@@ -136,6 +136,7 @@ export class Attribute
 
             attribute.glList.push(gl);
         }
+
         return buffer;
     }
 
@@ -146,9 +147,9 @@ export class Attribute
      */
     static clear(attribute: Attribute)
     {
-        attribute.glList.forEach(gl =>
+        attribute.glList.forEach((gl) =>
         {
-            var buffer = gl.cache.attributes.get(attribute);
+            const buffer = gl.cache.attributes.get(attribute);
             if (buffer)
             {
                 gl.deleteBuffer(buffer);

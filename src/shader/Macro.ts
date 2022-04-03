@@ -1,4 +1,3 @@
-
 /**
  * 着色器宏定义
  */
@@ -19,12 +18,12 @@ export interface ShaderMacro
      */
     NUM_LIGHT: number;
 
-    /** 
+    /**
      * 点光源数量
      */
     NUM_POINTLIGHT: number;
 
-    /** 
+    /**
      * 方向光源数量
      */
     NUM_DIRECTIONALLIGHT: number;
@@ -39,12 +38,12 @@ export interface ShaderMacro
      */
     NUM_POINTLIGHT_CASTSHADOW: number;
 
-    /** 
+    /**
      * 聚光灯光源数量
      */
     NUM_SPOT_LIGHTS: number;
 
-    /** 
+    /**
      * 生成投影的聚光灯光源数量
      */
     NUM_SPOT_LIGHTS_CASTSHADOW: number;
@@ -54,7 +53,7 @@ export interface ShaderMacro
      */
     NUM_SKELETONJOINT: number;
     /**
-     * 
+     *
      */
     RotationOrder: number;
     /**
