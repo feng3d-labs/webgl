@@ -35,7 +35,7 @@ export class ShaderMacroUtils
             if (line.indexOf('#if') !== -1)
             {
                 const reg = /(\w+)/g;
-                var result: RegExpExecArray;
+                let result: RegExpExecArray;
                 while (result = reg.exec(line))
                 {
                     const key = result[1];

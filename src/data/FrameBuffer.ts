@@ -22,7 +22,7 @@ export class FrameBuffer
             buffer = gl.createFramebuffer();
             if (!buffer)
             {
-                alert('Failed to create frame buffer object');
+                console.warn('Failed to create frame buffer object');
 
                 return null;
             }

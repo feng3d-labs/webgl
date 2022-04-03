@@ -135,8 +135,8 @@ export class Texture
             switch (textureType)
             {
                 case gl.TEXTURE_CUBE_MAP:
-                    var pixels: TexImageSource[] = data.activePixels as any;
-                    var faces = [
+                    const pixels: TexImageSource[] = data.activePixels as any;
+                    const faces = [
                         gl.TEXTURE_CUBE_MAP_POSITIVE_X, gl.TEXTURE_CUBE_MAP_POSITIVE_Y, gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
                         gl.TEXTURE_CUBE_MAP_NEGATIVE_X, gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
                     ];
@@ -153,7 +153,7 @@ export class Texture
                     }
                     break;
                 case gl.TEXTURE_2D:
-                    var _pixel: TexImageSource = data.activePixels as any;
+                    const _pixel: TexImageSource = data.activePixels as any;
                     if (data.isRenderTarget)
                     {
                         gl.texImage2D(textureType, 0, format, data.OFFSCREEN_WIDTH, data.OFFSCREEN_HEIGHT, 0, format, type, null);

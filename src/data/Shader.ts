@@ -91,7 +91,6 @@ export class Shader
         const shader = gl.createShader(type);
         if (objectIsEmpty(shader))
         {
-            debugger;
             throw 'unable to create shader';
         }
 
@@ -104,7 +103,6 @@ export class Shader
         {
             const error = gl.getShaderInfoLog(shader);
             gl.deleteShader(shader);
-            debugger;
             throw `Failed to compile shader: ${error}`;
         }
 
@@ -117,7 +115,6 @@ export class Shader
         const program = gl.createProgram();
         if (!program)
         {
-            debugger;
             throw '创建 WebGLProgram 失败！';
         }
 
@@ -136,7 +133,6 @@ export class Shader
             gl.deleteProgram(program);
             gl.deleteShader(fragmentShader);
             gl.deleteShader(vertexShader);
-            debugger;
             throw `Failed to link program: ${error}`;
         }
 
@@ -161,7 +157,7 @@ export class Shader
         var i = 0;
         while (i < numAttributes)
         {
-            var activeInfo = gl.getActiveAttrib(shaderProgram, i++);
+            const activeInfo = gl.getActiveAttrib(shaderProgram, i++);
             attributes[activeInfo.name] = { name: activeInfo.name, size: activeInfo.size, type: activeInfo.type, location: gl.getAttribLocation(shaderProgram, activeInfo.name) };
         }
         // 获取uniform信息
@@ -171,7 +167,7 @@ export class Shader
         let textureID = 0;
         while (i < numUniforms)
         {
-            var activeInfo = gl.getActiveUniform(shaderProgram, i++);
+            const activeInfo = gl.getActiveUniform(shaderProgram, i++);
             const reg = /(\w+)/g;
 
             let name = activeInfo.name;
@@ -189,7 +185,7 @@ export class Shader
             for (let j = 0; j < names.length; j++)
             {
                 name = names[j];
-                var result: RegExpExecArray;
+                let result: RegExpExecArray;
                 const paths: string[] = [];
                 while (result = reg.exec(name))
                 {

@@ -294,7 +294,7 @@ export class WebGLRenderer
                     break;
                 case gl.SAMPLER_2D:
                 case gl.SAMPLER_CUBE:
-                    var textureInfo = data as Texture;
+                    const textureInfo = data as Texture;
                     // 激活纹理编号
                     gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
                     Texture.active(gl, textureInfo);
@@ -313,7 +313,6 @@ export class WebGLRenderer
             const instanceCount = ~~lazy.getvalue(renderAtomic.instanceCount);
 
             const indexBuffer = renderAtomic.indexBuffer;
-            var vertexNum = 0;
             if (indexBuffer)
             {
                 Index.active(gl, indexBuffer);
@@ -334,7 +333,7 @@ export class WebGLRenderer
             }
             else
             {
-                var vertexNum = ((attributes) =>
+                let vertexNum = ((attributes) =>
                 {
                     for (const attr in attributes)
                     {

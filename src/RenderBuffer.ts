@@ -4,10 +4,10 @@ import { GL } from './gl/GL';
 export class RenderBuffer
 {
     @watch('invalidate')
-        OFFSCREEN_WIDTH = 1024;
+    OFFSCREEN_WIDTH = 1024;
 
     @watch('invalidate')
-        OFFSCREEN_HEIGHT = 1024;
+    OFFSCREEN_HEIGHT = 1024;
 
     /**
      * 是否失效
@@ -41,7 +41,7 @@ export class RenderBuffer
             buffer = gl.createRenderbuffer(); // Create a renderbuffer object
             if (!buffer)
             {
-                alert('Failed to create renderbuffer object');
+                console.warn('Failed to create renderbuffer object');
 
                 return;
             }

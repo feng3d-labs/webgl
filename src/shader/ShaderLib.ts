@@ -84,7 +84,6 @@ export class ShaderLib
             let moduleshader = this.shaderConfig.modules[match[1]];
             if (!moduleshader)
             {
-                debugger;
                 console.error(`无法找到着色器 ${match[1]}`);
             }
             moduleshader = this.uninclude(moduleshader);
