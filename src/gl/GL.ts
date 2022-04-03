@@ -117,14 +117,21 @@ export class GL
                 gl.contextAttributes = contextAttributes;
                 break;
             }
-            catch (e) { }
+            catch (e)
+            {
+                console.warn(e);
+            }
         }
         if (!gl)
         { throw '无法初始化WEBGL'; }
         //
+        // eslint-disable-next-line no-new
         new GLCache(gl);
+        // eslint-disable-next-line no-new
         new GLExtension(gl);
+        // eslint-disable-next-line no-new
         new GLCapabilities(gl);
+        // eslint-disable-next-line no-new
         new WebGLRenderer(gl);
         //
         gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque

@@ -35,12 +35,15 @@ export class ShaderMacroUtils
             if (line.indexOf('#if') !== -1)
             {
                 const reg = /(\w+)/g;
-                let result: RegExpExecArray;
-                while (result = reg.exec(line))
+                let result: RegExpExecArray = reg.exec(line);
+                while (result)
                 {
                     const key = result[1];
                     if (key !== null && isNaN(Number(key)) && shaderMacroKeys.indexOf(key) === -1 && variables.indexOf(key) === -1)
-                    { variables.push(key); }
+                    {
+                        variables.push(key);
+                    }
+                    result = reg.exec(line);
                 }
             }
         }

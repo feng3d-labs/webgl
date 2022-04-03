@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { GL } from './GL';
 
 /**
@@ -77,7 +78,11 @@ export class GLExtension
         const oldGetExtension = gl.getExtension;
         gl.getExtension = function (name: string)
         {
-            gl.extensions[name] = gl.extensions[name] || oldGetExtension.apply(gl, arguments);
+            if (!gl.extensions[name])
+            {
+                // eslint-disable-next-line prefer-rest-params
+                gl.extensions[name] = oldGetExtension.apply(gl, arguments);
+            }
 
             return gl.extensions[name];
         };

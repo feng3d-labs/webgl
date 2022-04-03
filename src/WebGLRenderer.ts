@@ -333,10 +333,11 @@ export class WebGLRenderer
             }
             else
             {
-                let vertexNum = ((attributes) =>
+                const vertexNum = ((attributes) =>
                 {
                     for (const attr in attributes)
                     {
+                        // eslint-disable-next-line no-prototype-builtins
                         if (attributes.hasOwnProperty(attr))
                         {
                             const attribute: Attribute = attributes[attr];

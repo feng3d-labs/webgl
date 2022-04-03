@@ -10,14 +10,14 @@ import type { GL } from '../gl/GL';
 export class Attribute
 {
     @serialize
-    name: string;
+        name: string;
 
     /**
      * 属性数据
      */
     @serialize
     @watch('invalidate')
-    data: number[];
+        data: number[];
 
     /**
      * 数据尺寸
@@ -25,7 +25,7 @@ export class Attribute
      * A GLint specifying the number of components per vertex attribute. Must be 1, 2, 3, or 4.
      */
     @serialize
-    size = 3;
+        size = 3;
 
     /**
      *  A GLenum specifying the data type of each component in the array. Possible values:
@@ -62,7 +62,7 @@ export class Attribute
      * @see https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/vertexAttribDivisorANGLE
      */
     @serialize
-    divisor = 0;
+        divisor = 0;
 
     // /**
     //  * A GLenum specifying the intended usage pattern of the data store for optimization purposes.

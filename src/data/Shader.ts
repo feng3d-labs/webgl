@@ -154,7 +154,7 @@ export class Shader
         // 获取属性信息
         const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
         const attributes: { [name: string]: AttributeInfo } = {};
-        var i = 0;
+        let i = 0;
         while (i < numAttributes)
         {
             const activeInfo = gl.getActiveAttrib(shaderProgram, i++);
@@ -163,7 +163,7 @@ export class Shader
         // 获取uniform信息
         const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
         const uniforms: { [name: string]: UniformInfo } = {};
-        var i = 0;
+        i = 0;
         let textureID = 0;
         while (i < numUniforms)
         {
@@ -185,11 +185,12 @@ export class Shader
             for (let j = 0; j < names.length; j++)
             {
                 name = names[j];
-                let result: RegExpExecArray;
+                let result: RegExpExecArray = reg.exec(name);
                 const paths: string[] = [];
-                while (result = reg.exec(name))
+                while (result)
                 {
                     paths.push(result[1]);
+                    result = reg.exec(name);
                 }
                 uniforms[name] = { name: paths[0], paths, size: activeInfo.size, type: activeInfo.type, location: gl.getUniformLocation(shaderProgram, name), textureID };
                 if (activeInfo.type === gl.SAMPLER_2D || activeInfo.type === gl.SAMPLER_CUBE)
