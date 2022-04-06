@@ -1,4 +1,4 @@
-import { deleteItem, lazy } from '@feng3d/polyfill';
+import { ArrayUtils, lazy } from '@feng3d/polyfill';
 import { Attribute } from './data/Attribute';
 import { Index } from './data/Index';
 import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
@@ -233,7 +233,7 @@ export class WebGLRenderer
                 const buffer: Attribute = renderAtomic.attributes[name];
                 Attribute.active(gl, activeInfo.location, buffer);
                 activeAttributes.push(activeInfo.location);
-                deleteItem(preActiveAttributes, activeInfo.location);
+                ArrayUtils.deleteItem(preActiveAttributes, activeInfo.location);
             }
             preActiveAttributes.forEach((location) =>
             {
