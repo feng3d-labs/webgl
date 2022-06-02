@@ -1,6 +1,6 @@
 {
   "name": "@feng3d/renderer",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@feng3d/objectview": "0.4.0",
-    "@feng3d/polyfill": "0.4.2",
-    "@feng3d/serialization": "0.4.0",
-    "@feng3d/watcher": "0.4.10"
+    "@feng3d/polyfill": "^0.4.3",
+    "@feng3d/serialization": "^0.4.1",
+    "@feng3d/watcher": "^0.4.11"
   }
 }
