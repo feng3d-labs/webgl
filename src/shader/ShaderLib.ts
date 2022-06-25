@@ -34,7 +34,6 @@ export interface ShaderConfig
  */
 export class ShaderLib
 {
-    shaderlib: any;
     get shaderConfig()
     {
         this._shaderConfig = this._shaderConfig || { shaders: {}, modules: {} };
@@ -57,7 +56,7 @@ export class ShaderLib
         if (this._shaderCache[shaderName])
         { return this._shaderCache[shaderName]; }
 
-        const shader = shaderlib.shaderlib.shaderConfig.shaders[shaderName];
+        const shader = shaderlib.shaderConfig.shaders[shaderName];
         //
         const vertex = shaderlib.uninclude(shader.vertex);
         //
@@ -100,7 +99,7 @@ export class ShaderLib
      */
     getShaderNames()
     {
-        return Object.keys(this.shaderlib.shaderConfig.shaders);
+        return Object.keys(this.shaderConfig.shaders);
     }
 
     /**

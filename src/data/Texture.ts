@@ -176,7 +176,7 @@ export class Texture
         return texture;
     }
 
-    private glList?: GL[] = [];
+    glList?: GL[] = [];
 
     /**
      * 清除纹理
