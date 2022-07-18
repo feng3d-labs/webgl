@@ -1,15 +1,8 @@
-import { LazyObject } from '@feng3d/polyfill';
-
-export type LazyUniforms = LazyObject<Uniforms>;
-
-export interface Uniforms extends MixinsUniforms
+namespace feng3d
 {
-}
+    export type LazyUniforms = LazyObject<Uniforms>;
 
-declare global
-{
-    interface MixinsUniforms
+    export interface Uniforms
     {
-
     }
 }

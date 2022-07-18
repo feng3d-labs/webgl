@@ -1,50 +1,51 @@
-import { GL } from '../gl/GL';
-
-export class FrameBuffer
+namespace feng3d
 {
-    /**
-     * 是否失效
-     */
-    private _invalid = true;
-
-    static active(gl: GL, frameBuffer: FrameBuffer)
+    export class FrameBuffer
     {
-        if (frameBuffer._invalid)
-        {
-            frameBuffer._invalid = false;
-            this.clear(frameBuffer);
-        }
+        /**
+         * 是否失效
+         */
+        private _invalid = true;
 
-        // Create a framebuffer object (FBO)
-        let buffer = gl.cache.frameBuffers.get(frameBuffer);
-        if (!buffer)
+        static active(gl: GL, frameBuffer: FrameBuffer)
         {
-            buffer = gl.createFramebuffer();
+            if (frameBuffer._invalid)
+            {
+                frameBuffer._invalid = false;
+                this.clear(frameBuffer);
+            }
+
+            // Create a framebuffer object (FBO)
+            let buffer = gl.cache.frameBuffers.get(frameBuffer);
             if (!buffer)
             {
-                console.warn('Failed to create frame buffer object');
+                buffer = gl.createFramebuffer();
+                if (!buffer)
+                {
+                    console.warn('Failed to create frame buffer object');
 
-                return null;
+                    return null;
+                }
+                gl.cache.frameBuffers.set(frameBuffer, buffer);
             }
-            gl.cache.frameBuffers.set(frameBuffer, buffer);
+
+            return buffer;
         }
 
-        return buffer;
-    }
-
-    /**
-     * 清理缓存
-     */
-    static clear(frameBuffer: FrameBuffer)
-    {
-        GL.glList.forEach((gl) =>
+        /**
+         * 清理缓存
+         */
+        static clear(frameBuffer: FrameBuffer)
         {
-            const buffer = gl.cache.frameBuffers.get(frameBuffer);
-            if (buffer)
+            WebGLRenderer.glList.forEach(gl =>
             {
-                gl.deleteFramebuffer(buffer);
-                gl.cache.frameBuffers.delete(frameBuffer);
-            }
-        });
+                const buffer = gl.cache.frameBuffers.get(frameBuffer);
+                if (buffer)
+                {
+                    gl.deleteFramebuffer(buffer);
+                    gl.cache.frameBuffers.delete(frameBuffer);
+                }
+            });
+        }
     }
 }

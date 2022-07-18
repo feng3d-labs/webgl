@@ -1,46 +1,66 @@
-/**
- * A GLenum specifying the test function. The default function is gl.ALWAYS.
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
- */
-export enum StencilFunc
+namespace feng3d
 {
     /**
-     * Never pass.
+     * A GLenum specifying the test function. The default function is gl.ALWAYS. 
+     * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    NEVER = 'NEVER',
-    /**
-     * Pass if (ref & mask) <  (stencil & mask).
-     */
-    LESS = 'LESS',
+    export enum StencilFunc
+    {
+        /**
+         * 总是不通过。
+         * 
+         * Never pass.
+         */
+        NEVER = 'NEVER',
 
-    /**
-     * Pass if (ref & mask) = (stencil & mask).
-     */
-    EQUAL = 'EQUAL',
+        /**
+         * 如果 (ref & mask) <  (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) <  (stencil & mask).
+         */
+        LESS = 'LESS',
 
-    /**
-     * Pass if (ref & mask) <= (stencil & mask).
-     */
-    LEQUAL = 'LEQUAL',
+        /**
+         * 如果 (ref & mask) = (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) = (stencil & mask).
+         */
+        EQUAL = 'EQUAL',
 
-    /**
-     * Pass if (ref & mask) > (stencil & mask).
-     */
-    GREATER = 'GREATER',
+        /**
+         * 如果 (ref & mask) <= (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) <= (stencil & mask).
+         */
+        LEQUAL = 'LEQUAL',
 
-    /**
-     * Pass if (ref & mask) !== (stencil & mask).
-     */
-    NOTEQUAL = 'NOTEQUAL',
+        /**
+         * 如果 (ref & mask) > (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) > (stencil & mask).
+         */
+        GREATER = 'GREATER',
 
-    /**
-     * Pass if (ref & mask) >= (stencil & mask).
-     */
-    GEQUAL = 'GEQUAL',
+        /**
+         * 如果 (ref & mask) != (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) != (stencil & mask).
+         */
+        NOTEQUAL = 'NOTEQUAL',
 
-    /**
-     * Always pass.
-     */
-    ALWAYS = 'ALWAYS',
+        /**
+         * 如果 (ref & mask) >= (stencil & mask) 则通过。
+         * 
+         * Pass if (ref & mask) >= (stencil & mask).
+         */
+        GEQUAL = 'GEQUAL',
+
+        /**
+         * 总是通过。
+         * 
+         * Always pass.
+         */
+        ALWAYS = 'ALWAYS',
+    }
 }

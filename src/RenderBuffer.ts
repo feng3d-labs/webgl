@@ -1,71 +1,85 @@
-import { watch } from '@feng3d/watcher';
-import { GL } from './gl/GL';
-
-export class RenderBuffer
+namespace feng3d
 {
-    @watch('invalidate')
-        OFFSCREEN_WIDTH = 1024;
-
-    @watch('invalidate')
-        OFFSCREEN_HEIGHT = 1024;
-
-    /**
-     * 是否失效
-     */
-    private _invalid = true;
-
-    /**
-     * 使失效
-     */
-    protected invalidate()
+    export class RenderBuffer
     {
-        this._invalid = true;
-    }
-
-    /**
-     * 激活
-     * @param gl
-     */
-    static active(gl: GL, renderBuffer: RenderBuffer)
-    {
-        if (renderBuffer._invalid)
+        get OFFSCREEN_WIDTH()
         {
-            this.clear(renderBuffer);
-            renderBuffer._invalid = false;
+            return this._OFFSCREEN_WIDTH;
+        }
+        set OFFSCREEN_WIDTH(v)
+        {
+            this._OFFSCREEN_WIDTH = v;
+            this.invalidate();
+        }
+        private _OFFSCREEN_WIDTH = 1024;
+
+        get OFFSCREEN_HEIGHT()
+        {
+            return this._OFFSCREEN_HEIGHT;
+        }
+        set OFFSCREEN_HEIGHT(v)
+        {
+            this._OFFSCREEN_HEIGHT = v;
+            this.invalidate();
+        }
+        private _OFFSCREEN_HEIGHT = 1024;
+
+        /**
+         * 是否失效
+         */
+        private _invalid = true;
+
+        /**
+         * 使失效
+         */
+        protected invalidate()
+        {
+            this._invalid = true;
         }
 
-        let buffer = gl.cache.renderBuffers.get(renderBuffer);
-        if (!buffer)
+        /**
+         * 激活
+         * @param gl 
+         */
+        static active(gl: GL, renderBuffer: RenderBuffer)
         {
-            // Create a renderbuffer object and Set its size and parameters
-            buffer = gl.createRenderbuffer(); // Create a renderbuffer object
+            if (renderBuffer._invalid)
+            {
+                this.clear(renderBuffer);
+                renderBuffer._invalid = false;
+            }
+
+            let buffer = gl.cache.renderBuffers.get(renderBuffer);
             if (!buffer)
             {
-                console.warn('Failed to create renderbuffer object');
-
-                return;
+                // Create a renderbuffer object and Set its size and parameters
+                buffer = gl.createRenderbuffer(); // Create a renderbuffer object
+                if (!buffer)
+                {
+                    alert('Failed to create renderbuffer object');
+                    return;
+                }
+                gl.cache.renderBuffers.set(renderBuffer, buffer);
+                gl.bindRenderbuffer(gl.RENDERBUFFER, buffer);
+                gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, renderBuffer.OFFSCREEN_WIDTH, renderBuffer.OFFSCREEN_HEIGHT);
             }
-            gl.cache.renderBuffers.set(renderBuffer, buffer);
-            gl.bindRenderbuffer(gl.RENDERBUFFER, buffer);
-            gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, renderBuffer.OFFSCREEN_WIDTH, renderBuffer.OFFSCREEN_HEIGHT);
+            return buffer;
         }
 
-        return buffer;
-    }
-
-    /**
-     * 清理纹理
-     */
-    static clear(renderBuffer: RenderBuffer)
-    {
-        GL.glList.forEach((gl) =>
+        /**
+         * 清理纹理
+         */
+        static clear(renderBuffer: RenderBuffer)
         {
-            const buffer = gl.cache.renderBuffers.get(renderBuffer);
-            if (buffer)
+            WebGLRenderer.glList.forEach(gl =>
             {
-                gl.deleteRenderbuffer(buffer);
-                gl.cache.renderBuffers.delete(renderBuffer);
-            }
-        });
+                const buffer = gl.cache.renderBuffers.get(renderBuffer);
+                if (buffer)
+                {
+                    gl.deleteRenderbuffer(buffer);
+                    gl.cache.renderBuffers.delete(renderBuffer);
+                }
+            });
+        }
     }
 }

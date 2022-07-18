@@ -1,13 +1,16 @@
-/**
- * 纹理放大滤波器
- * Texture magnification filter
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
- */
-export enum TextureMagFilter
+namespace feng3d
 {
     /**
-     *  (default value)
+     * 纹理放大滤波器
+     * Texture magnification filter
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
      */
-    LINEAR = 'LINEAR',
-    NEAREST = 'NEAREST',
+    export enum TextureMagFilter
+    {
+        /**
+         *  (default value)
+         */
+        LINEAR = 'LINEAR',
+        NEAREST = 'NEAREST',
+    }
 }
