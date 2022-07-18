@@ -15,16 +15,16 @@
     },
     "references": [
         {
-            "path": "../objectview/tsconfig.json"
+            "path": "../objectview"
         },
         {
-            "path": "../polyfill/tsconfig.json"
+            "path": "../polyfill"
         },
         {
-            "path": "../serialization/tsconfig.json"
+            "path": "../serialization"
         },
         {
-            "path": "../watcher/tsconfig.json"
+            "path": "../watcher"
         },
     ],
     "files": [
