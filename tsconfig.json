@@ -18,9 +18,6 @@
             "path": "../objectview"
         },
         {
-            "path": "../polyfill"
-        },
-        {
             "path": "../serialization"
         },
         {
@@ -28,6 +25,8 @@
         },
     ],
     "files": [
+        //
+        "../polyfill/index.d.ts",
         //
         "src/gl/enums/RenderMode.ts",
         "src/gl/enums/TextureType.ts",
