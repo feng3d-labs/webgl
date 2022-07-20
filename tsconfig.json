@@ -13,16 +13,12 @@
         ],
         "outFile": "dist/index.js"
     },
-    "references": [
-        {
-            "path": "../serialization"
-        },
-    ],
     "files": [
         //
         "../polyfill/index.d.ts",
         "../objectview/index.d.ts",
         "../watcher/index.d.ts",
+        "../serialization/index.d.ts",
         //
         "src/gl/enums/RenderMode.ts",
         "src/gl/enums/TextureType.ts",
