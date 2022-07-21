@@ -7,6 +7,16 @@ import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
 import { LazyUniforms, Uniforms } from './Uniform';
 
+declare global
+{
+    interface MixinsRenderAtomic
+    {
+
+    }
+}
+
+export interface RenderAtomic extends MixinsRenderAtomic { }
+
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
  */

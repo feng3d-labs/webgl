@@ -6,6 +6,16 @@ import { Texture } from '../data/Texture';
 import { RenderBuffer } from '../RenderBuffer';
 import { GL } from './GL';
 
+declare global
+{
+    interface MixinsGLCache
+    {
+
+    }
+}
+
+export interface GLCache extends MixinsGLCache { }
+
 /**
  * GL 缓存
  */
