@@ -1,4 +1,4 @@
-import { ObjectUtils } from '@feng3d/polyfill';
+import { gPartial } from '@feng3d/polyfill';
 import { GL } from '../gl/GL';
 import { ShaderMacro } from '../shader/Macro';
 import { shaderlib } from '../shader/ShaderLib';
@@ -13,9 +13,9 @@ export class Shader
      */
     shaderMacro: ShaderMacro = {} as any;
 
-    constructor(shaderName = '')
+    constructor(source?: gPartial<Shader>)
     {
-        this.shaderName = shaderName;
+        Object.assign(this, source);
     }
 
     setShader(vertex: string, fragment: string)
@@ -53,15 +53,15 @@ export class Shader
     /**
      * 着色器名称
      */
-    private shaderName: string;
+    shaderName: string;
     /**
      * 顶点着色器代码
      */
-    private vertex: string;
+    vertex: string;
     /**
      * 片段着色器代码
      */
-    private fragment: string;
+    fragment: string;
 
     /**
      * 更新渲染代码
@@ -84,12 +84,12 @@ export class Shader
      * @param gl GL上下文
      * @param type 着色器类型
      * @param code 着色器代码
-     * @returns 编译后的着色器对象
+     * @return 编译后的着色器对象
      */
     private compileShaderCode(gl: GL, type: number, code: string)
     {
         const shader = gl.createShader(type);
-        if (ObjectUtils.objectIsEmpty(shader))
+        if (!shader)
         {
             throw 'unable to create shader';
         }

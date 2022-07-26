@@ -1,13 +1,29 @@
-import { watch } from '@feng3d/watcher';
 import { GL } from './gl/GL';
+import { WebGLRenderer } from './WebGLRenderer';
 
 export class RenderBuffer
 {
-    @watch('invalidate')
-        OFFSCREEN_WIDTH = 1024;
+    get OFFSCREEN_WIDTH()
+    {
+        return this._OFFSCREEN_WIDTH;
+    }
+    set OFFSCREEN_WIDTH(v)
+    {
+        this._OFFSCREEN_WIDTH = v;
+        this.invalidate();
+    }
+    private _OFFSCREEN_WIDTH = 1024;
 
-    @watch('invalidate')
-        OFFSCREEN_HEIGHT = 1024;
+    get OFFSCREEN_HEIGHT()
+    {
+        return this._OFFSCREEN_HEIGHT;
+    }
+    set OFFSCREEN_HEIGHT(v)
+    {
+        this._OFFSCREEN_HEIGHT = v;
+        this.invalidate();
+    }
+    private _OFFSCREEN_HEIGHT = 1024;
 
     /**
      * 是否失效
@@ -58,7 +74,7 @@ export class RenderBuffer
      */
     static clear(renderBuffer: RenderBuffer)
     {
-        GL.glList.forEach((gl) =>
+        WebGLRenderer.glList.forEach((gl) =>
         {
             const buffer = gl.cache.renderBuffers.get(renderBuffer);
             if (buffer)

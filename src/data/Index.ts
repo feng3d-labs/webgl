@@ -1,22 +1,30 @@
-import { watch } from '@feng3d/watcher';
+import { gPartial } from '@feng3d/polyfill';
 import { GLArrayType } from '../gl/enums/GLArrayType';
 import { GL } from '../gl/GL';
+import { WebGLRenderer } from '../WebGLRenderer';
 
 /**
  * 索引渲染数据
-
  */
 export class Index
 {
     /**
      * 索引数据
      */
-    @watch('invalidate')
-        indices: number[];
-
-    constructor(indices?: number[])
+    get indices()
     {
-        this.indices = indices;
+        return this._indices;
+    }
+    set indices(v)
+    {
+        this._indices = v;
+        this.invalidate();
+    }
+    private _indices: number[];
+
+    constructor(source?: gPartial<Index>)
+    {
+        Object.assign(this, source);
     }
 
     invalidate()
@@ -30,7 +38,9 @@ export class Index
     get count()
     {
         if (!this.indices)
-        { return 0; }
+        {
+            return 0;
+        }
 
         return this.indices.length;
     }
@@ -54,9 +64,9 @@ export class Index
      * 激活缓冲
      * @param gl
      */
-    static active(gl: GL, index: Index)
+    active(gl: GL)
     {
-        const buffer = Index.getBuffer(gl, index);
+        const buffer = Index.getBuffer(gl, this);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 
@@ -83,21 +93,17 @@ export class Index
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(index.indices), gl.STATIC_DRAW);
-
-            index.glList.push(gl);
         }
 
         return buffer;
     }
-
-    private glList: GL[] = [];
 
     /**
      * 清理缓冲
      */
     static clear(index: Index)
     {
-        index.glList.forEach((gl) =>
+        WebGLRenderer.glList.forEach((gl) =>
         {
             const buffer = gl.cache.indices.get(index);
             if (buffer)
@@ -106,6 +112,5 @@ export class Index
                 gl.cache.indices.delete(index);
             }
         });
-        index.glList = [];
     }
 }

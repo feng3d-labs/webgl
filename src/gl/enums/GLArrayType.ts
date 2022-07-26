@@ -26,9 +26,9 @@ export enum GLArrayType
      */
     FLOAT = 'FLOAT',
     UNSIGNED_INT = 'UNSIGNED_INT',
-    // /**
-    //  * using a WebGL 2 context
-    //  * 16-bit floating point number
-    //  */
-    // HALF_FLOAT = "HALF_FLOAT",
+    /**
+     * using a WebGL 2 context
+     * 16-bit floating point number
+     */
+    HALF_FLOAT = 'HALF_FLOAT',
 }

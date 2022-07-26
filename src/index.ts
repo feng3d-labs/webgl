@@ -31,4 +31,3 @@ export * from './shader/Macro';
 export * from './shader/ShaderLib';
 export * from './shader/ShaderMacroUtils';
 export * from './WebGLRenderer';
-

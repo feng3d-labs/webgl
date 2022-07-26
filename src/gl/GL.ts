@@ -1,5 +1,4 @@
 import { RenderAtomic } from '../data/RenderAtomic';
-import { WebGLRenderer } from '../WebGLRenderer';
 import { GLCache } from './GLCache';
 import { GLCapabilities } from './GLCapabilities';
 import { GLExtension } from './GLExtension';
@@ -92,54 +91,4 @@ export interface GL extends WebGLRenderingContext
      * 缓存
      */
     cache: GLCache;
-}
-
-export class GL
-{
-    static glList: GL[] = [];
-
-    /**
-     * 获取 GL 实例
-     * @param canvas 画布
-     * @param contextAttributes
-     */
-    static getGL(canvas: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
-    {
-        const contextIds = ['webgl2', 'webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
-        // var contextIds = ["webgl"];
-        let gl: GL = null;
-        for (let i = 0; i < contextIds.length; ++i)
-        {
-            try
-            {
-                gl = canvas.getContext(contextIds[i], contextAttributes) as any;
-                gl.contextId = contextIds[i];
-                gl.contextAttributes = contextAttributes;
-                break;
-            }
-            catch (e)
-            {
-                console.warn(e);
-            }
-        }
-        if (!gl)
-        { throw '无法初始化WEBGL'; }
-        //
-        // eslint-disable-next-line no-new
-        new GLCache(gl);
-        // eslint-disable-next-line no-new
-        new GLExtension(gl);
-        // eslint-disable-next-line no-new
-        new GLCapabilities(gl);
-        // eslint-disable-next-line no-new
-        new WebGLRenderer(gl);
-        //
-        gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-        gl.clearDepth(1.0); // Clear everything
-        gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-        this.glList.push(gl);
-
-        return gl;
-    }
 }

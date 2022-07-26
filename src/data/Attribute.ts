@@ -1,7 +1,8 @@
-import { serialize } from '@feng3d/serialization';
-import { watch } from '@feng3d/watcher';
+import { gPartial } from '@feng3d/polyfill';
+import { AttributeUsage } from '../gl/enums/AttributeUsage';
 import { GLArrayType } from '../gl/enums/GLArrayType';
-import type { GL } from '../gl/GL';
+import { GL } from '../gl/GL';
+import { WebGLRenderer } from '../WebGLRenderer';
 
 /**
  * 属性渲染数据
@@ -9,23 +10,28 @@ import type { GL } from '../gl/GL';
  */
 export class Attribute
 {
-    @serialize
-        name: string;
+    name: string;
 
     /**
      * 属性数据
      */
-    @serialize
-    @watch('invalidate')
-        data: number[];
+    get data()
+    {
+        return this._data;
+    }
+    set data(v)
+    {
+        this._data = v;
+        this.invalidate();
+    }
+    private _data: number[];
 
     /**
      * 数据尺寸
      *
      * A GLint specifying the number of components per vertex attribute. Must be 1, 2, 3, or 4.
      */
-    @serialize
-        size = 3;
+    size = 3;
 
     /**
      *  A GLenum specifying the data type of each component in the array. Possible values:
@@ -37,7 +43,7 @@ export class Attribute
         When using a WebGL 2 context, the following values are available additionally:
            - gl.HALF_FLOAT: 16-bit floating point number
      */
-    type = GLArrayType.FLOAT;
+    type: 'BYTE' | 'SHORT' | 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'FLOAT' | 'UNSIGNED_INT' | 'UNSIGNED_INT' | 'HALF_FLOAT' = GLArrayType.FLOAT;
 
     /**
      * A GLboolean specifying whether integer data values should be normalized when being casted to a float.
@@ -61,30 +67,25 @@ export class Attribute
      * A GLuint specifying the number of instances that will pass between updates of the generic attribute.
      * @see https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/vertexAttribDivisorANGLE
      */
-    @serialize
-        divisor = 0;
+    divisor = 0;
 
-    // /**
-    //  * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
-    //  *
-    //  * 为优化目的指定数据存储的预期使用模式的GLenum。
-    //  *
-    //  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
-    //  */
-    // @serialize
-    // usage = AttributeUsage.STATIC_DRAW;
+    /**
+     * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
+     *
+     * 为优化目的指定数据存储的预期使用模式的GLenum。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
+     */
+    usage = AttributeUsage.STATIC_DRAW;
 
     /**
      * 是否失效
      */
     invalid = true;
 
-    constructor(name: string, data: number[], size = 3, divisor = 0)
+    constructor(source?: gPartial<Attribute>)
     {
-        this.name = name;
-        this.data = data;
-        this.size = size;
-        this.divisor = divisor;
+        Object.assign(this, source);
     }
 
     /**
@@ -100,27 +101,27 @@ export class Attribute
      * @param gl
      * @param location A GLuint specifying the index of the vertex attribute that is to be modified.
      */
-    static active(gl: GL, location: number, attribute: Attribute)
+    active(gl: GL, location: number)
     {
         gl.enableVertexAttribArray(location);
-        const buffer = Attribute.getBuffer(gl, attribute);
+        const buffer = this.getBuffer(gl);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(location, attribute.size, gl[attribute.type], attribute.normalized, attribute.stride, attribute.offset);
+        gl.vertexAttribPointer(location, this.size, gl[this.type], this.normalized, this.stride, this.offset);
 
-        gl.vertexAttribDivisor(location, attribute.divisor);
+        gl.vertexAttribDivisor(location, this.divisor);
     }
 
     /**
      * 获取缓冲
      */
-    static getBuffer(gl: GL, attribute: Attribute)
+    getBuffer(gl: GL)
     {
-        if (attribute.invalid)
+        if (this.invalid)
         {
-            this.clear(attribute);
-            attribute.invalid = false;
+            this.clear(this);
+            this.invalid = false;
         }
-        let buffer = gl.cache.attributes.get(attribute);
+        let buffer = gl.cache.attributes.get(this);
         if (!buffer)
         {
             buffer = gl.createBuffer();
@@ -129,25 +130,21 @@ export class Attribute
                 console.error('createBuffer 失败！');
                 throw '';
             }
-            gl.cache.attributes.set(attribute, buffer);
+            gl.cache.attributes.set(this, buffer);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(attribute.data), gl.STATIC_DRAW);
-
-            attribute.glList.push(gl);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.data), gl[this.usage]);
         }
 
         return buffer;
     }
 
-    private glList: GL[] = [];
-
     /**
      * 清理缓冲
      */
-    static clear(attribute: Attribute)
+    clear(attribute: Attribute)
     {
-        attribute.glList.forEach((gl) =>
+        WebGLRenderer.glList.forEach((gl) =>
         {
             const buffer = gl.cache.attributes.get(attribute);
             if (buffer)
@@ -156,6 +153,5 @@ export class Attribute
                 gl.cache.attributes.delete(attribute);
             }
         });
-        attribute.glList = [];
     }
 }

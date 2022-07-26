@@ -1,4 +1,5 @@
 import { GL } from '../gl/GL';
+import { WebGLRenderer } from '../WebGLRenderer';
 
 export class FrameBuffer
 {
@@ -37,7 +38,7 @@ export class FrameBuffer
      */
     static clear(frameBuffer: FrameBuffer)
     {
-        GL.glList.forEach((gl) =>
+        WebGLRenderer.glList.forEach((gl) =>
         {
             const buffer = gl.cache.frameBuffers.get(frameBuffer);
             if (buffer)

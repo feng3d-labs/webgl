@@ -1,6 +1,8 @@
 import { RenderParams } from '../data/RenderParams';
 import { shaderMacroUtils } from './ShaderMacroUtils';
 
+export const shaderConfig: ShaderConfig = { shaders: {}, modules: {} };
+
 /**
  * 着色器库，由shader.ts初始化
  */
@@ -36,7 +38,7 @@ export class ShaderLib
 {
     get shaderConfig()
     {
-        this._shaderConfig = this._shaderConfig || { shaders: {}, modules: {} };
+        this._shaderConfig = this._shaderConfig || shaderConfig;
 
         return this._shaderConfig;
     }
@@ -54,7 +56,9 @@ export class ShaderLib
     getShader(shaderName: string)
     {
         if (this._shaderCache[shaderName])
-        { return this._shaderCache[shaderName]; }
+        {
+            return this._shaderCache[shaderName];
+        }
 
         const shader = shaderlib.shaderConfig.shaders[shaderName];
         //
@@ -78,7 +82,7 @@ export class ShaderLib
         const includeRegExp = /#include<(.+)>/g;
         //
         let match = includeRegExp.exec(shaderCode);
-        while (match !== null)
+        while (match)
         {
             let moduleshader = this.shaderConfig.modules[match[1]];
             if (!moduleshader)

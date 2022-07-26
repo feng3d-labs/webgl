@@ -1,14 +1,14 @@
-import { ArrayUtils, lazy } from '@feng3d/polyfill';
+/* eslint-disable no-new */
+import { lazy } from '@feng3d/polyfill';
 import { Attribute } from './data/Attribute';
-import { Index } from './data/Index';
 import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
-import { RenderParams } from './data/RenderParams';
 import { AttributeInfo, UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
-import { ColorMask } from './gl/enums/ColorMask';
-import { CullFace } from './gl/enums/CullFace';
-import type { GL } from './gl/GL';
+import { GL } from './gl/GL';
+import { GLCache } from './gl/GLCache';
+import { GLCapabilities } from './gl/GLCapabilities';
+import { GLExtension } from './gl/GLExtension';
 
 /**
  * WEBGL 渲染器
@@ -17,351 +17,273 @@ import type { GL } from './gl/GL';
  */
 export class WebGLRenderer
 {
-    /**
-     * 绘制
-     * @param renderAtomic 渲染原子
-     */
-    readonly draw: (renderAtomic: RenderAtomic) => void;
+    static glList: GL[] = [];
 
-    constructor(gl: GL)
+    gl: GL;
+    private preActiveAttributes: number[] = [];
+
+    constructor(canvas: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
     {
-        console.assert(!gl.render, `${gl} ${gl.render} 存在！`);
-
-        let preActiveAttributes: number[] = [];
-
-        gl.render = (renderAtomic1: RenderAtomic) =>
+        const contextIds = ['webgl2', 'webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
+        // var contextIds = ["webgl"];
+        let gl: GL = <any>null;
+        for (let i = 0; i < contextIds.length; ++i)
         {
-            const instanceCount = renderAtomic1.getInstanceCount();
-            if (instanceCount === 0) return;
-            const shaderMacro = renderAtomic1.getShaderMacro();
-            const shader = renderAtomic1.getShader();
-            shader.shaderMacro = shaderMacro;
-            const shaderResult = shader.activeShaderProgram(gl);
-            if (!shaderResult) return;
-            //
-            const renderAtomic: RenderAtomicData = checkRenderData(renderAtomic1);
-            if (!renderAtomic) return;
-            //
-            gl.useProgram(shaderResult.program);
-            activeShaderParams(renderAtomic.renderParams);
-            activeAttributes(renderAtomic, shaderResult.attributes);
-            activeUniforms(renderAtomic, shaderResult.uniforms);
-            draw(renderAtomic, gl[renderAtomic.renderParams.renderMode]);
+            try
+            {
+                gl = <any>canvas.getContext(contextIds[i], contextAttributes);
+                gl.contextId = contextIds[i];
+                gl.contextAttributes = contextAttributes;
+                break;
+            }
+            // eslint-disable-next-line no-empty
+            catch (e) { }
+        }
+        if (!gl)
+        { throw '无法初始化WEBGL'; }
+        this.gl = gl;
+        //
+        new GLCache(gl);
+        new GLExtension(gl);
+        new GLCapabilities(gl);
+        //
+        gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+        gl.clearDepth(1.0); // Clear everything
+        gl.enable(gl.DEPTH_TEST); // Enable depth testing
+        gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+        WebGLRenderer.glList.push(gl);
+
+        console.assert(!gl.render, `${gl} ${gl.render} 存在！`);
+    }
+
+    render(renderAtomic: RenderAtomic)
+    {
+        const instanceCount = renderAtomic.getInstanceCount();
+        if (instanceCount === 0) return;
+        const shaderMacro = renderAtomic.getShaderMacro();
+        const shader = renderAtomic.getShader();
+        shader.shaderMacro = shaderMacro;
+        const shaderResult = shader.activeShaderProgram(this.gl);
+        if (!shaderResult) return;
+        //
+        const checkedRenderAtomic: RenderAtomicData = this.checkRenderData(renderAtomic);
+        if (!checkedRenderAtomic) return;
+        //
+        this.gl.useProgram(shaderResult.program);
+        checkedRenderAtomic.renderParams.updateRenderParams(this.gl);
+        this.activeAttributes(checkedRenderAtomic, shaderResult.attributes);
+        this.activeUniforms(checkedRenderAtomic, shaderResult.uniforms);
+        this.draw(checkedRenderAtomic, this.gl[checkedRenderAtomic.renderParams.renderMode]);
+    }
+
+    private checkRenderData(renderAtomic: RenderAtomic)
+    {
+        const shader = renderAtomic.getShader();
+        const shaderResult = shader.activeShaderProgram(this.gl);
+        if (!shaderResult)
+        {
+            console.warn(`缺少着色器，无法渲染!`);
+
+            return null;
+        }
+
+        const attributes: { [name: string]: Attribute; } = {};
+        for (const key in shaderResult.attributes)
+        {
+            const attribute = renderAtomic.getAttributeByKey(key);
+            if (!attribute)
+            {
+                console.warn(`缺少顶点 attribute 数据 ${key} ，无法渲染!`);
+
+                return null;
+            }
+            attributes[key] = attribute;
+        }
+
+        const uniforms: { [name: string]: Uniforms; } = {};
+        for (let key in shaderResult.uniforms)
+        {
+            const activeInfo = shaderResult.uniforms[key];
+            if (activeInfo.name)
+            {
+                key = activeInfo.name;
+            }
+            const uniform = renderAtomic.getUniformByKey(key);
+            if (uniform === undefined)
+            {
+                console.warn(`缺少 uniform 数据 ${key} ,无法渲染！`);
+
+                return null;
+            }
+            uniforms[key] = uniform;
+        }
+
+        const indexBuffer = renderAtomic.getIndexBuffer();
+
+        const checkedRenderAtomic: RenderAtomicData
+            = {
+            shader,
+            attributes,
+            uniforms,
+            renderParams: renderAtomic.getRenderParams(),
+            index: indexBuffer,
+            instanceCount: renderAtomic.getInstanceCount(),
         };
 
-        function checkRenderData(renderAtomic: RenderAtomic)
+        return checkedRenderAtomic;
+    }
+
+    /**
+     * 激活属性
+     */
+    private activeAttributes(renderAtomic: RenderAtomicData, attributeInfos: { [name: string]: AttributeInfo })
+    {
+        const gl = this.gl;
+
+        const activeAttributes: number[] = [];
+        for (const name in attributeInfos)
         {
-            const shader = renderAtomic.getShader();
-            const shaderResult = shader.activeShaderProgram(gl);
-            if (!shaderResult)
+            const activeInfo = attributeInfos[name];
+            const buffer: Attribute = renderAtomic.attributes[name];
+            buffer.active(gl, activeInfo.location);
+            activeAttributes.push(activeInfo.location);
+
+            const index = this.preActiveAttributes.indexOf(activeInfo.location);
+            if (index !== -1)
             {
-                console.warn(`缺少着色器，无法渲染!`);
-
-                return null;
-            }
-
-            const attributes: { [name: string]: Attribute; } = {};
-            for (const key in shaderResult.attributes)
-            {
-                const attribute = renderAtomic.getAttributeByKey(key);
-                if (attribute === undefined)
-                {
-                    console.warn(`缺少顶点 attribute 数据 ${key} ，无法渲染!`);
-
-                    return null;
-                }
-                attributes[key] = attribute;
-            }
-
-            const uniforms: { [name: string]: Uniforms; } = {};
-            for (let key in shaderResult.uniforms)
-            {
-                const activeInfo = shaderResult.uniforms[key];
-                if (activeInfo.name)
-                {
-                    key = activeInfo.name;
-                }
-                const uniform = renderAtomic.getUniformByKey(key);
-                if (uniform === undefined)
-                {
-                    console.warn(`缺少 uniform 数据 ${key} ,无法渲染！`);
-
-                    return null;
-                }
-                uniforms[key] = uniform;
-            }
-
-            const indexBuffer = renderAtomic.getIndexBuffer();
-            if (!indexBuffer)
-            {
-                console.warn(`确实顶点索引数据，无法渲染！`);
-
-                return null;
-            }
-
-            return {
-                shader,
-                attributes,
-                uniforms,
-                renderParams: renderAtomic.getRenderParams(),
-                indexBuffer,
-                instanceCount: renderAtomic.getInstanceCount(),
-            };
-        }
-
-        function activeShaderParams(shaderParams: RenderParams)
-        {
-            const cullfaceEnum = shaderParams.cullFace;
-            const blendEquation = gl[shaderParams.blendEquation];
-            const sfactor = gl[shaderParams.sfactor];
-            const dfactor = gl[shaderParams.dfactor];
-            const cullFace = gl[shaderParams.cullFace];
-            const frontFace = gl[shaderParams.frontFace];
-            const enableBlend = shaderParams.enableBlend;
-            const depthtest = shaderParams.depthtest;
-            const depthMask = shaderParams.depthMask;
-            const depthFunc = gl[shaderParams.depthFunc];
-            let viewPort = shaderParams.viewPort;
-            const useViewPort = shaderParams.useViewPort;
-            const useScissor = shaderParams.useScissor;
-            const scissor = shaderParams.scissor;
-            const colorMask = shaderParams.colorMask;
-            const colorMaskB = [ColorMask.R, ColorMask.G, ColorMask.B, ColorMask.A].map((v) => !!(colorMask & v));
-
-            const usePolygonOffset = shaderParams.usePolygonOffset;
-            const polygonOffsetFactor = shaderParams.polygonOffsetFactor;
-            const polygonOffsetUnits = shaderParams.polygonOffsetUnits;
-
-            const useStencil = shaderParams.useStencil;
-            const stencilFunc = gl[shaderParams.stencilFunc];
-            const stencilFuncRef = shaderParams.stencilFuncRef;
-            const stencilFuncMask = shaderParams.stencilFuncMask;
-            const stencilOpFail = gl[shaderParams.stencilOpFail];
-            const stencilOpZFail = gl[shaderParams.stencilOpZFail];
-            const stencilOpZPass = gl[shaderParams.stencilOpZPass];
-            const stencilMask = shaderParams.stencilMask;
-
-            if (!useViewPort)
-            {
-                viewPort = { x: 0, y: 0, width: gl.canvas.width, height: gl.canvas.height };
-            }
-
-            if (cullfaceEnum !== CullFace.NONE)
-            {
-                gl.enable(gl.CULL_FACE);
-                gl.cullFace(cullFace);
-                gl.frontFace(frontFace);
-            }
-            else
-            {
-                gl.disable(gl.CULL_FACE);
-            }
-
-            if (enableBlend)
-            {
-                //
-                gl.enable(gl.BLEND);
-                gl.blendEquation(blendEquation);
-                gl.blendFunc(sfactor, dfactor);
-            }
-            else
-            {
-                gl.disable(gl.BLEND);
-            }
-
-            if (depthtest)
-            {
-                gl.enable(gl.DEPTH_TEST);
-                gl.depthFunc(depthFunc);
-            }
-            else
-            {
-                gl.disable(gl.DEPTH_TEST);
-            }
-            gl.depthMask(depthMask);
-
-            gl.colorMask(colorMaskB[0], colorMaskB[1], colorMaskB[2], colorMaskB[3]);
-
-            gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
-
-            if (usePolygonOffset)
-            {
-                gl.enable(gl.POLYGON_OFFSET_FILL);
-                gl.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
-            }
-            else
-            {
-                gl.disable(gl.POLYGON_OFFSET_FILL);
-            }
-
-            if (useScissor)
-            {
-                gl.enable(gl.SCISSOR_TEST);
-                gl.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
-            }
-            else
-            {
-                gl.disable(gl.SCISSOR_TEST);
-            }
-
-            if (useStencil)
-            {
-                if (gl.capabilities.stencilBits === 0)
-                {
-                    console.warn(`${gl} 不支持 stencil，参考 https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext WebGL context attributes: stencil`);
-                }
-                gl.enable(gl.STENCIL_TEST);
-                gl.stencilFunc(stencilFunc, stencilFuncRef, stencilFuncMask);
-                gl.stencilOp(stencilOpFail, stencilOpZFail, stencilOpZPass);
-                gl.stencilMask(stencilMask);
-            }
-            else
-            {
-                gl.disable(gl.STENCIL_TEST);
+                this.preActiveAttributes.splice(index, 1);
             }
         }
-
-        /**
-         * 激活属性
-         */
-        function activeAttributes(renderAtomic: RenderAtomicData, attributeInfos: { [name: string]: AttributeInfo })
+        this.preActiveAttributes.forEach((location) =>
         {
-            const activeAttributes: number[] = [];
-            for (const name in attributeInfos)
+            gl.disableVertexAttribArray(location);
+        });
+        this.preActiveAttributes = activeAttributes;
+    }
+
+    /**
+     * 激活常量
+     */
+    private activeUniforms(renderAtomic: RenderAtomicData, uniformInfos: { [name: string]: UniformInfo })
+    {
+        const uniforms = renderAtomic.uniforms;
+        for (const name in uniformInfos)
+        {
+            const activeInfo = uniformInfos[name];
+            const paths = activeInfo.paths;
+            let uniformData = uniforms[paths[0]];
+            for (let i = 1; i < paths.length; i++)
             {
-                const activeInfo = attributeInfos[name];
-                const buffer: Attribute = renderAtomic.attributes[name];
-                Attribute.active(gl, activeInfo.location, buffer);
-                activeAttributes.push(activeInfo.location);
-                ArrayUtils.deleteItem(preActiveAttributes, activeInfo.location);
+                uniformData = uniformData[paths[i]];
             }
-            preActiveAttributes.forEach((location) =>
-            {
-                gl.disableVertexAttribArray(location);
-            });
-            preActiveAttributes = activeAttributes;
+            this.setContext3DUniform(activeInfo, uniformData);
         }
+    }
 
-        /**
-         * 激活常量
-         */
-        function activeUniforms(renderAtomic: RenderAtomicData, uniformInfos: { [name: string]: UniformInfo })
+    /**
+     * 设置环境Uniform数据
+     */
+    private setContext3DUniform(activeInfo: UniformInfo, data)
+    {
+        const gl = this.gl;
+
+        let vec: number[] = data;
+        if (data.toArray) vec = data.toArray();
+        const location = activeInfo.location;
+        switch (activeInfo.type)
         {
-            const uniforms = renderAtomic.uniforms;
-            for (const name in uniformInfos)
+            case gl.INT:
+                gl.uniform1i(location, data);
+                break;
+            case gl.FLOAT_MAT3:
+                gl.uniformMatrix3fv(location, false, vec);
+                break;
+            case gl.FLOAT_MAT4:
+                gl.uniformMatrix4fv(location, false, vec);
+                break;
+            case gl.FLOAT:
+                gl.uniform1f(location, data);
+                break;
+            case gl.FLOAT_VEC2:
+                gl.uniform2f(location, vec[0], vec[1]);
+                break;
+            case gl.FLOAT_VEC3:
+                gl.uniform3f(location, vec[0], vec[1], vec[2]);
+                break;
+            case gl.FLOAT_VEC4:
+                gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
+                break;
+            case gl.SAMPLER_2D:
+            case gl.SAMPLER_CUBE:
+                const textureInfo = data as Texture;
+                // 激活纹理编号
+                gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
+                Texture.active(gl, textureInfo);
+                // 设置纹理所在采样编号
+                gl.uniform1i(location, activeInfo.textureID);
+                break;
+            default:
+                console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);
+        }
+    }
+
+    /**
+     */
+    private draw(renderAtomic: RenderAtomicData, renderMode: number)
+    {
+        const gl = this.gl;
+
+        const instanceCount = ~~lazy.getvalue(renderAtomic.instanceCount);
+
+        const indexBuffer = renderAtomic.index;
+        if (indexBuffer)
+        {
+            indexBuffer.active(gl);
+            const arrayType = gl[indexBuffer.type];
+            if (indexBuffer.count === 0)
             {
-                const activeInfo = uniformInfos[name];
-                const paths = activeInfo.paths;
-                let uniformData = uniforms[paths[0]];
-                for (let i = 1; i < paths.length; i++)
-                {
-                    uniformData = uniformData[paths[i]];
-                }
-                setContext3DUniform(activeInfo, uniformData);
+                // console.warn(`顶点索引为0，不进行渲染！`);
+                return;
             }
-        }
-
-        /**
-         * 设置环境Uniform数据
-         */
-        function setContext3DUniform(activeInfo: UniformInfo, data)
-        {
-            let vec: number[] = data;
-            if (data.toArray) vec = data.toArray();
-            const location = activeInfo.location;
-            switch (activeInfo.type)
+            if (instanceCount > 1)
             {
-                case gl.INT:
-                    gl.uniform1i(location, data);
-                    break;
-                case gl.FLOAT_MAT3:
-                    gl.uniformMatrix3fv(location, false, vec);
-                    break;
-                case gl.FLOAT_MAT4:
-                    gl.uniformMatrix4fv(location, false, vec);
-                    break;
-                case gl.FLOAT:
-                    gl.uniform1f(location, data);
-                    break;
-                case gl.FLOAT_VEC2:
-                    gl.uniform2f(location, vec[0], vec[1]);
-                    break;
-                case gl.FLOAT_VEC3:
-                    gl.uniform3f(location, vec[0], vec[1], vec[2]);
-                    break;
-                case gl.FLOAT_VEC4:
-                    gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
-                    break;
-                case gl.SAMPLER_2D:
-                case gl.SAMPLER_CUBE:
-                    const textureInfo = data as Texture;
-                    // 激活纹理编号
-                    gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                    Texture.active(gl, textureInfo);
-                    // 设置纹理所在采样编号
-                    gl.uniform1i(location, activeInfo.textureID);
-                    break;
-                default:
-                    console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);
-            }
-        }
-
-        /**
-         */
-        function draw(renderAtomic: RenderAtomicData, renderMode: number)
-        {
-            const instanceCount = ~~lazy.getvalue(renderAtomic.instanceCount);
-
-            const indexBuffer = renderAtomic.indexBuffer;
-            if (indexBuffer)
-            {
-                Index.active(gl, indexBuffer);
-                const arrayType = gl[indexBuffer.type];
-                if (indexBuffer.count === 0)
-                {
-                    // console.warn(`顶点索引为0，不进行渲染！`);
-                    return;
-                }
-                if (instanceCount > 1)
-                {
-                    gl.drawElementsInstanced(renderMode, indexBuffer.count, arrayType, indexBuffer.offset, instanceCount);
-                }
-                else
-                {
-                    gl.drawElements(renderMode, indexBuffer.count, arrayType, indexBuffer.offset);
-                }
+                gl.drawElementsInstanced(renderMode, indexBuffer.count, arrayType, indexBuffer.offset, instanceCount);
             }
             else
             {
-                const vertexNum = ((attributes) =>
+                gl.drawElements(renderMode, indexBuffer.count, arrayType, indexBuffer.offset);
+            }
+        }
+        else
+        {
+            const vertexNum = ((attributes) =>
+            {
+                for (const attr in attributes)
                 {
-                    for (const attr in attributes)
+                    // eslint-disable-next-line no-prototype-builtins
+                    if (attributes.hasOwnProperty(attr))
                     {
-                        // eslint-disable-next-line no-prototype-builtins
-                        if (attributes.hasOwnProperty(attr))
-                        {
-                            const attribute: Attribute = attributes[attr];
+                        const attribute: Attribute = attributes[attr];
 
-                            return attribute.data.length / attribute.size;
-                        }
+                        return attribute.data.length / attribute.size;
                     }
+                }
 
-                    return 0;
-                })(renderAtomic.attributes);
-                if (vertexNum === 0)
-                {
-                    console.warn(`顶点数量为0，不进行渲染！`);
+                return 0;
+            })(renderAtomic.attributes);
+            if (vertexNum === 0)
+            {
+                console.warn(`顶点数量为0，不进行渲染！`);
 
-                    return;
-                }
-                if (instanceCount > 1)
-                {
-                    gl.drawArraysInstanced(renderMode, 0, vertexNum, instanceCount);
-                }
-                else
-                {
-                    gl.drawArrays(renderMode, 0, vertexNum);
-                }
+                return;
+            }
+            if (instanceCount > 1)
+            {
+                gl.drawArraysInstanced(renderMode, 0, vertexNum, instanceCount);
+            }
+            else
+            {
+                gl.drawArrays(renderMode, 0, vertexNum);
             }
         }
     }

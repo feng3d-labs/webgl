@@ -15,7 +15,9 @@ export class ShaderMacroUtils
         {
             const element = variables1[i];
             if (variables0.indexOf(element) === -1)
-            { variables0.push(element); }
+            {
+                variables0.push(element);
+            }
         }
 
         return variables0;

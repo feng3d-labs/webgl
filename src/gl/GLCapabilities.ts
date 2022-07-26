@@ -149,4 +149,3 @@ export class GLCapabilities
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
     }
 }
-
