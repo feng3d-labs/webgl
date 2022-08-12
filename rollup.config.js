@@ -48,7 +48,10 @@ async function main()
     namespaces[pkg.name] = pkg.namespace || 'feng3d';
     for (const key in pkg.dependencies)
     {
-        namespaces[key] = 'feng3d';
+        if (key.indexOf('@feng3d') !== -1)
+        {
+            namespaces[key] = 'feng3d';
+        }
     }
 
     let banner = [
