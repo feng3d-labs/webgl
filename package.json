@@ -60,7 +60,7 @@
     "typescript": "4.3.5"
   },
   "dependencies": {
-    "@feng3d/c-preprocessor": "^0.0.2",
+    "@feng3d/c-preprocessor": "^0.0.4",
     "@feng3d/objectview": "^0.5.0",
     "@feng3d/polyfill": "^0.5.0",
     "@feng3d/serialization": "^0.5.0",
