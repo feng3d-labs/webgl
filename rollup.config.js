@@ -70,7 +70,6 @@ async function main()
     const input = path.join(basePath, 'src/index.ts');
 
     const {
-        main,
         module,
         bundle,
         bundleInput,
@@ -79,6 +78,7 @@ async function main()
         standalone,
     } = pkg;
     const types = pkg['bundle:types'];
+    const main = './lib/index.js';
     const freeze = false;
 
     results.push({
