@@ -165,14 +165,14 @@ export class RenderAtomic
 
     getUniformByKey(key: string): Uniforms
     {
-        if (this.uniforms[key] !== undefined) return lazy.getvalue(this.uniforms[key]);
+        if (this.uniforms[key] !== undefined) return lazy.getValue(this.uniforms[key]);
 
         return (this.next && this.next.getUniformByKey(key));
     }
 
     getInstanceCount(): number
     {
-        if (this.instanceCount !== undefined) return lazy.getvalue(this.instanceCount);
+        if (this.instanceCount !== undefined) return lazy.getValue(this.instanceCount);
 
         return this.next && this.next.getInstanceCount();
     }

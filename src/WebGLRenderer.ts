@@ -233,7 +233,7 @@ export class WebGLRenderer
     {
         const gl = this.gl;
 
-        const instanceCount = ~~lazy.getvalue(renderAtomic.instanceCount);
+        const instanceCount = ~~lazy.getValue(renderAtomic.instanceCount);
 
         const indexBuffer = renderAtomic.index;
         if (indexBuffer)
