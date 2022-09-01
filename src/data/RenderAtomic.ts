@@ -1,11 +1,11 @@
-import { gPartial, Lazy, lazy } from '@feng3d/polyfill';
+import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { ShaderMacro } from '../shader/Macro';
 import { Attribute } from './Attribute';
 import { Attributes } from './Attributes';
 import { Index } from './Index';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
-import { LazyUniforms, Uniforms } from './Uniform';
+import { Uniforms } from './Uniform';
 
 declare global
 {
@@ -76,7 +76,7 @@ export class RenderAtomic
     /**
      * Uniform渲染数据
      */
-    uniforms: LazyUniforms = {} as any;
+    uniforms: LazyObject<Uniforms> = {} as any;
 
     /**
      * 渲染实例数量
@@ -155,7 +155,7 @@ export class RenderAtomic
         return (this.next && this.next.getAttributeByKey(key));
     }
 
-    getUniforms(uniforms: LazyUniforms = {} as any)
+    getUniforms(uniforms: LazyObject<Uniforms> = {} as any)
     {
         this.next && this.next.getUniforms(uniforms);
         Object.assign(uniforms, this.uniforms);

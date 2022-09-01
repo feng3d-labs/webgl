@@ -10,6 +10,21 @@ import { shaderlib } from '../shader/ShaderLib';
 export class Shader
 {
     /**
+     * 着色器名称
+     */
+    shaderName: string;
+
+    /**
+     * 顶点着色器代码
+     */
+    vertex: string;
+
+    /**
+     * 片段着色器代码
+     */
+    fragment: string;
+
+    /**
      * shader 中的 宏
      */
     shaderMacro: ShaderMacro = {} as any;
@@ -52,19 +67,6 @@ export class Shader
 
         return result;
     }
-
-    /**
-     * 着色器名称
-     */
-    shaderName: string;
-    /**
-     * 顶点着色器代码
-     */
-    vertex: string;
-    /**
-     * 片段着色器代码
-     */
-    fragment: string;
 
     /**
      * 更新渲染代码
