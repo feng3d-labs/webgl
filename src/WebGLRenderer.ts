@@ -24,6 +24,16 @@ export class WebGLRenderer
 
     constructor(canvas: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
     {
+        contextAttributes = Object.assign({
+            depth: true,
+            stencil: true,
+            antialias: false,
+            premultipliedAlpha: true,
+            preserveDrawingBuffer: false,
+            powerPreference: 'default',
+            failIfMajorPerformanceCaveat: false,
+        } as WebGLContextAttributes, contextAttributes);
+        //
         const contextIds = ['webgl2', 'webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
         // var contextIds = ["webgl"];
         let gl: GL = <any>null;
