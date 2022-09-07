@@ -10,6 +10,14 @@ import { GLCache } from './gl/GLCache';
 import { GLCapabilities } from './gl/GLCapabilities';
 import { GLExtension } from './gl/GLExtension';
 
+export interface WebGLRendererParameters extends WebGLContextAttributes
+{
+    /**
+     * A Canvas where the renderer draws its output.
+     */
+    canvas: HTMLCanvasElement;
+}
+
 /**
  * WEBGL 渲染器
  *
@@ -17,14 +25,26 @@ import { GLExtension } from './gl/GLExtension';
  */
 export class WebGLRenderer
 {
+    private _canvas: HTMLCanvasElement;
+
     static glList: GL[] = [];
 
     gl: GL;
     private preActiveAttributes: number[] = [];
 
-    constructor(canvas: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
+    constructor(parameters?: Partial<WebGLRendererParameters>)
     {
-        contextAttributes = Object.assign({
+        this._canvas = parameters.canvas;
+        if (!this._canvas)
+        {
+            this._canvas = document.createElement('canvas');
+            this._canvas.style.display = 'block';
+        }
+        this._canvas.addEventListener('webglcontextlost', this._onContextLost, false);
+        this._canvas.addEventListener('webglcontextrestored', this._onContextRestore, false);
+        this._canvas.addEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+
+        parameters = Object.assign({
             depth: true,
             stencil: true,
             antialias: false,
@@ -32,7 +52,7 @@ export class WebGLRenderer
             preserveDrawingBuffer: false,
             powerPreference: 'default',
             failIfMajorPerformanceCaveat: false,
-        } as WebGLContextAttributes, contextAttributes);
+        } as Partial<WebGLRendererParameters>, parameters);
         //
         const contextIds = ['webgl2', 'webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
         // var contextIds = ["webgl"];
@@ -41,16 +61,18 @@ export class WebGLRenderer
         {
             try
             {
-                gl = <any>canvas.getContext(contextIds[i], contextAttributes);
+                gl = this._canvas.getContext(contextIds[i], parameters) as any;
                 gl.contextId = contextIds[i];
-                gl.contextAttributes = contextAttributes;
+                gl.contextAttributes = parameters;
                 break;
             }
             // eslint-disable-next-line no-empty
             catch (e) { }
         }
         if (!gl)
-        { throw '无法初始化WEBGL'; }
+        {
+            throw '无法初始化WEBGL';
+        }
         this.gl = gl;
         //
         new GLCache(gl);
@@ -68,6 +90,8 @@ export class WebGLRenderer
 
     render(renderAtomic: RenderAtomic)
     {
+        if (this._isContextLost === true) return;
+
         const instanceCount = renderAtomic.getInstanceCount();
         if (instanceCount === 0) return;
         const shaderMacro = renderAtomic.getShaderMacro();
@@ -202,6 +226,7 @@ export class WebGLRenderer
         const location = activeInfo.location;
         switch (activeInfo.type)
         {
+            case gl.BOOL:
             case gl.INT:
                 gl.uniform1i(location, data);
                 break;
@@ -231,6 +256,7 @@ export class WebGLRenderer
                 Texture.active(gl, textureInfo);
                 // 设置纹理所在采样编号
                 gl.uniform1i(location, activeInfo.textureID);
+                break;
                 break;
             default:
                 console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);
@@ -297,4 +323,40 @@ export class WebGLRenderer
             }
         }
     }
+
+    dipose()
+    {
+        this._canvas.removeEventListener('webglcontextlost', this._onContextLost, false);
+        this._canvas.removeEventListener('webglcontextrestored', this._onContextRestore, false);
+        this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+    }
+
+    private _initGLContext()
+    {
+
+    }
+
+    private _isContextLost = false;
+    private _onContextLost = (event: Event) =>
+    {
+        event.preventDefault();
+
+        console.log('WebGLRenderer: Context Lost.');
+
+        this._isContextLost = true;
+    };
+
+    private _onContextRestore = () =>
+    {
+        console.log('WebGLRenderer: Context Restored.');
+
+        this._isContextLost = false;
+
+        this._initGLContext();
+    };
+
+    private _onContextCreationError = (event: WebGLContextEvent) =>
+    {
+        console.error('WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage);
+    };
 }
