@@ -61,16 +61,6 @@ export interface GL extends WebGLRenderingContext
     texParameterfAnisotropy(target: GLenum, anisotropy: GLfloat): void;
 
     /**
-     * 上下文属性
-     */
-    contextAttributes: WebGLContextAttributes | undefined;
-
-    /**
-     * 上下文名称
-     */
-    contextId: string;
-
-    /**
      * GL 扩展
      */
     extensions: GLExtension;

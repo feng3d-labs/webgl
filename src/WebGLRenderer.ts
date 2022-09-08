@@ -53,26 +53,9 @@ export class WebGLRenderer
             powerPreference: 'default',
             failIfMajorPerformanceCaveat: false,
         } as Partial<WebGLRendererParameters>, parameters);
-        //
-        const contextIds = ['webgl2', 'webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
-        // var contextIds = ["webgl"];
-        let gl: GL = <any>null;
-        for (let i = 0; i < contextIds.length; ++i)
-        {
-            try
-            {
-                gl = this._canvas.getContext(contextIds[i], parameters) as any;
-                gl.contextId = contextIds[i];
-                gl.contextAttributes = parameters;
-                break;
-            }
-            // eslint-disable-next-line no-empty
-            catch (e) { }
-        }
-        if (!gl)
-        {
-            throw '无法初始化WEBGL';
-        }
+
+        const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
+        const gl = getContext(this._canvas, contextNames, parameters) as GL;
         this.gl = gl;
         //
         new GLCache(gl);
@@ -359,4 +342,35 @@ export class WebGLRenderer
     {
         console.error('WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage);
     };
+}
+
+function getContext(canvas: HTMLCanvasElement, contextNames: string[], contextAttributes?: Partial<WebGLContextAttributes>)
+{
+    const context = _getContext(canvas, contextNames, contextAttributes);
+
+    if (!context)
+    {
+        if (_getContext(this._canvas, contextNames))
+        {
+            throw new Error('Error creating WebGL context with your selected attributes.');
+        }
+        else
+        {
+            throw new Error('Error creating WebGL context.');
+        }
+    }
+
+    return context;
+}
+
+function _getContext(canvas: HTMLCanvasElement, contextNames: string[], contextAttributes?: Partial<WebGLContextAttributes>)
+{
+    let context: RenderingContext;
+    for (let i = 0; i < contextNames.length; ++i)
+    {
+        context = canvas.getContext(contextNames[i], contextAttributes);
+        if (context) break;
+    }
+
+    return null;
 }
