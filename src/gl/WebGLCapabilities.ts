@@ -6,7 +6,7 @@ import { GL } from './GL';
  * @see https://webglreport.com
  * @see http://html5test.com
  */
-export class GLCapabilities
+export class WebGLCapabilities
 {
     /**
      * 是否为 WebGL2
@@ -90,7 +90,6 @@ export class GLCapabilities
 
     constructor(gl: GL)
     {
-        gl.capabilities = this;
         function getMaxPrecision(precision)
         {
             if (precision === 'highp')

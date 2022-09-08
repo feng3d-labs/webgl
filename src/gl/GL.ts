@@ -1,7 +1,6 @@
 import { RenderAtomic } from '../data/RenderAtomic';
 import { GLCache } from './GLCache';
-import { GLCapabilities } from './GLCapabilities';
-import { GLExtension } from './GLExtension';
+import { WebGLExtensions } from './WebGLExtensions';
 
 /**
  * 扩展（封装，包装）WebGL
@@ -63,7 +62,7 @@ export interface GL extends WebGLRenderingContext
     /**
      * GL 扩展
      */
-    extensions: GLExtension;
+    extensions: WebGLExtensions;
 
     /**
      * 渲染
@@ -71,11 +70,6 @@ export interface GL extends WebGLRenderingContext
      * @param renderAtomic 渲染数据
      */
     render(renderAtomic: RenderAtomic): void;
-
-    /**
-     * WEBGL 支持能力
-     */
-    capabilities: GLCapabilities;
 
     /**
      * 缓存

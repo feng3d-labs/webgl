@@ -7,8 +7,9 @@ import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
 import { GL } from './gl/GL';
 import { GLCache } from './gl/GLCache';
-import { GLCapabilities } from './gl/GLCapabilities';
-import { GLExtension } from './gl/GLExtension';
+import { WebGLCapabilities } from './gl/WebGLCapabilities';
+import { WebGLExtensions } from './gl/WebGLExtensions';
+import { updateRenderParams } from './internal/updateRenderParams';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
 {
@@ -57,10 +58,7 @@ export class WebGLRenderer
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
         const gl = getContext(this._canvas, contextNames, parameters) as GL;
         this.gl = gl;
-        //
-        new GLCache(gl);
-        new GLExtension(gl);
-        new GLCapabilities(gl);
+        this._initGLContext();
         //
         gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
         gl.clearDepth(1.0); // Clear everything
@@ -87,7 +85,7 @@ export class WebGLRenderer
         if (!checkedRenderAtomic) return;
         //
         this.gl.useProgram(shaderResult.program);
-        checkedRenderAtomic.renderParams.updateRenderParams(this.gl);
+        updateRenderParams(this, checkedRenderAtomic.renderParams);
         this.activeAttributes(checkedRenderAtomic, shaderResult.attributes);
         this.activeUniforms(checkedRenderAtomic, shaderResult.uniforms);
         this.draw(checkedRenderAtomic, this.gl[checkedRenderAtomic.renderParams.renderMode]);
@@ -314,9 +312,18 @@ export class WebGLRenderer
         this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
     }
 
+    public extensions: WebGLExtensions;
+    public capabilities: WebGLCapabilities;
     private _initGLContext()
     {
+        const gl = this.gl;
 
+        this.extensions = new WebGLExtensions(gl);
+
+        this.capabilities = new WebGLCapabilities(gl);
+        this.extensions.init(this.capabilities);
+
+        new GLCache(gl);
     }
 
     private _isContextLost = false;
@@ -350,7 +357,7 @@ function getContext(canvas: HTMLCanvasElement, contextNames: string[], contextAt
 
     if (!context)
     {
-        if (_getContext(this._canvas, contextNames))
+        if (_getContext(canvas, contextNames))
         {
             throw new Error('Error creating WebGL context with your selected attributes.');
         }
@@ -369,7 +376,7 @@ function _getContext(canvas: HTMLCanvasElement, contextNames: string[], contextA
     for (let i = 0; i < contextNames.length; ++i)
     {
         context = canvas.getContext(contextNames[i], contextAttributes);
-        if (context) break;
+        if (context) return context;
     }
 
     return null;
