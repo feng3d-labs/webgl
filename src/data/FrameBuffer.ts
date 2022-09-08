@@ -1,4 +1,3 @@
-import { GL } from '../gl/GL';
 import { WebGLRenderer } from '../WebGLRenderer';
 
 export class FrameBuffer
@@ -8,8 +7,9 @@ export class FrameBuffer
      */
     private _invalid = true;
 
-    static active(gl: GL, frameBuffer: FrameBuffer)
+    static active(webGLRenderer: WebGLRenderer, frameBuffer: FrameBuffer)
     {
+        const { gl } = webGLRenderer;
         if (frameBuffer._invalid)
         {
             frameBuffer._invalid = false;

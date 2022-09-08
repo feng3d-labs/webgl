@@ -9,6 +9,7 @@ import { GL } from './gl/GL';
 import { GLCache } from './gl/GLCache';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
+import { WebGLTextures } from './gl/WebGLTextures';
 import { updateRenderParams } from './internal/updateRenderParams';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
@@ -27,6 +28,10 @@ export interface WebGLRendererParameters extends WebGLContextAttributes
 export class WebGLRenderer
 {
     private _canvas: HTMLCanvasElement;
+
+    extensions: WebGLExtensions;
+    capabilities: WebGLCapabilities;
+    textures: WebGLTextures;
 
     static glList: GL[] = [];
 
@@ -234,7 +239,7 @@ export class WebGLRenderer
                 const textureInfo = data as Texture;
                 // 激活纹理编号
                 gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                Texture.active(gl, textureInfo);
+                this.textures.active(textureInfo);
                 // 设置纹理所在采样编号
                 gl.uniform1i(location, activeInfo.textureID);
                 break;
@@ -312,8 +317,6 @@ export class WebGLRenderer
         this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
     }
 
-    public extensions: WebGLExtensions;
-    public capabilities: WebGLCapabilities;
     private _initGLContext()
     {
         const gl = this.gl;
@@ -322,6 +325,7 @@ export class WebGLRenderer
 
         this.capabilities = new WebGLCapabilities(gl);
         this.extensions.init(this.capabilities);
+        this.textures = new WebGLTextures(this.gl, this.extensions);
 
         new GLCache(gl);
     }
