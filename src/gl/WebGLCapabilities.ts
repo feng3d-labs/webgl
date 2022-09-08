@@ -1,4 +1,5 @@
 import { GL } from './GL';
+import { WebGLExtensions } from './WebGLExtensions';
 
 /**
  * WEBGL 支持功能
@@ -88,8 +89,14 @@ export class WebGLCapabilities
      */
     stencilBits: number;
 
-    constructor(gl: GL)
+    gl: GL;
+    extensions: WebGLExtensions;
+
+    constructor(gl: GL, extensions: WebGLExtensions)
     {
+        this.gl = gl;
+        this.extensions = extensions;
+
         function getMaxPrecision(precision)
         {
             if (precision === 'highp')
@@ -120,14 +127,9 @@ export class WebGLCapabilities
             gl2 = gl;
             this.isWebGL2 = true;
         }
-        if (gl.extensions.EXT_texture_filter_anisotropic)
-        {
-            this.maxAnisotropy = gl.getParameter(gl.extensions.EXT_texture_filter_anisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-        }
-        else
-        {
-            this.maxAnisotropy = 0;
-        }
+
+        this.maxAnisotropy = getMaxAnisotropy(gl, extensions);
+
         this.maxPrecision = getMaxPrecision('highp');
 
         this.maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
@@ -147,4 +149,25 @@ export class WebGLCapabilities
         this.maxSamples = this.isWebGL2 ? gl.getParameter(gl2.MAX_SAMPLES) : 0;
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
     }
+}
+
+/**
+ * 纹理各向异性过滤最大值
+ */
+function getMaxAnisotropy(gl: GL, extensions: WebGLExtensions)
+{
+    let maxAnisotropy: number;
+
+    if (extensions.has('EXT_texture_filter_anisotropic') === true)
+    {
+        const extension = extensions.get('EXT_texture_filter_anisotropic');
+
+        maxAnisotropy = gl.getParameter(extension.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+    }
+    else
+    {
+        maxAnisotropy = 0;
+    }
+
+    return maxAnisotropy;
 }

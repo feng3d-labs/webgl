@@ -1,7 +1,10 @@
 import { Texture } from '../data/Texture';
 import { WebGLRenderer } from '../WebGLRenderer';
+import { TextureDataType } from './enums/TextureDataType';
 import { GL } from './GL';
+import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
+import { WebGLProperties } from './WebGLProperties';
 
 /**
  * WebGL纹理
@@ -10,11 +13,14 @@ export class WebGLTextures
 {
     gl: GL;
     extensions: WebGLExtensions;
+    capabilities: WebGLCapabilities;
+    properties: WebGLProperties;
 
-    constructor(gl: GL, extensions: WebGLExtensions)
+    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;
+        this.capabilities = capabilities;
     }
 
     active(data: Texture)
@@ -27,17 +33,37 @@ export class WebGLTextures
 
         // 绑定纹理
         gl.bindTexture(textureType, texture);
-        // 设置纹理参数
-        gl.texParameteri(textureType, gl.TEXTURE_MIN_FILTER, gl[data.minFilter]);
-        gl.texParameteri(textureType, gl.TEXTURE_MAG_FILTER, gl[data.magFilter]);
-        gl.texParameteri(textureType, gl.TEXTURE_WRAP_S, gl[data.wrapS]);
-        gl.texParameteri(textureType, gl.TEXTURE_WRAP_T, gl[data.wrapT]);
 
-        //
-        gl.texParameterfAnisotropy(textureType, data.anisotropy);
-        // if()
+        this.setTextureParameters(data);
 
         return texture;
+    }
+
+    private setTextureParameters(texture: Texture)
+    {
+        const { gl, extensions, capabilities, properties } = this;
+
+        const textureType = gl[texture.textureType];
+
+        // 设置纹理参数
+        gl.texParameteri(textureType, gl.TEXTURE_MIN_FILTER, gl[texture.minFilter]);
+        gl.texParameteri(textureType, gl.TEXTURE_MAG_FILTER, gl[texture.magFilter]);
+        gl.texParameteri(textureType, gl.TEXTURE_WRAP_S, gl[texture.wrapS]);
+        gl.texParameteri(textureType, gl.TEXTURE_WRAP_T, gl[texture.wrapT]);
+
+        if (extensions.has('EXT_texture_filter_anisotropic') === true)
+        {
+            const extension = extensions.get('EXT_texture_filter_anisotropic');
+
+            if (texture.type === TextureDataType.FLOAT && extensions.has('OES_texture_float_linear') === false) return; // verify extension for WebGL 1 and WebGL 2
+            if (capabilities.isWebGL2 === false && (texture.type === TextureDataType.HALF_FLOAT && extensions.has('OES_texture_half_float_linear') === false)) return; // verify extension for WebGL 1 only
+
+            if (texture.anisotropy > 1 || properties.get(texture).__currentAnisotropy)
+            {
+                gl.texParameterf(textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(texture.anisotropy, capabilities.maxAnisotropy));
+                properties.get(texture).__currentAnisotropy = texture.anisotropy;
+            }
+        }
     }
 
     /**

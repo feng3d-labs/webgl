@@ -9,6 +9,7 @@ import { GL } from './gl/GL';
 import { GLCache } from './gl/GLCache';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
+import { WebGLProperties } from './gl/WebGLProperties';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { updateRenderParams } from './internal/updateRenderParams';
 
@@ -30,6 +31,7 @@ export class WebGLRenderer
     private _canvas: HTMLCanvasElement;
 
     extensions: WebGLExtensions;
+    properties: WebGLProperties;
     capabilities: WebGLCapabilities;
     textures: WebGLTextures;
 
@@ -315,6 +317,8 @@ export class WebGLRenderer
         this._canvas.removeEventListener('webglcontextlost', this._onContextLost, false);
         this._canvas.removeEventListener('webglcontextrestored', this._onContextRestore, false);
         this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+
+        this.properties.dispose();
     }
 
     private _initGLContext()
@@ -323,9 +327,10 @@ export class WebGLRenderer
 
         this.extensions = new WebGLExtensions(gl);
 
-        this.capabilities = new WebGLCapabilities(gl);
+        this.capabilities = new WebGLCapabilities(gl, this.extensions);
         this.extensions.init(this.capabilities);
-        this.textures = new WebGLTextures(this.gl, this.extensions);
+        this.properties = new WebGLProperties();
+        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
 
         new GLCache(gl);
     }

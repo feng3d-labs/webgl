@@ -104,10 +104,39 @@ export class WebGLExtensions
         this.getExtension('EXT_color_buffer_half_float');
         this.getExtension('WEBGL_multisampled_render_to_texture');
         //
-        this.wrap(this.gl, capabilities);
+        this.wrap(this.gl);
     }
 
-    getExtension<K extends keyof WebGLExtensionMap>(name: K): WebGLExtensionMap[K]
+    /**
+     * 判断是否存在指定WebGL扩展。
+     *
+     * @param name WebGL扩展名称。
+     * @returns 是否存在指定WebGL扩展。
+     */
+    has<K extends keyof WebGLExtensionMap>(name: K): boolean
+    {
+        return this.getExtension(name) !== null;
+    }
+
+    /**
+     * 获取指定WebGL扩展。
+     *
+     * @param name WebGL扩展名称。
+     * @returns 返回指定WebGL扩展。
+     */
+    get<K extends keyof WebGLExtensionMap>(name: K): WebGLExtensionMap[K]
+    {
+        const extension = this.getExtension(name);
+
+        if (extension === null)
+        {
+            console.warn(`WebGLRenderer: ${name} extension not supported.`);
+        }
+
+        return extension;
+    }
+
+    private getExtension<K extends keyof WebGLExtensionMap>(name: K): WebGLExtensionMap[K]
     {
         const { gl, extensions } = this;
         if (extensions[name] !== undefined)
@@ -196,30 +225,8 @@ export class WebGLExtensions
         };
     }
 
-    private wrap(gl: GL, capabilities: WebGLCapabilities)
+    private wrap(gl: GL)
     {
-        if (!gl.texParameterfAnisotropy)
-        {
-            gl.texParameterfAnisotropy = (target, anisotropy) =>
-            {
-                if (anisotropy <= 0) return;
-
-                if (gl.extensions.EXT_texture_filter_anisotropic)
-                {
-                    if (anisotropy > capabilities.maxAnisotropy)
-                    {
-                        anisotropy = capabilities.maxAnisotropy;
-                        console.warn(`${anisotropy} 超出 maxAnisotropy 的最大值 ${capabilities.maxAnisotropy} ！,使用最大值替换。`);
-                    }
-                    gl.texParameterf(target, gl.extensions.EXT_texture_filter_anisotropic.TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
-                }
-                else
-                {
-                    console.warn('浏览器不支持各向异性过滤（anisotropy）特性！');
-                }
-            };
-        }
-
         //
         if (!gl.vertexAttribDivisor)
         {

@@ -49,17 +49,6 @@ export interface GL extends WebGLRenderingContext
     drawArraysInstanced(mode: GLenum, first: GLint, count: GLsizei, instanceCount: GLsizei): void;
 
     /**
-     * 设置纹理最大向异性。 (相当于texParameterf(textureType, ext.TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);)
-     *
-     * @param target A GLenum specifying the binding point (target).  GLenum 指定绑定点(目标)
-     * @param param Maximum anisotropy for a texture. 纹理最大向异性值
-     *
-     * @see WebGLRenderingContextBase.texParameterf
-     * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/texParameter
-     */
-    texParameterfAnisotropy(target: GLenum, anisotropy: GLfloat): void;
-
-    /**
      * GL 扩展
      */
     extensions: WebGLExtensions;
