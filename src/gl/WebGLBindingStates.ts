@@ -1,3 +1,4 @@
+import { Attribute } from '../data/Attribute';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
@@ -25,7 +26,82 @@ export class WebGLBindingStates
 
     setup(renderAtomic: RenderAtomic)
     {
-        this.currentState = this.getBindingState(renderAtomic);
+        const { capabilities } = this;
+
+        let updateBuffers = false;
+
+        if (capabilities.vaoAvailable)
+        {
+            const state = this.getBindingState(renderAtomic);
+            if (this.currentState !== state)
+            {
+                this.currentState = state;
+                this.bindVertexArrayObject(this.currentState.object);
+            }
+            updateBuffers = true;
+        }
+        else
+        {
+            updateBuffers = true;
+        }
+
+        // if (index !== null)
+        // {
+        //     attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
+        // }
+
+        if (updateBuffers)
+        {
+            this.setupVertexAttributes(renderAtomic);
+
+            // if (index !== null)
+            // {
+            //     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, attributes.get(index).buffer);
+            // }
+        }
+    }
+
+    private setupVertexAttributes(renderAtomic: RenderAtomic)
+    {
+        const { gl, capabilities, extensions } = this;
+
+        if (capabilities.isWebGL2 === false && renderAtomic.getInstanceCount() > 0)
+        {
+            if (extensions.get('ANGLE_instanced_arrays') === null) return;
+        }
+
+        this.initAttributes();
+
+        const shader = renderAtomic.getShader();
+        const shaderResult = shader.activeShaderProgram(this.gl);
+
+        const activeAttributes: number[] = [];
+        for (const name in shaderResult.attributes)
+        {
+            const activeInfo = shaderResult.attributes[name];
+            const attribute: Attribute = renderAtomic.getAttributeByKey(name);
+
+            this.enableAttribute(activeInfo.location, attribute.divisor);
+
+            const buffer = attribute.getBuffer(gl);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.vertexAttribPointer(activeInfo.location, attribute.size, gl[attribute.type], attribute.normalized, attribute.stride, attribute.offset);
+
+            activeAttributes.push(activeInfo.location);
+        }
+
+        this.disableUnusedAttributes();
+    }
+
+    private bindVertexArrayObject(vao: WebGLVertexArrayObject)
+    {
+        const { gl, extensions, capabilities } = this;
+
+        if (capabilities.isWebGL2) return (gl as any as WebGL2RenderingContext).bindVertexArray(vao);
+
+        const extension = extensions.get('OES_vertex_array_object');
+
+        return extension.bindVertexArrayOES(vao);
     }
 
     /**

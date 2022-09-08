@@ -97,22 +97,6 @@ export class Attribute
     }
 
     /**
-     *
-     * @param gl
-     * @param location A GLuint specifying the index of the vertex attribute that is to be modified.
-     */
-    active(webGLRenderer: WebGLRenderer, location: number)
-    {
-        const { gl, bindingStates } = webGLRenderer;
-
-        bindingStates.enableAttribute(location, this.divisor);
-
-        const buffer = this.getBuffer(gl);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(location, this.size, gl[this.type], this.normalized, this.stride, this.offset);
-    }
-
-    /**
      * 获取缓冲
      */
     getBuffer(gl: GL)

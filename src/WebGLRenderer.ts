@@ -2,7 +2,7 @@
 import { lazy } from '@feng3d/polyfill';
 import { Attribute } from './data/Attribute';
 import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
-import { AttributeInfo, UniformInfo } from './data/Shader';
+import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
 import { GL } from './gl/GL';
@@ -83,9 +83,7 @@ export class WebGLRenderer
     {
         if (this._isContextLost === true) return;
 
-        // const { bindingStates } = this;
-
-        // bindingStates.setup(renderAtomic);
+        const { bindingStates } = this;
 
         const instanceCount = renderAtomic.getInstanceCount();
         if (instanceCount === 0) return;
@@ -100,7 +98,9 @@ export class WebGLRenderer
         //
         this.gl.useProgram(shaderResult.program);
         updateRenderParams(this, checkedRenderAtomic.renderParams);
-        this.activeAttributes(checkedRenderAtomic, shaderResult.attributes);
+
+        bindingStates.setup(renderAtomic);
+
         this.activeUniforms(checkedRenderAtomic, shaderResult.uniforms);
         this.draw(checkedRenderAtomic, this.gl[checkedRenderAtomic.renderParams.renderMode]);
     }
@@ -160,27 +160,6 @@ export class WebGLRenderer
         };
 
         return checkedRenderAtomic;
-    }
-
-    /**
-     * 激活属性
-     */
-    private activeAttributes(renderAtomic: RenderAtomicData, attributeInfos: { [name: string]: AttributeInfo })
-    {
-        const { bindingStates } = this;
-
-        bindingStates.initAttributes();
-
-        const activeAttributes: number[] = [];
-        for (const name in attributeInfos)
-        {
-            const activeInfo = attributeInfos[name];
-            const buffer: Attribute = renderAtomic.attributes[name];
-            buffer.active(this, activeInfo.location);
-            activeAttributes.push(activeInfo.location);
-        }
-
-        bindingStates.disableUnusedAttributes();
     }
 
     /**

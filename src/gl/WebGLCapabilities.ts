@@ -92,6 +92,11 @@ export class WebGLCapabilities
     gl: GL;
     extensions: WebGLExtensions;
 
+    /**
+     * 是否支持VAO。
+     */
+    vaoAvailable: boolean;
+
     constructor(gl: GL, extensions: WebGLExtensions)
     {
         this.gl = gl;
@@ -148,6 +153,8 @@ export class WebGLCapabilities
 
         this.maxSamples = this.isWebGL2 ? gl.getParameter(gl2.MAX_SAMPLES) : 0;
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
+
+        this.vaoAvailable = this.isWebGL2 || !!extensions.get('OES_vertex_array_object');
     }
 }
 
