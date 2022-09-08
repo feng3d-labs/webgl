@@ -84,6 +84,10 @@ export class WebGLRenderer
     {
         if (this._isContextLost === true) return;
 
+        const { bindingStates } = this;
+
+        bindingStates.setup(renderAtomic);
+
         const instanceCount = renderAtomic.getInstanceCount();
         if (instanceCount === 0) return;
         const shaderMacro = renderAtomic.getShaderMacro();
@@ -334,7 +338,7 @@ export class WebGLRenderer
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
-        this.bindingStates = new WebGLBindingStates(this.gl);
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.capabilities);
 
         new GLCache(this.gl);
     }
