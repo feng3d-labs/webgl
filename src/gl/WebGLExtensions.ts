@@ -53,7 +53,6 @@ export class WebGLExtensions
         console.assert(!gl.extensions, `${gl} ${gl.extensions} 存在！`);
         gl.extensions = this;
 
-        this.initExtensions(gl);
         this.cacheGLQuery(gl);
     }
 
@@ -146,15 +145,6 @@ export class WebGLExtensions
         extensions[name] = extension;
 
         return extension;
-    }
-
-    private initExtensions(gl: GL)
-    {
-        if (this.has('EXT_blend_minmax'))
-        {
-            gl['MIN_EXT'] = this.get('EXT_blend_minmax').MIN_EXT;
-            gl['MAX_EXT'] = this.get('EXT_blend_minmax').MAX_EXT;
-        }
     }
 
     /**

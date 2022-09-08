@@ -143,7 +143,7 @@ export class WebGLCapabilities
         this.maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
         this.vertexTextures = this.maxVertexTextures > 0;
-        this.floatFragmentTextures = this.isWebGL2 || !!gl.getExtension('OES_texture_float');
+        this.floatFragmentTextures = this.isWebGL2 || !!extensions.get('OES_texture_float');
         this.floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
         this.maxSamples = this.isWebGL2 ? gl.getParameter(gl2.MAX_SAMPLES) : 0;
