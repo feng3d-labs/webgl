@@ -7,6 +7,7 @@ import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
 import { GL } from './gl/GL';
 import { GLCache } from './gl/GLCache';
+import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLProperties } from './gl/WebGLProperties';
@@ -31,16 +32,17 @@ export class WebGLRenderer
 {
     private _canvas: HTMLCanvasElement;
 
+    static glList: GL[] = [];
+
+    gl: GL;
+    private preActiveAttributes: number[] = [];
+
     extensions: WebGLExtensions;
     properties: WebGLProperties;
     capabilities: WebGLCapabilities;
     textures: WebGLTextures;
     state: WebGLState;
-
-    static glList: GL[] = [];
-
-    gl: GL;
-    private preActiveAttributes: number[] = [];
+    bindingStates: WebGLBindingStates;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -169,7 +171,7 @@ export class WebGLRenderer
         {
             const activeInfo = attributeInfos[name];
             const buffer: Attribute = renderAtomic.attributes[name];
-            buffer.active(gl, activeInfo.location);
+            buffer.active(this, activeInfo.location);
             activeAttributes.push(activeInfo.location);
 
             const index = this.preActiveAttributes.indexOf(activeInfo.location);
@@ -325,17 +327,16 @@ export class WebGLRenderer
 
     private _initGLContext()
     {
-        const gl = this.gl;
+        this.extensions = new WebGLExtensions(this.gl);
 
-        this.extensions = new WebGLExtensions(gl);
-
-        this.capabilities = new WebGLCapabilities(gl, this.extensions);
+        this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
         this.extensions.init(this.capabilities);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
-        this.state = new WebGLState(gl, this.extensions, this.capabilities);
+        this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
+        this.bindingStates = new WebGLBindingStates(this.gl);
 
-        new GLCache(gl);
+        new GLCache(this.gl);
     }
 
     private _isContextLost = false;
