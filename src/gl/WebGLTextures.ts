@@ -16,11 +16,12 @@ export class WebGLTextures
     capabilities: WebGLCapabilities;
     properties: WebGLProperties;
 
-    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
+    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
+        this.properties = properties;
     }
 
     active(data: Texture)

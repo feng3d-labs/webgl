@@ -330,7 +330,7 @@ export class WebGLRenderer
         this.capabilities = new WebGLCapabilities(gl, this.extensions);
         this.extensions.init(this.capabilities);
         this.properties = new WebGLProperties();
-        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
+        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
 
         new GLCache(gl);
     }
