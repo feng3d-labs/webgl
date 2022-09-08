@@ -1,4 +1,5 @@
 import { Attribute } from '../data/Attribute';
+import { Index } from '../data/Index';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
@@ -12,7 +13,7 @@ export class WebGLBindingStates
     private currentState: BindingState;
     private defaultState: BindingState;
 
-    private bindingStates = new WeakMap();
+    private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
     constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
     {
@@ -36,12 +37,16 @@ export class WebGLBindingStates
             if (this.currentState !== state)
             {
                 this.currentState = state;
-                this.bindVertexArrayObject(this.currentState.object);
+                this.bindVertexArrayObject(this.currentState.vao);
             }
-            updateBuffers = true;
+            updateBuffers = this.needsUpdate(renderAtomic);
+
+            if (updateBuffers) this.saveCache(renderAtomic);
         }
-        else
+        else if (this.currentState.renderAtomic !== renderAtomic)
         {
+            this.currentState.renderAtomic = renderAtomic;
+
             updateBuffers = true;
         }
 
@@ -61,6 +66,101 @@ export class WebGLBindingStates
         }
     }
 
+    /**
+     * 判断是否需要更新。
+     *
+     * @param renderAtomic 渲染原子。
+     * @returns 是否需要更新。
+     */
+    private needsUpdate(renderAtomic: RenderAtomic)
+    {
+        const { gl, currentState } = this;
+
+        const cachedAttributes = currentState.attributes;
+
+        const shader = renderAtomic.getShader();
+        const shaderResult = shader.activeShaderProgram(gl);
+        const attributeInfos = shaderResult.attributes;
+
+        let attributesNum = 0;
+
+        for (const name in attributeInfos)
+        {
+            const attributeInfo = attributeInfos[name];
+
+            if (attributeInfo.location >= 0)
+            {
+                const cachedAttribute = cachedAttributes[name];
+                const attribute = renderAtomic.getAttributeByKey(name);
+
+                if (cachedAttribute === undefined) return true;
+
+                if (cachedAttribute.attribute !== attribute) return true;
+
+                if (attribute && cachedAttribute.data !== attribute.data) return true;
+
+                attributesNum++;
+            }
+        }
+
+        if (currentState.attributesNum !== attributesNum) return true;
+
+        const index = renderAtomic.getIndexBuffer();
+        if (currentState.index !== index) return true;
+
+        return false;
+    }
+
+    /**
+     * 保存缓存。
+     *
+     * @param renderAtomic 渲染原子。
+     */
+    private saveCache(renderAtomic: RenderAtomic)
+    {
+        const { gl, currentState } = this;
+
+        const cache: { [key: string]: { data: number[], attribute: Attribute } } = {};
+        let attributesNum = 0;
+
+        const shader = renderAtomic.getShader();
+        const shaderResult = shader.activeShaderProgram(gl);
+        const attributeInfos = shaderResult.attributes;
+
+        for (const name in attributeInfos)
+        {
+            const programAttribute = attributeInfos[name];
+
+            if (programAttribute.location >= 0)
+            {
+                const attribute = renderAtomic.getAttributeByKey(name);
+
+                const data: { data: number[], attribute: Attribute } = {} as any;
+                data.attribute = attribute;
+
+                if (attribute && attribute.data)
+                {
+                    data.data = attribute.data;
+                }
+
+                cache[name] = data;
+
+                attributesNum++;
+            }
+        }
+
+        currentState.attributes = cache;
+        currentState.attributesNum = attributesNum;
+
+        const index = renderAtomic.getIndexBuffer();
+        currentState.index = index;
+    }
+
+    /**
+     * 设置顶点属性。
+     *
+     * @param renderAtomic 渲染原子。
+     */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
         const { gl, capabilities, extensions } = this;
@@ -73,7 +173,7 @@ export class WebGLBindingStates
         this.initAttributes();
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(this.gl);
+        const shaderResult = shader.activeShaderProgram(gl);
 
         const activeAttributes: number[] = [];
         for (const name in shaderResult.attributes)
@@ -93,6 +193,11 @@ export class WebGLBindingStates
         this.disableUnusedAttributes();
     }
 
+    /**
+     * 绑定顶点数组对象。
+     *
+     * @param vao 顶点数组对象。
+     */
     private bindVertexArrayObject(vao: WebGLVertexArrayObject)
     {
         const { gl, extensions, capabilities } = this;
@@ -100,8 +205,7 @@ export class WebGLBindingStates
         if (capabilities.isWebGL2) return (gl as any as WebGL2RenderingContext).bindVertexArray(vao);
 
         const extension = extensions.get('OES_vertex_array_object');
-
-        return extension.bindVertexArrayOES(vao);
+        extension.bindVertexArrayOES(vao);
     }
 
     /**
@@ -174,6 +278,12 @@ export class WebGLBindingStates
         }
     }
 
+    /**
+     * 获取对应的绑定状态。
+     *
+     * @param renderAtomic 渲染原子。
+     * @returns 对应的绑定状态。
+     */
     private getBindingState(renderAtomic: RenderAtomic)
     {
         let bindingState = this.bindingStates.get(renderAtomic);
@@ -187,6 +297,11 @@ export class WebGLBindingStates
         return bindingState;
     }
 
+    /**
+     * 创建WebGL顶点数组对象。
+     *
+     * @returns WebGL顶点数组对象。
+     */
     private createVertexArrayObject()
     {
         const { gl, extensions, capabilities } = this;
@@ -201,6 +316,12 @@ export class WebGLBindingStates
         return extension.createVertexArrayOES();
     }
 
+    /**
+     * 创建绑定状态。
+     *
+     * @param vao WebGL顶点数组对象。
+     * @returns 绑定状态。
+     */
     private createBindingState(vao: WebGLVertexArrayObject)
     {
         const { gl } = this;
@@ -211,20 +332,51 @@ export class WebGLBindingStates
     }
 }
 
+/**
+ * 绑定状态
+ */
 class BindingState
 {
-    newAttributes = [];
-    enabledAttributes = [];
-    attributeDivisors = [];
-    attributes = {};
-    object: any;
+    renderAtomic: RenderAtomic;
 
-    constructor(object: any, maxVertexAttributes: number)
+    /**
+     * 最新启用的WebGL属性。
+     */
+    newAttributes: number[] = [];
+
+    /**
+     * 已启用的WebGL属性。
+     */
+    enabledAttributes: number[] = [];
+
+    /**
+     * WebGL属性对应的divisor值。
+     */
+    attributeDivisors: number[] = [];
+
+    /**
+     * WebGL顶点数组对象
+     */
+    vao: WebGLVertexArrayObject;
+
+    /**
+     * WebGL属性缓存信息
+     */
+    attributes: { [key: string]: { data: number[], attribute: Attribute } } = {};
+
+    /**
+     * 顶点索引缓冲
+     */
+    index: Index;
+
+    /**
+     * 属性数量。
+     */
+    attributesNum: number;
+
+    constructor(vao: WebGLVertexArrayObject, maxVertexAttributes: number)
     {
-        this.newAttributes = [];
-        this.enabledAttributes = [];
-        this.attributeDivisors = [];
-        this.object = object;
+        this.vao = vao;
 
         for (let i = 0; i < maxVertexAttributes; i++)
         {
