@@ -65,7 +65,7 @@ export class RenderParams
      */
     @serialize
     @oav({ component: 'OAVEnum', tooltip: '混合方式，默认BlendEquation.FUNC_ADD', componentParam: { enumClass: BlendEquation } })
-    blendEquation: 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' = BlendEquation.FUNC_ADD;
+    blendEquation: 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX' | BlendEquation = BlendEquation.FUNC_ADD;
 
     /**
      * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。

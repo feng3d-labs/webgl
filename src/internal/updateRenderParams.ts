@@ -1,4 +1,5 @@
 import { RenderParams } from '../data/RenderParams';
+import { BlendEquation } from '../gl/enums/BlendEquation';
 import { ColorMask } from '../gl/enums/ColorMask';
 import { CullFace } from '../gl/enums/CullFace';
 import { WebGLRenderer } from '../WebGLRenderer';
@@ -8,10 +9,10 @@ import { WebGLRenderer } from '../WebGLRenderer';
  */
 export function updateRenderParams(webGLRenderer: WebGLRenderer, renderParams: RenderParams)
 {
-    const { gl, capabilities } = webGLRenderer;
+    const { gl, capabilities, state } = webGLRenderer;
 
     const cullfaceEnum = renderParams.cullFace;
-    const blendEquation = gl[renderParams.blendEquation];
+    const blendEquation = state.convertBlendEquation(renderParams.blendEquation as BlendEquation);
     const sfactor = gl[renderParams.sfactor];
     const dfactor = gl[renderParams.dfactor];
     const cullFace = gl[renderParams.cullFace];

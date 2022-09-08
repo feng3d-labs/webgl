@@ -27,23 +27,9 @@ export enum BlendEquation
     FUNC_REVERSE_SUBTRACT = 'FUNC_REVERSE_SUBTRACT',
 
     /**
-     * 源与目标的最小值，当开启 EXT_blend_minmax 扩展时生效。
-     *
-     * When using the EXT_blend_minmax extension:
-     * Minimum of source and destination
-     */
-    MIN_EXT = 'MIN_EXT',
-
-    /**
-     * 源与目标的最大值，当开启 EXT_blend_minmax 扩展时生效。
-     *
-     * When using the EXT_blend_minmax extension:
-     * Maximum of source and destination.
-     */
-    MAX_EXT = 'MAX_EXT',
-
-    /**
      * 源与目标的最小值，在 WebGL 2 中可使用。
+     *
+     * 在 WebGL 1 时，自动使用 EXT_blend_minmax 扩展中 MIN_EXT 值。
      *
      * using a WebGL 2 context
      * Minimum of source and destination
@@ -52,6 +38,8 @@ export enum BlendEquation
 
     /**
      * 源与目标的最大值，在 WebGL 2 中可使用。
+     *
+     * 在 WebGL 1 时，自动使用 EXT_blend_minmax 扩展中 MAX_EXT 值。
      *
      * using a WebGL 2 context
      * Maximum of source and destination.

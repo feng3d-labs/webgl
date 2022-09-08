@@ -10,6 +10,7 @@ import { GLCache } from './gl/GLCache';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLProperties } from './gl/WebGLProperties';
+import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { updateRenderParams } from './internal/updateRenderParams';
 
@@ -34,6 +35,7 @@ export class WebGLRenderer
     properties: WebGLProperties;
     capabilities: WebGLCapabilities;
     textures: WebGLTextures;
+    state: WebGLState;
 
     static glList: GL[] = [];
 
@@ -331,6 +333,7 @@ export class WebGLRenderer
         this.extensions.init(this.capabilities);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
+        this.state = new WebGLState(gl, this.extensions, this.capabilities);
 
         new GLCache(gl);
     }
