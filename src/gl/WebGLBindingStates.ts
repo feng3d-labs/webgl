@@ -41,26 +41,61 @@ export class WebGLBindingStates
     {
         const { gl, extensions, capabilities, currentState } = this;
 
-        // //
-        // const newAttributes = currentState.newAttributes;
-        // const enabledAttributes = currentState.enabledAttributes;
-        // const attributeDivisors = currentState.attributeDivisors;
+        //
+        const newAttributes = currentState.newAttributes;
+        const enabledAttributes = currentState.enabledAttributes;
+        const attributeDivisors = currentState.attributeDivisors;
 
-        // newAttributes[location] = 1;
+        newAttributes[location] = 1;
 
-        // if (enabledAttributes[location] === 0)
-        // {
+        if (enabledAttributes[location] === 0)
+        {
             gl.enableVertexAttribArray(location);
-        //     enabledAttributes[location] = 1;
-        // }
+            enabledAttributes[location] = 1;
+        }
 
-        // if (attributeDivisors[location] !== divisor)
-        // {
+        if (attributeDivisors[location] !== divisor)
+        {
             const extension = capabilities.isWebGL2 ? gl : extensions.get('ANGLE_instanced_arrays');
 
             extension[capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE'](location, divisor);
-        //     attributeDivisors[location] = divisor;
-        // }
+            attributeDivisors[location] = divisor;
+        }
+    }
+
+    /**
+     * 初始化WebGL属性使用情况
+     */
+    initAttributes()
+    {
+        const { currentState } = this;
+
+        const newAttributes = currentState.newAttributes;
+
+        for (let i = 0, il = newAttributes.length; i < il; i++)
+        {
+            newAttributes[i] = 0;
+        }
+    }
+
+    /**
+     * 关闭未使用的WebGL属性。
+     */
+    disableUnusedAttributes()
+    {
+        const { gl, currentState } = this;
+
+        const newAttributes = currentState.newAttributes;
+        const enabledAttributes = currentState.enabledAttributes;
+
+        for (let i = 0, il = enabledAttributes.length; i < il; i++)
+        {
+            if (enabledAttributes[i] !== newAttributes[i])
+            {
+                gl.disableVertexAttribArray(i);
+                enabledAttributes[i] = 0;
+            }
+        }
     }
 
     private getBindingState(renderAtomic: RenderAtomic)

@@ -35,7 +35,6 @@ export class WebGLRenderer
     static glList: GL[] = [];
 
     gl: GL;
-    private preActiveAttributes: number[] = [];
 
     extensions: WebGLExtensions;
     properties: WebGLProperties;
@@ -84,9 +83,9 @@ export class WebGLRenderer
     {
         if (this._isContextLost === true) return;
 
-        const { bindingStates } = this;
+        // const { bindingStates } = this;
 
-        bindingStates.setup(renderAtomic);
+        // bindingStates.setup(renderAtomic);
 
         const instanceCount = renderAtomic.getInstanceCount();
         if (instanceCount === 0) return;
@@ -168,7 +167,9 @@ export class WebGLRenderer
      */
     private activeAttributes(renderAtomic: RenderAtomicData, attributeInfos: { [name: string]: AttributeInfo })
     {
-        const gl = this.gl;
+        const { bindingStates } = this;
+
+        bindingStates.initAttributes();
 
         const activeAttributes: number[] = [];
         for (const name in attributeInfos)
@@ -177,18 +178,9 @@ export class WebGLRenderer
             const buffer: Attribute = renderAtomic.attributes[name];
             buffer.active(this, activeInfo.location);
             activeAttributes.push(activeInfo.location);
-
-            const index = this.preActiveAttributes.indexOf(activeInfo.location);
-            if (index !== -1)
-            {
-                this.preActiveAttributes.splice(index, 1);
-            }
         }
-        this.preActiveAttributes.forEach((location) =>
-        {
-            gl.disableVertexAttribArray(location);
-        });
-        this.preActiveAttributes = activeAttributes;
+
+        bindingStates.disableUnusedAttributes();
     }
 
     /**
