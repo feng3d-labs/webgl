@@ -51,7 +51,7 @@ export class WebGLInfo
                 break;
 
             default:
-                console.error('THREE.WebGLInfo: Unknown draw mode:', mode);
+                console.error('WebGLInfo: Unknown draw mode:', mode);
                 break;
         }
     }

@@ -109,7 +109,7 @@ export class WebGLAttributes
         }
         else
         {
-            throw new Error(`THREE.WebGLAttributes: Unsupported buffer data format: ${array}`);
+            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
         }
 
         return {

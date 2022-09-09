@@ -1,14 +1,11 @@
-import { WebGLAttributeBufferCacle } from '../WebGLAttributes';
 import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';
 
-export class WebGLIndexedBufferRenderer
+export class WebGLBufferRenderer
 {
     mode: number;
-    type: number;
-    bytesPerElement: number;
 
     gl: GL;
     extensions: WebGLExtensions;
@@ -28,17 +25,11 @@ export class WebGLIndexedBufferRenderer
         this.mode = value;
     }
 
-    setIndex(value: WebGLAttributeBufferCacle)
-    {
-        this.type = value.type;
-        this.bytesPerElement = value.bytesPerElement;
-    }
-
     render(start: number, count: number)
     {
-        const { gl, info, mode, type, bytesPerElement } = this;
+        const { gl, info, mode } = this;
 
-        gl.drawElements(mode, count, type, start * bytesPerElement);
+        gl.drawArrays(mode, start, count);
 
         info.update(count, mode, 1);
     }
@@ -47,11 +38,11 @@ export class WebGLIndexedBufferRenderer
     {
         if (primcount === 0) return;
 
-        const { gl, extensions, info, capabilities, mode, type, bytesPerElement } = this;
+        const { gl, extensions, info, capabilities, mode } = this;
 
         if (capabilities.isWebGL2)
         {
-            gl.drawElementsInstanced(mode, count, type, start * bytesPerElement, primcount);
+            gl.drawArraysInstanced(mode, start, count, primcount);
         }
         else
         {
@@ -59,11 +50,11 @@ export class WebGLIndexedBufferRenderer
 
             if (extension === null)
             {
-                console.error('WebGLIndexedBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
+                console.error('WebGLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
 
                 return;
             }
-            extension.drawElementsInstancedANGLE(mode, count, type, start * bytesPerElement, primcount);
+            extension.drawArraysInstancedANGLE(mode, start, count, primcount);
         }
 
         info.update(count, mode, primcount);
