@@ -1,4 +1,4 @@
-import { Index } from './data/Index';
+import { BufferAttribute } from './data/Index';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 
 export interface WebGLAttributeBufferCacle
@@ -12,7 +12,7 @@ export interface WebGLAttributeBufferCacle
 export class WebGLAttributes
 {
     private gl: WebGLRenderingContext;
-    private buffers = new WeakMap<Index, WebGLAttributeBufferCacle>();
+    private buffers = new WeakMap<BufferAttribute, WebGLAttributeBufferCacle>();
     private capabilities: WebGLCapabilities;
 
     constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
@@ -21,14 +21,14 @@ export class WebGLAttributes
         this.capabilities = capabilities;
     }
 
-    get(attribute: Index)
+    get(attribute: BufferAttribute)
     {
         const { buffers } = this;
 
         return buffers.get(attribute);
     }
 
-    remove(attribute: Index)
+    remove(attribute: BufferAttribute)
     {
         const { gl, buffers } = this;
 
@@ -42,7 +42,7 @@ export class WebGLAttributes
         }
     }
 
-    update(attribute: Index, bufferType: number)
+    update(attribute: BufferAttribute, bufferType: number)
     {
         const { buffers } = this;
 
@@ -60,7 +60,7 @@ export class WebGLAttributes
         }
     }
 
-    private createBuffer(attribute: Index, bufferType: number): WebGLAttributeBufferCacle
+    private createBuffer(attribute: BufferAttribute, bufferType: number): WebGLAttributeBufferCacle
     {
         const { gl } = this;
 
@@ -119,7 +119,7 @@ export class WebGLAttributes
         };
     }
 
-    private updateBuffer(buffer: WebGLBuffer, attribute: Index, bufferType: number)
+    private updateBuffer(buffer: WebGLBuffer, attribute: BufferAttribute, bufferType: number)
     {
         const { gl, capabilities } = this;
 

@@ -1,13 +1,13 @@
 /* eslint-disable no-new */
 import { lazy } from '@feng3d/polyfill';
-import { Attribute } from './data/Attribute';
+import { BufferAttribute } from './data/Index';
 import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
 import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
-import { WebGLCache } from './gl/WebGLCache';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
+import { WebGLCache } from './gl/WebGLCache';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
@@ -122,7 +122,7 @@ export class WebGLRenderer
             return null;
         }
 
-        const attributes: { [name: string]: Attribute; } = {};
+        const attributes: { [name: string]: BufferAttribute; } = {};
         for (const key in shaderResult.attributes)
         {
             const attribute = renderAtomic.getAttributeByKey(key);
@@ -255,11 +255,11 @@ export class WebGLRenderer
 
             if (instanceCount > 1)
             {
-                indexedBufferRenderer.renderInstances(index.offset, index.count, instanceCount);
+                indexedBufferRenderer.renderInstances(0, index.count, instanceCount);
             }
             else
             {
-                indexedBufferRenderer.render(index.offset, index.count);
+                indexedBufferRenderer.render(0, index.count);
             }
         }
         else
@@ -271,9 +271,9 @@ export class WebGLRenderer
                     // eslint-disable-next-line no-prototype-builtins
                     if (attributes.hasOwnProperty(attr))
                     {
-                        const attribute: Attribute = attributes[attr];
+                        const attribute: BufferAttribute = attributes[attr];
 
-                        return attribute.data.length / attribute.size;
+                        return attribute.count;
                     }
                 }
 
@@ -324,7 +324,6 @@ export class WebGLRenderer
 
         this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
         this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
-
     }
 
     private _isContextLost = false;

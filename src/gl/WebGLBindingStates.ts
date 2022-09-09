@@ -1,5 +1,4 @@
-import { Attribute } from '../data/Attribute';
-import { Index } from '../data/Index';
+import { BufferAttribute } from '../data/Index';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from '../WebGLAttributes';
 import { WebGLCache } from './WebGLCache';
@@ -103,8 +102,6 @@ export class WebGLBindingStates
 
                 if (cachedAttribute.attribute !== attribute) return true;
 
-                if (attribute && cachedAttribute.data !== attribute.data) return true;
-
                 attributesNum++;
             }
         }
@@ -126,7 +123,7 @@ export class WebGLBindingStates
     {
         const { gl, currentState, cacle } = this;
 
-        const cache: { [key: string]: { data: number[], attribute: Attribute } } = {};
+        const cache: { [key: string]: { data: number[], attribute: BufferAttribute } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
@@ -141,13 +138,8 @@ export class WebGLBindingStates
             {
                 const attribute = renderAtomic.getAttributeByKey(name);
 
-                const data: { data: number[], attribute: Attribute } = {} as any;
+                const data: { data: number[], attribute: BufferAttribute } = {} as any;
                 data.attribute = attribute;
-
-                if (attribute && attribute.data)
-                {
-                    data.data = attribute.data;
-                }
 
                 cache[name] = data;
 
@@ -169,7 +161,7 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
-        const { gl, capabilities, extensions, cacle } = this;
+        const { gl, attributes, capabilities, extensions, cacle } = this;
 
         if (capabilities.isWebGL2 === false && renderAtomic.getInstanceCount() > 0)
         {
@@ -181,22 +173,47 @@ export class WebGLBindingStates
         const shader = renderAtomic.getShader();
         const shaderResult = shader.activeShaderProgram(gl, cacle);
 
-        const activeAttributes: number[] = [];
         for (const name in shaderResult.attributes)
         {
             const activeInfo = shaderResult.attributes[name];
-            const attribute: Attribute = renderAtomic.getAttributeByKey(name);
+            if (activeInfo.location < 0)
+            {
+                throw '';
+            }
+
+            const attribute = renderAtomic.getAttributeByKey(name);
+            const size = attribute.itemSize;
+            const normalized = attribute.normalized;
 
             this.enableAttribute(activeInfo.location, attribute.divisor);
 
-            const buffer = attribute.getBuffer(gl, cacle);
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.vertexAttribPointer(activeInfo.location, attribute.size, gl[attribute.type], attribute.normalized, attribute.stride, attribute.offset);
+            attributes.update(attribute, gl.ARRAY_BUFFER);
+            const attributeBufferCacle = attributes.get(attribute);
 
-            activeAttributes.push(activeInfo.location);
+            const buffer = attributeBufferCacle.buffer;
+            const type = attributeBufferCacle.type;
+            const bytesPerElement = attributeBufferCacle.bytesPerElement;
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+            this.vertexAttribPointer(activeInfo.location, size, type, normalized, size * bytesPerElement, 0);
         }
 
         this.disableUnusedAttributes();
+    }
+
+    private vertexAttribPointer(index: number, size: number, type: number, normalized: boolean, stride: number, offset: number)
+    {
+        const { gl, capabilities } = this;
+
+        if (capabilities.isWebGL2 === true && (type === gl.INT || type === gl.UNSIGNED_INT))
+        {
+            (gl as WebGL2RenderingContext).vertexAttribIPointer(index, size, type, stride, offset);
+        }
+        else
+        {
+            gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
+        }
     }
 
     /**
@@ -242,9 +259,15 @@ export class WebGLBindingStates
 
         if (attributeDivisors[location] !== divisor)
         {
-            const extension = capabilities.isWebGL2 ? gl : extensions.get('ANGLE_instanced_arrays');
-
-            extension[capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE'](location, divisor);
+            if (capabilities.isWebGL2)
+            {
+                (gl as WebGL2RenderingContext).vertexAttribDivisor(location, divisor);
+            }
+            else
+            {
+                const extension = extensions.get('ANGLE_instanced_arrays');
+                extension.vertexAttribDivisorANGLE(location, divisor);
+            }
             attributeDivisors[location] = divisor;
         }
     }
@@ -368,12 +391,12 @@ class BindingState
     /**
      * WebGL属性缓存信息
      */
-    attributes: { [key: string]: { data: number[], attribute: Attribute } } = {};
+    attributes: { [key: string]: { data: number[], attribute: BufferAttribute } } = {};
 
     /**
      * 顶点索引缓冲
      */
-    index: Index;
+    index: BufferAttribute;
 
     /**
      * 属性数量。

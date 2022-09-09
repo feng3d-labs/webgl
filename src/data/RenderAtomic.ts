@@ -1,8 +1,7 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { ShaderMacro } from '../shader/Macro';
-import { Attribute } from './Attribute';
 import { Attributes } from './Attributes';
-import { Index } from './Index';
+import { BufferAttribute } from './Index';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
 import { Uniforms } from './Uniform';
@@ -30,7 +29,7 @@ export class RenderAtomic
     /**
      * 顶点索引缓冲
      */
-    index: Index;
+    index: BufferAttribute;
 
     /**
      * 属性数据列表
@@ -45,14 +44,7 @@ export class RenderAtomic
         this._attributes = {} as any;
         for (const key in v)
         {
-            if (v[key] instanceof Attribute)
-            {
-                this._attributes[key] = v[key];
-            }
-            else
-            {
-                this._attributes[key] = new Attribute(v[key]);
-            }
+            this._attributes[key] = v[key];
         }
     }
 
@@ -118,7 +110,7 @@ export class RenderAtomic
         Object.assign(this, source);
     }
 
-    getIndexBuffer(): Index
+    getIndexBuffer(): BufferAttribute
     {
         if (this.index !== undefined) return this.index;
 
@@ -133,7 +125,7 @@ export class RenderAtomic
         return attributes;
     }
 
-    getAttributeByKey(key: string): Attribute
+    getAttributeByKey(key: string): BufferAttribute
     {
         if (this.attributes[key] !== undefined) return this.attributes[key];
 
@@ -189,9 +181,9 @@ export class RenderAtomic
 export interface RenderAtomicData
 {
     shader: Shader;
-    attributes: { [name: string]: Attribute; };
+    attributes: { [name: string]: BufferAttribute; };
     uniforms: { [name: string]: Uniforms; };
     renderParams: RenderParams;
-    index: Index;
+    index: BufferAttribute;
     instanceCount: number;
 }
