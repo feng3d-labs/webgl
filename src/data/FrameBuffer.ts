@@ -1,4 +1,4 @@
-import { GLCache } from '../gl/GLCache';
+import { WebGLCache } from '../gl/WebGLCache';
 import { WebGLRenderer } from '../WebGLRenderer';
 
 export class FrameBuffer
@@ -37,7 +37,7 @@ export class FrameBuffer
     /**
      * 清理缓存
      */
-    static clear(frameBuffer: FrameBuffer, gl: WebGLRenderingContext, cache: GLCache)
+    static clear(frameBuffer: FrameBuffer, gl: WebGLRenderingContext, cache: WebGLCache)
     {
         const buffer = cache.frameBuffers.get(frameBuffer);
         if (buffer)

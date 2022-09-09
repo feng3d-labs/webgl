@@ -22,7 +22,7 @@ export * from './gl/enums/TextureMagFilter';
 export * from './gl/enums/TextureMinFilter';
 export * from './gl/enums/TextureType';
 export * from './gl/enums/TextureWrap';
-export * from './gl/GLCache';
+export * from './gl/WebGLCache';
 export * from './gl/WebGLCapabilities';
 export * from './gl/WebGLExtensions';
 export * from './RenderBuffer';

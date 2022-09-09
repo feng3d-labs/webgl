@@ -5,7 +5,7 @@ import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
 import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
-import { GLCache } from './gl/GLCache';
+import { WebGLCache } from './gl/WebGLCache';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
@@ -49,7 +49,7 @@ export class WebGLRenderer
     attributes: WebGLAttributes;
     bufferRenderer: WebGLBufferRenderer;
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
-    cache: GLCache;
+    cache: WebGLCache;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -314,7 +314,7 @@ export class WebGLRenderer
 
         this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
         this.extensions.init(this.capabilities);
-        this.cache = new GLCache(this.gl);
+        this.cache = new WebGLCache(this.gl);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);

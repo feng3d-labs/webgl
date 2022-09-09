@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { GLCache } from '../gl/GLCache';
+import { WebGLCache } from '../gl/WebGLCache';
 import { ShaderMacro } from '../shader/Macro';
 import { shaderlib } from '../shader/ShaderLib';
 
@@ -42,7 +42,7 @@ export class Shader
     /**
      * 激活渲染程序
      */
-    activeShaderProgram(gl: WebGLRenderingContext, cache: GLCache)
+    activeShaderProgram(gl: WebGLRenderingContext, cache: WebGLCache)
     {
         this.updateShaderCode();
 

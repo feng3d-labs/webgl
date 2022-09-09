@@ -2,7 +2,7 @@ import { Attribute } from '../data/Attribute';
 import { Index } from '../data/Index';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from '../WebGLAttributes';
-import { GLCache } from './GLCache';
+import { WebGLCache } from './WebGLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 
@@ -14,11 +14,11 @@ export class WebGLBindingStates
     private capabilities: WebGLCapabilities;
     private currentState: BindingState;
     private defaultState: BindingState;
-    private cacle: GLCache;
+    private cacle: WebGLCache;
 
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, cacle: GLCache)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, cacle: WebGLCache)
     {
         this.gl = gl;
         this.extensions = extensions;

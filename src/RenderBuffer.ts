@@ -1,4 +1,4 @@
-import { GLCache } from './gl/GLCache';
+import { WebGLCache } from './gl/WebGLCache';
 import { WebGLRenderer } from './WebGLRenderer';
 
 export class RenderBuffer
@@ -42,7 +42,7 @@ export class RenderBuffer
      * 激活
      * @param gl
      */
-    static active(gl: WebGLRenderingContext, cache: GLCache, renderBuffer: RenderBuffer)
+    static active(gl: WebGLRenderingContext, cache: WebGLCache, renderBuffer: RenderBuffer)
     {
         if (renderBuffer._invalid)
         {
@@ -72,7 +72,7 @@ export class RenderBuffer
     /**
      * 清理纹理
      */
-    static clear(renderBuffer: RenderBuffer, cache: GLCache)
+    static clear(renderBuffer: RenderBuffer, cache: WebGLCache)
     {
         WebGLRenderer.glList.forEach((gl) =>
         {

@@ -7,18 +7,18 @@ import { RenderBuffer } from '../RenderBuffer';
 
 declare global
 {
-    interface MixinsGLCache
+    interface MixinsWebGLCache
     {
 
     }
 }
 
-export interface GLCache extends MixinsGLCache { }
+export interface WebGLCache extends MixinsWebGLCache { }
 
 /**
  * GL 缓存
  */
-export class GLCache
+export class WebGLCache
 {
     compileShaderResults: { [key: string]: CompileShaderResult } = {};
 

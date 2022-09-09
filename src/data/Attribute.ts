@@ -1,7 +1,7 @@
 import { gPartial } from '@feng3d/polyfill';
 import { AttributeUsage } from '../gl/enums/AttributeUsage';
 import { GLArrayType } from '../gl/enums/GLArrayType';
-import { GLCache } from '../gl/GLCache';
+import { WebGLCache } from '../gl/WebGLCache';
 
 /**
  * 属性渲染数据
@@ -98,7 +98,7 @@ export class Attribute
     /**
      * 获取缓冲
      */
-    getBuffer(gl: WebGLRenderingContext, cache: GLCache)
+    getBuffer(gl: WebGLRenderingContext, cache: WebGLCache)
     {
         if (this.invalid)
         {
@@ -126,7 +126,7 @@ export class Attribute
     /**
      * 清理缓冲
      */
-    clear(attribute: Attribute, gl: WebGLRenderingContext, cache: GLCache)
+    clear(attribute: Attribute, gl: WebGLRenderingContext, cache: WebGLCache)
     {
         const buffer = cache.attributes.get(attribute);
         if (buffer)

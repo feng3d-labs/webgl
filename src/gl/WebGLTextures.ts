@@ -1,6 +1,6 @@
 import { Texture } from '../data/Texture';
 import { TextureDataType } from './enums/TextureDataType';
-import { GLCache } from './GLCache';
+import { WebGLCache } from './WebGLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLProperties } from './WebGLProperties';
@@ -23,7 +23,7 @@ export class WebGLTextures
         this.properties = properties;
     }
 
-    active(data: Texture, cache: GLCache)
+    active(data: Texture, cache: WebGLCache)
     {
         const { gl } = this;
 
@@ -70,7 +70,7 @@ export class WebGLTextures
      * 获取顶点属性缓冲
      * @param data 数据
      */
-    static getTexture(gl: WebGLRenderingContext, data: Texture, cache: GLCache)
+    static getTexture(gl: WebGLRenderingContext, data: Texture, cache: WebGLCache)
     {
         if (data.invalid)
         {
@@ -147,7 +147,7 @@ export class WebGLTextures
      *
      * @param data
      */
-    static clear(data: Texture, gl: WebGLRenderingContext, cache: GLCache)
+    static clear(data: Texture, gl: WebGLRenderingContext, cache: WebGLCache)
     {
         const tex = cache.textures.get(data);
         if (tex)
