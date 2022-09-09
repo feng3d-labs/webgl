@@ -10,10 +10,13 @@ import { GLCache } from './gl/GLCache';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
+import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
+import { WebGLInfo } from './gl/WebGLInfo';
 import { WebGLProperties } from './gl/WebGLProperties';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { updateRenderParams } from './internal/updateRenderParams';
+import { WebGLAttributes } from './WebGLAttributes';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
 {
@@ -40,8 +43,11 @@ export class WebGLRenderer
     properties: WebGLProperties;
     capabilities: WebGLCapabilities;
     textures: WebGLTextures;
+    info: WebGLInfo;
     state: WebGLState;
     bindingStates: WebGLBindingStates;
+    attributes: WebGLAttributes;
+    indexedBufferRenderer: WebGLIndexedBufferRenderer;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -102,7 +108,7 @@ export class WebGLRenderer
         bindingStates.setup(renderAtomic);
 
         this.activeUniforms(checkedRenderAtomic, shaderResult.uniforms);
-        this.draw(checkedRenderAtomic, this.gl[checkedRenderAtomic.renderParams.renderMode]);
+        this.draw(renderAtomic, checkedRenderAtomic, this.gl[checkedRenderAtomic.renderParams.renderMode]);
     }
 
     private checkRenderData(renderAtomic: RenderAtomic)
@@ -232,13 +238,20 @@ export class WebGLRenderer
 
     /**
      */
-    private draw(renderAtomic: RenderAtomicData, renderMode: number)
+    private draw(renderAtomic: RenderAtomic, renderAtomicData: RenderAtomicData, renderMode: number)
     {
         const gl = this.gl;
 
-        const instanceCount = ~~lazy.getValue(renderAtomic.instanceCount);
+        const index = renderAtomic.getIndexBuffer();
+        if (index !== null)
+        {
+            const attribute = this.attributes.get(index);
+            this.indexedBufferRenderer.setIndex(attribute);
+        }
 
-        const indexBuffer = renderAtomic.index;
+        const instanceCount = ~~lazy.getValue(renderAtomicData.instanceCount);
+
+        const indexBuffer = renderAtomicData.index;
         if (indexBuffer)
         {
             indexBuffer.active(gl);
@@ -273,7 +286,7 @@ export class WebGLRenderer
                 }
 
                 return 0;
-            })(renderAtomic.attributes);
+            })(renderAtomicData.attributes);
             if (vertexNum === 0)
             {
                 console.warn(`顶点数量为0，不进行渲染！`);
@@ -309,7 +322,11 @@ export class WebGLRenderer
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.capabilities);
+        this.attributes = new WebGLAttributes(this.gl, this.capabilities);
+        this.info = new WebGLInfo(this.gl);
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities);
+
+        this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
 
         new GLCache(this.gl);
     }

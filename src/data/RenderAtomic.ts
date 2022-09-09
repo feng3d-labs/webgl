@@ -30,22 +30,7 @@ export class RenderAtomic
     /**
      * 顶点索引缓冲
      */
-    get index()
-    {
-        return this._index;
-    }
-    set index(v)
-    {
-        if (v instanceof Index)
-        {
-            this._index = v;
-        }
-        else
-        {
-            this._index = new Index(v);
-        }
-    }
-    private _index: Index;
+    index: Index;
 
     /**
      * 属性数据列表

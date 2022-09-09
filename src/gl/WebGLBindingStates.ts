@@ -1,6 +1,7 @@
 import { Attribute } from '../data/Attribute';
 import { Index } from '../data/Index';
 import { RenderAtomic } from '../data/RenderAtomic';
+import { WebGLAttributes } from '../WebGLAttributes';
 import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
@@ -9,25 +10,27 @@ export class WebGLBindingStates
 {
     private gl: GL;
     private extensions: WebGLExtensions;
+    private attributes: WebGLAttributes;
     private capabilities: WebGLCapabilities;
     private currentState: BindingState;
     private defaultState: BindingState;
 
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
+    constructor(gl: GL, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
+        this.attributes = attributes;
+        this.currentState = this.defaultState;
 
         this.defaultState = this.createBindingState(null);
-        this.currentState = this.defaultState;
     }
 
     setup(renderAtomic: RenderAtomic)
     {
-        const { capabilities } = this;
+        const { gl, attributes, capabilities } = this;
 
         let updateBuffers = false;
 
@@ -50,19 +53,20 @@ export class WebGLBindingStates
             updateBuffers = true;
         }
 
-        // if (index !== null)
-        // {
-        //     attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
-        // }
+        const index = renderAtomic.getIndexBuffer();
+        if (index !== null)
+        {
+            attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
+        }
 
         if (updateBuffers)
         {
             this.setupVertexAttributes(renderAtomic);
 
-            // if (index !== null)
-            // {
-            //     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, attributes.get(index).buffer);
-            // }
+            if (index !== null)
+            {
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, attributes.get(index).buffer);
+            }
         }
     }
 
