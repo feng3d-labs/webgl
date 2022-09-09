@@ -1,5 +1,4 @@
 import { WebGLAttributeBufferCacle } from '../WebGLAttributes';
-import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';
@@ -10,12 +9,12 @@ export class WebGLIndexedBufferRenderer
     type: number;
     bytesPerElement: number;
 
-    gl: GL;
+    gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
     info: WebGLInfo;
     capabilities: WebGLCapabilities;
 
-    constructor(gl: GL, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;
@@ -51,7 +50,7 @@ export class WebGLIndexedBufferRenderer
 
         if (capabilities.isWebGL2)
         {
-            gl.drawElementsInstanced(mode, count, type, start * bytesPerElement, primcount);
+            (gl as WebGL2RenderingContext).drawElementsInstanced(mode, count, type, start * bytesPerElement, primcount);
         }
         else
         {

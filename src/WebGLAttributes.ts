@@ -1,5 +1,4 @@
 import { Index } from './data/Index';
-import { GL } from './gl/GL';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 
 export interface WebGLAttributeBufferCacle
@@ -12,11 +11,11 @@ export interface WebGLAttributeBufferCacle
 
 export class WebGLAttributes
 {
-    private gl: GL;
+    private gl: WebGLRenderingContext;
     private buffers = new WeakMap<Index, WebGLAttributeBufferCacle>();
     private capabilities: WebGLCapabilities;
 
-    constructor(gl: GL, capabilities: WebGLCapabilities)
+    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.capabilities = capabilities;

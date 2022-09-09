@@ -2,28 +2,30 @@ import { Attribute } from '../data/Attribute';
 import { Index } from '../data/Index';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from '../WebGLAttributes';
-import { GL } from './GL';
+import { GLCache } from './GLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 
 export class WebGLBindingStates
 {
-    private gl: GL;
+    private gl: WebGLRenderingContext;
     private extensions: WebGLExtensions;
     private attributes: WebGLAttributes;
     private capabilities: WebGLCapabilities;
     private currentState: BindingState;
     private defaultState: BindingState;
+    private cacle: GLCache;
 
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: GL, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, cacle: GLCache)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
         this.attributes = attributes;
         this.currentState = this.defaultState;
+        this.cacle = cacle;
 
         this.defaultState = this.createBindingState(null);
     }
@@ -78,12 +80,12 @@ export class WebGLBindingStates
      */
     private needsUpdate(renderAtomic: RenderAtomic)
     {
-        const { gl, currentState } = this;
+        const { gl, currentState, cacle } = this;
 
         const cachedAttributes = currentState.attributes;
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shader.activeShaderProgram(gl, cacle);
         const attributeInfos = shaderResult.attributes;
 
         let attributesNum = 0;
@@ -122,13 +124,13 @@ export class WebGLBindingStates
      */
     private saveCache(renderAtomic: RenderAtomic)
     {
-        const { gl, currentState } = this;
+        const { gl, currentState, cacle } = this;
 
         const cache: { [key: string]: { data: number[], attribute: Attribute } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shader.activeShaderProgram(gl, cacle);
         const attributeInfos = shaderResult.attributes;
 
         for (const name in attributeInfos)
@@ -167,7 +169,7 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
-        const { gl, capabilities, extensions } = this;
+        const { gl, capabilities, extensions, cacle } = this;
 
         if (capabilities.isWebGL2 === false && renderAtomic.getInstanceCount() > 0)
         {
@@ -177,7 +179,7 @@ export class WebGLBindingStates
         this.initAttributes();
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shader.activeShaderProgram(gl, cacle);
 
         const activeAttributes: number[] = [];
         for (const name in shaderResult.attributes)
@@ -187,7 +189,7 @@ export class WebGLBindingStates
 
             this.enableAttribute(activeInfo.location, attribute.divisor);
 
-            const buffer = attribute.getBuffer(gl);
+            const buffer = attribute.getBuffer(gl, cacle);
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
             gl.vertexAttribPointer(activeInfo.location, attribute.size, gl[attribute.type], attribute.normalized, attribute.stride, attribute.offset);
 

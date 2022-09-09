@@ -5,7 +5,6 @@ import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
 import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
 import { Uniforms } from './data/Uniform';
-import { GL } from './gl/GL';
 import { GLCache } from './gl/GLCache';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
@@ -36,9 +35,9 @@ export class WebGLRenderer
 {
     private _canvas: HTMLCanvasElement;
 
-    static glList: GL[] = [];
+    static glList: WebGLRenderingContext[] = [];
 
-    gl: GL;
+    gl: WebGLRenderingContext;
 
     extensions: WebGLExtensions;
     properties: WebGLProperties;
@@ -50,6 +49,7 @@ export class WebGLRenderer
     attributes: WebGLAttributes;
     bufferRenderer: WebGLBufferRenderer;
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
+    cache: GLCache;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -74,7 +74,7 @@ export class WebGLRenderer
         } as Partial<WebGLRendererParameters>, parameters);
 
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
-        const gl = getContext(this._canvas, contextNames, parameters) as GL;
+        const gl = getContext(this._canvas, contextNames, parameters) as WebGLRenderingContext;
         this.gl = gl;
         this._initGLContext();
         //
@@ -83,8 +83,6 @@ export class WebGLRenderer
         gl.enable(gl.DEPTH_TEST); // Enable depth testing
         gl.depthFunc(gl.LEQUAL); // Near things obscure far things
         WebGLRenderer.glList.push(gl);
-
-        console.assert(!gl.render, `${gl} ${gl.render} 存在！`);
     }
 
     render(renderAtomic: RenderAtomic)
@@ -98,7 +96,7 @@ export class WebGLRenderer
         const shaderMacro = renderAtomic.getShaderMacro();
         const shader = renderAtomic.getShader();
         shader.shaderMacro = shaderMacro;
-        const shaderResult = shader.activeShaderProgram(this.gl);
+        const shaderResult = shader.activeShaderProgram(this.gl, this.cache);
         if (!shaderResult) return;
         //
         const checkedRenderAtomic: RenderAtomicData = this.checkRenderData(renderAtomic);
@@ -116,7 +114,7 @@ export class WebGLRenderer
     private checkRenderData(renderAtomic: RenderAtomic)
     {
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(this.gl);
+        const shaderResult = shader.activeShaderProgram(this.gl, this.cache);
         if (!shaderResult)
         {
             console.warn(`缺少着色器，无法渲染!`);
@@ -194,7 +192,7 @@ export class WebGLRenderer
      */
     private setContext3DUniform(activeInfo: UniformInfo, data)
     {
-        const gl = this.gl;
+        const { gl, textures, cache } = this;
 
         let vec: number[] = data;
         if (data.toArray) vec = data.toArray();
@@ -228,7 +226,7 @@ export class WebGLRenderer
                 const textureInfo = data as Texture;
                 // 激活纹理编号
                 gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                this.textures.active(textureInfo);
+                textures.active(textureInfo, cache);
                 // 设置纹理所在采样编号
                 gl.uniform1i(location, activeInfo.textureID);
                 break;
@@ -316,17 +314,17 @@ export class WebGLRenderer
 
         this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
         this.extensions.init(this.capabilities);
+        this.cache = new GLCache(this.gl);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
         this.info = new WebGLInfo(this.gl);
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities);
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.cache);
 
         this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
         this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
 
-        new GLCache(this.gl);
     }
 
     private _isContextLost = false;

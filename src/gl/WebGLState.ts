@@ -1,16 +1,15 @@
 import { BlendEquation } from './enums/BlendEquation';
-import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 
 export class WebGLState
 {
-    private gl: GL;
+    private gl: WebGLRenderingContext;
     private extensions: WebGLExtensions;
     private capabilities: WebGLCapabilities;
     private blendEquationCache: { [key: string]: number } = {};
 
-    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;

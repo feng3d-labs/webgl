@@ -1,5 +1,3 @@
-import { GL } from './GL';
-
 export class WebGLInfo
 {
     readonly memory = {
@@ -15,9 +13,9 @@ export class WebGLInfo
         lines: 0
     };
 
-    gl: GL;
+    gl: WebGLRenderingContext;
 
-    constructor(gl: GL)
+    constructor(gl: WebGLRenderingContext)
     {
         this.gl = gl;
     }

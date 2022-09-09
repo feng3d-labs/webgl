@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { GL } from '../gl/GL';
+import { GLCache } from '../gl/GLCache';
 import { ShaderMacro } from '../shader/Macro';
 import { shaderlib } from '../shader/ShaderLib';
 
@@ -42,12 +42,12 @@ export class Shader
     /**
      * 激活渲染程序
      */
-    activeShaderProgram(gl: GL)
+    activeShaderProgram(gl: WebGLRenderingContext, cache: GLCache)
     {
         this.updateShaderCode();
 
         const shaderKey = this.vertex + this.fragment;
-        let result = gl.cache.compileShaderResults[shaderKey];
+        let result = cache.compileShaderResults[shaderKey];
         if (result) return result;
 
         const { vertex, fragment } = this;
@@ -55,7 +55,7 @@ export class Shader
         // 渲染程序
         try
         {
-            result = gl.cache.compileShaderResults[shaderKey] = this.compileShaderProgram(gl, vertex, fragment);
+            result = cache.compileShaderResults[shaderKey] = this.compileShaderProgram(gl, vertex, fragment);
         }
         catch (error)
         {
@@ -90,7 +90,7 @@ export class Shader
      * @param code 着色器代码
      * @return 编译后的着色器对象
      */
-    private compileShaderCode(gl: GL, type: number, code: string)
+    private compileShaderCode(gl: WebGLRenderingContext, type: number, code: string)
     {
         const shader = gl.createShader(type);
         if (!shader)
@@ -113,7 +113,7 @@ export class Shader
         return shader;
     }
 
-    private createLinkProgram(gl: GL, vertexShader: WebGLShader, fragmentShader: WebGLShader)
+    private createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
         // 创建程序对象
         const program = gl.createProgram();
@@ -143,7 +143,7 @@ export class Shader
         return program;
     }
 
-    private compileShaderProgram(gl: GL, vshader: string, fshader: string): CompileShaderResult
+    private compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshader: string): CompileShaderResult
     {
         // 创建着色器程序
         // 编译顶点着色器

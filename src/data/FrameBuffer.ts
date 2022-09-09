@@ -1,3 +1,4 @@
+import { GLCache } from '../gl/GLCache';
 import { WebGLRenderer } from '../WebGLRenderer';
 
 export class FrameBuffer
@@ -9,15 +10,15 @@ export class FrameBuffer
 
     static active(webGLRenderer: WebGLRenderer, frameBuffer: FrameBuffer)
     {
-        const { gl } = webGLRenderer;
+        const { gl, cache } = webGLRenderer;
         if (frameBuffer._invalid)
         {
             frameBuffer._invalid = false;
-            this.clear(frameBuffer);
+            this.clear(frameBuffer, gl, cache);
         }
 
         // Create a framebuffer object (FBO)
-        let buffer = gl.cache.frameBuffers.get(frameBuffer);
+        let buffer = cache.frameBuffers.get(frameBuffer);
         if (!buffer)
         {
             buffer = gl.createFramebuffer();
@@ -27,7 +28,7 @@ export class FrameBuffer
 
                 return null;
             }
-            gl.cache.frameBuffers.set(frameBuffer, buffer);
+            cache.frameBuffers.set(frameBuffer, buffer);
         }
 
         return buffer;
@@ -36,16 +37,13 @@ export class FrameBuffer
     /**
      * 清理缓存
      */
-    static clear(frameBuffer: FrameBuffer)
+    static clear(frameBuffer: FrameBuffer, gl: WebGLRenderingContext, cache: GLCache)
     {
-        WebGLRenderer.glList.forEach((gl) =>
+        const buffer = cache.frameBuffers.get(frameBuffer);
+        if (buffer)
         {
-            const buffer = gl.cache.frameBuffers.get(frameBuffer);
-            if (buffer)
-            {
-                gl.deleteFramebuffer(buffer);
-                gl.cache.frameBuffers.delete(frameBuffer);
-            }
-        });
+            gl.deleteFramebuffer(buffer);
+            cache.frameBuffers.delete(frameBuffer);
+        }
     }
 }

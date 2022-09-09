@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
 declare global
@@ -44,16 +43,12 @@ declare global
  */
 export class WebGLExtensions
 {
-    private gl: GL;
+    private gl: WebGLRenderingContext;
     private extensions: { [extensionName: string]: any } = {};
 
-    constructor(gl: GL)
+    constructor(gl: WebGLRenderingContext)
     {
         this.gl = gl;
-        console.assert(!gl.extensions, `${gl} ${gl.extensions} 存在！`);
-        gl.extensions = this;
-
-        this.cacheGLQuery(gl);
     }
 
     init(capabilities: WebGLCapabilities)
@@ -77,8 +72,6 @@ export class WebGLExtensions
         this.getExtension('OES_texture_float_linear');
         this.getExtension('EXT_color_buffer_half_float');
         this.getExtension('WEBGL_multisampled_render_to_texture');
-        //
-        this.wrap(this.gl);
     }
 
     /**
@@ -145,71 +138,5 @@ export class WebGLExtensions
         extensions[name] = extension;
 
         return extension;
-    }
-
-    /**
-     * 缓存GL查询
-     * @param gl GL实例
-     */
-    private cacheGLQuery(gl: GL)
-    {
-        const oldGetExtension = gl.getExtension;
-        gl.getExtension = function (name: string)
-        {
-            if (!gl.extensions[name])
-            {
-                // eslint-disable-next-line prefer-rest-params
-                gl.extensions[name] = oldGetExtension.apply(gl, arguments);
-            }
-
-            return gl.extensions[name];
-        };
-    }
-
-    private wrap(gl: GL)
-    {
-        //
-        if (!gl.vertexAttribDivisor)
-        {
-            gl.vertexAttribDivisor = (index, divisor) =>
-            {
-                if (this.has('ANGLE_instanced_arrays'))
-                {
-                    this.get('ANGLE_instanced_arrays').vertexAttribDivisorANGLE(index, divisor);
-                }
-                else
-                {
-                    console.warn(`浏览器 不支持 drawElementsInstanced ！`);
-                }
-            };
-        }
-        if (!gl.drawElementsInstanced)
-        {
-            gl.drawElementsInstanced = (mode, count, type, offset, instanceCount) =>
-            {
-                if (this.has('ANGLE_instanced_arrays'))
-                {
-                    this.get('ANGLE_instanced_arrays').drawElementsInstancedANGLE(mode, count, type, offset, instanceCount);
-                }
-                else
-                {
-                    console.warn(`浏览器 不支持 drawElementsInstanced ！`);
-                }
-            };
-        }
-        if (!gl.drawArraysInstanced)
-        {
-            gl.drawArraysInstanced = (mode, first, count, instanceCount) =>
-            {
-                if (this.has('ANGLE_instanced_arrays'))
-                {
-                    this.get('ANGLE_instanced_arrays').drawArraysInstancedANGLE(mode, first, count, instanceCount);
-                }
-                else
-                {
-                    console.warn(`浏览器 不支持 drawArraysInstanced ！`);
-                }
-            };
-        }
     }
 }

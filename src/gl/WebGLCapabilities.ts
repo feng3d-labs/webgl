@@ -1,4 +1,3 @@
-import { GL } from './GL';
 import { WebGLExtensions } from './WebGLExtensions';
 
 /**
@@ -89,7 +88,7 @@ export class WebGLCapabilities
      */
     stencilBits: number;
 
-    gl: GL;
+    gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
 
     /**
@@ -97,7 +96,7 @@ export class WebGLCapabilities
      */
     vaoAvailable: boolean;
 
-    constructor(gl: GL, extensions: WebGLExtensions)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions)
     {
         this.gl = gl;
         this.extensions = extensions;
@@ -161,7 +160,7 @@ export class WebGLCapabilities
 /**
  * 纹理各向异性过滤最大值
  */
-function getMaxAnisotropy(gl: GL, extensions: WebGLExtensions)
+function getMaxAnisotropy(gl: WebGLRenderingContext, extensions: WebGLExtensions)
 {
     let maxAnisotropy: number;
 

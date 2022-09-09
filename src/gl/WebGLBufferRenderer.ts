@@ -1,4 +1,3 @@
-import { GL } from './GL';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';
@@ -7,12 +6,12 @@ export class WebGLBufferRenderer
 {
     mode: number;
 
-    gl: GL;
+    gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
     info: WebGLInfo;
     capabilities: WebGLCapabilities;
 
-    constructor(gl: GL, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;
@@ -42,7 +41,7 @@ export class WebGLBufferRenderer
 
         if (capabilities.isWebGL2)
         {
-            gl.drawArraysInstanced(mode, start, count, primcount);
+            (gl as WebGL2RenderingContext).drawArraysInstanced(mode, start, count, primcount);
         }
         else
         {

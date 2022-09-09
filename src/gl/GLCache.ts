@@ -4,7 +4,6 @@ import { Index } from '../data/Index';
 import { CompileShaderResult } from '../data/Shader';
 import { Texture } from '../data/Texture';
 import { RenderBuffer } from '../RenderBuffer';
-import { GL } from './GL';
 
 declare global
 {
@@ -23,7 +22,7 @@ export class GLCache
 {
     compileShaderResults: { [key: string]: CompileShaderResult } = {};
 
-    private _gl: GL;
+    private _gl: WebGLRenderingContext;
 
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
@@ -50,9 +49,8 @@ export class GLCache
      */
     frameBuffers = new Map<FrameBuffer, WebGLFramebuffer>();
 
-    constructor(gl: GL)
+    constructor(gl: WebGLRenderingContext)
     {
-        gl.cache = this;
         this._gl = gl;
     }
 }

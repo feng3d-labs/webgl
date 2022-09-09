@@ -1,4 +1,4 @@
-import { GL } from './gl/GL';
+import { GLCache } from './gl/GLCache';
 import { WebGLRenderer } from './WebGLRenderer';
 
 export class RenderBuffer
@@ -42,15 +42,15 @@ export class RenderBuffer
      * 激活
      * @param gl
      */
-    static active(gl: GL, renderBuffer: RenderBuffer)
+    static active(gl: WebGLRenderingContext, cache: GLCache, renderBuffer: RenderBuffer)
     {
         if (renderBuffer._invalid)
         {
-            this.clear(renderBuffer);
+            this.clear(renderBuffer, cache);
             renderBuffer._invalid = false;
         }
 
-        let buffer = gl.cache.renderBuffers.get(renderBuffer);
+        let buffer = cache.renderBuffers.get(renderBuffer);
         if (!buffer)
         {
             // Create a renderbuffer object and Set its size and parameters
@@ -61,7 +61,7 @@ export class RenderBuffer
 
                 return;
             }
-            gl.cache.renderBuffers.set(renderBuffer, buffer);
+            cache.renderBuffers.set(renderBuffer, buffer);
             gl.bindRenderbuffer(gl.RENDERBUFFER, buffer);
             gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, renderBuffer.OFFSCREEN_WIDTH, renderBuffer.OFFSCREEN_HEIGHT);
         }
@@ -72,15 +72,15 @@ export class RenderBuffer
     /**
      * 清理纹理
      */
-    static clear(renderBuffer: RenderBuffer)
+    static clear(renderBuffer: RenderBuffer, cache: GLCache)
     {
         WebGLRenderer.glList.forEach((gl) =>
         {
-            const buffer = gl.cache.renderBuffers.get(renderBuffer);
+            const buffer = cache.renderBuffers.get(renderBuffer);
             if (buffer)
             {
                 gl.deleteRenderbuffer(buffer);
-                gl.cache.renderBuffers.delete(renderBuffer);
+                cache.renderBuffers.delete(renderBuffer);
             }
         });
     }

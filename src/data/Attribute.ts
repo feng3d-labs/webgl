@@ -1,8 +1,7 @@
 import { gPartial } from '@feng3d/polyfill';
 import { AttributeUsage } from '../gl/enums/AttributeUsage';
 import { GLArrayType } from '../gl/enums/GLArrayType';
-import { GL } from '../gl/GL';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { GLCache } from '../gl/GLCache';
 
 /**
  * 属性渲染数据
@@ -99,14 +98,14 @@ export class Attribute
     /**
      * 获取缓冲
      */
-    getBuffer(gl: GL)
+    getBuffer(gl: WebGLRenderingContext, cache: GLCache)
     {
         if (this.invalid)
         {
-            this.clear(this);
+            this.clear(this, gl, cache);
             this.invalid = false;
         }
-        let buffer = gl.cache.attributes.get(this);
+        let buffer = cache.attributes.get(this);
         if (!buffer)
         {
             buffer = gl.createBuffer();
@@ -115,7 +114,7 @@ export class Attribute
                 console.error('createBuffer 失败！');
                 throw '';
             }
-            gl.cache.attributes.set(this, buffer);
+            cache.attributes.set(this, buffer);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.data), gl[this.usage]);
@@ -127,16 +126,13 @@ export class Attribute
     /**
      * 清理缓冲
      */
-    clear(attribute: Attribute)
+    clear(attribute: Attribute, gl: WebGLRenderingContext, cache: GLCache)
     {
-        WebGLRenderer.glList.forEach((gl) =>
+        const buffer = cache.attributes.get(attribute);
+        if (buffer)
         {
-            const buffer = gl.cache.attributes.get(attribute);
-            if (buffer)
-            {
-                gl.deleteBuffer(buffer);
-                gl.cache.attributes.delete(attribute);
-            }
-        });
+            gl.deleteBuffer(buffer);
+            cache.attributes.delete(attribute);
+        }
     }
 }

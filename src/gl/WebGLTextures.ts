@@ -1,7 +1,6 @@
 import { Texture } from '../data/Texture';
-import { WebGLRenderer } from '../WebGLRenderer';
 import { TextureDataType } from './enums/TextureDataType';
-import { GL } from './GL';
+import { GLCache } from './GLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLProperties } from './WebGLProperties';
@@ -11,12 +10,12 @@ import { WebGLProperties } from './WebGLProperties';
  */
 export class WebGLTextures
 {
-    gl: GL;
+    gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
     capabilities: WebGLCapabilities;
     properties: WebGLProperties;
 
-    constructor(gl: GL, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
     {
         this.gl = gl;
         this.extensions = extensions;
@@ -24,11 +23,11 @@ export class WebGLTextures
         this.properties = properties;
     }
 
-    active(data: Texture)
+    active(data: Texture, cache: GLCache)
     {
         const { gl } = this;
 
-        const texture = WebGLTextures.getTexture(gl, data);
+        const texture = WebGLTextures.getTexture(gl, data, cache);
 
         const textureType = gl[data.textureType];
 
@@ -71,14 +70,14 @@ export class WebGLTextures
      * 获取顶点属性缓冲
      * @param data 数据
      */
-    static getTexture(gl: GL, data: Texture)
+    static getTexture(gl: WebGLRenderingContext, data: Texture, cache: GLCache)
     {
         if (data.invalid)
         {
-            this.clear(data);
+            this.clear(data, gl, cache);
             data.invalid = false;
         }
-        let texture = gl.cache.textures.get(data);
+        let texture = cache.textures.get(data);
         if (!texture)
         {
             texture = gl.createTexture(); // Create a texture object
@@ -87,7 +86,7 @@ export class WebGLTextures
                 console.error('createTexture 失败！');
                 throw '';
             }
-            gl.cache.textures.set(data, texture);
+            cache.textures.set(data, texture);
 
             //
             const textureType = gl[data.textureType];
@@ -148,16 +147,13 @@ export class WebGLTextures
      *
      * @param data
      */
-    static clear(data: Texture)
+    static clear(data: Texture, gl: WebGLRenderingContext, cache: GLCache)
     {
-        WebGLRenderer.glList.forEach((gl) =>
+        const tex = cache.textures.get(data);
+        if (tex)
         {
-            const tex = gl.cache.textures.get(data);
-            if (tex)
-            {
-                gl.deleteTexture(tex);
-                gl.cache.textures.delete(data);
-            }
-        });
+            gl.deleteTexture(tex);
+            cache.textures.delete(data);
+        }
     }
 }
