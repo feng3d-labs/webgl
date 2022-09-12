@@ -23,10 +23,10 @@ export class WebGLBindingStates
         this.extensions = extensions;
         this.capabilities = capabilities;
         this.attributes = attributes;
-        this.currentState = this.defaultState;
         this.cacle = cacle;
 
         this.defaultState = this.createBindingState(null);
+        this.currentState = this.defaultState;
     }
 
     setup(renderAtomic: RenderAtomic)
@@ -102,6 +102,8 @@ export class WebGLBindingStates
 
                 if (cachedAttribute.attribute !== attribute) return true;
 
+                if (cachedAttribute.version !== attribute.version) return true;
+
                 attributesNum++;
             }
         }
@@ -123,7 +125,7 @@ export class WebGLBindingStates
     {
         const { gl, currentState, cacle } = this;
 
-        const cache: { [key: string]: { data: number[], attribute: BufferAttribute } } = {};
+        const cache: { [key: string]: { version: number, attribute: BufferAttribute } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
@@ -138,8 +140,9 @@ export class WebGLBindingStates
             {
                 const attribute = renderAtomic.getAttributeByKey(name);
 
-                const data: { data: number[], attribute: BufferAttribute } = {} as any;
+                const data: { version: number, attribute: BufferAttribute } = {} as any;
                 data.attribute = attribute;
+                data.version = attribute.version;
 
                 cache[name] = data;
 
@@ -391,7 +394,7 @@ class BindingState
     /**
      * WebGL属性缓存信息
      */
-    attributes: { [key: string]: { data: number[], attribute: BufferAttribute } } = {};
+    attributes: { [key: string]: { version: number, attribute: BufferAttribute } } = {};
 
     /**
      * 顶点索引缓冲
