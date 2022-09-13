@@ -1,6 +1,6 @@
 export * from './data/Attributes';
 export * from './data/FrameBuffer';
-export * from './data/Index';
+export * from './data/BufferAttribute';
 export * from './data/RenderAtomic';
 export * from './data/RenderParams';
 export * from './data/Shader';

@@ -1,6 +1,5 @@
-import { Attribute } from '../data/Attribute';
 import { FrameBuffer } from '../data/FrameBuffer';
-import { BufferAttribute } from '../data/Index';
+import { BufferAttribute } from '../data/BufferAttribute';
 import { CompileShaderResult } from '../data/Shader';
 import { Texture } from '../data/Texture';
 import { RenderBuffer } from '../RenderBuffer';
@@ -32,7 +31,7 @@ export class WebGLCache
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
      */
-    attributes = new Map<Attribute, WebGLBuffer>();
+    attributes = new Map<BufferAttribute, WebGLBuffer>();
 
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer

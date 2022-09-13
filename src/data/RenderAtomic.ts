@@ -1,7 +1,7 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { ShaderMacro } from '../shader/Macro';
 import { Attributes } from './Attributes';
-import { BufferAttribute } from './Index';
+import { BufferAttribute } from './BufferAttribute';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
 import { Uniforms } from './Uniform';

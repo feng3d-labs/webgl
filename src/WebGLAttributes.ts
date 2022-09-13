@@ -1,4 +1,4 @@
-import { BufferAttribute } from './data/Index';
+import { BufferAttribute } from './data/BufferAttribute';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 
 export interface WebGLAttributeBufferCacle

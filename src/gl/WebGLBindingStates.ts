@@ -1,4 +1,4 @@
-import { BufferAttribute } from '../data/Index';
+import { BufferAttribute } from '../data/BufferAttribute';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from '../WebGLAttributes';
 import { WebGLCache } from './WebGLCache';
@@ -55,7 +55,7 @@ export class WebGLBindingStates
         }
 
         const index = renderAtomic.getIndexBuffer();
-        if (index !== null)
+        if (index)
         {
             attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
         }
@@ -64,7 +64,7 @@ export class WebGLBindingStates
         {
             this.setupVertexAttributes(renderAtomic);
 
-            if (index !== null)
+            if (index)
             {
                 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, attributes.get(index).buffer);
             }

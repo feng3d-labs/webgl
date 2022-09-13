@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { lazy } from '@feng3d/polyfill';
-import { BufferAttribute } from './data/Index';
+import { BufferAttribute } from './data/BufferAttribute';
 import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
 import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
@@ -246,7 +246,7 @@ export class WebGLRenderer
         const renderMode = gl[renderAtomicData.renderParams.renderMode];
 
         const index = renderAtomic.getIndexBuffer();
-        if (index !== null)
+        if (index)
         {
             const attribute = attributes.get(index);
             indexedBufferRenderer.setIndex(attribute);

@@ -1,4 +1,4 @@
-import { BufferAttribute } from './Index';
+import { BufferAttribute } from './BufferAttribute';
 
 export interface Attributes
 {

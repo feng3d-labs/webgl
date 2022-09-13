@@ -81,27 +81,3 @@ export class BufferAttribute
         this.count = array !== undefined ? array.length / itemSize : 0;
     }
 }
-
-export class Uint16BufferAttribute extends BufferAttribute
-{
-    constructor(array: ArrayLike<number> | ArrayBufferLike | number, itemSize: number, normalized?: boolean, divisor = 0)
-    {
-        super(new Uint16Array(array as any), itemSize, normalized, divisor);
-    }
-}
-
-export class Int32BufferAttribute extends BufferAttribute
-{
-    constructor(array: ArrayLike<number> | ArrayBufferLike | number, itemSize: number, normalized?: boolean, divisor = 0)
-    {
-        super(new Int32Array(array as any), itemSize, normalized, divisor);
-    }
-}
-
-export class Float32BufferAttribute extends BufferAttribute
-{
-    constructor(array: ArrayLike<number> | ArrayBufferLike | number, itemSize: number, normalized?: boolean, divisor = 0)
-    {
-        super(new Float32Array(array as any), itemSize, normalized, divisor);
-    }
-}
