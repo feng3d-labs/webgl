@@ -1,6 +1,5 @@
 import { Texture } from '../data/Texture';
 import { TextureDataType } from './enums/TextureDataType';
-import { WebGLCache } from './WebGLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLProperties } from './WebGLProperties';
@@ -14,15 +13,18 @@ export class WebGLTextures
     extensions: WebGLExtensions;
     capabilities: WebGLCapabilities;
     properties: WebGLProperties;
-    cache: WebGLCache;
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties, cache: WebGLCache)
+    /**
+     * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
+     */
+    private textures = new WeakMap<Texture, WebGLTexture>();
+
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
         this.properties = properties;
-        this.cache = cache;
     }
 
     active(data: Texture)
@@ -74,14 +76,14 @@ export class WebGLTextures
      */
     private getTexture(data: Texture)
     {
-        const { gl, cache } = this;
+        const { gl, textures } = this;
 
         if (data.invalid)
         {
             this.clear(data);
             data.invalid = false;
         }
-        let texture = cache.textures.get(data);
+        let texture = textures.get(data);
         if (!texture)
         {
             texture = gl.createTexture(); // Create a texture object
@@ -90,7 +92,7 @@ export class WebGLTextures
                 console.error('createTexture 失败！');
                 throw '';
             }
-            cache.textures.set(data, texture);
+            textures.set(data, texture);
 
             //
             const textureType = gl[data.textureType];
@@ -153,13 +155,13 @@ export class WebGLTextures
      */
     private clear(data: Texture)
     {
-        const { gl, cache } = this;
+        const { gl, textures } = this;
 
-        const tex = cache.textures.get(data);
+        const tex = textures.get(data);
         if (tex)
         {
             gl.deleteTexture(tex);
-            cache.textures.delete(data);
+            textures.delete(data);
         }
     }
 }

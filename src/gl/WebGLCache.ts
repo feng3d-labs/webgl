@@ -1,6 +1,4 @@
 import { FrameBuffer } from '../data/FrameBuffer';
-import { CompileShaderResult } from '../data/Shader';
-import { Texture } from '../data/Texture';
 import { RenderBuffer } from '../RenderBuffer';
 
 declare global
@@ -18,14 +16,7 @@ export interface WebGLCache extends MixinsWebGLCache { }
  */
 export class WebGLCache
 {
-    compileShaderResults: { [key: string]: CompileShaderResult } = {};
-
     private _gl: WebGLRenderingContext;
-
-    /**
-     * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
-     */
-    textures = new Map<Texture, WebGLTexture>();
 
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer

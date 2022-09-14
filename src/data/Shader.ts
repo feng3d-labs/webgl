@@ -1,5 +1,4 @@
 import { gPartial } from '@feng3d/polyfill';
-import { WebGLCache } from '../gl/WebGLCache';
 import { ShaderMacro } from '../shader/Macro';
 import { shaderlib } from '../shader/ShaderLib';
 
@@ -8,6 +7,8 @@ import { shaderlib } from '../shader/ShaderLib';
  */
 export class Shader
 {
+    static compileShaderResults: { [key: string]: CompileShaderResult } = {};
+
     /**
      * 着色器名称
      */
@@ -42,12 +43,12 @@ export class Shader
     /**
      * 激活渲染程序
      */
-    activeShaderProgram(gl: WebGLRenderingContext, cache: WebGLCache)
+    activeShaderProgram(gl: WebGLRenderingContext)
     {
         this.updateShaderCode();
 
         const shaderKey = this.vertex + this.fragment;
-        let result = cache.compileShaderResults[shaderKey];
+        let result = Shader.compileShaderResults[shaderKey];
         if (result) return result;
 
         const { vertex, fragment } = this;
@@ -55,7 +56,7 @@ export class Shader
         // 渲染程序
         try
         {
-            result = cache.compileShaderResults[shaderKey] = this.compileShaderProgram(gl, vertex, fragment);
+            result = Shader.compileShaderResults[shaderKey] = this.compileShaderProgram(gl, vertex, fragment);
         }
         catch (error)
         {

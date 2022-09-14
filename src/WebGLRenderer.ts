@@ -109,7 +109,7 @@ export class WebGLRenderer
         const shaderMacro = renderAtomic.getShaderMacro();
         const shader = renderAtomic.getShader();
         shader.shaderMacro = shaderMacro;
-        const shaderResult = shader.activeShaderProgram(this.gl, this.cache);
+        const shaderResult = shader.activeShaderProgram(this.gl);
         if (!shaderResult)
         {
             console.warn(`缺少着色器，无法渲染!`);
@@ -210,7 +210,7 @@ export class WebGLRenderer
         this.cache = new WebGLCache(this.gl);
         this.cacheStates = new WebGLCacheStates(this.gl);
         this.properties = new WebGLProperties();
-        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties, this.cache);
+        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
         this.info = new WebGLInfo(this.gl);
