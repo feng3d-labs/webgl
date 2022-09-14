@@ -12,6 +12,7 @@ import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
 import { WebGLInfo } from './gl/WebGLInfo';
 import { WebGLProperties } from './gl/WebGLProperties';
 import { WebGLRenderParams } from './gl/WebGLRenderParams';
+import { WebGLShaders } from './gl/WebGLShaders';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { WebGLUniforms } from './gl/WebGLUniforms';
@@ -57,18 +58,19 @@ export class WebGLRenderer
      */
     info: WebGLInfo;
 
+    cache: WebGLCache;
+    /**
+     * 缓存WebGL状态
+     */
+    cacheStates: WebGLCacheStates;
+    shaders: WebGLShaders;
     state: WebGLState;
     bindingStates: WebGLBindingStates;
     attributes: WebGLAttributes;
     bufferRenderer: WebGLBufferRenderer;
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
-    cache: WebGLCache;
     renderParams: WebGLRenderParams;
 
-    /**
-     * 缓存WebGL状态
-     */
-    cacheStates: WebGLCacheStates;
     uniforms: WebGLUniforms;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
@@ -109,7 +111,7 @@ export class WebGLRenderer
         const shaderMacro = renderAtomic.getShaderMacro();
         const shader = renderAtomic.getShader();
         shader.shaderMacro = shaderMacro;
-        const shaderResult = shader.activeShaderProgram(this.gl);
+        const shaderResult = this.shaders.activeShaderProgram(shader);
         if (!shaderResult)
         {
             console.warn(`缺少着色器，无法渲染!`);
@@ -209,12 +211,13 @@ export class WebGLRenderer
         this.extensions.init(this.capabilities);
         this.cache = new WebGLCache(this.gl);
         this.cacheStates = new WebGLCacheStates(this.gl);
+        this.shaders = new WebGLShaders(this.gl);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
         this.info = new WebGLInfo(this.gl);
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.cache);
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.shaders);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
         this.uniforms = new WebGLUniforms(this.gl, this.textures, this.cache);
 

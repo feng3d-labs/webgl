@@ -1,9 +1,9 @@
 import { BufferAttribute } from '../data/BufferAttribute';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from '../WebGLAttributes';
-import { WebGLCache } from './WebGLCache';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
+import { WebGLShaders } from './WebGLShaders';
 
 export class WebGLBindingStates
 {
@@ -11,19 +11,19 @@ export class WebGLBindingStates
     private extensions: WebGLExtensions;
     private attributes: WebGLAttributes;
     private capabilities: WebGLCapabilities;
+    private shaders: WebGLShaders;
+
     private currentState: BindingState;
     private defaultState: BindingState;
-    private cacle: WebGLCache;
-
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, cacle: WebGLCache)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, shaders: WebGLShaders)
     {
         this.gl = gl;
         this.extensions = extensions;
-        this.capabilities = capabilities;
         this.attributes = attributes;
-        this.cacle = cacle;
+        this.capabilities = capabilities;
+        this.shaders = shaders;
 
         this.defaultState = this.createBindingState(null);
         this.currentState = this.defaultState;
@@ -79,12 +79,12 @@ export class WebGLBindingStates
      */
     private needsUpdate(renderAtomic: RenderAtomic)
     {
-        const { gl, currentState } = this;
+        const { currentState, shaders } = this;
 
         const cachedAttributes = currentState.attributes;
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shaders.activeShaderProgram(shader);
         const attributeInfos = shaderResult.attributes;
 
         let attributesNum = 0;
@@ -123,13 +123,13 @@ export class WebGLBindingStates
      */
     private saveCache(renderAtomic: RenderAtomic)
     {
-        const { gl, currentState } = this;
+        const { currentState, shaders } = this;
 
         const cache: { [key: string]: { version: number, attribute: BufferAttribute } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shaders.activeShaderProgram(shader);
         const attributeInfos = shaderResult.attributes;
 
         for (const name in attributeInfos)
@@ -164,7 +164,7 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
-        const { gl, attributes, capabilities, extensions } = this;
+        const { gl, attributes, capabilities, extensions, shaders } = this;
 
         if (capabilities.isWebGL2 === false && renderAtomic.getInstanceCount() > 0)
         {
@@ -174,7 +174,7 @@ export class WebGLBindingStates
         this.initAttributes();
 
         const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(gl);
+        const shaderResult = shaders.activeShaderProgram(shader);
 
         for (const name in shaderResult.attributes)
         {
