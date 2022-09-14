@@ -1,6 +1,7 @@
 const files = {
-    webgl2: [
+    draw: [
         'draw_image_space',
+        'draw_instanced',
     ],
 };
 
