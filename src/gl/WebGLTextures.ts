@@ -72,7 +72,7 @@ export class WebGLTextures
      * 获取顶点属性缓冲
      * @param data 数据
      */
-    getTexture(data: Texture)
+    private getTexture(data: Texture)
     {
         const { gl, cache } = this;
 
@@ -151,7 +151,7 @@ export class WebGLTextures
      *
      * @param data
      */
-    clear(data: Texture)
+    private clear(data: Texture)
     {
         const { gl, cache } = this;
 
