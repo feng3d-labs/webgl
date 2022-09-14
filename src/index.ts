@@ -6,8 +6,6 @@ export * from './data/RenderParams';
 export * from './data/Shader';
 export * from './data/Texture';
 export * from './data/Uniform';
-export * from './gl/enums/TextureType';
-export * from './gl/enums/TextureWrap';
 export * from './gl/WebGLCapabilities';
 export * from './gl/WebGLEnums';
 export * from './gl/WebGLExtensions';

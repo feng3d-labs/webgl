@@ -1,7 +1,6 @@
 import { Texture } from '../data/Texture';
-import { TextureWrap } from './enums/TextureWrap';
 import { WebGLCapabilities } from './WebGLCapabilities';
-import { TextureMagFilter, TextureMinFilter } from './WebGLEnums';
+import { TextureMagFilter, TextureMinFilter, TextureWrap } from './WebGLEnums';
 import { WebGLExtensions } from './WebGLExtensions';
 import { UniformInfo } from './WebGLShaders';
 

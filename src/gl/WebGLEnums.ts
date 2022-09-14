@@ -245,3 +245,28 @@ export type TextureMagFilter = 'LINEAR' | 'NEAREST';
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
 export type TextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST' | 'LINEAR_MIPMAP_NEAREST' | 'NEAREST_MIPMAP_LINEAR' | 'LINEAR_MIPMAP_LINEAR';
+
+/**
+ * 纹理类型
+ * A GLenum specifying the binding point (target). Possible values:
+ *
+ * * `TEXTURE_2D` gl.TEXTURE_2D: A two-dimensional texture.
+ * * `TEXTURE_CUBE_MAP` gl.TEXTURE_CUBE_MAP: A cube-mapped texture.
+ * * `TEXTURE_3D` using a WebGL 2 context gl.TEXTURE_3D: A three-dimensional texture.
+ * * `TEXTURE_2D_ARRAY` using a WebGL 2 context gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindTexture
+ */
+export type TextureType = 'TEXTURE_2D' | 'TEXTURE_CUBE_MAP' | 'TEXTURE_3D' | 'TEXTURE_2D_ARRAY';
+
+/**
+ * 纹理坐标s包装函数枚举
+ * Wrapping function for texture coordinate s
+ *
+ * * `REPEAT`
+ * * `CLAMP_TO_EDGE`
+ * * `MIRRORED_REPEAT`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type TextureWrap = 'REPEAT' | 'CLAMP_TO_EDGE' | 'MIRRORED_REPEAT';

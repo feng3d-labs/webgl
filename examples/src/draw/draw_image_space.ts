@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { RenderAtomic, Texture, TextureType, TextureWrap, WebGLRenderer } from '../../../src';
+import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -27,13 +27,13 @@ import { RenderAtomic, Texture, TextureType, TextureWrap, WebGLRenderer } from '
 
         const diffuse: gPartial<Texture> = {
             flipY: false,
-            textureType: TextureType.TEXTURE_2D,
+            textureType: 'TEXTURE_2D',
             format: 'RGBA',
             type: 'UNSIGNED_BYTE',
             magFilter: 'LINEAR',
             minFilter: 'LINEAR',
-            wrapS: TextureWrap.REPEAT,
-            wrapT: TextureWrap.REPEAT,
+            wrapS: 'REPEAT',
+            wrapT: 'REPEAT',
             activePixels: img as any,
         };
 
