@@ -1,5 +1,4 @@
 import { RenderAtomic } from '../data/RenderAtomic';
-import { Texture } from '../data/Texture';
 import { UniformInfo } from './WebGLShaders';
 import { WebGLTextures } from './WebGLTextures';
 
@@ -75,8 +74,7 @@ export class WebGLUniforms
                 break;
             case gl.SAMPLER_2D:
             case gl.SAMPLER_CUBE:
-                const textureInfo = data as Texture;
-                textures.active(textureInfo, activeInfo);
+                textures.active(data, activeInfo);
                 break;
             default:
                 console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);
