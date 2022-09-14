@@ -1,10 +1,9 @@
 /* eslint-disable no-new */
 import { lazy } from '@feng3d/polyfill';
 import { BufferAttribute } from './data/BufferAttribute';
-import { RenderAtomic, RenderAtomicData } from './data/RenderAtomic';
+import { RenderAtomic } from './data/RenderAtomic';
 import { UniformInfo } from './data/Shader';
 import { Texture } from './data/Texture';
-import { Uniforms } from './data/Uniform';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLCache } from './gl/WebGLCache';
@@ -36,15 +35,29 @@ export class WebGLRenderer
 {
     private _canvas: HTMLCanvasElement;
 
-    static glList: WebGLRenderingContext[] = [];
-
     gl: WebGLRenderingContext;
 
+    /**
+     * WebGL扩展
+     */
     extensions: WebGLExtensions;
     properties: WebGLProperties;
+
+    /**
+     * WEBGL支持功能
+     */
     capabilities: WebGLCapabilities;
+
+    /**
+     * WebGL纹理
+     */
     textures: WebGLTextures;
+
+    /**
+     * WebGL信息
+     */
     info: WebGLInfo;
+
     state: WebGLState;
     bindingStates: WebGLBindingStates;
     attributes: WebGLAttributes;
@@ -78,18 +91,11 @@ export class WebGLRenderer
             preserveDrawingBuffer: false,
             powerPreference: 'default',
             failIfMajorPerformanceCaveat: false,
-        } as Partial<WebGLRendererParameters>, parameters);
+        } as Partial<WebGLContextAttributes>, parameters);
 
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
-        const gl = getContext(this._canvas, contextNames, parameters) as WebGLRenderingContext;
-        this.gl = gl;
+        this.gl = getContext(this._canvas, contextNames, parameters) as WebGLRenderingContext;
         this._initGLContext();
-        //
-        gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-        gl.clearDepth(1.0); // Clear everything
-        gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-        WebGLRenderer.glList.push(gl);
     }
 
     render(renderAtomic: RenderAtomic)
@@ -104,94 +110,33 @@ export class WebGLRenderer
         const shader = renderAtomic.getShader();
         shader.shaderMacro = shaderMacro;
         const shaderResult = shader.activeShaderProgram(this.gl, this.cache);
-        if (!shaderResult) return;
-        //
-        const checkedRenderAtomic: RenderAtomicData = this.checkRenderData(renderAtomic);
-        if (!checkedRenderAtomic) return;
-        //
-        this.gl.useProgram(shaderResult.program);
-
-        renderParams.updateRenderParams(checkedRenderAtomic.renderParams);
-
-        bindingStates.setup(renderAtomic);
-
-        this.activeUniforms(checkedRenderAtomic, shaderResult.uniforms);
-        this.draw(renderAtomic, checkedRenderAtomic);
-    }
-
-    private checkRenderData(renderAtomic: RenderAtomic)
-    {
-        const shader = renderAtomic.getShader();
-        const shaderResult = shader.activeShaderProgram(this.gl, this.cache);
         if (!shaderResult)
         {
             console.warn(`缺少着色器，无法渲染!`);
 
-            return null;
+            return;
         }
+        //
+        this.gl.useProgram(shaderResult.program);
 
-        const attributes: { [name: string]: BufferAttribute; } = {};
-        for (const key in shaderResult.attributes)
-        {
-            // 处理 WebGL 内置属性 gl_VertexID 等
-            if (shaderResult.attributes[key].location < 0)
-            {
-                continue;
-            }
-            const attribute = renderAtomic.getAttributeByKey(key);
-            if (!attribute)
-            {
-                console.warn(`缺少顶点 attribute 数据 ${key} ，无法渲染!`);
+        renderParams.updateRenderParams(renderAtomic.getRenderParams());
 
-                return null;
-            }
-            attributes[key] = attribute;
-        }
+        bindingStates.setup(renderAtomic);
 
-        const uniforms: { [name: string]: Uniforms; } = {};
-        for (let key in shaderResult.uniforms)
-        {
-            const activeInfo = shaderResult.uniforms[key];
-            if (activeInfo.name)
-            {
-                key = activeInfo.name;
-            }
-            const uniform = renderAtomic.getUniformByKey(key);
-            if (uniform === undefined)
-            {
-                console.warn(`缺少 uniform 数据 ${key} ,无法渲染！`);
-
-                return null;
-            }
-            uniforms[key] = uniform;
-        }
-
-        const indexBuffer = renderAtomic.getIndexBuffer();
-
-        const checkedRenderAtomic: RenderAtomicData
-            = {
-            shader,
-            attributes,
-            uniforms,
-            renderParams: renderAtomic.getRenderParams(),
-            index: indexBuffer,
-            instanceCount: renderAtomic.getInstanceCount(),
-        };
-
-        return checkedRenderAtomic;
+        this.activeUniforms(renderAtomic, shaderResult.uniforms);
+        this.draw(renderAtomic);
     }
 
     /**
      * 激活常量
      */
-    private activeUniforms(renderAtomic: RenderAtomicData, uniformInfos: { [name: string]: UniformInfo })
+    private activeUniforms(renderAtomic: RenderAtomic, uniformInfos: { [name: string]: UniformInfo })
     {
-        const uniforms = renderAtomic.uniforms;
         for (const name in uniformInfos)
         {
             const activeInfo = uniformInfos[name];
             const paths = activeInfo.paths;
-            let uniformData = uniforms[paths[0]];
+            let uniformData = renderAtomic.getUniformByKey(paths[0]);
             for (let i = 1; i < paths.length; i++)
             {
                 uniformData = uniformData[paths[i]];
@@ -251,12 +196,12 @@ export class WebGLRenderer
 
     /**
      */
-    private draw(renderAtomic: RenderAtomic, renderAtomicData: RenderAtomicData)
+    private draw(renderAtomic: RenderAtomic)
     {
         const { gl, attributes, indexedBufferRenderer, bufferRenderer } = this;
 
-        const instanceCount = ~~lazy.getValue(renderAtomicData.instanceCount);
-        const renderMode = gl[renderAtomicData.renderParams.renderMode];
+        const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
+        const renderMode = gl[renderAtomic.getRenderParams().renderMode];
 
         const index = renderAtomic.getIndexBuffer();
         if (index)
@@ -291,7 +236,7 @@ export class WebGLRenderer
                 }
 
                 return 0;
-            })(renderAtomicData.attributes);
+            })(renderAtomic.getAttributes());
             if (vertexNum === 0)
             {
                 // console.warn(`顶点数量为0，不进行渲染！`);

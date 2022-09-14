@@ -1,3 +1,6 @@
+/**
+ * WebGL信息
+ */
 export class WebGLInfo
 {
     readonly memory = {

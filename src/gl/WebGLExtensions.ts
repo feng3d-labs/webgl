@@ -39,7 +39,7 @@ declare global
 }
 
 /**
- * GL扩展
+ * WebGL扩展
  */
 export class WebGLExtensions
 {

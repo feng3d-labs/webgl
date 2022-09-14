@@ -177,13 +177,3 @@ export class RenderAtomic
         return shaderMacro;
     }
 }
-
-export interface RenderAtomicData
-{
-    shader: Shader;
-    attributes: { [name: string]: BufferAttribute; };
-    uniforms: { [name: string]: Uniforms; };
-    renderParams: RenderParams;
-    index: BufferAttribute;
-    instanceCount: number;
-}

@@ -1,7 +1,7 @@
 import { WebGLExtensions } from './WebGLExtensions';
 
 /**
- * WEBGL 支持功能
+ * WEBGL支持功能
  *
  * @see https://webglreport.com
  * @see http://html5test.com

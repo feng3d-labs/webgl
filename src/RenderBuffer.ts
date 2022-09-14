@@ -1,5 +1,4 @@
 import { WebGLCache } from './gl/WebGLCache';
-import { WebGLRenderer } from './WebGLRenderer';
 
 export class RenderBuffer
 {
@@ -46,7 +45,7 @@ export class RenderBuffer
     {
         if (renderBuffer._invalid)
         {
-            this.clear(renderBuffer, cache);
+            this.clear(gl, renderBuffer, cache);
             renderBuffer._invalid = false;
         }
 
@@ -72,16 +71,13 @@ export class RenderBuffer
     /**
      * 清理纹理
      */
-    static clear(renderBuffer: RenderBuffer, cache: WebGLCache)
+    static clear(gl: WebGLRenderingContext, renderBuffer: RenderBuffer, cache: WebGLCache)
     {
-        WebGLRenderer.glList.forEach((gl) =>
+        const buffer = cache.renderBuffers.get(renderBuffer);
+        if (buffer)
         {
-            const buffer = cache.renderBuffers.get(renderBuffer);
-            if (buffer)
-            {
-                gl.deleteRenderbuffer(buffer);
-                cache.renderBuffers.delete(renderBuffer);
-            }
-        });
+            gl.deleteRenderbuffer(buffer);
+            cache.renderBuffers.delete(renderBuffer);
+        }
     }
 }
