@@ -4,12 +4,8 @@ import { RenderAtomic, Texture, TextureDataType, TextureFormat, TextureMagFilter
 (function ()
 {
     const canvas = document.createElement('canvas');
-    canvas.id = 'glcanvas';
-    canvas.style.position = 'fixed';
-    canvas.style.left = '0px';
-    canvas.style.top = '0px';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
+    canvas.width = Math.min(window.innerWidth, window.innerHeight);
+    canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     const gl = canvas.getContext('webgl2', { antialias: false });
@@ -72,12 +68,14 @@ import { RenderAtomic, Texture, TextureDataType, TextureFormat, TextureMagFilter
 
         function draw()
         {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
+            canvas.width = Math.min(window.innerWidth, window.innerHeight);
+            canvas.height = canvas.width;
 
             //
             renderAtomic.uniforms['u_imageSize'] = [canvas.width / 2, canvas.height / 2];
 
+            webglRenderer.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            webglRenderer.gl.clear(webglRenderer.gl.COLOR_BUFFER_BIT);
             webglRenderer.render(renderAtomic);
             requestAnimationFrame(draw);
         }
