@@ -1,8 +1,6 @@
 import { oav } from '@feng3d/objectview';
 import { serialize } from '@feng3d/serialization';
-import { StencilFunc } from '../gl/enums/StencilFunc';
-import { StencilOp } from '../gl/enums/StencilOp';
-import { BlendEquation, BlendFactor, CullFace, DepthFunc, FrontFace, RenderMode } from '../gl/WebGLEnums';
+import { BlendEquation, BlendFactor, CullFace, DepthFunc, FrontFace, RenderMode, StencilFunc, StencilOp } from '../gl/WebGLEnums';
 
 /**
  * 渲染参数
@@ -229,9 +227,9 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    @oav({ tooltip: 'A GLenum specifying the test function. The default function is gl.ALWAYS. ', component: 'OAVEnum', componentParam: { enumClass: StencilFunc } })
+    @oav({ tooltip: 'A GLenum specifying the test function. The default function is gl.ALWAYS. ', component: 'OAVEnum', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
     @serialize
-    stencilFunc: 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS' = StencilFunc.ALWAYS;
+    stencilFunc: StencilFunc = 'ALWAYS';
 
     /**
      * 一个为模板测试指定参考值。这个值被限制在0到2^n -1的范围内，其中n是模板缓冲区中的位数。默认0。
@@ -262,9 +260,9 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: StencilOp } })
+    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @serialize
-    stencilOpFail: 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DECR' | 'DECR_WRAP' | 'INVERT' = StencilOp.KEEP;
+    stencilOpFail: StencilOp = 'KEEP';
 
     /**
      * 指定在模板测试通过但深度测试失败时使用的函数枚举。默认KEEP，保持当前值。
@@ -273,9 +271,9 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test passes, but the depth test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: StencilOp } })
+    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test passes, but the depth test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @serialize
-    stencilOpZFail: 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DECR' | 'DECR_WRAP' | 'INVERT' = StencilOp.KEEP;
+    stencilOpZFail: StencilOp = 'KEEP';
 
     /**
      * 指定在模板测试和深度测试通过时使用的函数枚举，或在模板测试通过且没有深度缓冲或禁用深度测试时使用的函数枚举。默认KEEP，保持当前值。
@@ -284,9 +282,9 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when both the stencil test and the depth test pass, or when the stencil test passes and there is no depth buffer or depth testing is disabled. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: StencilOp } })
+    @oav({ tooltip: 'A GLenum specifying the function to use when both the stencil test and the depth test pass, or when the stencil test passes and there is no depth buffer or depth testing is disabled. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @serialize
-    stencilOpZPass: 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DECR' | 'DECR_WRAP' | 'INVERT' = StencilOp.KEEP;
+    stencilOpZPass: StencilOp = 'KEEP';
 
     /**
      * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认1。
