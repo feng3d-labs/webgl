@@ -76,11 +76,7 @@ export class WebGLUniforms
             case gl.SAMPLER_2D:
             case gl.SAMPLER_CUBE:
                 const textureInfo = data as Texture;
-                // 激活纹理编号
-                gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                textures.active(textureInfo);
-                // 设置纹理所在采样编号
-                gl.uniform1i(location, activeInfo.textureID);
+                textures.active(textureInfo, activeInfo);
                 break;
             default:
                 console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);

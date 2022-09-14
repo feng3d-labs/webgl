@@ -3,6 +3,7 @@ import { TextureDataType } from './enums/TextureDataType';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLProperties } from './WebGLProperties';
+import { UniformInfo } from './WebGLShaders';
 
 /**
  * WebGL纹理
@@ -27,9 +28,15 @@ export class WebGLTextures
         this.properties = properties;
     }
 
-    active(data: Texture)
+    active(data: Texture, activeInfo?: UniformInfo)
     {
         const { gl } = this;
+
+        if (activeInfo)
+        {
+            // 激活纹理编号
+            gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
+        }
 
         const texture = this.getTexture(data);
 
@@ -39,6 +46,12 @@ export class WebGLTextures
         gl.bindTexture(textureType, texture);
 
         this.setTextureParameters(data);
+
+        if (activeInfo)
+        {
+            // 设置纹理所在采样编号
+            gl.uniform1i(activeInfo.location, activeInfo.textureID);
+        }
 
         return texture;
     }
