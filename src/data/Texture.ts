@@ -1,9 +1,8 @@
-import { TextureFormat } from '../gl/enums/TextureFormat';
 import { TextureMagFilter } from '../gl/enums/TextureMagFilter';
 import { TextureMinFilter } from '../gl/enums/TextureMinFilter';
 import { TextureType } from '../gl/enums/TextureType';
 import { TextureWrap } from '../gl/enums/TextureWrap';
-import { TextureDataType } from '../gl/WebGLEnums';
+import { TextureDataType, TextureFormat } from '../gl/WebGLEnums';
 
 export interface Texture
 {

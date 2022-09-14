@@ -170,3 +170,52 @@ export type TextureDataType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT_5_6_5' | 'UNSIGN
     | 'UNSIGNED_INT' | 'UNSIGNED_INT_24_8_WEBGL' | 'FLOAT' | 'HALF_FLOAT_OES' | 'BYTE' | 'SHORT' | 'INT'
     | 'HALF_FLOAT' | 'UNSIGNED_INT_2_10_10_10_REV' | 'UNSIGNED_INT_10F_11F_11F_REV' | 'UNSIGNED_INT_5_9_9_9_REV' | 'UNSIGNED_INT_24_8' | 'FLOAT_32_UNSIGNED_INT_24_8_REV'
     ;
+
+/**
+ * 纹理颜色格式
+ * A GLint specifying the color components in the texture
+ *
+ * * `ALPHA` Discards the red, green and blue components and reads the alpha component.
+ * * `RGB` Discards the alpha components and reads the red, green and blue components.
+ * * `RGBA` Red, green, blue and alpha components are read from the color buffer.
+ * * `LUMINANCE` Each color component is a luminance component, alpha is 1.0.
+ * * `LUMINANCE_ALPHA` Each component is a luminance/alpha component.
+ * * `DEPTH_COMPONENT` When using the WEBGL_depth_texture extension:
+ * * `DEPTH_STENCIL` When using the WEBGL_depth_texture extension:
+ * * `SRGB_EXT` When using the EXT_sRGB extension:
+ * * `SRGB_ALPHA_EXT` When using the EXT_sRGB extension:
+ * * `R8` using a WebGL 2 context
+ * * `R16F` using a WebGL 2 context
+ * * `R32F` using a WebGL 2 context
+ * * `R8UI` using a WebGL 2 context
+ * * `RG8` using a WebGL 2 context
+ * * `RG16F` using a WebGL 2 context
+ * * `RG32F` using a WebGL 2 context
+ * * `RG8UI` using a WebGL 2 context
+ * * `RG16UI` using a WebGL 2 context
+ * * `RG32UI` using a WebGL 2 context
+ * * `RGB8` using a WebGL 2 context
+ * * `SRGB8` using a WebGL 2 context
+ * * `RGB565` using a WebGL 2 context
+ * * `R11F_G11F_B10F` using a WebGL 2 context
+ * * `RGB9_E5` using a WebGL 2 context
+ * * `RGB16F` using a WebGL 2 context
+ * * `RGB32F` using a WebGL 2 context
+ * * `RGB8UI` using a WebGL 2 context
+ * * `RGBA8` using a WebGL 2 context
+ * * `RGB5_A1` using a WebGL 2 context
+ * * `RGB10_A2` using a WebGL 2 context
+ * * `RGBA4` using a WebGL 2 context
+ * * `RGBA16F` using a WebGL 2 context
+ * * `RGBA32F` using a WebGL 2 context
+ * * `RGBA8UI` using a WebGL 2 context
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+export type TextureFormat = 'ALPHA' | 'RGB' | `RGBA` | `LUMINANCE` | `LUMINANCE_ALPHA` | `DEPTH_COMPONENT`
+    | `DEPTH_STENCIL` | `SRGB_EXT` | `SRGB_ALPHA_EXT` | `R8` | `R16F` | `R32F`
+    | `R8UI` | `RG8` | `RG16F` | `RG32F` | `RG8UI` | `RG16UI`
+    | `RG32UI` | `RGB8` | `SRGB8` | `RGB565`
+    | `R11F_G11F_B10F` | `RGB9_E5` | `RGB16F` | `RGB32F`
+    | `RGB8UI` | `RGBA8` | `RGB5_A1` | `RGB10_A2`
+    | `RGBA4` | `RGBA16F` | `RGBA32F` | `RGBA8UI`;

@@ -6,7 +6,6 @@ export * from './data/RenderParams';
 export * from './data/Shader';
 export * from './data/Texture';
 export * from './data/Uniform';
-export * from './gl/enums/TextureFormat';
 export * from './gl/enums/TextureMagFilter';
 export * from './gl/enums/TextureMinFilter';
 export * from './gl/enums/TextureType';
