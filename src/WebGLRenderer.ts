@@ -11,7 +11,6 @@ import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
 import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
 import { WebGLInfo } from './gl/WebGLInfo';
-import { WebGLProperties } from './gl/WebGLProperties';
 import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLShaders } from './gl/WebGLShaders';
 import { WebGLState } from './gl/WebGLState';
@@ -42,7 +41,6 @@ export class WebGLRenderer
      * WebGL扩展
      */
     extensions: WebGLExtensions;
-    properties: WebGLProperties;
 
     /**
      * WEBGL支持功能
@@ -201,8 +199,6 @@ export class WebGLRenderer
         this._canvas.removeEventListener('webglcontextlost', this._onContextLost, false);
         this._canvas.removeEventListener('webglcontextrestored', this._onContextRestore, false);
         this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
-
-        this.properties.dispose();
     }
 
     private _initGLContext()
@@ -213,8 +209,7 @@ export class WebGLRenderer
         this.extensions.init(this.capabilities);
         this.cacheStates = new WebGLCacheStates(this.gl);
         this.shaders = new WebGLShaders(this.gl);
-        this.properties = new WebGLProperties();
-        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
+        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
         this.info = new WebGLInfo(this.gl);
