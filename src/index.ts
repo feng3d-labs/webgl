@@ -7,7 +7,6 @@ export * from './data/Shader';
 export * from './data/Texture';
 export * from './data/Uniform';
 export * from './gl/enums/AttributeUsage';
-export * from './gl/enums/ColorMask';
 export * from './gl/enums/GLArrayType';
 export * from './gl/enums/TextureDataType';
 export * from './gl/enums/TextureFormat';
@@ -23,3 +22,4 @@ export * from './shader/Macro';
 export * from './shader/ShaderLib';
 export * from './shader/ShaderMacroUtils';
 export * from './WebGLRenderer';
+

@@ -1,5 +1,4 @@
 import { RenderParams } from '../data/RenderParams';
-import { ColorMask } from './enums/ColorMask';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLState } from './WebGLState';
 
@@ -38,7 +37,6 @@ export class WebGLRenderParams
         const useScissor = renderParams.useScissor;
         const scissor = renderParams.scissor;
         const colorMask = renderParams.colorMask;
-        const colorMaskB = [ColorMask.R, ColorMask.G, ColorMask.B, ColorMask.A].map((v) => !!(colorMask & v));
 
         const usePolygonOffset = renderParams.usePolygonOffset;
         const polygonOffsetFactor = renderParams.polygonOffsetFactor;
@@ -92,7 +90,7 @@ export class WebGLRenderParams
         }
         gl.depthMask(depthMask);
 
-        gl.colorMask(colorMaskB[0], colorMaskB[1], colorMaskB[2], colorMaskB[3]);
+        gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
         gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
 

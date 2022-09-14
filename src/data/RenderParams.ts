@@ -1,6 +1,5 @@
 import { oav } from '@feng3d/objectview';
 import { serialize } from '@feng3d/serialization';
-import { ColorMask } from '../gl/enums/ColorMask';
 import { StencilFunc } from '../gl/enums/StencilFunc';
 import { StencilOp } from '../gl/enums/StencilOp';
 import { BlendEquation, BlendFactor, CullFace, DepthFunc, FrontFace, RenderMode } from '../gl/WebGLEnums';
@@ -132,8 +131,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/colorMask
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '深度检测方法', componentParam: { enumClass: ColorMask } })
-    colorMask = ColorMask.RGBA;
+    @oav({ tooltip: '深度检测方法' })
+    colorMask: [boolean, boolean, boolean, boolean] = [true, true, true, true];
 
     /**
      * 是否使用 viewport，默认不使用，不使用时viewport为画布区域。
