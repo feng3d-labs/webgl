@@ -1,7 +1,6 @@
 import { RenderAtomic } from '../data/RenderAtomic';
-import { UniformInfo } from '../data/Shader';
 import { Texture } from '../data/Texture';
-import { WebGLCache } from './WebGLCache';
+import { UniformInfo } from './WebGLShaders';
 import { WebGLTextures } from './WebGLTextures';
 
 /**
@@ -9,20 +8,17 @@ import { WebGLTextures } from './WebGLTextures';
  */
 export class WebGLUniforms
 {
-    gl: WebGLRenderingContext;
+    private gl: WebGLRenderingContext;
 
     /**
      * WebGL纹理
      */
-    textures: WebGLTextures;
+    private textures: WebGLTextures;
 
-    cache: WebGLCache;
-
-    constructor(gl: WebGLRenderingContext, textures: WebGLTextures, cache: WebGLCache)
+    constructor(gl: WebGLRenderingContext, textures: WebGLTextures)
     {
         this.gl = gl;
         this.textures = textures;
-        this.cache = cache;
     }
 
     /**

@@ -1,6 +1,6 @@
 export * from './data/Attributes';
-export * from './data/FrameBuffer';
 export * from './data/BufferAttribute';
+export * from './data/FrameBuffer';
 export * from './data/RenderAtomic';
 export * from './data/RenderParams';
 export * from './data/Shader';
@@ -21,7 +21,6 @@ export * from './gl/enums/TextureMagFilter';
 export * from './gl/enums/TextureMinFilter';
 export * from './gl/enums/TextureType';
 export * from './gl/enums/TextureWrap';
-export * from './gl/WebGLCache';
 export * from './gl/WebGLCapabilities';
 export * from './gl/WebGLExtensions';
 export * from './RenderBuffer';
