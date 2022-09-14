@@ -13,9 +13,9 @@ import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
 import { WebGLInfo } from './gl/WebGLInfo';
 import { WebGLProperties } from './gl/WebGLProperties';
+import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
-import { updateRenderParams } from './internal/updateRenderParams';
 import { WebGLAttributes } from './WebGLAttributes';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
@@ -50,6 +50,7 @@ export class WebGLRenderer
     bufferRenderer: WebGLBufferRenderer;
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
     cache: WebGLCache;
+    renderParams: WebGLRenderParams;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -89,7 +90,7 @@ export class WebGLRenderer
     {
         if (this._isContextLost === true) return;
 
-        const { bindingStates } = this;
+        const { bindingStates, renderParams } = this;
 
         const instanceCount = renderAtomic.getInstanceCount();
         if (instanceCount === 0) return;
@@ -103,7 +104,8 @@ export class WebGLRenderer
         if (!checkedRenderAtomic) return;
         //
         this.gl.useProgram(shaderResult.program);
-        updateRenderParams(this, checkedRenderAtomic.renderParams);
+
+        renderParams.updateRenderParams(checkedRenderAtomic.renderParams);
 
         bindingStates.setup(renderAtomic);
 
@@ -327,6 +329,7 @@ export class WebGLRenderer
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
         this.info = new WebGLInfo(this.gl);
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.cache);
+        this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
 
         this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
         this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
