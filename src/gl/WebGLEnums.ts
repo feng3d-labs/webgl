@@ -219,3 +219,14 @@ export type TextureFormat = 'ALPHA' | 'RGB' | `RGBA` | `LUMINANCE` | `LUMINANCE_
     | `R11F_G11F_B10F` | `RGB9_E5` | `RGB16F` | `RGB32F`
     | `RGB8UI` | `RGBA8` | `RGB5_A1` | `RGB10_A2`
     | `RGBA4` | `RGBA16F` | `RGBA32F` | `RGBA8UI`;
+
+/**
+ * 纹理放大滤波器
+ * Texture magnification filter
+ *
+ * * `LINEAR`
+ * * `NEAREST`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type TextureMagFilter = 'LINEAR' | 'NEAREST';
