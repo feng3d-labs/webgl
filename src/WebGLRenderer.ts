@@ -2,8 +2,6 @@
 import { lazy } from '@feng3d/polyfill';
 import { BufferAttribute } from './data/BufferAttribute';
 import { RenderAtomic } from './data/RenderAtomic';
-import { UniformInfo } from './data/Shader';
-import { Texture } from './data/Texture';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLCache } from './gl/WebGLCache';
@@ -16,6 +14,7 @@ import { WebGLProperties } from './gl/WebGLProperties';
 import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
+import { WebGLUniforms } from './gl/WebGLUniforms';
 import { WebGLAttributes } from './WebGLAttributes';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
@@ -70,6 +69,7 @@ export class WebGLRenderer
      * 缓存WebGL状态
      */
     cacheStates: WebGLCacheStates;
+    uniforms: WebGLUniforms;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -123,75 +123,9 @@ export class WebGLRenderer
 
         bindingStates.setup(renderAtomic);
 
-        this.activeUniforms(renderAtomic, shaderResult.uniforms);
+        this.uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
+
         this.draw(renderAtomic);
-    }
-
-    /**
-     * 激活常量
-     */
-    private activeUniforms(renderAtomic: RenderAtomic, uniformInfos: { [name: string]: UniformInfo })
-    {
-        for (const name in uniformInfos)
-        {
-            const activeInfo = uniformInfos[name];
-            const paths = activeInfo.paths;
-            let uniformData = renderAtomic.getUniformByKey(paths[0]);
-            for (let i = 1; i < paths.length; i++)
-            {
-                uniformData = uniformData[paths[i]];
-            }
-            this.setContext3DUniform(activeInfo, uniformData);
-        }
-    }
-
-    /**
-     * 设置环境Uniform数据
-     */
-    private setContext3DUniform(activeInfo: UniformInfo, data)
-    {
-        const { gl, textures, cache } = this;
-
-        let vec: number[] = data;
-        if (data.toArray) vec = data.toArray();
-        const location = activeInfo.location;
-        switch (activeInfo.type)
-        {
-            case gl.BOOL:
-            case gl.INT:
-                gl.uniform1i(location, data);
-                break;
-            case gl.FLOAT_MAT3:
-                gl.uniformMatrix3fv(location, false, vec);
-                break;
-            case gl.FLOAT_MAT4:
-                gl.uniformMatrix4fv(location, false, vec);
-                break;
-            case gl.FLOAT:
-                gl.uniform1f(location, data);
-                break;
-            case gl.FLOAT_VEC2:
-                gl.uniform2f(location, vec[0], vec[1]);
-                break;
-            case gl.FLOAT_VEC3:
-                gl.uniform3f(location, vec[0], vec[1], vec[2]);
-                break;
-            case gl.FLOAT_VEC4:
-                gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
-                break;
-            case gl.SAMPLER_2D:
-            case gl.SAMPLER_CUBE:
-                const textureInfo = data as Texture;
-                // 激活纹理编号
-                gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                textures.active(textureInfo, cache);
-                // 设置纹理所在采样编号
-                gl.uniform1i(location, activeInfo.textureID);
-                break;
-                break;
-            default:
-                console.error(`无法识别的uniform类型 ${activeInfo.name} ${data}`);
-        }
     }
 
     /**
@@ -282,6 +216,7 @@ export class WebGLRenderer
         this.info = new WebGLInfo(this.gl);
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.cache);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
+        this.uniforms = new WebGLUniforms(this.gl, this.textures, this.cache);
 
         this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
         this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
