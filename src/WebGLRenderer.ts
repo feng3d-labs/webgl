@@ -4,6 +4,7 @@ import { BufferAttribute } from './data/BufferAttribute';
 import { RenderAtomic } from './data/RenderAtomic';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
+import { WebGLRenderbuffers } from './gl/WebGLBuffers';
 import { WebGLCache } from './gl/WebGLCache';
 import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
@@ -70,8 +71,8 @@ export class WebGLRenderer
     bufferRenderer: WebGLBufferRenderer;
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
     renderParams: WebGLRenderParams;
-
     uniforms: WebGLUniforms;
+    renderbuffers: WebGLRenderbuffers;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -220,6 +221,7 @@ export class WebGLRenderer
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.shaders);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
         this.uniforms = new WebGLUniforms(this.gl, this.textures, this.cache);
+        this.renderbuffers = new WebGLRenderbuffers(this.gl);
 
         this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
         this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
