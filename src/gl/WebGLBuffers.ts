@@ -7,7 +7,7 @@ export class WebGLRenderbuffers
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
      */
-    private renderBuffers = new Map<RenderBuffer, { buffer: WebGLRenderbuffer, OFFSCREEN_WIDTH: number, OFFSCREEN_HEIGHT: number }>();
+    private renderBuffers = new WeakMap<RenderBuffer, { buffer: WebGLRenderbuffer, OFFSCREEN_WIDTH: number, OFFSCREEN_HEIGHT: number }>();
 
     constructor(gl: WebGLRenderingContext)
     {
