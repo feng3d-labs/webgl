@@ -1,7 +1,6 @@
 import { RenderParams } from '../data/RenderParams';
 import { BlendEquation } from './enums/BlendEquation';
 import { ColorMask } from './enums/ColorMask';
-import { CullFace } from './enums/CullFace';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLState } from './WebGLState';
 
@@ -60,7 +59,7 @@ export class WebGLRenderParams
             viewPort = { x: 0, y: 0, width: gl.canvas.width, height: gl.canvas.height };
         }
 
-        if (cullfaceEnum !== CullFace.NONE)
+        if (cullfaceEnum !== 'NONE')
         {
             gl.enable(gl.CULL_FACE);
             gl.cullFace(cullFace);

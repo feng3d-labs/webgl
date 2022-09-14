@@ -3,11 +3,11 @@ import { serialize } from '@feng3d/serialization';
 import { BlendEquation } from '../gl/enums/BlendEquation';
 import { BlendFactor } from '../gl/enums/BlendFactor';
 import { ColorMask } from '../gl/enums/ColorMask';
-import { CullFace } from '../gl/enums/CullFace';
 import { DepthFunc } from '../gl/enums/DepthFunc';
 import { FrontFace } from '../gl/enums/FrontFace';
 import { StencilFunc } from '../gl/enums/StencilFunc';
 import { StencilOp } from '../gl/enums/StencilOp';
+import { CullFace, RenderMode } from '../gl/WebGLEnums';
 
 /**
  * 渲染参数
@@ -30,7 +30,7 @@ export class RenderParams
      */
     @serialize
     @oav({ component: 'OAVEnum', tooltip: '渲染模式，默认RenderMode.TRIANGLES', componentParam: { enumClass: ['POINTS', 'LINE_LOOP', 'LINE_STRIP', 'LINES', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN'] } })
-    renderMode: 'POINTS' | 'LINE_LOOP' | 'LINE_STRIP' | 'LINES' | 'TRIANGLES' | 'TRIANGLE_STRIP' | 'TRIANGLE_FAN' = 'TRIANGLES';
+    renderMode: RenderMode = 'TRIANGLES';
 
     /**
      * 剔除面，默认 BACK，剔除背面。
@@ -38,12 +38,16 @@ export class RenderParams
      * 默认情况下，逆时针的顶点连接顺序被定义为三角形的正面。
      * 使用gl.frontFace(gl.CW);调整顺时针为正面
      *
-     * @see http://www.jianshu.com/p/ee04165f2a02
+     * * NONE 关闭裁剪面
+     * * FRONT 正面
+     * * BACK 背面
+     * * FRONT_AND_BACK 正面与背面
+     *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '剔除面', componentParam: { enumClass: CullFace } })
-    cullFace: 'NONE' | 'FRONT' | 'BACK' | 'FRONT_AND_BACK' = CullFace.BACK;
+    @oav({ component: 'OAVEnum', tooltip: '剔除面', componentParam: { enumClass: ['NONE', 'FRONT', 'BACK', 'FRONT_AND_BACK'] } })
+    cullFace: CullFace = 'BACK';
 
     /**
      * 正向方向，默认 CW。三角形顺时针方向为正面。

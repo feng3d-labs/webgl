@@ -10,7 +10,7 @@ export * from './gl/enums/AttributeUsage';
 export * from './gl/enums/BlendEquation';
 export * from './gl/enums/BlendFactor';
 export * from './gl/enums/ColorMask';
-export * from './gl/enums/CullFace';
+export * from './gl/WebGLEnums';
 export * from './gl/enums/DepthFunc';
 export * from './gl/enums/FrontFace';
 export * from './gl/enums/GLArrayType';
