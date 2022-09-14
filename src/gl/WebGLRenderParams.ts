@@ -1,4 +1,3 @@
-import { FunctionPropertyNames } from '@feng3d/polyfill';
 import { RenderParams } from '../data/RenderParams';
 import { BlendEquation } from './enums/BlendEquation';
 import { ColorMask } from './enums/ColorMask';
@@ -17,61 +16,6 @@ export class WebGLRenderParams
         this.gl = gl;
         this.capabilities = capabilities;
         this.state = state;
-
-        this.cacheRenderParams();
-    }
-
-    private cacheRenderParams()
-    {
-        const { gl } = this;
-
-        const enableMap = {};
-        const oldEnable = gl.enable;
-        gl.enable = (cap) =>
-        {
-            if (enableMap[cap] === true) return;
-            oldEnable.call(gl, cap);
-            enableMap[cap] = true;
-        };
-
-        const oldDisable = gl.disable;
-        gl.disable = (cap) =>
-        {
-            if (enableMap[cap] === false) return;
-            oldDisable.call(gl, cap);
-            enableMap[cap] = false;
-        };
-
-        this.cacheFunction(gl, 'cullFace');
-        this.cacheFunction(gl, 'frontFace');
-        this.cacheFunction(gl, 'blendEquation');
-        this.cacheFunction(gl, 'blendFunc');
-        this.cacheFunction(gl, 'depthFunc');
-        this.cacheFunction(gl, 'depthMask');
-        this.cacheFunction(gl, 'colorMask');
-        this.cacheFunction(gl, 'viewport');
-        this.cacheFunction(gl, 'useProgram');
-        this.cacheFunction(gl, 'polygonOffset');
-        this.cacheFunction(gl, 'scissor');
-        this.cacheFunction(gl, 'stencilFunc');
-        this.cacheFunction(gl, 'stencilOp');
-        this.cacheFunction(gl, 'stencilMask');
-    }
-
-    private cacheFunction<T>(gl: T, funcName: FunctionPropertyNames<T>)
-    {
-        let cacheParams: any[] = [];
-        const oldBlendFunc = gl[funcName] as any as Function;
-        gl[funcName] = ((...params: any[]) =>
-        {
-            const equal = params.every((_v, i, arr) => arr[i] === cacheParams[i]);
-            if (equal) return;
-
-            cacheParams = params.concat();
-            const result = oldBlendFunc.apply(gl, params);
-
-            return result;
-        }) as any;
     }
 
     /**

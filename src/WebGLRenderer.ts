@@ -8,6 +8,7 @@ import { Uniforms } from './data/Uniform';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLCache } from './gl/WebGLCache';
+import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLIndexedBufferRenderer } from './gl/WebGLIndexedBufferRenderer';
@@ -51,6 +52,11 @@ export class WebGLRenderer
     indexedBufferRenderer: WebGLIndexedBufferRenderer;
     cache: WebGLCache;
     renderParams: WebGLRenderParams;
+
+    /**
+     * 缓存WebGL状态
+     */
+    cacheStates: WebGLCacheStates;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -323,6 +329,7 @@ export class WebGLRenderer
         this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
         this.extensions.init(this.capabilities);
         this.cache = new WebGLCache(this.gl);
+        this.cacheStates = new WebGLCacheStates(this.gl);
         this.properties = new WebGLProperties();
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities, this.properties);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
