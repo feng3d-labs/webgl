@@ -230,3 +230,18 @@ export type TextureFormat = 'ALPHA' | 'RGB' | `RGBA` | `LUMINANCE` | `LUMINANCE_
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
 export type TextureMagFilter = 'LINEAR' | 'NEAREST';
+
+/**
+ * 纹理缩小过滤器
+ * Texture minification filter
+ *
+ * * `LINEAR`
+ * * `NEAREST`
+ * * `NEAREST_MIPMAP_NEAREST`
+ * * `LINEAR_MIPMAP_NEAREST`
+ * * `NEAREST_MIPMAP_LINEAR`
+ * * `LINEAR_MIPMAP_LINEAR`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type TextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST' | 'LINEAR_MIPMAP_NEAREST' | 'NEAREST_MIPMAP_LINEAR' | 'LINEAR_MIPMAP_LINEAR';

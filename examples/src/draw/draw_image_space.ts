@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { RenderAtomic, Texture, TextureMinFilter, TextureType, TextureWrap, WebGLRenderer } from '../../../src';
+import { RenderAtomic, Texture, TextureType, TextureWrap, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -31,7 +31,7 @@ import { RenderAtomic, Texture, TextureMinFilter, TextureType, TextureWrap, WebG
             format: 'RGBA',
             type: 'UNSIGNED_BYTE',
             magFilter: 'LINEAR',
-            minFilter: TextureMinFilter.LINEAR,
+            minFilter: 'LINEAR',
             wrapS: TextureWrap.REPEAT,
             wrapT: TextureWrap.REPEAT,
             activePixels: img as any,
