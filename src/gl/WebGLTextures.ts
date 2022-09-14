@@ -1,8 +1,10 @@
 import { Texture } from '../data/Texture';
 import { TextureDataType } from './enums/TextureDataType';
+import { TextureMagFilter } from './enums/TextureMagFilter';
+import { TextureMinFilter } from './enums/TextureMinFilter';
+import { TextureWrap } from './enums/TextureWrap';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
-import { WebGLProperties } from './WebGLProperties';
 import { UniformInfo } from './WebGLShaders';
 
 /**
@@ -13,19 +15,24 @@ export class WebGLTextures
     gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
     capabilities: WebGLCapabilities;
-    properties: WebGLProperties;
 
     /**
      * 此处用于缓存，需要获取有效数据请调用 Attribute.getBuffer
      */
-    private textures = new WeakMap<Texture, WebGLTexture>();
+    private textures = new WeakMap<Texture, {
+        texture: WebGLTexture,
+        minFilter?: TextureMinFilter,
+        magFilter?: TextureMagFilter,
+        wrapS?: TextureWrap,
+        wrapT?: TextureWrap,
+        anisotropy?: number,
+    }>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
-        this.properties = properties;
     }
 
     active(data: Texture, activeInfo?: UniformInfo)
@@ -58,28 +65,51 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { gl, extensions, capabilities, properties } = this;
+        const { gl, extensions, capabilities, textures } = this;
 
-        const textureType = gl[texture.textureType];
+        const { textureType, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
+
+        const cache = textures.get(texture);
+
+        const textureTarget = gl[textureType];
 
         // 设置纹理参数
-        gl.texParameteri(textureType, gl.TEXTURE_MIN_FILTER, gl[texture.minFilter]);
-        gl.texParameteri(textureType, gl.TEXTURE_MAG_FILTER, gl[texture.magFilter]);
-        gl.texParameteri(textureType, gl.TEXTURE_WRAP_S, gl[texture.wrapS]);
-        gl.texParameteri(textureType, gl.TEXTURE_WRAP_T, gl[texture.wrapT]);
-
-        if (extensions.has('EXT_texture_filter_anisotropic') === true)
+        if (cache.minFilter !== minFilter)
         {
-            const extension = extensions.get('EXT_texture_filter_anisotropic');
+            gl.texParameteri(textureTarget, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
+            cache.minFilter = minFilter;
+        }
+        if (cache.magFilter !== magFilter)
+        {
+            gl.texParameteri(textureTarget, gl.TEXTURE_MAG_FILTER, gl[magFilter]);
+            cache.magFilter = magFilter;
+        }
+        if (cache.wrapS !== wrapS)
+        {
+            gl.texParameteri(textureTarget, gl.TEXTURE_WRAP_S, gl[wrapS]);
+            cache.wrapS = wrapS;
+        }
+        if (cache.wrapT !== wrapT)
+        {
+            gl.texParameteri(textureTarget, gl.TEXTURE_WRAP_T, gl[wrapT]);
+            cache.wrapT = wrapT;
+        }
 
-            if (texture.type === TextureDataType.FLOAT && extensions.has('OES_texture_float_linear') === false) return; // verify extension for WebGL 1 and WebGL 2
-            if (capabilities.isWebGL2 === false && (texture.type === TextureDataType.HALF_FLOAT && extensions.has('OES_texture_half_float_linear') === false)) return; // verify extension for WebGL 1 only
-
-            if (texture.anisotropy > 1 || properties.get(texture).__currentAnisotropy)
+        if (cache.anisotropy !== anisotropy)
+        {
+            if (extensions.has('EXT_texture_filter_anisotropic') === true)
             {
-                gl.texParameterf(textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(texture.anisotropy, capabilities.maxAnisotropy));
-                properties.get(texture).__currentAnisotropy = texture.anisotropy;
+                const extension = extensions.get('EXT_texture_filter_anisotropic');
+
+                if (type === TextureDataType.FLOAT && extensions.has('OES_texture_float_linear') === false) return; // verify extension for WebGL 1 and WebGL 2
+                if (capabilities.isWebGL2 === false && (type === TextureDataType.HALF_FLOAT && extensions.has('OES_texture_half_float_linear') === false)) return; // verify extension for WebGL 1 only
+
+                if (anisotropy >= 0)
+                {
+                    gl.texParameterf(textureTarget, extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, capabilities.maxAnisotropy));
+                }
             }
+            cache.anisotropy = anisotropy;
         }
     }
 
@@ -96,16 +126,15 @@ export class WebGLTextures
             this.clear(data);
             data.invalid = false;
         }
-        let texture = textures.get(data);
-        if (!texture)
+        let cache = textures.get(data);
+        if (!cache)
         {
-            texture = gl.createTexture(); // Create a texture object
+            const texture = gl.createTexture(); // Create a texture object
             if (!texture)
             {
                 console.error('createTexture 失败！');
                 throw '';
             }
-            textures.set(data, texture);
 
             //
             const textureType = gl[data.textureType];
@@ -156,9 +185,12 @@ export class WebGLTextures
             {
                 gl.generateMipmap(textureType);
             }
+
+            cache = { texture };
+            textures.set(data, cache);
         }
 
-        return texture;
+        return cache.texture;
     }
 
     /**
@@ -173,7 +205,7 @@ export class WebGLTextures
         const tex = textures.get(data);
         if (tex)
         {
-            gl.deleteTexture(tex);
+            gl.deleteTexture(tex.texture);
             textures.delete(data);
         }
     }
