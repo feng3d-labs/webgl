@@ -2,6 +2,7 @@ const files = {
     draw: [
         'draw_image_space',
         'draw_instanced',
+        'draw_primitive_restart',
     ],
 };
 

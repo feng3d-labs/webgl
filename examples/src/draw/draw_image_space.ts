@@ -37,6 +37,7 @@ import { RenderAtomic, Texture, TextureDataType, TextureFormat, TextureMagFilter
             attributes: {},
             uniforms: {
                 diffuse,
+                // eslint-disable-next-line camelcase
                 u_imageSize: [canvas.width / 2, canvas.height / 2],
             },
             renderParams: { renderMode: 'TRIANGLES', cullFace: 'NONE', enableBlend: true },
