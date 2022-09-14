@@ -1,6 +1,6 @@
 import { WebGLBufferSourceTypes } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { AttributeUsage } from '../gl/enums/AttributeUsage';
+import { AttributeUsage } from '../gl/WebGLEnums';
 
 /**
  * 索引渲染数据
@@ -44,7 +44,7 @@ export class BufferAttribute
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    usage = AttributeUsage.STATIC_DRAW;
+    usage: AttributeUsage = 'STATIC_DRAW';
 
     /**
      * 更新范围。
