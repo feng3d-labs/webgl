@@ -2,9 +2,13 @@ import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
 {
+    const div = document.createElement('div');
+    div.innerHTML = ` <div id="info">WebGL 2 Samples - draw_primitive_restart</div>`;
+    document.body.appendChild(div);
+
     const canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = Math.min(window.innerWidth, window.innerHeight);
+    canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     const gl = canvas.getContext('webgl2', { antialias: false });
@@ -16,56 +20,53 @@ import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
         return;
     }
 
+    // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.18
+    // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
+    const MAX_UNSIGNED_SHORT = 65535;
+
     const webglRenderer = new WebGLRenderer({ canvas });
 
     const renderAtomic = new RenderAtomic({
         attributes: {
-            pos: new BufferAttribute(new Float32Array([-0.3, -0.5,
-                0.3, -0.5,
-                0.0, 0.5]), 2) as any,
-            color: new BufferAttribute(new Float32Array([
-                1.0, 0.5, 0.0,
-                0.0, 0.5, 1.0]), 3, undefined, 1) as any,
+            pos: new BufferAttribute(new Float32Array([
+                -1.0, -1.0,
+                -1.0, 1.0,
+                1.0, -1.0,
+                1.0, 1.0,
+            ]), 2) as any,
         },
         uniforms: {},
+        index: new BufferAttribute(new Uint16Array([
+            0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
+        ]), 1) as any,
         instanceCount: 2,
-        renderParams: { renderMode: 'TRIANGLES', cullFace: 'NONE', enableBlend: true },
+        renderParams: { renderMode: 'TRIANGLE_STRIP', cullFace: 'NONE', enableBlend: true },
         shader: {
             vertex:
                 `#version 300 es
-                    #define POSITION_LOCATION 0
-                    #define COLOR_LOCATION 1
-                    
-                    precision highp float;
-                    precision highp int;
-            
-                    layout(location = POSITION_LOCATION) in vec2 pos;
-                    layout(location = COLOR_LOCATION) in vec4 color;
-                    flat out vec4 v_color;
-            
-                    void main()
-                    {
-                        v_color = color;
-                        gl_Position = vec4(pos + vec2(float(gl_InstanceID) - 0.5, 0.0), 0.0, 1.0);
-                    }`,
-            fragment: `#version 300 es
                 precision highp float;
                 precision highp int;
         
-                flat in vec4 v_color;
-                out vec4 color;
+                layout(location = 0) in vec2 pos;
         
                 void main()
                 {
-                    color = v_color;
-                }` }
+                    gl_Position = vec4(pos, 0.0, 1.0);
+                }`,
+            fragment: `#version 300 es
+            precision highp float;
+            precision highp int;
+    
+            out vec4 color;
+    
+            void main()
+            {
+                color = vec4(1.0, 0.5, 0.0, 1.0);
+            }` }
     });
 
     function draw()
     {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
         webglRenderer.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         webglRenderer.gl.clear(webglRenderer.gl.COLOR_BUFFER_BIT);
         webglRenderer.render(renderAtomic);

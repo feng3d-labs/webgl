@@ -3,6 +3,10 @@ import { RenderAtomic, Texture, TextureDataType, TextureFormat, TextureMagFilter
 
 (function ()
 {
+    const div = document.createElement('div');
+    div.innerHTML = `<div id="info">WebGL 2 Samples - draw_image_space</div>`;
+    document.body.appendChild(div);
+
     const canvas = document.createElement('canvas');
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;

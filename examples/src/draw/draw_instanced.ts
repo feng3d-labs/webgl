@@ -2,6 +2,13 @@ import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
 {
+    const div = document.createElement('div');
+    div.innerHTML = `    <div id="info">WebGL 2 Samples - draw_instanced</div>
+    <p id="description">
+        This samples demonstrates the use of gl.DrawArraysInstanced()
+    </p>`;
+    document.body.appendChild(div);
+
     const canvas = document.createElement('canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
