@@ -1,11 +1,9 @@
 import { oav } from '@feng3d/objectview';
 import { serialize } from '@feng3d/serialization';
-import { BlendFactor } from '../gl/enums/BlendFactor';
 import { ColorMask } from '../gl/enums/ColorMask';
-import { DepthFunc } from '../gl/enums/DepthFunc';
 import { StencilFunc } from '../gl/enums/StencilFunc';
 import { StencilOp } from '../gl/enums/StencilOp';
-import { BlendEquation, CullFace, FrontFace, RenderMode } from '../gl/WebGLEnums';
+import { BlendEquation, BlendFactor, CullFace, DepthFunc, FrontFace, RenderMode } from '../gl/WebGLEnums';
 
 /**
  * 渲染参数
@@ -83,8 +81,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '源混合因子，默认BlendFactor.SRC_ALPHA', componentParam: { enumClass: BlendFactor } })
-    sfactor: 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' | 'DST_COLOR' | 'ONE_MINUS_DST_COLOR' | 'SRC_ALPHA' | 'ONE_MINUS_SRC_ALPHA' | 'DST_ALPHA' | 'ONE_MINUS_DST_ALPHA' | 'SRC_ALPHA_SATURATE' = BlendFactor.SRC_ALPHA;
+    @oav({ component: 'OAVEnum', tooltip: '源混合因子，默认BlendFactor.SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
+    sfactor: BlendFactor = 'SRC_ALPHA';
 
     /**
      * 目标混合因子，默认 ONE_MINUS_SRC_ALPHA，将所有颜色乘以1减去源alpha值。
@@ -93,8 +91,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '目标混合因子，默认BlendFactor.ONE_MINUS_SRC_ALPHA', componentParam: { enumClass: BlendFactor } })
-    dfactor: 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' | 'DST_COLOR' | 'ONE_MINUS_DST_COLOR' | 'SRC_ALPHA' | 'ONE_MINUS_SRC_ALPHA' | 'DST_ALPHA' | 'ONE_MINUS_DST_ALPHA' | 'SRC_ALPHA_SATURATE' = BlendFactor.ONE_MINUS_SRC_ALPHA;
+    @oav({ component: 'OAVEnum', tooltip: '目标混合因子，默认BlendFactor.ONE_MINUS_SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
+    dfactor: BlendFactor = 'ONE_MINUS_SRC_ALPHA';
 
     /**
      * 是否开启深度检查，默认 true，开启深度检测。
@@ -114,8 +112,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '深度检测方法', componentParam: { enumClass: DepthFunc } })
-    depthFunc: 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS' = DepthFunc.LESS;
+    @oav({ component: 'OAVEnum', tooltip: '深度检测方法', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
+    depthFunc: DepthFunc = 'LESS';
 
     /**
      * 是否开启深度标记
