@@ -1,5 +1,5 @@
-import { BlendEquation } from './enums/BlendEquation';
 import { WebGLCapabilities } from './WebGLCapabilities';
+import { BlendEquation } from './WebGLEnums';
 import { WebGLExtensions } from './WebGLExtensions';
 
 export class WebGLState
@@ -32,7 +32,7 @@ export class WebGLState
         const { gl, capabilities, extensions } = this;
 
         let value: number;
-        if (blendEquation === BlendEquation.MIN || blendEquation === BlendEquation.MAX)
+        if (blendEquation === 'MIN' || blendEquation === 'MAX')
         {
             if (capabilities.isWebGL2)
             {
@@ -44,11 +44,11 @@ export class WebGLState
 
                 if (extension !== null)
                 {
-                    if (blendEquation === BlendEquation.MIN)
+                    if (blendEquation === 'MIN')
                     {
                         value = extension.MIN_EXT;
                     }
-                    if (blendEquation === BlendEquation.MAX)
+                    if (blendEquation === 'MAX')
                     {
                         value = extension.MAX_EXT;
                     }

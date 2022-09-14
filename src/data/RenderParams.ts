@@ -1,13 +1,11 @@
 import { oav } from '@feng3d/objectview';
 import { serialize } from '@feng3d/serialization';
-import { BlendEquation } from '../gl/enums/BlendEquation';
 import { BlendFactor } from '../gl/enums/BlendFactor';
 import { ColorMask } from '../gl/enums/ColorMask';
 import { DepthFunc } from '../gl/enums/DepthFunc';
-import { FrontFace } from '../gl/enums/FrontFace';
 import { StencilFunc } from '../gl/enums/StencilFunc';
 import { StencilOp } from '../gl/enums/StencilOp';
-import { CullFace, RenderMode } from '../gl/WebGLEnums';
+import { BlendEquation, CullFace, FrontFace, RenderMode } from '../gl/WebGLEnums';
 
 /**
  * 渲染参数
@@ -55,8 +53,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '正面方向，默认FrontFace.CW 顺时针为正面', componentParam: { enumClass: FrontFace } })
-    frontFace: 'CW' | 'CCW' = FrontFace.CW;
+    @oav({ component: 'OAVEnum', tooltip: '正面方向，默认FrontFace.CW 顺时针为正面', componentParam: { enumClass: ['CW', 'CCW'] } })
+    frontFace: FrontFace = 'CW';
 
     /**
      * 是否开启混合，默认 false，不开启混合。
@@ -75,8 +73,8 @@ export class RenderParams
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '混合方式，默认BlendEquation.FUNC_ADD', componentParam: { enumClass: BlendEquation } })
-    blendEquation: 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX' | BlendEquation = BlendEquation.FUNC_ADD;
+    @oav({ component: 'OAVEnum', tooltip: '混合方式，默认BlendEquation.FUNC_ADD', componentParam: { enumClass: ['FUNC_ADD', 'FUNC_SUBTRACT', 'FUNC_REVERSE_SUBTRACT', 'MIN', 'MAX'] } })
+    blendEquation: BlendEquation = 'FUNC_ADD';
 
     /**
      * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。

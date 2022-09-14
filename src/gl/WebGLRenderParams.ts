@@ -1,5 +1,4 @@
 import { RenderParams } from '../data/RenderParams';
-import { BlendEquation } from './enums/BlendEquation';
 import { ColorMask } from './enums/ColorMask';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLState } from './WebGLState';
@@ -25,7 +24,7 @@ export class WebGLRenderParams
         const { gl, capabilities, state } = this;
 
         const cullfaceEnum = renderParams.cullFace;
-        const blendEquation = state.convertBlendEquation(renderParams.blendEquation as BlendEquation);
+        const blendEquation = state.convertBlendEquation(renderParams.blendEquation);
         const sfactor = gl[renderParams.sfactor];
         const dfactor = gl[renderParams.dfactor];
         const cullFace = gl[renderParams.cullFace];

@@ -29,3 +29,26 @@ export type RenderMode = 'POINTS' | 'LINE_LOOP' | 'LINE_STRIP' | 'LINES' | 'TRIA
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
  */
 export type CullFace = 'NONE' | 'FRONT' | 'BACK' | 'FRONT_AND_BACK';
+
+/**
+ * 正面方向枚举
+ *
+ * * CW 顺时钟方向
+ * * CCW 逆时钟方向
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
+ */
+export type FrontFace = 'CW' | 'CCW';
+
+/**
+ * 混合方法
+ *
+ * * FUNC_ADD 源 + 目标
+ * * FUNC_SUBTRACT 源 - 目标
+ * * FUNC_REVERSE_SUBTRACT 目标 - 源
+ * * MIN 源与目标的最小值，在 WebGL 2 中可使用。在 WebGL 1 时，自动使用 EXT_blend_minmax 扩展中 MIN_EXT 值。
+ * * MAX 源与目标的最大值，在 WebGL 2 中可使用。在 WebGL 1 时，自动使用 EXT_blend_minmax 扩展中 MAX_EXT 值。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
+ */
+export type BlendEquation = 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX';
