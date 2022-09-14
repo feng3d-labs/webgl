@@ -140,3 +140,33 @@ export type StencilOp = 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DE
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/bufferData
  */
 export type AttributeUsage = 'STATIC_DRAW' | 'DYNAMIC_DRAW' | 'STREAM_DRAW';
+
+/**
+ * 纹理数据类型
+ * A GLenum specifying the data type of the texel data
+ *
+ * * `UNSIGNED_BYTE` 8 bits per channel for gl.RGBA
+ * * `UNSIGNED_SHORT_5_6_5` 5 red bits, 6 green bits, 5 blue bits.
+ * * `UNSIGNED_SHORT_4_4_4_4` 4 red bits, 4 green bits, 4 blue bits, 4 alpha bits.
+ * * `UNSIGNED_SHORT_5_5_5_1` 5 red bits, 5 green bits, 5 blue bits, 1 alpha bit.
+ * * `UNSIGNED_SHORT` When using the WEBGL_depth_texture extension:
+ * * `UNSIGNED_INT` When using the WEBGL_depth_texture extension:
+ * * `UNSIGNED_INT_24_8_WEBGL` When using the WEBGL_depth_texture extension:(constant provided by the extension)
+ * * `FLOAT` When using the OES_texture_float extension:
+ * * `HALF_FLOAT_OES` When using the OES_texture_half_float extension:(constant provided by the extension)
+ * * `BYTE` using a WebGL 2 context
+ * * `SHORT` using a WebGL 2 context
+ * * `INT` using a WebGL 2 context
+ * * `HALF_FLOAT` using a WebGL 2 context
+ * * `UNSIGNED_INT_2_10_10_10_REV` using a WebGL 2 context
+ * * `UNSIGNED_INT_10F_11F_11F_REV` using a WebGL 2 context
+ * * `UNSIGNED_INT_5_9_9_9_REV` using a WebGL 2 context
+ * * `UNSIGNED_INT_24_8` using a WebGL 2 context
+ * * `FLOAT_32_UNSIGNED_INT_24_8_REV` using a WebGL 2 context(pixels must be null)
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+export type TextureDataType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT_5_6_5' | 'UNSIGNED_SHORT_4_4_4_4' | 'UNSIGNED_SHORT_5_5_5_1' | 'UNSIGNED_SHORT'
+    | 'UNSIGNED_INT' | 'UNSIGNED_INT_24_8_WEBGL' | 'FLOAT' | 'HALF_FLOAT_OES' | 'BYTE' | 'SHORT' | 'INT'
+    | 'HALF_FLOAT' | 'UNSIGNED_INT_2_10_10_10_REV' | 'UNSIGNED_INT_10F_11F_11F_REV' | 'UNSIGNED_INT_5_9_9_9_REV' | 'UNSIGNED_INT_24_8' | 'FLOAT_32_UNSIGNED_INT_24_8_REV'
+    ;

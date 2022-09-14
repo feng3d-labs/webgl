@@ -1,5 +1,4 @@
 import { Texture } from '../data/Texture';
-import { TextureDataType } from './enums/TextureDataType';
 import { TextureMagFilter } from './enums/TextureMagFilter';
 import { TextureMinFilter } from './enums/TextureMinFilter';
 import { TextureWrap } from './enums/TextureWrap';
@@ -101,8 +100,8 @@ export class WebGLTextures
             {
                 const extension = extensions.get('EXT_texture_filter_anisotropic');
 
-                if (type === TextureDataType.FLOAT && extensions.has('OES_texture_float_linear') === false) return; // verify extension for WebGL 1 and WebGL 2
-                if (capabilities.isWebGL2 === false && (type === TextureDataType.HALF_FLOAT && extensions.has('OES_texture_half_float_linear') === false)) return; // verify extension for WebGL 1 only
+                if (type === 'FLOAT' && extensions.has('OES_texture_float_linear') === false) return; // verify extension for WebGL 1 and WebGL 2
+                if (capabilities.isWebGL2 === false && (type === 'HALF_FLOAT' && extensions.has('OES_texture_half_float_linear') === false)) return; // verify extension for WebGL 1 only
 
                 if (anisotropy >= 0)
                 {
