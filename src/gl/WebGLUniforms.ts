@@ -48,7 +48,7 @@ export class WebGLUniforms
      */
     private setContext3DUniform(activeInfo: UniformInfo, data)
     {
-        const { gl, textures, cache } = this;
+        const { gl, textures } = this;
 
         let vec: number[] = data;
         if (data.toArray) vec = data.toArray();
@@ -82,7 +82,7 @@ export class WebGLUniforms
                 const textureInfo = data as Texture;
                 // 激活纹理编号
                 gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-                textures.active(textureInfo, cache);
+                textures.active(textureInfo);
                 // 设置纹理所在采样编号
                 gl.uniform1i(location, activeInfo.textureID);
                 break;

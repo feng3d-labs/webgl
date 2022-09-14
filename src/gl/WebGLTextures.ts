@@ -14,20 +14,22 @@ export class WebGLTextures
     extensions: WebGLExtensions;
     capabilities: WebGLCapabilities;
     properties: WebGLProperties;
+    cache: WebGLCache;
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities, properties: WebGLProperties, cache: WebGLCache)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.capabilities = capabilities;
         this.properties = properties;
+        this.cache = cache;
     }
 
-    active(data: Texture, cache: WebGLCache)
+    active(data: Texture)
     {
         const { gl } = this;
 
-        const texture = WebGLTextures.getTexture(gl, data, cache);
+        const texture = this.getTexture(data);
 
         const textureType = gl[data.textureType];
 
@@ -70,11 +72,13 @@ export class WebGLTextures
      * 获取顶点属性缓冲
      * @param data 数据
      */
-    static getTexture(gl: WebGLRenderingContext, data: Texture, cache: WebGLCache)
+    getTexture(data: Texture)
     {
+        const { gl, cache } = this;
+
         if (data.invalid)
         {
-            this.clear(data, gl, cache);
+            this.clear(data);
             data.invalid = false;
         }
         let texture = cache.textures.get(data);
@@ -147,8 +151,10 @@ export class WebGLTextures
      *
      * @param data
      */
-    static clear(data: Texture, gl: WebGLRenderingContext, cache: WebGLCache)
+    clear(data: Texture)
     {
+        const { gl, cache } = this;
+
         const tex = cache.textures.get(data);
         if (tex)
         {
