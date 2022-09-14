@@ -1,48 +1,98 @@
-import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
+import { gPartial } from '@feng3d/polyfill';
+import { RenderAtomic, Texture, TextureDataType, TextureFormat, TextureMagFilter, TextureMinFilter, TextureType, TextureWrap, WebGLRenderer } from '../../../src';
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
-document.body.appendChild(webglcanvas);
-
-const webglRenderer = new WebGLRenderer({ canvas: webglcanvas });
-
-const renderAtomic = new RenderAtomic({
-    attributes: {
-        a_position: new BufferAttribute(new Float32Array([
-            -1, 0,
-            0, -1,
-            1, 1
-        ]), 2) as any,
-    },
-    uniforms: { u_color: [1, 0, 0, 1] },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
-    shader: {
-        vertex: `
-                    precision mediump float;
-                    attribute vec2 a_position;
-                    void main () {
-                      gl_Position = vec4(a_position, 0, 1);
-                    }
-            `,
-        fragment: `
-            precision mediump float;
-            uniform vec4 u_color;
-            void main () {
-              gl_FragColor = u_color;
-            }
-            ` }
-});
-
-function draw()
+(function ()
 {
-    webglcanvas.width = webglcanvas.clientWidth;
-    webglcanvas.height = webglcanvas.clientHeight;
-    webglRenderer.render(renderAtomic);
-    requestAnimationFrame(draw);
-}
-draw();
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
+    canvas.style.position = 'fixed';
+    canvas.style.left = '0px';
+    canvas.style.top = '0px';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    document.body.appendChild(canvas);
+
+    const gl = canvas.getContext('webgl2', { antialias: false });
+    const isWebGL2 = !!gl;
+    if (!isWebGL2)
+    {
+        document.body.innerHTML = 'WebGL 2 is not available.  See <a href="https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">How to get a WebGL 2 implementation</a>';
+
+        return;
+    }
+
+    loadImage('../resources/assets/img/Di-3d.png', (img) =>
+    {
+        const webglRenderer = new WebGLRenderer({ canvas });
+
+        const diffuse: gPartial<Texture> = {
+            flipY: false,
+            textureType: TextureType.TEXTURE_2D,
+            format: TextureFormat.RGBA,
+            type: TextureDataType.UNSIGNED_BYTE,
+            magFilter: TextureMagFilter.LINEAR,
+            minFilter: TextureMinFilter.LINEAR,
+            wrapS: TextureWrap.REPEAT,
+            wrapT: TextureWrap.REPEAT,
+            activePixels: img as any,
+        };
+
+        const renderAtomic = new RenderAtomic({
+            attributes: {},
+            uniforms: {
+                diffuse,
+                u_imageSize: [canvas.width / 2, canvas.height / 2],
+            },
+            renderParams: { renderMode: 'TRIANGLES', cullFace: 'NONE', enableBlend: true },
+            shader: {
+                vertex:
+                    `#version 300 es
+    precision highp float;
+    precision highp int;
+    
+    void main()
+    {
+        gl_Position = vec4(2.f * float(uint(gl_VertexID) % 2u) - 1.f, 2.f * float(uint(gl_VertexID) / 2u) - 1.f, 0.0, 1.0);
+    }`,
+                fragment: `#version 300 es
+    precision highp float;
+    precision highp int;
+    
+    uniform sampler2D diffuse;
+    
+    uniform vec2 u_imageSize;
+    
+    out vec4 color;
+    
+    void main()
+    {
+        color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
+    }` }
+        });
+
+        function draw()
+        {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            //
+            renderAtomic.uniforms['u_imageSize'] = [canvas.width / 2, canvas.height / 2];
+
+            webglRenderer.render(renderAtomic);
+            requestAnimationFrame(draw);
+        }
+        draw();
+    });
+
+    function loadImage(url: string, onload: (img: HTMLImageElement) => void)
+    {
+        const img = new Image();
+        img.src = url;
+        img.onload = function ()
+        {
+            onload(img);
+        };
+
+        return img;
+    }
+})();

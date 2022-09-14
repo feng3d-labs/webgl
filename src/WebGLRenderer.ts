@@ -125,6 +125,11 @@ export class WebGLRenderer
         const attributes: { [name: string]: BufferAttribute; } = {};
         for (const key in shaderResult.attributes)
         {
+            // 处理 WebGL 内置属性 gl_VertexID 等
+            if (shaderResult.attributes[key].location < 0)
+            {
+                continue;
+            }
             const attribute = renderAtomic.getAttributeByKey(key);
             if (!attribute)
             {
@@ -264,7 +269,7 @@ export class WebGLRenderer
         }
         else
         {
-            const vertexNum = ((attributes) =>
+            let vertexNum = ((attributes) =>
             {
                 for (const attr in attributes)
                 {
@@ -281,9 +286,10 @@ export class WebGLRenderer
             })(renderAtomicData.attributes);
             if (vertexNum === 0)
             {
-                console.warn(`顶点数量为0，不进行渲染！`);
+                // console.warn(`顶点数量为0，不进行渲染！`);
 
-                return;
+                // return;
+                vertexNum = 6;
             }
 
             bufferRenderer.setMode(renderMode);

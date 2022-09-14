@@ -179,9 +179,10 @@ export class WebGLBindingStates
         for (const name in shaderResult.attributes)
         {
             const activeInfo = shaderResult.attributes[name];
+            // 处理 WebGL 内置属性 gl_VertexID 等
             if (activeInfo.location < 0)
             {
-                throw '';
+                continue;
             }
 
             const attribute = renderAtomic.getAttributeByKey(name);
