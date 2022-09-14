@@ -6,7 +6,6 @@ import { ColorMask } from '../gl/enums/ColorMask';
 import { CullFace } from '../gl/enums/CullFace';
 import { DepthFunc } from '../gl/enums/DepthFunc';
 import { FrontFace } from '../gl/enums/FrontFace';
-import { RenderMode } from '../gl/enums/RenderMode';
 import { StencilFunc } from '../gl/enums/StencilFunc';
 import { StencilOp } from '../gl/enums/StencilOp';
 
@@ -18,12 +17,20 @@ export class RenderParams
     /**
      * 渲染模式，默认 TRIANGLES，每三个顶点绘制一个三角形。
      *
+     * * POINTS 绘制单个点。
+     * * LINE_LOOP 绘制循环连线。
+     * * LINE_STRIP 绘制连线
+     * * LINES 每两个顶点绘制一条线段。
+     * * TRIANGLES 每三个顶点绘制一个三角形。
+     * * TRIANGLE_STRIP 绘制三角形条带。
+     * * TRIANGLE_FAN  绘制三角扇形。
+     *
      * A GLenum specifying the type primitive to render. Possible values are:
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
      */
     @serialize
-    @oav({ component: 'OAVEnum', tooltip: '渲染模式，默认RenderMode.TRIANGLES', componentParam: { enumClass: RenderMode } })
-    renderMode: 'POINTS' | 'LINE_LOOP' | 'LINE_STRIP' | 'LINES' | 'TRIANGLES' | 'TRIANGLE_STRIP' | 'TRIANGLE_FAN' = RenderMode.TRIANGLES;
+    @oav({ component: 'OAVEnum', tooltip: '渲染模式，默认RenderMode.TRIANGLES', componentParam: { enumClass: ['POINTS', 'LINE_LOOP', 'LINE_STRIP', 'LINES', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN'] } })
+    renderMode: 'POINTS' | 'LINE_LOOP' | 'LINE_STRIP' | 'LINES' | 'TRIANGLES' | 'TRIANGLE_STRIP' | 'TRIANGLE_FAN' = 'TRIANGLES';
 
     /**
      * 剔除面，默认 BACK，剔除背面。

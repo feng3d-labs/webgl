@@ -14,7 +14,6 @@ export * from './gl/enums/CullFace';
 export * from './gl/enums/DepthFunc';
 export * from './gl/enums/FrontFace';
 export * from './gl/enums/GLArrayType';
-export * from './gl/enums/RenderMode';
 export * from './gl/enums/TextureDataType';
 export * from './gl/enums/TextureFormat';
 export * from './gl/enums/TextureMagFilter';
