@@ -100,7 +100,7 @@ export class WebGLRenderer
         this._initGLContext();
     }
 
-    render(renderAtomic: RenderAtomic)
+    render(renderAtomic: RenderAtomic, first?: number, count?: number)
     {
         if (this._isContextLost === true) return;
 
@@ -127,13 +127,18 @@ export class WebGLRenderer
 
         this.uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
 
-        this.draw(renderAtomic);
+        this.draw(renderAtomic, first, count);
     }
 
     /**
      */
-    private draw(renderAtomic: RenderAtomic)
+    private draw(renderAtomic: RenderAtomic, first?: number, count?: number)
     {
+        if (first === undefined)
+        {
+            first = 0;
+        }
+
         const { gl, attributes, indexedBufferRenderer, bufferRenderer } = this;
 
         const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
@@ -147,13 +152,18 @@ export class WebGLRenderer
 
             indexedBufferRenderer.setMode(renderMode);
 
+            if (count === undefined)
+            {
+                count = index.count - first;
+            }
+
             if (instanceCount > 1)
             {
-                indexedBufferRenderer.renderInstances(0, index.count, instanceCount);
+                indexedBufferRenderer.renderInstances(first, count, instanceCount);
             }
             else
             {
-                indexedBufferRenderer.render(0, index.count);
+                indexedBufferRenderer.render(first, count);
             }
         }
         else
@@ -182,14 +192,18 @@ export class WebGLRenderer
             }
 
             bufferRenderer.setMode(renderMode);
+            if (count === undefined)
+            {
+                count = vertexNum;
+            }
 
             if (instanceCount > 1)
             {
-                bufferRenderer.renderInstances(0, vertexNum, instanceCount);
+                bufferRenderer.renderInstances(first, count, instanceCount);
             }
             else
             {
-                bufferRenderer.render(0, vertexNum);
+                bufferRenderer.render(first, count);
             }
         }
     }
