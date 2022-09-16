@@ -75,18 +75,18 @@ for (const key in files)
             const link = document.createElement('a');
             link.className = 'link';
             link.textContent = file;
-            link.href = `examples.html?type=${file}&v=${Math.random()}`;
+            link.href = `examples.html?type=${key}/${file}&v=${Math.random()}`;
             link.setAttribute('target', 'viewer');
             link.addEventListener('click', function (event)
             {
                 if (event.button === 0)
                 {
-                    selectFile(file);
+                    selectFile(`${key}/${file}`);
                 }
             });
             container.appendChild(link);
 
-            links[file] = link;
+            links[`${key}/${file}`] = link;
         })(section[i]);
     }
 }
@@ -151,7 +151,7 @@ function updateFilter()
 
         for (let i = 0; i < section.length; i++)
         {
-            filterExample(section[i], exp);
+            filterExample(`${key}/${section[i]}`, exp);
         }
     }
 
@@ -173,12 +173,12 @@ function filterExample(file, exp)
             text = file.replace(res[i], `<b>${res[i]}</b>`);
         }
 
-        link.innerHTML = text;
+        // link.innerHTML = text;
     }
     else
     {
         link.classList.add('filtered');
-        link.innerHTML = file;
+        // link.innerHTML = file;
     }
 }
 
@@ -192,7 +192,7 @@ function layoutList()
 
         for (let i = 0; i < section.length; i++)
         {
-            const file = section[i];
+            const file = `${key}/${section[i]}`;
 
             if (!links[file].classList.contains('filtered'))
             {
