@@ -3,6 +3,7 @@ const files = {
         'basic',
         'batch',
         'bunny',
+        'camera',
     ],
     WebGL2Samples: [
         'draw_image_space',
