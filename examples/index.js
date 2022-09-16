@@ -1,9 +1,12 @@
 const files = {
-    draw: [
+    Draw: [
         'draw_image_space',
         'draw_instanced',
         'draw_primitive_restart',
         'draw_range_arrays',
+    ],
+    'Frame Buffer Object': [
+        'fbo_blit',
     ],
 };
 
@@ -55,7 +58,6 @@ button.style.display = 'none';
 document.body.appendChild(button);
 
 const links = {};
-const paths = {};
 let selected = null;
 
 for (const key in files)
@@ -72,12 +74,10 @@ for (const key in files)
         // eslint-disable-next-line no-loop-func
         (function (file)
         {
-            paths[file] = `${key}/${file}`;
-
             const link = document.createElement('a');
             link.className = 'link';
             link.textContent = file;
-            link.href = `examples.html?type=${paths[file]}&v=${Math.random()}`;
+            link.href = `examples.html?type=${file}&v=${Math.random()}`;
             link.setAttribute('target', 'viewer');
             link.addEventListener('click', function (event)
             {
@@ -96,7 +96,7 @@ for (const key in files)
 function loadFile(file)
 {
     selectFile(file);
-    viewer.src = `examples.html?type=${paths[file]}`;
+    viewer.src = `examples.html?type=${file}`;
 }
 
 function selectFile(file)

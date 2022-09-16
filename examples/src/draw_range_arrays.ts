@@ -1,4 +1,4 @@
-import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
+import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../src';
 
 (function ()
 {

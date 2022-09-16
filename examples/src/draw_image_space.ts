@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { RenderAtomic, Texture, WebGLRenderer } from '../../src';
 
 (function ()
 {
@@ -25,7 +25,7 @@ import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
     {
         const webglRenderer = new WebGLRenderer({ canvas });
 
-        const diffuse: gPartial<Texture> = {
+        const diffuse: gPartial<Texture<any>> = {
             flipY: false,
             textureType: 'TEXTURE_2D',
             format: 'RGBA',
