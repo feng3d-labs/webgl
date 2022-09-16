@@ -1,6 +1,6 @@
 const files = {
     WebGL2Samples: [
-        'WebGL2Samples/draw_image_space',
+        'draw_image_space',
         'draw_instanced',
         'draw_primitive_restart',
         'draw_range_arrays',
