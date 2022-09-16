@@ -1,4 +1,7 @@
 const files = {
+    'regl-examples': [
+        'basic'
+    ],
     WebGL2Samples: [
         'draw_image_space',
         'draw_instanced',
