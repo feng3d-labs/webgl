@@ -1,11 +1,9 @@
 const files = {
-    Draw: [
-        'draw_image_space',
+    WebGL2Samples: [
+        'WebGL2Samples/draw_image_space',
         'draw_instanced',
         'draw_primitive_restart',
         'draw_range_arrays',
-    ],
-    'Frame Buffer Object': [
         'fbo_blit',
     ],
 };
