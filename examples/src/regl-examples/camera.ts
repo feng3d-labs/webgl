@@ -1,6 +1,7 @@
 import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
 import { angleNormals } from './mikolalysenko/angle-normals';
 import * as bunny from './mikolalysenko/bunny';
+import { createCamera } from './util/camera';
 
 const webglcanvas = document.createElement('canvas');
 webglcanvas.id = 'glcanvas';
@@ -12,6 +13,10 @@ webglcanvas.style.height = '100%';
 document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer({ canvas: webglcanvas, antialias: true });
+
+const camera = createCamera(regl, {
+    center: [0, 2.5, 0]
+});
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -63,6 +68,8 @@ function draw()
 {
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
+
+    camera();
 
     webglRenderer.render(renderAtomic);
 
