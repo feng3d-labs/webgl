@@ -5,6 +5,7 @@ const files = {
         'bunny',
         'camera',
         'cube',
+        'cloth',
     ],
     WebGL2Samples: [
         'draw_image_space',
