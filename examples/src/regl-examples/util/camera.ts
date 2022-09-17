@@ -1,8 +1,9 @@
+import { RenderAtomic } from '../../../../src';
 import { mouseListen as mouseChange } from '../mikolalysenko/mouse-change';
 import { mouseWheelListen as mouseWheel } from '../mikolalysenko/mouse-wheel';
 import { identity, lookAt, perspective } from '../stackgl/gl-mat4';
 
-export function createCamera(regl, props)
+export function createCamera(props)
 {
   const cameraState = {
     view: identity(new Float32Array(16)),
@@ -99,29 +100,25 @@ export function createCamera(regl, props)
     lookAt(cameraState.view, eye, center, up);
   }
 
-  const injectContext = regl({
-    context: Object.assign({}, cameraState, {
-      projection({ viewportWidth, viewportHeight })
-      {
-        return perspective(cameraState.projection,
-          Math.PI / 4.0,
-          viewportWidth / viewportHeight,
-          0.01,
-          1000.0);
-      }
-    }),
-    uniforms: Object.keys(cameraState).reduce(function (uniforms, name)
+  const injectContext = (renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number) =>
+  {
+    Object.keys(cameraState).forEach(function (name)
     {
-      uniforms[name] = regl.context(name);
+      renderAtomic.uniforms[name] = () => setupCamera[name];
+    });
 
-      return uniforms;
-    }, {})
-  });
+    renderAtomic.uniforms['projection'] = () =>
+      perspective(cameraState.projection,
+        Math.PI / 4.0,
+        viewportWidth / viewportHeight,
+        0.01,
+        1000.0);
+  };
 
-  function setupCamera(block?)
+  function setupCamera(renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number)
   {
     updateCamera();
-    injectContext(block);
+    injectContext(renderAtomic, viewportWidth, viewportHeight);
   }
 
   Object.keys(cameraState).forEach(function (name)

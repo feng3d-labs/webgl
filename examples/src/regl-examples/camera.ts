@@ -14,7 +14,7 @@ document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer({ canvas: webglcanvas, antialias: true });
 
-const camera = createCamera(regl, {
+const camera = createCamera({
     center: [0, 2.5, 0]
 });
 
@@ -69,7 +69,7 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    camera();
+    camera(renderAtomic, webglcanvas.width, webglcanvas.height);
 
     webglRenderer.render(renderAtomic);
 
