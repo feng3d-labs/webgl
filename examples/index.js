@@ -2,10 +2,11 @@ const files = {
     'regl-examples': [
         'basic',
         'batch',
+        'blur',
         'bunny',
         'camera',
-        'cube',
         'cloth',
+        'cube',
     ],
     WebGL2Samples: [
         'draw_image_space',
