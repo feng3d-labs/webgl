@@ -5,6 +5,7 @@ import * as mat4 from './stackgl/gl-mat4';
 import * as vec3 from './stackgl/gl-vec3';
 
 import { BufferAttribute, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { gPartial } from '@feng3d/polyfill';
 
 const canvas = document.createElement('canvas');
 canvas.id = 'glcanvas';
@@ -22,20 +23,26 @@ window.addEventListener('resize', fit(canvas), false);
 camera.view(mat4.lookAt([], [0, 3.0, 30.0], [0, 0, -5.5], [0, 1, 0]));
 camera.rotate([0.0, 0.0], [3.14 * 0.15, 0.0]);
 
-const uv = [];
-const elements = [];
-const position = [];
-const oldPosition = [];
-const normal = [];
+const uv: number[][] = [];
+const elements: number[][] = [];
+const position: number[][] = [];
+const oldPosition: number[][] = [];
+const normal: number[][] = [];
 const constraints: Constraint[] = [];
 
 // create a constraint between the vertices with the indices i0 and i1.
-function Constraint(i0, i1)
+class Constraint
 {
-    this.i0 = i0;
-    this.i1 = i1;
+    i0: any;
+    i1: any;
+    restLength: number;
+    constructor(i0, i1)
+    {
+        this.i0 = i0;
+        this.i1 = i1;
 
-    this.restLength = vec3.distance(position[i0], position[i1]);
+        this.restLength = vec3.distance(position[i0], position[i1]);
+    }
 }
 
 const size = 5.5;
@@ -67,12 +74,6 @@ for (row = 0; row <= N; ++row)
     }
 }
 
-const positionBuffer = regl.buffer({
-    length: position.length * 3 * 4,
-    type: 'float',
-    usage: 'dynamic'
-});
-
 let i; let i0; let i1; let i2; let
     i3;
 
@@ -81,12 +82,6 @@ for (i = 0; i < position.length; ++i)
 {
     normal.push([0.0, 0.0, 0.0]);
 }
-
-const normalBuffer = regl.buffer({
-    length: normal.length * 3 * 4,
-    type: 'float',
-    usage: 'dynamic'
-});
 
 // create faces
 for (row = 0; row <= (N - 1); ++row)
@@ -137,28 +132,35 @@ for (row = 0; row <= N; ++row)
     }
 }
 
-const positions = cubePosition.reduce((pv: number[], cv: number[]) =>
+const positions = position.reduce((pv: number[], cv: number[]) =>
 {
     cv.forEach((v) => { pv.push(v); });
 
     return pv;
 }, []);
 
-const uvs = cubeUv.reduce((pv: number[], cv: number[]) =>
+const uvs = uv.reduce((pv: number[], cv: number[]) =>
 {
     cv.forEach((v) => { pv.push(v); });
 
     return pv;
 }, []);
 
-const indices = cubeElements.reduce((pv: number[], cv: number[]) =>
+const normals = normal.reduce((pv: number[], cv: number[]) =>
 {
     cv.forEach((v) => { pv.push(v); });
 
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer({ canvas: canvas });
+const indices = elements.reduce((pv: number[], cv: number[]) =>
+{
+    cv.forEach((v) => { pv.push(v); });
+
+    return pv;
+}, []);
+
+const webglRenderer = new WebGLRenderer({ canvas });
 
 let diffuse: gPartial<Texture<any>>;
 
@@ -169,52 +171,202 @@ let viewportHeight = 1;
 const renderAtomic = new RenderAtomic({
     attributes: {
         position: new BufferAttribute(new Float32Array(positions), 3) as any,
+        normal: new BufferAttribute(new Float32Array(normals), 3) as any,
         uv: new BufferAttribute(new Float32Array(uvs), 2) as any,
     },
     index: new BufferAttribute(new Uint16Array(indices), 1) as any,
     uniforms: {
-        view: () =>
-        {
-            const t = 0.01 * tick;
-
-            return mat4.lookAt([],
-                [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-                [0, 0.0, 0],
-                [0, 1, 0]);
-        },
+        view: () => camera.view(),
         projection: () =>
             mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,
-                10),
-        tex: () => diffuse,
+                1000),
+        texture: () => diffuse,
     },
     renderParams: { cullFace: 'NONE', enableBlend: true },
     shader: {
         vertex: `precision mediump float;
+
         attribute vec3 position;
+        attribute vec3 normal;
         attribute vec2 uv;
+      
         varying vec2 vUv;
+        varying vec3 vNormal;
+      
         uniform mat4 projection, view;
+      
         void main() {
           vUv = uv;
+          vNormal = normal;
           gl_Position = projection * view * vec4(position, 1);
         }`,
         fragment: `precision mediump float;
+
         varying vec2 vUv;
-        uniform sampler2D tex;
+        varying vec3 vNormal;
+      
+        uniform sampler2D texture;
+      
         void main () {
-          gl_FragColor = texture2D(tex,vUv);
+          vec3 tex = texture2D(texture, vUv*1.0).xyz;
+          vec3 lightDir = normalize(vec3(0.4, 0.9, 0.3));
+      
+          vec3 n = vNormal;
+      
+          // for the back faces we need to use the opposite normals.
+          if(gl_FrontFacing == false) {
+            n = -n;
+          }
+      
+          vec3 ambient = 0.3 * tex;
+          vec3 diffuse = 0.7 * tex * clamp( dot(n, lightDir ), 0.0, 1.0 );
+      
+          gl_FragColor = vec4(ambient + diffuse, 1.0);
         }` }
 });
 
 function draw()
 {
+    const deltaTime = 0.017;
+
+    let vel: number[] = [];
+    let next: number[] = [];
+    const delta = deltaTime;
+
+    const g = [0.0, -4.0, 0.0]; // gravity force vector.
+
+    const windForce = [Math.sin(tick / 2.0), Math.cos(tick / 3.0), Math.sin(tick / 1.0)];
+    vec3.normalize(windForce, windForce);
+    vec3.scale(windForce, windForce, 20.6);
+
+    for (i = 0; i < position.length; ++i)
+    {
+        //
+        // we do verlet integration for every vertex.
+        //
+
+        // compute velocity.
+        vec3.subtract(vel, position[i], oldPosition[i]);
+        vel = [vel[0], vel[1], vel[2]];
+        next = [position[i][0], position[i][1], position[i][2]];
+
+        // advance vertex with velocity.
+        vec3.add(next, next, vel);
+
+        // apply gravity force.
+        vec3.scaleAndAdd(next, next, g, delta * delta);
+
+        // apply wind force.
+        vec3.scaleAndAdd(next, next, windForce, delta * delta);
+
+        // keep track of current and old position.
+        oldPosition[i] = [position[i][0], position[i][1], position[i][2]];
+        position[i] = [next[0], next[1], next[2]];
+    }
+
+    const d = [];
+    let v0; let
+        v1;
+    //
+    // Attempt to satisfy the constraints by running a couple of iterations.
+    //
+    for (i = 0; i < 15; ++i)
+    {
+        for (let j = 0; j < constraints.length; j++)
+        {
+            const c = constraints[j];
+
+            v0 = position[c.i0];
+            v1 = position[c.i1];
+
+            vec3.subtract(d, v1, v0);
+
+            const dLength = vec3.length(d);
+            const diff = (dLength - c.restLength) / dLength;
+
+            // repulse/attract the end vertices of the constraint.
+            vec3.scaleAndAdd(v0, v0, d, +0.5 * diff);
+            vec3.scaleAndAdd(v1, v1, d, -0.5 * diff);
+        }
+    }
+
+    // we make some vertices at the edge of the cloth unmovable.
+    for (i = 0; i <= N; ++i)
+    {
+        position[i] = [oldPosition[i][0], oldPosition[i][1], oldPosition[i][2]];
+    }
+
+    // next, we recompute the normals
+    for (i = 0; i < normal.length; i++)
+    {
+        normal[i] = [0.0, 0.0, 0.0];
+    }
+
+    //
+    for (i = 0; i < elements.length; i++)
+    {
+        i0 = elements[i][0];
+        i1 = elements[i][1];
+        i2 = elements[i][2];
+
+        const p0 = position[i0];
+        const p1 = position[i1];
+        const p2 = position[i2];
+
+        v0 = [0.0, 0.0, 0.0];
+        vec3.subtract(v0, p0, p1);
+
+        v1 = [0.0, 0.0, 0.0];
+        vec3.subtract(v1, p0, p2);
+
+        // compute face normal.
+        const n0 = [0.0, 0.0, 0.0];
+        vec3.cross(n0, v0, v1);
+        vec3.normalize(n0, n0);
+
+        // add face normal to vertices of face.
+        vec3.add(normal[i0], normal[i0], n0);
+        vec3.add(normal[i1], normal[i1], n0);
+        vec3.add(normal[i2], normal[i2], n0);
+    }
+
+    // the average of the total face normals approximates the vertex normals.
+    for (i = 0; i < normal.length; i++)
+    {
+        vec3.normalize(normal[i], normal[i]);
+    }
+
+    /*
+      Make sure that we stream the positions and normals to their buffers,
+      since these are updated every frame.
+      */
+    const positions = position.reduce((pv: number[], cv: number[]) =>
+    {
+        cv.forEach((v) => { pv.push(v); });
+
+        return pv;
+    }, []);
+    const normals = normal.reduce((pv: number[], cv: number[]) =>
+    {
+        cv.forEach((v) => { pv.push(v); });
+
+        return pv;
+    }, []);
+
+    renderAtomic.attributes.position.array = new Float32Array(positions);
+    renderAtomic.attributes.position.needsUpdate();
+    renderAtomic.attributes.normal.array = new Float32Array(normals);
+    renderAtomic.attributes.normal.needsUpdate();
+
     tick++;
 
     viewportWidth = canvas.width = canvas.clientWidth;
     viewportHeight = canvas.height = canvas.clientHeight;
+
+    camera.tick();
 
     webglRenderer.render(renderAtomic);
     requestAnimationFrame(draw);
@@ -224,7 +376,7 @@ resl({
     manifest: {
         texture: {
             type: 'image',
-            src: 'resources/assets/peppers.png',
+            src: 'resources/assets/cloth.png',
         }
     },
     onDone: ({ texture }) =>
@@ -234,9 +386,10 @@ resl({
             textureType: 'TEXTURE_2D',
             format: 'RGBA',
             type: 'UNSIGNED_BYTE',
-            magFilter: 'LINEAR',
-            minFilter: 'LINEAR',
+            magFilter: 'NEAREST',
+            minFilter: 'LINEAR_MIPMAP_LINEAR',
             activePixels: texture as any,
+            generateMipmap: true,
         };
 
         draw();
