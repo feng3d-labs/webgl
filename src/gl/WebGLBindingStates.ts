@@ -187,7 +187,6 @@ export class WebGLBindingStates
 
             const attribute = renderAtomic.getAttributeByKey(name);
             const size = attribute.itemSize;
-            const normalized = attribute.normalized;
 
             this.enableAttribute(activeInfo.location, attribute.divisor);
 
@@ -197,6 +196,7 @@ export class WebGLBindingStates
             const buffer = attributeBufferCacle.buffer;
             const type = attributeBufferCacle.type;
             const bytesPerElement = attributeBufferCacle.bytesPerElement;
+            const normalized = attributeBufferCacle.normalized;
 
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 

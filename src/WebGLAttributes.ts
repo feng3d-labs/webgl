@@ -11,6 +11,12 @@ export interface WebGLAttributeBufferCacle
      * 数据数量
      */
     count: number;
+
+    /**
+     * 是否标准化。
+     */
+    normalized: boolean;
+
     bytesPerElement: number;
     version: number;
 }
@@ -119,11 +125,14 @@ export class WebGLAttributes
 
         const count = array !== undefined ? array.length / attribute.itemSize : 0;
 
+        const normalized = attribute.normalized === true;
+
         return {
             attribute,
             buffer,
             type,
             count,
+            normalized,
             bytesPerElement: array.BYTES_PER_ELEMENT,
             version: attribute.version
         };

@@ -60,7 +60,6 @@ export class BufferAttribute
 
         this.array = array;
         this.itemSize = itemSize;
-        this.normalized = normalized === true;
         this.divisor = divisor;
 
         //
