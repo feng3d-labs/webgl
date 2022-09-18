@@ -7,8 +7,6 @@ import { AttributeUsage } from '../gl/WebGLEnums';
  */
 export class BufferAttribute
 {
-    name: string;
-
     /**
      * 数据
      */
@@ -61,6 +59,7 @@ export class BufferAttribute
         this.array = array;
         this.itemSize = itemSize;
         this.divisor = divisor;
+        this.normalized = normalized;
 
         //
         watcher.watch(this as BufferAttribute, 'array', this.needsUpdate, this);
