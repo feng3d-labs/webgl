@@ -1,6 +1,5 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { ShaderMacro } from '../shader/Macro';
-import { Attributes } from './Attributes';
 import { BufferAttribute } from './BufferAttribute';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
@@ -48,7 +47,7 @@ export class RenderAtomic
         }
     }
 
-    private _attributes: Attributes = {} as any;
+    private _attributes: { [key: string]: BufferAttribute; } = {};
 
     /**
      * Uniform渲染数据
@@ -117,7 +116,7 @@ export class RenderAtomic
         return (this.next && this.next.getIndexBuffer());
     }
 
-    getAttributes(attributes: Attributes = {} as any)
+    getAttributes(attributes: { [key: string]: BufferAttribute; } = {})
     {
         this.next && this.next.getAttributes(attributes);
         Object.assign(attributes, this.attributes);

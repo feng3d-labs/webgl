@@ -1,4 +1,3 @@
-export * from './data/Attributes';
 export * from './data/BufferAttribute';
 export * from './data/FrameBuffer';
 export * from './data/RenderAtomic';
