@@ -52,7 +52,7 @@ export class Texture<T> extends EventEmitter<T>
      */
     @serialize
     @oav()
-    flipY = true;
+    flipY = false;
 
     /**
      * 将图像RGB颜色值得每一个分量乘以A。默认为false
