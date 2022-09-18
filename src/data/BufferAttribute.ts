@@ -33,11 +33,6 @@ export class BufferAttribute
     divisor = 0;
 
     /**
-     * 数据数量
-     */
-    count: number;
-
-    /**
      * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
      *
      * 为优化目的指定数据存储的预期使用模式的GLenum。
@@ -65,7 +60,6 @@ export class BufferAttribute
 
         this.array = array;
         this.itemSize = itemSize;
-        this.count = array !== undefined ? array.length / itemSize : 0;
         this.normalized = normalized === true;
         this.divisor = divisor;
 
@@ -75,9 +69,6 @@ export class BufferAttribute
 
     needsUpdate()
     {
-        const { array, itemSize } = this;
-
         this.version++;
-        this.count = array !== undefined ? array.length / itemSize : 0;
     }
 }

@@ -1,6 +1,5 @@
 /* eslint-disable no-new */
 import { lazy } from '@feng3d/polyfill';
-import { BufferAttribute } from './data/BufferAttribute';
 import { RenderAtomic } from './data/RenderAtomic';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
@@ -154,7 +153,7 @@ export class WebGLRenderer
 
             if (count === undefined)
             {
-                count = index.count - first;
+                count = attribute.count - first;
             }
 
             if (instanceCount > 1)
@@ -168,14 +167,14 @@ export class WebGLRenderer
         }
         else
         {
-            let vertexNum = ((attributes) =>
+            let vertexNum = ((attributelist) =>
             {
-                for (const attr in attributes)
+                for (const attr in attributelist)
                 {
                     // eslint-disable-next-line no-prototype-builtins
-                    if (attributes.hasOwnProperty(attr))
+                    if (attributelist.hasOwnProperty(attr))
                     {
-                        const attribute: BufferAttribute = attributes[attr];
+                        const attribute = attributes.get(attributelist[attr]);
 
                         return attribute.count;
                     }

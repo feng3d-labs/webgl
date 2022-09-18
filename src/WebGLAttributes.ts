@@ -3,8 +3,14 @@ import { WebGLCapabilities } from './gl/WebGLCapabilities';
 
 export interface WebGLAttributeBufferCacle
 {
+    attribute: BufferAttribute;
     buffer: WebGLBuffer;
     type: number;
+
+    /**
+     * 数据数量
+     */
+    count: number;
     bytesPerElement: number;
     version: number;
 }
@@ -111,9 +117,13 @@ export class WebGLAttributes
             throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
         }
 
+        const count = array !== undefined ? array.length / attribute.itemSize : 0;
+
         return {
+            attribute,
             buffer,
             type,
+            count,
             bytesPerElement: array.BYTES_PER_ELEMENT,
             version: attribute.version
         };
