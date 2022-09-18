@@ -88,9 +88,9 @@ export class WebGLAttributeBufferCacle
         this.version = attribute.version;
     }
 
-    updateBuffer(buffer: WebGLBuffer, attribute: BufferAttribute, bufferType: number)
+    updateBuffer(bufferType: number)
     {
-        const { gl, capabilities } = this;
+        const { gl, capabilities, buffer, attribute } = this;
 
         const array = attribute.array;
         const updateRange = attribute.updateRange;
@@ -166,7 +166,7 @@ export class WebGLAttributes
         }
         else if (data.version < attribute.version)
         {
-            data.updateBuffer(data.buffer, attribute, bufferType);
+            data.updateBuffer(bufferType);
 
             data.version = attribute.version;
         }
