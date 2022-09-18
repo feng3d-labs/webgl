@@ -118,6 +118,16 @@ export class WebGLAttributeBufferCacle
             updateRange.count = -1; // reset range
         }
     }
+
+    dispose()
+    {
+        const { gl, buffer } = this;
+
+        gl.deleteBuffer(buffer);
+
+        this.gl = null;
+        this.buffer = null;
+    }
 }
 
 export class WebGLAttributes
@@ -141,13 +151,13 @@ export class WebGLAttributes
 
     remove(attribute: BufferAttribute)
     {
-        const { gl, buffers } = this;
+        const { buffers } = this;
 
         const data = buffers.get(attribute);
 
         if (data)
         {
-            gl.deleteBuffer(data.buffer);
+            data.dispose();
 
             buffers.delete(attribute);
         }
