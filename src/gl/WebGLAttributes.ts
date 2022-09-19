@@ -1,5 +1,5 @@
-import { BufferAttribute } from './data/BufferAttribute';
-import { WebGLCapabilities } from './gl/WebGLCapabilities';
+import { BufferAttribute } from '../data/BufferAttribute';
+import { WebGLCapabilities } from './WebGLCapabilities';
 
 export class WebGLAttributeBufferCacle
 {

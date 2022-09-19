@@ -1,6 +1,6 @@
 import { BufferAttribute } from '../data/BufferAttribute';
 import { RenderAtomic } from '../data/RenderAtomic';
-import { WebGLAttributes } from '../WebGLAttributes';
+import { WebGLAttributes } from './WebGLAttributes';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLShaders } from './WebGLShaders';

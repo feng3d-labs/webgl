@@ -1,4 +1,4 @@
-import { WebGLAttributeBufferCacle } from '../WebGLAttributes';
+import { WebGLAttributeBufferCacle } from './WebGLAttributes';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';

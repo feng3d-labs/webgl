@@ -15,7 +15,7 @@ import { WebGLShaders } from './gl/WebGLShaders';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { WebGLUniforms } from './gl/WebGLUniforms';
-import { WebGLAttributes } from './WebGLAttributes';
+import { WebGLAttributes } from './gl/WebGLAttributes';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
 {
