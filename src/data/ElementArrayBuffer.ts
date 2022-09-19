@@ -39,9 +39,4 @@ export class ElementArrayBuffer
 
         this.array = array;
     }
-
-    needsUpdate()
-    {
-        this.version++;
-    }
 }

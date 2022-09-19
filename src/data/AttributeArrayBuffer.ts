@@ -55,9 +55,4 @@ export class AttributeArrayBuffer
         this.divisor = divisor;
         this.normalized = normalized;
     }
-
-    needsUpdate()
-    {
-        this.version++;
-    }
 }

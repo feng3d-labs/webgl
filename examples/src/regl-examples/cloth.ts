@@ -357,9 +357,7 @@ function draw()
     }, []);
 
     renderAtomic.attributes.position.array = new Float32Array(positions);
-    renderAtomic.attributes.position.needsUpdate();
     renderAtomic.attributes.normal.array = new Float32Array(normals);
-    renderAtomic.attributes.normal.needsUpdate();
 
     tick++;
 
