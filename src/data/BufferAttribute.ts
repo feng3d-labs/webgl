@@ -1,5 +1,4 @@
 import { WebGLBufferSourceTypes } from '@feng3d/polyfill';
-import { watcher } from '@feng3d/watcher';
 import { AttributeUsage } from '../gl/WebGLEnums';
 
 /**
@@ -40,11 +39,6 @@ export class BufferAttribute
     usage: AttributeUsage = 'STATIC_DRAW';
 
     /**
-     * 更新范围。
-     */
-    updateRange = { offset: 0, count: -1 };
-
-    /**
      * 版本号，用于标记是否变化。
      */
     version = 0;
@@ -60,9 +54,6 @@ export class BufferAttribute
         this.itemSize = itemSize;
         this.divisor = divisor;
         this.normalized = normalized;
-
-        //
-        watcher.watch(this as BufferAttribute, 'array', this.needsUpdate, this);
     }
 
     needsUpdate()

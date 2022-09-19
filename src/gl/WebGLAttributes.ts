@@ -1,3 +1,4 @@
+import { watcher } from '@feng3d/watcher';
 import { BufferAttribute } from '../data/BufferAttribute';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
@@ -86,46 +87,38 @@ export class WebGLAttributeBufferCacle
         this.normalized = normalized;
         this.bytesPerElement = array.BYTES_PER_ELEMENT;
         this.version = attribute.version;
+
+        //
+        watcher.watch(attribute, 'array', this.needsUpdate, this);
+    }
+
+    private needsUpdate()
+    {
+        this.attribute.version++;
     }
 
     updateBuffer(bufferType: number)
     {
-        const { gl, capabilities, buffer, attribute } = this;
+        const { gl, buffer, attribute } = this;
 
         const array = attribute.array;
-        const updateRange = attribute.updateRange;
 
         gl.bindBuffer(bufferType, buffer);
 
-        if (updateRange.count === -1)
-        {
-            // Not using update ranges
-            gl.bufferSubData(bufferType, 0, array);
-        }
-        else
-        {
-            if (capabilities.isWebGL2)
-            {
-                (gl as any as WebGL2RenderingContext).bufferSubData(bufferType, updateRange.offset * array.BYTES_PER_ELEMENT,
-                    array, updateRange.offset, updateRange.count);
-            }
-            else
-            {
-                gl.bufferSubData(bufferType, updateRange.offset * array.BYTES_PER_ELEMENT,
-                    array.subarray(updateRange.offset, updateRange.offset + updateRange.count));
-            }
-
-            updateRange.count = -1; // reset range
-        }
+        gl.bufferSubData(bufferType, 0, array);
     }
 
     dispose()
     {
-        const { gl, buffer } = this;
+        const { gl, buffer, attribute } = this;
 
         gl.deleteBuffer(buffer);
 
+        watcher.watch(attribute, 'array', this.needsUpdate, this);
+
         this.gl = null;
+        this.capabilities = null;
+        this.attribute = null;
         this.buffer = null;
     }
 }
