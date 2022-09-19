@@ -179,45 +179,23 @@ export class WebGLBindingStates
         for (const name in shaderResult.attributes)
         {
             const activeInfo = shaderResult.attributes[name];
+            const location = activeInfo.location;
             // 处理 WebGL 内置属性 gl_VertexID 等
-            if (activeInfo.location < 0)
+            if (location < 0)
             {
                 continue;
             }
 
             const attribute = renderAtomic.getAttributeByKey(name);
-            const size = attribute.itemSize;
 
-            this.enableAttribute(activeInfo.location, attribute.divisor);
+            this.enableAttribute(location, attribute.divisor);
 
             attributes.update(attribute, gl.ARRAY_BUFFER);
-            const attributeBufferCacle = attributes.get(attribute);
 
-            const buffer = attributeBufferCacle.buffer;
-            const type = attributeBufferCacle.type;
-            const bytesPerElement = attributeBufferCacle.bytesPerElement;
-            const normalized = attributeBufferCacle.normalized;
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-
-            this.vertexAttribPointer(activeInfo.location, size, type, normalized, size * bytesPerElement, 0);
+            attributes.vertexAttribPointer(location, attribute);
         }
 
         this.disableUnusedAttributes();
-    }
-
-    private vertexAttribPointer(index: number, size: number, type: number, normalized: boolean, stride: number, offset: number)
-    {
-        const { gl, capabilities } = this;
-
-        if (capabilities.isWebGL2 === true && (type === gl.INT || type === gl.UNSIGNED_INT))
-        {
-            (gl as WebGL2RenderingContext).vertexAttribIPointer(index, size, type, stride, offset);
-        }
-        else
-        {
-            gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
-        }
     }
 
     /**

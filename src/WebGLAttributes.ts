@@ -181,4 +181,31 @@ export class WebGLAttributes
             data.version = attribute.version;
         }
     }
+
+    vertexAttribPointer(location: number, attribute: BufferAttribute)
+    {
+        const { gl, capabilities } = this;
+
+        const attributeBufferCacle = this.get(attribute);
+
+        const size = attribute.itemSize;
+        const buffer = attributeBufferCacle.buffer;
+        const type = attributeBufferCacle.type;
+        const bytesPerElement = attributeBufferCacle.bytesPerElement;
+        const normalized = attributeBufferCacle.normalized;
+
+        const stride = size * bytesPerElement;
+        const offset = 0;
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+        if (capabilities.isWebGL2 === true && (type === gl.INT || type === gl.UNSIGNED_INT))
+        {
+            (gl as WebGL2RenderingContext).vertexAttribIPointer(location, size, type, stride, offset);
+        }
+        else
+        {
+            gl.vertexAttribPointer(location, size, type, normalized, stride, offset);
+        }
+    }
 }
