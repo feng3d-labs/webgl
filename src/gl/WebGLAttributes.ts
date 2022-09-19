@@ -1,5 +1,5 @@
 import { watcher } from '@feng3d/watcher';
-import { BufferAttribute } from '../data/BufferAttribute';
+import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
 export class WebGLAttributeBufferCacle
@@ -7,7 +7,7 @@ export class WebGLAttributeBufferCacle
     gl: WebGLRenderingContext;
     capabilities: WebGLCapabilities;
     //
-    attribute: BufferAttribute;
+    attribute: AttributeArrayBuffer;
     buffer: WebGLBuffer;
     type: number;
 
@@ -24,7 +24,7 @@ export class WebGLAttributeBufferCacle
     bytesPerElement: number;
     version: number;
 
-    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: BufferAttribute, bufferType: number)
+    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: AttributeArrayBuffer, bufferType: number)
     {
         this.gl = gl;
         this.capabilities = capabilities;
@@ -126,7 +126,7 @@ export class WebGLAttributeBufferCacle
 export class WebGLAttributes
 {
     private gl: WebGLRenderingContext;
-    private buffers = new WeakMap<BufferAttribute, WebGLAttributeBufferCacle>();
+    private buffers = new WeakMap<AttributeArrayBuffer, WebGLAttributeBufferCacle>();
     private capabilities: WebGLCapabilities;
 
     constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
@@ -135,14 +135,14 @@ export class WebGLAttributes
         this.capabilities = capabilities;
     }
 
-    get(attribute: BufferAttribute)
+    get(attribute: AttributeArrayBuffer)
     {
         const { buffers } = this;
 
         return buffers.get(attribute);
     }
 
-    remove(attribute: BufferAttribute)
+    remove(attribute: AttributeArrayBuffer)
     {
         const { buffers } = this;
 
@@ -156,7 +156,7 @@ export class WebGLAttributes
         }
     }
 
-    update(attribute: BufferAttribute, bufferType: number)
+    update(attribute: AttributeArrayBuffer, bufferType: number)
     {
         const { gl, capabilities, buffers } = this;
 
@@ -175,7 +175,7 @@ export class WebGLAttributes
         }
     }
 
-    vertexAttribPointer(location: number, attribute: BufferAttribute)
+    vertexAttribPointer(location: number, attribute: AttributeArrayBuffer)
     {
         const { gl, capabilities } = this;
 

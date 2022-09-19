@@ -1,4 +1,4 @@
-import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
+import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
 
 const webglcanvas = document.createElement('canvas');
 webglcanvas.id = 'glcanvas';
@@ -25,7 +25,7 @@ const offsets = [{ offset: [-1, -1] },
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new BufferAttribute(new Float32Array([
+        position: new AttributeArrayBuffer(new Float32Array([
             0.5, 0,
             0, 0.5,
             1, 1

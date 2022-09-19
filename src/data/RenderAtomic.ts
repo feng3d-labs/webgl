@@ -1,6 +1,7 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { ShaderMacro } from '../shader/Macro';
-import { BufferAttribute } from './BufferAttribute';
+import { AttributeArrayBuffer } from './AttributeArrayBuffer';
+import { ElementArrayBuffer } from './ElementArrayBuffer';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
 import { Uniforms } from './Uniform';
@@ -28,7 +29,7 @@ export class RenderAtomic
     /**
      * 顶点索引缓冲
      */
-    index: BufferAttribute;
+    index: ElementArrayBuffer;
 
     /**
      * 属性数据列表
@@ -47,7 +48,7 @@ export class RenderAtomic
         }
     }
 
-    private _attributes: { [key: string]: BufferAttribute; } = {};
+    private _attributes: { [key: string]: AttributeArrayBuffer; } = {};
 
     /**
      * Uniform渲染数据
@@ -109,14 +110,14 @@ export class RenderAtomic
         Object.assign(this, source);
     }
 
-    getIndexBuffer(): BufferAttribute
+    getIndexBuffer(): ElementArrayBuffer
     {
         if (this.index !== undefined) return this.index;
 
         return (this.next && this.next.getIndexBuffer());
     }
 
-    getAttributes(attributes: { [key: string]: BufferAttribute; } = {})
+    getAttributes(attributes: { [key: string]: AttributeArrayBuffer; } = {})
     {
         this.next && this.next.getAttributes(attributes);
         Object.assign(attributes, this.attributes);
@@ -124,7 +125,7 @@ export class RenderAtomic
         return attributes;
     }
 
-    getAttributeByKey(key: string): BufferAttribute
+    getAttributeByKey(key: string): AttributeArrayBuffer
     {
         if (this.attributes[key] !== undefined) return this.attributes[key];
 

@@ -1,4 +1,4 @@
-import { BufferAttribute, RenderAtomic, WebGLRenderer } from '../../../src';
+import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
 import * as bunny from './mikolalysenko/bunny';
 import * as mat4 from './stackgl/gl-mat4';
 
@@ -33,9 +33,9 @@ let viewportHeight = webglcanvas.clientHeight;
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new BufferAttribute(new Float32Array(positions), 3) as any,
+        position: new AttributeArrayBuffer(new Float32Array(positions), 3) as any,
     },
-    index: new BufferAttribute(new Uint16Array(indices), 1) as any,
+    index: new AttributeArrayBuffer(new Uint16Array(indices), 1) as any,
     uniforms: {
         model: mat4.identity([]),
         view: () =>

@@ -4,7 +4,7 @@ import { resl } from './mikolalysenko/resl';
 import * as mat4 from './stackgl/gl-mat4';
 import * as vec3 from './stackgl/gl-vec3';
 
-import { BufferAttribute, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { AttributeArrayBuffer, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
 import { gPartial } from '@feng3d/polyfill';
 
 const canvas = document.createElement('canvas');
@@ -170,11 +170,11 @@ let viewportHeight = 1;
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new BufferAttribute(new Float32Array(positions), 3) as any,
-        normal: new BufferAttribute(new Float32Array(normals), 3) as any,
-        uv: new BufferAttribute(new Float32Array(uvs), 2) as any,
+        position: new AttributeArrayBuffer(new Float32Array(positions), 3) as any,
+        normal: new AttributeArrayBuffer(new Float32Array(normals), 3) as any,
+        uv: new AttributeArrayBuffer(new Float32Array(uvs), 2) as any,
     },
-    index: new BufferAttribute(new Uint16Array(indices), 1) as any,
+    index: new AttributeArrayBuffer(new Uint16Array(indices), 1) as any,
     uniforms: {
         view: () => camera.view(),
         projection: () =>

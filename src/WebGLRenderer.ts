@@ -146,7 +146,7 @@ export class WebGLRenderer
         const index = renderAtomic.getIndexBuffer();
         if (index)
         {
-            const attribute = attributes.get(index);
+            const attribute = indexedBufferRenderer.get(index);
             indexedBufferRenderer.setIndex(attribute);
 
             indexedBufferRenderer.setMode(renderMode);
@@ -220,20 +220,21 @@ export class WebGLRenderer
 
         this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
         this.extensions.init(this.capabilities);
+        this.info = new WebGLInfo(this.gl);
         this.cacheStates = new WebGLCacheStates(this.gl);
         this.shaders = new WebGLShaders(this.gl);
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
-        this.info = new WebGLInfo(this.gl);
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities, this.shaders);
+
+        this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
+        this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
+
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.indexedBufferRenderer, this.capabilities, this.shaders);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
         this.uniforms = new WebGLUniforms(this.gl, this.textures);
         this.renderbuffers = new WebGLRenderbuffers(this.gl);
         this.framebuffers = new WebGLFramebuffers(this.gl);
-
-        this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
-        this.indexedBufferRenderer = new WebGLIndexedBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
     }
 
     private _isContextLost = false;

@@ -1,8 +1,10 @@
-import { BufferAttribute } from '../data/BufferAttribute';
+import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
+import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributes } from './WebGLAttributes';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
+import { WebGLIndexedBufferRenderer } from './WebGLIndexedBufferRenderer';
 import { WebGLShaders } from './WebGLShaders';
 
 export class WebGLBindingStates
@@ -10,6 +12,7 @@ export class WebGLBindingStates
     private gl: WebGLRenderingContext;
     private extensions: WebGLExtensions;
     private attributes: WebGLAttributes;
+    private indexedBufferRenderer: WebGLIndexedBufferRenderer;
     private capabilities: WebGLCapabilities;
     private shaders: WebGLShaders;
 
@@ -17,11 +20,12 @@ export class WebGLBindingStates
     private defaultState: BindingState;
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, capabilities: WebGLCapabilities, shaders: WebGLShaders)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, indexedBufferRenderer: WebGLIndexedBufferRenderer, capabilities: WebGLCapabilities, shaders: WebGLShaders)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.attributes = attributes;
+        this.indexedBufferRenderer = indexedBufferRenderer;
         this.capabilities = capabilities;
         this.shaders = shaders;
 
@@ -31,7 +35,7 @@ export class WebGLBindingStates
 
     setup(renderAtomic: RenderAtomic)
     {
-        const { gl, attributes, capabilities } = this;
+        const { gl, indexedBufferRenderer, capabilities } = this;
 
         let updateBuffers = false;
 
@@ -57,7 +61,7 @@ export class WebGLBindingStates
         const index = renderAtomic.getIndexBuffer();
         if (index)
         {
-            attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
+            indexedBufferRenderer.update(index);
         }
 
         if (updateBuffers)
@@ -66,7 +70,7 @@ export class WebGLBindingStates
 
             if (index)
             {
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, attributes.get(index).buffer);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexedBufferRenderer.get(index).buffer);
             }
         }
     }
@@ -125,7 +129,7 @@ export class WebGLBindingStates
     {
         const { currentState, shaders } = this;
 
-        const cache: { [key: string]: { version: number, attribute: BufferAttribute } } = {};
+        const cache: { [key: string]: { version: number, attribute: AttributeArrayBuffer } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
@@ -140,7 +144,7 @@ export class WebGLBindingStates
             {
                 const attribute = renderAtomic.getAttributeByKey(name);
 
-                const data: { version: number, attribute: BufferAttribute } = {} as any;
+                const data: { version: number, attribute: AttributeArrayBuffer } = {} as any;
                 data.attribute = attribute;
                 data.version = attribute.version;
 
@@ -373,12 +377,12 @@ class BindingState
     /**
      * WebGL属性缓存信息
      */
-    attributes: { [key: string]: { version: number, attribute: BufferAttribute } } = {};
+    attributes: { [key: string]: { version: number, attribute: AttributeArrayBuffer } } = {};
 
     /**
      * 顶点索引缓冲
      */
-    index: BufferAttribute;
+    index: ElementArrayBuffer;
 
     /**
      * 属性数量。
