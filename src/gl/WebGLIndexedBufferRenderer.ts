@@ -71,43 +71,44 @@ export class WebGLIndexedBufferRenderer
         info.update(count, mode, primcount);
     }
 
-    get(attribute: ElementArrayBuffer)
+    bindBuffer(element: ElementArrayBuffer)
     {
-        const { buffers } = this;
+        const { gl } = this;
 
-        return buffers.get(attribute);
-    }
-
-    remove(attribute: ElementArrayBuffer)
-    {
-        const { buffers } = this;
-
-        const data = buffers.get(attribute);
-
-        if (data)
+        if (element)
         {
-            data.dispose();
-
-            buffers.delete(attribute);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.get(element).buffer);
         }
     }
 
-    update(element: ElementArrayBuffer)
+    get(element: ElementArrayBuffer)
     {
-        const { gl, capabilities, buffers } = this;
+        const { gl, buffers } = this;
 
         let data = buffers.get(element);
 
         if (data === undefined)
         {
-            data = new WebGLElementArrayBufferCacle(gl, capabilities, element);
+            data = new WebGLElementArrayBufferCacle(gl, element);
             buffers.set(element, data);
         }
-        else if (data.version < element.version)
-        {
-            data.updateBuffer();
 
-            data.version = element.version;
+        data.updateBuffer();
+
+        return data;
+    }
+
+    remove(element: ElementArrayBuffer)
+    {
+        const { buffers } = this;
+
+        const data = buffers.get(element);
+
+        if (data)
+        {
+            data.dispose();
+
+            buffers.delete(element);
         }
     }
 }
@@ -115,9 +116,8 @@ export class WebGLIndexedBufferRenderer
 class WebGLElementArrayBufferCacle
 {
     gl: WebGLRenderingContext;
-    capabilities: WebGLCapabilities;
     //
-    attribute: ElementArrayBuffer;
+    element: ElementArrayBuffer;
     buffer: WebGLBuffer;
     type: number;
 
@@ -134,10 +134,9 @@ class WebGLElementArrayBufferCacle
     bytesPerElement: number;
     version: number;
 
-    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, element: ElementArrayBuffer)
+    constructor(gl: WebGLRenderingContext, element: ElementArrayBuffer)
     {
         this.gl = gl;
-        this.capabilities = capabilities;
 
         const array = element.array;
         const usage = gl[element.usage];
@@ -186,7 +185,7 @@ class WebGLElementArrayBufferCacle
             throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
         }
 
-        this.attribute = element;
+        this.element = element;
         this.buffer = buffer;
         this.type = type;
         this.count = array.length;
@@ -199,14 +198,20 @@ class WebGLElementArrayBufferCacle
 
     private needsUpdate()
     {
-        this.attribute.version++;
+        this.element.version++;
     }
 
     updateBuffer()
     {
-        const { gl, buffer, attribute } = this;
+        const { gl, buffer, element } = this;
 
-        const array = attribute.array;
+        if (this.version === element.version)
+        {
+            return;
+        }
+        this.version = element.version;
+
+        const array = element.array;
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
         gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, array);
@@ -214,15 +219,14 @@ class WebGLElementArrayBufferCacle
 
     dispose()
     {
-        const { gl, buffer, attribute } = this;
+        const { gl, buffer, element } = this;
 
         gl.deleteBuffer(buffer);
 
-        watcher.watch(attribute, 'array', this.needsUpdate, this);
+        watcher.watch(element, 'array', this.needsUpdate, this);
 
         this.gl = null;
-        this.capabilities = null;
-        this.attribute = null;
+        this.element = null;
         this.buffer = null;
     }
 }

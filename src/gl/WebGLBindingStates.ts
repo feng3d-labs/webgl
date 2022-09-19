@@ -35,7 +35,7 @@ export class WebGLBindingStates
 
     setup(renderAtomic: RenderAtomic)
     {
-        const { gl, indexedBufferRenderer, capabilities } = this;
+        const { indexedBufferRenderer, capabilities } = this;
 
         let updateBuffers = false;
 
@@ -58,20 +58,12 @@ export class WebGLBindingStates
             updateBuffers = true;
         }
 
-        const index = renderAtomic.getIndexBuffer();
-        if (index)
-        {
-            indexedBufferRenderer.update(index);
-        }
-
         if (updateBuffers)
         {
             this.setupVertexAttributes(renderAtomic);
 
-            if (index)
-            {
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexedBufferRenderer.get(index).buffer);
-            }
+            const index = renderAtomic.getIndexBuffer();
+            indexedBufferRenderer.bindBuffer(index);
         }
     }
 
