@@ -5,7 +5,7 @@ import { serialize } from '@feng3d/serialization';
 import { watcher } from '@feng3d/watcher';
 import { TextureDataType, TextureFormat, TextureMagFilter, TextureMinFilter, TextureType, TextureWrap } from '../gl/WebGLEnums';
 
-export class Texture<T> extends EventEmitter<T>
+export class Texture<T = any> extends EventEmitter<T>
 {
     /**
      * 纹理类型
@@ -110,11 +110,11 @@ export class Texture<T> extends EventEmitter<T>
     private _wrapT: TextureWrap = 'REPEAT';
 
     /**
-     * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为0。
+     * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
      */
     @serialize
     @oav()
-    anisotropy = 0;
+    anisotropy = 1;
 
     /**
      * 是否失效，值为true时重新创建 WebGLTexture
