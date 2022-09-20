@@ -1,4 +1,4 @@
-import { AttributeBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
+import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -25,23 +25,24 @@ import { AttributeBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
     const vertexCount = 12;
     const renderAtomic = new RenderAtomic({
         attributes: {
-            position: new AttributeBuffer(new Float32Array([
-                -0.8, -0.8,
-                0.8, -0.8,
-                0.8, 0.8,
-                0.8, 0.8,
-                -0.8, 0.8,
-                -0.8, -0.8,
-                -0.5, -0.5,
-                0.5, -0.5,
-                0.5, 0.5,
-                0.5, 0.5,
-                -0.5, 0.5,
-                -0.5, -0.5,
-            ]), 2) as any,
+            position: {
+                array: [
+                    -0.8, -0.8,
+                    0.8, -0.8,
+                    0.8, 0.8,
+                    0.8, 0.8,
+                    -0.8, 0.8,
+                    -0.8, -0.8,
+                    -0.5, -0.5,
+                    0.5, -0.5,
+                    0.5, 0.5,
+                    0.5, 0.5,
+                    -0.5, 0.5,
+                    -0.5, -0.5,
+                ], itemSize: 2
+            },
         },
         uniforms: {},
-        instanceCount: 2,
         renderParams: { renderMode: 'TRIANGLE_STRIP', cullFace: 'NONE', enableBlend: true },
         shader: {
             vertex:

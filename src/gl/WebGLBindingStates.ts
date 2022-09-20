@@ -218,9 +218,10 @@ export class WebGLBindingStates
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/enableVertexAttribArray
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/vertexAttribDivisor
      */
-    enableAttribute(location: number, divisor = 0)
+    enableAttribute(location: number, divisor?: number)
     {
         const { gl, extensions, capabilities, currentState } = this;
+        divisor = ~~divisor;
 
         //
         const newAttributes = currentState.newAttributes;

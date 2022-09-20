@@ -1,7 +1,7 @@
-import { AttributeBuffer, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
-import * as mat4 from './stackgl/gl-mat4';
-import { resl } from './mikolalysenko/resl';
 import { gPartial } from '@feng3d/polyfill';
+import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { resl } from './mikolalysenko/resl';
+import * as mat4 from './stackgl/gl-mat4';
 
 const webglcanvas = document.createElement('canvas');
 webglcanvas.id = 'glcanvas';
@@ -70,10 +70,10 @@ let viewportHeight = 1;
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new AttributeBuffer(new Float32Array(positions), 3) as any,
-        uv: new AttributeBuffer(new Float32Array(uvs), 2) as any,
+        position: { array: positions, itemSize: 3 },
+        uv: { array: uvs, itemSize: 2 },
     },
-    index: new AttributeBuffer(new Uint16Array(indices), 1) as any,
+    index: { array: indices },
     uniforms: {
         view: () =>
         {

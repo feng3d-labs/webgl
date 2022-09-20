@@ -43,11 +43,13 @@ const offsets = [{ offset: [-1, -1] },
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new AttributeBuffer(new Float32Array([
-            0.5, 0,
-            0, 0.5,
-            1, 1
-        ]), 2) as any,
+        position: {
+            array: [
+                0.5, 0,
+                0, 0.5,
+                1, 1
+            ], itemSize: 2
+        },
     },
     uniforms: {
         color: () => [

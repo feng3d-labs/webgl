@@ -1,4 +1,4 @@
-import { AttributeBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
+import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 const webglcanvas = document.createElement('canvas');
 webglcanvas.id = 'glcanvas';
@@ -13,11 +13,13 @@ const webglRenderer = new WebGLRenderer({ canvas: webglcanvas });
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new AttributeBuffer(new Float32Array([
-            -1, 0,
-            0, -1,
-            1, 1
-        ]), 2) as any,
+        position: {
+            array: [
+                -1, 0,
+                0, -1,
+                1, 1
+            ], itemSize: 2
+        },
     },
     uniforms: { color: [1, 0, 0, 1] },
     renderParams: { cullFace: 'NONE', enableBlend: true },
