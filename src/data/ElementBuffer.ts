@@ -6,7 +6,7 @@ import { AttributeUsage } from '../gl/WebGLEnums';
 export type ElementBufferSourceTypes = number[] | Uint16Array | Uint32Array | Uint8Array;
 
 /**
- * 指定元素数组缓冲区中的值的类型。
+ * 元素缓冲数据类型。
  *
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
  */
@@ -37,7 +37,7 @@ export interface ElementBuffer
     usage?: AttributeUsage;
 
     /**
-     * 指定元素数组缓冲区中的值的类型，默认为`UNSIGNED_SHORT`。
+     * 元素缓冲数据类型，默认为`UNSIGNED_SHORT`。
      *
      * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
      */

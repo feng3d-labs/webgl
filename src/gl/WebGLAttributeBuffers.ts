@@ -133,53 +133,145 @@ export class WebGLAttributeBuffer
             gl.deleteBuffer(buffer);
         }
 
-        const array = attribute.array;
+        let array = attribute.array;
         const usage = attribute.usage || 'STATIC_DRAW';
         const count = array !== undefined ? array.length / attribute.itemSize : 0;
         const normalized = attribute.normalized === true;
         let type = attribute.type;
 
-        if (array instanceof Float32Array)
+        // 处理 type
+        if (type === undefined)
         {
-            type = 'FLOAT';
+            if (array instanceof Float32Array)
+            {
+                type = 'FLOAT';
+            }
+            else if (array instanceof Uint32Array)
+            {
+                type = 'UNSIGNED_INT';
+            }
+            else if (array instanceof Int32Array)
+            {
+                type = 'INT';
+            }
+            else if (array instanceof Uint16Array)
+            {
+                type = 'UNSIGNED_SHORT';
+            }
+            else if (array instanceof Int16Array)
+            {
+                type = 'SHORT';
+            }
+            else if (array instanceof Uint8Array)
+            {
+                type = 'UNSIGNED_BYTE';
+            }
+            else if (array instanceof Int8Array || array instanceof Uint8ClampedArray)
+            {
+                type = 'BYTE';
+            }
+            else
+            {
+                type = 'FLOAT';
+            }
         }
-        else if (array instanceof Uint16Array)
+
+        // 处理数组
+        if (Array.isArray(array))
         {
-            type = 'UNSIGNED_SHORT';
+            if (type === 'FLOAT')
+            {
+                array = new Float32Array(array);
+            }
+            else if (type === 'UNSIGNED_INT')
+            {
+                array = new Uint32Array(array);
+            }
+            else if (type === 'INT')
+            {
+                array = new Int32Array(array);
+            }
+            else if (type === 'UNSIGNED_SHORT')
+            {
+                array = new Uint16Array(array);
+            }
+            else if (type === 'SHORT')
+            {
+                array = new Int16Array(array);
+            }
+            else if (type === 'UNSIGNED_BYTE')
+            {
+                array = new Uint8Array(array);
+            }
+            else if (type === 'BYTE')
+            {
+                array = new Int8Array(array);
+            }
+            else
+            {
+                throw `未知元素缓冲区数据类型 ${type}`;
+            }
         }
-        else if (array instanceof Int16Array)
+
+        // 处理数据类型不匹配情况
+        if (type === 'FLOAT')
         {
-            type = 'SHORT';
+            if (!(array instanceof Float32Array))
+            {
+                array = new Float32Array(array);
+            }
         }
-        else if (array instanceof Uint32Array)
+        else if (type === 'UNSIGNED_INT')
         {
-            type = 'UNSIGNED_INT';
+            if (!(array instanceof Uint32Array))
+            {
+                array = new Uint32Array(array);
+            }
         }
-        else if (array instanceof Int32Array)
+        else if (type === 'INT')
         {
-            type = 'INT';
+            if (!(array instanceof Int32Array))
+            {
+                array = new Int32Array(array);
+            }
         }
-        else if (array instanceof Int8Array)
+        else if (type === 'UNSIGNED_SHORT')
         {
-            type = 'BYTE';
+            if (!(array instanceof Uint16Array))
+            {
+                array = new Uint16Array(array);
+            }
         }
-        else if (array instanceof Uint8Array)
+        else if (type === 'SHORT')
         {
-            type = 'UNSIGNED_BYTE';
+            if (!(array instanceof Uint16Array))
+            {
+                array = new Int16Array(array);
+            }
         }
-        else if (array instanceof Uint8ClampedArray)
+        else if (type === 'BYTE')
         {
-            type = 'UNSIGNED_BYTE';
+            if (!(array instanceof Int8Array))
+            {
+                array = new Int8Array(array);
+            }
+        }
+        else if (type === 'UNSIGNED_BYTE')
+        {
+            if (!(array instanceof Uint8Array || array instanceof Uint8ClampedArray))
+            {
+                array = new Uint8Array(array);
+            }
         }
         else
         {
-            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
+            throw `未知元素缓冲区数据类型 ${type}`;
         }
 
         buffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, array as BufferSource, gl[usage]);
+        gl.bufferData(gl.ARRAY_BUFFER, array, gl[usage]);
 
         this.buffer = buffer;
         this.type = type;

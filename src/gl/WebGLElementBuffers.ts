@@ -213,6 +213,27 @@ class WebGLElementBuffer
         let array = element.array;
         let type = element.type;
 
+        // 处理 type
+        if (type === undefined)
+        {
+            if (array instanceof Uint8Array)
+            {
+                type = 'UNSIGNED_BYTE';
+            }
+            else if (array instanceof Uint16Array)
+            {
+                type = 'UNSIGNED_SHORT';
+            }
+            else if (array instanceof Uint32Array)
+            {
+                type = 'UNSIGNED_INT';
+            }
+            else
+            {
+                type = 'UNSIGNED_SHORT';
+            }
+        }
+
         // 处理数组
         if (Array.isArray(array))
         {
@@ -224,10 +245,13 @@ class WebGLElementBuffer
             {
                 array = new Uint32Array(array);
             }
-            else
+            else if (type === 'UNSIGNED_SHORT')
             {
                 array = new Uint16Array(array);
-                type = 'UNSIGNED_SHORT';
+            }
+            else
+            {
+                throw `未知元素缓冲数据类型 ${type}`;
             }
         }
 
@@ -252,6 +276,10 @@ class WebGLElementBuffer
             {
                 array = new Uint32Array(array);
             }
+        }
+        else
+        {
+            throw `未知元素缓冲数据类型 ${type}`;
         }
 
         buffer = gl.createBuffer();

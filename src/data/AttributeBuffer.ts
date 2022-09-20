@@ -9,11 +9,13 @@ export type AttributeBufferSourceTypes = number[]
     | Uint32Array
     | Int32Array
     | Uint16Array
-    | Int16Array
-    | Uint8ClampedArray
+    | Int16Array | Uint8ClampedArray
     | Uint8Array
     | Int8Array;
 
+/**
+ * 属性缓冲数据类型
+ */
 export type AttributeTypes = 'FLOAT' | 'UNSIGNED_SHORT' | 'SHORT' | 'UNSIGNED_INT' | 'INT' | 'BYTE' | 'UNSIGNED_BYTE' | 'UNSIGNED_BYTE';
 
 /**
@@ -53,6 +55,9 @@ export class AttributeBuffer
      */
     usage: AttributeUsage = 'STATIC_DRAW';
 
+    /**
+     * 属性缓冲数据类型
+     */
     type: AttributeTypes;
 
     /**

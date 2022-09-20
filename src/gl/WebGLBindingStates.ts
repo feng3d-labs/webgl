@@ -3,8 +3,8 @@ import { ElementBuffer } from '../data/ElementBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributeBuffers } from './WebGLAttributeBuffers';
 import { WebGLCapabilities } from './WebGLCapabilities';
-import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLElementBuffers } from './WebGLElementBuffers';
+import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLShaders } from './WebGLShaders';
 
 export class WebGLBindingStates
@@ -160,7 +160,7 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
-        const { gl, attributes, capabilities, extensions, shaders } = this;
+        const { attributes, capabilities, extensions, shaders } = this;
 
         if (capabilities.isWebGL2 === false && renderAtomic.getInstanceCount() > 0)
         {
