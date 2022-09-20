@@ -1,3 +1,4 @@
+import { RenderAtomic } from '../data/RenderAtomic';
 import { Shader } from '../data/Shader';
 import { shaderlib } from '../shader/ShaderLib';
 
@@ -13,6 +14,22 @@ export class WebGLShaders
     constructor(gl: WebGLRenderingContext)
     {
         this.gl = gl;
+    }
+
+    activeShader(renderAtomic: RenderAtomic)
+    {
+        const shaderMacro = renderAtomic.getShaderMacro();
+        const shader = renderAtomic.getShader();
+        shader.shaderMacro = shaderMacro;
+        const shaderResult = this.activeShaderProgram(shader);
+        if (!shaderResult)
+        {
+            throw new Error(`缺少着色器，无法渲染!`);
+        }
+        //
+        this.gl.useProgram(shaderResult.program);
+
+        return shaderResult;
     }
 
     /**

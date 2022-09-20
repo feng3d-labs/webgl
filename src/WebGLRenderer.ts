@@ -102,26 +102,22 @@ export class WebGLRenderer
 
         const { bindingStates, renderParams, elementBufferRenderer, uniforms, shaders } = this;
 
-        const shaderMacro = renderAtomic.getShaderMacro();
-        const shader = renderAtomic.getShader();
-        shader.shaderMacro = shaderMacro;
-        const shaderResult = shaders.activeShaderProgram(shader);
-        if (!shaderResult)
+        try
         {
-            console.warn(`缺少着色器，无法渲染!`);
+            const shaderResult = shaders.activeShader(renderAtomic);
 
-            return;
+            renderParams.updateRenderParams(renderAtomic.getRenderParams());
+
+            bindingStates.setup(renderAtomic);
+
+            uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
+
+            elementBufferRenderer.render(renderAtomic, offset, count);
         }
-        //
-        this.gl.useProgram(shaderResult.program);
-
-        renderParams.updateRenderParams(renderAtomic.getRenderParams());
-
-        bindingStates.setup(renderAtomic);
-
-        uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
-
-        elementBufferRenderer.render(renderAtomic, offset, count);
+        catch (error)
+        {
+            console.warn(error);
+        }
     }
 
     dipose()
