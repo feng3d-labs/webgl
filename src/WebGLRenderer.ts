@@ -1,5 +1,4 @@
 /* eslint-disable no-new */
-import { lazy } from '@feng3d/polyfill';
 import { RenderAtomic } from './data/RenderAtomic';
 import { WebGLAttributes } from './gl/WebGLAttributes';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
@@ -97,18 +96,16 @@ export class WebGLRenderer
         this._initGLContext();
     }
 
-    render(renderAtomic: RenderAtomic, first?: number, count?: number)
+    render(renderAtomic: RenderAtomic, offset?: number, count?: number)
     {
         if (this._isContextLost === true) return;
 
-        const { bindingStates, renderParams } = this;
+        const { bindingStates, renderParams, elementBufferRenderer, uniforms, shaders } = this;
 
-        const instanceCount = renderAtomic.getInstanceCount();
-        if (instanceCount === 0) return;
         const shaderMacro = renderAtomic.getShaderMacro();
         const shader = renderAtomic.getShader();
         shader.shaderMacro = shaderMacro;
-        const shaderResult = this.shaders.activeShaderProgram(shader);
+        const shaderResult = shaders.activeShaderProgram(shader);
         if (!shaderResult)
         {
             console.warn(`缺少着色器，无法渲染!`);
@@ -122,26 +119,9 @@ export class WebGLRenderer
 
         bindingStates.setup(renderAtomic);
 
-        this.uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
+        uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
 
-        this.draw(renderAtomic, first, count);
-    }
-
-    /**
-     */
-    private draw(renderAtomic: RenderAtomic, offset?: number, count?: number)
-    {
-        if (offset === undefined)
-        {
-            offset = 0;
-        }
-
-        const { gl, elementBufferRenderer } = this;
-
-        const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
-        const renderMode = gl[renderAtomic.getRenderParams().renderMode];
-
-        elementBufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
+        elementBufferRenderer.render(renderAtomic, offset, count);
     }
 
     dipose()

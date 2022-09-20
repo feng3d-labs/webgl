@@ -1,3 +1,4 @@
+import { lazy } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
 import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
@@ -14,9 +15,12 @@ export class WebGLElementBufferRenderer
         this.webGLRenderer = webGLRenderer;
     }
 
-    render(renderAtomic: RenderAtomic, mode: number, offset: number, count: number, instanceCount: number)
+    render(renderAtomic: RenderAtomic, offset: number, count: number)
     {
         const { gl, extensions, info, capabilities, attributes } = this.webGLRenderer;
+
+        let instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
+        const mode = gl[renderAtomic.getRenderParams().renderMode];
 
         const element = renderAtomic.getIndexBuffer();
 
@@ -42,6 +46,11 @@ export class WebGLElementBufferRenderer
                 // return;
                 vertexNum = 6;
             }
+        }
+
+        if (offset === undefined)
+        {
+            offset = 0;
         }
 
         if (count === undefined)
