@@ -1,14 +1,14 @@
 import { lazy } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
+import { DrawElementType, ElementArrayBuffer } from '../data/ElementArrayBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLRenderer } from '../WebGLRenderer';
 import { AttributeUsage } from './WebGLEnums';
 
-export class WebGLElementBufferRenderer
+export class WebGLElementBuffers
 {
     private webGLRenderer: WebGLRenderer;
-    private buffers = new WeakMap<ElementArrayBuffer, WebGLElementArrayBufferCacle>();
+    private buffers = new WeakMap<ElementArrayBuffer, WebGLElementBuffer>();
 
     constructor(webGLRenderer: WebGLRenderer)
     {
@@ -17,7 +17,7 @@ export class WebGLElementBufferRenderer
 
     render(renderAtomic: RenderAtomic, offset: number, count: number)
     {
-        const { gl, extensions, info, capabilities, attributes } = this.webGLRenderer;
+        const { gl, extensions, info, capabilities, attributeBuffers: attributes } = this.webGLRenderer;
 
         let instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
         const mode = gl[renderAtomic.getRenderParams().renderMode];
@@ -31,7 +31,7 @@ export class WebGLElementBufferRenderer
         if (element)
         {
             const elementCache = this.get(element);
-            type = elementCache.type;
+            type = gl[elementCache.type];
             bytesPerElement = elementCache.bytesPerElement;
             vertexNum = elementCache.count;
         }
@@ -126,7 +126,7 @@ export class WebGLElementBufferRenderer
 
         if (data === undefined)
         {
-            data = new WebGLElementArrayBufferCacle(gl, element);
+            data = new WebGLElementBuffer(gl, element);
             buffers.set(element, data);
         }
 
@@ -153,7 +153,7 @@ export class WebGLElementBufferRenderer
 /**
  * WebGL元素数组缓冲，用于处理每个 ElementArrayBuffer 向WebGL上传数据。
  */
-class WebGLElementArrayBufferCacle
+class WebGLElementBuffer
 {
     gl: WebGLRenderingContext;
     //
@@ -163,7 +163,7 @@ class WebGLElementArrayBufferCacle
     /**
      * 元素数据类型
      */
-    type: number;
+    type: DrawElementType;
 
     /**
      * 每个元素占用字符数量
@@ -210,24 +210,24 @@ class WebGLElementArrayBufferCacle
 
         //
         let array = element.array;
+        let type = element.type;
 
-        let type: number;
         if (Array.isArray(array))
         {
-            type = gl.UNSIGNED_SHORT;
+            type = 'UNSIGNED_SHORT';
             array = new Uint16Array(array);
         }
         else if (array instanceof Uint16Array)
         {
-            type = gl.UNSIGNED_SHORT;
+            type = 'UNSIGNED_SHORT';
         }
         else if (array instanceof Uint32Array)
         {
-            type = gl.UNSIGNED_INT;
+            type = 'UNSIGNED_INT';
         }
         else if (array instanceof Uint8Array)
         {
-            type = gl.UNSIGNED_BYTE;
+            type = 'UNSIGNED_BYTE';
         }
         else
         {

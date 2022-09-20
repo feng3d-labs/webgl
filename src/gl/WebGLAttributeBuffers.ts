@@ -2,7 +2,87 @@ import { watcher } from '@feng3d/watcher';
 import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
-export class WebGLAttributeBufferCacle
+export class WebGLAttributeBuffers
+{
+    private gl: WebGLRenderingContext;
+    private buffers = new WeakMap<AttributeArrayBuffer, WebGLAttributeBuffer>();
+    private capabilities: WebGLCapabilities;
+
+    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
+    {
+        this.gl = gl;
+        this.capabilities = capabilities;
+    }
+
+    get(attribute: AttributeArrayBuffer)
+    {
+        const { buffers } = this;
+
+        return buffers.get(attribute);
+    }
+
+    remove(attribute: AttributeArrayBuffer)
+    {
+        const { buffers } = this;
+
+        const data = buffers.get(attribute);
+
+        if (data)
+        {
+            data.dispose();
+
+            buffers.delete(attribute);
+        }
+    }
+
+    update(attribute: AttributeArrayBuffer, bufferType: number)
+    {
+        const { gl, capabilities, buffers } = this;
+
+        let data = buffers.get(attribute);
+
+        if (data === undefined)
+        {
+            data = new WebGLAttributeBuffer(gl, capabilities, attribute, bufferType);
+            buffers.set(attribute, data);
+        }
+        else if (data.version < attribute.version)
+        {
+            data.updateBuffer(bufferType);
+
+            data.version = attribute.version;
+        }
+    }
+
+    vertexAttribPointer(location: number, attribute: AttributeArrayBuffer)
+    {
+        const { gl, capabilities } = this;
+
+        const attributeBufferCacle = this.get(attribute);
+
+        const size = attribute.itemSize;
+        const buffer = attributeBufferCacle.buffer;
+        const type = attributeBufferCacle.type;
+        const bytesPerElement = attributeBufferCacle.bytesPerElement;
+        const normalized = attributeBufferCacle.normalized;
+
+        const stride = size * bytesPerElement;
+        const offset = 0;
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+        if (capabilities.isWebGL2 === true && (type === gl.INT || type === gl.UNSIGNED_INT))
+        {
+            (gl as WebGL2RenderingContext).vertexAttribIPointer(location, size, type, stride, offset);
+        }
+        else
+        {
+            gl.vertexAttribPointer(location, size, type, normalized, stride, offset);
+        }
+    }
+}
+
+export class WebGLAttributeBuffer
 {
     gl: WebGLRenderingContext;
     capabilities: WebGLCapabilities;
@@ -120,85 +200,5 @@ export class WebGLAttributeBufferCacle
         this.capabilities = null;
         this.attribute = null;
         this.buffer = null;
-    }
-}
-
-export class WebGLAttributes
-{
-    private gl: WebGLRenderingContext;
-    private buffers = new WeakMap<AttributeArrayBuffer, WebGLAttributeBufferCacle>();
-    private capabilities: WebGLCapabilities;
-
-    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
-    {
-        this.gl = gl;
-        this.capabilities = capabilities;
-    }
-
-    get(attribute: AttributeArrayBuffer)
-    {
-        const { buffers } = this;
-
-        return buffers.get(attribute);
-    }
-
-    remove(attribute: AttributeArrayBuffer)
-    {
-        const { buffers } = this;
-
-        const data = buffers.get(attribute);
-
-        if (data)
-        {
-            data.dispose();
-
-            buffers.delete(attribute);
-        }
-    }
-
-    update(attribute: AttributeArrayBuffer, bufferType: number)
-    {
-        const { gl, capabilities, buffers } = this;
-
-        let data = buffers.get(attribute);
-
-        if (data === undefined)
-        {
-            data = new WebGLAttributeBufferCacle(gl, capabilities, attribute, bufferType);
-            buffers.set(attribute, data);
-        }
-        else if (data.version < attribute.version)
-        {
-            data.updateBuffer(bufferType);
-
-            data.version = attribute.version;
-        }
-    }
-
-    vertexAttribPointer(location: number, attribute: AttributeArrayBuffer)
-    {
-        const { gl, capabilities } = this;
-
-        const attributeBufferCacle = this.get(attribute);
-
-        const size = attribute.itemSize;
-        const buffer = attributeBufferCacle.buffer;
-        const type = attributeBufferCacle.type;
-        const bytesPerElement = attributeBufferCacle.bytesPerElement;
-        const normalized = attributeBufferCacle.normalized;
-
-        const stride = size * bytesPerElement;
-        const offset = 0;
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-
-        if (capabilities.isWebGL2 === true && (type === gl.INT || type === gl.UNSIGNED_INT))
-        {
-            (gl as WebGL2RenderingContext).vertexAttribIPointer(location, size, type, stride, offset);
-        }
-        else
-        {
-            gl.vertexAttribPointer(location, size, type, normalized, stride, offset);
-        }
     }
 }

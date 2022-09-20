@@ -1,5 +1,5 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
-import { WebGLAttributes } from '../gl/WebGLAttributes';
+import { WebGLAttributeBuffers } from '../gl/WebGLAttributeBuffers';
 import { ShaderMacro } from '../shader/Macro';
 import { AttributeArrayBuffer } from './AttributeArrayBuffer';
 import { ElementArrayBuffer } from './ElementArrayBuffer';
@@ -184,7 +184,7 @@ export class RenderAtomic
      * @param attributes
      * @returns
      */
-    getAttributeVertexNum(attributes: WebGLAttributes)
+    getAttributeVertexNum(attributes: WebGLAttributeBuffers)
     {
         const vertexNum = ((attributelist) =>
         {

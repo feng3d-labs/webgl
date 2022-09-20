@@ -1,11 +1,11 @@
 /* eslint-disable no-new */
 import { RenderAtomic } from './data/RenderAtomic';
-import { WebGLAttributes } from './gl/WebGLAttributes';
+import { WebGLAttributeBuffers } from './gl/WebGLAttributeBuffers';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLRenderbuffers } from './gl/WebGLBuffers';
 import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
-import { WebGLElementBufferRenderer } from './gl/WebGLElementBufferRenderer';
+import { WebGLElementBuffers } from './gl/WebGLElementBuffers';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
 import { WebGLInfo } from './gl/WebGLInfo';
@@ -61,13 +61,13 @@ export class WebGLRenderer
     shaders: WebGLShaders;
     state: WebGLState;
     bindingStates: WebGLBindingStates;
-    attributes: WebGLAttributes;
+    attributeBuffers: WebGLAttributeBuffers;
     renderParams: WebGLRenderParams;
     uniforms: WebGLUniforms;
     renderbuffers: WebGLRenderbuffers;
     framebuffers: WebGLFramebuffers;
 
-    elementBufferRenderer: WebGLElementBufferRenderer;
+    elementBuffers: WebGLElementBuffers;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
     {
@@ -100,7 +100,7 @@ export class WebGLRenderer
     {
         if (this._isContextLost === true) return;
 
-        const { bindingStates, renderParams, elementBufferRenderer, uniforms, shaders } = this;
+        const { bindingStates, renderParams, elementBuffers: elementBufferRenderer, uniforms, shaders } = this;
 
         try
         {
@@ -138,11 +138,10 @@ export class WebGLRenderer
         this.shaders = new WebGLShaders(this.gl);
         this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
-        this.attributes = new WebGLAttributes(this.gl, this.capabilities);
+        this.attributeBuffers = new WebGLAttributeBuffers(this.gl, this.capabilities);
+        this.elementBuffers = new WebGLElementBuffers(this);
 
-        this.elementBufferRenderer = new WebGLElementBufferRenderer(this);
-
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.elementBufferRenderer, this.capabilities, this.shaders);
+        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributeBuffers, this.elementBuffers, this.capabilities, this.shaders);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
         this.uniforms = new WebGLUniforms(this.gl, this.textures);
         this.renderbuffers = new WebGLRenderbuffers(this.gl);

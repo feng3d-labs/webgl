@@ -1,18 +1,18 @@
 import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
 import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
-import { WebGLAttributes } from './WebGLAttributes';
+import { WebGLAttributeBuffers } from './WebGLAttributeBuffers';
 import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
-import { WebGLElementBufferRenderer } from './WebGLElementBufferRenderer';
+import { WebGLElementBuffers } from './WebGLElementBuffers';
 import { WebGLShaders } from './WebGLShaders';
 
 export class WebGLBindingStates
 {
     private gl: WebGLRenderingContext;
     private extensions: WebGLExtensions;
-    private attributes: WebGLAttributes;
-    private elementBufferRenderer: WebGLElementBufferRenderer;
+    private attributes: WebGLAttributeBuffers;
+    private elementArrayBuffers: WebGLElementBuffers;
     private capabilities: WebGLCapabilities;
     private shaders: WebGLShaders;
 
@@ -20,12 +20,12 @@ export class WebGLBindingStates
     private defaultState: BindingState;
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributes, elementBufferRenderer: WebGLElementBufferRenderer, capabilities: WebGLCapabilities, shaders: WebGLShaders)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributeBuffers, elementArrayBuffers: WebGLElementBuffers, capabilities: WebGLCapabilities, shaders: WebGLShaders)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.attributes = attributes;
-        this.elementBufferRenderer = elementBufferRenderer;
+        this.elementArrayBuffers = elementArrayBuffers;
         this.capabilities = capabilities;
         this.shaders = shaders;
 
@@ -35,7 +35,7 @@ export class WebGLBindingStates
 
     setup(renderAtomic: RenderAtomic)
     {
-        const { elementBufferRenderer: indexedBufferRenderer, capabilities } = this;
+        const { elementArrayBuffers: indexedBufferRenderer, capabilities } = this;
 
         let updateBuffers = false;
 
