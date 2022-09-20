@@ -1,5 +1,5 @@
-export * from './data/AttributeArrayBuffer';
-export * from './data/ElementArrayBuffer';
+export * from './data/AttributeBuffer';
+export * from './data/ElementBuffer';
 export * from './data/FrameBuffer';
 export * from './data/RenderAtomic';
 export * from './data/RenderParams';

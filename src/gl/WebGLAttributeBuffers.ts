@@ -1,11 +1,11 @@
 import { watcher } from '@feng3d/watcher';
-import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
+import { AttributeBuffer } from '../data/AttributeBuffer';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
 export class WebGLAttributeBuffers
 {
     private gl: WebGLRenderingContext;
-    private buffers = new WeakMap<AttributeArrayBuffer, WebGLAttributeBuffer>();
+    private buffers = new WeakMap<AttributeBuffer, WebGLAttributeBuffer>();
     private capabilities: WebGLCapabilities;
 
     constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities)
@@ -14,14 +14,14 @@ export class WebGLAttributeBuffers
         this.capabilities = capabilities;
     }
 
-    get(attribute: AttributeArrayBuffer)
+    get(attribute: AttributeBuffer)
     {
         const { buffers } = this;
 
         return buffers.get(attribute);
     }
 
-    remove(attribute: AttributeArrayBuffer)
+    remove(attribute: AttributeBuffer)
     {
         const { buffers } = this;
 
@@ -35,7 +35,7 @@ export class WebGLAttributeBuffers
         }
     }
 
-    update(attribute: AttributeArrayBuffer, bufferType: number)
+    update(attribute: AttributeBuffer, bufferType: number)
     {
         const { gl, capabilities, buffers } = this;
 
@@ -54,7 +54,7 @@ export class WebGLAttributeBuffers
         }
     }
 
-    vertexAttribPointer(location: number, attribute: AttributeArrayBuffer)
+    vertexAttribPointer(location: number, attribute: AttributeBuffer)
     {
         const { gl, capabilities } = this;
 
@@ -87,7 +87,7 @@ export class WebGLAttributeBuffer
     gl: WebGLRenderingContext;
     capabilities: WebGLCapabilities;
     //
-    attribute: AttributeArrayBuffer;
+    attribute: AttributeBuffer;
     buffer: WebGLBuffer;
     type: number;
 
@@ -104,7 +104,7 @@ export class WebGLAttributeBuffer
     bytesPerElement: number;
     version: number;
 
-    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: AttributeArrayBuffer, bufferType: number)
+    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: AttributeBuffer, bufferType: number)
     {
         this.gl = gl;
         this.capabilities = capabilities;

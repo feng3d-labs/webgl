@@ -1,6 +1,6 @@
 import { lazy } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { DrawElementType, ElementArrayBuffer } from '../data/ElementArrayBuffer';
+import { DrawElementType, ElementBuffer } from '../data/ElementBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLRenderer } from '../WebGLRenderer';
 import { AttributeUsage } from './WebGLEnums';
@@ -8,7 +8,7 @@ import { AttributeUsage } from './WebGLEnums';
 export class WebGLElementBuffers
 {
     private webGLRenderer: WebGLRenderer;
-    private buffers = new WeakMap<ElementArrayBuffer, WebGLElementBuffer>();
+    private buffers = new WeakMap<ElementBuffer, WebGLElementBuffer>();
 
     constructor(webGLRenderer: WebGLRenderer)
     {
@@ -107,7 +107,7 @@ export class WebGLElementBuffers
         info.update(count, mode, instanceCount);
     }
 
-    bindBuffer(element: ElementArrayBuffer)
+    bindBuffer(element: ElementBuffer)
     {
         const { gl } = this.webGLRenderer;
 
@@ -117,7 +117,7 @@ export class WebGLElementBuffers
         }
     }
 
-    get(element: ElementArrayBuffer)
+    get(element: ElementBuffer)
     {
         const { gl } = this.webGLRenderer;
         const buffers = this.buffers;
@@ -135,7 +135,7 @@ export class WebGLElementBuffers
         return data;
     }
 
-    remove(element: ElementArrayBuffer)
+    remove(element: ElementBuffer)
     {
         const { buffers } = this;
 
@@ -151,13 +151,13 @@ export class WebGLElementBuffers
 }
 
 /**
- * WebGL元素数组缓冲，用于处理每个 ElementArrayBuffer 向WebGL上传数据。
+ * WebGL元素数组缓冲，用于处理每个 ElementBuffer 向WebGL上传数据。
  */
 class WebGLElementBuffer
 {
     gl: WebGLRenderingContext;
     //
-    element: ElementArrayBuffer;
+    element: ElementBuffer;
     buffer: WebGLBuffer;
 
     /**
@@ -177,7 +177,7 @@ class WebGLElementBuffer
 
     version = -1;
 
-    constructor(gl: WebGLRenderingContext, element: ElementArrayBuffer)
+    constructor(gl: WebGLRenderingContext, element: ElementBuffer)
     {
         this.gl = gl;
         this.element = element;

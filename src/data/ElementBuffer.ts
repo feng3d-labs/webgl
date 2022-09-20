@@ -9,14 +9,14 @@ import { AttributeUsage } from '../gl/WebGLEnums';
 export type DrawElementType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT';
 
 /**
- * WebGL元素索引的缓冲
+ * WebGL顶点索引的缓冲
  *
  * 使用 gl.ELEMENT_ARRAY_BUFFER 进行绑定数据。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export class ElementArrayBuffer
+export class ElementBuffer
 {
     /**
      * 数据
@@ -48,7 +48,7 @@ export class ElementArrayBuffer
     {
         if (Array.isArray(array))
         {
-            throw new TypeError('AttributeArrayBuffer: array should be a Typed Array.');
+            throw new TypeError('AttributeBuffer: array should be a Typed Array.');
         }
 
         this.array = array;

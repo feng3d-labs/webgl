@@ -1,4 +1,4 @@
-import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
+import { AttributeBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -28,7 +28,7 @@ import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src'
 
     const renderAtomic = new RenderAtomic({
         attributes: {
-            pos: new AttributeArrayBuffer(new Float32Array([
+            pos: new AttributeBuffer(new Float32Array([
                 -1.0, -1.0,
                 -1.0, 1.0,
                 1.0, -1.0,
@@ -36,7 +36,7 @@ import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src'
             ]), 2) as any,
         },
         uniforms: {},
-        index: new AttributeArrayBuffer(new Uint16Array([
+        index: new AttributeBuffer(new Uint16Array([
             0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
         ]), 1) as any,
         instanceCount: 2,

@@ -2,9 +2,9 @@ import { WebGLBufferSourceTypes } from '@feng3d/polyfill';
 import { AttributeUsage } from '../gl/WebGLEnums';
 
 /**
- * WebGL顶点数组缓冲
+ * WebGL顶点属性缓冲
  */
-export class AttributeArrayBuffer
+export class AttributeBuffer
 {
     /**
      * 数据
@@ -47,7 +47,7 @@ export class AttributeArrayBuffer
     {
         if (Array.isArray(array))
         {
-            throw new TypeError('AttributeArrayBuffer: array should be a Typed Array.');
+            throw new TypeError('AttributeBuffer: array should be a Typed Array.');
         }
 
         this.array = array;

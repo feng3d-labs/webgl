@@ -1,5 +1,5 @@
-import { AttributeArrayBuffer } from '../data/AttributeArrayBuffer';
-import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
+import { AttributeBuffer } from '../data/AttributeBuffer';
+import { ElementBuffer } from '../data/ElementBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLAttributeBuffers } from './WebGLAttributeBuffers';
 import { WebGLCapabilities } from './WebGLCapabilities';
@@ -121,7 +121,7 @@ export class WebGLBindingStates
     {
         const { currentState, shaders } = this;
 
-        const cache: { [key: string]: { version: number, attribute: AttributeArrayBuffer } } = {};
+        const cache: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
         let attributesNum = 0;
 
         const shader = renderAtomic.getShader();
@@ -136,7 +136,7 @@ export class WebGLBindingStates
             {
                 const attribute = renderAtomic.getAttributeByKey(name);
 
-                const data: { version: number, attribute: AttributeArrayBuffer } = {} as any;
+                const data: { version: number, attribute: AttributeBuffer } = {} as any;
                 data.attribute = attribute;
                 data.version = attribute.version;
 
@@ -369,12 +369,12 @@ class BindingState
     /**
      * WebGL属性缓存信息
      */
-    attributes: { [key: string]: { version: number, attribute: AttributeArrayBuffer } } = {};
+    attributes: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
 
     /**
      * 顶点索引缓冲
      */
-    index: ElementArrayBuffer;
+    index: ElementBuffer;
 
     /**
      * 属性数量。

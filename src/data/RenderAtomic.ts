@@ -1,8 +1,8 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
 import { WebGLAttributeBuffers } from '../gl/WebGLAttributeBuffers';
 import { ShaderMacro } from '../shader/Macro';
-import { AttributeArrayBuffer } from './AttributeArrayBuffer';
-import { ElementArrayBuffer } from './ElementArrayBuffer';
+import { AttributeBuffer } from './AttributeBuffer';
+import { ElementBuffer } from './ElementBuffer';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
 import { Uniforms } from './Uniform';
@@ -30,7 +30,7 @@ export class RenderAtomic
     /**
      * 顶点索引缓冲
      */
-    index: ElementArrayBuffer;
+    index: ElementBuffer;
 
     /**
      * 属性数据列表
@@ -49,7 +49,7 @@ export class RenderAtomic
         }
     }
 
-    private _attributes: { [key: string]: AttributeArrayBuffer; } = {};
+    private _attributes: { [key: string]: AttributeBuffer; } = {};
 
     /**
      * Uniform渲染数据
@@ -111,14 +111,14 @@ export class RenderAtomic
         Object.assign(this, source);
     }
 
-    getIndexBuffer(): ElementArrayBuffer
+    getIndexBuffer(): ElementBuffer
     {
         if (this.index !== undefined) return this.index;
 
         return (this.next && this.next.getIndexBuffer());
     }
 
-    getAttributes(attributes: { [key: string]: AttributeArrayBuffer; } = {})
+    getAttributes(attributes: { [key: string]: AttributeBuffer; } = {})
     {
         this.next && this.next.getAttributes(attributes);
         Object.assign(attributes, this.attributes);
@@ -126,7 +126,7 @@ export class RenderAtomic
         return attributes;
     }
 
-    getAttributeByKey(key: string): AttributeArrayBuffer
+    getAttributeByKey(key: string): AttributeBuffer
     {
         if (this.attributes[key] !== undefined) return this.attributes[key];
 

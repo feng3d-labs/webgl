@@ -1,4 +1,4 @@
-import { AttributeArrayBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
+import { AttributeBuffer, RenderAtomic, WebGLRenderer } from '../../../src';
 import { angleNormals } from './mikolalysenko/angle-normals';
 import * as bunny from './mikolalysenko/bunny';
 import { createCamera } from './util/camera';
@@ -41,10 +41,10 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
 
 const renderAtomic = new RenderAtomic({
     attributes: {
-        position: new AttributeArrayBuffer(new Float32Array(positions), 3) as any,
-        normal: new AttributeArrayBuffer(new Float32Array(normals), 3) as any,
+        position: new AttributeBuffer(new Float32Array(positions), 3) as any,
+        normal: new AttributeBuffer(new Float32Array(normals), 3) as any,
     },
-    index: new AttributeArrayBuffer(new Uint16Array(indices), 1) as any,
+    index: new AttributeBuffer(new Uint16Array(indices), 1) as any,
     uniforms: {},
     renderParams: { cullFace: 'NONE', enableBlend: true },
     shader: {

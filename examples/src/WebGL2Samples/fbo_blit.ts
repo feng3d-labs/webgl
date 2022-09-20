@@ -1,5 +1,5 @@
 import { gPartial } from '@feng3d/polyfill';
-import { AttributeArrayBuffer, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { AttributeBuffer, RenderAtomic, Texture, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -41,7 +41,7 @@ import { AttributeArrayBuffer, RenderAtomic, Texture, WebGLRenderer } from '../.
 
         const renderAtomic = new RenderAtomic({
             attributes: {
-                position: new AttributeArrayBuffer(new Float32Array([
+                position: new AttributeBuffer(new Float32Array([
                     -1.0, -1.0,
                     1.0, -1.0,
                     1.0, 1.0,
@@ -49,7 +49,7 @@ import { AttributeArrayBuffer, RenderAtomic, Texture, WebGLRenderer } from '../.
                     -1.0, 1.0,
                     -1.0, -1.0
                 ]), 2) as any,
-                texcoord: new AttributeArrayBuffer(new Float32Array([
+                texcoord: new AttributeBuffer(new Float32Array([
                     0.0, 1.0,
                     1.0, 1.0,
                     1.0, 0.0,
