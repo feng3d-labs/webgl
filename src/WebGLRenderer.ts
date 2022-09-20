@@ -1,21 +1,21 @@
 /* eslint-disable no-new */
 import { lazy } from '@feng3d/polyfill';
 import { RenderAtomic } from './data/RenderAtomic';
+import { WebGLAttributes } from './gl/WebGLAttributes';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLRenderbuffers } from './gl/WebGLBuffers';
 import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
+import { WebGLElementBufferRenderer } from './gl/WebGLElementBufferRenderer';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
-import { WebGLElementBufferRenderer } from './gl/WebGLElementBufferRenderer';
 import { WebGLInfo } from './gl/WebGLInfo';
 import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLShaders } from './gl/WebGLShaders';
 import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { WebGLUniforms } from './gl/WebGLUniforms';
-import { WebGLAttributes } from './gl/WebGLAttributes';
 
 export interface WebGLRendererParameters extends WebGLContextAttributes
 {
@@ -149,8 +149,6 @@ export class WebGLRenderer
             const attribute = indexedBufferRenderer.get(index);
             indexedBufferRenderer.setIndex(attribute);
 
-            indexedBufferRenderer.setMode(renderMode);
-
             if (count === undefined)
             {
                 count = attribute.count - first;
@@ -158,11 +156,11 @@ export class WebGLRenderer
 
             if (instanceCount > 1)
             {
-                indexedBufferRenderer.renderInstances(first, count, instanceCount);
+                indexedBufferRenderer.renderInstances(renderMode, first, count, instanceCount);
             }
             else
             {
-                indexedBufferRenderer.render(first, count);
+                indexedBufferRenderer.render(renderMode, first, count);
             }
         }
         else
@@ -190,7 +188,6 @@ export class WebGLRenderer
                 vertexNum = 6;
             }
 
-            bufferRenderer.setMode(renderMode);
             if (count === undefined)
             {
                 count = vertexNum;
@@ -198,11 +195,11 @@ export class WebGLRenderer
 
             if (instanceCount > 1)
             {
-                bufferRenderer.renderInstances(first, count, instanceCount);
+                bufferRenderer.renderInstances(renderMode, first, count, instanceCount);
             }
             else
             {
-                bufferRenderer.render(first, count);
+                bufferRenderer.render(renderMode, first, count);
             }
         }
     }

@@ -1,12 +1,12 @@
 import { watcher } from '@feng3d/watcher';
 import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
 import { WebGLCapabilities } from './WebGLCapabilities';
+import { AttributeUsage } from './WebGLEnums';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';
 
 export class WebGLElementBufferRenderer
 {
-    mode: number;
     type: number;
     bytesPerElement: number;
 
@@ -25,31 +25,26 @@ export class WebGLElementBufferRenderer
         this.capabilities = capabilities;
     }
 
-    setMode(value: number)
-    {
-        this.mode = value;
-    }
-
     setIndex(value: WebGLElementArrayBufferCacle)
     {
         this.type = value.type;
         this.bytesPerElement = value.bytesPerElement;
     }
 
-    render(start: number, count: number)
+    render(mode: number, start: number, count: number)
     {
-        const { gl, info, mode, type, bytesPerElement } = this;
+        const { gl, info, type, bytesPerElement } = this;
 
         gl.drawElements(mode, count, type, start * bytesPerElement);
 
         info.update(count, mode, 1);
     }
 
-    renderInstances(start: number, count: number, primcount: number)
+    renderInstances(mode: number, start: number, count: number, primcount: number)
     {
         if (primcount === 0) return;
 
-        const { gl, extensions, info, capabilities, mode, type, bytesPerElement } = this;
+        const { gl, extensions, info, capabilities, type, bytesPerElement } = this;
 
         if (capabilities.isWebGL2)
         {
@@ -138,13 +133,14 @@ class WebGLElementArrayBufferCacle
     {
         this.gl = gl;
 
+        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
+
         const array = element.array;
-        const usage = gl[element.usage];
 
         const buffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array as any, usage);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array as any, gl[usage]);
 
         let type: number;
 

@@ -4,8 +4,6 @@ import { WebGLInfo } from './WebGLInfo';
 
 export class WebGLBufferRenderer
 {
-    mode: number;
-
     gl: WebGLRenderingContext;
     extensions: WebGLExtensions;
     info: WebGLInfo;
@@ -19,25 +17,20 @@ export class WebGLBufferRenderer
         this.capabilities = capabilities;
     }
 
-    setMode(value: number)
+    render(mode: number, start: number, count: number)
     {
-        this.mode = value;
-    }
-
-    render(start: number, count: number)
-    {
-        const { gl, info, mode } = this;
+        const { gl, info } = this;
 
         gl.drawArrays(mode, start, count);
 
         info.update(count, mode, 1);
     }
 
-    renderInstances(start: number, count: number, primcount: number)
+    renderInstances(mode: number, start: number, count: number, primcount: number)
     {
         if (primcount === 0) return;
 
-        const { gl, extensions, info, capabilities, mode } = this;
+        const { gl, extensions, info, capabilities } = this;
 
         if (capabilities.isWebGL2)
         {
