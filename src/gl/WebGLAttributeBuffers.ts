@@ -1,5 +1,5 @@
 import { watcher } from '@feng3d/watcher';
-import { AttributeBuffer } from '../data/AttributeBuffer';
+import { AttributeBuffer, AttributeTypes } from '../data/AttributeBuffer';
 import { WebGLCapabilities } from './WebGLCapabilities';
 
 export class WebGLAttributeBuffers
@@ -35,7 +35,7 @@ export class WebGLAttributeBuffers
         }
     }
 
-    update(attribute: AttributeBuffer, bufferType: number)
+    update(attribute: AttributeBuffer)
     {
         const { gl, capabilities, buffers } = this;
 
@@ -43,15 +43,10 @@ export class WebGLAttributeBuffers
 
         if (data === undefined)
         {
-            data = new WebGLAttributeBuffer(gl, capabilities, attribute, bufferType);
+            data = new WebGLAttributeBuffer(gl, capabilities, attribute);
             buffers.set(attribute, data);
         }
-        else if (data.version < attribute.version)
-        {
-            data.updateBuffer(bufferType);
-
-            data.version = attribute.version;
-        }
+        data.updateBuffer();
     }
 
     vertexAttribPointer(location: number, attribute: AttributeBuffer)
@@ -62,7 +57,7 @@ export class WebGLAttributeBuffers
 
         const size = attribute.itemSize;
         const buffer = attributeBufferCacle.buffer;
-        const type = attributeBufferCacle.type;
+        const type = gl[attributeBufferCacle.type];
         const bytesPerElement = attributeBufferCacle.bytesPerElement;
         const normalized = attributeBufferCacle.normalized;
 
@@ -89,7 +84,8 @@ export class WebGLAttributeBuffer
     //
     attribute: AttributeBuffer;
     buffer: WebGLBuffer;
-    type: number;
+
+    type: AttributeTypes;
 
     /**
      * 数据数量
@@ -102,71 +98,14 @@ export class WebGLAttributeBuffer
     normalized: boolean;
 
     bytesPerElement: number;
-    version: number;
+    version = -1;
 
-    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: AttributeBuffer, bufferType: number)
+    constructor(gl: WebGLRenderingContext, capabilities: WebGLCapabilities, attribute: AttributeBuffer)
     {
         this.gl = gl;
         this.capabilities = capabilities;
 
-        const array = attribute.array;
-        const usage = gl[attribute.usage];
-
-        const buffer = gl.createBuffer();
-
-        gl.bindBuffer(bufferType, buffer);
-        gl.bufferData(bufferType, array as BufferSource, usage);
-
-        let type: number;
-
-        if (array instanceof Float32Array)
-        {
-            type = gl.FLOAT;
-        }
-        else if (array instanceof Uint16Array)
-        {
-            type = gl.UNSIGNED_SHORT;
-        }
-        else if (array instanceof Int16Array)
-        {
-            type = gl.SHORT;
-        }
-        else if (array instanceof Uint32Array)
-        {
-            type = gl.UNSIGNED_INT;
-        }
-        else if (array instanceof Int32Array)
-        {
-            type = gl.INT;
-        }
-        else if (array instanceof Int8Array)
-        {
-            type = gl.BYTE;
-        }
-        else if (array instanceof Uint8Array)
-        {
-            type = gl.UNSIGNED_BYTE;
-        }
-        else if (array instanceof Uint8ClampedArray)
-        {
-            type = gl.UNSIGNED_BYTE;
-        }
-        else
-        {
-            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
-        }
-
-        const count = array !== undefined ? array.length / attribute.itemSize : 0;
-
-        const normalized = attribute.normalized === true;
-
         this.attribute = attribute;
-        this.buffer = buffer;
-        this.type = type;
-        this.count = count;
-        this.normalized = normalized;
-        this.bytesPerElement = array.BYTES_PER_ELEMENT;
-        this.version = attribute.version;
 
         //
         watcher.watch(attribute, 'array', this.needsUpdate, this);
@@ -174,18 +113,79 @@ export class WebGLAttributeBuffer
 
     private needsUpdate()
     {
-        this.attribute.version++;
+        this.attribute.version = ~~this.attribute.version + 1;
     }
 
-    updateBuffer(bufferType: number)
+    updateBuffer()
     {
-        const { gl, buffer, attribute } = this;
+        const { gl, attribute } = this;
+
+        if (this.version === attribute.version)
+        {
+            return;
+        }
+        this.version = attribute.version;
+
+        // 删除过时的缓冲
+        let buffer = this.buffer;
+        if (buffer)
+        {
+            gl.deleteBuffer(buffer);
+        }
 
         const array = attribute.array;
+        const usage = attribute.usage || 'STATIC_DRAW';
+        const count = array !== undefined ? array.length / attribute.itemSize : 0;
+        const normalized = attribute.normalized === true;
+        let type = attribute.type;
 
-        gl.bindBuffer(bufferType, buffer);
+        if (array instanceof Float32Array)
+        {
+            type = 'FLOAT';
+        }
+        else if (array instanceof Uint16Array)
+        {
+            type = 'UNSIGNED_SHORT';
+        }
+        else if (array instanceof Int16Array)
+        {
+            type = 'SHORT';
+        }
+        else if (array instanceof Uint32Array)
+        {
+            type = 'UNSIGNED_INT';
+        }
+        else if (array instanceof Int32Array)
+        {
+            type = 'INT';
+        }
+        else if (array instanceof Int8Array)
+        {
+            type = 'BYTE';
+        }
+        else if (array instanceof Uint8Array)
+        {
+            type = 'UNSIGNED_BYTE';
+        }
+        else if (array instanceof Uint8ClampedArray)
+        {
+            type = 'UNSIGNED_BYTE';
+        }
+        else
+        {
+            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
+        }
 
-        gl.bufferSubData(bufferType, 0, array);
+        buffer = gl.createBuffer();
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, array as BufferSource, gl[usage]);
+
+        this.buffer = buffer;
+        this.type = type;
+        this.count = count;
+        this.normalized = normalized;
+        this.bytesPerElement = array.BYTES_PER_ELEMENT;
     }
 
     dispose()

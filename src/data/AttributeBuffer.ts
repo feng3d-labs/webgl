@@ -14,6 +14,8 @@ export type AttributeBufferSourceTypes = number[]
     | Uint8Array
     | Int8Array;
 
+export type AttributeTypes = 'FLOAT' | 'UNSIGNED_SHORT' | 'SHORT' | 'UNSIGNED_INT' | 'INT' | 'BYTE' | 'UNSIGNED_BYTE' | 'UNSIGNED_BYTE';
+
 /**
  * WebGL顶点属性缓冲
  */
@@ -50,6 +52,8 @@ export class AttributeBuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
     usage: AttributeUsage = 'STATIC_DRAW';
+
+    type: AttributeTypes;
 
     /**
      * 版本号，用于标记是否变化。

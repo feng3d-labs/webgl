@@ -186,7 +186,7 @@ export class WebGLBindingStates
 
             this.enableAttribute(location, attribute.divisor);
 
-            attributes.update(attribute, gl.ARRAY_BUFFER);
+            attributes.update(attribute);
 
             attributes.vertexAttribPointer(location, attribute);
         }

@@ -1,6 +1,6 @@
 import { lazy } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { DrawElementType, ElementBuffer } from '../data/ElementBuffer';
+import { DrawElementTypes, ElementBuffer } from '../data/ElementBuffer';
 import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLRenderer } from '../WebGLRenderer';
 import { AttributeUsage } from './WebGLEnums';
@@ -163,7 +163,7 @@ class WebGLElementBuffer
     /**
      * 元素数据类型
      */
-    type: DrawElementType;
+    type: DrawElementTypes;
 
     /**
      * 每个元素占用字符数量
@@ -209,6 +209,7 @@ class WebGLElementBuffer
         }
 
         //
+        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
         let array = element.array;
         let type = element.type;
 
@@ -253,16 +254,15 @@ class WebGLElementBuffer
             }
         }
 
-        this.type = type;
-        this.count = array.length;
-        this.bytesPerElement = array.BYTES_PER_ELEMENT;
-
-        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
-
-        buffer = this.buffer = gl.createBuffer();
+        buffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[usage]);
+
+        this.type = type;
+        this.count = array.length;
+        this.bytesPerElement = array.BYTES_PER_ELEMENT;
+        this.buffer = buffer;
     }
 
     dispose()

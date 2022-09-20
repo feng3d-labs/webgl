@@ -10,7 +10,7 @@ export type ElementBufferSourceTypes = number[] | Uint16Array | Uint32Array | Ui
  *
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type DrawElementType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT';
+export type DrawElementTypes = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT';
 
 /**
  * WebGL元素缓冲，顶点索引缓冲。
@@ -41,7 +41,7 @@ export interface ElementBuffer
      *
      * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
      */
-    type?: DrawElementType;
+    type?: DrawElementTypes;
 
     /**
      * 版本号，用于标记是否变化。
