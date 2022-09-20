@@ -20,7 +20,7 @@ export type DrawElementType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export class ElementBuffer
+export interface ElementBuffer
 {
     /**
      * 数据
@@ -34,27 +34,17 @@ export class ElementBuffer
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    usage: AttributeUsage = 'STATIC_DRAW';
+    usage?: AttributeUsage;
 
     /**
      * 指定元素数组缓冲区中的值的类型，默认为`UNSIGNED_SHORT`。
      *
      * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
      */
-    type: DrawElementType;
+    type?: DrawElementType;
 
     /**
      * 版本号，用于标记是否变化。
      */
-    version = 0;
-
-    constructor(array: ElementBufferSourceTypes)
-    {
-        if (Array.isArray(array))
-        {
-            throw new TypeError('AttributeBuffer: array should be a Typed Array.');
-        }
-
-        this.array = array;
-    }
+    version?:number;
 }

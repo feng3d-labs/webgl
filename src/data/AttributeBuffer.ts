@@ -3,7 +3,8 @@ import { AttributeUsage } from '../gl/WebGLEnums';
 /**
  * 属性缓冲数据类型。
  */
-export type AttributeBufferSourceTypes = Float64Array
+export type AttributeBufferSourceTypes = number[]
+    | Float64Array
     | Float32Array
     | Uint32Array
     | Int32Array
