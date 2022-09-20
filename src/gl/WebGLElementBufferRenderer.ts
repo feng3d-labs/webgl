@@ -4,7 +4,7 @@ import { WebGLCapabilities } from './WebGLCapabilities';
 import { WebGLExtensions } from './WebGLExtensions';
 import { WebGLInfo } from './WebGLInfo';
 
-export class WebGLIndexedBufferRenderer
+export class WebGLElementBufferRenderer
 {
     mode: number;
     type: number;
