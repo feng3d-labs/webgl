@@ -12,7 +12,7 @@ export class WebGLBindingStates
     private gl: WebGLRenderingContext;
     private extensions: WebGLExtensions;
     private attributes: WebGLAttributeBuffers;
-    private elementArrayBuffers: WebGLElementBuffers;
+    private elementBuffers: WebGLElementBuffers;
     private capabilities: WebGLCapabilities;
     private shaders: WebGLShaders;
 
@@ -20,12 +20,12 @@ export class WebGLBindingStates
     private defaultState: BindingState;
     private bindingStates = new WeakMap<RenderAtomic, BindingState>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributeBuffers, elementArrayBuffers: WebGLElementBuffers, capabilities: WebGLCapabilities, shaders: WebGLShaders)
+    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, attributes: WebGLAttributeBuffers, elementBuffers: WebGLElementBuffers, capabilities: WebGLCapabilities, shaders: WebGLShaders)
     {
         this.gl = gl;
         this.extensions = extensions;
         this.attributes = attributes;
-        this.elementArrayBuffers = elementArrayBuffers;
+        this.elementBuffers = elementBuffers;
         this.capabilities = capabilities;
         this.shaders = shaders;
 
@@ -35,7 +35,7 @@ export class WebGLBindingStates
 
     setup(renderAtomic: RenderAtomic)
     {
-        const { elementArrayBuffers: indexedBufferRenderer, capabilities } = this;
+        const { elementBuffers: indexedBufferRenderer, capabilities } = this;
 
         let updateBuffers = false;
 
