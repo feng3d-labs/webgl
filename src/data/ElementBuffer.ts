@@ -3,7 +3,7 @@ import { AttributeUsage } from '../gl/WebGLEnums';
 /**
  * 元素缓冲数据类型
  */
-export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
+export type ElementBufferSourceTypes = number[] | Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 指定元素数组缓冲区中的值的类型。

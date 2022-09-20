@@ -212,27 +212,47 @@ class WebGLElementBuffer
         let array = element.array;
         let type = element.type;
 
+        // 处理数组
         if (Array.isArray(array))
         {
-            type = 'UNSIGNED_SHORT';
-            array = new Uint16Array(array);
+            if (type === 'UNSIGNED_BYTE')
+            {
+                array = new Uint8Array(array);
+            }
+            else if (type === 'UNSIGNED_INT')
+            {
+                array = new Uint32Array(array);
+            }
+            else
+            {
+                array = new Uint16Array(array);
+                type = 'UNSIGNED_SHORT';
+            }
         }
-        else if (array instanceof Uint16Array)
+
+        // 处理数据类型不匹配情况
+        if (type === 'UNSIGNED_BYTE')
         {
-            type = 'UNSIGNED_SHORT';
+            if (!(array instanceof Uint8Array))
+            {
+                array = new Uint8Array(array);
+            }
         }
-        else if (array instanceof Uint32Array)
+        else if (type === 'UNSIGNED_SHORT')
         {
-            type = 'UNSIGNED_INT';
+            if (!(array instanceof Uint16Array))
+            {
+                array = new Uint16Array(array);
+            }
         }
-        else if (array instanceof Uint8Array)
+        else if (type === 'UNSIGNED_INT')
         {
-            type = 'UNSIGNED_BYTE';
+            if (!(array instanceof Uint32Array))
+            {
+                array = new Uint32Array(array);
+            }
         }
-        else
-        {
-            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
-        }
+
         this.type = type;
         this.count = array.length;
         this.bytesPerElement = array.BYTES_PER_ELEMENT;
@@ -242,7 +262,7 @@ class WebGLElementBuffer
         buffer = this.buffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array as BufferSource, gl[usage]);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[usage]);
     }
 
     dispose()
