@@ -115,7 +115,7 @@ export class WebGLAttributeBuffer
         const buffer = gl.createBuffer();
 
         gl.bindBuffer(bufferType, buffer);
-        gl.bufferData(bufferType, array as any, usage);
+        gl.bufferData(bufferType, array as BufferSource, usage);
 
         let type: number;
 

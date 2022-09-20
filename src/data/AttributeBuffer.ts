@@ -1,5 +1,17 @@
-import { WebGLBufferSourceTypes } from '@feng3d/polyfill';
 import { AttributeUsage } from '../gl/WebGLEnums';
+
+/**
+ * 属性缓冲数据类型。
+ */
+export type AttributeBufferSourceTypes = Float64Array
+    | Float32Array
+    | Uint32Array
+    | Int32Array
+    | Uint16Array
+    | Int16Array
+    | Uint8ClampedArray
+    | Uint8Array
+    | Int8Array;
 
 /**
  * WebGL顶点属性缓冲
@@ -9,7 +21,7 @@ export class AttributeBuffer
     /**
      * 数据
      */
-    array: WebGLBufferSourceTypes;
+    array: AttributeBufferSourceTypes;
 
     /**
      * 单项数据尺寸。
@@ -43,7 +55,7 @@ export class AttributeBuffer
      */
     version = 0;
 
-    constructor(array: WebGLBufferSourceTypes, itemSize: number, normalized?: boolean, divisor = 0)
+    constructor(array: AttributeBufferSourceTypes, itemSize: number, normalized?: boolean, divisor = 0)
     {
         if (Array.isArray(array))
         {

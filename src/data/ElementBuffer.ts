@@ -1,5 +1,9 @@
-import { WebGLBufferSourceTypes } from '@feng3d/polyfill';
 import { AttributeUsage } from '../gl/WebGLEnums';
+
+/**
+ * 元素缓冲数据类型
+ */
+export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 指定元素数组缓冲区中的值的类型。
@@ -9,7 +13,7 @@ import { AttributeUsage } from '../gl/WebGLEnums';
 export type DrawElementType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT';
 
 /**
- * WebGL顶点索引的缓冲
+ * WebGL元素缓冲，顶点索引缓冲。
  *
  * 使用 gl.ELEMENT_ARRAY_BUFFER 进行绑定数据。
  *
@@ -21,7 +25,7 @@ export class ElementBuffer
     /**
      * 数据
      */
-    array: WebGLBufferSourceTypes;
+    array: ElementBufferSourceTypes;
 
     /**
      * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
@@ -44,7 +48,7 @@ export class ElementBuffer
      */
     version = 0;
 
-    constructor(array: WebGLBufferSourceTypes)
+    constructor(array: ElementBufferSourceTypes)
     {
         if (Array.isArray(array))
         {
