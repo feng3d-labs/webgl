@@ -150,85 +150,37 @@ export class WebGLElementBufferRenderer
     }
 }
 
+/**
+ * WebGL元素数组缓冲，用于处理每个 ElementArrayBuffer 向WebGL上传数据。
+ */
 class WebGLElementArrayBufferCacle
 {
     gl: WebGLRenderingContext;
     //
     element: ElementArrayBuffer;
     buffer: WebGLBuffer;
+
+    /**
+     * 元素数据类型
+     */
     type: number;
 
     /**
-     * 数据数量
+     * 每个元素占用字符数量
+     */
+    bytesPerElement: number;
+
+    /**
+     * 元素数组长度
      */
     count: number;
 
-    /**
-     * 是否标准化。
-     */
-    normalized: boolean;
-
-    bytesPerElement: number;
-    version: number;
+    version = -1;
 
     constructor(gl: WebGLRenderingContext, element: ElementArrayBuffer)
     {
         this.gl = gl;
-
-        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
-
-        const array = element.array;
-
-        const buffer = gl.createBuffer();
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array as any, gl[usage]);
-
-        let type: number;
-
-        if (array instanceof Float32Array)
-        {
-            type = gl.FLOAT;
-        }
-        else if (array instanceof Uint16Array)
-        {
-            type = gl.UNSIGNED_SHORT;
-        }
-        else if (array instanceof Int16Array)
-        {
-            type = gl.SHORT;
-        }
-        else if (array instanceof Uint32Array)
-        {
-            type = gl.UNSIGNED_INT;
-        }
-        else if (array instanceof Int32Array)
-        {
-            type = gl.INT;
-        }
-        else if (array instanceof Int8Array)
-        {
-            type = gl.BYTE;
-        }
-        else if (array instanceof Uint8Array)
-        {
-            type = gl.UNSIGNED_BYTE;
-        }
-        else if (array instanceof Uint8ClampedArray)
-        {
-            type = gl.UNSIGNED_BYTE;
-        }
-        else
-        {
-            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
-        }
-
         this.element = element;
-        this.buffer = buffer;
-        this.type = type;
-        this.count = array.length;
-        this.bytesPerElement = array.BYTES_PER_ELEMENT;
-        this.version = element.version;
 
         //
         watcher.watch(element, 'array', this.needsUpdate, this);
@@ -236,12 +188,12 @@ class WebGLElementArrayBufferCacle
 
     private needsUpdate()
     {
-        this.element.version++;
+        this.element.version += ~~this.element.version;
     }
 
     updateBuffer()
     {
-        const { gl, buffer, element } = this;
+        const { gl, element } = this;
 
         if (this.version === element.version)
         {
@@ -249,10 +201,48 @@ class WebGLElementArrayBufferCacle
         }
         this.version = element.version;
 
-        const array = element.array;
+        // 删除过时的缓冲
+        let buffer = this.buffer;
+        if (buffer)
+        {
+            gl.deleteBuffer(buffer);
+        }
+
+        //
+        let array = element.array;
+
+        let type: number;
+        if (Array.isArray(array))
+        {
+            type = gl.UNSIGNED_SHORT;
+            array = new Uint16Array(array);
+        }
+        else if (array instanceof Uint16Array)
+        {
+            type = gl.UNSIGNED_SHORT;
+        }
+        else if (array instanceof Uint32Array)
+        {
+            type = gl.UNSIGNED_INT;
+        }
+        else if (array instanceof Uint8Array)
+        {
+            type = gl.UNSIGNED_BYTE;
+        }
+        else
+        {
+            throw new Error(`WebGLAttributes: Unsupported buffer data format: ${array}`);
+        }
+        this.type = type;
+        this.count = array.length;
+        this.bytesPerElement = array.BYTES_PER_ELEMENT;
+
+        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
+
+        buffer = this.buffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, array);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array as any, gl[usage]);
     }
 
     dispose()
