@@ -1,44 +1,66 @@
 import { watcher } from '@feng3d/watcher';
 import { ElementArrayBuffer } from '../data/ElementArrayBuffer';
-import { WebGLCapabilities } from './WebGLCapabilities';
+import { RenderAtomic } from '../data/RenderAtomic';
+import { WebGLRenderer } from '../WebGLRenderer';
 import { AttributeUsage } from './WebGLEnums';
-import { WebGLExtensions } from './WebGLExtensions';
-import { WebGLInfo } from './WebGLInfo';
 
 export class WebGLElementBufferRenderer
 {
-    gl: WebGLRenderingContext;
-    extensions: WebGLExtensions;
-    info: WebGLInfo;
-    capabilities: WebGLCapabilities;
-
+    private webGLRenderer: WebGLRenderer;
     private buffers = new WeakMap<ElementArrayBuffer, WebGLElementArrayBufferCacle>();
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
+    constructor(webGLRenderer: WebGLRenderer)
     {
-        this.gl = gl;
-        this.extensions = extensions;
-        this.info = info;
-        this.capabilities = capabilities;
+        this.webGLRenderer = webGLRenderer;
     }
 
-    render(element: ElementArrayBuffer, mode: number, offset: number, count: number, instanceCount: number)
+    render(renderAtomic: RenderAtomic, mode: number, offset: number, count: number, instanceCount: number)
     {
-        const { gl, extensions, info, capabilities } = this;
+        const { gl, extensions, info, capabilities, attributes } = this.webGLRenderer;
 
-        const elementCache = this.get(element);
-        const { type, bytesPerElement } = elementCache;
+        const element = renderAtomic.getIndexBuffer();
+
+        let type: number;
+        let bytesPerElement: number;
+        let vertexNum: number;
+
+        if (element)
+        {
+            const elementCache = this.get(element);
+            type = elementCache.type;
+            bytesPerElement = elementCache.bytesPerElement;
+            vertexNum = elementCache.count;
+        }
+        else
+        {
+            vertexNum = renderAtomic.getAttributeVertexNum(attributes);
+
+            if (vertexNum === 0)
+            {
+                // console.warn(`顶点数量为0，不进行渲染！`);
+
+                // return;
+                vertexNum = 6;
+            }
+        }
 
         if (count === undefined)
         {
-            count = elementCache.count - offset;
+            count = vertexNum - offset;
         }
 
         if (instanceCount > 1)
         {
             if (capabilities.isWebGL2)
             {
-                (gl as WebGL2RenderingContext).drawElementsInstanced(mode, count, type, offset * bytesPerElement, instanceCount);
+                if (element)
+                {
+                    (gl as WebGL2RenderingContext).drawElementsInstanced(mode, count, type, offset * bytesPerElement, instanceCount);
+                }
+                else
+                {
+                    (gl as WebGL2RenderingContext).drawArraysInstanced(mode, offset, count, instanceCount);
+                }
             }
             else
             {
@@ -46,16 +68,30 @@ export class WebGLElementBufferRenderer
 
                 if (extension === null)
                 {
-                    console.error('WebGLIndexedBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
+                    console.error('hardware does not support extension ANGLE_instanced_arrays.');
 
                     return;
                 }
-                extension.drawElementsInstancedANGLE(mode, count, type, offset * bytesPerElement, instanceCount);
+                if (element)
+                {
+                    extension.drawElementsInstancedANGLE(mode, count, type, offset * bytesPerElement, instanceCount);
+                }
+                else
+                {
+                    extension.drawArraysInstancedANGLE(mode, offset, count, instanceCount);
+                }
             }
         }
         else
         {
-            gl.drawElements(mode, count, type, offset * bytesPerElement);
+            if (element)
+            {
+                gl.drawElements(mode, count, type, offset * bytesPerElement);
+            }
+            else
+            {
+                gl.drawArrays(mode, offset, count);
+            }
             instanceCount = 1;
         }
 
@@ -64,7 +100,7 @@ export class WebGLElementBufferRenderer
 
     bindBuffer(element: ElementArrayBuffer)
     {
-        const { gl } = this;
+        const { gl } = this.webGLRenderer;
 
         if (element)
         {
@@ -74,7 +110,8 @@ export class WebGLElementBufferRenderer
 
     get(element: ElementArrayBuffer)
     {
-        const { gl, buffers } = this;
+        const { gl } = this.webGLRenderer;
+        const buffers = this.buffers;
 
         let data = buffers.get(element);
 

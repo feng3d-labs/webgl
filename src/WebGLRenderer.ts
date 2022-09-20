@@ -143,15 +143,7 @@ export class WebGLRenderer
         const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
         const renderMode = gl[renderAtomic.getRenderParams().renderMode];
 
-        const element = renderAtomic.getIndexBuffer();
-        if (element)
-        {
-            indexedBufferRenderer.render(element, renderMode, offset, count, instanceCount);
-        }
-        else
-        {
-            bufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
-        }
+        indexedBufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
     }
 
     dipose()
@@ -175,7 +167,7 @@ export class WebGLRenderer
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
 
         this.bufferRenderer = new WebGLBufferRenderer(this);
-        this.elementBufferRenderer = new WebGLElementBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
+        this.elementBufferRenderer = new WebGLElementBufferRenderer(this);
 
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.elementBufferRenderer, this.capabilities, this.shaders);
         this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
