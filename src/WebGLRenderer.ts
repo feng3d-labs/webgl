@@ -3,7 +3,6 @@ import { lazy } from '@feng3d/polyfill';
 import { RenderAtomic } from './data/RenderAtomic';
 import { WebGLAttributes } from './gl/WebGLAttributes';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
-import { WebGLBufferRenderer } from './gl/WebGLBufferRenderer';
 import { WebGLRenderbuffers } from './gl/WebGLBuffers';
 import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
@@ -69,7 +68,6 @@ export class WebGLRenderer
     renderbuffers: WebGLRenderbuffers;
     framebuffers: WebGLFramebuffers;
 
-    bufferRenderer: WebGLBufferRenderer;
     elementBufferRenderer: WebGLElementBufferRenderer;
 
     constructor(parameters?: Partial<WebGLRendererParameters>)
@@ -138,12 +136,12 @@ export class WebGLRenderer
             offset = 0;
         }
 
-        const { gl, elementBufferRenderer: indexedBufferRenderer, bufferRenderer } = this;
+        const { gl, elementBufferRenderer } = this;
 
         const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
         const renderMode = gl[renderAtomic.getRenderParams().renderMode];
 
-        indexedBufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
+        elementBufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
     }
 
     dipose()
@@ -166,7 +164,6 @@ export class WebGLRenderer
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
 
-        this.bufferRenderer = new WebGLBufferRenderer(this);
         this.elementBufferRenderer = new WebGLElementBufferRenderer(this);
 
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.elementBufferRenderer, this.capabilities, this.shaders);
