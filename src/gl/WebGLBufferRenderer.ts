@@ -1,54 +1,59 @@
-import { WebGLCapabilities } from './WebGLCapabilities';
-import { WebGLExtensions } from './WebGLExtensions';
-import { WebGLInfo } from './WebGLInfo';
+import { RenderAtomic } from '../data/RenderAtomic';
+import { WebGLRenderer } from '../WebGLRenderer';
 
 export class WebGLBufferRenderer
 {
-    gl: WebGLRenderingContext;
-    extensions: WebGLExtensions;
-    info: WebGLInfo;
-    capabilities: WebGLCapabilities;
+    webGLRenderer: WebGLRenderer;
 
-    constructor(gl: WebGLRenderingContext, extensions: WebGLExtensions, info: WebGLInfo, capabilities: WebGLCapabilities)
+    constructor(webGLRenderer: WebGLRenderer)
     {
-        this.gl = gl;
-        this.extensions = extensions;
-        this.info = info;
-        this.capabilities = capabilities;
+        this.webGLRenderer = webGLRenderer;
     }
 
-    render(mode: number, start: number, count: number)
+    render(renderAtomic: RenderAtomic, mode: number, offset: number, count: number, instanceCount: number)
     {
-        const { gl, info } = this;
+        const { gl, extensions, info, capabilities, attributes } = this.webGLRenderer;
 
-        gl.drawArrays(mode, start, count);
+        let vertexNum = renderAtomic.getAttributeVertexNum(attributes);
 
-        info.update(count, mode, 1);
-    }
-
-    renderInstances(mode: number, start: number, count: number, primcount: number)
-    {
-        if (primcount === 0) return;
-
-        const { gl, extensions, info, capabilities } = this;
-
-        if (capabilities.isWebGL2)
+        if (vertexNum === 0)
         {
-            (gl as WebGL2RenderingContext).drawArraysInstanced(mode, start, count, primcount);
+            // console.warn(`顶点数量为0，不进行渲染！`);
+
+            // return;
+            vertexNum = 6;
+        }
+
+        if (count === undefined)
+        {
+            count = vertexNum - offset;
+        }
+
+        if (instanceCount > 1)
+        {
+            if (capabilities.isWebGL2)
+            {
+                (gl as WebGL2RenderingContext).drawArraysInstanced(mode, offset, count, instanceCount);
+            }
+            else
+            {
+                const extension = extensions.get('ANGLE_instanced_arrays');
+
+                if (extension === null)
+                {
+                    console.error('WebGLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
+
+                    return;
+                }
+                extension.drawArraysInstancedANGLE(mode, offset, count, instanceCount);
+            }
         }
         else
         {
-            const extension = extensions.get('ANGLE_instanced_arrays');
-
-            if (extension === null)
-            {
-                console.error('WebGLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
-
-                return;
-            }
-            extension.drawArraysInstancedANGLE(mode, start, count, primcount);
+            gl.drawArrays(mode, offset, count);
+            instanceCount = 1;
         }
 
-        info.update(count, mode, primcount);
+        info.update(count, mode, instanceCount);
     }
 }

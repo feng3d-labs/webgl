@@ -1,4 +1,5 @@
 import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
+import { WebGLAttributes } from '../gl/WebGLAttributes';
 import { ShaderMacro } from '../shader/Macro';
 import { AttributeArrayBuffer } from './AttributeArrayBuffer';
 import { ElementArrayBuffer } from './ElementArrayBuffer';
@@ -175,5 +176,32 @@ export class RenderAtomic
         Object.assign(shaderMacro, this.shaderMacro);
 
         return shaderMacro;
+    }
+
+    /**
+     * 获取属性顶点属性。
+     *
+     * @param attributes
+     * @returns
+     */
+    getAttributeVertexNum(attributes: WebGLAttributes)
+    {
+        const vertexNum = ((attributelist) =>
+        {
+            for (const attr in attributelist)
+            {
+                // eslint-disable-next-line no-prototype-builtins
+                if (attributelist.hasOwnProperty(attr))
+                {
+                    const attribute = attributes.get(attributelist[attr]);
+
+                    return attribute.count;
+                }
+            }
+
+            return 0;
+        })(this.getAttributes());
+
+        return vertexNum;
     }
 }

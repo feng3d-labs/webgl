@@ -131,76 +131,26 @@ export class WebGLRenderer
 
     /**
      */
-    private draw(renderAtomic: RenderAtomic, first?: number, count?: number)
+    private draw(renderAtomic: RenderAtomic, offset?: number, count?: number)
     {
-        if (first === undefined)
+        if (offset === undefined)
         {
-            first = 0;
+            offset = 0;
         }
 
-        const { gl, attributes, elementBufferRenderer: indexedBufferRenderer, bufferRenderer } = this;
+        const { gl, elementBufferRenderer: indexedBufferRenderer, bufferRenderer } = this;
 
         const instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
         const renderMode = gl[renderAtomic.getRenderParams().renderMode];
 
-        const index = renderAtomic.getIndexBuffer();
-        if (index)
+        const element = renderAtomic.getIndexBuffer();
+        if (element)
         {
-            const attribute = indexedBufferRenderer.get(index);
-            indexedBufferRenderer.setIndex(attribute);
-
-            if (count === undefined)
-            {
-                count = attribute.count - first;
-            }
-
-            if (instanceCount > 1)
-            {
-                indexedBufferRenderer.renderInstances(renderMode, first, count, instanceCount);
-            }
-            else
-            {
-                indexedBufferRenderer.render(renderMode, first, count);
-            }
+            indexedBufferRenderer.render(element, renderMode, offset, count, instanceCount);
         }
         else
         {
-            let vertexNum = ((attributelist) =>
-            {
-                for (const attr in attributelist)
-                {
-                    // eslint-disable-next-line no-prototype-builtins
-                    if (attributelist.hasOwnProperty(attr))
-                    {
-                        const attribute = attributes.get(attributelist[attr]);
-
-                        return attribute.count;
-                    }
-                }
-
-                return 0;
-            })(renderAtomic.getAttributes());
-            if (vertexNum === 0)
-            {
-                // console.warn(`顶点数量为0，不进行渲染！`);
-
-                // return;
-                vertexNum = 6;
-            }
-
-            if (count === undefined)
-            {
-                count = vertexNum;
-            }
-
-            if (instanceCount > 1)
-            {
-                bufferRenderer.renderInstances(renderMode, first, count, instanceCount);
-            }
-            else
-            {
-                bufferRenderer.render(renderMode, first, count);
-            }
+            bufferRenderer.render(renderAtomic, renderMode, offset, count, instanceCount);
         }
     }
 
@@ -224,7 +174,7 @@ export class WebGLRenderer
         this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
         this.attributes = new WebGLAttributes(this.gl, this.capabilities);
 
-        this.bufferRenderer = new WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
+        this.bufferRenderer = new WebGLBufferRenderer(this);
         this.elementBufferRenderer = new WebGLElementBufferRenderer(this.gl, this.extensions, this.info, this.capabilities);
 
         this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributes, this.elementBufferRenderer, this.capabilities, this.shaders);
