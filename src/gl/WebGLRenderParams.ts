@@ -22,49 +22,27 @@ export class WebGLRenderParams
     {
         const { gl, capabilities, state } = this;
 
-        const cullfaceEnum = renderParams.cullFace;
+        const { cullFace, frontFace,
+            enableBlend, sfactor, dfactor,
+            depthtest, depthFunc, depthMask,
+            colorMask,
+            useViewPort, viewPort,
+            usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,
+            useScissor, scissor,
+            useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
+        } = renderParams;
+
         const blendEquation = state.convertBlendEquation(renderParams.blendEquation);
-        const sfactor = gl[renderParams.sfactor];
-        const dfactor = gl[renderParams.dfactor];
-        const cullFace = gl[renderParams.cullFace];
-        const frontFace = gl[renderParams.frontFace];
-        const enableBlend = renderParams.enableBlend;
-        const depthtest = renderParams.depthtest;
-        const depthMask = renderParams.depthMask;
-        const depthFunc = gl[renderParams.depthFunc];
-        let viewPort = renderParams.viewPort;
-        const useViewPort = renderParams.useViewPort;
-        const useScissor = renderParams.useScissor;
-        const scissor = renderParams.scissor;
-        const colorMask = renderParams.colorMask;
 
-        const usePolygonOffset = renderParams.usePolygonOffset;
-        const polygonOffsetFactor = renderParams.polygonOffsetFactor;
-        const polygonOffsetUnits = renderParams.polygonOffsetUnits;
-
-        const useStencil = renderParams.useStencil;
-        const stencilFunc = gl[renderParams.stencilFunc];
-        const stencilFuncRef = renderParams.stencilFuncRef;
-        const stencilFuncMask = renderParams.stencilFuncMask;
-        const stencilOpFail = gl[renderParams.stencilOpFail];
-        const stencilOpZFail = gl[renderParams.stencilOpZFail];
-        const stencilOpZPass = gl[renderParams.stencilOpZPass];
-        const stencilMask = renderParams.stencilMask;
-
-        if (!useViewPort)
+        if (cullFace === 'NONE')
         {
-            viewPort = { x: 0, y: 0, width: gl.canvas.width, height: gl.canvas.height };
-        }
-
-        if (cullfaceEnum !== 'NONE')
-        {
-            gl.enable(gl.CULL_FACE);
-            gl.cullFace(cullFace);
-            gl.frontFace(frontFace);
+            gl.disable(gl.CULL_FACE);
         }
         else
         {
-            gl.disable(gl.CULL_FACE);
+            gl.enable(gl.CULL_FACE);
+            gl.cullFace(gl[cullFace]);
+            gl.frontFace(gl[frontFace]);
         }
 
         if (enableBlend)
@@ -72,7 +50,7 @@ export class WebGLRenderParams
             //
             gl.enable(gl.BLEND);
             gl.blendEquation(blendEquation);
-            gl.blendFunc(sfactor, dfactor);
+            gl.blendFunc(gl[sfactor], gl[dfactor]);
         }
         else
         {
@@ -82,17 +60,25 @@ export class WebGLRenderParams
         if (depthtest)
         {
             gl.enable(gl.DEPTH_TEST);
-            gl.depthFunc(depthFunc);
+            gl.depthFunc(gl[depthFunc]);
         }
         else
         {
             gl.disable(gl.DEPTH_TEST);
         }
+
         gl.depthMask(depthMask);
 
         gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
-        gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+        if (useViewPort)
+        {
+            gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+        }
+        else
+        {
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        }
 
         if (usePolygonOffset)
         {
@@ -121,8 +107,8 @@ export class WebGLRenderParams
                 console.warn(`${gl} 不支持 stencil，参考 https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext WebGL context attributes: stencil`);
             }
             gl.enable(gl.STENCIL_TEST);
-            gl.stencilFunc(stencilFunc, stencilFuncRef, stencilFuncMask);
-            gl.stencilOp(stencilOpFail, stencilOpZFail, stencilOpZPass);
+            gl.stencilFunc(gl[stencilFunc], stencilFuncRef, stencilFuncMask);
+            gl.stencilOp(gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
             gl.stencilMask(stencilMask);
         }
         else
