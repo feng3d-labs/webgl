@@ -1,5 +1,5 @@
+import { BlendEquation } from '../data/RenderParams';
 import { WebGLCapabilities } from './WebGLCapabilities';
-import { BlendEquation } from './WebGLEnums';
 import { WebGLExtensions } from './WebGLExtensions';
 
 export class WebGLState
