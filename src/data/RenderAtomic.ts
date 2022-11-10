@@ -1,11 +1,11 @@
-import { gPartial, Lazy, lazy } from '@feng3d/polyfill';
+import { gPartial, Lazy, lazy, LazyObject } from '@feng3d/polyfill';
+import { WebGLAttributeBuffers } from '../gl/WebGLAttributeBuffers';
 import { ShaderMacro } from '../shader/Macro';
-import { Attribute } from './Attribute';
-import { Attributes } from './Attributes';
-import { Index } from './Index';
+import { AttributeBuffer } from './AttributeBuffer';
+import { ElementBuffer } from './ElementBuffer';
 import { RenderParams } from './RenderParams';
 import { Shader } from './Shader';
-import { LazyUniforms, Uniforms } from './Uniform';
+import { Uniforms } from './Uniform';
 
 declare global
 {
@@ -30,22 +30,7 @@ export class RenderAtomic
     /**
      * 顶点索引缓冲
      */
-    get index()
-    {
-        return this._index;
-    }
-    set index(v)
-    {
-        if (v instanceof Index)
-        {
-            this._index = v;
-        }
-        else
-        {
-            this._index = new Index(v);
-        }
-    }
-    private _index: Index;
+    index: ElementBuffer;
 
     /**
      * 属性数据列表
@@ -60,23 +45,16 @@ export class RenderAtomic
         this._attributes = {} as any;
         for (const key in v)
         {
-            if (v[key] instanceof Attribute)
-            {
-                this._attributes[key] = v[key];
-            }
-            else
-            {
-                this._attributes[key] = new Attribute(v[key]);
-            }
+            this._attributes[key] = v[key];
         }
     }
 
-    private _attributes: Attributes = {} as any;
+    private _attributes: { [key: string]: AttributeBuffer; } = {};
 
     /**
      * Uniform渲染数据
      */
-    uniforms: LazyUniforms = {} as any;
+    uniforms: LazyObject<Uniforms> = {} as any;
 
     /**
      * 渲染实例数量
@@ -133,14 +111,14 @@ export class RenderAtomic
         Object.assign(this, source);
     }
 
-    getIndexBuffer(): Index
+    getIndexBuffer(): ElementBuffer
     {
         if (this.index !== undefined) return this.index;
 
         return (this.next && this.next.getIndexBuffer());
     }
 
-    getAttributes(attributes: Attributes = {} as any)
+    getAttributes(attributes: { [key: string]: AttributeBuffer; } = {})
     {
         this.next && this.next.getAttributes(attributes);
         Object.assign(attributes, this.attributes);
@@ -148,14 +126,14 @@ export class RenderAtomic
         return attributes;
     }
 
-    getAttributeByKey(key: string): Attribute
+    getAttributeByKey(key: string): AttributeBuffer
     {
         if (this.attributes[key] !== undefined) return this.attributes[key];
 
         return (this.next && this.next.getAttributeByKey(key));
     }
 
-    getUniforms(uniforms: LazyUniforms = {} as any)
+    getUniforms(uniforms: LazyObject<Uniforms> = {} as any)
     {
         this.next && this.next.getUniforms(uniforms);
         Object.assign(uniforms, this.uniforms);
@@ -165,14 +143,14 @@ export class RenderAtomic
 
     getUniformByKey(key: string): Uniforms
     {
-        if (this.uniforms[key] !== undefined) return lazy.getvalue(this.uniforms[key]);
+        if (this.uniforms[key] !== undefined) return lazy.getValue(this.uniforms[key]);
 
         return (this.next && this.next.getUniformByKey(key));
     }
 
     getInstanceCount(): number
     {
-        if (this.instanceCount !== undefined) return lazy.getvalue(this.instanceCount);
+        if (this.instanceCount !== undefined) return lazy.getValue(this.instanceCount);
 
         return this.next && this.next.getInstanceCount();
     }
@@ -199,14 +177,31 @@ export class RenderAtomic
 
         return shaderMacro;
     }
-}
 
-export interface RenderAtomicData
-{
-    shader: Shader;
-    attributes: { [name: string]: Attribute; };
-    uniforms: { [name: string]: Uniforms; };
-    renderParams: RenderParams;
-    index: Index;
-    instanceCount: number;
+    /**
+     * 获取属性顶点属性。
+     *
+     * @param attributes
+     * @returns
+     */
+    getAttributeVertexNum(attributes: WebGLAttributeBuffers)
+    {
+        const vertexNum = ((attributelist) =>
+        {
+            for (const attr in attributelist)
+            {
+                // eslint-disable-next-line no-prototype-builtins
+                if (attributelist.hasOwnProperty(attr))
+                {
+                    const attribute = attributes.get(attributelist[attr]);
+
+                    return attribute.count;
+                }
+            }
+
+            return 0;
+        })(this.getAttributes());
+
+        return vertexNum;
+    }
 }
