@@ -2,42 +2,46 @@
 import { RenderAtomic } from './data/RenderAtomic';
 import { WebGLAttributeBuffers } from './gl/WebGLAttributeBuffers';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
-import { WebGLRenderbuffers } from './gl/WebGLBuffers';
-import { WebGLCacheStates } from './gl/WebGLCacheStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLElementBuffers } from './gl/WebGLElementBuffers';
 import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
 import { WebGLInfo } from './gl/WebGLInfo';
+import { WebGLRenderAtomic } from './gl/WebGLRenderAtomic';
+import { WebGLRenderbuffers } from './gl/WebGLRenderbuffers';
 import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLShaders } from './gl/WebGLShaders';
-import { WebGLState } from './gl/WebGLState';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { WebGLUniforms } from './gl/WebGLUniforms';
-
-export interface WebGLRendererParameters extends WebGLContextAttributes
-{
-    /**
-     * A Canvas where the renderer draws its output.
-     */
-    canvas: HTMLCanvasElement;
-}
+import { WebGLContext } from './WebGLContext';
 
 /**
  * WEBGL 渲染器
  *
- * 所有渲染都由该渲染器执行
+ * 所有渲染都由该渲染器执行。與2D、3D場景無關，屬於更加底層的API。針對每一個 RenderAtomic 渲染數據進行渲染。
+ *
+ * 3D 渲染請使用 WebGLRenderer3D。
  */
 export class WebGLRenderer
 {
-    private _canvas: HTMLCanvasElement;
+    /**
+     * 将被绘制的目标画布。
+     */
+    readonly canvas: HTMLCanvasElement;
 
-    gl: WebGLRenderingContext;
+    /**
+     * WebGL渲染上下文，圖形庫。
+     */
+    readonly gl: WebGLRenderingContext;
+
+    readonly gl2: WebGL2RenderingContext;
 
     /**
      * WebGL扩展
      */
-    extensions: WebGLExtensions;
+    readonly extensions: WebGLExtensions;
+
+    readonly webGLContext: WebGLContext;
 
     /**
      * WEBGL支持功能
@@ -54,12 +58,7 @@ export class WebGLRenderer
      */
     info: WebGLInfo;
 
-    /**
-     * 缓存WebGL状态
-     */
-    cacheStates: WebGLCacheStates;
     shaders: WebGLShaders;
-    state: WebGLState;
     bindingStates: WebGLBindingStates;
     attributeBuffers: WebGLAttributeBuffers;
     renderParams: WebGLRenderParams;
@@ -69,19 +68,40 @@ export class WebGLRenderer
 
     elementBuffers: WebGLElementBuffers;
 
-    constructor(parameters?: Partial<WebGLRendererParameters>)
-    {
-        this._canvas = parameters.canvas;
-        if (!this._canvas)
-        {
-            this._canvas = document.createElement('canvas');
-            this._canvas.style.display = 'block';
-        }
-        this._canvas.addEventListener('webglcontextlost', this._onContextLost, false);
-        this._canvas.addEventListener('webglcontextrestored', this._onContextRestore, false);
-        this._canvas.addEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+    /**
+     * 是否为 WebGL2
+     */
+    readonly isWebGL2: boolean;
 
-        parameters = Object.assign({
+    get width()
+    {
+        return this.canvas.width;
+    }
+
+    get height()
+    {
+        return this.canvas.height;
+    }
+
+    constructor(canvas?: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
+    {
+        if (!canvas)
+        {
+            canvas = document.createElement('canvas');
+            canvas.id = 'glcanvas';
+            canvas.style.position = 'fixed';
+            canvas.style.left = '0px';
+            canvas.style.top = '0px';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            document.body.appendChild(canvas);
+        }
+        canvas.addEventListener('webglcontextlost', this._onContextLost, false);
+        canvas.addEventListener('webglcontextrestored', this._onContextRestore, false);
+        canvas.addEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+        this.canvas = canvas;
+
+        contextAttributes = Object.assign({
             depth: true,
             stencil: true,
             antialias: false,
@@ -89,63 +109,57 @@ export class WebGLRenderer
             preserveDrawingBuffer: false,
             powerPreference: 'default',
             failIfMajorPerformanceCaveat: false,
-        } as Partial<WebGLContextAttributes>, parameters);
+        } as Partial<WebGLContextAttributes>, contextAttributes);
 
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
-        this.gl = getContext(this._canvas, contextNames, parameters) as WebGLRenderingContext;
-        this._initGLContext();
+        const gl = this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
+
+        this.isWebGL2 = false;
+        if (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext)
+        {
+            this.gl2 = gl;
+            this.isWebGL2 = true;
+        }
+
+        this.webGLContext = new WebGLContext(this);
+        this.extensions = new WebGLExtensions(this);
+
+        this.capabilities = new WebGLCapabilities(this);
+        this.info = new WebGLInfo(this);
+        this.shaders = new WebGLShaders(this);
+        this.textures = new WebGLTextures(this);
+        this.attributeBuffers = new WebGLAttributeBuffers(this);
+        this.elementBuffers = new WebGLElementBuffers(this);
+
+        this.bindingStates = new WebGLBindingStates(this);
+        this.renderParams = new WebGLRenderParams(this);
+        this.uniforms = new WebGLUniforms();
+        this.renderbuffers = new WebGLRenderbuffers(this);
+        this.framebuffers = new WebGLFramebuffers(this);
     }
 
-    render(renderAtomic: RenderAtomic, offset?: number, count?: number)
+    /**
+     * 渲染一次。
+     *
+     * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
+     */
+    render(renderAtomic: RenderAtomic)
     {
         if (this._isContextLost === true) return;
 
+        const webGLRenderAtomic = new WebGLRenderAtomic(this, renderAtomic);
+
         const { bindingStates, renderParams, elementBuffers: elementBufferRenderer, uniforms, shaders } = this;
 
-        try
-        {
-            const shaderResult = shaders.activeShader(renderAtomic);
+        const shaderResult = shaders.activeShader(webGLRenderAtomic);
 
-            renderParams.updateRenderParams(renderAtomic.getRenderParams());
+        renderParams.updateRenderParams(webGLRenderAtomic.renderParams);
 
-            bindingStates.setup(renderAtomic);
+        bindingStates.setup(webGLRenderAtomic);
 
-            uniforms.activeUniforms(renderAtomic, shaderResult.uniforms);
+        uniforms.activeUniforms(this, webGLRenderAtomic, shaderResult.uniforms);
 
-            elementBufferRenderer.render(renderAtomic, offset, count);
-        }
-        catch (error)
-        {
-            console.warn(error);
-        }
-    }
-
-    dipose()
-    {
-        this._canvas.removeEventListener('webglcontextlost', this._onContextLost, false);
-        this._canvas.removeEventListener('webglcontextrestored', this._onContextRestore, false);
-        this._canvas.removeEventListener('webglcontextcreationerror', this._onContextCreationError, false);
-    }
-
-    private _initGLContext()
-    {
-        this.extensions = new WebGLExtensions(this.gl);
-
-        this.capabilities = new WebGLCapabilities(this.gl, this.extensions);
-        this.extensions.init(this.capabilities);
-        this.info = new WebGLInfo(this.gl);
-        this.cacheStates = new WebGLCacheStates(this.gl);
-        this.shaders = new WebGLShaders(this.gl);
-        this.textures = new WebGLTextures(this.gl, this.extensions, this.capabilities);
-        this.state = new WebGLState(this.gl, this.extensions, this.capabilities);
-        this.attributeBuffers = new WebGLAttributeBuffers(this.gl, this.capabilities);
-        this.elementBuffers = new WebGLElementBuffers(this);
-
-        this.bindingStates = new WebGLBindingStates(this.gl, this.extensions, this.attributeBuffers, this.elementBuffers, this.capabilities, this.shaders);
-        this.renderParams = new WebGLRenderParams(this.gl, this.capabilities, this.state);
-        this.uniforms = new WebGLUniforms(this.gl, this.textures);
-        this.renderbuffers = new WebGLRenderbuffers(this.gl);
-        this.framebuffers = new WebGLFramebuffers(this.gl);
+        elementBufferRenderer.render(webGLRenderAtomic);
     }
 
     private _isContextLost = false;
@@ -153,18 +167,16 @@ export class WebGLRenderer
     {
         event.preventDefault();
 
-        console.log('WebGLRenderer: Context Lost.');
+        console.warn('WebGLRenderer: Context Lost.');
 
         this._isContextLost = true;
     };
 
     private _onContextRestore = () =>
     {
-        console.log('WebGLRenderer: Context Restored.');
+        console.warn('WebGLRenderer: Context Restored.');
 
         this._isContextLost = false;
-
-        this._initGLContext();
     };
 
     private _onContextCreationError = (event: WebGLContextEvent) =>

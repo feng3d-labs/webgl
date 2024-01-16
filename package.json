@@ -1,8 +1,7 @@
 {
   "name": "@feng3d/renderer",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "渲染库",
-  "standalone": true,
   "author": "feng",
   "license": "MIT",
   "type": "module",
@@ -57,10 +56,11 @@
     "vitest": "^0.32.2"
   },
   "dependencies": {
-    "@feng3d/event": "^0.7.0",
-    "@feng3d/objectview": "^0.7.0",
-    "@feng3d/polyfill": "^0.7.0",
-    "@feng3d/serialization": "^0.7.0",
-    "@feng3d/watcher": "^0.7.0"
+    "@feng3d/event": "^0.8.4",
+    "@feng3d/objectview": "^0.8.2",
+    "@feng3d/polyfill": "^0.8.4",
+    "@feng3d/serialization": "^0.8.3",
+    "@feng3d/math": "^0.8.4",
+    "@feng3d/watcher": "^0.8.3"
   }
 }
