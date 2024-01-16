@@ -169,10 +169,6 @@ export class WebGLTextures
                 webGLContext.texImage2D(face, 0, data.format, data.format, data.type, data.sources[face] || ImageUtil.get('white'));
             });
         }
-        else if (data instanceof RenderTargetTexture2D)
-        {
-            webGLContext.texImage2D('TEXTURE_2D', 0, data.format, data.width, data.height, 0, data.format, data.type, null);
-        }
         else if (data instanceof RenderTargetTextureCube)
         {
             TextureCube.faces.forEach((face) =>
