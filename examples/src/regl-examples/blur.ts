@@ -1,7 +1,7 @@
 import { fit } from './hughsk/canvas-fit';
 import { attachCamera } from './hughsk/canvas-orbit-camera';
 
-import { $set } from 'feng3d';
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 const canvas = document.createElement('canvas');

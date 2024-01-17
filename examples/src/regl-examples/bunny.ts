@@ -1,4 +1,4 @@
-import { $set } from 'feng3d';
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 import * as bunny from './mikolalysenko/bunny';
 import * as mat4 from './stackgl/gl-mat4';

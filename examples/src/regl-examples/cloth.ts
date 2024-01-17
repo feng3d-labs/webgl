@@ -1,11 +1,10 @@
 import { fit } from './hughsk/canvas-fit';
 import { attachCamera } from './hughsk/canvas-orbit-camera';
-import { resl } from './mikolalysenko/resl';
 import * as mat4 from './stackgl/gl-mat4';
 import * as vec3 from './stackgl/gl-vec3';
 
-import { gPartial } from '@feng3d/polyfill';
-import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { $set } from '@feng3d/serialization';
+import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
 
 const canvas = document.createElement('canvas');
 canvas.id = 'glcanvas';
@@ -160,15 +159,13 @@ const indices = elements.reduce((pv: number[], cv: number[]) =>
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer({ canvas });
-
-let diffuse: gPartial<Texture<any>>;
+const webglRenderer = new WebGLRenderer(canvas);
 
 let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
 
-const renderAtomic = new RenderAtomic({
+const renderAtomic = $set(new RenderAtomic(), {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },
@@ -370,26 +367,11 @@ function draw()
     requestAnimationFrame(draw);
 }
 
-resl({
-    manifest: {
-        texture: {
-            type: 'image',
-            src: 'resources/assets/cloth.png',
-        }
-    },
-    onDone: ({ texture }) =>
-    {
-        diffuse = {
-            flipY: false,
-            textureType: 'TEXTURE_2D',
-            format: 'RGBA',
-            type: 'UNSIGNED_BYTE',
-            magFilter: 'NEAREST',
-            minFilter: 'LINEAR_MIPMAP_LINEAR',
-            activePixels: texture as any,
-            generateMipmap: true,
-        };
+const img = new Image();
+img.src = 'resources/assets/cloth.png';
+await img.decode();
 
-        draw();
-    }
-});
+const diffuse = new Texture2D();
+diffuse.source = img;
+
+draw();
