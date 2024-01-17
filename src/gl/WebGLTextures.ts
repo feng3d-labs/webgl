@@ -1,6 +1,5 @@
 import { WebGLRenderer } from '../WebGLRenderer';
 import { Texture } from '../data/Texture';
-import { ImageUtil } from '../utils/ImageUtil';
 import { TextureMagFilter, TextureMinFilter, TextureWrap } from './WebGLEnums';
 import { WebGLUniform } from './WebGLUniforms';
 
@@ -140,7 +139,6 @@ export class WebGLTextures
 
             // 设置纹理图片
             data.setTextureData(this._webGLRenderer.webGLContext);
-            this.setTextureData(data);
 
             if (data.generateMipmap)
             {
@@ -152,30 +150,6 @@ export class WebGLTextures
         }
 
         return cache.texture;
-    }
-
-    private setTextureData(data: Texture)
-    {
-        const { webGLContext } = this._webGLRenderer;
-
-        if (data instanceof SourceTexture2D)
-        {
-            webGLContext.texImage2D('TEXTURE_2D', 0, data.format, data.format, data.type, data.source || ImageUtil.get('white'));
-        }
-        else if (data instanceof SourceTextureCube)
-        {
-            TextureCube.faces.forEach((face) =>
-            {
-                webGLContext.texImage2D(face, 0, data.format, data.format, data.type, data.sources[face] || ImageUtil.get('white'));
-            });
-        }
-        else if (data instanceof RenderTargetTextureCube)
-        {
-            TextureCube.faces.forEach((face) =>
-            {
-                webGLContext.texImage2D(face, 0, data.format, data.width, data.height, 0, data.format, data.type, null);
-            });
-        }
     }
 
     /**
