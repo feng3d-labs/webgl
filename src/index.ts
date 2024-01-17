@@ -1,3 +1,5 @@
+export * from './WebGLContext';
+export * from './FrameBuffer';
 export * from './RenderBuffer';
 export * from './WebGLRenderer';
 export * from './data/AttributeBuffer';
@@ -16,4 +18,4 @@ export * from './shader/ShaderLib';
 export * from './shader/ShaderMacroUtils';
 export * from './textures/RenderTargetTexture2D';
 export * from './textures/Texture2D';
-
+export * from './utils/ImageUtil';
