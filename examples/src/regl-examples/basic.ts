@@ -1,3 +1,4 @@
+import { $set } from 'feng3d';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 const webglcanvas = document.createElement('canvas');
@@ -9,9 +10,9 @@ webglcanvas.style.width = '100%';
 webglcanvas.style.height = '100%';
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvas: webglcanvas });
+const webglRenderer = new WebGLRenderer(webglcanvas);
 
-const renderAtomic = new RenderAtomic({
+const renderAtomic = $set(new RenderAtomic(), {
     attributes: {
         position: {
             array: [
