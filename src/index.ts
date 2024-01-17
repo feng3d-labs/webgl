@@ -1,3 +1,4 @@
+export * from './data/Texture';
 export * from './RenderBuffer';
 export * from './WebGLRenderer';
 export * from './data/AttributeBuffer';
