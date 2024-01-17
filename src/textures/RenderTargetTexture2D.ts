@@ -54,6 +54,6 @@ export class RenderTargetTexture2D extends Texture2D
 
     setTextureData(webGLContext: WebGLContext): void
     {
-        webGLContext.texImage2D('TEXTURE_2D', 0, this.format, this.format, this.type, null);
+        webGLContext.texImage2D('TEXTURE_2D', 0, this.format, this.width, this.height, 0, this.format, this.type, null);
     }
 }
