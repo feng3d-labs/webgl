@@ -1,4 +1,5 @@
-import { ok } from 'assert';
+import { assert, describe, it } from 'vitest';
+const { ok } = assert;
 
 describe('test', () =>
 {

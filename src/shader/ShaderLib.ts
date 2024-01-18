@@ -1,4 +1,4 @@
-import { RenderParams } from '../data/RenderParams';
+import { globalEmitter } from '@feng3d/event';
 import { shaderMacroUtils } from './ShaderMacroUtils';
 
 export const shaderConfig: ShaderConfig = { shaders: {}, modules: {} };
@@ -18,8 +18,6 @@ export interface ShaderConfig
              * 从glsl读取的fragment shader
              */
             fragment: string,
-            cls?: new (...arg: any[]) => any,
-            renderParams?: Partial<RenderParams>,
         }
     },
     /**
@@ -119,3 +117,19 @@ export class ShaderLib
  * shader 库
  */
 export const shaderlib = new ShaderLib();
+
+declare module '@feng3d/event'
+{
+    interface GlobalEvents
+    {
+        /**
+         * shader资源发生变化
+         */
+        'asset.shaderChanged': any;
+    }
+}
+
+globalEmitter.on('asset.shaderChanged', () =>
+{
+    shaderlib.clearCache();
+});

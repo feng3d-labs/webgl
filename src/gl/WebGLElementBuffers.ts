@@ -1,39 +1,43 @@
 import { lazy } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { DrawElementTypes, ElementBuffer, ElementBufferSourceTypes } from '../data/ElementBuffer';
-import { RenderAtomic } from '../data/RenderAtomic';
 import { WebGLRenderer } from '../WebGLRenderer';
-import { AttributeUsage } from './WebGLEnums';
+import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from '../data/ElementBuffer';
+import { BufferUsage } from './WebGLEnums';
+import { WebGLRenderAtomic } from './WebGLRenderAtomic';
 
 export class WebGLElementBuffers
 {
-    private webGLRenderer: WebGLRenderer;
     private buffers = new WeakMap<ElementBuffer, WebGLElementBuffer>();
 
+    private _webGLRenderer: WebGLRenderer;
     constructor(webGLRenderer: WebGLRenderer)
     {
-        this.webGLRenderer = webGLRenderer;
+        this._webGLRenderer = webGLRenderer;
     }
 
-    render(renderAtomic: RenderAtomic, offset: number, count: number)
+    render(renderAtomic: WebGLRenderAtomic)
     {
-        const { gl, extensions, info, capabilities, attributeBuffers: attributes } = this.webGLRenderer;
+        const { info, attributeBuffers: attributes, webGLContext } = this._webGLRenderer;
 
-        let instanceCount = ~~lazy.getValue(renderAtomic.getInstanceCount());
-        const mode = gl[renderAtomic.getRenderParams().renderMode];
+        const drawCall = renderAtomic.drawCall;
 
-        const element = renderAtomic.getIndexBuffer();
+        let instanceCount = ~~lazy.getValue(drawCall.instanceCount);
+        const drawMode = drawCall.drawMode;
+        let offset = drawCall.offset;
+        let count = drawCall.count;
 
-        let type: number;
+        const element = renderAtomic.index;
+
         let bytesPerElement: number;
         let vertexNum: number;
+        let type: DrawElementType;
 
         if (element)
         {
             const elementCache = this.get(element);
-            type = gl[elementCache.type];
             bytesPerElement = elementCache.bytesPerElement;
             vertexNum = elementCache.count;
+            type = elementCache.type;
         }
         else
         {
@@ -60,73 +64,50 @@ export class WebGLElementBuffers
 
         if (instanceCount > 1)
         {
-            if (capabilities.isWebGL2)
+            if (element)
             {
-                if (element)
-                {
-                    (gl as WebGL2RenderingContext).drawElementsInstanced(mode, count, type, offset * bytesPerElement, instanceCount);
-                }
-                else
-                {
-                    (gl as WebGL2RenderingContext).drawArraysInstanced(mode, offset, count, instanceCount);
-                }
+                webGLContext.drawElementsInstanced(drawMode, count, type, offset * bytesPerElement, instanceCount);
             }
             else
             {
-                const extension = extensions.get('ANGLE_instanced_arrays');
-
-                if (extension === null)
-                {
-                    console.error('hardware does not support extension ANGLE_instanced_arrays.');
-
-                    return;
-                }
-                if (element)
-                {
-                    extension.drawElementsInstancedANGLE(mode, count, type, offset * bytesPerElement, instanceCount);
-                }
-                else
-                {
-                    extension.drawArraysInstancedANGLE(mode, offset, count, instanceCount);
-                }
+                webGLContext.drawArraysInstanced(drawMode, offset, count, instanceCount);
             }
         }
         else
         {
             if (element)
             {
-                gl.drawElements(mode, count, type, offset * bytesPerElement);
+                webGLContext.drawElements(drawMode, count, type, offset * bytesPerElement);
             }
             else
             {
-                gl.drawArrays(mode, offset, count);
+                webGLContext.drawArrays(drawMode, offset, count);
             }
             instanceCount = 1;
         }
 
-        info.update(count, mode, instanceCount);
+        info.update(count, drawMode, instanceCount);
     }
 
     bindBuffer(element: ElementBuffer)
     {
-        const { gl } = this.webGLRenderer;
+        const { webGLContext } = this._webGLRenderer;
 
         if (element)
         {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.get(element).buffer);
+            webGLContext.bindBuffer('ELEMENT_ARRAY_BUFFER', this.get(element).buffer);
         }
     }
 
     get(element: ElementBuffer)
     {
-        const { gl } = this.webGLRenderer;
         const buffers = this.buffers;
 
         let data = buffers.get(element);
 
         if (data === undefined)
         {
-            data = new WebGLElementBuffer(gl, element);
+            data = new WebGLElementBuffer(this._webGLRenderer, element);
             buffers.set(element, data);
         }
 
@@ -155,7 +136,6 @@ export class WebGLElementBuffers
  */
 class WebGLElementBuffer
 {
-    gl: WebGLRenderingContext;
     //
     element: ElementBuffer;
     buffer: WebGLBuffer;
@@ -163,7 +143,7 @@ class WebGLElementBuffer
     /**
      * 元素数据类型
      */
-    type: DrawElementTypes;
+    type: DrawElementType;
 
     /**
      * 每个元素占用字符数量
@@ -177,9 +157,10 @@ class WebGLElementBuffer
 
     version = -1;
 
-    constructor(gl: WebGLRenderingContext, element: ElementBuffer)
+    private _webGLRenderer: WebGLRenderer;
+    constructor(webGLRenderer: WebGLRenderer, element: ElementBuffer)
     {
-        this.gl = gl;
+        this._webGLRenderer = webGLRenderer;
         this.element = element;
 
         //
@@ -193,7 +174,8 @@ class WebGLElementBuffer
 
     updateBuffer()
     {
-        const { gl, element } = this;
+        const { webGLContext } = this._webGLRenderer;
+        const { element } = this;
 
         if (this.version === element.version)
         {
@@ -205,17 +187,17 @@ class WebGLElementBuffer
         let buffer = this.buffer;
         if (buffer)
         {
-            gl.deleteBuffer(buffer);
+            webGLContext.deleteBuffer(buffer);
         }
 
         //
         const { type, array } = transfromArrayType(element.array, element.type);
-        const usage: AttributeUsage = element.usage || 'STATIC_DRAW';
+        const usage: BufferUsage = element.usage || 'STATIC_DRAW';
 
-        buffer = gl.createBuffer();
+        buffer = webGLContext.createBuffer();
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[usage]);
+        webGLContext.bindBuffer('ELEMENT_ARRAY_BUFFER', buffer);
+        webGLContext.bufferData('ELEMENT_ARRAY_BUFFER', array, usage);
 
         this.type = type;
         this.count = array.length;
@@ -225,19 +207,20 @@ class WebGLElementBuffer
 
     dispose()
     {
-        const { gl, buffer, element } = this;
+        const { webGLContext } = this._webGLRenderer;
+        const { buffer, element } = this;
 
-        gl.deleteBuffer(buffer);
+        webGLContext.deleteBuffer(buffer);
 
         watcher.watch(element, 'array', this.needsUpdate, this);
 
-        this.gl = null;
+        this._webGLRenderer = null;
         this.element = null;
         this.buffer = null;
     }
 }
 
-function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementTypes)
+function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementType)
 {
     // 处理 type
     if (type === undefined)

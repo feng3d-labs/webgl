@@ -1,3 +1,4 @@
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 import * as bunny from './mikolalysenko/bunny';
 import * as mat4 from './stackgl/gl-mat4';
@@ -11,7 +12,7 @@ webglcanvas.style.width = '100%';
 webglcanvas.style.height = '100%';
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvas: webglcanvas, antialias: true });
+const webglRenderer = new WebGLRenderer(webglcanvas, { antialias: true });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -31,7 +32,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderAtomic = new RenderAtomic({
+const renderAtomic = $set(new RenderAtomic(), {
     attributes: {
         position: { array: positions, itemSize: 3 },
     },

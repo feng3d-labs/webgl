@@ -1,3 +1,4 @@
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
@@ -20,10 +21,10 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
         return;
     }
 
-    const webglRenderer = new WebGLRenderer({ canvas });
+    const webglRenderer = new WebGLRenderer(canvas);
 
     const vertexCount = 12;
-    const renderAtomic = new RenderAtomic({
+    const renderAtomic = $set(new RenderAtomic(), {
         attributes: {
             position: {
                 array: [
@@ -43,7 +44,8 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
             },
         },
         uniforms: {},
-        renderParams: { renderMode: 'TRIANGLE_STRIP', cullFace: 'NONE', enableBlend: true },
+        drawCall: { drawMode: 'TRIANGLE_STRIP' },
+        renderParams: { cullFace: 'NONE', enableBlend: true },
         shader: {
             vertex:
                 `#version 300 es
@@ -77,9 +79,13 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
 
         renderAtomic.renderParams.useViewPort = true;
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
-        webglRenderer.render(renderAtomic, 0, vertexCount / 2);
+        renderAtomic.drawCall.offset = 0;
+        renderAtomic.drawCall.count = vertexCount / 2;
+        webglRenderer.render(renderAtomic);
         renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
-        webglRenderer.render(renderAtomic, 6, vertexCount / 2);
+        renderAtomic.drawCall.offset = 6;
+        renderAtomic.drawCall.count = vertexCount / 2;
+        webglRenderer.render(renderAtomic);
 
         requestAnimationFrame(draw);
     }

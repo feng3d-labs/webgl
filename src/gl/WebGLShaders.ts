@@ -1,33 +1,39 @@
-import { RenderAtomic } from '../data/RenderAtomic';
+import { WebGLUniformTypeUtils } from '../const/WebGLUniformType';
 import { Shader } from '../data/Shader';
+import { ShaderMacro } from '../shader/Macro';
 import { shaderlib } from '../shader/ShaderLib';
+import { WebGLRenderer } from '../WebGLRenderer';
+import { ShaderType } from './WebGLEnums';
+import { WebGLRenderAtomic } from './WebGLRenderAtomic';
+import { WebGLUniform } from './WebGLUniforms';
 
 /**
  * WebGLShader处理器
  */
 export class WebGLShaders
 {
-    private gl: WebGLRenderingContext;
+    private _webGLRenderer: WebGLRenderer;
 
     private compileShaderResults: { [key: string]: CompileShaderResult } = {};
 
-    constructor(gl: WebGLRenderingContext)
+    constructor(webGLRenderer: WebGLRenderer)
     {
-        this.gl = gl;
+        this._webGLRenderer = webGLRenderer;
     }
 
-    activeShader(renderAtomic: RenderAtomic)
+    activeShader(renderAtomic: WebGLRenderAtomic)
     {
-        const shaderMacro = renderAtomic.getShaderMacro();
-        const shader = renderAtomic.getShader();
-        shader.shaderMacro = shaderMacro;
-        const shaderResult = this.activeShaderProgram(shader);
+        const { webGLContext } = this._webGLRenderer;
+
+        const shaderMacro = renderAtomic.shaderMacro;
+        const shader = renderAtomic.shader;
+        const shaderResult = this.activeShaderProgram(shader, shaderMacro);
         if (!shaderResult)
         {
             throw new Error(`缺少着色器，无法渲染!`);
         }
         //
-        this.gl.useProgram(shaderResult.program);
+        webGLContext.useProgram(shaderResult.program);
 
         return shaderResult;
     }
@@ -35,11 +41,11 @@ export class WebGLShaders
     /**
      * 激活渲染程序
      */
-    activeShaderProgram(shader: Shader)
+    activeShaderProgram(shader: Shader, shaderMacro: ShaderMacro)
     {
         const { shaderName } = shader;
 
-        const { vertex, fragment } = this.updateShaderCode(shader);
+        const { vertex, fragment } = this.updateShaderCode(shader, shaderMacro);
 
         const shaderKey = vertex + fragment;
         let result = this.compileShaderResults[shaderKey];
@@ -62,58 +68,53 @@ export class WebGLShaders
 
     /**
      * 编译着色器代码
-     * @param gl GL上下文
      * @param type 着色器类型
      * @param code 着色器代码
      * @return 编译后的着色器对象
      */
-    private compileShaderCode(gl: WebGLRenderingContext, type: number, code: string)
+    private compileShaderCode(type: ShaderType, code: string)
     {
-        const shader = gl.createShader(type);
-        if (!shader)
-        {
-            throw 'unable to create shader';
-        }
+        const { webGLContext } = this._webGLRenderer;
 
-        gl.shaderSource(shader, code);
-        gl.compileShader(shader);
+        const shader = webGLContext.createShader(type);
+
+        webGLContext.shaderSource(shader, code);
+        webGLContext.compileShader(shader);
 
         // 检查编译结果
-        const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+        const compiled = webGLContext.getShaderParameter(shader, 'COMPILE_STATUS');
         if (!compiled)
         {
-            const error = gl.getShaderInfoLog(shader);
-            gl.deleteShader(shader);
+            const error = webGLContext.getShaderInfoLog(shader);
+            webGLContext.deleteShader(shader);
             throw `Failed to compile shader: ${error}`;
         }
 
         return shader;
     }
 
-    private createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader)
+    private createLinkProgram(webGLRenderer: WebGLRenderer, vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
+        const { webGLContext } = webGLRenderer;
+
         // 创建程序对象
-        const program = gl.createProgram();
-        if (!program)
-        {
-            throw '创建 WebGLProgram 失败！';
-        }
+        const program = webGLContext.createProgram();
 
         // 添加着色器
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
+        webGLContext.attachShader(program, vertexShader);
+        webGLContext.attachShader(program, fragmentShader);
 
         // 链接程序
-        gl.linkProgram(program);
+        webGLContext.linkProgram(program);
 
         // 检查结果
-        const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+        const linked = webGLContext.getProgramParameter(program, 'LINK_STATUS');
         if (!linked)
         {
-            const error = gl.getProgramInfoLog(program);
-            gl.deleteProgram(program);
-            gl.deleteShader(fragmentShader);
-            gl.deleteShader(vertexShader);
+            const error = webGLContext.getProgramInfoLog(program);
+            webGLContext.deleteProgram(program);
+            webGLContext.deleteShader(fragmentShader);
+            webGLContext.deleteShader(vertexShader);
             throw `Failed to link program: ${error}`;
         }
 
@@ -123,9 +124,9 @@ export class WebGLShaders
     /**
      * 更新渲染代码
      */
-    private updateShaderCode(shader: Shader)
+    private updateShaderCode(shader: Shader, shaderMacro: ShaderMacro)
     {
-        const { shaderName, shaderMacro } = shader;
+        const { shaderName } = shader;
 
         if (!shaderName) return shader;
 
@@ -142,35 +143,36 @@ export class WebGLShaders
 
     private compileShaderProgram(vshader: string, fshader: string): CompileShaderResult
     {
-        const { gl } = this;
+        const { webGLContext } = this._webGLRenderer;
 
         // 创建着色器程序
         // 编译顶点着色器
-        const vertexShader = this.compileShaderCode(gl, gl.VERTEX_SHADER, vshader);
+        const vertexShader = this.compileShaderCode('VERTEX_SHADER', vshader);
 
         // 编译片段着色器
-        const fragmentShader = this.compileShaderCode(gl, gl.FRAGMENT_SHADER, fshader);
+        const fragmentShader = this.compileShaderCode('FRAGMENT_SHADER', fshader);
 
         // 创建着色器程序
-        const shaderProgram = this.createLinkProgram(gl, vertexShader, fragmentShader);
+        const shaderProgram = this.createLinkProgram(this._webGLRenderer, vertexShader, fragmentShader);
 
         // 获取属性信息
-        const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
+        const numAttributes = webGLContext.getProgramParameter(shaderProgram, 'ACTIVE_ATTRIBUTES');
         const attributes: { [name: string]: AttributeInfo } = {};
         let i = 0;
         while (i < numAttributes)
         {
-            const activeInfo = gl.getActiveAttrib(shaderProgram, i++);
-            attributes[activeInfo.name] = { name: activeInfo.name, size: activeInfo.size, type: activeInfo.type, location: gl.getAttribLocation(shaderProgram, activeInfo.name) };
+            const activeInfo = webGLContext.getActiveAttrib(shaderProgram, i++);
+            const location = webGLContext.getAttribLocation(shaderProgram, activeInfo.name);
+            attributes[activeInfo.name] = { activeInfo, location };
         }
         // 获取uniform信息
-        const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
-        const uniforms: { [name: string]: UniformInfo } = {};
+        const numUniforms = webGLContext.getProgramParameter(shaderProgram, 'ACTIVE_UNIFORMS');
+        const uniforms: { [name: string]: WebGLUniform } = {};
         i = 0;
         let textureID = 0;
         while (i < numUniforms)
         {
-            const activeInfo = gl.getActiveUniform(shaderProgram, i++);
+            const activeInfo = webGLContext.getActiveUniform(shaderProgram, i++);
             const reg = /(\w+)/g;
 
             let name = activeInfo.name;
@@ -195,8 +197,12 @@ export class WebGLShaders
                     paths.push(result[1]);
                     result = reg.exec(name);
                 }
-                uniforms[name] = { name: paths[0], paths, size: activeInfo.size, type: activeInfo.type, location: gl.getUniformLocation(shaderProgram, name), textureID };
-                if (activeInfo.type === gl.SAMPLER_2D || activeInfo.type === gl.SAMPLER_CUBE)
+                const location = webGLContext.getUniformLocation(shaderProgram, name);
+                const type = WebGLUniformTypeUtils.getType(activeInfo.type);
+                const isTexture = WebGLUniformTypeUtils.isTexture(type);
+                uniforms[name] = { activeInfo, location, type, paths, textureID };
+
+                if (isTexture)
                 {
                     textureID++;
                 }
@@ -236,45 +242,15 @@ export interface CompileShaderResult
     /**
      * uniform信息列表
      */
-    uniforms: { [name: string]: UniformInfo };
-}
-
-/**
- * WebGL渲染程序有效信息
- */
-export interface UniformInfo
-{
-    /**
-     * uniform名称
-     */
-    name: string;
-
-    size: number;
-    type: number;
-    /**
-     * uniform地址
-     */
-    location: WebGLUniformLocation;
-    /**
-     * texture索引
-     */
-    textureID: number;
-
-    /**
-     * Uniform数组索引，当Uniform数据为数组数据时生效
-     */
-    paths: string[];
+    uniforms: { [name: string]: WebGLUniform };
 }
 
 export interface AttributeInfo
 {
     /**
-     * 名称
+     * WebGL激活信息。
      */
-    name: string;
-
-    size: number;
-    type: number;
+    activeInfo: WebGLActiveInfo;
 
     /**
      * 属性地址

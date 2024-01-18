@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "typescript": "4.8.4",
+    "fast-glob": "^3.3.2",
     "vite": "^3.0.7"
   }
 }

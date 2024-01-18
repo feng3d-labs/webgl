@@ -1,3 +1,4 @@
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 import { angleNormals } from './mikolalysenko/angle-normals';
 import * as bunny from './mikolalysenko/bunny';
@@ -12,7 +13,7 @@ webglcanvas.style.width = '100%';
 webglcanvas.style.height = '100%';
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvas: webglcanvas, antialias: true });
+const webglRenderer = new WebGLRenderer(webglcanvas, { antialias: true });
 
 const camera = createCamera({
     center: [0, 2.5, 0]
@@ -39,7 +40,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderAtomic = new RenderAtomic({
+const renderAtomic = $set(new RenderAtomic(), {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },
