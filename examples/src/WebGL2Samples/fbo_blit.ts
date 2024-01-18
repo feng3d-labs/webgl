@@ -1,5 +1,5 @@
-import { gPartial } from '@feng3d/polyfill';
-import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
+import { $set } from '@feng3d/serialization';
+import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
 
 (function ()
 {
@@ -25,21 +25,14 @@ import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
     }
     loadImage('../resources/assets/img/Di-3d.png', (img) =>
     {
-        const webglRenderer = new WebGLRenderer({ canvas });
+        const webglRenderer = new WebGLRenderer(canvas);
 
-        const diffuse: gPartial<Texture<any>> = {
-            flipY: false,
-            textureType: 'TEXTURE_2D',
-            format: 'RGBA',
-            type: 'UNSIGNED_BYTE',
-            magFilter: 'LINEAR',
+        const diffuse = $set(new Texture2D(), {
             minFilter: 'LINEAR',
-            wrapS: 'REPEAT',
-            wrapT: 'REPEAT',
-            activePixels: img as any,
-        };
+            source: img as any,
+        });
 
-        const renderAtomic = new RenderAtomic({
+        const renderAtomic = $set(new RenderAtomic(), {
             attributes: {
                 position: {
                     array: [
@@ -71,8 +64,8 @@ import { RenderAtomic, Texture, WebGLRenderer } from '../../../src';
                 ],
                 diffuse,
             },
-            instanceCount: 2,
-            renderParams: { renderMode: 'TRIANGLE_STRIP', cullFace: 'NONE', enableBlend: true },
+            drawCall: { drawMode: 'TRIANGLE_STRIP', instanceCount: 2 },
+            renderParams: { cullFace: 'NONE', enableBlend: true },
             shader: {
                 vertex:
                     `#version 300 es

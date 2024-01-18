@@ -1,3 +1,4 @@
+import { $set } from '@feng3d/serialization';
 import { RenderAtomic, WebGLRenderer } from '../../../src';
 
 (function ()
@@ -24,9 +25,9 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
     // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
     const MAX_UNSIGNED_SHORT = 65535;
 
-    const webglRenderer = new WebGLRenderer({ canvas });
+    const webglRenderer = new WebGLRenderer(canvas);
 
-    const renderAtomic = new RenderAtomic({
+    const renderAtomic = $set(new RenderAtomic(), {
         attributes: {
             pos: {
                 array: [
@@ -43,8 +44,8 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
                 0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
             ]
         },
-        instanceCount: 2,
-        renderParams: { renderMode: 'TRIANGLE_STRIP', cullFace: 'NONE', enableBlend: true },
+        drawCall: { drawMode: 'TRIANGLE_STRIP', instanceCount: 2 },
+        renderParams: { cullFace: 'NONE', enableBlend: true },
         shader: {
             vertex:
                 `#version 300 es
