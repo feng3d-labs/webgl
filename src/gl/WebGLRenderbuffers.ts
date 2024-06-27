@@ -52,7 +52,7 @@ export class WebGLRenderbuffers
                 return;
             }
             gl.bindRenderbuffer(gl.RENDERBUFFER, webGLRenderbuffer);
-            webGLContext.renderbufferStorage('RENDERBUFFER', renderBuffer.internalformat, renderBuffer.width, renderBuffer.height);
+            gl.renderbufferStorage(gl.RENDERBUFFER, gl[renderBuffer.internalformat], renderBuffer.width, renderBuffer.height);
 
             webGLRenderbuffer.version = renderBuffer.version;
 

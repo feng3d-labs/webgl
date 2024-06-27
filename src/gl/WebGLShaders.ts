@@ -23,7 +23,7 @@ export class WebGLShaders
 
     activeShader(renderAtomic: WebGLRenderAtomic)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         const shaderMacro = renderAtomic.shaderMacro;
         const shader = renderAtomic.shader;
@@ -33,7 +33,7 @@ export class WebGLShaders
             throw new Error(`缺少着色器，无法渲染!`);
         }
         //
-        webGLContext.useProgram(shaderResult.program);
+        gl.useProgram(shaderResult.program);
 
         return shaderResult;
     }
@@ -78,7 +78,7 @@ export class WebGLShaders
 
         const shader = gl.createShader(gl[type]);
 
-        webGLContext.shaderSource(shader, code);
+        gl.shaderSource(shader, code);
         gl.compileShader(shader);
 
         // 检查编译结果
@@ -105,7 +105,7 @@ export class WebGLShaders
         gl.attachShader(program, fragmentShader);
 
         // 链接程序
-        webGLContext.linkProgram(program);
+        gl.linkProgram(program);
 
         // 检查结果
         const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
@@ -197,7 +197,7 @@ export class WebGLShaders
                     paths.push(result[1]);
                     result = reg.exec(name);
                 }
-                const location = webGLContext.getUniformLocation(shaderProgram, name);
+                const location = gl.getUniformLocation(shaderProgram, name);
                 const type = WebGLUniformTypeUtils.getType(activeInfo.type);
                 const isTexture = WebGLUniformTypeUtils.isTexture(type);
                 uniforms[name] = { activeInfo, location, type, paths, textureID };

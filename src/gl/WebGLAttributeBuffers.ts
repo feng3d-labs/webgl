@@ -71,7 +71,7 @@ export class WebGLAttributeBuffers
         }
         else
         {
-            webGLContext.vertexAttribPointer(location, size, attributeBufferCacle.type, normalized, stride, offset);
+            gl.vertexAttribPointer(location, size, gl[type], normalized, stride, offset);
         }
     }
 }

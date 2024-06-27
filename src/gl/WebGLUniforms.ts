@@ -75,7 +75,7 @@ export class WebGLUniforms
         {
             case 'BOOL':
             case 'INT':
-                webGLContext.uniform1i(location, data);
+                gl.uniform1i(location, data);
                 break;
             case 'FLOAT_MAT3':
                 gl.uniformMatrix3fv(location, false, vec);
@@ -84,16 +84,16 @@ export class WebGLUniforms
                 gl.uniformMatrix4fv(location, false, vec);
                 break;
             case 'FLOAT':
-                webGLContext.uniform1f(location, data);
+                gl.uniform1f(location, data);
                 break;
             case 'FLOAT_VEC2':
-                webGLContext.uniform2f(location, vec[0], vec[1]);
+                gl.uniform2f(location, vec[0], vec[1]);
                 break;
             case 'FLOAT_VEC3':
-                webGLContext.uniform3f(location, vec[0], vec[1], vec[2]);
+                gl.uniform3f(location, vec[0], vec[1], vec[2]);
                 break;
             case 'FLOAT_VEC4':
-                webGLContext.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
+                gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
                 break;
             case 'SAMPLER_2D':
             case 'SAMPLER_CUBE':

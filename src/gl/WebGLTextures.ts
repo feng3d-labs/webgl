@@ -48,7 +48,7 @@ export class WebGLTextures
         if (activeInfo)
         {
             // 设置纹理所在采样编号
-            webGLContext.uniform1i(activeInfo.location, activeInfo.textureID);
+            gl.uniform1i(activeInfo.location, activeInfo.textureID);
         }
 
         return texture;
@@ -56,7 +56,7 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { webGLContext, extensions, capabilities, isWebGL2 } = this._webGLRenderer;
+        const { webGLContext, extensions, capabilities, isWebGL2, gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
@@ -66,22 +66,22 @@ export class WebGLTextures
         // 设置纹理参数
         if (cache.minFilter !== minFilter)
         {
-            webGLContext.texParameteri(textureTarget, 'TEXTURE_MIN_FILTER', minFilter);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_MIN_FILTER, gl[minFilter]);
             cache.minFilter = minFilter;
         }
         if (cache.magFilter !== magFilter)
         {
-            webGLContext.texParameteri(textureTarget, 'TEXTURE_MAG_FILTER', magFilter);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_MAG_FILTER, gl[magFilter]);
             cache.magFilter = magFilter;
         }
         if (cache.wrapS !== wrapS)
         {
-            webGLContext.texParameteri(textureTarget, 'TEXTURE_WRAP_S', wrapS);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_WRAP_S, gl[wrapS]);
             cache.wrapS = wrapS;
         }
         if (cache.wrapT !== wrapT)
         {
-            webGLContext.texParameteri(textureTarget, 'TEXTURE_WRAP_T', wrapT);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_WRAP_T, gl[wrapT]);
             cache.wrapT = wrapT;
         }
 
@@ -105,7 +105,8 @@ export class WebGLTextures
 
                 if (anisotropy > 1)
                 {
-                    webGLContext.texParameterf(textureTarget, 'TEXTURE_MAX_ANISOTROPY_EXT', Math.min(anisotropy, capabilities.maxAnisotropy));
+                    const ext = gl.getExtension('EXT_texture_filter_anisotropic');
+                    gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, capabilities.maxAnisotropy));
                 }
             }
             cache.anisotropy = anisotropy;
@@ -132,8 +133,8 @@ export class WebGLTextures
             const texture = gl.createTexture(); // Create a texture object
 
             // 设置图片y轴方向
-            webGLContext.pixelStorei('UNPACK_FLIP_Y_WEBGL', data.flipY);
-            webGLContext.pixelStorei('UNPACK_PREMULTIPLY_ALPHA_WEBGL', data.premulAlpha);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, data.flipY);
+            gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, data.premulAlpha);
             // 绑定纹理
             gl.bindTexture(gl[data.textureTarget], texture);
 

@@ -61,12 +61,7 @@ export class WebGLExtensions
                 break;
 
             case 'EXT_texture_filter_anisotropic':
-                const ext = extension = gl.getExtension('EXT_texture_filter_anisotropic') || gl.getExtension('MOZ_EXT_texture_filter_anisotropic') || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
-
-                // @ts-ignore
-                gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT = ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT;
-                // @ts-ignore
-                gl.TEXTURE_MAX_ANISOTROPY_EXT = ext.TEXTURE_MAX_ANISOTROPY_EXT;
+                extension = gl.getExtension('EXT_texture_filter_anisotropic') || gl.getExtension('MOZ_EXT_texture_filter_anisotropic') || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
                 break;
 
             case 'WEBGL_compressed_texture_s3tc':

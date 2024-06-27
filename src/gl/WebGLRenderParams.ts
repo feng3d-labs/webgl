@@ -66,17 +66,17 @@ export class WebGLRenderParams
 
         if (useViewPort)
         {
-            webGLContext.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
         }
         else
         {
-            webGLContext.viewport(0, 0, width, height);
+            gl.viewport(0, 0, width, height);
         }
 
         if (usePolygonOffset)
         {
             gl.enable(gl.POLYGON_OFFSET_FILL);
-            webGLContext.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
+            gl.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
         }
         else
         {
@@ -86,7 +86,7 @@ export class WebGLRenderParams
         if (useScissor)
         {
             gl.enable(gl.SCISSOR_TEST);
-            webGLContext.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
+            gl.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
         }
         else
         {
@@ -96,9 +96,9 @@ export class WebGLRenderParams
         if (useStencil)
         {
             gl.enable(gl.STENCIL_TEST);
-            webGLContext.stencilFunc(stencilFunc, stencilFuncRef, stencilFuncMask);
-            webGLContext.stencilOp(stencilOpFail, stencilOpZFail, stencilOpZPass);
-            webGLContext.stencilMask(stencilMask);
+            gl.stencilFunc(gl[stencilFunc], stencilFuncRef, stencilFuncMask);
+            gl.stencilOp(gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
+            gl.stencilMask(stencilMask);
         }
         else
         {
