@@ -1,14 +1,15 @@
 import { RenderAtomic } from "../data/RenderAtomic";
+import { runRenderParams } from "./runRenderParams";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderAtomic)
 {
     const webGLRenderAtomic = renderObject;
 
-    const { _bindingStates, _renderParams, _elementBuffers, _uniforms, _shaders } = gl;
+    const { _bindingStates, _elementBuffers, _uniforms, _shaders } = gl;
 
     const shaderResult = _shaders.activeShader(webGLRenderAtomic);
 
-    _renderParams.updateRenderParams(webGLRenderAtomic.renderParams);
+    runRenderParams(gl, webGLRenderAtomic.renderParams);
 
     _bindingStates.setup(webGLRenderAtomic);
 

@@ -6,7 +6,6 @@ import { WebGLCapabilities } from "../gl/WebGLCapabilities";
 import { WebGLElementBuffers } from "../gl/WebGLElementBuffers";
 import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
-import { WebGLRenderParams } from "../gl/WebGLRenderParams";
 import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
 import { WebGLShaders } from "../gl/WebGLShaders";
 import { WebGLTextures } from "../gl/WebGLTextures";
@@ -50,7 +49,6 @@ function initWebGLModules(gl: WebGLRenderingContext)
     new WebGLElementBuffers(gl);
 
     new WebGLBindingStates(gl);
-    new WebGLRenderParams(gl);
     new WebGLUniforms(gl);
     new WebGLRenderbuffers(gl);
     new WebGLFramebuffers(gl);
