@@ -1,3 +1,4 @@
+import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { AttributeBuffer } from "../data/AttributeBuffer";
 import { ElementBuffer } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
@@ -71,11 +72,10 @@ export class WebGLBindingStates
     private needsUpdate(renderAtomic: RenderAtomic)
     {
         const { currentState } = this;
-        const { _shaders } = this.gl;
 
         const cachedAttributes = currentState.attributes;
 
-        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.shader);
         const attributeInfos = shaderResult.attributes;
 
         let attributesNum = 0;
@@ -114,13 +114,12 @@ export class WebGLBindingStates
      */
     private saveCache(renderAtomic: RenderAtomic)
     {
-        const { _shaders } = this.gl;
         const { currentState } = this;
 
         const cache: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
         let attributesNum = 0;
 
-        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.shader);
         const attributeInfos = shaderResult.attributes;
 
         for (const name in attributeInfos)
@@ -155,11 +154,11 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: RenderAtomic)
     {
-        const { _attributeBuffers, _shaders } = this.gl;
+        const { _attributeBuffers } = this.gl;
 
         this.initAttributes();
 
-        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.shader);
 
         for (const name in shaderResult.attributes)
         {

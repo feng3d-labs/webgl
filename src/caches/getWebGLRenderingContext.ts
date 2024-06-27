@@ -7,7 +7,6 @@ import { WebGLElementBuffers } from "../gl/WebGLElementBuffers";
 import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
 import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
-import { WebGLShaders } from "../gl/WebGLShaders";
 import { WebGLTextures } from "../gl/WebGLTextures";
 import { WebGLUniforms } from "../gl/WebGLUniforms";
 
@@ -43,7 +42,6 @@ function initWebGLModules(gl: WebGLRenderingContext)
     new WebGLCapabilities(gl);
 
     new WebGLInfo(gl);
-    new WebGLShaders(gl);
     new WebGLTextures(gl);
     new WebGLAttributeBuffers(gl);
     new WebGLElementBuffers(gl);
