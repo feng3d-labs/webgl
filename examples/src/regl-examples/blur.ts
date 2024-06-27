@@ -4,15 +4,7 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
-canvas.style.position = "fixed";
-canvas.style.left = "0px";
-canvas.style.top = "0px";
-canvas.style.width = "100%";
-canvas.style.height = "100%";
-document.body.appendChild(canvas);
-
+const canvas = document.body.appendChild(document.createElement("canvas"));
 window.addEventListener("resize", fit(canvas), false);
 
 const camera = attachCamera(canvas);

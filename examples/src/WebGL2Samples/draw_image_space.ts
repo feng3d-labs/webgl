@@ -21,7 +21,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
         return;
     }
 
-    loadImage("../resources/assets/img/Di-3d.png", (img) =>
+    loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
         const webglRenderer = new WebGLRenderer(canvas);
 

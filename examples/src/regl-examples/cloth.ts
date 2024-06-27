@@ -368,7 +368,7 @@ function draw()
 }
 
 const img = new Image();
-img.src = "resources/assets/cloth.png";
+img.src = "../../resources/assets/cloth.png";
 await img.decode();
 
 const diffuse = new Texture2D();

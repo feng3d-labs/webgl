@@ -120,7 +120,7 @@ function draw()
 }
 
 const img = new Image();
-img.src = "resources/assets/peppers.png";
+img.src = "../../resources/assets/peppers.png";
 await img.decode();
 
 const diffuse = new Texture2D();
