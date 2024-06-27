@@ -1,6 +1,7 @@
 const files = {
     "webgl-examples": [
-        "sample1"
+        "sample1",
+        "sample2",
     ],
     "regl-examples": [
         "basic",

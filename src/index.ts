@@ -3,6 +3,8 @@ export * from "./RenderBuffer";
 export * from "./WebGLRenderer";
 export * from "./data/AttributeBuffer";
 export * from "./data/ElementBuffer";
+export * from "./data/IWebGLBuffer";
+export * from "./data/IWebGLRenderPipeline";
 export * from "./data/RenderAtomic";
 export * from "./data/RenderParams";
 export * from "./data/Shader";

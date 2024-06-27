@@ -1,4 +1,5 @@
 import { IWebGLPassDescriptor } from "./IWebGLPassDescriptor";
+import { RenderAtomic } from "./RenderAtomic";
 
 /**
  * WebGL渲染通道
@@ -15,5 +16,5 @@ export class IWebGLRenderPass
     /**
      * 渲染对象列表，默认为 []。
      */
-    // renderObjects?: IRenderObject[];
+    renderObjects?: RenderAtomic[];
 }
