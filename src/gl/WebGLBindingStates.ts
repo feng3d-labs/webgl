@@ -181,11 +181,11 @@ export class WebGLBindingStates
      */
     private bindVertexArrayObject(vao: WebGLVertexArrayObject)
     {
-        const { extensions, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         if (gl instanceof WebGL2RenderingContext) return gl.bindVertexArray(vao);
 
-        const extension = extensions.getExtension('OES_vertex_array_object');
+        const extension = gl.getExtension('OES_vertex_array_object');
         extension.bindVertexArrayOES(vao);
     }
 
@@ -219,7 +219,7 @@ export class WebGLBindingStates
 
         if (attributeDivisors[location] !== divisor)
         {
-            const { gl, extensions } = this._webGLRenderer;
+            const { gl } = this._webGLRenderer;
 
             if (gl instanceof WebGL2RenderingContext)
             {
@@ -227,7 +227,7 @@ export class WebGLBindingStates
             }
             else
             {
-                const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                const extension = gl.getExtension('ANGLE_instanced_arrays');
                 extension.vertexAttribDivisorANGLE(location, divisor);
             }
             attributeDivisors[location] = divisor;
@@ -296,14 +296,14 @@ export class WebGLBindingStates
      */
     private createVertexArrayObject()
     {
-        const { gl, extensions } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         if (gl instanceof WebGL2RenderingContext)
         {
             return gl.createVertexArray();
         }
 
-        const extension = extensions.getExtension('OES_vertex_array_object');
+        const extension = gl.getExtension('OES_vertex_array_object');
 
         return extension.createVertexArrayOES();
     }

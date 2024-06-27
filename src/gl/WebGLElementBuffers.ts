@@ -17,7 +17,7 @@ export class WebGLElementBuffers
 
     render(renderAtomic: WebGLRenderAtomic)
     {
-        const { info, attributeBuffers: attributes, gl, extensions } = this._webGLRenderer;
+        const { info, attributeBuffers: attributes, gl } = this._webGLRenderer;
 
         const drawCall = renderAtomic.drawCall;
 
@@ -72,7 +72,7 @@ export class WebGLElementBuffers
                 }
                 else
                 {
-                    const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                    const extension = gl.getExtension('ANGLE_instanced_arrays');
                     extension.drawElementsInstancedANGLE(gl[drawMode], count, gl[type], offset, instanceCount);
                 }
             }
@@ -82,7 +82,7 @@ export class WebGLElementBuffers
             }
             else
             {
-                const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                const extension = gl.getExtension('ANGLE_instanced_arrays');
                 extension.drawArraysInstancedANGLE(gl[drawMode], offset, count, instanceCount);
             }
         }

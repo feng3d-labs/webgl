@@ -10,7 +10,6 @@ export * from './data/Texture';
 export * from './data/Uniforms';
 export * from './gl/WebGLCapabilities';
 export * from './gl/WebGLEnums';
-export * from './gl/WebGLExtensions';
 export * from './gl/WebGLUniforms';
 export * from './shader/Macro';
 export * from './shader/ShaderLib';
@@ -18,3 +17,4 @@ export * from './shader/ShaderMacroUtils';
 export * from './textures/RenderTargetTexture2D';
 export * from './textures/Texture2D';
 export * from './utils/ImageUtil';
+

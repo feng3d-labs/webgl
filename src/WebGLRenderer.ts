@@ -4,7 +4,6 @@ import { WebGLAttributeBuffers } from './gl/WebGLAttributeBuffers';
 import { WebGLBindingStates } from './gl/WebGLBindingStates';
 import { WebGLCapabilities } from './gl/WebGLCapabilities';
 import { WebGLElementBuffers } from './gl/WebGLElementBuffers';
-import { WebGLExtensions } from './gl/WebGLExtensions';
 import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
 import { WebGLInfo } from './gl/WebGLInfo';
 import { WebGLRenderAtomic } from './gl/WebGLRenderAtomic';
@@ -32,11 +31,6 @@ export class WebGLRenderer
      * WebGL渲染上下文，圖形庫。
      */
     readonly gl: WebGLRenderingContext;
-
-    /**
-     * WebGL扩展
-     */
-    readonly extensions: WebGLExtensions;
 
     /**
      * WEBGL支持功能
@@ -93,8 +87,6 @@ export class WebGLRenderer
 
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
         this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
-
-        this.extensions = new WebGLExtensions(this);
 
         this.capabilities = new WebGLCapabilities(this);
         this.info = new WebGLInfo(this);
