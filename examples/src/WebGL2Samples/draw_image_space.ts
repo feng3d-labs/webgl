@@ -74,9 +74,16 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             //
             renderAtomic.uniforms["u_imageSize"] = [canvas.width / 2, canvas.height / 2];
 
-            webglRenderer.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-            webglRenderer.gl.clear(webglRenderer.gl.COLOR_BUFFER_BIT);
-            webglRenderer.render(renderAtomic);
+            webglRenderer.submit({
+                renderPasss: [{
+                    passDescriptor: {
+                        clearColor: [0.0, 0.0, 0.0, 1.0],
+                        clearMask: ["COLOR_BUFFER_BIT"]
+                    },
+                    renderObjects: [renderAtomic]
+                }]
+            });
+
             requestAnimationFrame(draw);
         }
         draw();

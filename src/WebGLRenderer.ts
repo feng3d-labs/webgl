@@ -2,7 +2,7 @@ import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
 import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
 import { IWebGLSubmit } from "./data/IWebGLSubmit";
 import { RenderAtomic } from "./data/RenderAtomic";
-import { WebGLRenderAtomic } from "./gl/WebGLRenderAtomic";
+import { runRenderObject } from "./runs/runRenderObject";
 import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
 
 /**
@@ -58,18 +58,6 @@ export class WebGLRenderer
         const gl = getWebGLRenderingContext(this.__canvasContext);
         if (gl.isContextLost()) return;
 
-        const webGLRenderAtomic = new WebGLRenderAtomic(renderAtomic);
-
-        const { _bindingStates, _renderParams, _elementBuffers, _uniforms, _shaders } = gl;
-
-        const shaderResult = _shaders.activeShader(webGLRenderAtomic);
-
-        _renderParams.updateRenderParams(webGLRenderAtomic.renderParams);
-
-        _bindingStates.setup(webGLRenderAtomic);
-
-        _uniforms.activeUniforms(webGLRenderAtomic, shaderResult.uniforms);
-
-        _elementBuffers.render(webGLRenderAtomic);
+        runRenderObject(gl, renderAtomic);
     }
 }
