@@ -48,13 +48,13 @@ export class WebGLFramebuffers
 
     active(frameBuffer: FrameBuffer)
     {
-        const { renderbuffers, textures, webGLContext } = this._webGLRenderer;
+        const { renderbuffers, textures, webGLContext, gl } = this._webGLRenderer;
 
         const target: FramebufferTarget = 'FRAMEBUFFER';
 
         if (!frameBuffer)
         {
-            webGLContext.bindFramebuffer(target, null);
+            gl.bindFramebuffer(gl[target], null);
 
             return;
         }
@@ -62,7 +62,7 @@ export class WebGLFramebuffers
         const webGLFramebuffer = this.get(frameBuffer);
 
         // 绑定帧缓冲区对象
-        webGLContext.bindFramebuffer(target, webGLFramebuffer);
+        gl.bindFramebuffer(gl[target], webGLFramebuffer);
 
         let needCheck = false;
 
@@ -89,8 +89,8 @@ export class WebGLFramebuffers
         if (needCheck)
         {
             // 检查Framebuffer状态
-            const e = webGLContext.checkFramebufferStatus(target);
-            if (webGLContext.FRAMEBUFFER_COMPLETE !== e)
+            const e = gl.checkFramebufferStatus(gl[target]);
+            if (gl.FRAMEBUFFER_COMPLETE !== e)
             {
                 console.warn(`Frame buffer object is incomplete: ${e.toString()}`);
 
@@ -103,14 +103,14 @@ export class WebGLFramebuffers
 
     private get(frameBuffer: FrameBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { _cache: frameBuffers } = this;
 
         // Create a framebuffer object (FBO)
         let buffer = frameBuffers.get(frameBuffer);
         if (!buffer)
         {
-            buffer = webGLContext.createFramebuffer();
+            buffer = gl.createFramebuffer();
             if (!buffer)
             {
                 console.warn('Failed to create frame buffer object');

@@ -1,6 +1,6 @@
 import { watcher } from '@feng3d/watcher';
-import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from '../data/AttributeBuffer';
 import { WebGLRenderer } from '../WebGLRenderer';
+import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from '../data/AttributeBuffer';
 
 export class WebGLAttributeBuffers
 {
@@ -50,7 +50,7 @@ export class WebGLAttributeBuffers
 
     vertexAttribPointer(location: number, attribute: AttributeBuffer)
     {
-        const { isWebGL2, webGLContext } = this._webGLRenderer;
+        const { isWebGL2, webGLContext, gl } = this._webGLRenderer;
 
         const attributeBufferCacle = this.get(attribute);
 
@@ -63,11 +63,11 @@ export class WebGLAttributeBuffers
         const stride = size * bytesPerElement;
         const offset = 0;
 
-        webGLContext.bindBuffer('ARRAY_BUFFER', buffer);
+        gl.bindBuffer(gl['ARRAY_BUFFER'], buffer);
 
-        if (isWebGL2 === true && (type === 'INT' || type === 'UNSIGNED_INT'))
+        if (gl instanceof WebGL2RenderingContext && (type === 'INT' || type === 'UNSIGNED_INT'))
         {
-            webGLContext.vertexAttribIPointer(location, size, type, stride, offset);
+            gl.vertexAttribIPointer(location, size, gl[type], stride, offset);
         }
         else
         {
@@ -137,9 +137,9 @@ export class WebGLAttributeBuffer
         const count = array !== undefined ? array.length / attribute.itemSize : 0;
         const normalized = attribute.normalized === true;
 
-        buffer = webGLContext.createBuffer();
+        buffer = gl.createBuffer();
 
-        webGLContext.bindBuffer('ARRAY_BUFFER', buffer);
+        gl.bindBuffer(gl['ARRAY_BUFFER'], buffer);
         gl.bufferData(gl['ARRAY_BUFFER'], array, gl[usage]);
 
         this.buffer = buffer;

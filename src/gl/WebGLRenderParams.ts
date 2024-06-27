@@ -15,7 +15,7 @@ export class WebGLRenderParams
      */
     updateRenderParams(renderParams: RenderParams)
     {
-        const { webGLContext, width, height } = this._webGLRenderer;
+        const { webGLContext, width, height, gl } = this._webGLRenderer;
 
         const { cullFace, frontFace,
             enableBlend, blendEquation, sfactor, dfactor,
@@ -42,8 +42,8 @@ export class WebGLRenderParams
         {
             //
             webGLContext.enable('BLEND');
-            webGLContext.blendEquation(blendEquation);
-            webGLContext.blendFunc(sfactor, dfactor);
+            gl.blendEquation(gl[blendEquation]);
+            gl.blendFunc(gl[sfactor], gl[dfactor]);
         }
         else
         {
@@ -62,7 +62,7 @@ export class WebGLRenderParams
 
         webGLContext.depthMask(depthMask);
 
-        webGLContext.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
+        gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
         if (useViewPort)
         {

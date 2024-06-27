@@ -66,11 +66,29 @@ export class WebGLElementBuffers
         {
             if (element)
             {
-                webGLContext.drawElementsInstanced(drawMode, count, type, offset * bytesPerElement, instanceCount);
+                const { isWebGL2, gl2, extensions } = this._webGLRenderer;
+                if (isWebGL2)
+                {
+                    gl2.drawElementsInstanced(gl2[drawMode], count, gl2[type], offset, instanceCount);
+                }
+                else
+                {
+                    const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                    extension.drawElementsInstancedANGLE(gl2[drawMode], count, gl2[type], offset, instanceCount);
+                }
             }
             else
             {
-                webGLContext.drawArraysInstanced(drawMode, offset, count, instanceCount);
+                const { gl2, isWebGL2, extensions } = this._webGLRenderer;
+                if (isWebGL2)
+                {
+                    gl2.drawArraysInstanced(gl2[drawMode], offset, count, instanceCount);
+                }
+                else
+                {
+                    const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                    extension.drawArraysInstancedANGLE(gl2[drawMode], offset, count, instanceCount);
+                }
             }
         }
         else
@@ -91,11 +109,11 @@ export class WebGLElementBuffers
 
     bindBuffer(element: ElementBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
 
         if (element)
         {
-            webGLContext.bindBuffer('ELEMENT_ARRAY_BUFFER', this.get(element).buffer);
+            gl.bindBuffer(gl['ELEMENT_ARRAY_BUFFER'], this.get(element).buffer);
         }
     }
 
@@ -194,9 +212,9 @@ class WebGLElementBuffer
         const { type, array } = transfromArrayType(element.array, element.type);
         const usage: BufferUsage = element.usage || 'STATIC_DRAW';
 
-        buffer = webGLContext.createBuffer();
+        buffer = gl.createBuffer();
 
-        webGLContext.bindBuffer('ELEMENT_ARRAY_BUFFER', buffer);
+        gl.bindBuffer(gl['ELEMENT_ARRAY_BUFFER'], buffer);
         gl.bufferData(gl['ELEMENT_ARRAY_BUFFER'], array, gl[usage]);
 
         this.type = type;

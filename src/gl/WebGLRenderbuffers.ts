@@ -28,7 +28,7 @@ export class WebGLRenderbuffers
      */
     get(renderBuffer: RenderBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { renderBuffers } = this;
 
         let webGLRenderbuffer = renderBuffers.get(renderBuffer);
@@ -44,14 +44,14 @@ export class WebGLRenderbuffers
         if (!webGLRenderbuffer)
         {
             // Create a renderbuffer object and Set its size and parameters
-            webGLRenderbuffer = webGLContext.createRenderbuffer(); // Create a renderbuffer object
+            webGLRenderbuffer = gl.createRenderbuffer(); // Create a renderbuffer object
             if (!webGLRenderbuffer)
             {
                 console.warn('Failed to create renderbuffer object');
 
                 return;
             }
-            webGLContext.bindRenderbuffer('RENDERBUFFER', webGLRenderbuffer);
+            gl.bindRenderbuffer(gl['RENDERBUFFER'], webGLRenderbuffer);
             webGLContext.renderbufferStorage('RENDERBUFFER', renderBuffer.internalformat, renderBuffer.width, renderBuffer.height);
 
             webGLRenderbuffer.version = renderBuffer.version;

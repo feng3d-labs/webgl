@@ -30,18 +30,18 @@ export class WebGLTextures
 
     active(data: Texture, activeInfo?: WebGLUniform)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
 
         if (activeInfo)
         {
             // 激活纹理编号
-            webGLContext.activeTexture(activeInfo.textureID);
+            gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
         }
 
         const texture = this.get(data);
 
         // 绑定纹理
-        webGLContext.bindTexture(data.textureTarget, texture);
+        gl.bindTexture(gl[data.textureTarget], texture);
 
         this.setTextureParameters(data);
 
@@ -118,7 +118,7 @@ export class WebGLTextures
      */
     get(data: Texture)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         let cache = textures.get(data);
@@ -135,7 +135,7 @@ export class WebGLTextures
             webGLContext.pixelStorei('UNPACK_FLIP_Y_WEBGL', data.flipY);
             webGLContext.pixelStorei('UNPACK_PREMULTIPLY_ALPHA_WEBGL', data.premulAlpha);
             // 绑定纹理
-            webGLContext.bindTexture(data.textureTarget, texture);
+            gl.bindTexture(gl[data.textureTarget], texture);
 
             // 设置纹理图片
             data.setTextureData(this._webGLRenderer.webGLContext);

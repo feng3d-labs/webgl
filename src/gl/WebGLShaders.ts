@@ -74,12 +74,12 @@ export class WebGLShaders
      */
     private compileShaderCode(type: ShaderType, code: string)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
 
-        const shader = webGLContext.createShader(type);
+        const shader = gl.createShader(gl[type]);
 
         webGLContext.shaderSource(shader, code);
-        webGLContext.compileShader(shader);
+        gl.compileShader(shader);
 
         // 检查编译结果
         const compiled = webGLContext.getShaderParameter(shader, 'COMPILE_STATUS');
@@ -95,14 +95,14 @@ export class WebGLShaders
 
     private createLinkProgram(webGLRenderer: WebGLRenderer, vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
-        const { webGLContext } = webGLRenderer;
+        const { webGLContext, gl } = webGLRenderer;
 
         // 创建程序对象
-        const program = webGLContext.createProgram();
+        const program = gl.createProgram();
 
         // 添加着色器
-        webGLContext.attachShader(program, vertexShader);
-        webGLContext.attachShader(program, fragmentShader);
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
 
         // 链接程序
         webGLContext.linkProgram(program);
