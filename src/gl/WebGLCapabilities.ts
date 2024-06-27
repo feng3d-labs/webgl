@@ -121,12 +121,12 @@ export class WebGLCapabilities
 
     private _getMaxPrecision(precision: 'highp' | 'mediump' | 'lowp' = 'highp')
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
 
         if (precision === 'highp')
         {
-            if (webGLContext.getShaderPrecisionFormat('VERTEX_SHADER', 'HIGH_FLOAT').precision > 0
-                && webGLContext.getShaderPrecisionFormat('FRAGMENT_SHADER', 'HIGH_FLOAT').precision > 0)
+            if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
+                && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
             {
                 return 'highp';
             }
@@ -134,8 +134,8 @@ export class WebGLCapabilities
         }
         if (precision === 'mediump')
         {
-            if (webGLContext.getShaderPrecisionFormat('VERTEX_SHADER', 'MEDIUM_FLOAT').precision > 0
-                && webGLContext.getShaderPrecisionFormat('FRAGMENT_SHADER', 'MEDIUM_FLOAT').precision > 0)
+            if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
+                && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
             {
                 return 'mediump';
             }

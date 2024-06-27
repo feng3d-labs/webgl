@@ -70,7 +70,7 @@ export class WebGLFramebuffers
         const texture = textures.get(frameBuffer.texture);
         if (webGLFramebuffer.texture !== texture)
         {
-            gl.framebufferTexture2D(gl[target], gl['COLOR_ATTACHMENT0'], gl['TEXTURE_2D'], texture, 0);
+            gl.framebufferTexture2D(gl[target], gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
             webGLFramebuffer.texture = texture;
 
             needCheck = true;
@@ -80,7 +80,7 @@ export class WebGLFramebuffers
         const depthBuffer = renderbuffers.get(frameBuffer.depthBuffer);
         if (webGLFramebuffer.depthBuffer !== depthBuffer)
         {
-            gl.framebufferRenderbuffer(gl[target], gl['DEPTH_ATTACHMENT'], gl['RENDERBUFFER'], depthBuffer);
+            gl.framebufferRenderbuffer(gl[target], gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
             webGLFramebuffer.depthBuffer = depthBuffer;
 
             needCheck = true;

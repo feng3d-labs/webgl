@@ -1,8 +1,6 @@
 import { VertexAttributeTypes } from './data/AttributeBuffer';
-import { FrontFace, StencilFunc, StencilOp } from './data/RenderParams';
-import { AttachmentPoint, FramebufferTarget, PixelStoreiParameter, PrecisionType, ProgramParameter, RenderbufferInternalformat, Renderbuffertarget, ShaderParameter, ShaderType, TexImage2DTarget, TexParameterf, TexParameteri, TextureTarget } from './gl/WebGLEnums';
-import { WebGLExtensionMapFull } from './gl/WebGLExtensions';
-import { WebGLParameters } from './gl/WebGLParameters';
+import { StencilFunc, StencilOp } from './data/RenderParams';
+import { PixelStoreiParameter, PrecisionType, ProgramParameter, RenderbufferInternalformat, Renderbuffertarget, ShaderParameter, ShaderType, TexParameterf, TexParameteri, TextureTarget } from './gl/WebGLEnums';
 import { WebGLRenderer } from './WebGLRenderer';
 
 /**
@@ -16,96 +14,6 @@ export class WebGLContextBase
     {
         this._webGLRenderer = webGLRenderer;
     }
-
-    /**
-     * The WebGLRenderingContext.getProgramInfoLog returns the information log for the specified WebGLProgram object. It contains errors that occurred during failed linking or validation of WebGLProgram objects.
-     *
-     * @param program The WebGLProgram to query.
-     * @returns A string that contains diagnostic messages, warning messages, and other information about the last linking or validation operation. When a WebGLProgram object is initially created, its information log will be a string of length 0.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getProgramInfoLog
-     */
-    getProgramInfoLog(program: WebGLProgram): string | null
-    {
-        const { gl } = this._webGLRenderer;
-        const infoLog = gl.getProgramInfoLog(program);
-
-        return infoLog;
-    }
-
-    /**
-     * The WebGLRenderingContext.getProgramParameter() method of the WebGL API returns information about the given program.
-     *
-     * @param program A WebGLProgram to get parameter information from.
-     * @param pname A GLenum specifying the information to query.
-     * @returns Returns the requested program information (as specified with pname).
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getProgramParameter
-     */
-    getProgramParameter<K extends keyof ProgramParameter>(program: WebGLProgram, pname: K): ProgramParameter[K]
-    {
-        const { gl2 } = this._webGLRenderer;
-        const result = gl2.getProgramParameter(program, gl2[pname]);
-
-        return result;
-    }
-
-    // getRenderbufferParameter(target: GLenum, pname: GLenum): any;
-
-    /**
-     * The WebGLRenderingContext.getShaderInfoLog returns the information log for the specified WebGLShader object. It contains warnings, debugging and compile information.
-     *
-     * @param shader A WebGLShader to query.
-     * @returns A string that contains diagnostic messages, warning messages, and other information about the last compile operation. When a WebGLShader object is initially created, its information log will be a string of length 0.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getShaderInfoLog
-     */
-    getShaderInfoLog(shader: WebGLShader): string | null
-    {
-        const { gl } = this._webGLRenderer;
-        const info = gl.getShaderInfoLog(shader);
-
-        return info;
-    }
-
-    /**
-     * The WebGLRenderingContext.getShaderParameter() method of the WebGL API returns information about the given shader.
-     *
-     * @param shader A WebGLShader to get parameter information from.
-     * @param pname A GLenum specifying the information to query.
-     * @returns Returns the requested shader information (as specified with pname).
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getShaderParameter
-     */
-    getShaderParameter<K extends keyof ShaderParameter>(shader: WebGLShader, pname: K): ShaderParameter[K]
-    {
-        const { gl } = this._webGLRenderer;
-        const result = gl.getShaderParameter(shader, gl[pname]);
-
-        return result;
-    }
-
-    /**
-     * The WebGLRenderingContext.getShaderPrecisionFormat() method of the WebGL API returns a new WebGLShaderPrecisionFormat object describing the range and precision for the specified shader numeric format.
-     *
-     * @param shadertype Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
-     * @param precisiontype A precision type value. Either gl.LOW_FLOAT, gl.MEDIUM_FLOAT, gl.HIGH_FLOAT, gl.LOW_INT, gl.MEDIUM_INT, or gl.HIGH_INT.
-     * @returns A WebGLShaderPrecisionFormat object or null, if an error occurs.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getShaderPrecisionFormat
-     */
-    getShaderPrecisionFormat(shadertype: ShaderType, precisiontype: PrecisionType): WebGLShaderPrecisionFormat | null
-    {
-        const { gl } = this._webGLRenderer;
-        const result = gl.getShaderPrecisionFormat(gl[shadertype], gl[precisiontype]);
-
-        return result;
-    }
-
-    // getShaderSource(shader: WebGLShader): string | null;
-    // getSupportedExtensions(): string[] | null;
-    // getTexParameter(target: GLenum, pname: GLenum): any;
-    // getUniform(program: WebGLProgram, location: WebGLUniformLocation): any;
 
     /**
      * Part of the WebGL API, the WebGLRenderingContext method getUniformLocation() returns the location of a specific uniform variable which is part of a given WebGLProgram.

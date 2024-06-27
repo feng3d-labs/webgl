@@ -113,7 +113,7 @@ export class WebGLElementBuffers
 
         if (element)
         {
-            gl.bindBuffer(gl['ELEMENT_ARRAY_BUFFER'], this.get(element).buffer);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.get(element).buffer);
         }
     }
 
@@ -214,8 +214,8 @@ class WebGLElementBuffer
 
         buffer = gl.createBuffer();
 
-        gl.bindBuffer(gl['ELEMENT_ARRAY_BUFFER'], buffer);
-        gl.bufferData(gl['ELEMENT_ARRAY_BUFFER'], array, gl[usage]);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[usage]);
 
         this.type = type;
         this.count = array.length;

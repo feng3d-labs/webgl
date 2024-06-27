@@ -82,10 +82,10 @@ export class WebGLShaders
         gl.compileShader(shader);
 
         // 检查编译结果
-        const compiled = webGLContext.getShaderParameter(shader, 'COMPILE_STATUS');
+        const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
         if (!compiled)
         {
-            const error = webGLContext.getShaderInfoLog(shader);
+            const error = gl.getShaderInfoLog(shader);
             gl.deleteShader(shader);
             throw `Failed to compile shader: ${error}`;
         }
@@ -108,10 +108,10 @@ export class WebGLShaders
         webGLContext.linkProgram(program);
 
         // 检查结果
-        const linked = webGLContext.getProgramParameter(program, 'LINK_STATUS');
+        const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
         if (!linked)
         {
-            const error = webGLContext.getProgramInfoLog(program);
+            const error = gl.getProgramInfoLog(program);
             gl.deleteProgram(program);
             gl.deleteShader(fragmentShader);
             gl.deleteShader(vertexShader);
@@ -156,7 +156,7 @@ export class WebGLShaders
         const shaderProgram = this.createLinkProgram(this._webGLRenderer, vertexShader, fragmentShader);
 
         // 获取属性信息
-        const numAttributes = webGLContext.getProgramParameter(shaderProgram, 'ACTIVE_ATTRIBUTES');
+        const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
         const attributes: { [name: string]: AttributeInfo } = {};
         let i = 0;
         while (i < numAttributes)
@@ -166,7 +166,7 @@ export class WebGLShaders
             attributes[activeInfo.name] = { activeInfo, location };
         }
         // 获取uniform信息
-        const numUniforms = webGLContext.getProgramParameter(shaderProgram, 'ACTIVE_UNIFORMS');
+        const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
         const uniforms: { [name: string]: WebGLUniform } = {};
         i = 0;
         let textureID = 0;

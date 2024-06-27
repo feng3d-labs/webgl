@@ -46,7 +46,7 @@ export class Texture2D extends Texture
     setTextureData(webGLContext: WebGLContext)
     {
         const { gl } = webGLContext['_webGLRenderer'];
-        gl.texImage2D(gl['TEXTURE_2D'], 0, gl[this.format], gl[this.format], gl[this.type], this.source);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl[this.format], gl[this.format], gl[this.type], this.source);
     }
 
     getSize()

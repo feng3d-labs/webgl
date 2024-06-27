@@ -63,7 +63,7 @@ export class WebGLAttributeBuffers
         const stride = size * bytesPerElement;
         const offset = 0;
 
-        gl.bindBuffer(gl['ARRAY_BUFFER'], buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
         if (gl instanceof WebGL2RenderingContext && (type === 'INT' || type === 'UNSIGNED_INT'))
         {
@@ -139,8 +139,8 @@ export class WebGLAttributeBuffer
 
         buffer = gl.createBuffer();
 
-        gl.bindBuffer(gl['ARRAY_BUFFER'], buffer);
-        gl.bufferData(gl['ARRAY_BUFFER'], array, gl[usage]);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, array, gl[usage]);
 
         this.buffer = buffer;
         this.type = type;

@@ -29,11 +29,11 @@ export class WebGLRenderParams
 
         if (cullFace === 'NONE')
         {
-            gl.disable(gl['CULL_FACE']);
+            gl.disable(gl.CULL_FACE);
         }
         else
         {
-            gl.enable(gl['CULL_FACE']);
+            gl.enable(gl.CULL_FACE);
             gl.cullFace(gl[cullFace]);
             gl.frontFace(gl[frontFace]);
         }
@@ -41,23 +41,23 @@ export class WebGLRenderParams
         if (enableBlend)
         {
             //
-            gl.enable(gl['BLEND']);
+            gl.enable(gl.BLEND);
             gl.blendEquation(gl[blendEquation]);
             gl.blendFunc(gl[sfactor], gl[dfactor]);
         }
         else
         {
-            gl.disable(gl['BLEND']);
+            gl.disable(gl.BLEND);
         }
 
         if (depthtest)
         {
-            gl.enable(gl['DEPTH_TEST']);
+            gl.enable(gl.DEPTH_TEST);
             gl.depthFunc(gl[depthFunc]);
         }
         else
         {
-            gl.disable(gl['DEPTH_TEST']);
+            gl.disable(gl.DEPTH_TEST);
         }
 
         gl.depthMask(depthMask);
@@ -75,34 +75,34 @@ export class WebGLRenderParams
 
         if (usePolygonOffset)
         {
-            gl.enable(gl['POLYGON_OFFSET_FILL']);
+            gl.enable(gl.POLYGON_OFFSET_FILL);
             webGLContext.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
         }
         else
         {
-            gl.disable(gl['POLYGON_OFFSET_FILL']);
+            gl.disable(gl.POLYGON_OFFSET_FILL);
         }
 
         if (useScissor)
         {
-            gl.enable(gl['SCISSOR_TEST']);
+            gl.enable(gl.SCISSOR_TEST);
             webGLContext.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
         }
         else
         {
-            gl.disable(gl['SCISSOR_TEST']);
+            gl.disable(gl.SCISSOR_TEST);
         }
 
         if (useStencil)
         {
-            gl.enable(gl['STENCIL_TEST']);
+            gl.enable(gl.STENCIL_TEST);
             webGLContext.stencilFunc(stencilFunc, stencilFuncRef, stencilFuncMask);
             webGLContext.stencilOp(stencilOpFail, stencilOpZFail, stencilOpZPass);
             webGLContext.stencilMask(stencilMask);
         }
         else
         {
-            gl.disable(gl['STENCIL_TEST']);
+            gl.disable(gl.STENCIL_TEST);
         }
     }
 }
