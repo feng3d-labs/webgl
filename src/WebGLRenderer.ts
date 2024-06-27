@@ -23,11 +23,6 @@ import { WebGLUniforms } from './gl/WebGLUniforms';
 export class WebGLRenderer
 {
     /**
-     * 将被绘制的目标画布。
-     */
-    readonly canvas: HTMLCanvasElement;
-
-    /**
      * WebGL渲染上下文，圖形庫。
      */
     readonly gl: WebGLRenderingContext;
@@ -73,7 +68,6 @@ export class WebGLRenderer
         canvas.addEventListener('webglcontextlost', this._onContextLost, false);
         canvas.addEventListener('webglcontextrestored', this._onContextRestore, false);
         canvas.addEventListener('webglcontextcreationerror', this._onContextCreationError, false);
-        this.canvas = canvas;
 
         contextAttributes = Object.assign({
             depth: true,
