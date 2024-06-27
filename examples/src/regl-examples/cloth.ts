@@ -1,22 +1,22 @@
-import { fit } from './hughsk/canvas-fit';
-import { attachCamera } from './hughsk/canvas-orbit-camera';
-import * as mat4 from './stackgl/gl-mat4';
-import * as vec3 from './stackgl/gl-vec3';
+import { fit } from "./hughsk/canvas-fit";
+import { attachCamera } from "./hughsk/canvas-orbit-camera";
+import * as mat4 from "./stackgl/gl-mat4";
+import * as vec3 from "./stackgl/gl-vec3";
 
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
-const canvas = document.createElement('canvas');
-canvas.id = 'glcanvas';
-canvas.style.position = 'fixed';
-canvas.style.left = '0px';
-canvas.style.top = '0px';
-canvas.style.width = '100%';
-canvas.style.height = '100%';
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.style.position = "fixed";
+canvas.style.left = "0px";
+canvas.style.top = "0px";
+canvas.style.width = "100%";
+canvas.style.height = "100%";
 document.body.appendChild(canvas);
 
 const camera = attachCamera(canvas);
-window.addEventListener('resize', fit(canvas), false);
+window.addEventListener("resize", fit(canvas), false);
 
 // configure intial camera view.
 camera.view(mat4.lookAt([], [0, 3.0, 30.0], [0, 0, -5.5], [0, 1, 0]));
@@ -182,7 +182,7 @@ const renderAtomic = $set(new RenderAtomic(), {
                 1000),
         texture: () => diffuse,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
+    renderParams: { cullFace: "NONE", enableBlend: true },
     shader: {
         vertex: `precision mediump float;
 
@@ -368,7 +368,7 @@ function draw()
 }
 
 const img = new Image();
-img.src = 'resources/assets/cloth.png';
+img.src = "resources/assets/cloth.png";
 await img.decode();
 
 const diffuse = new Texture2D();

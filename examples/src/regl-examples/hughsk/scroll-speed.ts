@@ -1,5 +1,5 @@
-import { addWheelListener as wheel } from '../anvaka/wheel';
-import { EventEmitter as Emitter } from '../Gozala/events';
+import { addWheelListener as wheel } from "../anvaka/wheel";
+import { EventEmitter as Emitter } from "../Gozala/events";
 
 export function getScroller(element, preventDefault)
 {
@@ -8,7 +8,7 @@ export function getScroller(element, preventDefault)
     scroll.flush = flush;
     flush();
 
-    if (typeof window === 'undefined')
+    if (typeof window === "undefined")
     {
         return scroll;
     }
@@ -33,7 +33,7 @@ export function getScroller(element, preventDefault)
         scroll[0] += scale * (e.deltaX || 0);
         scroll[1] += scale * (e.deltaY || 0);
         scroll[2] += scale * (e.deltaZ || 0);
-        scroll.emit('scroll', scroll);
+        scroll.emit("scroll", scroll);
 
         if (!preventDefault) return;
         if (!e.preventDefault) return;

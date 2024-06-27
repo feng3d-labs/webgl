@@ -2,23 +2,23 @@
 
 /* global XMLHttpRequest */
 const configParameters = [
-    'manifest',
-    'onDone',
-    'onProgress',
-    'onError'
+    "manifest",
+    "onDone",
+    "onProgress",
+    "onError"
 ];
 
 const manifestParameters = [
-    'type',
-    'src',
-    'stream',
-    'credentials',
-    'parser'
+    "type",
+    "src",
+    "stream",
+    "credentials",
+    "parser"
 ];
 
 const parserParameters = [
-    'onData',
-    'onDone'
+    "onData",
+    "onDone"
 ];
 
 const STATE_ERROR = -1;
@@ -52,17 +52,17 @@ function Loader(name, cancel)
 
 export function resl(config)
 {
-    if (typeof config !== 'object' || !config)
+    if (typeof config !== "object" || !config)
     {
-        raise('invalid or missing configuration');
+        raise("invalid or missing configuration");
     }
 
-    checkType(config, configParameters, 'config');
+    checkType(config, configParameters, "config");
 
     const manifest = config.manifest;
-    if (typeof manifest !== 'object' || !manifest)
+    if (typeof manifest !== "object" || !manifest)
     {
-        raise('missing manifest');
+        raise("missing manifest");
     }
 
     function getFunction(name, _dflt?)
@@ -70,7 +70,7 @@ export function resl(config)
         if (name in config)
         {
             const func = config[name];
-            if (typeof func !== 'function')
+            if (typeof func !== "function")
             {
                 raise(`invalid callback "${name}"`);
             }
@@ -81,14 +81,14 @@ export function resl(config)
         return null;
     }
 
-    const onDone = getFunction('onDone');
+    const onDone = getFunction("onDone");
     if (!onDone)
     {
-        raise('missing onDone() callback');
+        raise("missing onDone() callback");
     }
 
-    const onProgress = getFunction('onProgress');
-    const onError = getFunction('onError');
+    const onProgress = getFunction("onProgress");
+    const onError = getFunction("onError");
 
     const assets = {};
 
@@ -98,7 +98,7 @@ export function resl(config)
     {
         const name = request.name;
         const stream = request.stream;
-        const binary = request.type === 'binary';
+        const binary = request.type === "binary";
         const parser = request.parser;
 
         const xhr = new XMLHttpRequest();
@@ -123,7 +123,7 @@ export function resl(config)
 
         if (binary)
         {
-            xhr.responseType = 'arraybuffer';
+            xhr.responseType = "arraybuffer";
         }
 
         function onReadyStateChange()
@@ -141,7 +141,7 @@ export function resl(config)
             if (xhr.readyState > 2 && loader.state === STATE_DATA)
             {
                 let response;
-                if (request.type === 'binary')
+                if (request.type === "binary")
                 {
                     response = xhr.response;
                 }
@@ -204,7 +204,7 @@ export function resl(config)
         {
             xhr.withCredentials = true;
         }
-        xhr.open('GET', request.src, true);
+        xhr.open("GET", request.src, true);
         xhr.send();
 
         return loader;
@@ -287,17 +287,17 @@ export function resl(config)
 
         if (request.stream)
         {
-            element.addEventListener('progress', onProgress);
+            element.addEventListener("progress", onProgress);
         }
-        if (request.type === 'image')
+        if (request.type === "image")
         {
-            element.addEventListener('load', onComplete);
+            element.addEventListener("load", onComplete);
         }
         else
         {
             let canPlay = false;
             let loadedMetaData = false;
-            element.addEventListener('loadedmetadata', function ()
+            element.addEventListener("loadedmetadata", function ()
             {
                 loadedMetaData = true;
                 if (canPlay)
@@ -305,7 +305,7 @@ export function resl(config)
                     onComplete();
                 }
             });
-            element.addEventListener('canplay', function ()
+            element.addEventListener("canplay", function ()
             {
                 canPlay = true;
                 if (loadedMetaData)
@@ -314,23 +314,23 @@ export function resl(config)
                 }
             });
         }
-        element.addEventListener('error', onError);
+        element.addEventListener("error", onError);
 
         function removeListeners()
         {
             if (request.stream)
             {
-                element.removeEventListener('progress', onProgress);
+                element.removeEventListener("progress", onProgress);
             }
-            if (request.type === 'image')
+            if (request.type === "image")
             {
-                element.addEventListener('load', onComplete);
+                element.addEventListener("load", onComplete);
             }
             else
             {
-                element.addEventListener('canplay', onComplete);
+                element.addEventListener("canplay", onComplete);
             }
-            element.removeEventListener('error', onError);
+            element.removeEventListener("error", onError);
         }
 
         function cancel()
@@ -341,17 +341,17 @@ export function resl(config)
             }
             loader.state = STATE_ERROR;
             removeListeners();
-            element.src = '';
+            element.src = "";
         }
 
         // set up request
         if (request.credentials)
         {
-            element.crossOrigin = 'use-credentials';
+            element.crossOrigin = "use-credentials";
         }
         else
         {
-            element.crossOrigin = 'anonymous';
+            element.crossOrigin = "anonymous";
         }
         element.src = request.src;
 
@@ -367,15 +367,15 @@ export function resl(config)
         },
         image(request)
         {
-            return loadElement(request, document.createElement('img'));
+            return loadElement(request, document.createElement("img"));
         },
         video(request)
         {
-            return loadElement(request, document.createElement('video'));
+            return loadElement(request, document.createElement("video"));
         },
         audio(request)
         {
-            return loadElement(request, document.createElement('audio'));
+            return loadElement(request, document.createElement("audio"));
         }
     };
 
@@ -384,13 +384,13 @@ export function resl(config)
     const pending = Object.keys(manifest).map(function (name)
     {
         let request = manifest[name];
-        if (typeof request === 'string')
+        if (typeof request === "string")
         {
             request = {
                 src: request
             };
         }
-        else if (typeof request !== 'object' || !request)
+        else if (typeof request !== "object" || !request)
         {
             raise(`invalid asset definition "${name}"`);
         }
@@ -423,7 +423,7 @@ export function resl(config)
             {
                 raise(`missing ${prop} for asset "${name}"`);
             }
-            if (typeof value !== 'string')
+            if (typeof value !== "string")
             {
                 raise(`invalid ${prop} for asset "${name}", must be a string`);
             }
@@ -436,7 +436,7 @@ export function resl(config)
             if (name in request.parser)
             {
                 const result = request.parser[name];
-                if (typeof result !== 'function')
+                if (typeof result !== "function")
                 {
                     raise(`invalid parser callback ${name} for asset "${name}"`);
                 }
@@ -448,24 +448,24 @@ export function resl(config)
         }
 
         let parser = {};
-        if ('parser' in request)
+        if ("parser" in request)
         {
-            if (typeof request.parser === 'function')
+            if (typeof request.parser === "function")
             {
                 parser = {
                     data: request.parser
                 };
             }
-            else if (typeof request.parser === 'object' && request.parser)
+            else if (typeof request.parser === "object" && request.parser)
             {
                 checkType(parser, parserParameters, `parser for asset "${name}"`);
-                if (!('onData' in parser))
+                if (!("onData" in parser))
                 {
                     raise(`missing onData callback for parser in asset "${name}"`);
                 }
                 parser = {
-                    data: getParseFunc('onData'),
-                    done: getParseFunc('onDone')
+                    data: getParseFunc("onData"),
+                    done: getParseFunc("onDone")
                 };
             }
             else
@@ -476,10 +476,10 @@ export function resl(config)
 
         return {
             name,
-            type: getParameter('type', Object.keys(loaders), 'text'),
+            type: getParameter("type", Object.keys(loaders), "text"),
             stream: !!request.stream,
             credentials: !!request.credentials,
-            src: getString('src', true, ''),
+            src: getString("src", true, ""),
             parser
         };
     }).map(function (request)
@@ -500,7 +500,7 @@ export function resl(config)
         });
         if (onError)
         {
-            if (typeof message === 'string')
+            if (typeof message === "string")
             {
                 onError(new Error(`resl: ${message}`));
             }
@@ -511,7 +511,7 @@ export function resl(config)
         }
         else
         {
-            console.error('resl error:', message);
+            console.error("resl error:", message);
         }
     }
 
@@ -539,19 +539,17 @@ export function resl(config)
             onDone(assets);
         }
         else
-        {
-            if (onProgress)
+        if (onProgress)
             {
                 onProgress(progress / pending.length, message);
             }
-        }
     }
 
     if (pending.length === 0)
     {
         setTimeout(function ()
         {
-            notifyProgress('done');
+            notifyProgress("done");
         }, 1);
     }
 }

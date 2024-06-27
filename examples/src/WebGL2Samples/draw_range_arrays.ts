@@ -1,22 +1,22 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 (function ()
 {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = `<div id="info">WebGL 2 Samples - draw_range_arrays</div>`;
     document.body.appendChild(div);
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext('webgl2', { antialias: false });
+    const gl = canvas.getContext("webgl2", { antialias: false });
     const isWebGL2 = !!gl;
     if (!isWebGL2)
     {
-        document.body.innerHTML = 'WebGL 2 is not available.  See <a href="https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">How to get a WebGL 2 implementation</a>';
+        document.body.innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
 
         return;
     }
@@ -44,8 +44,8 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
             },
         },
         uniforms: {},
-        drawCall: { drawMode: 'TRIANGLE_STRIP' },
-        renderParams: { cullFace: 'NONE', enableBlend: true },
+        drawCall: { drawMode: "TRIANGLE_STRIP" },
+        renderParams: { cullFace: "NONE", enableBlend: true },
         shader: {
             vertex:
                 `#version 300 es

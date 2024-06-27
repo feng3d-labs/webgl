@@ -1,19 +1,19 @@
-import { fit } from './hughsk/canvas-fit';
-import { attachCamera } from './hughsk/canvas-orbit-camera';
+import { fit } from "./hughsk/canvas-fit";
+import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, WebGLRenderer } from "../../../src";
 
-const canvas = document.createElement('canvas');
-canvas.id = 'glcanvas';
-canvas.style.position = 'fixed';
-canvas.style.left = '0px';
-canvas.style.top = '0px';
-canvas.style.width = '100%';
-canvas.style.height = '100%';
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.style.position = "fixed";
+canvas.style.left = "0px";
+canvas.style.top = "0px";
+canvas.style.width = "100%";
+canvas.style.height = "100%";
 document.body.appendChild(canvas);
 
-window.addEventListener('resize', fit(canvas), false);
+window.addEventListener("resize", fit(canvas), false);
 
 const camera = attachCamera(canvas);
 
@@ -57,7 +57,7 @@ const renderAtomic = $set(new RenderAtomic(), {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
+    renderParams: { cullFace: "NONE", enableBlend: true },
     shader: {
         vertex: `precision mediump float;
         attribute vec2 position;

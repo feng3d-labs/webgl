@@ -1,13 +1,13 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, WebGLRenderer } from "../../../src";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer(webglcanvas);
@@ -43,7 +43,7 @@ const renderAtomic = $set(new RenderAtomic(), {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
+    renderParams: { cullFace: "NONE", enableBlend: true },
     shader: {
         vertex: `precision mediump float;
         attribute vec2 position;

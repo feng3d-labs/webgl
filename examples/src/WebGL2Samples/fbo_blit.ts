@@ -1,34 +1,34 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
 (function ()
 {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = `    <div id="info">WebGL 2 Samples - fbo_blit</div>
     <p id="description">
         This samples demonstrates blitting on frame buffer objects.
     </p>`;
     document.body.appendChild(div);
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext('webgl2', { antialias: false });
+    const gl = canvas.getContext("webgl2", { antialias: false });
     const isWebGL2 = !!gl;
     if (!isWebGL2)
     {
-        document.body.innerHTML = 'WebGL 2 is not available.  See <a href="https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">How to get a WebGL 2 implementation</a>';
+        document.body.innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
 
         return;
     }
-    loadImage('../resources/assets/img/Di-3d.png', (img) =>
+    loadImage("../resources/assets/img/Di-3d.png", (img) =>
     {
         const webglRenderer = new WebGLRenderer(canvas);
 
         const diffuse = $set(new Texture2D(), {
-            minFilter: 'LINEAR',
+            minFilter: "LINEAR",
             source: img as any,
         });
 
@@ -64,8 +64,8 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
                 ],
                 diffuse,
             },
-            drawCall: { drawMode: 'TRIANGLE_STRIP', instanceCount: 2 },
-            renderParams: { cullFace: 'NONE', enableBlend: true },
+            drawCall: { drawMode: "TRIANGLE_STRIP", instanceCount: 2 },
+            renderParams: { cullFace: "NONE", enableBlend: true },
             shader: {
                 vertex:
                     `#version 300 es

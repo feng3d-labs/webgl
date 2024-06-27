@@ -1,16 +1,16 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
-import { angleNormals } from './mikolalysenko/angle-normals';
-import * as bunny from './mikolalysenko/bunny';
-import { createCamera } from './util/camera';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { angleNormals } from "./mikolalysenko/angle-normals";
+import * as bunny from "./mikolalysenko/bunny";
+import { createCamera } from "./util/camera";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer(webglcanvas, { antialias: true });
@@ -47,7 +47,7 @@ const renderAtomic = $set(new RenderAtomic(), {
     },
     index: { array: indices },
     uniforms: {},
-    renderParams: { cullFace: 'NONE', enableBlend: true },
+    renderParams: { cullFace: "NONE", enableBlend: true },
     shader: {
         vertex: `precision mediump float;
         uniform mat4 projection, view;

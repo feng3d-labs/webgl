@@ -1,12 +1,12 @@
-import { output as keys } from './vkey';
+import { output as keys } from "./vkey";
 const list = Object.keys(keys);
 const down = {};
 
 reset();
 
-window.addEventListener('keydown', keydown, false);
-window.addEventListener('keyup', keyup, false);
-window.addEventListener('blur', reset, false);
+window.addEventListener("keydown", keydown, false);
+window.addEventListener("keyup", keyup, false);
+window.addEventListener("blur", reset, false);
 
 export function pressed(key)
 {

@@ -1,6 +1,6 @@
 // @see https://github.com/mikolalysenko/orbit-camera
 
-import * as glm from '../toji/gl-matrix';
+import * as glm from "../toji/gl-matrix";
 
 const vec3 = glm.vec3;
 const mat3 = glm.mat3;

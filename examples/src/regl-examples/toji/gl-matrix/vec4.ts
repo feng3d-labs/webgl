@@ -1,4 +1,4 @@
-import * as glMatrix from './common';
+import * as glMatrix from "./common";
 
 /**
  * 4 Dimensional Vector

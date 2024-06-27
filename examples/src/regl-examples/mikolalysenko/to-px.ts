@@ -1,6 +1,6 @@
 // @see https://github.com/mikolalysenko/to-px.git
 
-import { parseUnit } from './parse-unit';
+import { parseUnit } from "./parse-unit";
 
 const PIXELS_PER_INCH = 96;
 
@@ -29,7 +29,7 @@ export function toPX(str)
     {
         const px = toPX(parts[1]);
 
-        return typeof px === 'number' ? parts[0] * px : null;
+        return typeof px === "number" ? parts[0] * px : null;
     }
 
     return null;

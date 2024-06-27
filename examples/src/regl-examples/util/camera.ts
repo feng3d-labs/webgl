@@ -1,7 +1,7 @@
-import { RenderAtomic } from '../../../../src';
-import { mouseListen as mouseChange } from '../mikolalysenko/mouse-change';
-import { mouseWheelListen as mouseWheel } from '../mikolalysenko/mouse-wheel';
-import { identity, lookAt, perspective } from '../stackgl/gl-mat4';
+import { RenderAtomic } from "../../../../src";
+import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
+import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";
+import { identity, lookAt, perspective } from "../stackgl/gl-mat4";
 
 export function createCamera(props)
 {
@@ -19,8 +19,8 @@ export function createCamera(props)
   const right = new Float32Array([1, 0, 0]);
   const front = new Float32Array([0, 0, 1]);
 
-  const minDistance = Math.log('minDistance' in props ? props.minDistance : 0.1);
-  const maxDistance = Math.log('maxDistance' in props ? props.maxDistance : 1000);
+  const minDistance = Math.log("minDistance" in props ? props.minDistance : 0.1);
+  const maxDistance = Math.log("maxDistance" in props ? props.maxDistance : 1000);
 
   let dtheta = 0;
   let dphi = 0;
@@ -107,7 +107,7 @@ export function createCamera(props)
       renderAtomic.uniforms[name] = () => setupCamera[name];
     });
 
-    renderAtomic.uniforms['projection'] = () =>
+    renderAtomic.uniforms["projection"] = () =>
       perspective(cameraState.projection,
         Math.PI / 4.0,
         viewportWidth / viewportHeight,

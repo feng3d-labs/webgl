@@ -1,14 +1,14 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, Texture2D, WebGLRenderer } from '../../../src';
-import * as mat4 from './stackgl/gl-mat4';
+import { $set } from "@feng3d/serialization";
+import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
+import * as mat4 from "./stackgl/gl-mat4";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const cubePosition = [
@@ -89,7 +89,7 @@ const renderAtomic = $set(new RenderAtomic(), {
                 10),
         tex: () => diffuse,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
+    renderParams: { cullFace: "NONE", enableBlend: true },
     shader: {
         vertex: `precision mediump float;
         attribute vec3 position;
@@ -120,11 +120,11 @@ function draw()
 }
 
 const img = new Image();
-img.src = 'resources/assets/peppers.png';
+img.src = "resources/assets/peppers.png";
 await img.decode();
 
 const diffuse = new Texture2D();
-diffuse.minFilter = 'LINEAR';
+diffuse.minFilter = "LINEAR";
 diffuse.source = img;
 
 draw();
