@@ -27,7 +27,7 @@ export class RenderAtomic
      */
     uniforms: LazyObject<Uniforms> = {} as any;
 
-    drawCall = new DrawCall();
+    drawCall: DrawCall;
 
     /**
      * 渲染程序

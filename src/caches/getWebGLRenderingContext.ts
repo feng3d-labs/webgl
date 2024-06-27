@@ -15,28 +15,28 @@ import { WebGLUniforms } from "../gl/WebGLUniforms";
 /**
  * 获取WebGL上下文。
  *
- * @param canvasContext
+ * @param key
  * @returns
  */
-export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
+export function getWebGLRenderingContext(key: IWebGLCanvasContext)
 {
-    let gl = canvasContextMap.get(canvasContext);
-    if (!gl)
+    let value = canvasContextMap.get(key);
+    if (!value)
     {
-        const canvas = getCanvas(canvasContext);
-        gl = getWebGLContext(canvas, canvasContext);
+        const canvas = getCanvas(key);
+        value = getWebGLContext(canvas, key);
 
-        initWebGLModules(gl);
+        initWebGLModules(value);
 
         //
         canvas.addEventListener("webglcontextlost", _onContextLost, false);
         canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
         canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
 
-        canvasContextMap.set(canvasContext, gl);
+        canvasContextMap.set(key, value);
     }
 
-    return gl;
+    return value;
 }
 
 function initWebGLModules(gl: WebGLRenderingContext)

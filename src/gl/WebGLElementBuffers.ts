@@ -4,6 +4,7 @@ import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../dat
 import { RenderAtomic } from "../data/RenderAtomic";
 import { WebGLAttributeBuffers } from "./WebGLAttributeBuffers";
 import { BufferUsage } from "./WebGLEnums";
+import { getDrawCall } from "../caches/getDrawCall";
 
 declare global
 {
@@ -30,7 +31,7 @@ export class WebGLElementBuffers
         const { _attributeBuffers } = this.gl;
         const { _info } = gl;
 
-        const drawCall = renderAtomic.drawCall;
+        const drawCall = getDrawCall(renderAtomic.drawCall);
 
         let instanceCount = ~~lazy.getValue(drawCall.instanceCount);
         const drawMode = drawCall.drawMode;
