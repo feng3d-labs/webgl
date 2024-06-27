@@ -1,9 +1,9 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { RenderAtomic } from "../data/RenderAtomic";
 import { Shader } from "../data/Shader";
 import { ShaderMacro } from "../shader/Macro";
 import { shaderlib } from "../shader/ShaderLib";
 import { ShaderType } from "./WebGLEnums";
-import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 import { WebGLUniform } from "./WebGLUniforms";
 
 declare global
@@ -32,7 +32,7 @@ export class WebGLShaders
         gl._shaders = this;
     }
 
-    activeShader(renderAtomic: WebGLRenderAtomic)
+    activeShader(renderAtomic: RenderAtomic)
     {
         const { gl } = this;
 

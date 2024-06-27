@@ -1,6 +1,6 @@
 import { lazy } from "@feng3d/polyfill";
 import { WebGLUniformType } from "../const/WebGLUniformType";
-import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
+import { RenderAtomic } from "../data/RenderAtomic";
 
 /**
  * WebGL统一变量
@@ -57,7 +57,7 @@ export class WebGLUniforms
     /**
      * 激活常量
      */
-    activeUniforms(renderAtomic: WebGLRenderAtomic, uniformInfos: { [name: string]: WebGLUniform })
+    activeUniforms(renderAtomic: RenderAtomic, uniformInfos: { [name: string]: WebGLUniform })
     {
         for (const name in uniformInfos)
         {

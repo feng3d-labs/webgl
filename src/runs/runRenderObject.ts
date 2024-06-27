@@ -1,9 +1,8 @@
 import { RenderAtomic } from "../data/RenderAtomic";
-import { WebGLRenderAtomic } from "../gl/WebGLRenderAtomic";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderAtomic)
 {
-    const webGLRenderAtomic = new WebGLRenderAtomic(renderObject);
+    const webGLRenderAtomic = renderObject;
 
     const { _bindingStates, _renderParams, _elementBuffers, _uniforms, _shaders } = gl;
 

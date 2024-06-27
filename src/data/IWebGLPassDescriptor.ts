@@ -22,7 +22,7 @@ export interface IWebGLPassDescriptor
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
-    clearMask: ClearMask[];
+    clearMask?: ClearMask[];
 
     /**
      * 清除后填充深度值。

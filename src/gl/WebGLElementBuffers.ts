@@ -1,8 +1,9 @@
 import { lazy } from "@feng3d/polyfill";
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
+import { RenderAtomic } from "../data/RenderAtomic";
+import { WebGLAttributeBuffers } from "./WebGLAttributeBuffers";
 import { BufferUsage } from "./WebGLEnums";
-import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 
 declare global
 {
@@ -23,7 +24,7 @@ export class WebGLElementBuffers
         gl._elementBuffers = this;
     }
 
-    render(renderAtomic: WebGLRenderAtomic)
+    render(renderAtomic: RenderAtomic)
     {
         const gl = this.gl;
         const { _attributeBuffers } = this.gl;
@@ -51,7 +52,7 @@ export class WebGLElementBuffers
         }
         else
         {
-            vertexNum = renderAtomic.getAttributeVertexNum(_attributeBuffers);
+            vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
 
             if (vertexNum === 0)
             {
@@ -315,4 +316,31 @@ function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementT
     }
 
     return { array, type };
+}
+
+/**
+ * 获取属性顶点属性。
+ *
+ * @param attributes
+ * @returns
+ */
+function getAttributeVertexNum(attributes: WebGLAttributeBuffers, renderAtomic: RenderAtomic)
+{
+    const vertexNum = ((attributelist) =>
+    {
+        for (const attr in attributelist)
+        {
+            // eslint-disable-next-line no-prototype-builtins
+            if (attributelist.hasOwnProperty(attr))
+            {
+                const attribute = attributes.get(attributelist[attr]);
+
+                return attribute.count;
+            }
+        }
+
+        return 0;
+    })(renderAtomic.attributes);
+
+    return vertexNum;
 }
