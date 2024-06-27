@@ -57,11 +57,11 @@ export class WebGLExtensions
         switch (name as any)
         {
             case 'WEBGL_depth_texture':
-                extension = webGLContext.getExtension('WEBGL_depth_texture') || webGLContext.getExtension('MOZ_WEBGL_depth_texture') || webGLContext.getExtension('WEBKIT_WEBGL_depth_texture');
+                extension = gl.getExtension('WEBGL_depth_texture') || gl.getExtension('MOZ_WEBGL_depth_texture') || gl.getExtension('WEBKIT_WEBGL_depth_texture');
                 break;
 
             case 'EXT_texture_filter_anisotropic':
-                const ext = extension = webGLContext.getExtension('EXT_texture_filter_anisotropic') || webGLContext.getExtension('MOZ_EXT_texture_filter_anisotropic') || webGLContext.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
+                const ext = extension = gl.getExtension('EXT_texture_filter_anisotropic') || gl.getExtension('MOZ_EXT_texture_filter_anisotropic') || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
 
                 // @ts-ignore
                 gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT = ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT;
@@ -70,15 +70,15 @@ export class WebGLExtensions
                 break;
 
             case 'WEBGL_compressed_texture_s3tc':
-                extension = webGLContext.getExtension('WEBGL_compressed_texture_s3tc') || webGLContext.getExtension('MOZ_WEBGL_compressed_texture_s3tc') || webGLContext.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc');
+                extension = gl.getExtension('WEBGL_compressed_texture_s3tc') || gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') || gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc');
                 break;
 
             case 'WEBGL_compressed_texture_pvrtc':
-                extension = webGLContext.getExtension('WEBGL_compressed_texture_pvrtc') || webGLContext.getExtension('WEBKIT_WEBGL_compressed_texture_pvrtc');
+                extension = gl.getExtension('WEBGL_compressed_texture_pvrtc') || gl.getExtension('WEBKIT_WEBGL_compressed_texture_pvrtc');
                 break;
 
             default:
-                extension = webGLContext.getExtension(name);
+                extension = gl.getExtension(name);
         }
 
         if (extension === null && isWarn)

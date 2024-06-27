@@ -200,7 +200,7 @@ export class WebGLBindingStates
      */
     enableAttribute(location: number, divisor?: number)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { currentState } = this;
         divisor = ~~divisor;
 
@@ -213,7 +213,7 @@ export class WebGLBindingStates
 
         if (enabledAttributes[location] === 0)
         {
-            webGLContext.enableVertexAttribArray(location);
+            gl.enableVertexAttribArray(location);
             enabledAttributes[location] = 1;
         }
 
@@ -254,7 +254,7 @@ export class WebGLBindingStates
      */
     disableUnusedAttributes()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { currentState } = this;
 
         const newAttributes = currentState.newAttributes;
@@ -264,7 +264,7 @@ export class WebGLBindingStates
         {
             if (enabledAttributes[i] !== newAttributes[i])
             {
-                webGLContext.disableVertexAttribArray(i);
+                gl.disableVertexAttribArray(i);
                 enabledAttributes[i] = 0;
             }
         }
@@ -316,8 +316,8 @@ export class WebGLBindingStates
      */
     private createBindingState(vao: WebGLVertexArrayObject)
     {
-        const { webGLContext } = this._webGLRenderer;
-        const maxVertexAttributes = webGLContext.getParameter('MAX_VERTEX_ATTRIBS');
+        const { gl } = this._webGLRenderer;
+        const maxVertexAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
         const bindingState = new BindingState(vao, maxVertexAttributes);
 
         return bindingState;

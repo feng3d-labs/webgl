@@ -129,7 +129,7 @@ export class WebGLTextures
         }
         if (!cache)
         {
-            const texture = webGLContext.createTexture(); // Create a texture object
+            const texture = gl.createTexture(); // Create a texture object
 
             // 设置图片y轴方向
             webGLContext.pixelStorei('UNPACK_FLIP_Y_WEBGL', data.flipY);
@@ -142,7 +142,7 @@ export class WebGLTextures
 
             if (data.generateMipmap)
             {
-                webGLContext.generateMipmap(data.textureTarget);
+                gl.generateMipmap(gl[data.textureTarget]);
             }
 
             cache = { texture, version: data.version };
@@ -157,13 +157,13 @@ export class WebGLTextures
      */
     private clear(data: Texture)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         const tex = textures.get(data);
         if (tex)
         {
-            webGLContext.deleteTexture(tex.texture);
+            gl.deleteTexture(tex.texture);
             textures.delete(data);
         }
     }

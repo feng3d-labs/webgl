@@ -67,13 +67,13 @@ export class WebGLRenderbuffers
      */
     private clear(renderBuffer: RenderBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { renderBuffers } = this;
 
         const buffer = renderBuffers.get(renderBuffer);
         if (buffer)
         {
-            webGLContext.deleteRenderbuffer(buffer);
+            gl.deleteRenderbuffer(buffer);
             renderBuffers.delete(renderBuffer);
         }
     }

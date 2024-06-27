@@ -17,7 +17,7 @@ export class WebGLElementBuffers
 
     render(renderAtomic: WebGLRenderAtomic)
     {
-        const { info, attributeBuffers: attributes, webGLContext } = this._webGLRenderer;
+        const { info, attributeBuffers: attributes, webGLContext, gl } = this._webGLRenderer;
 
         const drawCall = renderAtomic.drawCall;
 
@@ -95,11 +95,11 @@ export class WebGLElementBuffers
         {
             if (element)
             {
-                webGLContext.drawElements(drawMode, count, type, offset * bytesPerElement);
+                gl.drawElements(gl[drawMode], count, gl[type], offset * bytesPerElement);
             }
             else
             {
-                webGLContext.drawArrays(drawMode, offset, count);
+                gl.drawArrays(gl[drawMode], offset, count);
             }
             instanceCount = 1;
         }
@@ -205,7 +205,7 @@ class WebGLElementBuffer
         let buffer = this.buffer;
         if (buffer)
         {
-            webGLContext.deleteBuffer(buffer);
+            gl.deleteBuffer(buffer);
         }
 
         //
@@ -225,10 +225,10 @@ class WebGLElementBuffer
 
     dispose()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { buffer, element } = this;
 
-        webGLContext.deleteBuffer(buffer);
+        gl.deleteBuffer(buffer);
 
         watcher.watch(element, 'array', this.needsUpdate, this);
 

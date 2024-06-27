@@ -86,7 +86,7 @@ export class WebGLShaders
         if (!compiled)
         {
             const error = webGLContext.getShaderInfoLog(shader);
-            webGLContext.deleteShader(shader);
+            gl.deleteShader(shader);
             throw `Failed to compile shader: ${error}`;
         }
 
@@ -112,9 +112,9 @@ export class WebGLShaders
         if (!linked)
         {
             const error = webGLContext.getProgramInfoLog(program);
-            webGLContext.deleteProgram(program);
-            webGLContext.deleteShader(fragmentShader);
-            webGLContext.deleteShader(vertexShader);
+            gl.deleteProgram(program);
+            gl.deleteShader(fragmentShader);
+            gl.deleteShader(vertexShader);
             throw `Failed to link program: ${error}`;
         }
 
@@ -143,7 +143,7 @@ export class WebGLShaders
 
     private compileShaderProgram(vshader: string, fshader: string): CompileShaderResult
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
 
         // 创建着色器程序
         // 编译顶点着色器
@@ -161,8 +161,8 @@ export class WebGLShaders
         let i = 0;
         while (i < numAttributes)
         {
-            const activeInfo = webGLContext.getActiveAttrib(shaderProgram, i++);
-            const location = webGLContext.getAttribLocation(shaderProgram, activeInfo.name);
+            const activeInfo = gl.getActiveAttrib(shaderProgram, i++);
+            const location = gl.getAttribLocation(shaderProgram, activeInfo.name);
             attributes[activeInfo.name] = { activeInfo, location };
         }
         // 获取uniform信息
@@ -172,7 +172,7 @@ export class WebGLShaders
         let textureID = 0;
         while (i < numUniforms)
         {
-            const activeInfo = webGLContext.getActiveUniform(shaderProgram, i++);
+            const activeInfo = gl.getActiveUniform(shaderProgram, i++);
             const reg = /(\w+)/g;
 
             let name = activeInfo.name;

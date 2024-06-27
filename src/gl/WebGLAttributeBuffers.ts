@@ -129,7 +129,7 @@ export class WebGLAttributeBuffer
         let buffer = this.buffer;
         if (buffer)
         {
-            webGLContext.deleteBuffer(buffer);
+            gl.deleteBuffer(buffer);
         }
 
         const { type, array } = transfromArrayType(attribute.array, attribute.type);
@@ -151,10 +151,10 @@ export class WebGLAttributeBuffer
 
     dispose()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { buffer, attribute } = this;
 
-        webGLContext.deleteBuffer(buffer);
+        gl.deleteBuffer(buffer);
 
         watcher.watch(attribute, 'array', this.needsUpdate, this);
 

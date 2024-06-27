@@ -29,38 +29,38 @@ export class WebGLRenderParams
 
         if (cullFace === 'NONE')
         {
-            webGLContext.disable('CULL_FACE');
+            gl.disable(gl['CULL_FACE']);
         }
         else
         {
-            webGLContext.enable('CULL_FACE');
-            webGLContext.cullFace(cullFace);
-            webGLContext.frontFace(frontFace);
+            gl.enable(gl['CULL_FACE']);
+            gl.cullFace(gl[cullFace]);
+            gl.frontFace(gl[frontFace]);
         }
 
         if (enableBlend)
         {
             //
-            webGLContext.enable('BLEND');
+            gl.enable(gl['BLEND']);
             gl.blendEquation(gl[blendEquation]);
             gl.blendFunc(gl[sfactor], gl[dfactor]);
         }
         else
         {
-            webGLContext.disable('BLEND');
+            gl.disable(gl['BLEND']);
         }
 
         if (depthtest)
         {
-            webGLContext.enable('DEPTH_TEST');
-            webGLContext.depthFunc(depthFunc);
+            gl.enable(gl['DEPTH_TEST']);
+            gl.depthFunc(gl[depthFunc]);
         }
         else
         {
-            webGLContext.disable('DEPTH_TEST');
+            gl.disable(gl['DEPTH_TEST']);
         }
 
-        webGLContext.depthMask(depthMask);
+        gl.depthMask(depthMask);
 
         gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
@@ -75,34 +75,34 @@ export class WebGLRenderParams
 
         if (usePolygonOffset)
         {
-            webGLContext.enable('POLYGON_OFFSET_FILL');
+            gl.enable(gl['POLYGON_OFFSET_FILL']);
             webGLContext.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
         }
         else
         {
-            webGLContext.disable('POLYGON_OFFSET_FILL');
+            gl.disable(gl['POLYGON_OFFSET_FILL']);
         }
 
         if (useScissor)
         {
-            webGLContext.enable('SCISSOR_TEST');
+            gl.enable(gl['SCISSOR_TEST']);
             webGLContext.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
         }
         else
         {
-            webGLContext.disable('SCISSOR_TEST');
+            gl.disable(gl['SCISSOR_TEST']);
         }
 
         if (useStencil)
         {
-            webGLContext.enable('STENCIL_TEST');
+            gl.enable(gl['STENCIL_TEST']);
             webGLContext.stencilFunc(stencilFunc, stencilFuncRef, stencilFuncMask);
             webGLContext.stencilOp(stencilOpFail, stencilOpZFail, stencilOpZPass);
             webGLContext.stencilMask(stencilMask);
         }
         else
         {
-            webGLContext.disable('STENCIL_TEST');
+            gl.disable(gl['STENCIL_TEST']);
         }
     }
 }

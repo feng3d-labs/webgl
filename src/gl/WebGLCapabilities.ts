@@ -94,27 +94,27 @@ export class WebGLCapabilities
     {
         this._webGLRenderer = webGLRenderer;
 
-        const { isWebGL2, extensions, webGLContext } = this._webGLRenderer;
+        const { isWebGL2, extensions, webGLContext, gl } = this._webGLRenderer;
 
-        this.maxAnisotropy = webGLContext.getParameter('MAX_TEXTURE_MAX_ANISOTROPY_EXT');
+        this.maxAnisotropy = extensions.getExtension('EXT_texture_filter_anisotropic') ? gl.getParameter(extensions.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
         this.maxPrecision = this._getMaxPrecision();
 
-        this.maxTextures = webGLContext.getParameter('MAX_TEXTURE_IMAGE_UNITS');
-        this.maxVertexTextures = webGLContext.getParameter('MAX_VERTEX_TEXTURE_IMAGE_UNITS');
-        this.maxTextureSize = webGLContext.getParameter('MAX_TEXTURE_SIZE');
-        this.maxCubemapSize = webGLContext.getParameter('MAX_CUBE_MAP_TEXTURE_SIZE');
+        this.maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+        this.maxVertexTextures = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+        this.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        this.maxCubemapSize = gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE);
 
-        this.maxAttributes = webGLContext.getParameter('MAX_VERTEX_ATTRIBS');
-        this.maxVertexUniforms = webGLContext.getParameter('MAX_VERTEX_UNIFORM_VECTORS');
-        this.maxVaryings = webGLContext.getParameter('MAX_VARYING_VECTORS');
-        this.maxFragmentUniforms = webGLContext.getParameter('MAX_FRAGMENT_UNIFORM_VECTORS');
+        this.maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
+        this.maxVertexUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+        this.maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
+        this.maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
         this.vertexTextures = this.maxVertexTextures > 0;
         this.floatFragmentTextures = isWebGL2 || !!extensions.getExtension('OES_texture_float');
         this.floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
-        this.maxSamples = isWebGL2 ? webGLContext.getParameter('MAX_SAMPLES') : 0;
-        this.stencilBits = webGLContext.getParameter('STENCIL_BITS');
+        this.maxSamples = gl instanceof WebGL2RenderingContext ? gl.getParameter(gl.MAX_SAMPLES) : 0;
+        this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
 
         this.vaoAvailable = isWebGL2 || !!extensions.getExtension('OES_vertex_array_object');
     }
