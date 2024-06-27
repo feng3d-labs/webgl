@@ -7,7 +7,7 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderA
 
     const { _bindingStates, _elementBuffers, _uniforms, _shaders } = gl;
 
-    const shaderResult = _shaders.activeShader(webGLRenderAtomic);
+    const shaderResult = _shaders.activeShader(webGLRenderAtomic.shader);
 
     runRenderParams(gl, webGLRenderAtomic.renderParams);
 

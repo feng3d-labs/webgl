@@ -75,7 +75,7 @@ export class WebGLBindingStates
 
         const cachedAttributes = currentState.attributes;
 
-        const shaderResult = _shaders.activeShader(renderAtomic);
+        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
         const attributeInfos = shaderResult.attributes;
 
         let attributesNum = 0;
@@ -120,7 +120,7 @@ export class WebGLBindingStates
         const cache: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
         let attributesNum = 0;
 
-        const shaderResult = _shaders.activeShader(renderAtomic);
+        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
         const attributeInfos = shaderResult.attributes;
 
         for (const name in attributeInfos)
@@ -159,7 +159,7 @@ export class WebGLBindingStates
 
         this.initAttributes();
 
-        const shaderResult = _shaders.activeShader(renderAtomic);
+        const shaderResult = _shaders.activeShaderProgram(renderAtomic.shader);
 
         for (const name in shaderResult.attributes)
         {

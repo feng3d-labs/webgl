@@ -30,11 +30,10 @@ export class WebGLShaders
         gl._shaders = this;
     }
 
-    activeShader(renderAtomic: RenderAtomic)
+    activeShader(shader: Shader)
     {
         const { gl } = this;
 
-        const shader = renderAtomic.shader;
         const shaderResult = this.activeShaderProgram(shader);
         if (!shaderResult)
         {
