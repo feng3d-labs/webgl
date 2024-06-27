@@ -1,6 +1,6 @@
-import { lazy } from "@feng3d/polyfill";
 import { WebGLUniformType } from "../const/WebGLUniformType";
 import { RenderAtomic } from "../data/RenderAtomic";
+import { lazy } from "../types";
 
 /**
  * WebGL统一变量

@@ -1,4 +1,3 @@
-import { Lazy } from "@feng3d/polyfill";
 import { DrawMode } from "./RenderParams";
 
 export interface DrawCall
@@ -24,7 +23,7 @@ export interface DrawCall
     /**
      * 渲染实例数量
      */
-    instanceCount?: Lazy<number>;
+    instanceCount?: number;
 
     offset?: number;
 

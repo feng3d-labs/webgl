@@ -1,19 +1,6 @@
-import { Vector2 } from "@feng3d/math";
 import { watcher } from "@feng3d/watcher";
 import { Texture } from "../data/Texture";
 import { TextureTarget } from "../gl/WebGLEnums";
-
-declare module "../data/Texture"
-{
-    interface TextureMap extends Texture2DMap { }
-}
-
-export interface Texture2DMap
-{
-    Texture2D: Texture2D;
-}
-
-export type Texture2DLike = Texture2DMap[keyof Texture2DMap];
 
 declare module "../data/Uniforms"
 {
@@ -49,7 +36,7 @@ export class Texture2D extends Texture
 
     getSize()
     {
-        return new Vector2(this.source?.["width"] || 0, this.source?.["height"] || 0);
+        return { x: this.source?.["width"] || 0, y: this.source?.["height"] || 0 };
     }
 }
 

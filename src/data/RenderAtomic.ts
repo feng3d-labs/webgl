@@ -1,4 +1,4 @@
-import { LazyObject } from "@feng3d/polyfill";
+import { LazyObject } from "../types";
 import { AttributeBuffer } from "./AttributeBuffer";
 import { DrawCall } from "./DrawCall";
 import { ElementBuffer } from "./ElementBuffer";

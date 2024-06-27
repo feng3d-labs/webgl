@@ -1,8 +1,6 @@
-import { Vector2 } from "@feng3d/math";
-import { mathUtil } from "@feng3d/polyfill";
 import { watcher } from "@feng3d/watcher";
-import { WebGLRenderer } from "../WebGLRenderer";
 import { TextureFormat, TextureMagFilter, TextureMinFilter } from "../gl/WebGLEnums";
+import { isPowerOfTwo } from "../utils/mathUtils";
 import { Texture2D } from "./Texture2D";
 
 /**
@@ -25,11 +23,11 @@ export class RenderTargetTexture2D extends Texture2D
      */
     get isPowerOfTwo()
     {
-        if (this.width === 0 || !mathUtil.isPowerOfTwo(this.width))
+        if (this.width === 0 || !isPowerOfTwo(this.width))
         {
             return false;
         }
-        if (this.height === 0 || !mathUtil.isPowerOfTwo(this.height))
+        if (this.height === 0 || !isPowerOfTwo(this.height))
         {
             return false;
         }
@@ -49,7 +47,7 @@ export class RenderTargetTexture2D extends Texture2D
      */
     getSize()
     {
-        return new Vector2(this.width, this.height);
+        return { x: this.width, y: this.height };
     }
 
     setTextureData(gl: WebGLRenderingContext): void

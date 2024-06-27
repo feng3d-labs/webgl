@@ -1,10 +1,9 @@
-import { lazy } from "@feng3d/polyfill";
 import { watcher } from "@feng3d/watcher";
+import { getDrawCall } from "../caches/getDrawCall";
 import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
 import { WebGLAttributeBuffers } from "./WebGLAttributeBuffers";
 import { BufferUsage } from "./WebGLEnums";
-import { getDrawCall } from "../caches/getDrawCall";
 
 declare global
 {
@@ -28,12 +27,11 @@ export class WebGLElementBuffers
     render(renderAtomic: RenderAtomic)
     {
         const gl = this.gl;
-        const { _attributeBuffers } = this.gl;
-        const { _info } = gl;
+        const { _attributeBuffers, _info } = this.gl;
 
         const drawCall = getDrawCall(renderAtomic.drawCall);
 
-        let instanceCount = ~~lazy.getValue(drawCall.instanceCount);
+        let instanceCount = drawCall.instanceCount;
         const drawMode = drawCall.drawMode;
         let offset = drawCall.offset;
         let count = drawCall.count;

@@ -18,5 +18,3 @@ export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";
 export * from "./textures/RenderTargetTexture2D";
 export * from "./textures/Texture2D";
-export * from "./utils/ImageUtil";
-
