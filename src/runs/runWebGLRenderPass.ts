@@ -6,7 +6,7 @@ export function runWebGLRenderPass(gl: WebGLRenderingContext, renderPass: IWebGL
 {
     runWebGLPassDescriptor(gl, renderPass.passDescriptor);
 
-    renderPass.renderObjects.forEach((renderObject) =>
+    renderPass.renderObjects?.forEach((renderObject) =>
     {
         runRenderObject(gl, renderObject);
     });

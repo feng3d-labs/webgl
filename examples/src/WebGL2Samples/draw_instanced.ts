@@ -79,9 +79,16 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        webglRenderer.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        webglRenderer.gl.clear(webglRenderer.gl.COLOR_BUFFER_BIT);
-        webglRenderer.render(renderAtomic);
+        webglRenderer.submit({
+            renderPasss: [{
+                passDescriptor: {
+                    clearColor: [0.0, 0.0, 0.0, 1.0],
+                    clearMask: ["COLOR_BUFFER_BIT"]
+                },
+                renderObjects: [renderAtomic]
+            }]
+        });
+
         requestAnimationFrame(draw);
     }
     draw();
