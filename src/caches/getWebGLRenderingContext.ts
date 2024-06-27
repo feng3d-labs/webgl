@@ -1,4 +1,5 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
+import { defaults } from "../defaults/defaults";
 
 /**
  * 获取WebGL上下文。
@@ -70,16 +71,7 @@ function getCanvas(canvasContext: IWebGLCanvasContext)
 
 function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IWebGLCanvasContext)
 {
-    const contextAttributes = Object.assign({
-        contextId: "webgl2",
-        depth: true,
-        stencil: true,
-        antialias: false,
-        premultipliedAlpha: true,
-        preserveDrawingBuffer: false,
-        powerPreference: "default",
-        failIfMajorPerformanceCaveat: false,
-    } as Partial<IWebGLCanvasContext>, canvasContext);
+    const contextAttributes = Object.assign({}, defaults.webGLCanvasContext, canvasContext);
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;

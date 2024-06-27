@@ -8,7 +8,9 @@ export interface IWebGLCanvasContext extends WebGLContextAttributes
     /**
      * 画布编号。
      */
-    canvasId: string
-
+    canvasId?: string
+    /**
+     * WebGL上下文类型
+     */
     contextId?: "webgl" | "webgl2"
 }
