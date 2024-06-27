@@ -1,12 +1,12 @@
-import { Vector2 } from '@feng3d/math';
-import { oav } from '@feng3d/objectview';
-import { Constructor, gPartial } from '@feng3d/polyfill';
-import { Serializable, SerializeProperty, getInstance } from '@feng3d/serialization';
-import { watcher } from '@feng3d/watcher';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { TextureDataType, TextureFormat, TextureMagFilter, TextureMinFilter, TextureTarget, TextureWrap } from '../gl/WebGLEnums';
+import { Vector2 } from "@feng3d/math";
+import { oav } from "@feng3d/objectview";
+import { Constructor, gPartial } from "@feng3d/polyfill";
+import { Serializable, SerializeProperty, getInstance } from "@feng3d/serialization";
+import { watcher } from "@feng3d/watcher";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { TextureDataType, TextureFormat, TextureMagFilter, TextureMinFilter, TextureTarget, TextureWrap } from "../gl/WebGLEnums";
 
-declare module '@feng3d/serialization'
+declare module "@feng3d/serialization"
 {
     interface SerializableMap extends TextureMap { }
 }
@@ -72,7 +72,7 @@ export abstract class Texture
                 `RGB8UI`, `RGBA8`, `RGB5_A1`, `RGB10_A2`, `RGBA4`, `RGBA16F`, `RGBA32F`, `RGBA8UI`]
         }
     })
-    format: TextureFormat = 'RGBA';
+    format: TextureFormat = "RGBA";
 
     /**
      * 数据类型
@@ -85,7 +85,7 @@ export abstract class Texture
                 'HALF_FLOAT', 'UNSIGNED_INT_2_10_10_10_REV', 'UNSIGNED_INT_10F_11F_11F_REV', 'UNSIGNED_INT_5_9_9_9_REV', 'UNSIGNED_INT_24_8', 'FLOAT_32_UNSIGNED_INT_24_8_REV']
         }
     })
-    type: TextureDataType = 'UNSIGNED_BYTE';
+    type: TextureDataType = "UNSIGNED_BYTE";
 
     /**
      * 是否生成mipmap
@@ -110,25 +110,25 @@ export abstract class Texture
 
     @SerializeProperty()
     @oav({ component: 'OAVEnum', componentParam: { enumClass: ['LINEAR', 'NEAREST', 'NEAREST_MIPMAP_NEAREST', 'LINEAR_MIPMAP_NEAREST', 'NEAREST_MIPMAP_LINEAR', 'LINEAR_MIPMAP_LINEAR'] } })
-    minFilter: TextureMinFilter = 'LINEAR_MIPMAP_LINEAR';
+    minFilter: TextureMinFilter = "LINEAR_MIPMAP_LINEAR";
 
     @SerializeProperty()
     @oav({ component: 'OAVEnum', componentParam: { enumClass: ['LINEAR', 'NEAREST'] } })
-    magFilter: TextureMagFilter = 'LINEAR';
+    magFilter: TextureMagFilter = "LINEAR";
 
     /**
      * 表示x轴的纹理的回环方式，就是当纹理的宽度小于需要贴图的平面的宽度的时候，平面剩下的部分应该p以何种方式贴图的问题。
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', componentParam: { enumClass: ['REPEAT', 'CLAMP_TO_EDGE', 'MIRRORED_REPEAT'] } })
-    wrapS: TextureWrap = 'REPEAT';
+    wrapS: TextureWrap = "REPEAT";
 
     /**
      * 表示y轴的纹理回环方式。 magFilter和minFilter表示过滤的方式。
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', componentParam: { enumClass: ['REPEAT', 'CLAMP_TO_EDGE', 'MIRRORED_REPEAT'] } })
-    wrapT: TextureWrap = 'REPEAT';
+    wrapT: TextureWrap = "REPEAT";
 
     /**
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
@@ -144,11 +144,11 @@ export abstract class Texture
 
     constructor()
     {
-        watcher.watch(this as Texture, 'format', this.invalidate, this);
-        watcher.watch(this as Texture, 'type', this.invalidate, this);
-        watcher.watch(this as Texture, 'generateMipmap', this.invalidate, this);
-        watcher.watch(this as Texture, 'flipY', this.invalidate, this);
-        watcher.watch(this as Texture, 'premulAlpha', this.invalidate, this);
+        watcher.watch(this as Texture, "format", this.invalidate, this);
+        watcher.watch(this as Texture, "type", this.invalidate, this);
+        watcher.watch(this as Texture, "generateMipmap", this.invalidate, this);
+        watcher.watch(this as Texture, "flipY", this.invalidate, this);
+        watcher.watch(this as Texture, "premulAlpha", this.invalidate, this);
     }
 
     /**

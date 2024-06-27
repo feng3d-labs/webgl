@@ -1,7 +1,7 @@
-import { AttributeBuffer } from '../data/AttributeBuffer';
-import { ElementBuffer } from '../data/ElementBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { WebGLRenderAtomic } from './WebGLRenderAtomic';
+import { AttributeBuffer } from "../data/AttributeBuffer";
+import { ElementBuffer } from "../data/ElementBuffer";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 
 export class WebGLBindingStates
 {
@@ -185,7 +185,7 @@ export class WebGLBindingStates
 
         if (gl instanceof WebGL2RenderingContext) return gl.bindVertexArray(vao);
 
-        const extension = gl.getExtension('OES_vertex_array_object');
+        const extension = gl.getExtension("OES_vertex_array_object");
         extension.bindVertexArrayOES(vao);
     }
 
@@ -227,7 +227,7 @@ export class WebGLBindingStates
             }
             else
             {
-                const extension = gl.getExtension('ANGLE_instanced_arrays');
+                const extension = gl.getExtension("ANGLE_instanced_arrays");
                 extension.vertexAttribDivisorANGLE(location, divisor);
             }
             attributeDivisors[location] = divisor;
@@ -303,7 +303,7 @@ export class WebGLBindingStates
             return gl.createVertexArray();
         }
 
-        const extension = gl.getExtension('OES_vertex_array_object');
+        const extension = gl.getExtension("OES_vertex_array_object");
 
         return extension.createVertexArrayOES();
     }

@@ -80,7 +80,7 @@ export class WebGLCapabilities
     /**
      * Shader中支持浮点类型的最高精度
      */
-    maxPrecision: 'highp' | 'mediump' | 'lowp';
+    maxPrecision: "highp" | "mediump" | "lowp";
 
     /**
      *
@@ -97,11 +97,11 @@ export class WebGLCapabilities
      */
     vaoAvailable: boolean;
 
-    constructor(gl: WebGLRenderingContext, precision: 'highp' | 'mediump' | 'lowp' = 'highp')
+    constructor(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
     {
         gl.capabilities = this;
         //
-        this.maxAnisotropy = gl.getExtension('EXT_texture_filter_anisotropic') ? gl.getParameter(gl.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
+        this.maxAnisotropy = gl.getExtension("EXT_texture_filter_anisotropic") ? gl.getParameter(gl.getExtension("EXT_texture_filter_anisotropic").MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
         this.maxPrecision = this._getMaxPrecision(gl, precision);
 
         this.maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
@@ -115,35 +115,35 @@ export class WebGLCapabilities
         this.maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
         this.vertexTextures = this.maxVertexTextures > 0;
-        this.floatFragmentTextures = gl instanceof WebGL2RenderingContext || !!gl.getExtension('OES_texture_float');
+        this.floatFragmentTextures = gl instanceof WebGL2RenderingContext || !!gl.getExtension("OES_texture_float");
         this.floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
         this.maxSamples = gl instanceof WebGL2RenderingContext ? gl.getParameter(gl.MAX_SAMPLES) : 0;
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
 
-        this.vaoAvailable = gl instanceof WebGL2RenderingContext || !!gl.getExtension('OES_vertex_array_object');
+        this.vaoAvailable = gl instanceof WebGL2RenderingContext || !!gl.getExtension("OES_vertex_array_object");
     }
 
-    private _getMaxPrecision(gl: WebGLRenderingContext, precision: 'highp' | 'mediump' | 'lowp' = 'highp')
+    private _getMaxPrecision(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
     {
-        if (precision === 'highp')
+        if (precision === "highp")
         {
             if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
                 && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
             {
-                return 'highp';
+                return "highp";
             }
-            precision = 'mediump';
+            precision = "mediump";
         }
-        if (precision === 'mediump')
+        if (precision === "mediump")
         {
             if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
                 && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
             {
-                return 'mediump';
+                return "mediump";
             }
         }
 
-        return 'lowp';
+        return "lowp";
     }
 }

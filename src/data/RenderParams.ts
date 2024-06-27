@@ -1,8 +1,8 @@
-import { oav } from '@feng3d/objectview';
-import { Serializable } from '@feng3d/serialization';
-import { SerializeProperty } from '@feng3d/serialization';
+import { oav } from "@feng3d/objectview";
+import { Serializable } from "@feng3d/serialization";
+import { SerializeProperty } from "@feng3d/serialization";
 
-declare module '@feng3d/serialization' { interface SerializableMap { RenderParams: RenderParams } }
+declare module "@feng3d/serialization" { interface SerializableMap { RenderParams: RenderParams } }
 
 /**
  * 渲染参数
@@ -25,7 +25,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '剔除面', componentParam: { enumClass: ['NONE', 'FRONT', 'BACK', 'FRONT_AND_BACK'] } })
-    cullFace: CullFace = 'BACK';
+    cullFace: CullFace = "BACK";
 
     /**
      * 正向方向，默认 CW。三角形顺时针方向为正面。
@@ -34,7 +34,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '正面方向，默认FrontFace.CW 顺时针为正面', componentParam: { enumClass: ['CW', 'CCW'] } })
-    frontFace: FrontFace = 'CW';
+    frontFace: FrontFace = "CW";
 
     /**
      * 是否开启混合，默认 false，不开启混合。
@@ -54,7 +54,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '混合方式，默认BlendEquation.FUNC_ADD', componentParam: { enumClass: ['FUNC_ADD', 'FUNC_SUBTRACT', 'FUNC_REVERSE_SUBTRACT', 'MIN', 'MAX'] } })
-    blendEquation: BlendEquation = 'FUNC_ADD';
+    blendEquation: BlendEquation = "FUNC_ADD";
 
     /**
      * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。
@@ -64,7 +64,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '源混合因子，默认BlendFactor.SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
-    sfactor: BlendFactor = 'SRC_ALPHA';
+    sfactor: BlendFactor = "SRC_ALPHA";
 
     /**
      * 目标混合因子，默认 ONE_MINUS_SRC_ALPHA，将所有颜色乘以1减去源alpha值。
@@ -74,7 +74,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '目标混合因子，默认BlendFactor.ONE_MINUS_SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
-    dfactor: BlendFactor = 'ONE_MINUS_SRC_ALPHA';
+    dfactor: BlendFactor = "ONE_MINUS_SRC_ALPHA";
 
     /**
      * 是否开启深度检查，默认 true，开启深度检测。
@@ -95,7 +95,7 @@ export class RenderParams
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '深度检测方法', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
-    depthFunc: DepthFunc = 'LESS';
+    depthFunc: DepthFunc = "LESS";
 
     /**
      * 是否开启深度标记
@@ -214,7 +214,7 @@ export class RenderParams
      */
     @oav({ tooltip: 'A GLenum specifying the test function. The default function is gl.ALWAYS. ', component: 'OAVEnum', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
     @SerializeProperty()
-    stencilFunc: StencilFunc = 'ALWAYS';
+    stencilFunc: StencilFunc = "ALWAYS";
 
     /**
      * 一个为模板测试指定参考值。这个值被限制在0到2^n -1的范围内，其中n是模板缓冲区中的位数。默认0。
@@ -247,7 +247,7 @@ export class RenderParams
      */
     @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @SerializeProperty()
-    stencilOpFail: StencilOp = 'KEEP';
+    stencilOpFail: StencilOp = "KEEP";
 
     /**
      * 指定在模板测试通过但深度测试失败时使用的函数枚举。默认KEEP，保持当前值。
@@ -258,7 +258,7 @@ export class RenderParams
      */
     @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test passes, but the depth test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @SerializeProperty()
-    stencilOpZFail: StencilOp = 'KEEP';
+    stencilOpZFail: StencilOp = "KEEP";
 
     /**
      * 指定在模板测试和深度测试通过时使用的函数枚举，或在模板测试通过且没有深度缓冲或禁用深度测试时使用的函数枚举。默认KEEP，保持当前值。
@@ -269,7 +269,7 @@ export class RenderParams
      */
     @oav({ tooltip: 'A GLenum specifying the function to use when both the stencil test and the depth test pass, or when the stencil test passes and there is no depth buffer or depth testing is disabled. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
     @SerializeProperty()
-    stencilOpZPass: StencilOp = 'KEEP';
+    stencilOpZPass: StencilOp = "KEEP";
 
     /**
      * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认1。
@@ -297,7 +297,7 @@ export class RenderParams
  * @see http://www.jianshu.com/p/ee04165f2a02
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
  */
-export type CullFace = 'NONE' | 'FRONT' | 'BACK' | 'FRONT_AND_BACK';
+export type CullFace = "NONE" | "FRONT" | "BACK" | "FRONT_AND_BACK";
 
 /**
  * 渲染模式，默认 TRIANGLES，每三个顶点绘制一个三角形。
@@ -322,7 +322,7 @@ export type CullFace = 'NONE' | 'FRONT' | 'BACK' | 'FRONT_AND_BACK';
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type DrawMode = 'POINTS' | 'LINE_STRIP' | 'LINE_LOOP' | 'LINES' | 'TRIANGLE_STRIP' | 'TRIANGLE_FAN' | 'TRIANGLES';
+export type DrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";
 
 /**
  * 正面方向枚举
@@ -332,7 +332,7 @@ export type DrawMode = 'POINTS' | 'LINE_STRIP' | 'LINE_LOOP' | 'LINES' | 'TRIANG
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
  */
-export type FrontFace = 'CW' | 'CCW';
+export type FrontFace = "CW" | "CCW";
 
 /**
  * 混合方法
@@ -361,7 +361,7 @@ export type FrontFace = 'CW' | 'CCW';
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
  */
-export type BlendEquation = 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX';
+export type BlendEquation = "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT" | "MIN" | "MAX";
 
 /**
  * 混合因子（R分量系数，G分量系数，B分量系数）
@@ -388,7 +388,7 @@ export type BlendEquation = 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRAC
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
  */
-export type BlendFactor = 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' | 'DST_COLOR' | 'ONE_MINUS_DST_COLOR' | 'SRC_ALPHA' | 'ONE_MINUS_SRC_ALPHA' | 'DST_ALPHA' | 'ONE_MINUS_DST_ALPHA' | 'SRC_ALPHA_SATURATE';
+export type BlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST_COLOR" | "ONE_MINUS_DST_COLOR" | "SRC_ALPHA" | "ONE_MINUS_SRC_ALPHA" | "DST_ALPHA" | "ONE_MINUS_DST_ALPHA" | "SRC_ALPHA_SATURATE";
 
 /**
  * 指定深度比较函数的枚举，该函数设置绘制像素的条件，默认 LESS，如果传入值小于深度缓冲区值则通过。
@@ -406,7 +406,7 @@ export type BlendFactor = 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' |
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
  */
-export type DepthFunc = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS';
+export type DepthFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
 /**
  * A GLenum specifying the test function. The default function is gl.ALWAYS.
@@ -422,7 +422,7 @@ export type DepthFunc = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOT
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
  */
-export type StencilFunc = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS';
+export type StencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
 /**
  * The WebGLRenderingContext.stencilOp() method of the WebGL API sets both the front and back-facing stencil test actions.
@@ -438,4 +438,4 @@ export type StencilFunc = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'N
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
  */
-export type StencilOp = 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DECR' | 'DECR_WRAP' | 'INVERT';
+export type StencilOp = "KEEP" | "ZERO" | "REPLACE" | "INCR" | "INCR_WRAP" | "DECR" | "DECR_WRAP" | "INVERT";

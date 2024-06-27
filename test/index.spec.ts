@@ -1,9 +1,9 @@
-import { assert, describe, it } from 'vitest';
+import { assert, describe, it } from "vitest";
 const { ok } = assert;
 
-describe('test', () =>
+describe("test", () =>
 {
-    it('test', () =>
+    it("test", () =>
     {
         ok(true);
     });

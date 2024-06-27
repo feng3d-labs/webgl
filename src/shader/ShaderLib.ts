@@ -1,5 +1,5 @@
-import { globalEmitter } from '@feng3d/event';
-import { shaderMacroUtils } from './ShaderMacroUtils';
+import { globalEmitter } from "@feng3d/event";
+import { shaderMacroUtils } from "./ShaderMacroUtils";
 
 export const shaderConfig: ShaderConfig = { shaders: {}, modules: {} };
 
@@ -118,18 +118,18 @@ export class ShaderLib
  */
 export const shaderlib = new ShaderLib();
 
-declare module '@feng3d/event'
+declare module "@feng3d/event"
 {
     interface GlobalEvents
     {
         /**
          * shader资源发生变化
          */
-        'asset.shaderChanged': any;
+        "asset.shaderChanged": any;
     }
 }
 
-globalEmitter.on('asset.shaderChanged', () =>
+globalEmitter.on("asset.shaderChanged", () =>
 {
     shaderlib.clearCache();
 });

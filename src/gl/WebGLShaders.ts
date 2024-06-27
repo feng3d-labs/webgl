@@ -1,11 +1,11 @@
-import { WebGLUniformTypeUtils } from '../const/WebGLUniformType';
-import { Shader } from '../data/Shader';
-import { ShaderMacro } from '../shader/Macro';
-import { shaderlib } from '../shader/ShaderLib';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { ShaderType } from './WebGLEnums';
-import { WebGLRenderAtomic } from './WebGLRenderAtomic';
-import { WebGLUniform } from './WebGLUniforms';
+import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { Shader } from "../data/Shader";
+import { ShaderMacro } from "../shader/Macro";
+import { shaderlib } from "../shader/ShaderLib";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { ShaderType } from "./WebGLEnums";
+import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
+import { WebGLUniform } from "./WebGLUniforms";
 
 /**
  * WebGLShader处理器
@@ -147,10 +147,10 @@ export class WebGLShaders
 
         // 创建着色器程序
         // 编译顶点着色器
-        const vertexShader = this.compileShaderCode('VERTEX_SHADER', vshader);
+        const vertexShader = this.compileShaderCode("VERTEX_SHADER", vshader);
 
         // 编译片段着色器
-        const fragmentShader = this.compileShaderCode('FRAGMENT_SHADER', fshader);
+        const fragmentShader = this.compileShaderCode("FRAGMENT_SHADER", fshader);
 
         // 创建着色器程序
         const shaderProgram = this.createLinkProgram(this._webGLRenderer, vertexShader, fragmentShader);
@@ -179,7 +179,7 @@ export class WebGLShaders
             const names = [name];
             if (activeInfo.size > 1)
             {
-                console.assert(name.substr(-3, 3) === '[0]');
+                console.assert(name.substr(-3, 3) === "[0]");
                 const baseName = name.substring(0, name.length - 3);
                 for (let j = 1; j < activeInfo.size; j++)
                 {
@@ -214,15 +214,15 @@ export class WebGLShaders
 
     private getMacroCode(variables: string[], valueObj: Object)
     {
-        let macroHeader = '';
+        let macroHeader = "";
         variables.forEach((macroName) =>
         {
             const value = valueObj[macroName];
-            if (typeof value === 'boolean')
+            if (typeof value === "boolean")
             {
                 value && (macroHeader += `#define ${macroName}\n`);
             }
-            else if (typeof value === 'number')
+            else if (typeof value === "number")
             {
                 macroHeader += `#define ${macroName} ${value}\n`;
             }

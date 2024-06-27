@@ -1,9 +1,9 @@
-import { Vector2 } from '@feng3d/math';
-import { mathUtil } from '@feng3d/polyfill';
-import { watcher } from '@feng3d/watcher';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { TextureFormat, TextureMagFilter, TextureMinFilter } from '../gl/WebGLEnums';
-import { Texture2D } from './Texture2D';
+import { Vector2 } from "@feng3d/math";
+import { mathUtil } from "@feng3d/polyfill";
+import { watcher } from "@feng3d/watcher";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { TextureFormat, TextureMagFilter, TextureMinFilter } from "../gl/WebGLEnums";
+import { Texture2D } from "./Texture2D";
 
 /**
  * 渲染目标纹理
@@ -14,11 +14,11 @@ export class RenderTargetTexture2D extends Texture2D
 
     height = 1024;
 
-    format: TextureFormat = 'RGBA';
+    format: TextureFormat = "RGBA";
 
-    minFilter: TextureMinFilter = 'NEAREST';
+    minFilter: TextureMinFilter = "NEAREST";
 
-    magFilter: TextureMagFilter = 'NEAREST';
+    magFilter: TextureMagFilter = "NEAREST";
 
     /**
      * 是否为2的幂贴图
@@ -40,8 +40,8 @@ export class RenderTargetTexture2D extends Texture2D
     constructor()
     {
         super();
-        watcher.watch(this as RenderTargetTexture2D, 'width', this.invalidate, this);
-        watcher.watch(this as RenderTargetTexture2D, 'height', this.invalidate, this);
+        watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
+        watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
     }
 
     /**

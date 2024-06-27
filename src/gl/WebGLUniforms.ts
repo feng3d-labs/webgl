@@ -1,7 +1,7 @@
-import { lazy } from '@feng3d/polyfill';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { WebGLUniformType } from '../const/WebGLUniformType';
-import { WebGLRenderAtomic } from './WebGLRenderAtomic';
+import { lazy } from "@feng3d/polyfill";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { WebGLUniformType } from "../const/WebGLUniformType";
+import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 
 /**
  * WebGL统一变量
@@ -73,30 +73,30 @@ export class WebGLUniforms
         const location = webGLUniform.location;
         switch (webGLUniform.type)
         {
-            case 'BOOL':
-            case 'INT':
+            case "BOOL":
+            case "INT":
                 gl.uniform1i(location, data);
                 break;
-            case 'FLOAT_MAT3':
+            case "FLOAT_MAT3":
                 gl.uniformMatrix3fv(location, false, vec);
                 break;
-            case 'FLOAT_MAT4':
+            case "FLOAT_MAT4":
                 gl.uniformMatrix4fv(location, false, vec);
                 break;
-            case 'FLOAT':
+            case "FLOAT":
                 gl.uniform1f(location, data);
                 break;
-            case 'FLOAT_VEC2':
+            case "FLOAT_VEC2":
                 gl.uniform2f(location, vec[0], vec[1]);
                 break;
-            case 'FLOAT_VEC3':
+            case "FLOAT_VEC3":
                 gl.uniform3f(location, vec[0], vec[1], vec[2]);
                 break;
-            case 'FLOAT_VEC4':
+            case "FLOAT_VEC4":
                 gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
                 break;
-            case 'SAMPLER_2D':
-            case 'SAMPLER_CUBE':
+            case "SAMPLER_2D":
+            case "SAMPLER_CUBE":
                 textures.active(data, webGLUniform);
                 break;
             default:

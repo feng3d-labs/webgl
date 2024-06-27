@@ -1,9 +1,9 @@
-import { lazy } from '@feng3d/polyfill';
-import { watcher } from '@feng3d/watcher';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from '../data/ElementBuffer';
-import { BufferUsage } from './WebGLEnums';
-import { WebGLRenderAtomic } from './WebGLRenderAtomic';
+import { lazy } from "@feng3d/polyfill";
+import { watcher } from "@feng3d/watcher";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
+import { BufferUsage } from "./WebGLEnums";
+import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 
 export class WebGLElementBuffers
 {
@@ -72,7 +72,7 @@ export class WebGLElementBuffers
                 }
                 else
                 {
-                    const extension = gl.getExtension('ANGLE_instanced_arrays');
+                    const extension = gl.getExtension("ANGLE_instanced_arrays");
                     extension.drawElementsInstancedANGLE(gl[drawMode], count, gl[type], offset, instanceCount);
                 }
             }
@@ -82,7 +82,7 @@ export class WebGLElementBuffers
             }
             else
             {
-                const extension = gl.getExtension('ANGLE_instanced_arrays');
+                const extension = gl.getExtension("ANGLE_instanced_arrays");
                 extension.drawArraysInstancedANGLE(gl[drawMode], offset, count, instanceCount);
             }
         }
@@ -177,7 +177,7 @@ class WebGLElementBuffer
         this.element = element;
 
         //
-        watcher.watch(element, 'array', this.needsUpdate, this);
+        watcher.watch(element, "array", this.needsUpdate, this);
     }
 
     private needsUpdate()
@@ -205,7 +205,7 @@ class WebGLElementBuffer
 
         //
         const { type, array } = transfromArrayType(element.array, element.type);
-        const usage: BufferUsage = element.usage || 'STATIC_DRAW';
+        const usage: BufferUsage = element.usage || "STATIC_DRAW";
 
         buffer = gl.createBuffer();
 
@@ -225,7 +225,7 @@ class WebGLElementBuffer
 
         gl.deleteBuffer(buffer);
 
-        watcher.watch(element, 'array', this.needsUpdate, this);
+        watcher.watch(element, "array", this.needsUpdate, this);
 
         this._webGLRenderer = null;
         this.element = null;
@@ -240,34 +240,34 @@ function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementT
     {
         if (array instanceof Uint8Array)
         {
-            type = 'UNSIGNED_BYTE';
+            type = "UNSIGNED_BYTE";
         }
         else if (array instanceof Uint16Array)
         {
-            type = 'UNSIGNED_SHORT';
+            type = "UNSIGNED_SHORT";
         }
         else if (array instanceof Uint32Array)
         {
-            type = 'UNSIGNED_INT';
+            type = "UNSIGNED_INT";
         }
         else
         {
-            type = 'UNSIGNED_SHORT';
+            type = "UNSIGNED_SHORT";
         }
     }
 
     // 处理数组
     if (Array.isArray(array))
     {
-        if (type === 'UNSIGNED_BYTE')
+        if (type === "UNSIGNED_BYTE")
         {
             array = new Uint8Array(array);
         }
-        else if (type === 'UNSIGNED_INT')
+        else if (type === "UNSIGNED_INT")
         {
             array = new Uint32Array(array);
         }
-        else if (type === 'UNSIGNED_SHORT')
+        else if (type === "UNSIGNED_SHORT")
         {
             array = new Uint16Array(array);
         }
@@ -278,21 +278,21 @@ function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementT
     }
 
     // 处理数据类型不匹配情况
-    if (type === 'UNSIGNED_BYTE')
+    if (type === "UNSIGNED_BYTE")
     {
         if (!(array instanceof Uint8Array))
         {
             array = new Uint8Array(array);
         }
     }
-    else if (type === 'UNSIGNED_SHORT')
+    else if (type === "UNSIGNED_SHORT")
     {
         if (!(array instanceof Uint16Array))
         {
             array = new Uint16Array(array);
         }
     }
-    else if (type === 'UNSIGNED_INT')
+    else if (type === "UNSIGNED_INT")
     {
         if (!(array instanceof Uint32Array))
         {

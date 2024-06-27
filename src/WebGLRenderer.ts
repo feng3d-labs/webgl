@@ -1,17 +1,17 @@
 /* eslint-disable no-new */
-import { RenderAtomic } from './data/RenderAtomic';
-import { WebGLAttributeBuffers } from './gl/WebGLAttributeBuffers';
-import { WebGLBindingStates } from './gl/WebGLBindingStates';
-import { WebGLCapabilities } from './gl/WebGLCapabilities';
-import { WebGLElementBuffers } from './gl/WebGLElementBuffers';
-import { WebGLFramebuffers } from './gl/WebGLFramebuffers';
-import { WebGLInfo } from './gl/WebGLInfo';
-import { WebGLRenderAtomic } from './gl/WebGLRenderAtomic';
-import { WebGLRenderbuffers } from './gl/WebGLRenderbuffers';
-import { WebGLRenderParams } from './gl/WebGLRenderParams';
-import { WebGLShaders } from './gl/WebGLShaders';
-import { WebGLTextures } from './gl/WebGLTextures';
-import { WebGLUniforms } from './gl/WebGLUniforms';
+import { RenderAtomic } from "./data/RenderAtomic";
+import { WebGLAttributeBuffers } from "./gl/WebGLAttributeBuffers";
+import { WebGLBindingStates } from "./gl/WebGLBindingStates";
+import { WebGLCapabilities } from "./gl/WebGLCapabilities";
+import { WebGLElementBuffers } from "./gl/WebGLElementBuffers";
+import { WebGLFramebuffers } from "./gl/WebGLFramebuffers";
+import { WebGLInfo } from "./gl/WebGLInfo";
+import { WebGLRenderAtomic } from "./gl/WebGLRenderAtomic";
+import { WebGLRenderbuffers } from "./gl/WebGLRenderbuffers";
+import { WebGLRenderParams } from "./gl/WebGLRenderParams";
+import { WebGLShaders } from "./gl/WebGLShaders";
+import { WebGLTextures } from "./gl/WebGLTextures";
+import { WebGLUniforms } from "./gl/WebGLUniforms";
 
 /**
  * WEBGL 渲染器
@@ -51,18 +51,18 @@ export class WebGLRenderer
     {
         if (!canvas)
         {
-            canvas = document.createElement('canvas');
-            canvas.id = 'glcanvas';
-            canvas.style.position = 'fixed';
-            canvas.style.left = '0px';
-            canvas.style.top = '0px';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
+            canvas = document.createElement("canvas");
+            canvas.id = "glcanvas";
+            canvas.style.position = "fixed";
+            canvas.style.left = "0px";
+            canvas.style.top = "0px";
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
             document.body.appendChild(canvas);
         }
-        canvas.addEventListener('webglcontextlost', this._onContextLost, false);
-        canvas.addEventListener('webglcontextrestored', this._onContextRestore, false);
-        canvas.addEventListener('webglcontextcreationerror', this._onContextCreationError, false);
+        canvas.addEventListener("webglcontextlost", this._onContextLost, false);
+        canvas.addEventListener("webglcontextrestored", this._onContextRestore, false);
+        canvas.addEventListener("webglcontextcreationerror", this._onContextCreationError, false);
 
         contextAttributes = Object.assign({
             depth: true,
@@ -70,11 +70,11 @@ export class WebGLRenderer
             antialias: false,
             premultipliedAlpha: true,
             preserveDrawingBuffer: false,
-            powerPreference: 'default',
+            powerPreference: "default",
             failIfMajorPerformanceCaveat: false,
         } as Partial<WebGLContextAttributes>, contextAttributes);
 
-        const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
+        const contextNames = ["webgl2", "webgl", "experimental-webgl"];
         this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
 
         new WebGLCapabilities(this.gl);
@@ -121,21 +121,21 @@ export class WebGLRenderer
     {
         event.preventDefault();
 
-        console.warn('WebGLRenderer: Context Lost.');
+        console.warn("WebGLRenderer: Context Lost.");
 
         this._isContextLost = true;
     };
 
     private _onContextRestore = () =>
     {
-        console.warn('WebGLRenderer: Context Restored.');
+        console.warn("WebGLRenderer: Context Restored.");
 
         this._isContextLost = false;
     };
 
     private _onContextCreationError = (event: WebGLContextEvent) =>
     {
-        console.error('WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage);
+        console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
     };
 }
 
@@ -147,11 +147,11 @@ function getContext(canvas: HTMLCanvasElement, contextNames: string[], contextAt
     {
         if (_getContext(canvas, contextNames))
         {
-            throw new Error('Error creating WebGL context with your selected attributes.');
+            throw new Error("Error creating WebGL context with your selected attributes.");
         }
         else
         {
-            throw new Error('Error creating WebGL context.');
+            throw new Error("Error creating WebGL context.");
         }
     }
 

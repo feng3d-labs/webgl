@@ -16,8 +16,8 @@
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export type BufferUsage = 'STATIC_DRAW' | 'DYNAMIC_DRAW' | 'STREAM_DRAW' // WebGL1
-    | 'STATIC_READ' | 'DYNAMIC_READ' | 'STREAM_READ' | 'STATIC_COPY' | 'DYNAMIC_COPY' | 'STREAM_COPY' // WebGL2
+export type BufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
+    | "STATIC_READ" | "DYNAMIC_READ" | "STREAM_READ" | "STATIC_COPY" | "DYNAMIC_COPY" | "STREAM_COPY" // WebGL2
     ;
 
 /**
@@ -35,9 +35,9 @@ export type BufferUsage = 'STATIC_DRAW' | 'DYNAMIC_DRAW' | 'STREAM_DRAW' // WebG
  * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
  *
  */
-export type BufferTarget = 'ARRAY_BUFFER' | 'ELEMENT_ARRAY_BUFFER' // WebGL1
-    | 'COPY_READ_BUFFER' | 'COPY_WRITE_BUFFER' | 'TRANSFORM_FEEDBACK_BUFFER'// WebGL2
-    | 'UNIFORM_BUFFER' | 'PIXEL_PACK_BUFFER' | 'PIXEL_UNPACK_BUFFER'; // WebGL2
+export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
+    | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
+    | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
 
 /**
  * A GLbitfield bitwise OR mask that indicates the buffers to be cleared. Possible values are:
@@ -47,7 +47,7 @@ export type BufferTarget = 'ARRAY_BUFFER' | 'ELEMENT_ARRAY_BUFFER' // WebGL1
  * gl.STENCIL_BUFFER_BIT
  *
  */
-export type ClearMask = 'COLOR_BUFFER_BIT' | 'DEPTH_BUFFER_BIT' | 'STENCIL_BUFFER_BIT';
+export type ClearMask = "COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
 
 /**
  * A GLenum specifying which WebGL capability to enable. Possible values:
@@ -67,11 +67,11 @@ export type ClearMask = 'COLOR_BUFFER_BIT' | 'DEPTH_BUFFER_BIT' | 'STENCIL_BUFFE
  * gl.RASTERIZER_DISCARD	Primitives are discarded immediately before the rasterization stage, but after the optional transform feedback stage. gl.clear() commands are ignored.
  */
 export type Capability =
-    'BLEND' | 'CULL_FACE' | 'DEPTH_TEST' | 'DITHER'
-    | 'POLYGON_OFFSET_FILL' | 'SAMPLE_ALPHA_TO_COVERAGE' | 'SAMPLE_COVERAGE'
-    | 'SCISSOR_TEST'
-    | 'STENCIL_TEST'
-    | 'RASTERIZER_DISCARD'
+    "BLEND" | "CULL_FACE" | "DEPTH_TEST" | "DITHER"
+    | "POLYGON_OFFSET_FILL" | "SAMPLE_ALPHA_TO_COVERAGE" | "SAMPLE_COVERAGE"
+    | "SCISSOR_TEST"
+    | "STENCIL_TEST"
+    | "RASTERIZER_DISCARD"
     ;
 
 /**
@@ -92,8 +92,8 @@ export type Capability =
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels
  */
-export type ReadPixelsFormat = 'ALPHA' | 'RGB' | 'RGBA' // WebGL1
-    | 'RED' | 'RG' | 'RED_INTEGER' | 'RG_INTEGER' | 'RGB_INTEGER' | 'RGBA_INTEGER' // WebGL2
+export type ReadPixelsFormat = "ALPHA" | "RGB" | "RGBA" // WebGL1
+    | "RED" | "RG" | "RED_INTEGER" | "RG_INTEGER" | "RGB_INTEGER" | "RGBA_INTEGER" // WebGL2
     ;
 
 /**
@@ -118,20 +118,20 @@ export type ReadPixelsFormat = 'ALPHA' | 'RGB' | 'RGBA' // WebGL1
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels
  */
 export type ReadPixelsType =
-    | 'UNSIGNED_BYTE'
-    | 'UNSIGNED_SHORT_5_6_5'
-    | 'UNSIGNED_SHORT_4_4_4_4'
-    | 'UNSIGNED_SHORT_5_5_5_1'
-    | 'FLOAT'
-    | 'BYTE'
-    | 'UNSIGNED_INT_2_10_10_10_REV'
-    | 'HALF_FLOAT'
-    | 'SHORT'
-    | 'UNSIGNED_SHORT'
-    | 'INT'
-    | 'UNSIGNED_INT'
-    | 'UNSIGNED_INT_10F_11F_11F_REV'
-    | 'UNSIGNED_INT_5_9_9_9_REV'
+    | "UNSIGNED_BYTE"
+    | "UNSIGNED_SHORT_5_6_5"
+    | "UNSIGNED_SHORT_4_4_4_4"
+    | "UNSIGNED_SHORT_5_5_5_1"
+    | "FLOAT"
+    | "BYTE"
+    | "UNSIGNED_INT_2_10_10_10_REV"
+    | "HALF_FLOAT"
+    | "SHORT"
+    | "UNSIGNED_SHORT"
+    | "INT"
+    | "UNSIGNED_INT"
+    | "UNSIGNED_INT_10F_11F_11F_REV"
+    | "UNSIGNED_INT_5_9_9_9_REV"
     ;
 
 /**
@@ -170,12 +170,12 @@ export type ReadPixelsType =
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TextureDataType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT_5_6_5' | 'UNSIGNED_SHORT_4_4_4_4' | 'UNSIGNED_SHORT_5_5_5_1' // WebGL1
-    | 'UNSIGNED_SHORT' | 'UNSIGNED_INT' | 'UNSIGNED_INT_24_8_WEBGL' // WEBGL_depth_texture
-    | 'FLOAT' // OES_texture_float
-    | 'HALF_FLOAT_OES' //  OES_texture_half_float
-    | 'BYTE' | 'UNSIGNED_SHORT' | 'SHORT' | 'UNSIGNED_INT' | 'INT' | 'HALF_FLOAT' | 'FLOAT' | 'UNSIGNED_INT_2_10_10_10_REV' // WebGL2
-    | 'UNSIGNED_INT_10F_11F_11F_REV' | 'UNSIGNED_INT_5_9_9_9_REV' | 'UNSIGNED_INT_24_8' | 'FLOAT_32_UNSIGNED_INT_24_8_REV' // WebGL2
+export type TextureDataType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT_5_6_5" | "UNSIGNED_SHORT_4_4_4_4" | "UNSIGNED_SHORT_5_5_5_1" // WebGL1
+    | "UNSIGNED_SHORT" | "UNSIGNED_INT" | "UNSIGNED_INT_24_8_WEBGL" // WEBGL_depth_texture
+    | "FLOAT" // OES_texture_float
+    | "HALF_FLOAT_OES" //  OES_texture_half_float
+    | "BYTE" | "UNSIGNED_SHORT" | "SHORT" | "UNSIGNED_INT" | "INT" | "HALF_FLOAT" | "FLOAT" | "UNSIGNED_INT_2_10_10_10_REV" // WebGL2
+    | "UNSIGNED_INT_10F_11F_11F_REV" | "UNSIGNED_INT_5_9_9_9_REV" | "UNSIGNED_INT_24_8" | "FLOAT_32_UNSIGNED_INT_24_8_REV" // WebGL2
     ;
 
 /**
@@ -219,7 +219,7 @@ export type TextureDataType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT_5_6_5' | 'UNSIGN
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TextureFormat = 'ALPHA' | 'RGB' | `RGBA` | `LUMINANCE` | `LUMINANCE_ALPHA` | `DEPTH_COMPONENT`
+export type TextureFormat = "ALPHA" | "RGB" | `RGBA` | `LUMINANCE` | `LUMINANCE_ALPHA` | `DEPTH_COMPONENT`
     | `DEPTH_STENCIL` | `SRGB_EXT` | `SRGB_ALPHA_EXT` | `R8` | `R16F` | `R32F`
     | `R8UI` | `RG8` | `RG16F` | `RG32F` | `RG8UI` | `RG16UI`
     | `RG32UI` | `RGB8` | `SRGB8` | `RGB565`
@@ -236,7 +236,7 @@ export type TextureFormat = 'ALPHA' | 'RGB' | `RGBA` | `LUMINANCE` | `LUMINANCE_
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type TextureMagFilter = 'LINEAR' | 'NEAREST';
+export type TextureMagFilter = "LINEAR" | "NEAREST";
 
 /**
  * 纹理缩小过滤器
@@ -251,7 +251,7 @@ export type TextureMagFilter = 'LINEAR' | 'NEAREST';
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type TextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST' | 'LINEAR_MIPMAP_NEAREST' | 'NEAREST_MIPMAP_LINEAR' | 'LINEAR_MIPMAP_LINEAR';
+export type TextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST" | "LINEAR_MIPMAP_NEAREST" | "NEAREST_MIPMAP_LINEAR" | "LINEAR_MIPMAP_LINEAR";
 
 /**
  * A GLenum specifying the binding point (target). Possible values:
@@ -266,7 +266,7 @@ export type TextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST' |
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindTexture
  */
-export type TextureTarget = 'TEXTURE_2D' | 'TEXTURE_CUBE_MAP' | 'TEXTURE_3D' | 'TEXTURE_2D_ARRAY';
+export type TextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
 
 /**
  * The pname parameter is a GLenum specifying the texture parameter to set.
@@ -331,12 +331,12 @@ export interface TexParameteri_WebGL2
     /**
      * Texture Comparison function
      */
-    TEXTURE_COMPARE_FUNC: 'LEQUAL' | 'GEQUAL' | 'LESS' | 'GREATER' | 'EQUAL' | 'NOTEQUAL' | 'ALWAYS' | 'NEVER';
+    TEXTURE_COMPARE_FUNC: "LEQUAL" | "GEQUAL" | "LESS" | "GREATER" | "EQUAL" | "NOTEQUAL" | "ALWAYS" | "NEVER";
 
     /**
      * Texture comparison mode
      */
-    TEXTURE_COMPARE_MODE: 'NONE' | 'COMPARE_REF_TO_TEXTURE';
+    TEXTURE_COMPARE_MODE: "NONE" | "COMPARE_REF_TO_TEXTURE";
 
     /**
      * 	Maximum texture mipmap array level. Any int values.
@@ -362,13 +362,13 @@ export interface TexParameteri_WebGL2
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TexImage2DTarget = 'TEXTURE_2D'
-    | 'TEXTURE_CUBE_MAP_POSITIVE_X'
-    | 'TEXTURE_CUBE_MAP_NEGATIVE_X'
-    | 'TEXTURE_CUBE_MAP_POSITIVE_Y'
-    | 'TEXTURE_CUBE_MAP_NEGATIVE_Y'
-    | 'TEXTURE_CUBE_MAP_POSITIVE_Z'
-    | 'TEXTURE_CUBE_MAP_NEGATIVE_Z';
+export type TexImage2DTarget = "TEXTURE_2D"
+    | "TEXTURE_CUBE_MAP_POSITIVE_X"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
 
 /**
  * 纹理坐标s包装函数枚举
@@ -380,7 +380,7 @@ export type TexImage2DTarget = 'TEXTURE_2D'
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type TextureWrap = 'REPEAT' | 'CLAMP_TO_EDGE' | 'MIRRORED_REPEAT';
+export type TextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
 
 /**
  * A GLenum specifying the binding point (target). Possible values:
@@ -392,7 +392,7 @@ export type TextureWrap = 'REPEAT' | 'CLAMP_TO_EDGE' | 'MIRRORED_REPEAT';
  * gl.DRAW_FRAMEBUFFER  Used as a destination for drawing operations such as gl.draw*, gl.clear* and gl.blitFramebuffer.
  * gl.READ_FRAMEBUFFER  Used as a source for reading operations such as gl.readPixels and gl.blitFramebuffer.
  */
-export type FramebufferTarget = 'FRAMEBUFFER' | 'DRAW_FRAMEBUFFER' | 'READ_FRAMEBUFFER';
+export type FramebufferTarget = "FRAMEBUFFER" | "DRAW_FRAMEBUFFER" | "READ_FRAMEBUFFER";
 
 /**
  * A GLenum specifying the binding point (target). Possible values:
@@ -401,7 +401,7 @@ export type FramebufferTarget = 'FRAMEBUFFER' | 'DRAW_FRAMEBUFFER' | 'READ_FRAME
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  */
-export type Renderbuffertarget = 'RENDERBUFFER';
+export type Renderbuffertarget = "RENDERBUFFER";
 
 /**
  * A GLenum specifying the internal format of the renderbuffer. Possible values:
@@ -466,14 +466,14 @@ export type Renderbuffertarget = 'RENDERBUFFER';
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  */
-export type RenderbufferInternalformat = 'RGBA4' | 'RGB565' | 'RGB5_A1' | 'DEPTH_COMPONENT16' | 'STENCIL_INDEX8' | 'DEPTH_STENCIL' // WebGL1
-    | 'R8' | 'R8UI' | 'R8I' | 'R16UI' | 'R16I' | 'R32UI' | 'R32I' | 'RG8' | 'RG8UI' | 'RG8I' // WebGL2
-    | 'RG16UI' | 'RG16I' | 'RG32UI' | 'RG32I' | 'RGB8' | 'RGBA8' | 'SRGB8_ALPHA8' | 'RGB10_A2' // WebGL2
-    | 'RGBA8UI' | 'RGBA8I' | 'RGB10_A2UI' | 'RGBA16UI' | 'RGBA16I' | 'RGBA32I' | 'RGBA32UI' // WebGL2
-    | 'DEPTH_COMPONENT24' | 'DEPTH_COMPONENT32F' | 'DEPTH24_STENCIL8' | 'DEPTH32F_STENCIL8' // WebGL2
-    | 'RGBA32F_EXT' | 'RGB32F_EXT' // WEBGL_color_buffer_float extension
-    | 'SRGB8_ALPHA8_EXT' // EXT_sRGB extension
-    | 'R16F' | 'RG16F' | 'RGBA16F' | 'R32F' | 'RG32F' | 'RGBA32F' | 'R11F_G11F_B10F' //  WebGL 2 EXT_color_buffer_float
+export type RenderbufferInternalformat = "RGBA4" | "RGB565" | "RGB5_A1" | "DEPTH_COMPONENT16" | "STENCIL_INDEX8" | "DEPTH_STENCIL" // WebGL1
+    | "R8" | "R8UI" | "R8I" | "R16UI" | "R16I" | "R32UI" | "R32I" | "RG8" | "RG8UI" | "RG8I" // WebGL2
+    | "RG16UI" | "RG16I" | "RG32UI" | "RG32I" | "RGB8" | "RGBA8" | "SRGB8_ALPHA8" | "RGB10_A2" // WebGL2
+    | "RGBA8UI" | "RGBA8I" | "RGB10_A2UI" | "RGBA16UI" | "RGBA16I" | "RGBA32I" | "RGBA32UI" // WebGL2
+    | "DEPTH_COMPONENT24" | "DEPTH_COMPONENT32F" | "DEPTH24_STENCIL8" | "DEPTH32F_STENCIL8" // WebGL2
+    | "RGBA32F_EXT" | "RGB32F_EXT" // WEBGL_color_buffer_float extension
+    | "SRGB8_ALPHA8_EXT" // EXT_sRGB extension
+    | "R16F" | "RG16F" | "RGBA16F" | "R32F" | "RG32F" | "RGBA32F" | "R11F_G11F_B10F" //  WebGL 2 EXT_color_buffer_float
     ;
 
 /**
@@ -481,7 +481,7 @@ export type RenderbufferInternalformat = 'RGBA4' | 'RGB565' | 'RGB5_A1' | 'DEPTH
  *
  * Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
  */
-export type ShaderType = 'FRAGMENT_SHADER' | 'VERTEX_SHADER';
+export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
 
 /**
  * A GLenum specifying the information to query. Possible values:
@@ -539,7 +539,7 @@ export interface PixelStoreiParameter_WebGL1
     /**
      * Default color space conversion or no color space conversion. default gl.BROWSER_DEFAULT_WEBGL.
      */
-    UNPACK_COLORSPACE_CONVERSION_WEBGL: 'BROWSER_DEFAULT_WEBGL' | 'NONE';
+    UNPACK_COLORSPACE_CONVERSION_WEBGL: "BROWSER_DEFAULT_WEBGL" | "NONE";
 }
 
 /**
@@ -609,7 +609,7 @@ export interface ProgramParameter
 /**
  * A precision type value. Either gl.LOW_FLOAT, gl.MEDIUM_FLOAT, gl.HIGH_FLOAT, gl.LOW_INT, gl.MEDIUM_INT, or gl.HIGH_INT.
  */
-export type PrecisionType = 'LOW_FLOAT' | 'MEDIUM_FLOAT' | 'HIGH_FLOAT' | 'LOW_INT' | 'MEDIUM_INT' | 'HIGH_INT';
+export type PrecisionType = "LOW_FLOAT" | "MEDIUM_FLOAT" | "HIGH_FLOAT" | "LOW_INT" | "MEDIUM_INT" | "HIGH_INT";
 
 /**
  * A GLenum specifying the attachment point for the texture. Possible values:
@@ -623,9 +623,9 @@ export type PrecisionType = 'LOW_FLOAT' | 'MEDIUM_FLOAT' | 'HIGH_FLOAT' | 'LOW_I
  * gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
  * gl.COLOR_ATTACHMENT1 gl.COLOR_ATTACHMENT2 gl.COLOR_ATTACHMENT3 gl.COLOR_ATTACHMENT4 gl.COLOR_ATTACHMENT5 gl.COLOR_ATTACHMENT6 gl.COLOR_ATTACHMENT7 gl.COLOR_ATTACHMENT8 gl.COLOR_ATTACHMENT9 gl.COLOR_ATTACHMENT10 gl.COLOR_ATTACHMENT11 gl.COLOR_ATTACHMENT12 gl.COLOR_ATTACHMENT13 gl.COLOR_ATTACHMENT14 gl.COLOR_ATTACHMENT15
  */
-export type AttachmentPoint = 'COLOR_ATTACHMENT0' | 'DEPTH_ATTACHMENT' | 'STENCIL_ATTACHMENT'
-    | 'DEPTH_STENCIL_ATTACHMENT'
-    | 'COLOR_ATTACHMENT1' | 'COLOR_ATTACHMENT2' | 'COLOR_ATTACHMENT3' | 'COLOR_ATTACHMENT4' | 'COLOR_ATTACHMENT5'
-    | 'COLOR_ATTACHMENT6' | 'COLOR_ATTACHMENT7' | 'COLOR_ATTACHMENT8' | 'COLOR_ATTACHMENT9' | 'COLOR_ATTACHMENT10'
-    | 'COLOR_ATTACHMENT11' | 'COLOR_ATTACHMENT12' | 'COLOR_ATTACHMENT13' | 'COLOR_ATTACHMENT14' | 'COLOR_ATTACHMENT15'
+export type AttachmentPoint = "COLOR_ATTACHMENT0" | "DEPTH_ATTACHMENT" | "STENCIL_ATTACHMENT"
+    | "DEPTH_STENCIL_ATTACHMENT"
+    | "COLOR_ATTACHMENT1" | "COLOR_ATTACHMENT2" | "COLOR_ATTACHMENT3" | "COLOR_ATTACHMENT4" | "COLOR_ATTACHMENT5"
+    | "COLOR_ATTACHMENT6" | "COLOR_ATTACHMENT7" | "COLOR_ATTACHMENT8" | "COLOR_ATTACHMENT9" | "COLOR_ATTACHMENT10"
+    | "COLOR_ATTACHMENT11" | "COLOR_ATTACHMENT12" | "COLOR_ATTACHMENT13" | "COLOR_ATTACHMENT14" | "COLOR_ATTACHMENT15"
     ;

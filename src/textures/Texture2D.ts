@@ -1,10 +1,10 @@
-import { Vector2 } from '@feng3d/math';
-import { watcher } from '@feng3d/watcher';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { Texture } from '../data/Texture';
-import { TextureTarget } from '../gl/WebGLEnums';
+import { Vector2 } from "@feng3d/math";
+import { watcher } from "@feng3d/watcher";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { Texture } from "../data/Texture";
+import { TextureTarget } from "../gl/WebGLEnums";
 
-declare module '../data/Texture'
+declare module "../data/Texture"
 {
     interface TextureMap extends Texture2DMap { }
 }
@@ -16,7 +16,7 @@ export interface Texture2DMap
 
 export type Texture2DLike = Texture2DMap[keyof Texture2DMap];
 
-declare module '../data/Uniforms'
+declare module "../data/Uniforms"
 {
     interface UniformTypeMap
     {
@@ -30,7 +30,7 @@ declare module '../data/Uniforms'
  */
 export class Texture2D extends Texture
 {
-    textureTarget: TextureTarget = 'TEXTURE_2D';
+    textureTarget: TextureTarget = "TEXTURE_2D";
 
     /**
      * One of the following objects can be used as a pixel source for the texture.
@@ -40,7 +40,7 @@ export class Texture2D extends Texture
     constructor()
     {
         super();
-        watcher.watch(this as Texture2D, 'source', this.invalidate, this);
+        watcher.watch(this as Texture2D, "source", this.invalidate, this);
     }
 
     setTextureData(webGLRenderer: WebGLRenderer)
@@ -51,7 +51,7 @@ export class Texture2D extends Texture
 
     getSize()
     {
-        return new Vector2(this.source?.['width'] || 0, this.source?.['height'] || 0);
+        return new Vector2(this.source?.["width"] || 0, this.source?.["height"] || 0);
     }
 }
 

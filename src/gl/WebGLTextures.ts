@@ -1,7 +1,7 @@
-import { WebGLRenderer } from '../WebGLRenderer';
-import { Texture } from '../data/Texture';
-import { TextureMagFilter, TextureMinFilter, TextureWrap } from './WebGLEnums';
-import { WebGLUniform } from './WebGLUniforms';
+import { WebGLRenderer } from "../WebGLRenderer";
+import { Texture } from "../data/Texture";
+import { TextureMagFilter, TextureMinFilter, TextureWrap } from "./WebGLEnums";
+import { WebGLUniform } from "./WebGLUniforms";
 
 /**
  * WebGL纹理
@@ -87,16 +87,16 @@ export class WebGLTextures
 
         if (cache.anisotropy !== anisotropy)
         {
-            const extension = gl.getExtension('EXT_texture_filter_anisotropic');
+            const extension = gl.getExtension("EXT_texture_filter_anisotropic");
             if (extension)
             {
-                const ext1 = gl.getExtension('OES_texture_float_linear');
+                const ext1 = gl.getExtension("OES_texture_float_linear");
 
-                if (type === 'FLOAT' && !ext1) return; // verify extension for WebGL 1 and WebGL 2
+                if (type === "FLOAT" && !ext1) return; // verify extension for WebGL 1 and WebGL 2
                 // verify extension for WebGL 1 only
-                if (!(gl instanceof WebGL2RenderingContext) && type === 'HALF_FLOAT')
+                if (!(gl instanceof WebGL2RenderingContext) && type === "HALF_FLOAT")
                 {
-                    const ext2 = gl.getExtension('OES_texture_half_float_linear');
+                    const ext2 = gl.getExtension("OES_texture_half_float_linear");
                     if (!ext2)
                     {
                         return;
@@ -105,7 +105,7 @@ export class WebGLTextures
 
                 if (anisotropy > 1)
                 {
-                    const ext = gl.getExtension('EXT_texture_filter_anisotropic');
+                    const ext = gl.getExtension("EXT_texture_filter_anisotropic");
                     gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, gl.capabilities.maxAnisotropy));
                 }
             }

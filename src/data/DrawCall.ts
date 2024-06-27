@@ -1,7 +1,7 @@
-import { Lazy } from '@feng3d/polyfill';
-import { oav } from '@feng3d/objectview';
-import { SerializeProperty } from '@feng3d/serialization';
-import { DrawMode } from './RenderParams';
+import { Lazy } from "@feng3d/polyfill";
+import { oav } from "@feng3d/objectview";
+import { SerializeProperty } from "@feng3d/serialization";
+import { DrawMode } from "./RenderParams";
 
 export class DrawCall
 {
@@ -21,7 +21,7 @@ export class DrawCall
      */
     @SerializeProperty()
     @oav({ component: 'OAVEnum', tooltip: '渲染模式，默认RenderMode.TRIANGLES', componentParam: { enumClass: ['POINTS', 'LINE_LOOP', 'LINE_STRIP', 'LINES', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN'] } })
-    drawMode: DrawMode = 'TRIANGLES';
+    drawMode: DrawMode = "TRIANGLES";
 
     /**
      * 渲染实例数量

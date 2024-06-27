@@ -1,5 +1,5 @@
-import { RenderBuffer } from '../RenderBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { RenderBuffer } from "../RenderBuffer";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 declare global
 {
@@ -47,7 +47,7 @@ export class WebGLRenderbuffers
             webGLRenderbuffer = gl.createRenderbuffer(); // Create a renderbuffer object
             if (!webGLRenderbuffer)
             {
-                console.warn('Failed to create renderbuffer object');
+                console.warn("Failed to create renderbuffer object");
 
                 return;
             }

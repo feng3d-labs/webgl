@@ -1,5 +1,5 @@
-import { AnimationCurve, Color3, Color4, ColorKeywords, Gradient, Rectangle, Vector2 } from '@feng3d/math';
-import { dataTransform, mathUtil } from '@feng3d/polyfill';
+import { AnimationCurve, Color3, Color4, ColorKeywords, Gradient, Rectangle, Vector2 } from "@feng3d/math";
+import { dataTransform, mathUtil } from "@feng3d/polyfill";
 
 /**
  * 图片相关工具
@@ -76,11 +76,11 @@ export class ImageUtil
     fromImage(image: HTMLImageElement)
     {
         if (!image) return null;
-        const canvasImg = document.createElement('canvas');
+        const canvasImg = document.createElement("canvas");
         canvasImg.width = image.width;
         canvasImg.height = image.height;
 
-        const ctxt = canvasImg.getContext('2d');
+        const ctxt = canvasImg.getContext("2d");
         console.assert(!!ctxt);
         ctxt.drawImage(image, 0, 0);
         this.imageData = ctxt.getImageData(0, 0, image.width, image.height);// 读取整张图片的像素。

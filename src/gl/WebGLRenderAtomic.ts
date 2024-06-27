@@ -1,14 +1,14 @@
-import { LazyObject } from '@feng3d/polyfill';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { AttributeBuffer } from '../data/AttributeBuffer';
-import { DrawCall } from '../data/DrawCall';
-import { ElementBuffer } from '../data/ElementBuffer';
-import { RenderAtomic } from '../data/RenderAtomic';
-import { RenderParams } from '../data/RenderParams';
-import { Shader } from '../data/Shader';
-import { Uniforms } from '../data/Uniforms';
-import { ShaderMacro } from '../shader/Macro';
-import { WebGLAttributeBuffers } from './WebGLAttributeBuffers';
+import { LazyObject } from "@feng3d/polyfill";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { AttributeBuffer } from "../data/AttributeBuffer";
+import { DrawCall } from "../data/DrawCall";
+import { ElementBuffer } from "../data/ElementBuffer";
+import { RenderAtomic } from "../data/RenderAtomic";
+import { RenderParams } from "../data/RenderParams";
+import { Shader } from "../data/Shader";
+import { Uniforms } from "../data/Uniforms";
+import { ShaderMacro } from "../shader/Macro";
+import { WebGLAttributeBuffers } from "./WebGLAttributeBuffers";
 
 export class WebGLRenderAtomic
 {

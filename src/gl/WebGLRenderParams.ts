@@ -1,5 +1,5 @@
-import { RenderParams } from '../data/RenderParams';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { RenderParams } from "../data/RenderParams";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 export class WebGLRenderParams
 {
@@ -27,7 +27,7 @@ export class WebGLRenderParams
             useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
         } = renderParams;
 
-        if (cullFace === 'NONE')
+        if (cullFace === "NONE")
         {
             gl.disable(gl.CULL_FACE);
         }

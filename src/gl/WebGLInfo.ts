@@ -1,5 +1,5 @@
-import { DrawMode } from '../data/RenderParams';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { DrawMode } from "../data/RenderParams";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 /**
  * WebGL信息
@@ -34,36 +34,36 @@ export class WebGLInfo
 
         switch (mode)
         {
-            case 'TRIANGLE_FAN':
+            case "TRIANGLE_FAN":
                 render.triangles += instanceCount * (count - 2);
                 break;
 
-            case 'TRIANGLES':
+            case "TRIANGLES":
                 render.triangles += instanceCount * (count / 3);
                 break;
 
-            case 'TRIANGLE_STRIP':
+            case "TRIANGLE_STRIP":
                 render.triangles += instanceCount * (count - 2);
                 break;
 
-            case 'LINES':
+            case "LINES":
                 render.lines += instanceCount * (count / 2);
                 break;
 
-            case 'LINE_STRIP':
+            case "LINE_STRIP":
                 render.lines += instanceCount * (count - 1);
                 break;
 
-            case 'LINE_LOOP':
+            case "LINE_LOOP":
                 render.lines += instanceCount * count;
                 break;
 
-            case 'POINTS':
+            case "POINTS":
                 render.points += instanceCount * count;
                 break;
 
             default:
-                console.error('WebGLInfo: Unknown draw mode:', mode);
+                console.error("WebGLInfo: Unknown draw mode:", mode);
                 break;
         }
     }

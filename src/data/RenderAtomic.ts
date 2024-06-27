@@ -1,11 +1,11 @@
-import { LazyObject } from '@feng3d/polyfill';
-import { ShaderMacro } from '../shader/Macro';
-import { AttributeBuffer } from './AttributeBuffer';
-import { DrawCall } from './DrawCall';
-import { ElementBuffer } from './ElementBuffer';
-import { RenderParams } from './RenderParams';
-import { Shader } from './Shader';
-import { Uniforms } from './Uniforms';
+import { LazyObject } from "@feng3d/polyfill";
+import { ShaderMacro } from "../shader/Macro";
+import { AttributeBuffer } from "./AttributeBuffer";
+import { DrawCall } from "./DrawCall";
+import { ElementBuffer } from "./ElementBuffer";
+import { RenderParams } from "./RenderParams";
+import { Shader } from "./Shader";
+import { Uniforms } from "./Uniforms";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）

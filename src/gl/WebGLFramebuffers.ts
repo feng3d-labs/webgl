@@ -1,6 +1,6 @@
-import { FrameBuffer } from '../FrameBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { FramebufferTarget } from './WebGLEnums';
+import { FrameBuffer } from "../FrameBuffer";
+import { WebGLRenderer } from "../WebGLRenderer";
+import { FramebufferTarget } from "./WebGLEnums";
 
 declare global
 {
@@ -50,7 +50,7 @@ export class WebGLFramebuffers
     {
         const { renderbuffers, textures, gl } = this._webGLRenderer;
 
-        const target: FramebufferTarget = 'FRAMEBUFFER';
+        const target: FramebufferTarget = "FRAMEBUFFER";
 
         if (!frameBuffer)
         {
@@ -113,7 +113,7 @@ export class WebGLFramebuffers
             buffer = gl.createFramebuffer();
             if (!buffer)
             {
-                console.warn('Failed to create frame buffer object');
+                console.warn("Failed to create frame buffer object");
 
                 return null;
             }
