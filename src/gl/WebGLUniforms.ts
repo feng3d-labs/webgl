@@ -1,5 +1,4 @@
 import { lazy } from "@feng3d/polyfill";
-import { WebGLRenderer } from "../WebGLRenderer";
 import { WebGLUniformType } from "../const/WebGLUniformType";
 import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 
@@ -34,15 +33,31 @@ export interface WebGLUniform
     paths: string[];
 }
 
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _uniforms: WebGLUniforms;
+    }
+}
+
 /**
  * WebGL统一变量
  */
 export class WebGLUniforms
 {
+    private gl: WebGLRenderingContext;
+
+    constructor(gl: WebGLRenderingContext)
+    {
+        this.gl = gl;
+        gl._uniforms = this;
+    }
+
     /**
      * 激活常量
      */
-    activeUniforms(webGLRenderer: WebGLRenderer, renderAtomic: WebGLRenderAtomic, uniformInfos: { [name: string]: WebGLUniform })
+    activeUniforms(renderAtomic: WebGLRenderAtomic, uniformInfos: { [name: string]: WebGLUniform })
     {
         for (const name in uniformInfos)
         {
@@ -57,16 +72,17 @@ export class WebGLUniforms
             {
                 console.error(`沒有找到Uniform ${name} 數據！`);
             }
-            this.setContext3DUniform(webGLRenderer, activeInfo, uniformData);
+            this.setContext3DUniform(activeInfo, uniformData);
         }
     }
 
     /**
      * 设置环境Uniform数据
      */
-    private setContext3DUniform(webGLRenderer: WebGLRenderer, webGLUniform: WebGLUniform, data)
+    private setContext3DUniform(webGLUniform: WebGLUniform, data)
     {
-        const { textures, gl } = webGLRenderer;
+        const { gl } = this;
+        const { _textures } = gl;
 
         let vec: number[] = data;
         if (data.toArray) vec = data.toArray();
@@ -97,7 +113,7 @@ export class WebGLUniforms
                 break;
             case "SAMPLER_2D":
             case "SAMPLER_CUBE":
-                textures.active(data, webGLUniform);
+                _textures.active(data, webGLUniform);
                 break;
             default:
                 console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${data}`);

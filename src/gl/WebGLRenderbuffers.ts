@@ -1,11 +1,18 @@
 import { RenderBuffer } from "../RenderBuffer";
-import { WebGLRenderer } from "../WebGLRenderer";
 
 declare global
 {
     interface WebGLRenderbuffer
     {
         version: number;
+    }
+}
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _renderbuffers: WebGLRenderbuffers;
     }
 }
 
@@ -16,11 +23,12 @@ export class WebGLRenderbuffers
      */
     private renderBuffers = new WeakMap<RenderBuffer, WebGLRenderbuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._renderbuffers = this;
     }
 
     /**
@@ -28,7 +36,7 @@ export class WebGLRenderbuffers
      */
     get(renderBuffer: RenderBuffer)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { renderBuffers } = this;
 
         let webGLRenderbuffer = renderBuffers.get(renderBuffer);
@@ -67,7 +75,7 @@ export class WebGLRenderbuffers
      */
     private clear(renderBuffer: RenderBuffer)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { renderBuffers } = this;
 
         const buffer = renderBuffers.get(renderBuffer);

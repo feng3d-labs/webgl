@@ -5,7 +5,7 @@ declare global
         /**
          * WEBGL支持功能
         */
-        capabilities: WebGLCapabilities;
+        _capabilities: WebGLCapabilities;
     }
 
     interface WebGLRenderingContext extends WebGLRenderingContextExt { }
@@ -102,7 +102,7 @@ export class WebGLCapabilities
 
     constructor(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
     {
-        gl.capabilities = this;
+        gl._capabilities = this;
         //
         this.maxAnisotropy = gl.getExtension("EXT_texture_filter_anisotropic") ? gl.getParameter(gl.getExtension("EXT_texture_filter_anisotropic").MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
         this.maxPrecision = this._getMaxPrecision(gl, precision);

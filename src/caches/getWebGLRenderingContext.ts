@@ -1,5 +1,16 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
 import { defaults } from "../defaults/defaults";
+import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
+import { WebGLBindingStates } from "../gl/WebGLBindingStates";
+import { WebGLCapabilities } from "../gl/WebGLCapabilities";
+import { WebGLElementBuffers } from "../gl/WebGLElementBuffers";
+import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
+import { WebGLInfo } from "../gl/WebGLInfo";
+import { WebGLRenderParams } from "../gl/WebGLRenderParams";
+import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
+import { WebGLShaders } from "../gl/WebGLShaders";
+import { WebGLTextures } from "../gl/WebGLTextures";
+import { WebGLUniforms } from "../gl/WebGLUniforms";
 
 /**
  * 获取WebGL上下文。
@@ -15,6 +26,8 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
         const canvas = getCanvas(canvasContext);
         gl = getWebGLContext(canvas, canvasContext);
 
+        initWebGLModules(gl);
+
         //
         canvas.addEventListener("webglcontextlost", _onContextLost, false);
         canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
@@ -24,6 +37,23 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
     }
 
     return gl;
+}
+
+function initWebGLModules(gl: WebGLRenderingContext)
+{
+    new WebGLCapabilities(gl);
+
+    new WebGLInfo(gl);
+    new WebGLShaders(gl);
+    new WebGLTextures(gl);
+    new WebGLAttributeBuffers(gl);
+    new WebGLElementBuffers(gl);
+
+    new WebGLBindingStates(gl);
+    new WebGLRenderParams(gl);
+    new WebGLUniforms(gl);
+    new WebGLRenderbuffers(gl);
+    new WebGLFramebuffers(gl);
 }
 
 function _onContextLost(event: Event)

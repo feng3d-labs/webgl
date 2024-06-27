@@ -2,28 +2,39 @@ import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
 import { Shader } from "../data/Shader";
 import { ShaderMacro } from "../shader/Macro";
 import { shaderlib } from "../shader/ShaderLib";
-import { WebGLRenderer } from "../WebGLRenderer";
 import { ShaderType } from "./WebGLEnums";
 import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
 import { WebGLUniform } from "./WebGLUniforms";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        /**
+         * WebGLShader处理器
+         */
+        _shaders: WebGLShaders;
+    }
+}
 
 /**
  * WebGLShader处理器
  */
 export class WebGLShaders
 {
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
     private compileShaderResults: { [key: string]: CompileShaderResult } = {};
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._shaders = this;
     }
 
     activeShader(renderAtomic: WebGLRenderAtomic)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         const shaderMacro = renderAtomic.shaderMacro;
         const shader = renderAtomic.shader;
@@ -74,7 +85,7 @@ export class WebGLShaders
      */
     private compileShaderCode(type: ShaderType, code: string)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         const shader = gl.createShader(gl[type]);
 
@@ -93,9 +104,9 @@ export class WebGLShaders
         return shader;
     }
 
-    private createLinkProgram(webGLRenderer: WebGLRenderer, vertexShader: WebGLShader, fragmentShader: WebGLShader)
+    private createLinkProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
-        const { gl } = webGLRenderer;
+        const { gl } = this;
 
         // 创建程序对象
         const program = gl.createProgram();
@@ -143,7 +154,7 @@ export class WebGLShaders
 
     private compileShaderProgram(vshader: string, fshader: string): CompileShaderResult
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         // 创建着色器程序
         // 编译顶点着色器
@@ -153,7 +164,7 @@ export class WebGLShaders
         const fragmentShader = this.compileShaderCode("FRAGMENT_SHADER", fshader);
 
         // 创建着色器程序
-        const shaderProgram = this.createLinkProgram(this._webGLRenderer, vertexShader, fragmentShader);
+        const shaderProgram = this.createLinkProgram(vertexShader, fragmentShader);
 
         // 获取属性信息
         const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);

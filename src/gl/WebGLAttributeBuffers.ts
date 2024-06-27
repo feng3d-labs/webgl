@@ -1,16 +1,24 @@
 import { watcher } from "@feng3d/watcher";
-import { WebGLRenderer } from "../WebGLRenderer";
 import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from "../data/AttributeBuffer";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _attributeBuffers: WebGLAttributeBuffers;
+    }
+}
 
 export class WebGLAttributeBuffers
 {
     private buffers = new WeakMap<AttributeBuffer, WebGLAttributeBuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._attributeBuffers = this;
     }
 
     get(attribute: AttributeBuffer)
@@ -42,7 +50,7 @@ export class WebGLAttributeBuffers
 
         if (data === undefined)
         {
-            data = new WebGLAttributeBuffer(this._webGLRenderer, attribute);
+            data = new WebGLAttributeBuffer(this.gl, attribute);
             buffers.set(attribute, data);
         }
         data.updateBuffer();
@@ -50,7 +58,7 @@ export class WebGLAttributeBuffers
 
     vertexAttribPointer(location: number, attribute: AttributeBuffer)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         const attributeBufferCacle = this.get(attribute);
 
@@ -97,11 +105,11 @@ export class WebGLAttributeBuffer
     bytesPerElement: number;
     version = -1;
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer, attribute: AttributeBuffer)
+    constructor(gl: WebGLRenderingContext, attribute: AttributeBuffer)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
 
         this.attribute = attribute;
 
@@ -116,7 +124,7 @@ export class WebGLAttributeBuffer
 
     updateBuffer()
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { attribute } = this;
 
         if (this.version === attribute.version)
@@ -151,14 +159,14 @@ export class WebGLAttributeBuffer
 
     dispose()
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { buffer, attribute } = this;
 
         gl.deleteBuffer(buffer);
 
         watcher.watch(attribute, "array", this.needsUpdate, this);
 
-        this._webGLRenderer = null;
+        this.gl = null;
         this.attribute = null;
         this.buffer = null;
     }

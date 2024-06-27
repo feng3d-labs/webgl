@@ -1,23 +1,33 @@
 import { lazy } from "@feng3d/polyfill";
 import { watcher } from "@feng3d/watcher";
-import { WebGLRenderer } from "../WebGLRenderer";
 import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
 import { BufferUsage } from "./WebGLEnums";
 import { WebGLRenderAtomic } from "./WebGLRenderAtomic";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _elementBuffers: WebGLElementBuffers;
+    }
+}
 
 export class WebGLElementBuffers
 {
     private buffers = new WeakMap<ElementBuffer, WebGLElementBuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
-    constructor(webGLRenderer: WebGLRenderer)
+    private gl: WebGLRenderingContext;
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._elementBuffers = this;
     }
 
     render(renderAtomic: WebGLRenderAtomic)
     {
-        const { info, attributeBuffers: attributes, gl } = this._webGLRenderer;
+        const gl = this.gl;
+        const { _attributeBuffers } = this.gl;
+        const { _info } = gl;
 
         const drawCall = renderAtomic.drawCall;
 
@@ -41,7 +51,7 @@ export class WebGLElementBuffers
         }
         else
         {
-            vertexNum = renderAtomic.getAttributeVertexNum(attributes);
+            vertexNum = renderAtomic.getAttributeVertexNum(_attributeBuffers);
 
             if (vertexNum === 0)
             {
@@ -99,12 +109,12 @@ export class WebGLElementBuffers
             instanceCount = 1;
         }
 
-        info.update(count, drawMode, instanceCount);
+        _info.update(count, drawMode, instanceCount);
     }
 
     bindBuffer(element: ElementBuffer)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         if (element)
         {
@@ -120,7 +130,7 @@ export class WebGLElementBuffers
 
         if (data === undefined)
         {
-            data = new WebGLElementBuffer(this._webGLRenderer, element);
+            data = new WebGLElementBuffer(this.gl, element);
             buffers.set(element, data);
         }
 
@@ -170,10 +180,10 @@ class WebGLElementBuffer
 
     version = -1;
 
-    private _webGLRenderer: WebGLRenderer;
-    constructor(webGLRenderer: WebGLRenderer, element: ElementBuffer)
+    private gl: WebGLRenderingContext;
+    constructor(gl: WebGLRenderingContext, element: ElementBuffer)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
         this.element = element;
 
         //
@@ -187,7 +197,7 @@ class WebGLElementBuffer
 
     updateBuffer()
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { element } = this;
 
         if (this.version === element.version)
@@ -220,14 +230,14 @@ class WebGLElementBuffer
 
     dispose()
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { buffer, element } = this;
 
         gl.deleteBuffer(buffer);
 
-        watcher.watch(element, "array", this.needsUpdate, this);
+        watcher.unwatch(element, "array", this.needsUpdate, this);
 
-        this._webGLRenderer = null;
+        this.gl = null;
         this.element = null;
         this.buffer = null;
     }

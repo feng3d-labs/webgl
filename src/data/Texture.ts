@@ -159,7 +159,7 @@ export abstract class Texture
         this.version++;
     }
 
-    abstract setTextureData(webGLRenderer: WebGLRenderer): void;
+    abstract setTextureData(gl: WebGLRenderingContext): void;
 
     /**
      * 纹理尺寸。

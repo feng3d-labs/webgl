@@ -1,13 +1,22 @@
 import { RenderParams } from "../data/RenderParams";
-import { WebGLRenderer } from "../WebGLRenderer";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _renderParams: WebGLRenderParams;
+    }
+}
 
 export class WebGLRenderParams
 {
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+
+        gl._renderParams = this;
     }
 
     /**
@@ -15,7 +24,7 @@ export class WebGLRenderParams
      */
     updateRenderParams(renderParams: RenderParams)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         const { cullFace, frontFace,
             enableBlend, blendEquation, sfactor, dfactor,

@@ -1,18 +1,29 @@
-import { WebGLRenderer } from "../WebGLRenderer";
 import { Texture } from "../data/Texture";
 import { TextureMagFilter, TextureMinFilter, TextureWrap } from "./WebGLEnums";
 import { WebGLUniform } from "./WebGLUniforms";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        /**
+         * WebGL纹理
+         */
+        _textures: WebGLTextures;
+    }
+}
 
 /**
  * WebGL纹理
  */
 export class WebGLTextures
 {
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._textures = this;
     }
 
     /**
@@ -30,7 +41,7 @@ export class WebGLTextures
 
     active(data: Texture, activeInfo?: WebGLUniform)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
 
         if (activeInfo)
         {
@@ -56,7 +67,7 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { _texturesCache: textures } = this;
 
         const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
@@ -106,7 +117,7 @@ export class WebGLTextures
                 if (anisotropy > 1)
                 {
                     const ext = gl.getExtension("EXT_texture_filter_anisotropic");
-                    gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, gl.capabilities.maxAnisotropy));
+                    gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, gl._capabilities.maxAnisotropy));
                 }
             }
             cache.anisotropy = anisotropy;
@@ -119,10 +130,10 @@ export class WebGLTextures
      */
     get(data: Texture)
     {
-        const { gl } = this._webGLRenderer;
-        const { _texturesCache: textures } = this;
+        const { gl } = this;
+        const { _texturesCache } = this;
 
-        let cache = textures.get(data);
+        let cache = _texturesCache.get(data);
         if (cache && data.version !== cache.version)
         {
             this.clear(data);
@@ -139,7 +150,7 @@ export class WebGLTextures
             gl.bindTexture(gl[data.textureTarget], texture);
 
             // 设置纹理图片
-            data.setTextureData(this._webGLRenderer);
+            data.setTextureData(this.gl);
 
             if (data.generateMipmap)
             {
@@ -147,7 +158,7 @@ export class WebGLTextures
             }
 
             cache = { texture, version: data.version };
-            textures.set(data, cache);
+            _texturesCache.set(data, cache);
         }
 
         return cache.texture;
@@ -158,7 +169,7 @@ export class WebGLTextures
      */
     private clear(data: Texture)
     {
-        const { gl } = this._webGLRenderer;
+        const { gl } = this;
         const { _texturesCache: textures } = this;
 
         const tex = textures.get(data);

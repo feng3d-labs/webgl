@@ -1,5 +1,15 @@
 import { DrawMode } from "../data/RenderParams";
-import { WebGLRenderer } from "../WebGLRenderer";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        /**
+         * WebGL信息
+         */
+        _info: WebGLInfo;
+    }
+}
 
 /**
  * WebGL信息
@@ -19,11 +29,12 @@ export class WebGLInfo
         lines: 0
     };
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        gl._info = this;
+        this.gl = gl;
     }
 
     update(count: number, mode: DrawMode, instanceCount: number)
