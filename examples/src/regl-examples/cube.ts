@@ -59,7 +59,7 @@ const indices = cubeElements.reduce((pv: number[], cv: number[]) =>
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer(webglcanvas);
+const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
 let tick = 0;
 let viewportWidth = 1;

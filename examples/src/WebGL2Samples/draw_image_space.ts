@@ -8,6 +8,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
     document.body.appendChild(div);
 
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
@@ -23,7 +24,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
     loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
-        const webglRenderer = new WebGLRenderer(canvas);
+        const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
         const diffuse = $set(new Texture2D(), {
             minFilter: "LINEAR",

@@ -5,6 +5,7 @@ import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
+canvas.id = "glcanvas";
 window.addEventListener("resize", fit(canvas), false);
 
 const camera = attachCamera(canvas);
@@ -16,7 +17,7 @@ const FILTER_RADIUS = 1;
 camera.rotate([0.0, 0.0], [0.0, -0.4]);
 camera.zoom(300.0);
 
-const webglRenderer = new WebGLRenderer(canvas);
+const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
 let batchId = 0;
 let tick = 0;

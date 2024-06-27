@@ -8,6 +8,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
     document.body.appendChild(div);
 
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
@@ -25,7 +26,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
     // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
     const MAX_UNSIGNED_SHORT = 65535;
 
-    const webglRenderer = new WebGLRenderer(canvas);
+    const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
     const renderAtomic = $set(new RenderAtomic(), {
         attributes: {

@@ -8,6 +8,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
     document.body.appendChild(div);
 
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
@@ -21,7 +22,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         return;
     }
 
-    const webglRenderer = new WebGLRenderer(canvas);
+    const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
     const vertexCount = 12;
     const renderAtomic = $set(new RenderAtomic(), {

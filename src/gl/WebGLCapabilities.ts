@@ -1,12 +1,15 @@
 declare global
 {
-    interface WebGLRenderingContext
+    interface WebGLRenderingContextExt
     {
         /**
          * WEBGL支持功能
-         */
+        */
         capabilities: WebGLCapabilities;
     }
+
+    interface WebGLRenderingContext extends WebGLRenderingContextExt { }
+    interface WebGL2RenderingContext extends WebGLRenderingContextExt { }
 }
 
 /**

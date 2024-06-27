@@ -159,7 +159,7 @@ const indices = elements.reduce((pv: number[], cv: number[]) =>
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer(canvas);
+const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
 let tick = 0;
 let viewportWidth = 1;
