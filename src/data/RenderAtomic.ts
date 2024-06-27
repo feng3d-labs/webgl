@@ -19,12 +19,12 @@ export class RenderAtomic
     /**
      * 属性数据列表
      */
-    attributes: { [key: string]: AttributeBuffer; } = {};
+    attributes: { [key: string]: AttributeBuffer; };
 
     /**
      * Uniform渲染数据
      */
-    uniforms: LazyObject<Uniforms> = {} as any;
+    uniforms: LazyObject<Uniforms>;
 
     drawCall: DrawCall;
 
@@ -36,5 +36,5 @@ export class RenderAtomic
     /**
      * 渲染参数
      */
-    renderParams = new RenderParams();
+    renderParams: RenderParams;
 }

@@ -1,3 +1,4 @@
+import { getRenderParams } from "../caches/getRenderParams";
 import { RenderParams } from "../data/RenderParams";
 
 declare global
@@ -24,6 +25,8 @@ export class WebGLRenderParams
      */
     updateRenderParams(renderParams: RenderParams)
     {
+        renderParams = getRenderParams(renderParams);
+
         const { gl } = this;
 
         const { cullFace, frontFace,
