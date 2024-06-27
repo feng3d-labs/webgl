@@ -1,4 +1,13 @@
-import { WebGLRenderer } from '../WebGLRenderer';
+declare global
+{
+    interface WebGLRenderingContext
+    {
+        /**
+         * WEBGL支持功能
+         */
+        capabilities: WebGLCapabilities;
+    }
+}
 
 /**
  * WEBGL支持功能
@@ -88,16 +97,12 @@ export class WebGLCapabilities
      */
     vaoAvailable: boolean;
 
-    private _webGLRenderer: WebGLRenderer;
-
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext, precision: 'highp' | 'mediump' | 'lowp' = 'highp')
     {
-        this._webGLRenderer = webGLRenderer;
-
-        const { gl } = this._webGLRenderer;
-
+        gl.capabilities = this;
+        //
         this.maxAnisotropy = gl.getExtension('EXT_texture_filter_anisotropic') ? gl.getParameter(gl.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
-        this.maxPrecision = this._getMaxPrecision();
+        this.maxPrecision = this._getMaxPrecision(gl, precision);
 
         this.maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
         this.maxVertexTextures = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
@@ -119,10 +124,8 @@ export class WebGLCapabilities
         this.vaoAvailable = gl instanceof WebGL2RenderingContext || !!gl.getExtension('OES_vertex_array_object');
     }
 
-    private _getMaxPrecision(precision: 'highp' | 'mediump' | 'lowp' = 'highp')
+    private _getMaxPrecision(gl: WebGLRenderingContext, precision: 'highp' | 'mediump' | 'lowp' = 'highp')
     {
-        const { gl } = this._webGLRenderer;
-
         if (precision === 'highp')
         {
             if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0

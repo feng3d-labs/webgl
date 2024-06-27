@@ -28,11 +28,6 @@ export class WebGLRenderer
     readonly gl: WebGLRenderingContext;
 
     /**
-     * WEBGL支持功能
-     */
-    capabilities: WebGLCapabilities;
-
-    /**
      * WebGL纹理
      */
     textures: WebGLTextures;
@@ -82,7 +77,8 @@ export class WebGLRenderer
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
         this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
 
-        this.capabilities = new WebGLCapabilities(this);
+        new WebGLCapabilities(this.gl);
+
         this.info = new WebGLInfo(this);
         this.shaders = new WebGLShaders(this);
         this.textures = new WebGLTextures(this);

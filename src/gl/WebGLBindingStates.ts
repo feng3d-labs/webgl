@@ -21,11 +21,11 @@ export class WebGLBindingStates
 
     setup(renderAtomic: WebGLRenderAtomic)
     {
-        const { elementBuffers: indexedBufferRenderer, capabilities } = this._webGLRenderer;
+        const { elementBuffers: indexedBufferRenderer, gl } = this._webGLRenderer;
 
         let updateBuffers = false;
 
-        if (capabilities.vaoAvailable)
+        if (gl.capabilities.vaoAvailable)
         {
             const state = this.getBindingState(renderAtomic);
             if (this.currentState !== state)

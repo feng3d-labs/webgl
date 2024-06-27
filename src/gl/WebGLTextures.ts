@@ -56,7 +56,7 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { capabilities, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
@@ -106,7 +106,7 @@ export class WebGLTextures
                 if (anisotropy > 1)
                 {
                     const ext = gl.getExtension('EXT_texture_filter_anisotropic');
-                    gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, capabilities.maxAnisotropy));
+                    gl.texParameterf(gl[textureTarget], ext.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, gl.capabilities.maxAnisotropy));
                 }
             }
             cache.anisotropy = anisotropy;
