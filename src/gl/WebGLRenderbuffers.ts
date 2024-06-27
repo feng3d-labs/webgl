@@ -28,7 +28,7 @@ export class WebGLRenderbuffers
      */
     get(renderBuffer: RenderBuffer)
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { renderBuffers } = this;
 
         let webGLRenderbuffer = renderBuffers.get(renderBuffer);

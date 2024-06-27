@@ -94,7 +94,7 @@ export class WebGLCapabilities
     {
         this._webGLRenderer = webGLRenderer;
 
-        const { isWebGL2, extensions, webGLContext, gl } = this._webGLRenderer;
+        const { isWebGL2, extensions, gl } = this._webGLRenderer;
 
         this.maxAnisotropy = extensions.getExtension('EXT_texture_filter_anisotropic') ? gl.getParameter(extensions.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
         this.maxPrecision = this._getMaxPrecision();
@@ -121,7 +121,7 @@ export class WebGLCapabilities
 
     private _getMaxPrecision(precision: 'highp' | 'mediump' | 'lowp' = 'highp')
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         if (precision === 'highp')
         {

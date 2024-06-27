@@ -30,7 +30,7 @@ export class WebGLTextures
 
     active(data: Texture, activeInfo?: WebGLUniform)
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         if (activeInfo)
         {
@@ -56,7 +56,7 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { webGLContext, extensions, capabilities, isWebGL2, gl } = this._webGLRenderer;
+        const { extensions, capabilities, isWebGL2, gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
@@ -119,7 +119,7 @@ export class WebGLTextures
      */
     get(data: Texture)
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         let cache = textures.get(data);
@@ -139,7 +139,7 @@ export class WebGLTextures
             gl.bindTexture(gl[data.textureTarget], texture);
 
             // 设置纹理图片
-            data.setTextureData(this._webGLRenderer.webGLContext);
+            data.setTextureData(this._webGLRenderer);
 
             if (data.generateMipmap)
             {

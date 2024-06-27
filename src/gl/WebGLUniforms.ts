@@ -66,7 +66,7 @@ export class WebGLUniforms
      */
     private setContext3DUniform(webGLRenderer: WebGLRenderer, webGLUniform: WebGLUniform, data)
     {
-        const { textures, webGLContext, gl } = webGLRenderer;
+        const { textures, gl } = webGLRenderer;
 
         let vec: number[] = data;
         if (data.toArray) vec = data.toArray();

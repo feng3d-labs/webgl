@@ -50,7 +50,7 @@ export class WebGLAttributeBuffers
 
     vertexAttribPointer(location: number, attribute: AttributeBuffer)
     {
-        const { isWebGL2, webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         const attributeBufferCacle = this.get(attribute);
 
@@ -116,7 +116,7 @@ export class WebGLAttributeBuffer
 
     updateBuffer()
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { attribute } = this;
 
         if (this.version === attribute.version)
@@ -151,7 +151,7 @@ export class WebGLAttributeBuffer
 
     dispose()
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { buffer, attribute } = this;
 
         gl.deleteBuffer(buffer);

@@ -1,4 +1,3 @@
-export * from './WebGLContext';
 export * from './FrameBuffer';
 export * from './RenderBuffer';
 export * from './WebGLRenderer';

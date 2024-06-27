@@ -13,7 +13,6 @@ import { WebGLRenderParams } from './gl/WebGLRenderParams';
 import { WebGLShaders } from './gl/WebGLShaders';
 import { WebGLTextures } from './gl/WebGLTextures';
 import { WebGLUniforms } from './gl/WebGLUniforms';
-import { WebGLContext } from './WebGLContext';
 
 /**
  * WEBGL 渲染器
@@ -40,8 +39,6 @@ export class WebGLRenderer
      * WebGL扩展
      */
     readonly extensions: WebGLExtensions;
-
-    readonly webGLContext: WebGLContext;
 
     /**
      * WEBGL支持功能
@@ -121,7 +118,6 @@ export class WebGLRenderer
             this.isWebGL2 = true;
         }
 
-        this.webGLContext = new WebGLContext(this);
         this.extensions = new WebGLExtensions(this);
 
         this.capabilities = new WebGLCapabilities(this);

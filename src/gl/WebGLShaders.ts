@@ -74,7 +74,7 @@ export class WebGLShaders
      */
     private compileShaderCode(type: ShaderType, code: string)
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         const shader = gl.createShader(gl[type]);
 
@@ -95,7 +95,7 @@ export class WebGLShaders
 
     private createLinkProgram(webGLRenderer: WebGLRenderer, vertexShader: WebGLShader, fragmentShader: WebGLShader)
     {
-        const { webGLContext, gl } = webGLRenderer;
+        const { gl } = webGLRenderer;
 
         // 创建程序对象
         const program = gl.createProgram();
@@ -143,7 +143,7 @@ export class WebGLShaders
 
     private compileShaderProgram(vshader: string, fshader: string): CompileShaderResult
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         // 创建着色器程序
         // 编译顶点着色器

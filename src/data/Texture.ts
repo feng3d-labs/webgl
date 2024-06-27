@@ -3,7 +3,7 @@ import { oav } from '@feng3d/objectview';
 import { Constructor, gPartial } from '@feng3d/polyfill';
 import { Serializable, SerializeProperty, getInstance } from '@feng3d/serialization';
 import { watcher } from '@feng3d/watcher';
-import { WebGLContext } from '../WebGLContext';
+import { WebGLRenderer } from '../WebGLRenderer';
 import { TextureDataType, TextureFormat, TextureMagFilter, TextureMinFilter, TextureTarget, TextureWrap } from '../gl/WebGLEnums';
 
 declare module '@feng3d/serialization'
@@ -159,7 +159,7 @@ export abstract class Texture
         this.version++;
     }
 
-    abstract setTextureData(webGLContext: WebGLContext): void;
+    abstract setTextureData(webGLRenderer: WebGLRenderer): void;
 
     /**
      * 纹理尺寸。

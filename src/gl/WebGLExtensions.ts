@@ -45,7 +45,7 @@ export class WebGLExtensions
      */
     getExtension<K extends keyof WebGLExtensionMap>(name: K, isWarn = true): WebGLExtensionMap[K]
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { extensions } = this;
         if (extensions[name] !== undefined)
         {

@@ -48,7 +48,7 @@ export class WebGLFramebuffers
 
     active(frameBuffer: FrameBuffer)
     {
-        const { renderbuffers, textures, webGLContext, gl } = this._webGLRenderer;
+        const { renderbuffers, textures, gl } = this._webGLRenderer;
 
         const target: FramebufferTarget = 'FRAMEBUFFER';
 

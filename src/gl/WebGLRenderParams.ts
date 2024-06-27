@@ -15,7 +15,7 @@ export class WebGLRenderParams
      */
     updateRenderParams(renderParams: RenderParams)
     {
-        const { webGLContext, width, height, gl } = this._webGLRenderer;
+        const { width, height, gl } = this._webGLRenderer;
 
         const { cullFace, frontFace,
             enableBlend, blendEquation, sfactor, dfactor,

@@ -17,7 +17,7 @@ export class WebGLElementBuffers
 
     render(renderAtomic: WebGLRenderAtomic)
     {
-        const { info, attributeBuffers: attributes, webGLContext, gl } = this._webGLRenderer;
+        const { info, attributeBuffers: attributes, gl } = this._webGLRenderer;
 
         const drawCall = renderAtomic.drawCall;
 
@@ -109,7 +109,7 @@ export class WebGLElementBuffers
 
     bindBuffer(element: ElementBuffer)
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         if (element)
         {
@@ -192,7 +192,7 @@ class WebGLElementBuffer
 
     updateBuffer()
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { element } = this;
 
         if (this.version === element.version)
@@ -225,7 +225,7 @@ class WebGLElementBuffer
 
     dispose()
     {
-        const { webGLContext, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
         const { buffer, element } = this;
 
         gl.deleteBuffer(buffer);
