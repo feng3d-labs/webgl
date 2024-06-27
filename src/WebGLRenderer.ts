@@ -16,6 +16,7 @@ import { WebGLRenderParams } from "./gl/WebGLRenderParams";
 import { WebGLShaders } from "./gl/WebGLShaders";
 import { WebGLTextures } from "./gl/WebGLTextures";
 import { WebGLUniforms } from "./gl/WebGLUniforms";
+import { runWebGLPassDescriptor } from "./runs/runWebGLPassDescriptor";
 
 /**
  * WEBGL 渲染器
@@ -81,32 +82,12 @@ export class WebGLRenderer
     }
     private renderPass(gl: WebGLRenderingContext, renderPass: IWebGLRenderPass)
     {
-        this.passDescriptor(gl, renderPass.passDescriptor);
+        runWebGLPassDescriptor(gl, renderPass.passDescriptor);
 
         // renderPass?.renderObjects.forEach((renderObject) =>
         // {
         //     this.render(renderObject);
         // });
-    }
-
-    private passDescriptor(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
-    {
-        const { clearColor, clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
-
-        // Set clear color to black, fully opaque
-        gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-        gl.clearDepth(clearDepth); // Clear everything
-        if (depthTest)
-        {
-            gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        }
-        else
-        {
-            gl.disable(gl.DEPTH_TEST); // Enable depth testing
-        }
-        gl.depthFunc(gl[depthFunc]); // Near things obscure far things
-        // Clear the color buffer with specified clear color
-        gl.clear(getClearMask(gl, clearMask));
     }
 
     constructor(canvasContext: IWebGLCanvasContext)
@@ -153,11 +134,4 @@ export class WebGLRenderer
 
         elementBufferRenderer.render(webGLRenderAtomic);
     }
-}
-
-function getClearMask(gl: WebGLRenderingContext, clearMask: ("COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT")[])
-{
-    const result = clearMask.reduce((pv, cv) => pv | gl[cv], 0);
-
-    return result;
 }
