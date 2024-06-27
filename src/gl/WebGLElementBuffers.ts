@@ -17,17 +17,14 @@ export class WebGLElementBuffers
 {
     private buffers = new WeakMap<ElementBuffer, WebGLElementBuffer>();
 
-    private gl: WebGLRenderingContext;
     constructor(gl: WebGLRenderingContext)
     {
-        this.gl = gl;
         gl._elementBuffers = this;
     }
 
-    render(renderAtomic: RenderAtomic)
+    render(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
     {
-        const gl = this.gl;
-        const { _attributeBuffers, _info } = this.gl;
+        const { _attributeBuffers, _info } = gl;
 
         const drawCall = getDrawCall(renderAtomic.drawCall);
 
@@ -44,7 +41,7 @@ export class WebGLElementBuffers
 
         if (element)
         {
-            const elementCache = this.get(element);
+            const elementCache = this.get(gl, element);
             bytesPerElement = elementCache.bytesPerElement;
             vertexNum = elementCache.count;
             type = elementCache.type;
@@ -112,17 +109,15 @@ export class WebGLElementBuffers
         _info.update(count, drawMode, instanceCount);
     }
 
-    bindBuffer(element: ElementBuffer)
+    bindBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
     {
-        const { gl } = this;
-
         if (element)
         {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.get(element).buffer);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.get(gl, element).buffer);
         }
     }
 
-    get(element: ElementBuffer)
+    get(gl: WebGLRenderingContext, element: ElementBuffer)
     {
         const buffers = this.buffers;
 
@@ -130,7 +125,7 @@ export class WebGLElementBuffers
 
         if (data === undefined)
         {
-            data = new WebGLElementBuffer(this.gl, element);
+            data = new WebGLElementBuffer(gl, element);
             buffers.set(element, data);
         }
 

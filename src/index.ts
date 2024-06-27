@@ -12,7 +12,7 @@ export * from "./data/Texture";
 export * from "./data/Uniforms";
 export * from "./gl/WebGLCapabilities";
 export * from "./gl/WebGLEnums";
-export * from "./gl/WebGLUniforms";
+export * from "./runs/runUniforms";
 export * from "./shader/Macro";
 export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";

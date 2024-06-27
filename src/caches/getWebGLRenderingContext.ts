@@ -8,7 +8,6 @@ import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
 import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
 import { WebGLTextures } from "../gl/WebGLTextures";
-import { WebGLUniforms } from "../gl/WebGLUniforms";
 
 /**
  * 获取WebGL上下文。
@@ -47,7 +46,6 @@ function initWebGLModules(gl: WebGLRenderingContext)
     new WebGLElementBuffers(gl);
 
     new WebGLBindingStates(gl);
-    new WebGLUniforms(gl);
     new WebGLRenderbuffers(gl);
     new WebGLFramebuffers(gl);
 }

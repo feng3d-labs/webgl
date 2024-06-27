@@ -59,7 +59,7 @@ export class WebGLBindingStates
             this.setupVertexAttributes(renderAtomic);
 
             const index = renderAtomic.index;
-            _elementBuffers.bindBuffer(index);
+            _elementBuffers.bindBuffer(gl, index);
         }
     }
 

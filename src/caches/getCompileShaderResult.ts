@@ -1,7 +1,7 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
 import { Shader } from "../data/Shader";
 import { ShaderType } from "../gl/WebGLEnums";
-import { WebGLUniform } from "../gl/WebGLUniforms";
+import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
 {

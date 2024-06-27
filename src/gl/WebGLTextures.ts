@@ -1,6 +1,6 @@
 import { Texture } from "../data/Texture";
 import { TextureMagFilter, TextureMinFilter, TextureWrap } from "./WebGLEnums";
-import { WebGLUniform } from "./WebGLUniforms";
+import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
 {

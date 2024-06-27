@@ -10,6 +10,4 @@ export function runShader(gl: WebGLRenderingContext, shader: Shader)
     }
     //
     gl.useProgram(shaderResult.program);
-
-    return shaderResult;
 }
