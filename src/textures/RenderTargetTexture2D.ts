@@ -1,8 +1,8 @@
 import { Vector2 } from '@feng3d/math';
 import { mathUtil } from '@feng3d/polyfill';
 import { watcher } from '@feng3d/watcher';
-import { TextureFormat, TextureMagFilter, TextureMinFilter } from '../gl/WebGLEnums';
 import { WebGLContext } from '../WebGLContext';
+import { TextureFormat, TextureMagFilter, TextureMinFilter } from '../gl/WebGLEnums';
 import { Texture2D } from './Texture2D';
 
 /**
@@ -54,6 +54,7 @@ export class RenderTargetTexture2D extends Texture2D
 
     setTextureData(webGLContext: WebGLContext): void
     {
-        webGLContext.texImage2D('TEXTURE_2D', 0, this.format, this.width, this.height, 0, this.format, this.type, null);
+        const { gl } = webGLContext['_webGLRenderer'];
+        gl.texImage2D(gl['TEXTURE_2D'], 0, gl[this.format], this.width, this.height, 0, gl[this.format], gl[this.type], null);
     }
 }

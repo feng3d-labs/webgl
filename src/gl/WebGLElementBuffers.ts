@@ -174,7 +174,7 @@ class WebGLElementBuffer
 
     updateBuffer()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { element } = this;
 
         if (this.version === element.version)
@@ -197,7 +197,7 @@ class WebGLElementBuffer
         buffer = webGLContext.createBuffer();
 
         webGLContext.bindBuffer('ELEMENT_ARRAY_BUFFER', buffer);
-        webGLContext.bufferData('ELEMENT_ARRAY_BUFFER', array, usage);
+        gl.bufferData(gl['ELEMENT_ARRAY_BUFFER'], array, gl[usage]);
 
         this.type = type;
         this.count = array.length;

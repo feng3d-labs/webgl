@@ -1,8 +1,8 @@
 import { Vector2 } from '@feng3d/math';
 import { watcher } from '@feng3d/watcher';
+import { WebGLContext } from '../WebGLContext';
 import { Texture } from '../data/Texture';
 import { TextureTarget } from '../gl/WebGLEnums';
-import { WebGLContext } from '../WebGLContext';
 
 declare module '../data/Texture'
 {
@@ -45,7 +45,8 @@ export class Texture2D extends Texture
 
     setTextureData(webGLContext: WebGLContext)
     {
-        webGLContext.texImage2D('TEXTURE_2D', 0, this.format, this.format, this.type, this.source);
+        const { gl } = webGLContext['_webGLRenderer'];
+        gl.texImage2D(gl['TEXTURE_2D'], 0, gl[this.format], gl[this.format], gl[this.type], this.source);
     }
 
     getSize()

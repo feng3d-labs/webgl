@@ -116,7 +116,7 @@ export class WebGLAttributeBuffer
 
     updateBuffer()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { webGLContext, gl } = this._webGLRenderer;
         const { attribute } = this;
 
         if (this.version === attribute.version)
@@ -140,7 +140,7 @@ export class WebGLAttributeBuffer
         buffer = webGLContext.createBuffer();
 
         webGLContext.bindBuffer('ARRAY_BUFFER', buffer);
-        webGLContext.bufferData('ARRAY_BUFFER', array, usage);
+        gl.bufferData(gl['ARRAY_BUFFER'], array, gl[usage]);
 
         this.buffer = buffer;
         this.type = type;
