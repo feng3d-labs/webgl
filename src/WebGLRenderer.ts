@@ -63,21 +63,6 @@ export class WebGLRenderer
 
     elementBuffers: WebGLElementBuffers;
 
-    /**
-     * 是否为 WebGL2
-     */
-    readonly isWebGL2: boolean;
-
-    get width()
-    {
-        return this.canvas.width;
-    }
-
-    get height()
-    {
-        return this.canvas.height;
-    }
-
     constructor(canvas?: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
     {
         if (!canvas)
@@ -107,13 +92,7 @@ export class WebGLRenderer
         } as Partial<WebGLContextAttributes>, contextAttributes);
 
         const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
-        const gl = this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
-
-        this.isWebGL2 = false;
-        if (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext)
-        {
-            this.isWebGL2 = true;
-        }
+        this.gl = getContext(canvas, contextNames, contextAttributes) as WebGLRenderingContext;
 
         this.extensions = new WebGLExtensions(this);
 

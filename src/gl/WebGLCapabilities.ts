@@ -94,7 +94,7 @@ export class WebGLCapabilities
     {
         this._webGLRenderer = webGLRenderer;
 
-        const { isWebGL2, extensions, gl } = this._webGLRenderer;
+        const { extensions, gl } = this._webGLRenderer;
 
         this.maxAnisotropy = extensions.getExtension('EXT_texture_filter_anisotropic') ? gl.getParameter(extensions.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
         this.maxPrecision = this._getMaxPrecision();
@@ -110,13 +110,13 @@ export class WebGLCapabilities
         this.maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
         this.vertexTextures = this.maxVertexTextures > 0;
-        this.floatFragmentTextures = isWebGL2 || !!extensions.getExtension('OES_texture_float');
+        this.floatFragmentTextures = gl instanceof WebGL2RenderingContext || !!extensions.getExtension('OES_texture_float');
         this.floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
         this.maxSamples = gl instanceof WebGL2RenderingContext ? gl.getParameter(gl.MAX_SAMPLES) : 0;
         this.stencilBits = gl.getParameter(gl.STENCIL_BITS);
 
-        this.vaoAvailable = isWebGL2 || !!extensions.getExtension('OES_vertex_array_object');
+        this.vaoAvailable = gl instanceof WebGL2RenderingContext || !!extensions.getExtension('OES_vertex_array_object');
     }
 
     private _getMaxPrecision(precision: 'highp' | 'mediump' | 'lowp' = 'highp')

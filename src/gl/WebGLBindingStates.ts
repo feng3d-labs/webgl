@@ -219,7 +219,7 @@ export class WebGLBindingStates
 
         if (attributeDivisors[location] !== divisor)
         {
-            const { gl, isWebGL2, extensions } = this._webGLRenderer;
+            const { gl, extensions } = this._webGLRenderer;
 
             if (gl instanceof WebGL2RenderingContext)
             {
@@ -296,7 +296,7 @@ export class WebGLBindingStates
      */
     private createVertexArrayObject()
     {
-        const { gl, isWebGL2, extensions } = this._webGLRenderer;
+        const { gl, extensions } = this._webGLRenderer;
 
         if (gl instanceof WebGL2RenderingContext)
         {

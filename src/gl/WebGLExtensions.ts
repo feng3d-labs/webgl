@@ -13,8 +13,8 @@ export class WebGLExtensions
     {
         this._webGLRenderer = webGLRenderer;
 
-        const { isWebGL2, gl } = this._webGLRenderer;
-        if (isWebGL2)
+        const { gl } = this._webGLRenderer;
+        if (gl instanceof WebGL2RenderingContext)
         {
             this.getExtension('EXT_color_buffer_float');
         }
@@ -121,19 +121,3 @@ interface WebGLExtensionMap
     'WEBGL_multisampled_render_to_texture': null;
 }
 
-interface WEBGL_compressed_texture_pvrtc { }
-
-export interface WebGLExtensionMapFull extends WebGLExtensionMap
-{
-    MOZ_WEBGL_depth_texture: WEBGL_depth_texture;
-    WEBKIT_WEBGL_depth_texture: WEBGL_depth_texture;
-
-    MOZ_EXT_texture_filter_anisotropic: EXT_texture_filter_anisotropic;
-    WEBKIT_EXT_texture_filter_anisotropic: EXT_texture_filter_anisotropic;
-
-    MOZ_WEBGL_compressed_texture_s3tc: WEBGL_compressed_texture_s3tc | null;
-    WEBKIT_WEBGL_compressed_texture_s3tc: WEBGL_compressed_texture_s3tc | null;
-
-    WEBGL_compressed_texture_pvrtc: WEBGL_compressed_texture_pvrtc;
-    WEBKIT_WEBGL_compressed_texture_pvrtc: WEBGL_compressed_texture_pvrtc;
-}

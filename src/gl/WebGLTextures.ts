@@ -56,7 +56,7 @@ export class WebGLTextures
 
     private setTextureParameters(texture: Texture)
     {
-        const { extensions, capabilities, isWebGL2, gl } = this._webGLRenderer;
+        const { extensions, capabilities, gl } = this._webGLRenderer;
         const { _texturesCache: textures } = this;
 
         const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
@@ -94,7 +94,7 @@ export class WebGLTextures
 
                 if (type === 'FLOAT' && !ext1) return; // verify extension for WebGL 1 and WebGL 2
                 // verify extension for WebGL 1 only
-                if (isWebGL2 === false && type === 'HALF_FLOAT')
+                if (!(gl instanceof WebGL2RenderingContext) && type === 'HALF_FLOAT')
                 {
                     const ext2 = extensions.getExtension('OES_texture_half_float_linear');
                     if (!ext2)

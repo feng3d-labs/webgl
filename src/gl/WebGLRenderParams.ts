@@ -15,7 +15,7 @@ export class WebGLRenderParams
      */
     updateRenderParams(renderParams: RenderParams)
     {
-        const { width, height, gl } = this._webGLRenderer;
+        const { gl } = this._webGLRenderer;
 
         const { cullFace, frontFace,
             enableBlend, blendEquation, sfactor, dfactor,
@@ -70,7 +70,7 @@ export class WebGLRenderParams
         }
         else
         {
-            gl.viewport(0, 0, width, height);
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         }
 
         if (usePolygonOffset)
