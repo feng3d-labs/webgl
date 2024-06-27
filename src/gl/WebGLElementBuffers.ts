@@ -17,7 +17,7 @@ export class WebGLElementBuffers
 
     render(renderAtomic: WebGLRenderAtomic)
     {
-        const { info, attributeBuffers: attributes, gl } = this._webGLRenderer;
+        const { info, attributeBuffers: attributes, gl, extensions } = this._webGLRenderer;
 
         const drawCall = renderAtomic.drawCall;
 
@@ -66,29 +66,24 @@ export class WebGLElementBuffers
         {
             if (element)
             {
-                const { isWebGL2, gl2, extensions } = this._webGLRenderer;
-                if (isWebGL2)
+                if (gl instanceof WebGL2RenderingContext)
                 {
-                    gl2.drawElementsInstanced(gl2[drawMode], count, gl2[type], offset, instanceCount);
+                    gl.drawElementsInstanced(gl[drawMode], count, gl[type], offset, instanceCount);
                 }
                 else
                 {
                     const extension = extensions.getExtension('ANGLE_instanced_arrays');
-                    extension.drawElementsInstancedANGLE(gl2[drawMode], count, gl2[type], offset, instanceCount);
+                    extension.drawElementsInstancedANGLE(gl[drawMode], count, gl[type], offset, instanceCount);
                 }
+            }
+            else if (gl instanceof WebGL2RenderingContext)
+            {
+                gl.drawArraysInstanced(gl[drawMode], offset, count, instanceCount);
             }
             else
             {
-                const { gl2, isWebGL2, extensions } = this._webGLRenderer;
-                if (isWebGL2)
-                {
-                    gl2.drawArraysInstanced(gl2[drawMode], offset, count, instanceCount);
-                }
-                else
-                {
-                    const extension = extensions.getExtension('ANGLE_instanced_arrays');
-                    extension.drawArraysInstancedANGLE(gl2[drawMode], offset, count, instanceCount);
-                }
+                const extension = extensions.getExtension('ANGLE_instanced_arrays');
+                extension.drawArraysInstancedANGLE(gl[drawMode], offset, count, instanceCount);
             }
         }
         else

@@ -181,9 +181,9 @@ export class WebGLBindingStates
      */
     private bindVertexArrayObject(vao: WebGLVertexArrayObject)
     {
-        const { gl2, isWebGL2, extensions } = this._webGLRenderer;
+        const { extensions, gl } = this._webGLRenderer;
 
-        if (isWebGL2) return gl2.bindVertexArray(vao);
+        if (gl instanceof WebGL2RenderingContext) return gl.bindVertexArray(vao);
 
         const extension = extensions.getExtension('OES_vertex_array_object');
         extension.bindVertexArrayOES(vao);
@@ -219,11 +219,11 @@ export class WebGLBindingStates
 
         if (attributeDivisors[location] !== divisor)
         {
-            const { gl2, isWebGL2, extensions } = this._webGLRenderer;
+            const { gl, isWebGL2, extensions } = this._webGLRenderer;
 
-            if (isWebGL2)
+            if (gl instanceof WebGL2RenderingContext)
             {
-                gl2.vertexAttribDivisor(location, divisor);
+                gl.vertexAttribDivisor(location, divisor);
             }
             else
             {
@@ -296,11 +296,11 @@ export class WebGLBindingStates
      */
     private createVertexArrayObject()
     {
-        const { gl2, isWebGL2, extensions } = this._webGLRenderer;
+        const { gl, isWebGL2, extensions } = this._webGLRenderer;
 
-        if (isWebGL2)
+        if (gl instanceof WebGL2RenderingContext)
         {
-            return gl2.createVertexArray();
+            return gl.createVertexArray();
         }
 
         const extension = extensions.getExtension('OES_vertex_array_object');

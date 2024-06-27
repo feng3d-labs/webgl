@@ -33,8 +33,6 @@ export class WebGLRenderer
      */
     readonly gl: WebGLRenderingContext;
 
-    readonly gl2: WebGL2RenderingContext;
-
     /**
      * WebGL扩展
      */
@@ -114,7 +112,6 @@ export class WebGLRenderer
         this.isWebGL2 = false;
         if (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext)
         {
-            this.gl2 = gl;
             this.isWebGL2 = true;
         }
 
