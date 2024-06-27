@@ -1,13 +1,6 @@
-import { oav } from "@feng3d/objectview";
-import { Serializable } from "@feng3d/serialization";
-import { SerializeProperty } from "@feng3d/serialization";
-
-declare module "@feng3d/serialization" { interface SerializableMap { RenderParams: RenderParams } }
-
 /**
  * 渲染参数
  */
-@Serializable('RenderParams')
 export class RenderParams
 {
     /**
@@ -23,8 +16,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '剔除面', componentParam: { enumClass: ['NONE', 'FRONT', 'BACK', 'FRONT_AND_BACK'] } })
     cullFace: CullFace = "BACK";
 
     /**
@@ -32,8 +23,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '正面方向，默认FrontFace.CW 顺时针为正面', componentParam: { enumClass: ['CW', 'CCW'] } })
     frontFace: FrontFace = "CW";
 
     /**
@@ -43,8 +32,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
      */
-    @SerializeProperty()
-    @oav({ tooltip: '是否开启混合' })
     enableBlend = false;
 
     /**
@@ -52,8 +39,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '混合方式，默认BlendEquation.FUNC_ADD', componentParam: { enumClass: ['FUNC_ADD', 'FUNC_SUBTRACT', 'FUNC_REVERSE_SUBTRACT', 'MIN', 'MAX'] } })
     blendEquation: BlendEquation = "FUNC_ADD";
 
     /**
@@ -62,8 +47,6 @@ export class RenderParams
      * @see BlendFactor
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '源混合因子，默认BlendFactor.SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
     sfactor: BlendFactor = "SRC_ALPHA";
 
     /**
@@ -72,8 +55,6 @@ export class RenderParams
      * @see BlendFactor
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '目标混合因子，默认BlendFactor.ONE_MINUS_SRC_ALPHA', componentParam: { enumClass: ['ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'DST_COLOR', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'SRC_ALPHA_SATURATE'] } })
     dfactor: BlendFactor = "ONE_MINUS_SRC_ALPHA";
 
     /**
@@ -81,8 +62,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    @SerializeProperty()
-    @oav({ tooltip: '是否开启深度检查' })
     depthtest = true;
 
     /**
@@ -93,8 +72,6 @@ export class RenderParams
      * @see DepthFunc
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    @SerializeProperty()
-    @oav({ component: 'OAVEnum', tooltip: '深度检测方法', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
     depthFunc: DepthFunc = "LESS";
 
     /**
@@ -102,8 +79,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthMask
      */
-    @SerializeProperty()
-    @oav({ tooltip: '是否开启深度标记' })
     depthMask = true;
 
     /**
@@ -113,8 +88,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/colorMask
      */
-    @SerializeProperty()
-    @oav({ tooltip: '深度检测方法' })
     colorMask: [boolean, boolean, boolean, boolean] = [true, true, true, true];
 
     /**
@@ -122,8 +95,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
      */
-    @oav({ tooltip: '是否使用 viewRect' })
-    @SerializeProperty()
     useViewPort = false;
 
     /**
@@ -133,8 +104,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
      */
-    @oav({ tooltip: '绘制在画布上的区域' })
-    @SerializeProperty()
     viewPort: { x: number, y: number, width: number, height: number } = { x: 0, y: 0, width: 100, height: 100 };
 
     /**
@@ -142,8 +111,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
      */
-    @oav({ tooltip: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor' })
-    @SerializeProperty()
     useScissor = false;
 
     /**
@@ -153,8 +120,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
      */
-    @oav({ tooltip: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor' })
-    @SerializeProperty()
     scissor: { x: number, y: number, width: number, height: number } = { x: 0, y: 0, width: 100, height: 100 };
 
     /**
@@ -168,8 +133,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    @oav({ tooltip: 'The WebGLRenderingContext.polygonOffset() method of the WebGL API specifies the scale factors and units to calculate depth values.' })
-    @SerializeProperty()
     usePolygonOffset = false;
 
     /**
@@ -179,8 +142,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    @oav({ tooltip: 'A GLfloat which sets the scale factor for the variable depth offset for each polygon. The default value is 0.' })
-    @SerializeProperty()
     polygonOffsetFactor = 0;
 
     /**
@@ -190,8 +151,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    @oav({ tooltip: 'A GLfloat which sets the multiplier by which an implementation-specific value is multiplied with to create a constant depth offset. The default value is 0.' })
-    @SerializeProperty()
     polygonOffsetUnits = 0;
 
     /**
@@ -201,8 +160,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    @oav({ tooltip: 'Activates stencil testing and updates to the stencil buffer. See WebGLRenderingContext.stencilFunc().' })
-    @SerializeProperty()
     useStencil = false;
 
     /**
@@ -212,8 +169,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    @oav({ tooltip: 'A GLenum specifying the test function. The default function is gl.ALWAYS. ', component: 'OAVEnum', componentParam: { enumClass: ['NEVER', 'LESS', 'EQUAL', 'LEQUAL', 'GREATER', 'NOTEQUAL', 'GEQUAL', 'ALWAYS'] } })
-    @SerializeProperty()
     stencilFunc: StencilFunc = "ALWAYS";
 
     /**
@@ -223,8 +178,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    @oav({ tooltip: 'A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n -1 where n is the number of bitplanes in the stencil buffer. The default value is 0. ' })
-    @SerializeProperty()
     stencilFuncRef = 0;
 
     /**
@@ -234,8 +187,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    @oav({ tooltip: 'A GLuint specifying a bit-wise mask that is used to AND the reference value and the stored stencil value when the test is done. The default value is all 1.' })
-    @SerializeProperty()
     stencilFuncMask = 1;
 
     /**
@@ -245,8 +196,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
-    @SerializeProperty()
     stencilOpFail: StencilOp = "KEEP";
 
     /**
@@ -256,8 +205,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when the stencil test passes, but the depth test fails. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
-    @SerializeProperty()
     stencilOpZFail: StencilOp = "KEEP";
 
     /**
@@ -267,8 +214,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLenum specifying the function to use when both the stencil test and the depth test pass, or when the stencil test passes and there is no depth buffer or depth testing is disabled. The default value is gl.KEEP.', component: 'OAVEnum', componentParam: { enumClass: ['KEEP', 'ZERO', 'REPLACE', 'INCR', 'INCR_WRAP', 'DECR', 'DECR_WRAP', 'INVERT'] } })
-    @SerializeProperty()
     stencilOpZPass: StencilOp = "KEEP";
 
     /**
@@ -278,8 +223,6 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    @oav({ tooltip: 'A GLuint specifying a bit mask to enable or disable writing of individual bits in the stencil planes. By default, the mask is all 1.' })
-    @SerializeProperty()
     stencilMask = 1;
 }
 

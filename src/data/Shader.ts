@@ -6,7 +6,7 @@ export class Shader
     /**
      * 着色器名称
      */
-    shaderName: string;
+    shaderName?: string;
 
     /**
      * 顶点着色器代码

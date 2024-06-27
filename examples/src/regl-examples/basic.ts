@@ -1,6 +1,13 @@
 import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
+/**
+ * 让T中以及所有键值中的所有键都是可选的
+ */
+export type gPartial<T> = {
+    [P in keyof T]?: T[P] | gPartial<T[P]>;
+};
+
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";
 webglcanvas.style.position = "fixed";
@@ -12,7 +19,7 @@ document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = $set(new RenderAtomic(), {
     attributes: {
         position: {
             array: [
@@ -39,7 +46,7 @@ const renderAtomic = $set(new RenderAtomic(), {
               gl_FragColor = color;
             }
             ` }
-});
+} as gPartial<RenderAtomic>);
 
 function draw()
 {

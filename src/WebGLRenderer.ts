@@ -139,7 +139,7 @@ export class WebGLRenderer
     {
         if (this.gl.isContextLost()) return;
 
-        const webGLRenderAtomic = new WebGLRenderAtomic(this, renderAtomic);
+        const webGLRenderAtomic = new WebGLRenderAtomic(renderAtomic);
 
         const { bindingStates, renderParams, elementBuffers: elementBufferRenderer, uniforms, shaders } = this;
 

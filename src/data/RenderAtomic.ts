@@ -13,11 +13,6 @@ import { Uniforms } from "./Uniforms";
 export class RenderAtomic
 {
     /**
-     * 下一个结点
-     */
-    next: RenderAtomic;
-
-    /**
      * 顶点索引缓冲
      */
     index: ElementBuffer;
@@ -32,7 +27,7 @@ export class RenderAtomic
      */
     uniforms: LazyObject<Uniforms> = {} as any;
 
-    drawCall: Partial<DrawCall> = {};
+    drawCall = new DrawCall();
 
     /**
      * 渲染程序
@@ -47,5 +42,5 @@ export class RenderAtomic
     /**
      * 渲染参数
      */
-    renderParams: Partial<RenderParams> = {};
+    renderParams = new RenderParams();
 }
