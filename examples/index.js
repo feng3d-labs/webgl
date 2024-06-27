@@ -1,44 +1,47 @@
 const files = {
-    'regl-examples': [
-        'basic',
-        'batch',
-        'blur',
-        'bunny',
-        'camera',
-        'cloth',
-        'cube',
+    "webgl-examples": [
+        "sample1"
+    ],
+    "regl-examples": [
+        "basic",
+        "batch",
+        "blur",
+        "bunny",
+        "camera",
+        "cloth",
+        "cube",
     ],
     WebGL2Samples: [
-        'draw_image_space',
-        'draw_instanced',
-        'draw_primitive_restart',
-        'draw_range_arrays',
-        'fbo_blit',
+        "draw_image_space",
+        "draw_instanced",
+        "draw_primitive_restart",
+        "draw_range_arrays",
+        "fbo_blit",
     ],
 };
 
 function extractQuery()
 {
-    const p = window.location.search.indexOf('?q=');
+    const p = window.location.search.indexOf("?q=");
     if (p !== -1)
     {
         return window.location.search.substr(3);
     }
 
-    return '';
+    return "";
 }
 
-const panel = document.getElementById('panel');
-const content = document.getElementById('content');
-const viewer = document.getElementById('viewer');
+const panel = document.getElementById("panel");
+const content = document.getElementById("content");
+const viewer = document.getElementById("viewer");
 
-const filterInput = document.getElementById('filterInput');
-const clearFilterButton = document.getElementById('clearFilterButton');
+const filterInput = document.getElementById("filterInput");
+const clearFilterButton = document.getElementById("clearFilterButton");
 
-const expandButton = document.getElementById('expandButton');
-expandButton.addEventListener('click', function (event)
+const expandButton = document.getElementById("expandButton");
+expandButton.addEventListener("click", function (event)
 {
-    panel.classList.toggle('collapsed');
+    panel.classList.toggle("collapsed");
     event.preventDefault();
 });
 
@@ -48,20 +51,20 @@ if ((/(iPad|iPhone|iPod)/g).test(navigator.userAgent))
 {
     viewer.style.width = getComputedStyle(viewer).width;
     viewer.style.height = getComputedStyle(viewer).height;
-    viewer.setAttribute('scrolling', 'no');
+    viewer.setAttribute("scrolling", "no");
 }
 
-const container = document.createElement('div');
+const container = document.createElement("div");
 content.appendChild(container);
 
-const button = document.createElement('div');
-button.id = 'button';
-button.textContent = 'View source';
-button.addEventListener('click', function (event)
+const button = document.createElement("div");
+button.id = "button";
+button.textContent = "View source";
+button.addEventListener("click", function (event)
 {
     window.open(`https://gitlab.com/feng3d/feng3d-examples/tree/master/src/${selected}.ts`);
 }, false);
-button.style.display = 'none';
+button.style.display = "none";
 document.body.appendChild(button);
 
 const links = {};
@@ -71,9 +74,9 @@ for (const key in files)
 {
     const section = files[key];
 
-    const header = document.createElement('h2');
+    const header = document.createElement("h2");
     header.textContent = key;
-    header.setAttribute('data-category', key);
+    header.setAttribute("data-category", key);
     container.appendChild(header);
 
     for (let i = 0; i < section.length; i++)
@@ -81,12 +84,12 @@ for (const key in files)
         // eslint-disable-next-line no-loop-func
         (function (file)
         {
-            const link = document.createElement('a');
-            link.className = 'link';
+            const link = document.createElement("a");
+            link.className = "link";
             link.textContent = file;
             link.href = `examples.html?type=${key}/${file}&v=${Math.random()}`;
-            link.setAttribute('target', 'viewer');
-            link.addEventListener('click', function (event)
+            link.setAttribute("target", "viewer");
+            link.addEventListener("click", function (event)
             {
                 if (event.button === 0)
                 {
@@ -108,34 +111,34 @@ function loadFile(file)
 
 function selectFile(file)
 {
-    if (selected !== null) links[selected].classList.remove('selected');
+    if (selected !== null) links[selected].classList.remove("selected");
 
-    links[file].classList.add('selected');
+    links[file].classList.add("selected");
 
     window.location.hash = file;
     viewer.focus();
 
-    button.style.display = '';
-    panel.classList.toggle('collapsed');
+    button.style.display = "";
+    panel.classList.toggle("collapsed");
 
     selected = file;
 }
 
-if (window.location.hash !== '')
+if (window.location.hash !== "")
 {
     loadFile(window.location.hash.substring(1));
 }
 
 // filter
 
-filterInput.addEventListener('input', function (e)
+filterInput.addEventListener("input", function (e)
 {
     updateFilter();
 });
 
-clearFilterButton.addEventListener('click', function (e)
+clearFilterButton.addEventListener("click", function (e)
 {
-    filterInput.value = '';
+    filterInput.value = "";
     updateFilter();
     e.preventDefault();
 });
@@ -143,16 +146,16 @@ clearFilterButton.addEventListener('click', function (e)
 function updateFilter()
 {
     const v = filterInput.value;
-    if (v !== '')
+    if (v !== "")
     {
-        window.history.replaceState({}, '', `?q=${v}${window.location.hash}`);
+        window.history.replaceState({}, "", `?q=${v}${window.location.hash}`);
     }
     else
     {
-        window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+        window.history.replaceState({}, "", window.location.pathname + window.location.hash);
     }
 
-    const exp = new RegExp(v, 'gi');
+    const exp = new RegExp(v, "gi");
 
     for (const key in files)
     {
@@ -175,7 +178,7 @@ function filterExample(file, exp)
 
     if (res && res.length > 0)
     {
-        link.classList.remove('filtered');
+        link.classList.remove("filtered");
 
         for (let i = 0; i < res.length; i++)
         {
@@ -186,7 +189,7 @@ function filterExample(file, exp)
     }
     else
     {
-        link.classList.add('filtered');
+        link.classList.add("filtered");
         // link.innerHTML = file;
     }
 }
@@ -203,7 +206,7 @@ function layoutList()
         {
             const file = `${key}/${section[i]}`;
 
-            if (!links[file].classList.contains('filtered'))
+            if (!links[file].classList.contains("filtered"))
             {
                 collapsed = false;
                 break;
@@ -214,11 +217,11 @@ function layoutList()
 
         if (collapsed)
         {
-            element.classList.add('filtered');
+            element.classList.add("filtered");
         }
         else
         {
-            element.classList.remove('filtered');
+            element.classList.remove("filtered");
         }
     }
 }

@@ -1,4 +1,8 @@
-/* eslint-disable no-new */
+import { getContext as getContext1 } from "./caches/getContext";
+import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
+import { IWebGLPassDescriptor } from "./data/IWebGLPassDescriptor";
+import { IWebGLRenderPass } from "./data/IWebGLRenderPass";
+import { IWebGLSubmit } from "./data/IWebGLSubmit";
 import { RenderAtomic } from "./data/RenderAtomic";
 import { WebGLAttributeBuffers } from "./gl/WebGLAttributeBuffers";
 import { WebGLBindingStates } from "./gl/WebGLBindingStates";
@@ -46,6 +50,68 @@ export class WebGLRenderer
     framebuffers: WebGLFramebuffers;
 
     elementBuffers: WebGLElementBuffers;
+
+    private __canvasContext: IWebGLCanvasContext;
+    static init(canvasContext: IWebGLCanvasContext)
+    {
+        const gl = getContext1(canvasContext);
+        const webgl = new WebGLRenderer(gl.canvas as any);
+        webgl.__canvasContext = canvasContext;
+
+        return webgl;
+    }
+
+    /**
+     * 提交渲染数据
+     *
+     * @param data
+     * @returns
+     */
+    submit(data: IWebGLSubmit)
+    {
+        const gl = getContext1(this.__canvasContext);
+
+        if (!gl)
+        {
+            alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+
+            return;
+        }
+
+        data.renderPasss.forEach((renderPass) =>
+        {
+            this.renderPass(gl, renderPass);
+        });
+    }
+    private renderPass(gl: WebGLRenderingContext, renderPass: IWebGLRenderPass)
+    {
+        this.passDescriptor(gl, renderPass.passDescriptor);
+
+        // renderPass?.renderObjects.forEach((renderObject) =>
+        // {
+        //     this.render(renderObject);
+        // });
+    }
+
+    private passDescriptor(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
+    {
+        const { clearColor, clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
+
+        // Set clear color to black, fully opaque
+        gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+        gl.clearDepth(clearDepth); // Clear everything
+        if (depthTest)
+        {
+            gl.enable(gl.DEPTH_TEST); // Enable depth testing
+        }
+        else
+        {
+            gl.disable(gl.DEPTH_TEST); // Enable depth testing
+        }
+        gl.depthFunc(gl[depthFunc]); // Near things obscure far things
+        // Clear the color buffer with specified clear color
+        gl.clear(getClearMask(gl, clearMask));
+    }
 
     constructor(canvas?: HTMLCanvasElement, contextAttributes?: WebGLContextAttributes)
     {
@@ -168,4 +234,11 @@ function _getContext(canvas: HTMLCanvasElement, contextNames: string[], contextA
     }
 
     return null;
+}
+
+function getClearMask(gl: WebGLRenderingContext, clearMask: ("COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT")[])
+{
+    const result = clearMask.reduce((pv, cv) => pv | gl[cv], 0);
+
+    return result;
 }
