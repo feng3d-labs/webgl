@@ -1,4 +1,4 @@
-import { globalEmitter } from "@feng3d/event";
+import { ShaderMacro } from "./Macro";
 import { shaderMacroUtils } from "./ShaderMacroUtils";
 
 export const shaderConfig: ShaderConfig = { shaders: {}, modules: {} };
@@ -49,7 +49,23 @@ export class ShaderLib
     private _shaderCache: { [shaderName: string]: { vertex: string, fragment: string, vertexMacroVariables: string[], fragmentMacroVariables: string[] } } = {};
 
     /**
-     * 获取shaderCode
+     * 获取带宏定义的着色器代码
+     */
+    getShaderCodeWithMacro(shaderName: string, shaderMacro: ShaderMacro)
+    {
+        // 获取着色器代码
+        const result = shaderlib.getShader(shaderName);
+
+        const vMacroCode = this.getMacroCode(result.vertexMacroVariables, shaderMacro);
+        const vertex = vMacroCode + result.vertex;
+        const fMacroCode = this.getMacroCode(result.fragmentMacroVariables, shaderMacro);
+        const fragment = fMacroCode + result.fragment;
+
+        return { vertex, fragment };
+    }
+
+    /**
+     * 获取着色器代码
      */
     getShader(shaderName: string)
     {
@@ -111,25 +127,28 @@ export class ShaderLib
     {
         this._shaderCache = {};
     }
+
+    private getMacroCode(variables: string[], valueObj: Object)
+    {
+        let macroHeader = "";
+        variables.forEach((macroName) =>
+        {
+            const value = valueObj[macroName];
+            if (typeof value === "boolean")
+            {
+                value && (macroHeader += `#define ${macroName}\n`);
+            }
+            else if (typeof value === "number")
+            {
+                macroHeader += `#define ${macroName} ${value}\n`;
+            }
+        });
+
+        return macroHeader.length > 0 ? (`${macroHeader}\n`) : macroHeader;
+    }
 }
 
 /**
  * shader 库
  */
 export const shaderlib = new ShaderLib();
-
-declare module "@feng3d/event"
-{
-    interface GlobalEvents
-    {
-        /**
-         * shader资源发生变化
-         */
-        "asset.shaderChanged": any;
-    }
-}
-
-globalEmitter.on("asset.shaderChanged", () =>
-{
-    shaderlib.clearCache();
-});

@@ -1,8 +1,6 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
 import { RenderAtomic } from "../data/RenderAtomic";
 import { Shader } from "../data/Shader";
-import { ShaderMacro } from "../shader/Macro";
-import { shaderlib } from "../shader/ShaderLib";
 import { ShaderType } from "./WebGLEnums";
 import { WebGLUniform } from "./WebGLUniforms";
 
@@ -36,9 +34,8 @@ export class WebGLShaders
     {
         const { gl } = this;
 
-        const shaderMacro = renderAtomic.shaderMacro;
         const shader = renderAtomic.shader;
-        const shaderResult = this.activeShaderProgram(shader, shaderMacro);
+        const shaderResult = this.activeShaderProgram(shader);
         if (!shaderResult)
         {
             throw new Error(`缺少着色器，无法渲染!`);
@@ -52,13 +49,11 @@ export class WebGLShaders
     /**
      * 激活渲染程序
      */
-    activeShaderProgram(shader: Shader, shaderMacro: ShaderMacro)
+    activeShaderProgram(shader: Shader)
     {
-        const { shaderName } = shader;
+        const { vertex, fragment } = shader;
 
-        const { vertex, fragment } = this.updateShaderCode(shader, shaderMacro);
-
-        const shaderKey = vertex + fragment;
+        const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
         let result = this.compileShaderResults[shaderKey];
         if (result) return result;
 
@@ -69,7 +64,7 @@ export class WebGLShaders
         }
         catch (error)
         {
-            console.error(`${shaderName} 编译失败！\n${error}`);
+            console.error(`着色器 编译失败！\n${error}`);
 
             return null;
         }
@@ -130,26 +125,6 @@ export class WebGLShaders
         }
 
         return program;
-    }
-
-    /**
-     * 更新渲染代码
-     */
-    private updateShaderCode(shader: Shader, shaderMacro: ShaderMacro)
-    {
-        const { shaderName } = shader;
-
-        if (!shaderName) return shader;
-
-        // 获取着色器代码
-        const result = shaderlib.getShader(shaderName);
-
-        const vMacroCode = this.getMacroCode(result.vertexMacroVariables, shaderMacro);
-        const vertex = vMacroCode + result.vertex;
-        const fMacroCode = this.getMacroCode(result.fragmentMacroVariables, shaderMacro);
-        const fragment = fMacroCode + result.fragment;
-
-        return { vertex, fragment };
     }
 
     private compileShaderProgram(vshader: string, fshader: string): CompileShaderResult
@@ -221,25 +196,6 @@ export class WebGLShaders
         }
 
         return { program: shaderProgram, vertex: vertexShader, fragment: fragmentShader, attributes, uniforms };
-    }
-
-    private getMacroCode(variables: string[], valueObj: Object)
-    {
-        let macroHeader = "";
-        variables.forEach((macroName) =>
-        {
-            const value = valueObj[macroName];
-            if (typeof value === "boolean")
-            {
-                value && (macroHeader += `#define ${macroName}\n`);
-            }
-            else if (typeof value === "number")
-            {
-                macroHeader += `#define ${macroName} ${value}\n`;
-            }
-        });
-
-        return macroHeader.length > 0 ? (`${macroHeader}\n`) : macroHeader;
     }
 }
 

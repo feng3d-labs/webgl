@@ -1,13 +1,8 @@
 /**
  * shader
  */
-export class Shader
+export interface Shader
 {
-    /**
-     * 着色器名称
-     */
-    shaderName?: string;
-
     /**
      * 顶点着色器代码
      */

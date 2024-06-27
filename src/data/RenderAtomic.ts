@@ -1,5 +1,4 @@
 import { LazyObject } from "@feng3d/polyfill";
-import { ShaderMacro } from "../shader/Macro";
 import { AttributeBuffer } from "./AttributeBuffer";
 import { DrawCall } from "./DrawCall";
 import { ElementBuffer } from "./ElementBuffer";
@@ -33,11 +32,6 @@ export class RenderAtomic
      * 渲染程序
      */
     shader: Shader;
-
-    /**
-     * shader 中的 宏
-     */
-    shaderMacro: ShaderMacro = {} as any;
 
     /**
      * 渲染参数
