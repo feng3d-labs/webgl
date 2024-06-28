@@ -40,16 +40,6 @@ export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
     | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
 
 /**
- * A GLbitfield bitwise OR mask that indicates the buffers to be cleared. Possible values are:
- *
- * gl.COLOR_BUFFER_BIT
- * gl.DEPTH_BUFFER_BIT
- * gl.STENCIL_BUFFER_BIT
- *
- */
-export type ClearMask = "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
-
-/**
  * A GLenum specifying which WebGL capability to enable. Possible values:
  *
  * gl.BLEND	Activates blending of the computed fragment color values. See WebGLRenderingContext.blendFunc().

@@ -13,6 +13,8 @@ export interface IRenderPassColorAttachment
      * 是否清除颜色附件。
      *
      * 默认 `"clear"` 。
+     *
+     * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
     loadOp?: "load" | "clear";
 }

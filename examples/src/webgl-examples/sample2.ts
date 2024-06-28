@@ -29,10 +29,10 @@ function main()
                 }],
                 depthStencilAttachment: {
                     depthClearValue: 1.0,
+                    depthLoadOp: "clear",
                 },
                 depthTest: true,
                 depthFunc: "LEQUAL",
-                clearMask: ["DEPTH_BUFFER_BIT"],
             },
             renderObjects: [{
                 pipeline: {
