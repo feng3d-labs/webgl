@@ -51,9 +51,4 @@ export interface ElementBuffer
      * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
      */
     type?: DrawElementType;
-
-    /**
-     * 版本号，用于标记是否变化。
-     */
-    version?: number;
 }

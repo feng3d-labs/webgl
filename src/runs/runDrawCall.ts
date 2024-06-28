@@ -1,8 +1,9 @@
 import { getDrawCall } from "../caches/getDrawCall";
+import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
+import { ElementTypeMap } from "../const/WebGLUniformType";
 import { DrawElementType } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
 import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
-import { getWebGLElementBuffer } from "../caches/getWebGLElementBuffer";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
 {
@@ -17,14 +18,12 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
 
     const element = renderAtomic.index;
 
-    let bytesPerElement: number;
     let vertexNum: number;
     let type: DrawElementType;
 
     if (element)
     {
-        const elementCache = getWebGLElementBuffer(gl, element);
-        bytesPerElement = elementCache.bytesPerElement;
+        const elementCache = getElementWebGLBuffer(gl, element);
         vertexNum = elementCache.count;
         type = elementCache.type;
     }
@@ -79,7 +78,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
     {
         if (element)
         {
-            gl.drawElements(gl[drawMode], count, gl[type], offset * bytesPerElement);
+            gl.drawElements(gl[drawMode], count, gl[type], offset * ElementTypeMap[type]);
         }
         else
         {

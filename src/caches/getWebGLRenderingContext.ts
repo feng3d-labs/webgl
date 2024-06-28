@@ -23,6 +23,7 @@ export function getWebGLRenderingContext(key: IWebGLCanvasContext)
         value = getWebGLContext(canvas, key);
 
         initWebGLModules(value);
+        initMap(value);
 
         //
         canvas.addEventListener("webglcontextlost", _onContextLost, false);
@@ -33,6 +34,11 @@ export function getWebGLRenderingContext(key: IWebGLCanvasContext)
     }
 
     return value;
+}
+
+function initMap(gl: WebGLRenderingContext)
+{
+    gl._elementBufferMap = new WeakMap();
 }
 
 function initWebGLModules(gl: WebGLRenderingContext)

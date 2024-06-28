@@ -1,130 +1,126 @@
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
-import { BufferUsage } from "../gl/WebGLEnums";
 
 declare global
 {
-    interface WebGLRenderingContextExt
+    interface WebGLRenderingContext
     {
-    }
-}
-
-const buffers = new WeakMap<ElementBuffer, WebGLElementBuffer>();
-
-export function getWebGLElementBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
-{
-    let data = buffers.get(element);
-
-    if (data === undefined)
-    {
-        data = new WebGLElementBuffer(gl, element);
-        buffers.set(element, data);
+        _elementBufferMap: WeakMap<ElementBuffer, WebGLBuffer>
     }
 
-    data.updateBuffer();
-
-    return data;
-}
-
-function remove(element: ElementBuffer)
-{
-    const data = buffers.get(element);
-
-    if (data)
+    interface WebGLBuffer
     {
-        data.dispose();
+        /**
+         * 元素数据类型
+         */
+        type: DrawElementType;
 
-        buffers.delete(element);
+        /**
+         * 元素数组长度
+         */
+        count: number;
     }
 }
 
 /**
- * WebGL元素数组缓冲，用于处理每个 ElementBuffer 向WebGL上传数据。
+ * 获取索引WebGL缓冲区。
+ *
+ * @param gl
+ * @param element
+ * @returns
  */
-class WebGLElementBuffer
+export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
 {
-    //
-    element: ElementBuffer;
-    buffer: WebGLBuffer;
+    let buffer = gl._elementBufferMap.get(element);
 
-    /**
-     * 元素数据类型
-     */
-    type: DrawElementType;
-
-    /**
-     * 每个元素占用字符数量
-     */
-    bytesPerElement: number;
-
-    /**
-     * 元素数组长度
-     */
-    count: number;
-
-    version = -1;
-
-    private gl: WebGLRenderingContext;
-    constructor(gl: WebGLRenderingContext, element: ElementBuffer)
+    if (!buffer)
     {
-        this.gl = gl;
-        this.element = element;
-
-        //
-        watcher.watch(element, "array", this.needsUpdate, this);
-    }
-
-    private needsUpdate()
-    {
-        this.element.version += ~~this.element.version;
-    }
-
-    updateBuffer()
-    {
-        const { gl } = this;
-        const { element } = this;
-
-        if (this.version === element.version)
-        {
-            return;
-        }
-        this.version = element.version;
-
-        // 删除过时的缓冲
-        let buffer = this.buffer;
-        if (buffer)
-        {
-            gl.deleteBuffer(buffer);
-        }
-
-        //
-        const { type, array } = transfromArrayType(element.array, element.type);
-        const usage: BufferUsage = element.usage || "STATIC_DRAW";
-
         buffer = gl.createBuffer();
+        gl._elementBufferMap.set(element, buffer);
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[usage]);
+        const updateBuffer = () =>
+        {
+            // 获取
+            buffer.type = element.type || getDrawElementType(element.array);
+            const array = getArrayBufferViewWithType(element.array, buffer.type);
 
-        this.type = type;
-        this.count = array.length;
-        this.bytesPerElement = array.BYTES_PER_ELEMENT;
-        this.buffer = buffer;
+            // 上传数据到WebGL
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[element.usage || "STATIC_DRAW"]);
+
+            //
+            buffer.count = array.length;
+        };
+
+        updateBuffer();
+
+        //
+        watcher.watch(element, "array", updateBuffer);
     }
 
-    dispose()
+    return buffer;
+}
+
+function getDrawElementType(array: ElementBufferSourceTypes)
+{
+    let type: DrawElementType;
+    if (array instanceof Uint8Array)
     {
-        const { gl } = this;
-        const { buffer, element } = this;
-
-        gl.deleteBuffer(buffer);
-
-        watcher.unwatch(element, "array", this.needsUpdate, this);
-
-        this.gl = null;
-        this.element = null;
-        this.buffer = null;
+        type = "UNSIGNED_BYTE";
     }
+    else if (array instanceof Uint16Array)
+    {
+        type = "UNSIGNED_SHORT";
+    }
+    else if (array instanceof Uint32Array)
+    {
+        type = "UNSIGNED_INT";
+    }
+    else if (array.length < 1 << 8)
+    {
+        type = "UNSIGNED_BYTE";
+    }
+    else if (array.length < 1 << 16)
+    {
+        type = "UNSIGNED_SHORT";
+    }
+    else
+    {
+        type = "UNSIGNED_INT";
+    }
+
+    return type;
+}
+
+function getArrayBufferViewWithType(array: ElementBufferSourceTypes, type: DrawElementType)
+{
+    if (type === "UNSIGNED_BYTE")
+    {
+        if (!(array instanceof Uint8Array))
+        {
+            array = new Uint8Array(array);
+        }
+    }
+    else if (type === "UNSIGNED_SHORT")
+    {
+        if (!(array instanceof Uint16Array))
+        {
+            array = new Uint16Array(array);
+        }
+    }
+    else if (type === "UNSIGNED_INT")
+    {
+        if (!(array instanceof Uint32Array))
+        {
+            array = new Uint32Array(array);
+        }
+    }
+    else
+    {
+        throw `未知元素缓冲数据类型 ${type}`;
+    }
+
+    return array;
 }
 
 function transfromArrayType(array: ElementBufferSourceTypes, type?: DrawElementType)

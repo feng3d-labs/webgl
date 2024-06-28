@@ -2,7 +2,7 @@ import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { AttributeBuffer } from "../data/AttributeBuffer";
 import { ElementBuffer } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
-import { getWebGLElementBuffer } from "../caches/getWebGLElementBuffer";
+import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 
 declare global
 {
@@ -391,6 +391,6 @@ function bindBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
 {
     if (element)
     {
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, getWebGLElementBuffer(gl, element).buffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, getElementWebGLBuffer(gl, element));
     }
 }
