@@ -9,7 +9,6 @@ main();
 function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
-    const webgl = WebGLRenderer.init({ canvasId: "glcanvas", contextId: "webgl" });
 
     // Vertex shader program
 
@@ -38,7 +37,7 @@ function main()
     // objects we'll be drawing.
     const buffers = initBuffers();
 
-    drawScene(webgl, program, buffers, canvas);
+    drawScene(program, buffers, canvas);
 }
 
 function initBuffers()
@@ -57,7 +56,7 @@ function initBuffers()
     };
 }
 
-function drawScene(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buffers: {
+function drawScene(programInfo: IWebGLRenderPipeline, buffers: {
     position: IWebGLBuffer;
 }, canvas: HTMLCanvasElement)
 {
@@ -94,7 +93,8 @@ function drawScene(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buff
         [-0.0, 0.0, -6.0]); // amount to translate
 
     //
-    webgl.submit({
+    WebGLRenderer.submit({
+        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
         renderPasss: [{
             passDescriptor: {
                 colorAttachments: [{

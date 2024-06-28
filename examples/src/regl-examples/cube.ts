@@ -58,8 +58,6 @@ const indices = cubeElements.reduce((pv: number[], cv: number[]) =>
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
 let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
@@ -114,7 +112,7 @@ function draw()
     viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-    webglRenderer.render(renderAtomic);
+    WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
     requestAnimationFrame(draw);
 }
 

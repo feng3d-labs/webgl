@@ -21,8 +21,6 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         return;
     }
 
-    const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
     const vertexCount = 12;
     const renderAtomic: RenderAtomic = {
         attributes: {
@@ -72,9 +70,12 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
             }` }
     };
 
+    const canvasContext = { canvasId: "glcanvas" };
+
     function draw()
     {
-        webglRenderer.submit({
+        WebGLRenderer.submit({
+            canvasContext,
             renderPasss: [{
                 passDescriptor: {
                     colorAttachments: [{
@@ -89,11 +90,11 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
         renderAtomic.drawCall!.offset = 0;
         renderAtomic.drawCall!.count = vertexCount / 2;
-        webglRenderer.render(renderAtomic);
+        WebGLRenderer.render(canvasContext, renderAtomic);
         renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
         renderAtomic.drawCall!.offset = 6;
         renderAtomic.drawCall!.count = vertexCount / 2;
-        webglRenderer.render(renderAtomic);
+        WebGLRenderer.render(canvasContext, renderAtomic);
 
         requestAnimationFrame(draw);
     }

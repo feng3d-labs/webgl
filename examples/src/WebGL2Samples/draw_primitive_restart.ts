@@ -25,8 +25,6 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
     // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
     const MAX_UNSIGNED_SHORT = 65535;
 
-    const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
     const renderAtomic: RenderAtomic = {
         attributes: {
             pos: {
@@ -72,7 +70,8 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
 
     function draw()
     {
-        webglRenderer.submit({
+        WebGLRenderer.submit({
+            canvasContext: { canvasId: "glcanvas" },
             renderPasss: [{
                 passDescriptor: {
                     colorAttachments: [{

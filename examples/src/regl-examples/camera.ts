@@ -12,8 +12,6 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas", antialias: true });
-
 const camera = createCamera({
     center: [0, 2.5, 0]
 });
@@ -71,7 +69,7 @@ function draw()
 
     camera(renderAtomic, webglcanvas.width, webglcanvas.height);
 
-    webglRenderer.render(renderAtomic);
+    WebGLRenderer.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

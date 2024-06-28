@@ -24,8 +24,6 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         return;
     }
 
-    const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
     const renderAtomic: RenderAtomic = {
         attributes: {
             pos: {
@@ -78,7 +76,8 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        webglRenderer.submit({
+        WebGLRenderer.submit({
+            canvasContext: { canvasId: "glcanvas" },
             renderPasss: [{
                 passDescriptor: {
                     colorAttachments: [{

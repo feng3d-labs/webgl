@@ -11,16 +11,17 @@ import { WebGLTextures } from "../gl/WebGLTextures";
 /**
  * 获取WebGL上下文。
  *
- * @param key
+ * @param canvasContext
  * @returns
  */
-export function getWebGLRenderingContext(key: IWebGLCanvasContext)
+export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
 {
+    const key = canvasContext.canvasId;
     let value = canvasContextMap.get(key);
     if (!value)
     {
-        const canvas = getCanvas(key);
-        value = getWebGLContext(canvas, key);
+        const canvas = getCanvas(canvasContext);
+        value = getWebGLContext(canvas, canvasContext);
 
         initWebGLModules(value);
         initMap(value);
@@ -119,4 +120,4 @@ function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IWebGLCanvasC
     return null;
 }
 
-const canvasContextMap = new Map<IWebGLCanvasContext, WebGLRenderingContext>();
+const canvasContextMap = new Map<string, WebGLRenderingContext>();

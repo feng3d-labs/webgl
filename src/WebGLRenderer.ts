@@ -14,23 +14,15 @@ import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
  */
 export class WebGLRenderer
 {
-    private __canvasContext: IWebGLCanvasContext;
-    static init(canvasContext: IWebGLCanvasContext)
-    {
-        const webgl = new WebGLRenderer(canvasContext);
-
-        return webgl;
-    }
-
     /**
      * 提交渲染数据
      *
      * @param data
      * @returns
      */
-    submit(data: IWebGLSubmit)
+    static submit(data: IWebGLSubmit)
     {
-        const gl = getWebGLRenderingContext(this.__canvasContext);
+        const gl = getWebGLRenderingContext(data.canvasContext);
 
         if (!gl) return;
 
@@ -43,19 +35,14 @@ export class WebGLRenderer
         });
     }
 
-    constructor(canvasContext: IWebGLCanvasContext)
-    {
-        this.__canvasContext = canvasContext;
-    }
-
     /**
      * 渲染一次。
      *
      * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
      */
-    render(renderAtomic: RenderAtomic)
+    static render(canvasContext: IWebGLCanvasContext, renderAtomic: RenderAtomic)
     {
-        const gl = getWebGLRenderingContext(this.__canvasContext);
+        const gl = getWebGLRenderingContext(canvasContext);
         if (gl.isContextLost()) return;
 
         runRenderObject(gl, renderAtomic);

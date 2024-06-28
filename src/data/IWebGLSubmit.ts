@@ -1,3 +1,4 @@
+import { IWebGLCanvasContext } from "./IWebGLCanvasContext";
 import { IWebGLRenderPass } from "./IWebGLRenderPass";
 
 /**
@@ -5,6 +6,11 @@ import { IWebGLRenderPass } from "./IWebGLRenderPass";
  */
 export interface IWebGLSubmit
 {
+    /**
+     * WebGL上下文信息。
+     */
+    canvasContext: IWebGLCanvasContext;
+
     /**
      * WebGL渲染通道列表
      */

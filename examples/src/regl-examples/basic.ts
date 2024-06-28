@@ -16,8 +16,6 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
 const renderAtomic: RenderAtomic = {
     attributes: {
         position: {
@@ -52,7 +50,8 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    webglRenderer.submit({
+    WebGLRenderer.submit({
+        canvasContext: { canvasId: "glcanvas" },
         renderPasss: [{
             renderObjects: [renderAtomic]
         }]

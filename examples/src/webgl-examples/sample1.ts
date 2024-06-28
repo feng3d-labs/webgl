@@ -5,9 +5,8 @@ import { WebGLRenderer } from "../../../src";
 
 function main()
 {
-    const webglRenderer = WebGLRenderer.init({ canvasId: "glcanvas", contextId: "webgl" });
-
-    webglRenderer.submit({
+    WebGLRenderer.submit({
+        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
         renderPasss: [
             {
                 passDescriptor: {
@@ -15,19 +14,6 @@ function main()
                         clearValue: [1, 0, 0, 0.5],
                         loadOp: "clear",
                     }],
-                },
-            }
-        ],
-    });
-    webglRenderer.submit({
-        renderPasss: [
-            {
-                passDescriptor: {
-                    colorAttachments: [{
-                        clearValue: [1, 1, 0, 0.5],
-                        loadOp: "clear",
-                    }],
-                    clearMask: [],
                 },
             }
         ],

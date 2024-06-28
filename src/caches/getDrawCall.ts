@@ -3,15 +3,15 @@ import { defaultDrawCall } from "../defaults/defaultDrawCall";
 
 export function getDrawCall(key: DrawCall)
 {
-    let value = canvasContextMap.get(key);
-    if (!value)
-    {
-        value = Object.assign({}, defaultDrawCall, key);
+    // let value = canvasContextMap.get(key);
+    // if (!value)
+    // {
+    key = Object.assign({}, defaultDrawCall, key);
 
-        canvasContextMap.set(key, value);
-    }
+    //     canvasContextMap.set(key, value);
+    // }
 
-    return value;
+    return key;
 }
 
 const canvasContextMap = new Map<DrawCall, DrawCall>();

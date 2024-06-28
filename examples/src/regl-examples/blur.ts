@@ -16,8 +16,6 @@ const FILTER_RADIUS = 1;
 camera.rotate([0.0, 0.0], [0.0, -0.4]);
 camera.zoom(300.0);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
 let batchId = 0;
 let tick = 0;
 const offsets = [{ offset: [-1, -1] },
@@ -77,7 +75,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        webglRenderer.render(renderAtomic);
+        WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

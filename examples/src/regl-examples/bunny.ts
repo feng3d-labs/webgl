@@ -11,8 +11,6 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas", antialias: true });
-
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
     cv.forEach((v) => { pv.push(v); });
@@ -75,7 +73,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    webglRenderer.render(renderAtomic);
+    WebGLRenderer.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

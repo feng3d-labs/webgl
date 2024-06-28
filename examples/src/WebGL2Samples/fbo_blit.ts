@@ -26,8 +26,6 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
     }
     loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
-        const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
         const diffuse = $set(new Texture2D(), {
             minFilter: "LINEAR",
             source: img as any,
@@ -106,7 +104,8 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
         function draw()
         {
-            webglRenderer.submit({
+            WebGLRenderer.submit({
+                canvasContext: { canvasId: "glcanvas" },
                 renderPasss: [{
                     passDescriptor: {
                         colorAttachments: [{

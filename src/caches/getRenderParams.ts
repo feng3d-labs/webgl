@@ -4,12 +4,12 @@ import { defaultRenderParams } from "../defaults/defaultRenderParams";
 export function getRenderParams(key: RenderParams)
 {
     let value = canvasContextMap.get(key);
-    if (!value)
-    {
+    // if (!value)
+    // {
         value = Object.assign({}, defaultRenderParams, key);
 
-        canvasContextMap.set(key, value);
-    }
+    //     canvasContextMap.set(key, value);
+    // }
 
     return value;
 }

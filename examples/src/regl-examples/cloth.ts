@@ -158,8 +158,6 @@ const indices = elements.reduce((pv: number[], cv: number[]) =>
     return pv;
 }, []);
 
-const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
-
 let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
@@ -362,7 +360,7 @@ function draw()
 
     camera.tick();
 
-    webglRenderer.render(renderAtomic);
+    WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
     requestAnimationFrame(draw);
 }
 
