@@ -89,7 +89,7 @@ const renderAtomic: RenderAtomic = {
         tex: () => diffuse,
     },
     renderParams: { cullFace: "NONE", enableBlend: true },
-    shader: {
+    pipeline: {
         vertex: `precision mediump float;
         attribute vec3 position;
         attribute vec2 uv;

@@ -40,7 +40,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             },
             drawCall: { drawMode: "TRIANGLES" },
             renderParams: { cullFace: "NONE", enableBlend: true },
-            shader: {
+            pipeline: {
                 vertex:
                     `#version 300 es
     precision highp float;

@@ -46,7 +46,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         uniforms: {},
         drawCall: { drawMode: "TRIANGLE_STRIP" },
         renderParams: { cullFace: "NONE", enableBlend: true },
-        shader: {
+        pipeline: {
             vertex:
                 `#version 300 es
                 #define POSITION_LOCATION 0

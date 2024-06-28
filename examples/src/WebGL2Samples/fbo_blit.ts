@@ -67,7 +67,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             },
             drawCall: { drawMode: "TRIANGLE_STRIP", instanceCount: 2 },
             renderParams: { cullFace: "NONE", enableBlend: true },
-            shader: {
+            pipeline: {
                 vertex:
                     `#version 300 es
                 #define POSITION_LOCATION 0

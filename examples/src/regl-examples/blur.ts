@@ -50,7 +50,7 @@ const renderAtomic: RenderAtomic = {
         offset: () => offsets[batchId].offset,
     },
     renderParams: { cullFace: "NONE", enableBlend: true },
-    shader: {
+    pipeline: {
         vertex: `precision mediump float;
         attribute vec2 position;
         uniform float angle;

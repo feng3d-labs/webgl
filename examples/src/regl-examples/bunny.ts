@@ -55,7 +55,7 @@ const renderAtomic: RenderAtomic = {
                 1000),
     },
     renderParams: { cullFace: "NONE", enableBlend: true },
-    shader: {
+    pipeline: {
         vertex: `precision mediump float;
         attribute vec3 position;
         uniform mat4 model, view, projection;

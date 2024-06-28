@@ -2,7 +2,7 @@ import { RenderParams } from "../data/RenderParams";
 
 export const defaultRenderParams: RenderParams = {
     cullFace: "BACK",
-    frontFace: "CW",
+    frontFace: "CCW",
     enableBlend: false,
     blendEquation: "FUNC_ADD",
     sfactor: "SRC_ALPHA",

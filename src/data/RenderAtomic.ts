@@ -12,6 +12,11 @@ import { Uniforms } from "./Uniforms";
 export interface RenderAtomic
 {
     /**
+     * 渲染程序
+     */
+    pipeline: Shader;
+
+    /**
      * 顶点索引缓冲
      */
     index?: ElementBuffer;
@@ -29,12 +34,7 @@ export interface RenderAtomic
     drawCall?: DrawCall;
 
     /**
-     * 渲染程序
-     */
-    shader: Shader;
-
-    /**
      * 渲染参数
      */
-    renderParams: RenderParams;
+    renderParams?: RenderParams;
 }

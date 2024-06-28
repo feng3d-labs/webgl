@@ -42,8 +42,8 @@ const renderAtomic: RenderAtomic = {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: "NONE", enableBlend: true },
-    shader: {
+    renderParams: { cullFace: "NONE" },
+    pipeline: {
         vertex: `precision mediump float;
         attribute vec2 position;
         uniform float angle;

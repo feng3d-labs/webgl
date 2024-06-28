@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IWebGLBuffer, IWebGLRenderPipeline, RenderParams, WebGLRenderer } from "../../../src";
+import { IWebGLBuffer, IWebGLRenderPipeline, WebGLRenderer } from "../../../src";
 
 main();
 
@@ -176,21 +176,21 @@ function drawScene1(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buf
                 depthFunc: "LEQUAL",
                 clearMask: ["COLOR_BUFFER_BIT", "DEPTH_BUFFER_BIT"],
             },
-            // renderObjects: [{
-            //     pipeline: programInfo,
-            //     vertexBuffers: {
-            //         aVertexPosition: {
-            //             buffer: buffers.position,
-            //             size: 2,
-            //             type: "FLOAT",
-            //         }
-            //     },
-            //     uniforms: {
-            //         uProjectionMatrix: projectionMatrix,
-            //         uModelViewMatrix: modelViewMatrix,
-            //     },
-            //     drawCall: { drawMode: "TRIANGLE_STRIP", offset: 0, count: 4 },
-            // }],
+            renderObjects: [{
+                pipeline: programInfo,
+                attributes: {
+                    aVertexPosition: {
+                        type: "FLOAT",
+                        array: buffers.position.data,
+                        itemSize: 2,
+                    }
+                },
+                uniforms: {
+                    uProjectionMatrix: projectionMatrix,
+                    uModelViewMatrix: modelViewMatrix,
+                },
+                drawCall: { drawMode: "TRIANGLE_STRIP", offset: 0, count: 4 },
+            }],
         }],
     });
 }

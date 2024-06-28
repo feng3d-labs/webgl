@@ -30,7 +30,7 @@ const renderAtomic: RenderAtomic = {
     },
     uniforms: { color: [1, 0, 0, 1] },
     renderParams: { cullFace: "NONE", enableBlend: true },
-    shader: {
+    pipeline: {
         vertex: `
                     precision mediump float;
                     attribute vec2 position;

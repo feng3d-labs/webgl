@@ -19,7 +19,7 @@ export interface RenderParams
     cullFace?: CullFace;
 
     /**
-     * 正向方向，默认 CW。三角形顺时针方向为正面。
+     * 正向方向，默认 CCW。三角形逆时针方向为正面。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
      */
