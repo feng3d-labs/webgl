@@ -36,7 +36,7 @@ import { RenderAtomic, Texture2D, WebGL } from "../../../src";
                 // eslint-disable-next-line camelcase
                 u_imageSize: [canvas.width / 2, canvas.height / 2],
             },
-            drawCall: { drawMode: "TRIANGLES" },
+            drawVertex: { drawMode: "TRIANGLES" },
             renderParams: { cullFace: "NONE", enableBlend: true },
             pipeline: {
                 vertex:

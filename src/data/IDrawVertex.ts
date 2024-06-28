@@ -1,6 +1,9 @@
 import { DrawMode } from "./RenderParams";
 
-export interface DrawCall
+/**
+ * 绘制指定数量的顶点。
+ */
+export interface IDrawVertex
 {
     /**
      * 渲染模式。

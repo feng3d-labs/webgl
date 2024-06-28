@@ -42,7 +42,7 @@ import { RenderAtomic, WebGL } from "../../../src";
             },
         },
         uniforms: {},
-        drawCall: { drawMode: "TRIANGLE_STRIP" },
+        drawVertex: { drawMode: "TRIANGLE_STRIP" },
         renderParams: { cullFace: "NONE", enableBlend: true },
         pipeline: {
             vertex:
@@ -88,12 +88,12 @@ import { RenderAtomic, WebGL } from "../../../src";
 
         renderAtomic.renderParams.useViewPort = true;
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall!.firstVertex = 0;
-        renderAtomic.drawCall!.vertexCount = vertexCount / 2;
+        renderAtomic.drawVertex!.firstVertex = 0;
+        renderAtomic.drawVertex!.vertexCount = vertexCount / 2;
         WebGL.render(canvasContext, renderAtomic);
         renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall!.firstVertex = 6;
-        renderAtomic.drawCall!.vertexCount = vertexCount / 2;
+        renderAtomic.drawVertex!.firstVertex = 6;
+        renderAtomic.drawVertex!.vertexCount = vertexCount / 2;
         WebGL.render(canvasContext, renderAtomic);
 
         requestAnimationFrame(draw);

@@ -1,6 +1,6 @@
 import { DrawMode } from "./RenderParams";
 
-export interface IWebGLDrawIndexed
+export interface IDrawIndexed
 {
     /**
      * 渲染模式。

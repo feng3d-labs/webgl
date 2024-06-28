@@ -38,7 +38,7 @@ import { RenderAtomic, WebGL } from "../../../src";
             },
         },
         uniforms: {},
-        drawCall: { drawMode: "TRIANGLES", instanceCount: 2 },
+        drawVertex: { drawMode: "TRIANGLES", instanceCount: 2 },
         renderParams: { cullFace: "NONE", enableBlend: true },
         pipeline: {
             vertex:

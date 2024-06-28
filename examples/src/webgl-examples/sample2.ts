@@ -59,7 +59,7 @@ function main()
                     uProjectionMatrix: projectionMatrix,
                     uModelViewMatrix: modelViewMatrix,
                 },
-                drawCall: { drawMode: "TRIANGLE_STRIP", firstVertex: 0, vertexCount: 4 },
+                drawVertex: { drawMode: "TRIANGLE_STRIP", firstVertex: 0, vertexCount: 4 },
             }],
         }],
     });

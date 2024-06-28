@@ -1,8 +1,8 @@
 import { LazyObject } from "../types";
 import { AttributeBuffer } from "./AttributeBuffer";
-import { DrawCall } from "./DrawCall";
+import { IDrawVertex } from "./IDrawVertex";
 import { ElementBuffer } from "./ElementBuffer";
-import { IWebGLDrawIndexed } from "./IWebGLDrawIndexed";
+import { IDrawIndexed } from "./IDrawIndexed";
 import { RenderParams } from "./RenderParams";
 import { Shader } from "./Shader";
 import { Uniforms } from "./Uniforms";
@@ -42,10 +42,10 @@ export interface RenderAtomic
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
      */
-    drawCall?: DrawCall;
+    drawVertex?: IDrawVertex;
 
     /**
      * 绘制一定数量顶点索引。
      */
-    drawIndexed?: IWebGLDrawIndexed;
+    drawIndexed?: IDrawIndexed;
 }

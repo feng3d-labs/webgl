@@ -5,9 +5,9 @@ import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
 {
-    if (renderAtomic.drawCall)
+    if (renderAtomic.drawVertex)
     {
-        _runDrawCall(gl, renderAtomic);
+        _runDrawVertex(gl, renderAtomic);
     }
     else if (renderAtomic.drawIndexed)
     {
@@ -15,7 +15,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
     }
     else
     {
-        renderAtomic.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawCall(gl, renderAtomic);
+        renderAtomic.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
     }
 }
 
@@ -53,13 +53,13 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
     }
 }
 
-function _runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
 {
     const { _attributeBuffers, _info } = gl;
     //
     const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
     //
-    const drawCall = renderAtomic.drawCall || {};
+    const drawCall = renderAtomic.drawVertex || {};
     //
     const drawMode = drawCall.drawMode || "TRIANGLES";
     const firstVertex = drawCall.firstVertex || 0;
