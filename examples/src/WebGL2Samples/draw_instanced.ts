@@ -39,7 +39,6 @@ import { IRenderObject, WebGL } from "../../../src";
         },
         uniforms: {},
         drawVertex: { instanceCount: 2 },
-        renderParams: { enableBlend: true },
         pipeline: {
             primitive: { topology: "TRIANGLES", cullMode: "NONE" },
             vertex: {
@@ -70,7 +69,9 @@ import { IRenderObject, WebGL } from "../../../src";
                 void main()
                 {
                     color = v_color;
-                }` }
+                }`,
+                targets: [{ blend: {} }],
+            }
         }
     };
 

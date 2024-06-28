@@ -36,7 +36,6 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                 // eslint-disable-next-line camelcase
                 u_imageSize: [canvas.width / 2, canvas.height / 2],
             },
-            renderParams: { enableBlend: true },
             pipeline: {
                 primitive: { topology: "TRIANGLES", cullMode: "NONE" },
                 vertex: {
@@ -63,7 +62,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     void main()
     {
         color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
-    }` }
+    }`,
+                    targets: [{ blend: {} }],
+                }
             }
         };
 

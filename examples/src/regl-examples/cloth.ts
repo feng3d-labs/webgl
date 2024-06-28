@@ -179,7 +179,6 @@ const renderAtomic: IRenderObject = {
                 1000),
         texture: () => diffuse,
     },
-    renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
         vertex: {
@@ -222,7 +221,9 @@ const renderAtomic: IRenderObject = {
           vec3 diffuse = 0.7 * tex * clamp( dot(n, lightDir ), 0.0, 1.0 );
       
           gl_FragColor = vec4(ambient + diffuse, 1.0);
-        }` }
+        }`,
+            targets: [{ blend: {} }],
+        }
     }
 };
 

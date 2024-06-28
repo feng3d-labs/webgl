@@ -44,7 +44,6 @@ const renderAtomic: IRenderObject = {
     },
     index: { array: indices },
     uniforms: {},
-    renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
         vertex: {
@@ -61,7 +60,9 @@ const renderAtomic: IRenderObject = {
         varying vec3 vnormal;
         void main () {
           gl_FragColor = vec4(abs(vnormal), 1.0);
-        }` },
+        }`,
+            targets: [{ blend: {} }],
+        },
     }
 };
 

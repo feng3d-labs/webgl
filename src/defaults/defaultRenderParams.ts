@@ -1,10 +1,6 @@
 import { RenderParams } from "../data/RenderParams";
 
 export const defaultRenderParams: RenderParams = {
-    enableBlend: false,
-    blendEquation: "FUNC_ADD",
-    sfactor: "SRC_ALPHA",
-    dfactor: "ONE_MINUS_SRC_ALPHA",
     colorMask: [true, true, true, true],
     useViewPort: false,
     useScissor: false,

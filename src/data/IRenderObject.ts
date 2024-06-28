@@ -30,7 +30,7 @@ export interface IRenderObject
     /**
      * Uniform渲染数据
      */
-    uniforms: LazyObject<Uniforms>;
+    uniforms?: LazyObject<Uniforms>;
 
     /**
      * 渲染参数

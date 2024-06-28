@@ -8,7 +8,7 @@ import { lazy } from "../types";
  */
 export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline);
+    const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
 
     for (const name in shaderResult.uniforms)
     {

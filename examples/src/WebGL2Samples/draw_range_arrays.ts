@@ -41,8 +41,6 @@ import { IRenderObject, WebGL } from "../../../src";
                 ], itemSize: 2
             },
         },
-        uniforms: {},
-        renderParams: { enableBlend: true },
         pipeline: {
             primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
             vertex: {
@@ -68,7 +66,9 @@ import { IRenderObject, WebGL } from "../../../src";
             void main()
             {
                 color = vec4(1.0, 0.5, 0.0, 1.0);
-            }` }
+            }`,
+                targets: [{ blend: {} }],
+            }
         }
     };
 
@@ -88,6 +88,7 @@ import { IRenderObject, WebGL } from "../../../src";
             }]
         });
 
+        renderAtomic.renderParams = {};
         renderAtomic.renderParams.useViewPort = true;
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
         renderAtomic.drawVertex = { firstVertex: 0, vertexCount: vertexCount / 2 };

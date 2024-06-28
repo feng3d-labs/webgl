@@ -1,8 +1,8 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
+import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { AttributeBuffer } from "../data/AttributeBuffer";
 import { ElementBuffer } from "../data/ElementBuffer";
 import { IRenderObject } from "../data/IRenderObject";
-import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 
 declare global
 {
@@ -75,7 +75,7 @@ export class WebGLBindingStates
 
         const cachedAttributes = currentState.attributes;
 
-        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
         const attributeInfos = shaderResult.attributes;
 
         let attributesNum = 0;
@@ -119,7 +119,7 @@ export class WebGLBindingStates
         const cache: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
         let attributesNum = 0;
 
-        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
         const attributeInfos = shaderResult.attributes;
 
         for (const name in attributeInfos)
@@ -158,7 +158,7 @@ export class WebGLBindingStates
 
         this.initAttributes();
 
-        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline);
+        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
 
         for (const name in shaderResult.attributes)
         {

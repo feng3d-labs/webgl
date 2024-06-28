@@ -1,30 +1,54 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
+import { IBlendComponent } from "../data/IBlendComponent";
 import { IDepthStencilState } from "../data/IDepthStencilState";
 import { IPrimitiveState } from "../data/IPrimitiveState";
-import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
+import { IFragmentState, IVertexState, IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
 
 const defaultDepthStencilState: IDepthStencilState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" };
 const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullMode: "BACK", frontFace: "CCW" };
 
+const defaultBlendComponent: IBlendComponent = {
+    operation: "FUNC_ADD",
+    srcFactor: "SRC_ALPHA",
+    dstFactor: "ONE_MINUS_SRC_ALPHA",
+};
+
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
-    // 设置渲染程序
-    runProgram(gl, renderPipeline);
+    runProgram(gl, renderPipeline.vertex, renderPipeline.fragment);
 
     runPrimitiveState(gl, renderPipeline.primitive);
 
     runDepthStencilState(gl, renderPipeline.depthStencil);
 }
 
-function runProgram(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
+function runProgram(gl: WebGLRenderingContext, vertex: IVertexState, fragment: IFragmentState)
 {
-    const shaderResult = getCompileShaderResult(gl, renderPipeline.vertex.code, renderPipeline.fragment.code);
+    const shaderResult = getCompileShaderResult(gl, vertex.code, fragment.code);
     if (!shaderResult)
     {
         throw new Error(`缺少着色器，无法渲染!`);
     }
     //
     gl.useProgram(shaderResult.program);
+
+    //
+    let blend = fragment.targets?.[0]?.blend;
+    if (blend)
+    {
+        blend = {
+            color: { ...defaultBlendComponent, ...blend?.color },
+            alpha: { ...defaultBlendComponent, ...blend?.color, ...blend?.alpha },
+        };
+        //
+        gl.enable(gl.BLEND);
+        gl.blendEquationSeparate(gl[blend.color.operation], gl[blend.alpha.operation]);
+        gl.blendFuncSeparate(gl[blend.color.srcFactor], gl[blend.color.dstFactor], gl[blend.alpha.srcFactor], gl[blend.alpha.dstFactor]);
+    }
+    else
+    {
+        gl.disable(gl.BLEND);
+    }
 }
 
 function runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveState)

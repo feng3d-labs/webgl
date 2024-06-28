@@ -86,7 +86,6 @@ const renderAtomic: IRenderObject = {
                 10),
         tex: () => diffuse,
     },
-    renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
         vertex: {
@@ -105,7 +104,9 @@ const renderAtomic: IRenderObject = {
         uniform sampler2D tex;
         void main () {
           gl_FragColor = texture2D(tex,vUv);
-        }` }
+        }`,
+            targets: [{ blend: {} }],
+        }
     }
 };
 

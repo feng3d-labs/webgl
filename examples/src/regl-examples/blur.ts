@@ -47,7 +47,6 @@ const renderAtomic: IRenderObject = {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
         vertex: {
@@ -65,7 +64,9 @@ const renderAtomic: IRenderObject = {
         uniform vec4 color;
         void main() {
           gl_FragColor = color;
-        }` },
+        }`,
+            targets: [{ blend: {} }],
+        },
     }
 };
 

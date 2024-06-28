@@ -13,18 +13,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
         useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
     } = renderParams;
 
-    if (enableBlend)
-    {
-        //
-        gl.enable(gl.BLEND);
-        gl.blendEquation(gl[blendEquation]);
-        gl.blendFunc(gl[sfactor], gl[dfactor]);
-    }
-    else
-    {
-        gl.disable(gl.BLEND);
-    }
-
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
     if (useViewPort)

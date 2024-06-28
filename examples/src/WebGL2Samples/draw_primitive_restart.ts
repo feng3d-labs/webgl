@@ -43,7 +43,6 @@ import { IRenderObject, WebGL } from "../../../src";
             ]
         },
         drawVertex: { instanceCount: 2 },
-        renderParams: { enableBlend: true },
         pipeline: {
             primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
             vertex: {
@@ -67,7 +66,9 @@ import { IRenderObject, WebGL } from "../../../src";
             void main()
             {
                 color = vec4(1.0, 0.5, 0.0, 1.0);
-            }` }
+            }`,
+                targets: [{ blend: {} }],
+            }
         }
     };
 

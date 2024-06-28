@@ -52,7 +52,6 @@ const renderAtomic: IRenderObject = {
                 0.01,
                 1000),
     },
-    renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
         vertex: {
@@ -66,7 +65,9 @@ const renderAtomic: IRenderObject = {
             code: `precision mediump float;
         void main() {
           gl_FragColor = vec4(1, 1, 1, 1);
-        }` },
+        }`,
+            targets: [{ blend: {} }],
+        },
     }
 };
 

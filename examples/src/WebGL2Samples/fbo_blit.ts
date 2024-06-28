@@ -64,7 +64,6 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                 diffuse,
             },
             drawVertex: { instanceCount: 2 },
-            renderParams: { enableBlend: true },
             pipeline: {
                 primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
                 vertex: {
@@ -101,7 +100,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             void main()
             {
                 color = texture(diffuse, v_st);
-            }` },
+            }`,
+                    targets: [{ blend: {} }]
+                },
             }
         };
 
