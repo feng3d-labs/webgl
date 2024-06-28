@@ -2,6 +2,7 @@ import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { AttributeBuffer } from "../data/AttributeBuffer";
 import { ElementBuffer } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
+import { getWebGLElementBuffer } from "../caches/getWebGLElementBuffer";
 
 declare global
 {
@@ -31,7 +32,6 @@ export class WebGLBindingStates
     setup(renderAtomic: RenderAtomic)
     {
         const gl = this.gl;
-        const { _elementBuffers } = this.gl;
 
         let updateBuffers = false;
 
@@ -59,7 +59,7 @@ export class WebGLBindingStates
             this.setupVertexAttributes(renderAtomic);
 
             const index = renderAtomic.index;
-            _elementBuffers.bindBuffer(gl, index);
+            bindBuffer(gl, index);
         }
     }
 
@@ -384,5 +384,13 @@ class BindingState
             this.enabledAttributes[i] = 0;
             this.attributeDivisors[i] = 0;
         }
+    }
+}
+
+function bindBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
+{
+    if (element)
+    {
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, getWebGLElementBuffer(gl, element).buffer);
     }
 }

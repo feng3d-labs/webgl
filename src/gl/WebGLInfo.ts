@@ -29,12 +29,9 @@ export class WebGLInfo
         lines: 0
     };
 
-    private gl: WebGLRenderingContext;
-
     constructor(gl: WebGLRenderingContext)
     {
         gl._info = this;
-        this.gl = gl;
     }
 
     update(count: number, mode: DrawMode, instanceCount: number)
