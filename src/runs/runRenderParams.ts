@@ -7,7 +7,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
 
     const { cullFace, frontFace,
         enableBlend, blendEquation, sfactor, dfactor,
-        depthtest, depthFunc, depthMask,
         colorMask,
         useViewPort, viewPort,
         usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,
@@ -37,18 +36,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
     {
         gl.disable(gl.BLEND);
     }
-
-    if (depthtest)
-    {
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl[depthFunc]);
-    }
-    else
-    {
-        gl.disable(gl.DEPTH_TEST);
-    }
-
-    gl.depthMask(depthMask);
 
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 

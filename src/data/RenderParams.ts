@@ -58,30 +58,6 @@ export interface RenderParams
     dfactor?: BlendFactor;
 
     /**
-     * 是否开启深度检查，默认 true，开启深度检测。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
-     */
-    depthtest?: boolean;
-
-    /**
-     * 指定深度比较函数的枚举，该函数设置绘制像素的条件，默认 LESS，如果传入值小于深度缓冲区值则通过。
-     *
-     * A GLenum specifying the depth comparison function, which sets the conditions under which the pixel will be drawn. The default value is gl.LESS.
-     *
-     * @see DepthFunc
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
-     */
-    depthFunc?: DepthFunc;
-
-    /**
-     * 是否开启深度标记
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthMask
-     */
-    depthMask?: boolean;
-
-    /**
      * 控制那些颜色分量是否可以被写入到帧缓冲器。
      *
      * [red, green, blue, alpha]

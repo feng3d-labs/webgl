@@ -31,8 +31,6 @@ function main()
                     depthClearValue: 1.0,
                     depthLoadOp: "clear",
                 },
-                depthTest: true,
-                depthFunc: "LEQUAL",
             },
             renderObjects: [{
                 pipeline: {
@@ -44,12 +42,12 @@ function main()
             
                 void main() {
                   gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-                }
-              `, fragment: `
+                }`, fragment: `
                 void main() {
                     gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-                }
-            ` },
+                }`,
+                    depthStencil: { depthCompare: "LEQUAL" }
+                },
                 attributes: {
                     aVertexPosition: {
                         type: "FLOAT",

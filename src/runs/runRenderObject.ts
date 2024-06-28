@@ -1,7 +1,7 @@
 import { RenderAtomic } from "../data/RenderAtomic";
 import { runUniforms } from "./runUniforms";
 import { runRenderParams } from "./runRenderParams";
-import { runShader } from "./runShader";
+import { runRenderPipeline } from "./runRenderPipeline";
 import { runDrawCall } from "./runDrawCall";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderAtomic)
@@ -10,7 +10,7 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderA
 
     const { _bindingStates } = gl;
 
-    runShader(gl, webGLRenderAtomic.pipeline);
+    runRenderPipeline(gl, webGLRenderAtomic.pipeline);
 
     runRenderParams(gl, webGLRenderAtomic.renderParams);
 
