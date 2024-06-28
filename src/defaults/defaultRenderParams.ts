@@ -1,7 +1,6 @@
 import { RenderParams } from "../data/RenderParams";
 
 export const defaultRenderParams: RenderParams = {
-    colorMask: [true, true, true, true],
     useViewPort: false,
     useScissor: false,
     usePolygonOffset: false,

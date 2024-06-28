@@ -33,6 +33,10 @@ function runProgram(gl: WebGLRenderingContext, vertex: IVertexState, fragment: I
     gl.useProgram(shaderResult.program);
 
     //
+    const colorMask = fragment.targets?.[0]?.writeMask || [true, true, true, true];
+    gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
+
+    //
     let blend = fragment.targets?.[0]?.blend;
     if (blend)
     {

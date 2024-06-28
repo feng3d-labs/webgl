@@ -3,16 +3,6 @@
  */
 export interface RenderParams
 {
-
-    /**
-     * 控制那些颜色分量是否可以被写入到帧缓冲器。
-     *
-     * [red, green, blue, alpha]
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/colorMask
-     */
-    colorMask?: [boolean, boolean, boolean, boolean];
-
     /**
      * 是否使用 viewport，默认不使用，不使用时viewport为画布区域。
      *
