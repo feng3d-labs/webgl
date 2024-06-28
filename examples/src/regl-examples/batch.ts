@@ -42,7 +42,8 @@ const renderAtomic: IRenderObject = {
     },
     pipeline: {
         primitive: { cullMode: "NONE" },
-        vertex: `precision mediump float;
+        vertex: {
+            code: `precision mediump float;
         attribute vec2 position;
         uniform float angle;
         uniform vec2 offset;
@@ -50,7 +51,7 @@ const renderAtomic: IRenderObject = {
           gl_Position = vec4(
             cos(angle) * position.x + sin(angle) * position.y + offset.x,
             -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
-        }`,
+        }` },
         fragment: {
             code: `precision mediump float;
         uniform vec4 color;

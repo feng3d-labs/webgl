@@ -182,7 +182,8 @@ const renderAtomic: IRenderObject = {
     renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
-        vertex: `precision mediump float;
+        vertex: {
+            code: `precision mediump float;
 
         attribute vec3 position;
         attribute vec3 normal;
@@ -197,7 +198,7 @@ const renderAtomic: IRenderObject = {
           vUv = uv;
           vNormal = normal;
           gl_Position = projection * view * vec4(position, 1);
-        }`,
+        }` },
         fragment: {
             code: `precision mediump float;
 

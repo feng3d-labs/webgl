@@ -19,14 +19,14 @@ export function getCompileShaderResult(gl: WebGLRenderingContext, renderPipeline
     const { vertex, fragment } = renderPipeline;
     const compileShaderResults = gl._compileShaderResults = gl._compileShaderResults || {};
 
-    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment.code}`;
+    const shaderKey = `${vertex.code}/n-------------shader-------------/n${fragment.code}`;
     let result = compileShaderResults[shaderKey];
     if (result) return result;
 
     // 渲染程序
     try
     {
-        result = compileShaderResults[shaderKey] = compileShaderProgram(gl, vertex, fragment.code);
+        result = compileShaderResults[shaderKey] = compileShaderProgram(gl, vertex.code, fragment.code);
     }
     catch (error)
     {

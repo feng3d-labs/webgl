@@ -9,7 +9,7 @@ export interface IWebGLRenderPipeline
     /**
      * 顶点着色器代码
      */
-    vertex: string;
+    vertex: { code: string };
 
     /**
      * 片段着色器代码

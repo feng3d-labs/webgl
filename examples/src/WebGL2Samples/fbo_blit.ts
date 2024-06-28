@@ -67,8 +67,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             renderParams: { enableBlend: true },
             pipeline: {
                 primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
-                vertex:
-                    `#version 300 es
+                vertex: {
+                    code: `#version 300 es
                 #define POSITION_LOCATION 0
                 #define TEXCOORD_LOCATION 4
                 
@@ -86,7 +86,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                 {
                     v_st = texcoord;
                     gl_Position = MVP * vec4(position, 0.0, 1.0);
-                }`,
+                }` },
                 fragment: {
                     code: `#version 300 es
             precision highp float;

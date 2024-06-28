@@ -89,7 +89,8 @@ const renderAtomic: IRenderObject = {
     renderParams: { enableBlend: true },
     pipeline: {
         primitive: { cullMode: "NONE" },
-        vertex: `precision mediump float;
+        vertex: {
+            code: `precision mediump float;
         attribute vec3 position;
         attribute vec2 uv;
         varying vec2 vUv;
@@ -97,7 +98,7 @@ const renderAtomic: IRenderObject = {
         void main() {
           vUv = uv;
           gl_Position = projection * view * vec4(position, 1);
-        }`,
+        }` },
         fragment: {
             code: `precision mediump float;
         varying vec2 vUv;

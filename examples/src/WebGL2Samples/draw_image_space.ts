@@ -39,15 +39,16 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             renderParams: { enableBlend: true },
             pipeline: {
                 primitive: { topology: "TRIANGLES", cullMode: "NONE" },
-                vertex:
-                    `#version 300 es
+                vertex: {
+                    code:
+                        `#version 300 es
     precision highp float;
     precision highp int;
     
     void main()
     {
         gl_Position = vec4(2.f * float(uint(gl_VertexID) % 2u) - 1.f, 2.f * float(uint(gl_VertexID) / 2u) - 1.f, 0.0, 1.0);
-    }`,
+    }` },
                 fragment: {
                     code: `#version 300 es
     precision highp float;

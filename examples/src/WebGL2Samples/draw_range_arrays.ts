@@ -45,8 +45,8 @@ import { IRenderObject, WebGL } from "../../../src";
         renderParams: { enableBlend: true },
         pipeline: {
             primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
-            vertex:
-                `#version 300 es
+            vertex: {
+                code: `#version 300 es
                 #define POSITION_LOCATION 0
                 
                 precision highp float;
@@ -57,7 +57,7 @@ import { IRenderObject, WebGL } from "../../../src";
                 void main()
                 {
                     gl_Position = vec4(position, 0.0, 1.0);
-                }`,
+                }` },
             fragment: {
                 code: `#version 300 es
             precision highp float;
