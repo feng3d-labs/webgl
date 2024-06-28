@@ -1,4 +1,5 @@
 import { ClearMask } from "../gl/WebGLEnums";
+import { IRenderPassColorAttachment } from "./IRenderPassColorAttachment";
 import { DepthFunc } from "./RenderParams";
 
 /**
@@ -7,13 +8,9 @@ import { DepthFunc } from "./RenderParams";
 export interface IWebGLPassDescriptor
 {
     /**
-     * 清除后填充颜色。
-     *
-     * 默认为 [0,0,0,0]。
-     *
-     * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clearColor
+     * 颜色附件
      */
-    clearColor?: [red: number, green: number, blue: number, alpha: number];
+    colorAttachments?: IRenderPassColorAttachment[];
 
     /**
      * 清除内容。（颜色、深度、模板）

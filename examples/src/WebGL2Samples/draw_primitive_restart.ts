@@ -75,7 +75,9 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         webglRenderer.submit({
             renderPasss: [{
                 passDescriptor: {
-                    clearColor: [0.0, 0.0, 0.0, 1.0],
+                    colorAttachments: [{
+                        clearColor: [0.0, 0.0, 0.0, 1.0],
+                    }],
                     clearMask: ["COLOR_BUFFER_BIT"]
                 },
                 renderObjects: [renderAtomic]

@@ -11,7 +11,9 @@ function main()
         renderPasss: [
             {
                 passDescriptor: {
-                    clearColor: [1, 0, 0, 0.5],
+                    colorAttachments: [{
+                        clearColor: [1, 0, 0, 0.5],
+                    }],
                     clearMask: ["COLOR_BUFFER_BIT"],
                 },
             }

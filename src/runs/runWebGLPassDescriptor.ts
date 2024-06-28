@@ -6,7 +6,9 @@ export function runWebGLPassDescriptor(gl: WebGLRenderingContext, passDescriptor
 {
     passDescriptor = Object.assign({}, defaults.webGLPassDescriptor, passDescriptor);
 
-    const { clearColor, clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
+    const clearColor = passDescriptor.colorAttachments[0].clearColor;
+
+    const { clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
 
     // Set clear color to black, fully opaque
     gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);

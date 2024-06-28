@@ -170,7 +170,9 @@ function drawScene1(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buf
     webgl.submit({
         renderPasss: [{
             passDescriptor: {
-                clearColor: [0, 0, 0, 1],
+                colorAttachments: [{
+                    clearColor: [0, 0, 0, 1],
+                }],
                 clearDepth: 1.0,
                 depthTest: true,
                 depthFunc: "LEQUAL",
