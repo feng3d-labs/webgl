@@ -6,7 +6,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
     renderParams = getRenderParams(renderParams);
 
     const {
-        enableBlend, blendEquation, sfactor, dfactor,
         colorMask,
         useViewPort, viewPort,
         usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,

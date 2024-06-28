@@ -5,38 +5,6 @@ export interface RenderParams
 {
 
     /**
-     * 是否开启混合，默认 false，不开启混合。
-     *
-     * <混合后的颜色> = <源颜色>*sfactor + <目标颜色>*dfactor
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
-     */
-    enableBlend?: boolean;
-
-    /**
-     * 混合方式，默认 FUNC_ADD，源 + 目标。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
-     */
-    blendEquation?: BlendEquation;
-
-    /**
-     * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。
-     *
-     * @see BlendFactor
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
-     */
-    sfactor?: BlendFactor;
-
-    /**
-     * 目标混合因子，默认 ONE_MINUS_SRC_ALPHA，将所有颜色乘以1减去源alpha值。
-     *
-     * @see BlendFactor
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
-     */
-    dfactor?: BlendFactor;
-
-    /**
      * 控制那些颜色分量是否可以被写入到帧缓冲器。
      *
      * [red, green, blue, alpha]

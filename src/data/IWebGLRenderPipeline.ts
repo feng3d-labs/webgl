@@ -1,3 +1,4 @@
+import { IColorTargetState } from "./IColorTargetState";
 import { IDepthStencilState } from "./IDepthStencilState";
 import { IPrimitiveState } from "./IPrimitiveState";
 
@@ -14,7 +15,7 @@ export interface IWebGLRenderPipeline
     /**
      * 片段着色器代码
      */
-    fragment: { code: string };
+    fragment: { code: string, targets?: IColorTargetState[] };
 
     /**
      * 图元拓扑结构。
