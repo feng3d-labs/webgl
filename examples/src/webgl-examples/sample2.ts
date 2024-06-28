@@ -1,47 +1,12 @@
 import { mat4 } from "gl-matrix";
-import { IWebGLBuffer, IWebGLRenderPipeline, WebGL } from "../../../src";
+import { IWebGLBuffer, WebGL } from "../../../src";
 
 main();
 
-//
-// Start here
-//
 function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    // Vertex shader program
-
-    const vsSource = `
-    attribute vec4 aVertexPosition;
-
-    uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionMatrix;
-
-    void main() {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-    }
-  `;
-
-    // Fragment shader program
-
-    const fsSource = `
-    void main() {
-      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-  `;
-
-    const program: IWebGLRenderPipeline = { vertex: vsSource, fragment: fsSource };
-
-    // Here's where we call the routine that builds all the
-    // objects we'll be drawing.
-    const buffers = initBuffers();
-
-    drawScene(program, buffers, canvas);
-}
-
-function initBuffers()
-{
     const positions = [
         1.0, 1.0,
         -1.0, 1.0,
@@ -51,14 +16,56 @@ function initBuffers()
 
     const positionBuffer: IWebGLBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(positions), usage: "STATIC_DRAW" };
 
-    return {
-        position: positionBuffer,
-    };
+    const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
+
+    //
+    WebGL.submit({
+        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
+        renderPasss: [{
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0, 0, 0, 1],
+                    loadOp: "clear",
+                }],
+                clearDepth: 1.0,
+                depthTest: true,
+                depthFunc: "LEQUAL",
+                clearMask: ["DEPTH_BUFFER_BIT"],
+            },
+            renderObjects: [{
+                pipeline: {
+                    vertex: `
+                attribute vec4 aVertexPosition;
+            
+                uniform mat4 uModelViewMatrix;
+                uniform mat4 uProjectionMatrix;
+            
+                void main() {
+                  gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+                }
+              `, fragment: `
+                void main() {
+                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                }
+            ` },
+                attributes: {
+                    aVertexPosition: {
+                        type: "FLOAT",
+                        array: positionBuffer.data,
+                        itemSize: 2,
+                    }
+                },
+                uniforms: {
+                    uProjectionMatrix: projectionMatrix,
+                    uModelViewMatrix: modelViewMatrix,
+                },
+                drawCall: { drawMode: "TRIANGLE_STRIP", offset: 0, count: 4 },
+            }],
+        }],
+    });
 }
 
-function drawScene(programInfo: IWebGLRenderPipeline, buffers: {
-    position: IWebGLBuffer;
-}, canvas: HTMLCanvasElement)
+function drawScene(canvas: HTMLCanvasElement)
 {
     // Create a perspective matrix, a special matrix that is
     // used to simulate the distortion of perspective in a camera.
@@ -92,35 +99,5 @@ function drawScene(programInfo: IWebGLRenderPipeline, buffers: {
         modelViewMatrix, // matrix to translate
         [-0.0, 0.0, -6.0]); // amount to translate
 
-    //
-    WebGL.submit({
-        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
-        renderPasss: [{
-            passDescriptor: {
-                colorAttachments: [{
-                    clearValue: [0, 0, 0, 1],
-                    loadOp: "clear",
-                }],
-                clearDepth: 1.0,
-                depthTest: true,
-                depthFunc: "LEQUAL",
-                clearMask: ["DEPTH_BUFFER_BIT"],
-            },
-            renderObjects: [{
-                pipeline: programInfo,
-                attributes: {
-                    aVertexPosition: {
-                        type: "FLOAT",
-                        array: buffers.position.data,
-                        itemSize: 2,
-                    }
-                },
-                uniforms: {
-                    uProjectionMatrix: projectionMatrix,
-                    uModelViewMatrix: modelViewMatrix,
-                },
-                drawCall: { drawMode: "TRIANGLE_STRIP", offset: 0, count: 4 },
-            }],
-        }],
-    });
+    return { projectionMatrix, modelViewMatrix };
 }
