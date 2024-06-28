@@ -325,7 +325,7 @@ function initShaderProgram(gl: WebGLRenderingContext, vsSource: string, fsSource
 // creates a shader of the given type, uploads the source and
 // compiles it.
 //
-function loadShader(gl: WebGLRenderingContext, type: 35633 | 35632, source: string)
+function loadShader(gl: WebGLRenderingContext, type: number, source: string)
 {
     const shader = gl.createShader(type) as WebGLShader;
 

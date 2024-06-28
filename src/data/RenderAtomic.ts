@@ -9,12 +9,12 @@ import { Uniforms } from "./Uniforms";
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
  */
-export class RenderAtomic
+export interface RenderAtomic
 {
     /**
      * 顶点索引缓冲
      */
-    index: ElementBuffer;
+    index?: ElementBuffer;
 
     /**
      * 属性数据列表
@@ -26,7 +26,7 @@ export class RenderAtomic
      */
     uniforms: LazyObject<Uniforms>;
 
-    drawCall: DrawCall;
+    drawCall?: DrawCall;
 
     /**
      * 渲染程序

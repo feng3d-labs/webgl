@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "module": "es2022",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "Node",
+        "noEmit": true,
+        "lib": [
+            "ES2015",
+            "DOM",
+        ],
+        "outDir": "lib"
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}

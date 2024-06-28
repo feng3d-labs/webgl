@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
@@ -40,7 +39,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },
@@ -63,7 +62,7 @@ const renderAtomic = $set(new RenderAtomic(), {
           gl_FragColor = vec4(abs(vnormal), 1.0);
         }`,
     }
-});
+};
 
 function draw()
 {

@@ -31,7 +31,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             source: img as any,
         });
 
-        const renderAtomic = $set(new RenderAtomic(), {
+        const renderAtomic: RenderAtomic = {
             attributes: {},
             uniforms: {
                 diffuse,
@@ -64,7 +64,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
     {
         color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
     }` }
-        });
+        };
 
         function draw()
         {

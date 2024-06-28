@@ -1,7 +1,7 @@
 /**
  * 渲染参数
  */
-export class RenderParams
+export interface RenderParams
 {
     /**
      * 剔除面，默认 BACK，剔除背面。
@@ -16,14 +16,14 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
      */
-    cullFace: CullFace = "BACK";
+    cullFace?: CullFace;
 
     /**
      * 正向方向，默认 CW。三角形顺时针方向为正面。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
      */
-    frontFace: FrontFace = "CW";
+    frontFace?: FrontFace;
 
     /**
      * 是否开启混合，默认 false，不开启混合。
@@ -32,14 +32,14 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
      */
-    enableBlend = false;
+    enableBlend?: boolean;
 
     /**
      * 混合方式，默认 FUNC_ADD，源 + 目标。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
      */
-    blendEquation: BlendEquation = "FUNC_ADD";
+    blendEquation?: BlendEquation;
 
     /**
      * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。
@@ -47,7 +47,7 @@ export class RenderParams
      * @see BlendFactor
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
-    sfactor: BlendFactor = "SRC_ALPHA";
+    sfactor?: BlendFactor;
 
     /**
      * 目标混合因子，默认 ONE_MINUS_SRC_ALPHA，将所有颜色乘以1减去源alpha值。
@@ -55,14 +55,14 @@ export class RenderParams
      * @see BlendFactor
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
      */
-    dfactor: BlendFactor = "ONE_MINUS_SRC_ALPHA";
+    dfactor?: BlendFactor;
 
     /**
      * 是否开启深度检查，默认 true，开启深度检测。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    depthtest = true;
+    depthtest?: boolean;
 
     /**
      * 指定深度比较函数的枚举，该函数设置绘制像素的条件，默认 LESS，如果传入值小于深度缓冲区值则通过。
@@ -72,14 +72,14 @@ export class RenderParams
      * @see DepthFunc
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    depthFunc: DepthFunc = "LESS";
+    depthFunc?: DepthFunc;
 
     /**
      * 是否开启深度标记
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthMask
      */
-    depthMask = true;
+    depthMask?: boolean;
 
     /**
      * 控制那些颜色分量是否可以被写入到帧缓冲器。
@@ -88,14 +88,14 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/colorMask
      */
-    colorMask: [boolean, boolean, boolean, boolean] = [true, true, true, true];
+    colorMask?: [boolean, boolean, boolean, boolean];
 
     /**
      * 是否使用 viewport，默认不使用，不使用时viewport为画布区域。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
      */
-    useViewPort = false;
+    useViewPort?: boolean;
 
     /**
      * 通过WebGL API的WebGLRenderingContext.viewport()方法设置了viewport，指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
@@ -104,14 +104,14 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
      */
-    viewPort: { x: number, y: number, width: number, height: number } = { x: 0, y: 0, width: 100, height: 100 };
+    viewPort?: { x: number, y: number, width: number, height: number };
 
     /**
      * 是否开启剪刀裁剪，默认不开启。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
      */
-    useScissor = false;
+    useScissor?: boolean;
 
     /**
      * WebGL API的WebGLRenderingContext.scissor()方法设置了一个剪刀盒，它将绘图限制为一个指定的矩形。
@@ -120,7 +120,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
      */
-    scissor: { x: number, y: number, width: number, height: number } = { x: 0, y: 0, width: 100, height: 100 };
+    scissor?: { x: number, y: number, width: number, height: number };
 
     /**
      * 是否开启 gl.POLYGON_OFFSET_FILL，默认不开启。
@@ -133,7 +133,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    usePolygonOffset = false;
+    usePolygonOffset?: boolean;
 
     /**
      * 为每个多边形设置可变深度偏移的比例因子。缺省值为0。
@@ -142,7 +142,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    polygonOffsetFactor = 0;
+    polygonOffsetFactor?: number;
 
     /**
      * 它设置特定于实现的值乘以的乘数，以创建恒定的深度偏移量。缺省值为0。
@@ -151,7 +151,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
      */
-    polygonOffsetUnits = 0;
+    polygonOffsetUnits?: number;
 
     /**
      * 是否开启模板测试与更新模板缓冲。
@@ -160,7 +160,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    useStencil = false;
+    useStencil?: boolean;
 
     /**
      * 描述模板测试的方法。默认ALWAYS，总是通过。
@@ -169,7 +169,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    stencilFunc: StencilFunc = "ALWAYS";
+    stencilFunc?: StencilFunc;
 
     /**
      * 一个为模板测试指定参考值。这个值被限制在0到2^n -1的范围内，其中n是模板缓冲区中的位数。默认0。
@@ -178,7 +178,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    stencilFuncRef = 0;
+    stencilFuncRef?: number;
 
     /**
      * 模板测试时使用的mask值，默认1。
@@ -187,7 +187,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
-    stencilFuncMask = 1;
+    stencilFuncMask?: number;
 
     /**
      * 指定模板测试失败时使用的函数的枚举。默认KEEP，保持当前值。
@@ -196,7 +196,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    stencilOpFail: StencilOp = "KEEP";
+    stencilOpFail?: StencilOp;
 
     /**
      * 指定在模板测试通过但深度测试失败时使用的函数枚举。默认KEEP，保持当前值。
@@ -205,7 +205,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    stencilOpZFail: StencilOp = "KEEP";
+    stencilOpZFail?: StencilOp;
 
     /**
      * 指定在模板测试和深度测试通过时使用的函数枚举，或在模板测试通过且没有深度缓冲或禁用深度测试时使用的函数枚举。默认KEEP，保持当前值。
@@ -214,7 +214,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    stencilOpZPass: StencilOp = "KEEP";
+    stencilOpZPass?: StencilOp;
 
     /**
      * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认1。
@@ -223,7 +223,7 @@ export class RenderParams
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
      */
-    stencilMask = 1;
+    stencilMask?: number;
 }
 
 /**

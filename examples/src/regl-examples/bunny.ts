@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
@@ -32,7 +31,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: { array: positions, itemSize: 3 },
     },
@@ -68,7 +67,7 @@ const renderAtomic = $set(new RenderAtomic(), {
           gl_FragColor = vec4(1, 1, 1, 1);
         }`,
     }
-});
+};
 
 function draw()
 {

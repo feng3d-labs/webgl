@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 /**
@@ -19,7 +18,7 @@ document.body.appendChild(webglcanvas);
 
 const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
-const renderAtomic: RenderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: {
             array: [
@@ -46,13 +45,19 @@ const renderAtomic: RenderAtomic = $set(new RenderAtomic(), {
               gl_FragColor = color;
             }
             ` }
-} as gPartial<RenderAtomic>);
+};
 
 function draw()
 {
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
-    webglRenderer.render(renderAtomic);
+
+    webglRenderer.submit({
+        renderPasss: [{
+            renderObjects: [renderAtomic]
+        }]
+    });
+
     requestAnimationFrame(draw);
 }
 draw();

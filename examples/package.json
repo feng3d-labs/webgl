@@ -4,7 +4,8 @@
   "author": "feng",
   "license": "MIT",
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "fast-glob": "^3.3.2",

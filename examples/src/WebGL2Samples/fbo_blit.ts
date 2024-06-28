@@ -33,7 +33,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             source: img as any,
         });
 
-        const renderAtomic = $set(new RenderAtomic(), {
+        const renderAtomic: RenderAtomic = {
             attributes: {
                 position: {
                     array: [
@@ -102,7 +102,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             {
                 color = texture(diffuse, v_st);
             }` }
-        });
+        };
 
         function draw()
         {

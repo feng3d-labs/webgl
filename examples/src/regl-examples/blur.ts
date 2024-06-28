@@ -1,7 +1,6 @@
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
@@ -31,7 +30,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: {
             array: [
@@ -67,7 +66,7 @@ const renderAtomic = $set(new RenderAtomic(), {
           gl_FragColor = color;
         }`,
     }
-});
+};
 
 function draw()
 {

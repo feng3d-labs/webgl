@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -65,7 +64,7 @@ let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         uv: { array: uvs, itemSize: 2 },
@@ -106,7 +105,7 @@ const renderAtomic = $set(new RenderAtomic(), {
         void main () {
           gl_FragColor = texture2D(tex,vUv);
         }` }
-});
+};
 
 function draw()
 {

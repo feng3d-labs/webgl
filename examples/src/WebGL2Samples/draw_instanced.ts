@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 (function ()
@@ -27,7 +26,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
 
     const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
-    const renderAtomic = $set(new RenderAtomic(), {
+    const renderAtomic: RenderAtomic = {
         attributes: {
             pos: {
                 array: [-0.3, -0.5,
@@ -72,7 +71,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
                 {
                     color = v_color;
                 }` }
-    });
+    };
 
     function draw()
     {

@@ -1,4 +1,3 @@
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, WebGLRenderer } from "../../../src";
 
 (function ()
@@ -25,7 +24,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
     const webglRenderer = new WebGLRenderer({ canvasId: "glcanvas" });
 
     const vertexCount = 12;
-    const renderAtomic = $set(new RenderAtomic(), {
+    const renderAtomic: RenderAtomic = {
         attributes: {
             position: {
                 array: [
@@ -71,7 +70,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
             {
                 color = vec4(1.0, 0.5, 0.0, 1.0);
             }` }
-    });
+    };
 
     function draw()
     {
@@ -86,12 +85,12 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
 
         renderAtomic.renderParams.useViewPort = true;
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall.offset = 0;
-        renderAtomic.drawCall.count = vertexCount / 2;
+        renderAtomic.drawCall!.offset = 0;
+        renderAtomic.drawCall!.count = vertexCount / 2;
         webglRenderer.render(renderAtomic);
         renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall.offset = 6;
-        renderAtomic.drawCall.count = vertexCount / 2;
+        renderAtomic.drawCall!.offset = 6;
+        renderAtomic.drawCall!.count = vertexCount / 2;
         webglRenderer.render(renderAtomic);
 
         requestAnimationFrame(draw);

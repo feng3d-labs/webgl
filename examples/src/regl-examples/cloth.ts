@@ -3,7 +3,6 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
 
-import { $set } from "@feng3d/serialization";
 import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
 const canvas = document.createElement("canvas");
@@ -165,7 +164,7 @@ let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: RenderAtomic = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },
@@ -223,7 +222,7 @@ const renderAtomic = $set(new RenderAtomic(), {
       
           gl_FragColor = vec4(ambient + diffuse, 1.0);
         }` }
-});
+};
 
 function draw()
 {
