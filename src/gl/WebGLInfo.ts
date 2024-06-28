@@ -1,4 +1,4 @@
-import { DrawMode } from "../data/RenderParams";
+import { DrawMode } from "../data/IPrimitiveState";
 
 declare global
 {

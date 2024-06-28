@@ -42,9 +42,10 @@ import { RenderAtomic, WebGL } from "../../../src";
                 0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
             ]
         },
-        drawVertex: { drawMode: "TRIANGLE_STRIP", instanceCount: 2 },
+        drawVertex: { instanceCount: 2 },
         renderParams: { cullFace: "NONE", enableBlend: true },
         pipeline: {
+            primitive: { topology: "TRIANGLE_STRIP" },
             vertex:
                 `#version 300 es
                 precision highp float;

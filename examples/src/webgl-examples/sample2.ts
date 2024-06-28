@@ -34,6 +34,7 @@ function main()
             },
             renderObjects: [{
                 pipeline: {
+                    primitive: { topology: "TRIANGLE_STRIP" },
                     vertex: `
                 attribute vec4 aVertexPosition;
             
@@ -59,7 +60,7 @@ function main()
                     uProjectionMatrix: projectionMatrix,
                     uModelViewMatrix: modelViewMatrix,
                 },
-                drawVertex: { drawMode: "TRIANGLE_STRIP", firstVertex: 0, vertexCount: 4 },
+                drawVertex: { firstVertex: 0, vertexCount: 4 },
             }],
         }],
     });

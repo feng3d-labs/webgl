@@ -38,9 +38,10 @@ import { RenderAtomic, WebGL } from "../../../src";
             },
         },
         uniforms: {},
-        drawVertex: { drawMode: "TRIANGLES", instanceCount: 2 },
+        drawVertex: { instanceCount: 2 },
         renderParams: { cullFace: "NONE", enableBlend: true },
         pipeline: {
+            primitive: { topology: "TRIANGLES" },
             vertex:
                 `#version 300 es
                     #define POSITION_LOCATION 0

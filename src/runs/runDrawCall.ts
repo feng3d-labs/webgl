@@ -23,11 +23,12 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
 {
     const { _info } = gl;
     //
+    const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
+    //
     const element = getElementWebGLBuffer(gl, renderAtomic.index);
     const type = element.type;
     //
     const drawIndexed = renderAtomic.drawIndexed || {};
-    const drawMode = drawIndexed.drawMode || "TRIANGLES";
     const firstIndex = drawIndexed.firstIndex || 0;
     const instanceCount = drawIndexed.instanceCount || 1;
     const indexCount = drawIndexed.indexCount || (element.count - firstIndex);
@@ -58,10 +59,10 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
     const { _attributeBuffers, _info } = gl;
     //
     const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+    const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
     const drawCall = renderAtomic.drawVertex || {};
     //
-    const drawMode = drawCall.drawMode || "TRIANGLES";
     const firstVertex = drawCall.firstVertex || 0;
     const vertexCount = drawCall.vertexCount || vertexNum || 6;
     const instanceCount = drawCall.instanceCount || 1;
