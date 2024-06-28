@@ -1,7 +1,7 @@
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
 canvas.id = "glcanvas";
@@ -28,7 +28,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: {
             array: [

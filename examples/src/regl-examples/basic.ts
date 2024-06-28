@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -16,7 +16,7 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: {
             array: [

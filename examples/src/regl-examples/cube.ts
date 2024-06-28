@@ -1,4 +1,4 @@
-import { RenderAtomic, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture2D, WebGL } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
 const webglcanvas = document.createElement("canvas");
@@ -62,7 +62,7 @@ let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         uv: { array: uvs, itemSize: 2 },

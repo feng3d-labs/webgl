@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
 import { createCamera } from "./util/camera";
@@ -37,7 +37,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },

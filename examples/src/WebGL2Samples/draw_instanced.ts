@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 (function ()
 {
@@ -24,7 +24,7 @@ import { RenderAtomic, WebGL } from "../../../src";
         return;
     }
 
-    const renderAtomic: RenderAtomic = {
+    const renderAtomic: IRenderObject = {
         attributes: {
             pos: {
                 array: [-0.3, -0.5,

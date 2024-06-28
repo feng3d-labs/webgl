@@ -1,7 +1,7 @@
 import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
 import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
 import { IWebGLSubmit } from "./data/IWebGLSubmit";
-import { RenderAtomic } from "./data/RenderAtomic";
+import { IRenderObject } from "./data/IRenderObject";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
 
@@ -38,7 +38,7 @@ export class WebGL
      *
      * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
      */
-    static render(canvasContext: IWebGLCanvasContext, renderAtomic: RenderAtomic)
+    static render(canvasContext: IWebGLCanvasContext, renderAtomic: IRenderObject)
     {
         const gl = getWebGLRenderingContext(canvasContext);
         if (gl.isContextLost()) return;

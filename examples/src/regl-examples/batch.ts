@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";
@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: {
             array: [

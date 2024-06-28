@@ -1,9 +1,9 @@
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
-import { RenderAtomic } from "../data/RenderAtomic";
+import { IRenderObject } from "../data/IRenderObject";
 import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
 
-export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     if (renderAtomic.drawVertex)
     {
@@ -19,7 +19,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
     }
 }
 
-function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const { _info } = gl;
     //
@@ -54,7 +54,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
     }
 }
 
-function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const { _attributeBuffers, _info } = gl;
     //
@@ -93,7 +93,7 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
  * @param attributes
  * @returns
  */
-function getAttributeVertexNum(attributes: WebGLAttributeBuffers, renderAtomic: RenderAtomic)
+function getAttributeVertexNum(attributes: WebGLAttributeBuffers, renderAtomic: IRenderObject)
 {
     const vertexNum = ((attributelist) =>
     {

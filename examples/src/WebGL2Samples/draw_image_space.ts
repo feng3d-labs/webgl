@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { RenderAtomic, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
 (function ()
 {
@@ -29,7 +29,7 @@ import { RenderAtomic, Texture2D, WebGL } from "../../../src";
             source: img as any,
         });
 
-        const renderAtomic: RenderAtomic = {
+        const renderAtomic: IRenderObject = {
             attributes: {},
             uniforms: {
                 diffuse,

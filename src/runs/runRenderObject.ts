@@ -1,10 +1,10 @@
-import { RenderAtomic } from "../data/RenderAtomic";
+import { IRenderObject } from "../data/IRenderObject";
 import { runUniforms } from "./runUniforms";
 import { runRenderParams } from "./runRenderParams";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runDrawCall } from "./runDrawCall";
 
-export function runRenderObject(gl: WebGLRenderingContext, renderObject: RenderAtomic)
+export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     const webGLRenderAtomic = renderObject;
 

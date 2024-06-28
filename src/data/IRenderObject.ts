@@ -10,7 +10,7 @@ import { Uniforms } from "./Uniforms";
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
  */
-export interface RenderAtomic
+export interface IRenderObject
 {
     /**
      * 渲染程序

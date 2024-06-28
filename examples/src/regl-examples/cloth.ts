@@ -3,7 +3,7 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
 
-import { RenderAtomic, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -162,7 +162,7 @@ let tick = 0;
 let viewportWidth = 1;
 let viewportHeight = 1;
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },

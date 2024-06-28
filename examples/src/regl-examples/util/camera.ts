@@ -1,4 +1,4 @@
-import { RenderAtomic } from "../../../../src";
+import { IRenderObject } from "../../../../src";
 import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
 import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";
 import { identity, lookAt, perspective } from "../stackgl/gl-mat4";
@@ -100,7 +100,7 @@ export function createCamera(props)
     lookAt(cameraState.view, eye, center, up);
   }
 
-  const injectContext = (renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number) =>
+  const injectContext = (renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number) =>
   {
     Object.keys(cameraState).forEach(function (name)
     {
@@ -115,7 +115,7 @@ export function createCamera(props)
         1000.0);
   };
 
-  function setupCamera(renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number)
+  function setupCamera(renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number)
   {
     updateCamera();
     injectContext(renderAtomic, viewportWidth, viewportHeight);

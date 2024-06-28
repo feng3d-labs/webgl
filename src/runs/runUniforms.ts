@@ -1,12 +1,12 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { WebGLUniformType } from "../const/WebGLUniformType";
-import { RenderAtomic } from "../data/RenderAtomic";
+import { IRenderObject } from "../data/IRenderObject";
 import { lazy } from "../types";
 
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline);
 

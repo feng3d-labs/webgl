@@ -1,7 +1,7 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { AttributeBuffer } from "../data/AttributeBuffer";
 import { ElementBuffer } from "../data/ElementBuffer";
-import { RenderAtomic } from "../data/RenderAtomic";
+import { IRenderObject } from "../data/IRenderObject";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 
 declare global
@@ -16,7 +16,7 @@ export class WebGLBindingStates
 {
     private currentState: BindingState;
     private defaultState: BindingState;
-    private bindingStates = new WeakMap<RenderAtomic, BindingState>();
+    private bindingStates = new WeakMap<IRenderObject, BindingState>();
 
     private gl: WebGLRenderingContext;
     constructor(gl: WebGLRenderingContext)
@@ -29,7 +29,7 @@ export class WebGLBindingStates
         this.currentState = this.defaultState;
     }
 
-    setup(renderAtomic: RenderAtomic)
+    setup(renderAtomic: IRenderObject)
     {
         const gl = this.gl;
 
@@ -69,7 +69,7 @@ export class WebGLBindingStates
      * @param renderAtomic 渲染原子。
      * @returns 是否需要更新。
      */
-    private needsUpdate(renderAtomic: RenderAtomic)
+    private needsUpdate(renderAtomic: IRenderObject)
     {
         const { currentState } = this;
 
@@ -112,7 +112,7 @@ export class WebGLBindingStates
      *
      * @param renderAtomic 渲染原子。
      */
-    private saveCache(renderAtomic: RenderAtomic)
+    private saveCache(renderAtomic: IRenderObject)
     {
         const { currentState } = this;
 
@@ -152,7 +152,7 @@ export class WebGLBindingStates
      *
      * @param renderAtomic 渲染原子。
      */
-    private setupVertexAttributes(renderAtomic: RenderAtomic)
+    private setupVertexAttributes(renderAtomic: IRenderObject)
     {
         const { _attributeBuffers } = this.gl;
 
@@ -284,7 +284,7 @@ export class WebGLBindingStates
      * @param renderAtomic 渲染原子。
      * @returns 对应的绑定状态。
      */
-    private getBindingState(renderAtomic: RenderAtomic)
+    private getBindingState(renderAtomic: IRenderObject)
     {
         let bindingState = this.bindingStates.get(renderAtomic);
         if (!bindingState)
@@ -337,7 +337,7 @@ export class WebGLBindingStates
  */
 class BindingState
 {
-    renderAtomic: RenderAtomic;
+    renderAtomic: IRenderObject;
 
     /**
      * 最新启用的WebGL属性。

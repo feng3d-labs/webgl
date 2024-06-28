@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 (function ()
 {
@@ -25,7 +25,7 @@ import { RenderAtomic, WebGL } from "../../../src";
     // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
     const MAX_UNSIGNED_SHORT = 65535;
 
-    const renderAtomic: RenderAtomic = {
+    const renderAtomic: IRenderObject = {
         attributes: {
             pos: {
                 array: [

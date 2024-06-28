@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 
 (function ()
 {
@@ -22,7 +22,7 @@ import { RenderAtomic, WebGL } from "../../../src";
     }
 
     const vertexCount = 12;
-    const renderAtomic: RenderAtomic = {
+    const renderAtomic: IRenderObject = {
         attributes: {
             position: {
                 array: [

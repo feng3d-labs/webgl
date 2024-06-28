@@ -4,7 +4,7 @@ export * from "./WebGL";
 export * from "./data/AttributeBuffer";
 export * from "./data/ElementBuffer";
 export * from "./data/IWebGLBuffer";
-export * from "./data/RenderAtomic";
+export * from "./data/IRenderObject";
 export * from "./data/RenderParams";
 export * from "./data/IWebGLRenderPipeline";
 export * from "./data/Texture";

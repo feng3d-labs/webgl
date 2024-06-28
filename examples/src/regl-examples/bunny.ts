@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "../../../src";
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -29,7 +29,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderAtomic: RenderAtomic = {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
     },
