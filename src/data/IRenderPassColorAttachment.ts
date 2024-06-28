@@ -7,5 +7,5 @@ export interface IRenderPassColorAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clearColor
      */
-    clearColor?: [red: number, green: number, blue: number, alpha: number];
+    clearValue?: [red: number, green: number, blue: number, alpha: number];
 }

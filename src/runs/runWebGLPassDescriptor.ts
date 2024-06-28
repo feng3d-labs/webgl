@@ -6,7 +6,7 @@ export function runWebGLPassDescriptor(gl: WebGLRenderingContext, passDescriptor
 {
     passDescriptor = Object.assign({}, defaults.webGLPassDescriptor, passDescriptor);
 
-    const clearColor = passDescriptor.colorAttachments[0].clearColor;
+    const clearColor = passDescriptor.colorAttachments[0].clearValue;
 
     const { clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
 

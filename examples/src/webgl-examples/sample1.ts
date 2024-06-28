@@ -12,7 +12,7 @@ function main()
             {
                 passDescriptor: {
                     colorAttachments: [{
-                        clearColor: [1, 0, 0, 0.5],
+                        clearValue: [1, 0, 0, 0.5],
                     }],
                     clearMask: ["COLOR_BUFFER_BIT"],
                 },

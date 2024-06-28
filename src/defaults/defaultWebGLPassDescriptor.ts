@@ -1,7 +1,7 @@
 import { IWebGLPassDescriptor } from "../data/IWebGLPassDescriptor";
 
 export const defaultWebGLPassDescriptor: IWebGLPassDescriptor = {
-    colorAttachments: [{ clearColor: [0, 0, 0, 0] }],
+    colorAttachments: [{ clearValue: [0, 0, 0, 0] }],
     clearMask: ["COLOR_BUFFER_BIT", "DEPTH_BUFFER_BIT", "STENCIL_BUFFER_BIT"],
     clearDepth: 1,
     depthTest: true,

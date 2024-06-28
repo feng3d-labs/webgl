@@ -78,7 +78,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
                 renderPasss: [{
                     passDescriptor: {
                         colorAttachments: [{
-                            clearColor: [0.0, 0.0, 0.0, 1.0],
+                            clearValue: [0.0, 0.0, 0.0, 1.0],
                         }],
                         clearMask: ["COLOR_BUFFER_BIT"]
                     },

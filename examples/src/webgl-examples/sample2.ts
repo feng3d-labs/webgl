@@ -171,7 +171,7 @@ function drawScene1(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buf
         renderPasss: [{
             passDescriptor: {
                 colorAttachments: [{
-                    clearColor: [0, 0, 0, 1],
+                    clearValue: [0, 0, 0, 1],
                 }],
                 clearDepth: 1.0,
                 depthTest: true,
