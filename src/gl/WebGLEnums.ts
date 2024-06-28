@@ -47,7 +47,7 @@ export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
  * gl.STENCIL_BUFFER_BIT
  *
  */
-export type ClearMask = "COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
+export type ClearMask = "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
 
 /**
  * A GLenum specifying which WebGL capability to enable. Possible values:

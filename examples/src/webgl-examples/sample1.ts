@@ -13,8 +13,21 @@ function main()
                 passDescriptor: {
                     colorAttachments: [{
                         clearValue: [1, 0, 0, 0.5],
+                        loadOp: "clear",
                     }],
-                    clearMask: ["COLOR_BUFFER_BIT"],
+                },
+            }
+        ],
+    });
+    webglRenderer.submit({
+        renderPasss: [
+            {
+                passDescriptor: {
+                    colorAttachments: [{
+                        clearValue: [1, 1, 0, 0.5],
+                        loadOp: "clear",
+                    }],
+                    clearMask: [],
                 },
             }
         ],

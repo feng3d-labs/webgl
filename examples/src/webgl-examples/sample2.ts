@@ -172,11 +172,12 @@ function drawScene1(webgl: WebGLRenderer, programInfo: IWebGLRenderPipeline, buf
             passDescriptor: {
                 colorAttachments: [{
                     clearValue: [0, 0, 0, 1],
+                    loadOp: "clear",
                 }],
                 clearDepth: 1.0,
                 depthTest: true,
                 depthFunc: "LEQUAL",
-                clearMask: ["COLOR_BUFFER_BIT", "DEPTH_BUFFER_BIT"],
+                clearMask: ["DEPTH_BUFFER_BIT"],
             },
             renderObjects: [{
                 pipeline: programInfo,

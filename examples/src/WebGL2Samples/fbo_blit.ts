@@ -109,10 +109,10 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             webglRenderer.submit({
                 renderPasss: [{
                     passDescriptor: {
-                        colorAttachments:[{
+                        colorAttachments: [{
                             clearValue: [0.0, 0.0, 0.0, 1.0],
+                            loadOp: "clear",
                         }],
-                        clearMask: ["COLOR_BUFFER_BIT"]
                     },
                     renderObjects: [renderAtomic]
                 }]
