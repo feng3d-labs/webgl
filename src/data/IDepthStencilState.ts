@@ -19,6 +19,13 @@ export type DepthFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOT
 export interface IDepthStencilState
 {
     /**
+     * 是否开启深度检查，默认 true，开启深度检测。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
+     */
+    depthtest?: boolean;
+
+    /**
      * 是否写入深度。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthMask

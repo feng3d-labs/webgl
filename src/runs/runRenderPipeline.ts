@@ -1,5 +1,8 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
+import { IDepthStencilState } from "../data/IDepthStencilState";
 import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
+
+const defaultDepthStencilState: IDepthStencilState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" };
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
@@ -11,14 +14,12 @@ export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWe
     //
     gl.useProgram(shaderResult.program);
 
-    const depthStencil = renderPipeline.depthStencil;
-    if (depthStencil)
+    const { depthtest, depthCompare, depthWriteEnabled } = { ...defaultDepthStencilState, ...renderPipeline.depthStencil };
+    if (depthtest)
     {
         gl.enable(gl.DEPTH_TEST);
         //
-        const depthCompare = depthStencil.depthCompare || "LESS";
         gl.depthFunc(gl[depthCompare]);
-        const depthWriteEnabled = depthStencil.depthWriteEnabled || true;
         gl.depthMask(depthWriteEnabled);
     }
     else
