@@ -14,19 +14,19 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getCompileShaderResult(gl: WebGLRenderingContext, shader: IWebGLRenderPipeline)
+export function getCompileShaderResult(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
-    const { vertex, fragment } = shader;
+    const { vertex, fragment } = renderPipeline;
     const compileShaderResults = gl._compileShaderResults = gl._compileShaderResults || {};
 
-    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
+    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment.code}`;
     let result = compileShaderResults[shaderKey];
     if (result) return result;
 
     // 渲染程序
     try
     {
-        result = compileShaderResults[shaderKey] = compileShaderProgram(gl, vertex, fragment);
+        result = compileShaderResults[shaderKey] = compileShaderProgram(gl, vertex, fragment.code);
     }
     catch (error)
     {

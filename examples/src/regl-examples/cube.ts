@@ -98,12 +98,14 @@ const renderAtomic: IRenderObject = {
           vUv = uv;
           gl_Position = projection * view * vec4(position, 1);
         }`,
-        fragment: `precision mediump float;
+        fragment: {
+            code: `precision mediump float;
         varying vec2 vUv;
         uniform sampler2D tex;
         void main () {
           gl_FragColor = texture2D(tex,vUv);
         }` }
+    }
 };
 
 function draw()

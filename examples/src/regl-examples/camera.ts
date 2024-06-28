@@ -55,11 +55,12 @@ const renderAtomic: IRenderObject = {
           vnormal = normal;
           gl_Position = projection * view * vec4(position, 1.0);
         }`,
-        fragment: `precision mediump float;
+        fragment: {
+            code: `precision mediump float;
         varying vec3 vnormal;
         void main () {
           gl_FragColor = vec4(abs(vnormal), 1.0);
-        }`,
+        }` },
     }
 };
 

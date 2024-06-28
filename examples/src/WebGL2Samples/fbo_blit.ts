@@ -87,7 +87,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                     v_st = texcoord;
                     gl_Position = MVP * vec4(position, 0.0, 1.0);
                 }`,
-                fragment: `#version 300 es
+                fragment: {
+                    code: `#version 300 es
             precision highp float;
             precision highp int;
     
@@ -100,7 +101,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             void main()
             {
                 color = texture(diffuse, v_st);
-            }` }
+            }` },
+            }
         };
 
         function draw()

@@ -48,7 +48,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     {
         gl_Position = vec4(2.f * float(uint(gl_VertexID) % 2u) - 1.f, 2.f * float(uint(gl_VertexID) / 2u) - 1.f, 0.0, 1.0);
     }`,
-                fragment: `#version 300 es
+                fragment: {
+                    code: `#version 300 es
     precision highp float;
     precision highp int;
     
@@ -62,6 +63,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     {
         color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
     }` }
+            }
         };
 
         function draw()

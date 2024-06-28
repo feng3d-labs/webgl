@@ -59,7 +59,8 @@ import { IRenderObject, WebGL } from "../../../src";
                         v_color = color;
                         gl_Position = vec4(pos + vec2(float(gl_InstanceID) - 0.5, 0.0), 0.0, 1.0);
                     }`,
-            fragment: `#version 300 es
+            fragment: {
+                code: `#version 300 es
                 precision highp float;
                 precision highp int;
         
@@ -70,6 +71,7 @@ import { IRenderObject, WebGL } from "../../../src";
                 {
                     color = v_color;
                 }` }
+        }
     };
 
     function draw()

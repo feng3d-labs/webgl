@@ -198,7 +198,8 @@ const renderAtomic: IRenderObject = {
           vNormal = normal;
           gl_Position = projection * view * vec4(position, 1);
         }`,
-        fragment: `precision mediump float;
+        fragment: {
+            code: `precision mediump float;
 
         varying vec2 vUv;
         varying vec3 vNormal;
@@ -221,6 +222,7 @@ const renderAtomic: IRenderObject = {
       
           gl_FragColor = vec4(ambient + diffuse, 1.0);
         }` }
+    }
 };
 
 function draw()

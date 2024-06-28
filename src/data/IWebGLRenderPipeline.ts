@@ -14,7 +14,7 @@ export interface IWebGLRenderPipeline
     /**
      * 片段着色器代码
      */
-    fragment: string;
+    fragment: { code: string };
 
     /**
      * 图元拓扑结构。

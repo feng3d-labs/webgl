@@ -51,11 +51,12 @@ const renderAtomic: IRenderObject = {
             cos(angle) * position.x + sin(angle) * position.y + offset.x,
             -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
         }`,
-        fragment: `precision mediump float;
+        fragment: {
+            code: `precision mediump float;
         uniform vec4 color;
         void main() {
           gl_FragColor = color;
-        }`,
+        }` },
     }
 };
 
