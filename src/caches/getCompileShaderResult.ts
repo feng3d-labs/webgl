@@ -1,5 +1,5 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
-import { Shader } from "../data/Shader";
+import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
 import { ShaderType } from "../gl/WebGLEnums";
 import { WebGLUniform } from "../runs/runUniforms";
 
@@ -14,7 +14,7 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getCompileShaderResult(gl: WebGLRenderingContext, shader: Shader)
+export function getCompileShaderResult(gl: WebGLRenderingContext, shader: IWebGLRenderPipeline)
 {
     const { vertex, fragment } = shader;
     const compileShaderResults = gl._compileShaderResults = gl._compileShaderResults || {};

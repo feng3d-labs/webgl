@@ -1,7 +1,7 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
-import { Shader } from "../data/Shader";
+import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
 
-export function runShader(gl: WebGLRenderingContext, shader: Shader)
+export function runShader(gl: WebGLRenderingContext, shader: IWebGLRenderPipeline)
 {
     const shaderResult = getCompileShaderResult(gl, shader);
     if (!shaderResult)

@@ -4,7 +4,7 @@ import { IDrawVertex } from "./IDrawVertex";
 import { ElementBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { RenderParams } from "./RenderParams";
-import { Shader } from "./Shader";
+import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
 import { Uniforms } from "./Uniforms";
 
 /**
@@ -15,7 +15,7 @@ export interface RenderAtomic
     /**
      * 渲染程序
      */
-    pipeline: Shader;
+    pipeline: IWebGLRenderPipeline;
 
     /**
      * 顶点索引缓冲

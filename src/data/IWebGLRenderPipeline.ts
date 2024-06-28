@@ -1,15 +1,8 @@
 /**
- * WebGL渲染管线
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLProgram
+ * shader
  */
-export class IWebGLRenderPipeline
+export interface IWebGLRenderPipeline
 {
-    /**
-     * 着色器名称
-     */
-    shaderName?: string;
-
     /**
      * 顶点着色器代码
      */
