@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -73,7 +73,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    WebGLRenderer.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

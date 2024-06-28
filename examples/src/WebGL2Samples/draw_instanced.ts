@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 (function ()
 {
@@ -76,7 +76,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        WebGLRenderer.submit({
+        WebGL.submit({
             canvasContext: { canvasId: "glcanvas" },
             renderPasss: [{
                 passDescriptor: {

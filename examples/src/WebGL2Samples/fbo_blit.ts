@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
+import { RenderAtomic, Texture2D, WebGL } from "../../../src";
 
 (function ()
 {
@@ -104,7 +104,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
 
         function draw()
         {
-            WebGLRenderer.submit({
+            WebGL.submit({
                 canvasContext: { canvasId: "glcanvas" },
                 renderPasss: [{
                     passDescriptor: {

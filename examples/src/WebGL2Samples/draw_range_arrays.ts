@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 (function ()
 {
@@ -74,7 +74,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
 
     function draw()
     {
-        WebGLRenderer.submit({
+        WebGL.submit({
             canvasContext,
             renderPasss: [{
                 passDescriptor: {
@@ -90,11 +90,11 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
         renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
         renderAtomic.drawCall!.offset = 0;
         renderAtomic.drawCall!.count = vertexCount / 2;
-        WebGLRenderer.render(canvasContext, renderAtomic);
+        WebGL.render(canvasContext, renderAtomic);
         renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
         renderAtomic.drawCall!.offset = 6;
         renderAtomic.drawCall!.count = vertexCount / 2;
-        WebGLRenderer.render(canvasContext, renderAtomic);
+        WebGL.render(canvasContext, renderAtomic);
 
         requestAnimationFrame(draw);
     }

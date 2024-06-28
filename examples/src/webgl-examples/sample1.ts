@@ -1,11 +1,11 @@
 // see https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample1/webgl-demo.js
 // https://mdn.github.io/dom-examples/webgl-examples/tutorial/sample1/
 
-import { WebGLRenderer } from "../../../src";
+import { WebGL } from "../../../src";
 
 function main()
 {
-    WebGLRenderer.submit({
+    WebGL.submit({
         canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
         renderPasss: [
             {

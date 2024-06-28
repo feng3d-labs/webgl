@@ -1,4 +1,4 @@
-import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
+import { RenderAtomic, Texture2D, WebGL } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
 const webglcanvas = document.createElement("canvas");
@@ -112,7 +112,7 @@ function draw()
     viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
+    WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
     requestAnimationFrame(draw);
 }
 

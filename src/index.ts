@@ -1,6 +1,6 @@
 export * from "./FrameBuffer";
 export * from "./RenderBuffer";
-export * from "./WebGLRenderer";
+export * from "./WebGL";
 export * from "./data/AttributeBuffer";
 export * from "./data/ElementBuffer";
 export * from "./data/IWebGLBuffer";

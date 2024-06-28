@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";
@@ -68,7 +68,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

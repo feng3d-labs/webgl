@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -50,7 +50,7 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGLRenderer.submit({
+    WebGL.submit({
         canvasContext: { canvasId: "glcanvas" },
         renderPasss: [{
             renderObjects: [renderAtomic]

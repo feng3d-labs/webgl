@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IWebGLBuffer, IWebGLRenderPipeline, WebGLRenderer } from "../../../src";
+import { IWebGLBuffer, IWebGLRenderPipeline, WebGL } from "../../../src";
 
 main();
 
@@ -93,7 +93,7 @@ function drawScene(programInfo: IWebGLRenderPipeline, buffers: {
         [-0.0, 0.0, -6.0]); // amount to translate
 
     //
-    WebGLRenderer.submit({
+    WebGL.submit({
         canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
         renderPasss: [{
             passDescriptor: {

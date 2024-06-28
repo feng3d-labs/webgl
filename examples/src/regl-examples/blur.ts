@@ -1,7 +1,7 @@
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
 canvas.id = "glcanvas";
@@ -75,7 +75,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGLRenderer.render({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

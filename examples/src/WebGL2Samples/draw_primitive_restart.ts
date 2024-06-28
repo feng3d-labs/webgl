@@ -1,4 +1,4 @@
-import { RenderAtomic, WebGLRenderer } from "../../../src";
+import { RenderAtomic, WebGL } from "../../../src";
 
 (function ()
 {
@@ -70,7 +70,7 @@ import { RenderAtomic, WebGLRenderer } from "../../../src";
 
     function draw()
     {
-        WebGLRenderer.submit({
+        WebGL.submit({
             canvasContext: { canvasId: "glcanvas" },
             renderPasss: [{
                 passDescriptor: {

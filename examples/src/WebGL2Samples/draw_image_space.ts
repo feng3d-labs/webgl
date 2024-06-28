@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
+import { RenderAtomic, Texture2D, WebGL } from "../../../src";
 
 (function ()
 {
@@ -72,7 +72,7 @@ import { RenderAtomic, Texture2D, WebGLRenderer } from "../../../src";
             //
             renderAtomic.uniforms["u_imageSize"] = [canvas.width / 2, canvas.height / 2];
 
-            WebGLRenderer.submit({
+            WebGL.submit({
                 canvasContext: { canvasId: "glcanvas" },
                 renderPasss: [{
                     passDescriptor: {
