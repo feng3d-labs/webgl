@@ -5,67 +5,17 @@ import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
 {
-    const { _attributeBuffers, _info } = gl;
-
     if (renderAtomic.drawCall)
     {
-        const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
-        //
-        const drawCall = renderAtomic.drawCall;
-        const drawMode = drawCall.drawMode || "TRIANGLES";
-        const firstVertex = drawCall.firstVertex || 0;
-        const vertexCount = drawCall.vertexCount || vertexNum || 6;
-        const instanceCount = drawCall.instanceCount || 1;
-
-        if (instanceCount > 1)
-        {
-            if (gl instanceof WebGL2RenderingContext)
-            {
-                gl.drawArraysInstanced(gl[drawMode], firstVertex, vertexCount, instanceCount);
-            }
-            else
-            {
-                const extension = gl.getExtension("ANGLE_instanced_arrays");
-                extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
-            }
-            _info.update(vertexCount, drawMode, instanceCount);
-        }
-        else
-        {
-            gl.drawArrays(gl[drawMode], firstVertex, vertexCount);
-            _info.update(vertexCount, drawMode, 1);
-        }
+        _runDrawCall(gl, renderAtomic);
     }
     else if (renderAtomic.drawIndexed)
     {
-        const element = getElementWebGLBuffer(gl, renderAtomic.index);
-        const type = element.type;
-        //
-        const drawIndexed = renderAtomic.drawIndexed;
-        const drawMode = drawIndexed.drawMode || "TRIANGLES";
-        const firstIndex = drawIndexed.firstIndex || 0;
-        const instanceCount = drawIndexed.instanceCount || 1;
-        const indexCount = drawIndexed.indexCount || (element.count - firstIndex);
-
-        //
-        if (instanceCount > 1)
-        {
-            if (gl instanceof WebGL2RenderingContext)
-            {
-                gl.drawElementsInstanced(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
-            }
-            else
-            {
-                const extension = gl.getExtension("ANGLE_instanced_arrays");
-                extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
-            }
-            _info.update(indexCount, drawMode, instanceCount);
-        }
-        else
-        {
-            gl.drawElements(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type]);
-            _info.update(indexCount, drawMode, 1);
-        }
+        _runDrawIndexed(gl, renderAtomic);
+    }
+    else
+    {
+        renderAtomic.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawCall(gl, renderAtomic);
     }
 
     // let instanceCount = drawCall.instanceCount;
@@ -145,6 +95,73 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
     // }
 
     // _info.update(count, drawMode, instanceCount);
+}
+
+function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+{
+    const { _info } = gl;
+    //
+    const element = getElementWebGLBuffer(gl, renderAtomic.index);
+    const type = element.type;
+    //
+    const drawIndexed = renderAtomic.drawIndexed || {};
+    const drawMode = drawIndexed.drawMode || "TRIANGLES";
+    const firstIndex = drawIndexed.firstIndex || 0;
+    const instanceCount = drawIndexed.instanceCount || 1;
+    const indexCount = drawIndexed.indexCount || (element.count - firstIndex);
+
+    //
+    if (instanceCount > 1)
+    {
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.drawElementsInstanced(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
+        }
+        else
+        {
+            const extension = gl.getExtension("ANGLE_instanced_arrays");
+            extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
+        }
+        _info.update(indexCount, drawMode, instanceCount);
+    }
+    else
+    {
+        gl.drawElements(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type]);
+        _info.update(indexCount, drawMode, 1);
+    }
+}
+
+function _runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomic)
+{
+    const { _attributeBuffers, _info } = gl;
+    //
+    const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+    //
+    const drawCall = renderAtomic.drawCall || {};
+    //
+    const drawMode = drawCall.drawMode || "TRIANGLES";
+    const firstVertex = drawCall.firstVertex || 0;
+    const vertexCount = drawCall.vertexCount || vertexNum || 6;
+    const instanceCount = drawCall.instanceCount || 1;
+
+    if (instanceCount > 1)
+    {
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.drawArraysInstanced(gl[drawMode], firstVertex, vertexCount, instanceCount);
+        }
+        else
+        {
+            const extension = gl.getExtension("ANGLE_instanced_arrays");
+            extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
+        }
+        _info.update(vertexCount, drawMode, instanceCount);
+    }
+    else
+    {
+        gl.drawArrays(gl[drawMode], firstVertex, vertexCount);
+        _info.update(vertexCount, drawMode, 1);
+    }
 }
 
 /**
