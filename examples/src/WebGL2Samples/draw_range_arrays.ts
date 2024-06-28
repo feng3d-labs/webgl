@@ -42,9 +42,9 @@ import { IRenderObject, WebGL } from "../../../src";
             },
         },
         uniforms: {},
-        renderParams: { cullFace: "NONE", enableBlend: true },
+        renderParams: { enableBlend: true },
         pipeline: {
-            primitive: { topology: "TRIANGLE_STRIP" },
+            primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
             vertex:
                 `#version 300 es
                 #define POSITION_LOCATION 0

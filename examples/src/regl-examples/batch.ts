@@ -40,8 +40,8 @@ const renderAtomic: IRenderObject = {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: "NONE" },
     pipeline: {
+        primitive: { cullMode: "NONE" },
         vertex: `precision mediump float;
         attribute vec2 position;
         uniform float angle;

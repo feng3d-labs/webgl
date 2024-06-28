@@ -64,9 +64,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                 diffuse,
             },
             drawVertex: { instanceCount: 2 },
-            renderParams: { cullFace: "NONE", enableBlend: true },
+            renderParams: { enableBlend: true },
             pipeline: {
-                primitive: { topology: "TRIANGLE_STRIP" },
+                primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
                 vertex:
                     `#version 300 es
                 #define POSITION_LOCATION 0

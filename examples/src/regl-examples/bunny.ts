@@ -52,8 +52,9 @@ const renderAtomic: IRenderObject = {
                 0.01,
                 1000),
     },
-    renderParams: { cullFace: "NONE", enableBlend: true },
+    renderParams: { enableBlend: true },
     pipeline: {
+        primitive: { cullMode: "NONE" },
         vertex: `precision mediump float;
         attribute vec3 position;
         uniform mat4 model, view, projection;

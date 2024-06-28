@@ -1,8 +1,10 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { IDepthStencilState } from "../data/IDepthStencilState";
+import { IPrimitiveState } from "../data/IPrimitiveState";
 import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
 
 const defaultDepthStencilState: IDepthStencilState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" };
+const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullMode: "BACK", frontFace: "CCW" };
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
@@ -14,6 +16,21 @@ export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWe
     //
     gl.useProgram(shaderResult.program);
 
+    //
+    const cullMode = renderPipeline.primitive?.cullMode || defaultPrimitiveState.cullMode;
+    const frontFace = renderPipeline.primitive?.frontFace || defaultPrimitiveState.frontFace;
+    if (cullMode === "NONE")
+    {
+        gl.disable(gl.CULL_FACE);
+    }
+    else
+    {
+        gl.enable(gl.CULL_FACE);
+        gl.cullFace(gl[cullMode]);
+        gl.frontFace(gl[frontFace]);
+    }
+
+    //
     const { depthtest, depthCompare, depthWriteEnabled } = { ...defaultDepthStencilState, ...renderPipeline.depthStencil };
     if (depthtest)
     {

@@ -179,8 +179,9 @@ const renderAtomic: IRenderObject = {
                 1000),
         texture: () => diffuse,
     },
-    renderParams: { cullFace: "NONE", enableBlend: true },
+    renderParams: { enableBlend: true },
     pipeline: {
+        primitive: { cullMode: "NONE" },
         vertex: `precision mediump float;
 
         attribute vec3 position;

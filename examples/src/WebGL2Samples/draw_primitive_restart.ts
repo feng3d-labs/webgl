@@ -43,9 +43,9 @@ import { IRenderObject, WebGL } from "../../../src";
             ]
         },
         drawVertex: { instanceCount: 2 },
-        renderParams: { cullFace: "NONE", enableBlend: true },
+        renderParams: { enableBlend: true },
         pipeline: {
-            primitive: { topology: "TRIANGLE_STRIP" },
+            primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
             vertex:
                 `#version 300 es
                 precision highp float;

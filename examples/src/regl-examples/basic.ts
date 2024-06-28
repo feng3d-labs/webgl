@@ -27,8 +27,9 @@ const renderAtomic: IRenderObject = {
         },
     },
     uniforms: { color: [1, 0, 0, 1] },
-    renderParams: { cullFace: "NONE", enableBlend: true },
+    renderParams: { enableBlend: true },
     pipeline: {
+        primitive: { cullMode: "NONE" },
         vertex: `
                     precision mediump float;
                     attribute vec2 position;

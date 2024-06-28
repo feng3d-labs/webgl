@@ -44,8 +44,9 @@ const renderAtomic: IRenderObject = {
     },
     index: { array: indices },
     uniforms: {},
-    renderParams: { cullFace: "NONE", enableBlend: true },
+    renderParams: { enableBlend: true },
     pipeline: {
+        primitive: { cullMode: "NONE" },
         vertex: `precision mediump float;
         uniform mat4 projection, view;
         attribute vec3 position, normal;

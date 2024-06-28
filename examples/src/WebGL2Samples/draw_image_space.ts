@@ -36,9 +36,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                 // eslint-disable-next-line camelcase
                 u_imageSize: [canvas.width / 2, canvas.height / 2],
             },
-            renderParams: { cullFace: "NONE", enableBlend: true },
+            renderParams: { enableBlend: true },
             pipeline: {
-                primitive: { topology: "TRIANGLES" },
+                primitive: { topology: "TRIANGLES", cullMode: "NONE" },
                 vertex:
                     `#version 300 es
     precision highp float;

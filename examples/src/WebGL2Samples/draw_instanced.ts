@@ -39,9 +39,9 @@ import { IRenderObject, WebGL } from "../../../src";
         },
         uniforms: {},
         drawVertex: { instanceCount: 2 },
-        renderParams: { cullFace: "NONE", enableBlend: true },
+        renderParams: { enableBlend: true },
         pipeline: {
-            primitive: { topology: "TRIANGLES" },
+            primitive: { topology: "TRIANGLES", cullMode: "NONE" },
             vertex:
                 `#version 300 es
                     #define POSITION_LOCATION 0

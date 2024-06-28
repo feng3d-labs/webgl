@@ -5,7 +5,7 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
 {
     renderParams = getRenderParams(renderParams);
 
-    const { cullFace, frontFace,
+    const {
         enableBlend, blendEquation, sfactor, dfactor,
         colorMask,
         useViewPort, viewPort,
@@ -13,17 +13,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
         useScissor, scissor,
         useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
     } = renderParams;
-
-    if (cullFace === "NONE")
-    {
-        gl.disable(gl.CULL_FACE);
-    }
-    else
-    {
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl[cullFace]);
-        gl.frontFace(gl[frontFace]);
-    }
 
     if (enableBlend)
     {
