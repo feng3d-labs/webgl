@@ -20,7 +20,10 @@ export interface IWebGLDrawIndexed
      */
     drawMode?: DrawMode;
 
-    indexCount: number;
+    /**
+     * 默认渲染所有顶点索引。
+     */
+    indexCount?: number;
     instanceCount?: number;
     firstIndex?: number;
 }

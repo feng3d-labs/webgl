@@ -1,8 +1,5 @@
-import { getDrawCall } from "../caches/getDrawCall";
-import { getWebGLDrawIndexed } from "../caches/getWebGLDrawIndexed";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
-import { DrawElementType } from "../data/ElementBuffer";
 import { RenderAtomic } from "../data/RenderAtomic";
 import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
 
@@ -12,10 +9,13 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
 
     if (renderAtomic.drawCall)
     {
+        const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+        //
         const drawCall = renderAtomic.drawCall;
         const drawMode = drawCall.drawMode || "TRIANGLES";
-
-        const { drawMode, firstVertex, vertexCount, instanceCount } = drawCall;
+        const firstVertex = drawCall.firstVertex || 0;
+        const vertexCount = drawCall.vertexCount || vertexNum || 6;
+        const instanceCount = drawCall.instanceCount || 1;
 
         if (instanceCount > 1)
         {
@@ -38,25 +38,26 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
     }
     else if (renderAtomic.drawIndexed)
     {
-        const drawIndexed = getWebGLDrawIndexed(renderAtomic.drawIndexed);
-
-        const { drawMode, indexCount, instanceCount, firstIndex } = drawIndexed;
+        const element = getElementWebGLBuffer(gl, renderAtomic.index);
+        const type = element.type;
+        //
+        const drawIndexed = renderAtomic.drawIndexed;
+        const drawMode = drawIndexed.drawMode || "TRIANGLES";
+        const firstIndex = drawIndexed.firstIndex || 0;
+        const instanceCount = drawIndexed.instanceCount || 1;
+        const indexCount = drawIndexed.indexCount || (element.count - firstIndex);
 
         //
-        const elementCache = getElementWebGLBuffer(gl, renderAtomic.index);
-        const vertexNum = elementCache.count;
-        const type = elementCache.type;
-
         if (instanceCount > 1)
         {
             if (gl instanceof WebGL2RenderingContext)
             {
-                gl.drawElementsInstanced(gl[drawMode], indexCount, gl[type], firstIndex, instanceCount);
+                gl.drawElementsInstanced(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
             }
             else
             {
                 const extension = gl.getExtension("ANGLE_instanced_arrays");
-                extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex, instanceCount);
+                extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
             }
             _info.update(indexCount, drawMode, instanceCount);
         }

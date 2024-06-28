@@ -23,7 +23,7 @@ export interface DrawCall
     /**
      * 绘制顶点数量。
      */
-    vertexCount: number;
+    vertexCount?: number;
     /**
      * 渲染实例数量
     */
