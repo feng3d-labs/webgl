@@ -2,6 +2,7 @@ import { LazyObject } from "../types";
 import { AttributeBuffer } from "./AttributeBuffer";
 import { DrawCall } from "./DrawCall";
 import { ElementBuffer } from "./ElementBuffer";
+import { IWebGLDrawIndexed } from "./IWebGLDrawIndexed";
 import { RenderParams } from "./RenderParams";
 import { Shader } from "./Shader";
 import { Uniforms } from "./Uniforms";
@@ -31,10 +32,20 @@ export interface RenderAtomic
      */
     uniforms: LazyObject<Uniforms>;
 
+    /**
+     * 渲染参数
+    */
+    renderParams?: RenderParams;
+
+    /**
+     * 绘制一定数量顶点。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
+     */
     drawCall?: DrawCall;
 
     /**
-     * 渲染参数
+     * 绘制一定数量顶点索引。
      */
-    renderParams?: RenderParams;
+    drawIndexed?: IWebGLDrawIndexed;
 }

@@ -1,4 +1,5 @@
 import { getDrawCall } from "../caches/getDrawCall";
+import { getWebGLDrawIndexed } from "../caches/getWebGLDrawIndexed";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { DrawElementType } from "../data/ElementBuffer";
@@ -9,85 +10,140 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: RenderAtomi
 {
     const { _attributeBuffers, _info } = gl;
 
-    const drawCall = getDrawCall(renderAtomic.drawCall);
-
-    let instanceCount = drawCall.instanceCount;
-    const drawMode = drawCall.drawMode;
-    let offset = drawCall.offset;
-    let count = drawCall.count;
-
-    const element = renderAtomic.index;
-
-    let vertexNum: number;
-    let type: DrawElementType;
-
-    if (element)
+    if (renderAtomic.drawCall)
     {
-        const elementCache = getElementWebGLBuffer(gl, element);
-        vertexNum = elementCache.count;
-        type = elementCache.type;
-    }
-    else
-    {
-        vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+        const drawCall = renderAtomic.drawCall;
+        const drawMode = drawCall.drawMode || "TRIANGLES";
 
-        if (vertexNum === 0)
-        {
-            // console.warn(`顶点数量为0，不进行渲染！`);
+        const { drawMode, firstVertex, vertexCount, instanceCount } = drawCall;
 
-            // return;
-            vertexNum = 6;
-        }
-    }
-
-    if (offset === undefined)
-    {
-        offset = 0;
-    }
-
-    if (count === undefined)
-    {
-        count = vertexNum - offset;
-    }
-
-    if (instanceCount > 1)
-    {
-        if (element)
+        if (instanceCount > 1)
         {
             if (gl instanceof WebGL2RenderingContext)
             {
-                gl.drawElementsInstanced(gl[drawMode], count, gl[type], offset, instanceCount);
+                gl.drawArraysInstanced(gl[drawMode], firstVertex, vertexCount, instanceCount);
             }
             else
             {
                 const extension = gl.getExtension("ANGLE_instanced_arrays");
-                extension.drawElementsInstancedANGLE(gl[drawMode], count, gl[type], offset, instanceCount);
+                extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
             }
-        }
-        else if (gl instanceof WebGL2RenderingContext)
-        {
-            gl.drawArraysInstanced(gl[drawMode], offset, count, instanceCount);
+            _info.update(vertexCount, drawMode, instanceCount);
         }
         else
         {
-            const extension = gl.getExtension("ANGLE_instanced_arrays");
-            extension.drawArraysInstancedANGLE(gl[drawMode], offset, count, instanceCount);
+            gl.drawArrays(gl[drawMode], firstVertex, vertexCount);
+            _info.update(vertexCount, drawMode, 1);
         }
     }
-    else
+    else if (renderAtomic.drawIndexed)
     {
-        if (element)
+        const drawIndexed = getWebGLDrawIndexed(renderAtomic.drawIndexed);
+
+        const { drawMode, indexCount, instanceCount, firstIndex } = drawIndexed;
+
+        //
+        const elementCache = getElementWebGLBuffer(gl, renderAtomic.index);
+        const vertexNum = elementCache.count;
+        const type = elementCache.type;
+
+        if (instanceCount > 1)
         {
-            gl.drawElements(gl[drawMode], count, gl[type], offset * ElementTypeMap[type]);
+            if (gl instanceof WebGL2RenderingContext)
+            {
+                gl.drawElementsInstanced(gl[drawMode], indexCount, gl[type], firstIndex, instanceCount);
+            }
+            else
+            {
+                const extension = gl.getExtension("ANGLE_instanced_arrays");
+                extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex, instanceCount);
+            }
+            _info.update(indexCount, drawMode, instanceCount);
         }
         else
         {
-            gl.drawArrays(gl[drawMode], offset, count);
+            gl.drawElements(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type]);
+            _info.update(indexCount, drawMode, 1);
         }
-        instanceCount = 1;
     }
 
-    _info.update(count, drawMode, instanceCount);
+    // let instanceCount = drawCall.instanceCount;
+    // const drawMode = drawCall.drawMode;
+    // let offset = drawCall.offset;
+    // let count = drawCall.count;
+
+    // const element = renderAtomic.index;
+
+    // let vertexNum: number;
+    // let type: DrawElementType;
+
+    // if (element)
+    // {
+    //     const elementCache = getElementWebGLBuffer(gl, element);
+    //     vertexNum = elementCache.count;
+    //     type = elementCache.type;
+    // }
+    // else
+    // {
+    //     vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+
+    //     if (vertexNum === 0)
+    //     {
+    //         // console.warn(`顶点数量为0，不进行渲染！`);
+
+    //         // return;
+    //         vertexNum = 6;
+    //     }
+    // }
+
+    // if (offset === undefined)
+    // {
+    //     offset = 0;
+    // }
+
+    // if (count === undefined)
+    // {
+    //     count = vertexNum - offset;
+    // }
+
+    // if (instanceCount > 1)
+    // {
+    //     if (element)
+    //     {
+    //         if (gl instanceof WebGL2RenderingContext)
+    //         {
+    //             gl.drawElementsInstanced(gl[drawMode], count, gl[type], offset, instanceCount);
+    //         }
+    //         else
+    //         {
+    //             const extension = gl.getExtension("ANGLE_instanced_arrays");
+    //             extension.drawElementsInstancedANGLE(gl[drawMode], count, gl[type], offset, instanceCount);
+    //         }
+    //     }
+    //     else if (gl instanceof WebGL2RenderingContext)
+    //     {
+    //         gl.drawArraysInstanced(gl[drawMode], offset, count, instanceCount);
+    //     }
+    //     else
+    //     {
+    //         const extension = gl.getExtension("ANGLE_instanced_arrays");
+    //         extension.drawArraysInstancedANGLE(gl[drawMode], offset, count, instanceCount);
+    //     }
+    // }
+    // else
+    // {
+    //     if (element)
+    //     {
+    //         gl.drawElements(gl[drawMode], count, gl[type], offset * ElementTypeMap[type]);
+    //     }
+    //     else
+    //     {
+    //         gl.drawArrays(gl[drawMode], offset, count);
+    //     }
+    //     instanceCount = 1;
+    // }
+
+    // _info.update(count, drawMode, instanceCount);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { DrawMode } from "./RenderParams";
 
-export interface DrawCall
+export interface IWebGLDrawIndexed
 {
     /**
      * 渲染模式。
@@ -16,20 +16,11 @@ export interface DrawCall
      * * TRIANGLE_FAN  绘制三角扇形。
      *
      * A GLenum specifying the type primitive to render. Possible values are:
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
      */
     drawMode?: DrawMode;
 
-    /**
-     * 绘制顶点数量。
-     */
-    vertexCount: number;
-    /**
-     * 渲染实例数量
-    */
+    indexCount: number;
     instanceCount?: number;
-    /**
-     * 第一个顶点索引。
-     */
-    firstVertex?: number;
+    firstIndex?: number;
 }
