@@ -1,4 +1,5 @@
 import { IRenderObject, WebGL } from "../../../src";
+import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
 
 (function ()
 {
@@ -72,30 +73,33 @@ import { IRenderObject, WebGL } from "../../../src";
         }
     };
 
-    const canvasContext = { canvasId: "glcanvas" };
+    const data: IWebGLSubmit = {
+        canvasContext: { canvasId: "glcanvas" },
+        renderPasss: [{
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
+            },
+            renderObjects: [
+                {
+                    ...renderAtomic,
+                    renderParams: { useViewPort: true, viewPort: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height } },
+                    drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
+                },
+                {
+                    ...renderAtomic,
+                    renderParams: { useViewPort: true, viewPort: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height } },
+                    drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
+                },
+            ],
+        }]
+    };
 
     function draw()
     {
-        WebGL.submit({
-            canvasContext,
-            renderPasss: [{
-                passDescriptor: {
-                    colorAttachments: [{
-                        clearValue: [0.0, 0.0, 0.0, 1.0],
-                        loadOp: "clear",
-                    }],
-                },
-            }]
-        });
-
-        renderAtomic.renderParams = {};
-        renderAtomic.renderParams.useViewPort = true;
-        renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawVertex = { firstVertex: 0, vertexCount: vertexCount / 2 };
-        WebGL.render(canvasContext, renderAtomic);
-        renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawVertex = { firstVertex: 6, vertexCount: vertexCount / 2 };
-        WebGL.render(canvasContext, renderAtomic);
+        WebGL.submit(data);
 
         requestAnimationFrame(draw);
     }
