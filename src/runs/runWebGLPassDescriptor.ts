@@ -1,21 +1,28 @@
 import { getRenderPassColorAttachment } from "../caches/getRenderPassColorAttachment";
+import { IRenderPassDepthStencilAttachment } from "../data/IRenderPassDepthStencilAttachment";
 import { IWebGLPassDescriptor } from "../data/IWebGLPassDescriptor";
 import { defaults } from "../defaults/defaults";
 import { ClearMask } from "../gl/WebGLEnums";
+
+const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1 };
 
 export function runWebGLPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
 {
     passDescriptor = Object.assign({}, defaults.webGLPassDescriptor, passDescriptor);
 
+    //
     const colorAttachment = getRenderPassColorAttachment(passDescriptor.colorAttachments?.[0]);
-
     const { clearValue, loadOp } = colorAttachment;
-
-    const { clearDepth, clearMask, depthTest, depthFunc } = passDescriptor;
-
-    // Set clear color to black, fully opaque
     gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
-    gl.clearDepth(clearDepth); // Clear everything
+
+    //
+    const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
+    const { depthClearValue } = depthStencilAttachment;
+    gl.clearDepth(depthClearValue);
+
+    //
+    const { clearMask, depthTest, depthFunc } = passDescriptor;
+
     if (depthTest)
     {
         gl.enable(gl.DEPTH_TEST); // Enable depth testing

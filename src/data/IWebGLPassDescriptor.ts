@@ -1,5 +1,6 @@
 import { ClearMask } from "../gl/WebGLEnums";
 import { IRenderPassColorAttachment } from "./IRenderPassColorAttachment";
+import { IRenderPassDepthStencilAttachment } from "./IRenderPassDepthStencilAttachment";
 import { DepthFunc } from "./RenderParams";
 
 /**
@@ -13,6 +14,11 @@ export interface IWebGLPassDescriptor
     colorAttachments?: IRenderPassColorAttachment[];
 
     /**
+     * 深度模板附件。
+     */
+    depthStencilAttachment?: IRenderPassDepthStencilAttachment;
+
+    /**
      * 清除内容。（颜色、深度、模板）
      *
      * 默认为 ["COLOR_BUFFER_BIT", "DEPTH_BUFFER_BIT", "STENCIL_BUFFER_BIT"]。
@@ -20,15 +26,6 @@ export interface IWebGLPassDescriptor
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
     clearMask?: ClearMask[];
-
-    /**
-     * 清除后填充深度值。
-     *
-     * 默认为 1。
-     *
-     * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clearDepth
-     */
-    clearDepth?: number;
 
     /**
      * 是否开启深度检查。

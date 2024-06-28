@@ -27,7 +27,9 @@ function main()
                     clearValue: [0, 0, 0, 1],
                     loadOp: "clear",
                 }],
-                clearDepth: 1.0,
+                depthStencilAttachment: {
+                    depthClearValue: 1.0,
+                },
                 depthTest: true,
                 depthFunc: "LEQUAL",
                 clearMask: ["DEPTH_BUFFER_BIT"],
