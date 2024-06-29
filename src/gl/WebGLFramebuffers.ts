@@ -1,6 +1,5 @@
-import { FrameBuffer } from '../FrameBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
-import { FramebufferTarget } from './WebGLEnums';
+import { FrameBuffer } from "../FrameBuffer";
+import { FramebufferTarget } from "./WebGLEnums";
 
 declare global
 {
@@ -27,6 +26,14 @@ declare global
     }
 }
 
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _framebuffers: WebGLFramebuffers;
+    }
+}
+
 /**
  * WebGLFramebuffer管理器。
  *
@@ -39,22 +46,24 @@ export class WebGLFramebuffers
      */
     private _cache = new Map<FrameBuffer, WebGLFramebuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._framebuffers = this;
     }
 
     active(frameBuffer: FrameBuffer)
     {
-        const { renderbuffers, textures, webGLContext } = this._webGLRenderer;
+        const gl = this.gl;
+        const { _renderbuffers, _textures } = this.gl;
 
-        const target: FramebufferTarget = 'FRAMEBUFFER';
+        const target: FramebufferTarget = "FRAMEBUFFER";
 
         if (!frameBuffer)
         {
-            webGLContext.bindFramebuffer(target, null);
+            gl.bindFramebuffer(gl[target], null);
 
             return;
         }
@@ -62,25 +71,25 @@ export class WebGLFramebuffers
         const webGLFramebuffer = this.get(frameBuffer);
 
         // 绑定帧缓冲区对象
-        webGLContext.bindFramebuffer(target, webGLFramebuffer);
+        gl.bindFramebuffer(gl[target], webGLFramebuffer);
 
         let needCheck = false;
 
         // 设置颜色关联对象
-        const texture = textures.get(frameBuffer.texture);
+        const texture = _textures.get(frameBuffer.texture);
         if (webGLFramebuffer.texture !== texture)
         {
-            webGLContext.framebufferTexture2D(target, 'COLOR_ATTACHMENT0', 'TEXTURE_2D', texture, 0);
+            gl.framebufferTexture2D(gl[target], gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
             webGLFramebuffer.texture = texture;
 
             needCheck = true;
         }
 
         // 设置深度关联对象
-        const depthBuffer = renderbuffers.get(frameBuffer.depthBuffer);
+        const depthBuffer = _renderbuffers.get(frameBuffer.depthBuffer);
         if (webGLFramebuffer.depthBuffer !== depthBuffer)
         {
-            webGLContext.framebufferRenderbuffer(target, 'DEPTH_ATTACHMENT', 'RENDERBUFFER', depthBuffer);
+            gl.framebufferRenderbuffer(gl[target], gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
             webGLFramebuffer.depthBuffer = depthBuffer;
 
             needCheck = true;
@@ -89,8 +98,8 @@ export class WebGLFramebuffers
         if (needCheck)
         {
             // 检查Framebuffer状态
-            const e = webGLContext.checkFramebufferStatus(target);
-            if (webGLContext.FRAMEBUFFER_COMPLETE !== e)
+            const e = gl.checkFramebufferStatus(gl[target]);
+            if (gl.FRAMEBUFFER_COMPLETE !== e)
             {
                 console.warn(`Frame buffer object is incomplete: ${e.toString()}`);
 
@@ -103,17 +112,17 @@ export class WebGLFramebuffers
 
     private get(frameBuffer: FrameBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { _cache: frameBuffers } = this;
 
         // Create a framebuffer object (FBO)
         let buffer = frameBuffers.get(frameBuffer);
         if (!buffer)
         {
-            buffer = webGLContext.createFramebuffer();
+            buffer = gl.createFramebuffer();
             if (!buffer)
             {
-                console.warn('Failed to create frame buffer object');
+                console.warn("Failed to create frame buffer object");
 
                 return null;
             }
@@ -128,13 +137,13 @@ export class WebGLFramebuffers
      */
     private clear(frameBuffer: FrameBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { _cache: frameBuffers } = this;
 
         const buffer = frameBuffers.get(frameBuffer);
         if (buffer)
         {
-            webGLContext.deleteFramebuffer(buffer);
+            gl.deleteFramebuffer(buffer);
             frameBuffers.delete(frameBuffer);
         }
     }

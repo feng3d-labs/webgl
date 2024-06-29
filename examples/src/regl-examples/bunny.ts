@@ -1,18 +1,15 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
-import * as bunny from './mikolalysenko/bunny';
-import * as mat4 from './stackgl/gl-mat4';
+import { IRenderObject, WebGL } from "../../../src";
+import * as bunny from "./mikolalysenko/bunny";
+import * as mat4 from "./stackgl/gl-mat4";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
-
-const webglRenderer = new WebGLRenderer(webglcanvas, { antialias: true });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -32,7 +29,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
     },
@@ -55,20 +52,24 @@ const renderAtomic = $set(new RenderAtomic(), {
                 0.01,
                 1000),
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
-    shader: {
-        vertex: `precision mediump float;
+    pipeline: {
+        primitive: { cullMode: "NONE" },
+        vertex: {
+            code: `precision mediump float;
         attribute vec3 position;
         uniform mat4 model, view, projection;
         void main() {
           gl_Position = projection * view * model * vec4(position, 1);
-        }`,
-        fragment: `precision mediump float;
+        }` },
+        fragment: {
+            code: `precision mediump float;
         void main() {
           gl_FragColor = vec4(1, 1, 1, 1);
         }`,
+            targets: [{ blend: {} }],
+        },
     }
-});
+};
 
 function draw()
 {
@@ -76,7 +77,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    webglRenderer.render(renderAtomic);
+    WebGL.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

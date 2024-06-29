@@ -1,19 +1,11 @@
-import { fit } from './hughsk/canvas-fit';
-import { attachCamera } from './hughsk/canvas-orbit-camera';
+import { fit } from "./hughsk/canvas-fit";
+import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { IRenderObject, WebGL } from "../../../src";
 
-const canvas = document.createElement('canvas');
-canvas.id = 'glcanvas';
-canvas.style.position = 'fixed';
-canvas.style.left = '0px';
-canvas.style.top = '0px';
-canvas.style.width = '100%';
-canvas.style.height = '100%';
-document.body.appendChild(canvas);
-
-window.addEventListener('resize', fit(canvas), false);
+const canvas = document.body.appendChild(document.createElement("canvas"));
+canvas.id = "glcanvas";
+window.addEventListener("resize", fit(canvas), false);
 
 const camera = attachCamera(canvas);
 
@@ -23,8 +15,6 @@ const FILTER_RADIUS = 1;
 // configure intial camera view.
 camera.rotate([0.0, 0.0], [0.0, -0.4]);
 camera.zoom(300.0);
-
-const webglRenderer = new WebGLRenderer(canvas);
 
 let batchId = 0;
 let tick = 0;
@@ -38,7 +28,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: {
             array: [
@@ -57,9 +47,10 @@ const renderAtomic = $set(new RenderAtomic(), {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
-    shader: {
-        vertex: `precision mediump float;
+    pipeline: {
+        primitive: { cullMode: "NONE" },
+        vertex: {
+            code: `precision mediump float;
         attribute vec2 position;
         uniform float angle;
         uniform vec2 offset;
@@ -67,14 +58,17 @@ const renderAtomic = $set(new RenderAtomic(), {
           gl_Position = vec4(
             cos(angle) * position.x + sin(angle) * position.y + offset.x,
             -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
-        }`,
-        fragment: `precision mediump float;
+        }` },
+        fragment: {
+            code: `precision mediump float;
         uniform vec4 color;
         void main() {
           gl_FragColor = color;
         }`,
+            targets: [{ blend: {} }],
+        },
     }
-});
+};
 
 function draw()
 {
@@ -85,7 +79,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        webglRenderer.render(renderAtomic);
+        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

@@ -1,14 +1,14 @@
 // @see https://github.com/hughsk/canvas-fit
 
-import { getSize as size } from './element-size';
+import { getSize as size } from "./element-size";
 
 const scratch = new Float32Array(2);
 
 export function fit(canvas, parent?, scale?)
 {
-    const isSVG = canvas.nodeName.toUpperCase() === 'SVG';
+    const isSVG = canvas.nodeName.toUpperCase() === "SVG";
 
-    canvas.style.position = canvas.style.position || 'absolute';
+    canvas.style.position = canvas.style.position || "absolute";
     canvas.style.top = 0;
     canvas.style.left = 0;
 
@@ -22,7 +22,7 @@ export function fit(canvas, parent?, scale?)
         const p = resize.parent || canvas.parentNode;
         let width: number;
         let height: number;
-        if (typeof p === 'function')
+        if (typeof p === "function")
         {
             const dims = p(scratch) || scratch;
             width = dims[0];
@@ -43,8 +43,8 @@ export function fit(canvas, parent?, scale?)
 
         if (isSVG)
         {
-            canvas.setAttribute('width', `${width * resize.scale}px`);
-            canvas.setAttribute('height', `${height * resize.scale}px`);
+            canvas.setAttribute("width", `${width * resize.scale}px`);
+            canvas.setAttribute("height", `${height * resize.scale}px`);
         }
         else
         {

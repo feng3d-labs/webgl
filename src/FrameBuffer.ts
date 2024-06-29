@@ -1,6 +1,6 @@
-import { watcher } from '@feng3d/watcher';
-import { RenderBuffer } from './RenderBuffer';
-import { RenderTargetTexture2D } from './textures/RenderTargetTexture2D';
+import { watcher } from "@feng3d/watcher";
+import { RenderBuffer } from "./RenderBuffer";
+import { RenderTargetTexture2D } from "./textures/RenderTargetTexture2D";
 
 /**
  * 帧缓冲
@@ -33,10 +33,10 @@ export class FrameBuffer
 
     constructor()
     {
-        watcher.watch(this as FrameBuffer, 'width', this.invalidateSize, this);
-        watcher.watch(this as FrameBuffer, 'height', this.invalidateSize, this);
-        watcher.watch(this as FrameBuffer, 'texture', this.invalidateSize, this);
-        watcher.watch(this as FrameBuffer, 'depthBuffer', this.invalidateSize, this);
+        watcher.watch(this as FrameBuffer, "width", this.invalidateSize, this);
+        watcher.watch(this as FrameBuffer, "height", this.invalidateSize, this);
+        watcher.watch(this as FrameBuffer, "texture", this.invalidateSize, this);
+        watcher.watch(this as FrameBuffer, "depthBuffer", this.invalidateSize, this);
     }
 
     private invalidateSize()

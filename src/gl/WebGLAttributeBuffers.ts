@@ -1,16 +1,24 @@
-import { watcher } from '@feng3d/watcher';
-import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from '../data/AttributeBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { watcher } from "@feng3d/watcher";
+import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from "../data/AttributeBuffer";
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _attributeBuffers: WebGLAttributeBuffers;
+    }
+}
 
 export class WebGLAttributeBuffers
 {
     private buffers = new WeakMap<AttributeBuffer, WebGLAttributeBuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._attributeBuffers = this;
     }
 
     get(attribute: AttributeBuffer)
@@ -42,7 +50,7 @@ export class WebGLAttributeBuffers
 
         if (data === undefined)
         {
-            data = new WebGLAttributeBuffer(this._webGLRenderer, attribute);
+            data = new WebGLAttributeBuffer(this.gl, attribute);
             buffers.set(attribute, data);
         }
         data.updateBuffer();
@@ -50,7 +58,7 @@ export class WebGLAttributeBuffers
 
     vertexAttribPointer(location: number, attribute: AttributeBuffer)
     {
-        const { isWebGL2, webGLContext } = this._webGLRenderer;
+        const { gl } = this;
 
         const attributeBufferCacle = this.get(attribute);
 
@@ -63,15 +71,15 @@ export class WebGLAttributeBuffers
         const stride = size * bytesPerElement;
         const offset = 0;
 
-        webGLContext.bindBuffer('ARRAY_BUFFER', buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
-        if (isWebGL2 === true && (type === 'INT' || type === 'UNSIGNED_INT'))
+        if (gl instanceof WebGL2RenderingContext && (type === "INT" || type === "UNSIGNED_INT"))
         {
-            webGLContext.vertexAttribIPointer(location, size, type, stride, offset);
+            gl.vertexAttribIPointer(location, size, gl[type], stride, offset);
         }
         else
         {
-            webGLContext.vertexAttribPointer(location, size, attributeBufferCacle.type, normalized, stride, offset);
+            gl.vertexAttribPointer(location, size, gl[type], normalized, stride, offset);
         }
     }
 }
@@ -97,16 +105,16 @@ export class WebGLAttributeBuffer
     bytesPerElement: number;
     version = -1;
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer, attribute: AttributeBuffer)
+    constructor(gl: WebGLRenderingContext, attribute: AttributeBuffer)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
 
         this.attribute = attribute;
 
         //
-        watcher.watch(attribute, 'array', this.needsUpdate, this);
+        watcher.watch(attribute, "array", this.needsUpdate, this);
     }
 
     private needsUpdate()
@@ -116,7 +124,7 @@ export class WebGLAttributeBuffer
 
     updateBuffer()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { attribute } = this;
 
         if (this.version === attribute.version)
@@ -129,18 +137,18 @@ export class WebGLAttributeBuffer
         let buffer = this.buffer;
         if (buffer)
         {
-            webGLContext.deleteBuffer(buffer);
+            gl.deleteBuffer(buffer);
         }
 
         const { type, array } = transfromArrayType(attribute.array, attribute.type);
-        const usage = attribute.usage || 'STATIC_DRAW';
+        const usage = attribute.usage || "STATIC_DRAW";
         const count = array !== undefined ? array.length / attribute.itemSize : 0;
         const normalized = attribute.normalized === true;
 
-        buffer = webGLContext.createBuffer();
+        buffer = gl.createBuffer();
 
-        webGLContext.bindBuffer('ARRAY_BUFFER', buffer);
-        webGLContext.bufferData('ARRAY_BUFFER', array, usage);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, array, gl[usage]);
 
         this.buffer = buffer;
         this.type = type;
@@ -151,14 +159,14 @@ export class WebGLAttributeBuffer
 
     dispose()
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { buffer, attribute } = this;
 
-        webGLContext.deleteBuffer(buffer);
+        gl.deleteBuffer(buffer);
 
-        watcher.watch(attribute, 'array', this.needsUpdate, this);
+        watcher.watch(attribute, "array", this.needsUpdate, this);
 
-        this._webGLRenderer = null;
+        this.gl = null;
         this.attribute = null;
         this.buffer = null;
     }
@@ -171,66 +179,66 @@ function transfromArrayType(array: AttributeBufferSourceTypes, type: VertexAttri
     {
         if (array instanceof Float32Array)
         {
-            type = 'FLOAT';
+            type = "FLOAT";
         }
         else if (array instanceof Uint32Array)
         {
-            type = 'UNSIGNED_INT';
+            type = "UNSIGNED_INT";
         }
         else if (array instanceof Int32Array)
         {
-            type = 'INT';
+            type = "INT";
         }
         else if (array instanceof Uint16Array)
         {
-            type = 'UNSIGNED_SHORT';
+            type = "UNSIGNED_SHORT";
         }
         else if (array instanceof Int16Array)
         {
-            type = 'SHORT';
+            type = "SHORT";
         }
         else if (array instanceof Uint8Array)
         {
-            type = 'UNSIGNED_BYTE';
+            type = "UNSIGNED_BYTE";
         }
         else if (array instanceof Int8Array || array instanceof Uint8ClampedArray)
         {
-            type = 'BYTE';
+            type = "BYTE";
         }
         else
         {
-            type = 'FLOAT';
+            type = "FLOAT";
         }
     }
 
     // 处理数组
     if (Array.isArray(array))
     {
-        if (type === 'FLOAT')
+        if (type === "FLOAT")
         {
             array = new Float32Array(array);
         }
-        else if (type === 'UNSIGNED_INT')
+        else if (type === "UNSIGNED_INT")
         {
             array = new Uint32Array(array);
         }
-        else if (type === 'INT')
+        else if (type === "INT")
         {
             array = new Int32Array(array);
         }
-        else if (type === 'UNSIGNED_SHORT')
+        else if (type === "UNSIGNED_SHORT")
         {
             array = new Uint16Array(array);
         }
-        else if (type === 'SHORT')
+        else if (type === "SHORT")
         {
             array = new Int16Array(array);
         }
-        else if (type === 'UNSIGNED_BYTE')
+        else if (type === "UNSIGNED_BYTE")
         {
             array = new Uint8Array(array);
         }
-        else if (type === 'BYTE')
+        else if (type === "BYTE")
         {
             array = new Int8Array(array);
         }
@@ -241,49 +249,49 @@ function transfromArrayType(array: AttributeBufferSourceTypes, type: VertexAttri
     }
 
     // 处理数据类型不匹配情况
-    if (type === 'FLOAT')
+    if (type === "FLOAT")
     {
         if (!(array instanceof Float32Array))
         {
             array = new Float32Array(array);
         }
     }
-    else if (type === 'UNSIGNED_INT')
+    else if (type === "UNSIGNED_INT")
     {
         if (!(array instanceof Uint32Array))
         {
             array = new Uint32Array(array);
         }
     }
-    else if (type === 'INT')
+    else if (type === "INT")
     {
         if (!(array instanceof Int32Array))
         {
             array = new Int32Array(array);
         }
     }
-    else if (type === 'UNSIGNED_SHORT')
+    else if (type === "UNSIGNED_SHORT")
     {
         if (!(array instanceof Uint16Array))
         {
             array = new Uint16Array(array);
         }
     }
-    else if (type === 'SHORT')
+    else if (type === "SHORT")
     {
         if (!(array instanceof Uint16Array))
         {
             array = new Int16Array(array);
         }
     }
-    else if (type === 'BYTE')
+    else if (type === "BYTE")
     {
         if (!(array instanceof Int8Array))
         {
             array = new Int8Array(array);
         }
     }
-    else if (type === 'UNSIGNED_BYTE')
+    else if (type === "UNSIGNED_BYTE")
     {
         if (!(array instanceof Uint8Array || array instanceof Uint8ClampedArray))
         {

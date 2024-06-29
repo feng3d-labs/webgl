@@ -1,16 +1,13 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { IRenderObject, WebGL } from "../../../src";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
-
-const webglRenderer = new WebGLRenderer(webglcanvas);
 
 let batchId = 0;
 let tick = 0;
@@ -24,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: {
             array: [
@@ -43,9 +40,10 @@ const renderAtomic = $set(new RenderAtomic(), {
         angle: () => 0.01 * tick,
         offset: () => offsets[batchId].offset,
     },
-    renderParams: { cullFace: 'NONE', enableBlend: true },
-    shader: {
-        vertex: `precision mediump float;
+    pipeline: {
+        primitive: { cullMode: "NONE" },
+        vertex: {
+            code: `precision mediump float;
         attribute vec2 position;
         uniform float angle;
         uniform vec2 offset;
@@ -53,14 +51,15 @@ const renderAtomic = $set(new RenderAtomic(), {
           gl_Position = vec4(
             cos(angle) * position.x + sin(angle) * position.y + offset.x,
             -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
-        }`,
-        fragment: `precision mediump float;
+        }` },
+        fragment: {
+            code: `precision mediump float;
         uniform vec4 color;
         void main() {
           gl_FragColor = color;
-        }`,
+        }` },
     }
-});
+};
 
 function draw()
 {
@@ -71,7 +70,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        webglRenderer.render(renderAtomic);
+        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

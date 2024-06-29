@@ -1,5 +1,5 @@
-import { watcher } from '@feng3d/watcher';
-import { RenderbufferInternalformat } from './gl/WebGLEnums';
+import { watcher } from "@feng3d/watcher";
+import { RenderbufferInternalformat } from "./gl/WebGLEnums";
 
 /**
  * 渲染缓冲。
@@ -19,7 +19,7 @@ export class RenderBuffer
     /**
      * A GLenum specifying the internal format of the renderbuffer.
      */
-    internalformat: RenderbufferInternalformat = 'DEPTH_COMPONENT16';
+    internalformat: RenderbufferInternalformat = "DEPTH_COMPONENT16";
 
     /**
      * 版本号，用于判断参数是否变化。
@@ -28,7 +28,7 @@ export class RenderBuffer
 
     constructor()
     {
-        watcher.watchs(this as RenderBuffer, ['width', 'height', 'internalformat'], this._invalidate, this);
+        watcher.watchs(this as RenderBuffer, ["width", "height", "internalformat"], this._invalidate, this);
     }
 
     private _invalidate()

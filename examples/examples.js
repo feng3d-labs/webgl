@@ -1,9 +1,9 @@
 window.onload = function ()
 {
-    const type = GetQueryString('type');
+    const type = GetQueryString("type");
 
-    const script = document.createElement('script');
-    script.type = 'module';
+    const script = document.createElement("script");
+    script.type = "module";
     script.src = `src/${type}.ts`;
     document.body.appendChild(script);
 

@@ -17,7 +17,7 @@ export type UniformType = UniformTypeMap[keyof UniformTypeMap];
  */
 export interface Uniforms
 {
-    [key: string]: UniformType | number | number[]
+    [key: string]: UniformType | number | number[] | Float32Array
     | { toArray(): number[] | Float32Array }
     | { toArray(): number[] | Float32Array }[]
     ;

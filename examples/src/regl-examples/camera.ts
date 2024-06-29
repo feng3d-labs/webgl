@@ -1,19 +1,16 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
-import { angleNormals } from './mikolalysenko/angle-normals';
-import * as bunny from './mikolalysenko/bunny';
-import { createCamera } from './util/camera';
+import { IRenderObject, WebGL } from "../../../src";
+import { angleNormals } from "./mikolalysenko/angle-normals";
+import * as bunny from "./mikolalysenko/bunny";
+import { createCamera } from "./util/camera";
 
-const webglcanvas = document.createElement('canvas');
-webglcanvas.id = 'glcanvas';
-webglcanvas.style.position = 'fixed';
-webglcanvas.style.left = '0px';
-webglcanvas.style.top = '0px';
-webglcanvas.style.width = '100%';
-webglcanvas.style.height = '100%';
+const webglcanvas = document.createElement("canvas");
+webglcanvas.id = "glcanvas";
+webglcanvas.style.position = "fixed";
+webglcanvas.style.left = "0px";
+webglcanvas.style.top = "0px";
+webglcanvas.style.width = "100%";
+webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
-
-const webglRenderer = new WebGLRenderer(webglcanvas, { antialias: true });
 
 const camera = createCamera({
     center: [0, 2.5, 0]
@@ -40,30 +37,34 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderAtomic = $set(new RenderAtomic(), {
+const renderAtomic: IRenderObject = {
     attributes: {
         position: { array: positions, itemSize: 3 },
         normal: { array: normals, itemSize: 3 },
     },
     index: { array: indices },
     uniforms: {},
-    renderParams: { cullFace: 'NONE', enableBlend: true },
-    shader: {
-        vertex: `precision mediump float;
+    pipeline: {
+        primitive: { cullMode: "NONE" },
+        vertex: {
+            code: `precision mediump float;
         uniform mat4 projection, view;
         attribute vec3 position, normal;
         varying vec3 vnormal;
         void main () {
           vnormal = normal;
           gl_Position = projection * view * vec4(position, 1.0);
-        }`,
-        fragment: `precision mediump float;
+        }` },
+        fragment: {
+            code: `precision mediump float;
         varying vec3 vnormal;
         void main () {
           gl_FragColor = vec4(abs(vnormal), 1.0);
         }`,
+            targets: [{ blend: {} }],
+        },
     }
-});
+};
 
 function draw()
 {
@@ -72,7 +73,7 @@ function draw()
 
     camera(renderAtomic, webglcanvas.width, webglcanvas.height);
 
-    webglRenderer.render(renderAtomic);
+    WebGL.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

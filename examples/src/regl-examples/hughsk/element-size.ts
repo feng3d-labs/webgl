@@ -20,11 +20,11 @@ export function getSize(element)
     const bounds = element.getBoundingClientRect();
     const styles = getComputedStyle(element);
     const height = (bounds.height | 0)
-        + parse(styles.getPropertyValue('margin-top'))
-        + parse(styles.getPropertyValue('margin-bottom'));
+        + parse(styles.getPropertyValue("margin-top"))
+        + parse(styles.getPropertyValue("margin-bottom"));
     const width = (bounds.width | 0)
-        + parse(styles.getPropertyValue('margin-left'))
-        + parse(styles.getPropertyValue('margin-right'));
+        + parse(styles.getPropertyValue("margin-left"))
+        + parse(styles.getPropertyValue("margin-right"));
 
     if (temporary)
     {

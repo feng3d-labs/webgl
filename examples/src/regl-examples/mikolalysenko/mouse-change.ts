@@ -1,6 +1,6 @@
 // @see https://github.com/mikolalysenko/mouse-change.git
 
-import * as mouse from './mouse-event';
+import * as mouse from "./mouse-event";
 
 export function mouseListen(element?, callback?)
 {
@@ -24,22 +24,22 @@ export function mouseListen(element?, callback?)
     function updateMods(ev)
     {
         let changed = false;
-        if ('altKey' in ev)
+        if ("altKey" in ev)
         {
             changed = changed || ev.altKey !== mods.alt;
             mods.alt = !!ev.altKey;
         }
-        if ('shiftKey' in ev)
+        if ("shiftKey" in ev)
         {
             changed = changed || ev.shiftKey !== mods.shift;
             mods.shift = !!ev.shiftKey;
         }
-        if ('ctrlKey' in ev)
+        if ("ctrlKey" in ev)
         {
             changed = changed || ev.ctrlKey !== mods.control;
             mods.control = !!ev.ctrlKey;
         }
-        if ('metaKey' in ev)
+        if ("metaKey" in ev)
         {
             changed = changed || ev.metaKey !== mods.meta;
             mods.meta = !!ev.metaKey;
@@ -52,7 +52,7 @@ export function mouseListen(element?, callback?)
     {
         const nextX = mouse.x(ev);
         const nextY = mouse.y(ev);
-        if ('buttons' in ev)
+        if ("buttons" in ev)
         {
             nextButtons = ev.buttons | 0;
         }
@@ -128,30 +128,30 @@ export function mouseListen(element?, callback?)
         }
         attached = true;
 
-        element.addEventListener('mousemove', handleMouseMove);
+        element.addEventListener("mousemove", handleMouseMove);
 
-        element.addEventListener('mousedown', handleMouseDown);
+        element.addEventListener("mousedown", handleMouseDown);
 
-        element.addEventListener('mouseup', handleMouseUp);
+        element.addEventListener("mouseup", handleMouseUp);
 
-        element.addEventListener('mouseleave', clearState);
-        element.addEventListener('mouseenter', clearState);
-        element.addEventListener('mouseout', clearState);
-        element.addEventListener('mouseover', clearState);
+        element.addEventListener("mouseleave", clearState);
+        element.addEventListener("mouseenter", clearState);
+        element.addEventListener("mouseout", clearState);
+        element.addEventListener("mouseover", clearState);
 
-        element.addEventListener('blur', handleBlur);
+        element.addEventListener("blur", handleBlur);
 
-        element.addEventListener('keyup', handleMods);
-        element.addEventListener('keydown', handleMods);
-        element.addEventListener('keypress', handleMods);
+        element.addEventListener("keyup", handleMods);
+        element.addEventListener("keydown", handleMods);
+        element.addEventListener("keypress", handleMods);
 
         if (element !== window)
         {
-            window.addEventListener('blur', handleBlur);
+            window.addEventListener("blur", handleBlur);
 
-            window.addEventListener('keyup', handleMods);
-            window.addEventListener('keydown', handleMods);
-            window.addEventListener('keypress', handleMods);
+            window.addEventListener("keyup", handleMods);
+            window.addEventListener("keydown", handleMods);
+            window.addEventListener("keypress", handleMods);
         }
     }
 
@@ -163,30 +163,30 @@ export function mouseListen(element?, callback?)
         }
         attached = false;
 
-        element.removeEventListener('mousemove', handleMouseMove);
+        element.removeEventListener("mousemove", handleMouseMove);
 
-        element.removeEventListener('mousedown', handleMouseDown);
+        element.removeEventListener("mousedown", handleMouseDown);
 
-        element.removeEventListener('mouseup', handleMouseUp);
+        element.removeEventListener("mouseup", handleMouseUp);
 
-        element.removeEventListener('mouseleave', clearState);
-        element.removeEventListener('mouseenter', clearState);
-        element.removeEventListener('mouseout', clearState);
-        element.removeEventListener('mouseover', clearState);
+        element.removeEventListener("mouseleave", clearState);
+        element.removeEventListener("mouseenter", clearState);
+        element.removeEventListener("mouseout", clearState);
+        element.removeEventListener("mouseover", clearState);
 
-        element.removeEventListener('blur', handleBlur);
+        element.removeEventListener("blur", handleBlur);
 
-        element.removeEventListener('keyup', handleMods);
-        element.removeEventListener('keydown', handleMods);
-        element.removeEventListener('keypress', handleMods);
+        element.removeEventListener("keyup", handleMods);
+        element.removeEventListener("keydown", handleMods);
+        element.removeEventListener("keypress", handleMods);
 
         if (element !== window)
         {
-            window.removeEventListener('blur', handleBlur);
+            window.removeEventListener("blur", handleBlur);
 
-            window.removeEventListener('keyup', handleMods);
-            window.removeEventListener('keydown', handleMods);
-            window.removeEventListener('keypress', handleMods);
+            window.removeEventListener("keyup", handleMods);
+            window.removeEventListener("keydown", handleMods);
+            window.removeEventListener("keypress", handleMods);
         }
     }
 

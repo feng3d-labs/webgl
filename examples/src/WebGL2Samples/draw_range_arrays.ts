@@ -1,30 +1,29 @@
-import { $set } from '@feng3d/serialization';
-import { RenderAtomic, WebGLRenderer } from '../../../src';
+import { IRenderObject, WebGL } from "../../../src";
+import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
 
 (function ()
 {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = `<div id="info">WebGL 2 Samples - draw_range_arrays</div>`;
     document.body.appendChild(div);
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext('webgl2', { antialias: false });
+    const gl = canvas.getContext("webgl2", { antialias: false });
     const isWebGL2 = !!gl;
     if (!isWebGL2)
     {
-        document.body.innerHTML = 'WebGL 2 is not available.  See <a href="https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">How to get a WebGL 2 implementation</a>';
+        document.body.innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
 
         return;
     }
 
-    const webglRenderer = new WebGLRenderer(canvas);
-
     const vertexCount = 12;
-    const renderAtomic = $set(new RenderAtomic(), {
+    const renderAtomic: IRenderObject = {
         attributes: {
             position: {
                 array: [
@@ -43,12 +42,10 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
                 ], itemSize: 2
             },
         },
-        uniforms: {},
-        drawCall: { drawMode: 'TRIANGLE_STRIP' },
-        renderParams: { cullFace: 'NONE', enableBlend: true },
-        shader: {
-            vertex:
-                `#version 300 es
+        pipeline: {
+            primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
+            vertex: {
+                code: `#version 300 es
                 #define POSITION_LOCATION 0
                 
                 precision highp float;
@@ -59,8 +56,9 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
                 void main()
                 {
                     gl_Position = vec4(position, 0.0, 1.0);
-                }`,
-            fragment: `#version 300 es
+                }` },
+            fragment: {
+                code: `#version 300 es
             precision highp float;
             precision highp int;
     
@@ -69,23 +67,39 @@ import { RenderAtomic, WebGLRenderer } from '../../../src';
             void main()
             {
                 color = vec4(1.0, 0.5, 0.0, 1.0);
-            }` }
-    });
+            }`,
+                targets: [{ blend: {} }],
+            }
+        }
+    };
+
+    const data: IWebGLSubmit = {
+        canvasContext: { canvasId: "glcanvas" },
+        renderPasss: [{
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
+            },
+            renderObjects: [
+                {
+                    ...renderAtomic,
+                    drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
+                    viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
+                },
+                {
+                    ...renderAtomic,
+                    drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
+                    viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
+                },
+            ],
+        }]
+    };
 
     function draw()
     {
-        webglRenderer.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        webglRenderer.gl.clear(webglRenderer.gl.COLOR_BUFFER_BIT);
-
-        renderAtomic.renderParams.useViewPort = true;
-        renderAtomic.renderParams.viewPort = { x: 0, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall.offset = 0;
-        renderAtomic.drawCall.count = vertexCount / 2;
-        webglRenderer.render(renderAtomic);
-        renderAtomic.renderParams.viewPort = { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height };
-        renderAtomic.drawCall.offset = 6;
-        renderAtomic.drawCall.count = vertexCount / 2;
-        webglRenderer.render(renderAtomic);
+        WebGL.submit(data);
 
         requestAnimationFrame(draw);
     }

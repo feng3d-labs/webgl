@@ -1,4 +1,4 @@
-import { BufferUsage } from '../gl/WebGLEnums';
+import { BufferUsage } from "../gl/WebGLEnums";
 
 /**
  * 属性缓冲数据类型。
@@ -33,8 +33,8 @@ export type AttributeBufferSourceTypes = number[]
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer
  */
-export type VertexAttributeTypes = 'FLOAT' | 'BYTE' | 'SHORT' | 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' // WebGL1
-    | 'HALF_FLOAT' | 'INT' | 'UNSIGNED_INT' | 'INT_2_10_10_10_REV' | 'UNSIGNED_INT_2_10_10_10_REV'; // WebGL2
+export type VertexAttributeTypes = "FLOAT" | "BYTE" | "SHORT" | "UNSIGNED_BYTE" | "UNSIGNED_SHORT" // WebGL1
+    | "HALF_FLOAT" | "INT" | "UNSIGNED_INT" | "INT_2_10_10_10_REV" | "UNSIGNED_INT_2_10_10_10_REV"; // WebGL2
 
 /**
  * A GLenum specifying the data type of each component in the array. Must be one of:
@@ -47,7 +47,7 @@ export type VertexAttributeTypes = 'FLOAT' | 'BYTE' | 'SHORT' | 'UNSIGNED_BYTE' 
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/vertexAttribIPointer
  */
-export type VertexAttributeIntegerTypes = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'INT' | 'UNSIGNED_INT';
+export type VertexAttributeIntegerTypes = "BYTE" | "UNSIGNED_BYTE" | "SHORT" | "UNSIGNED_SHORT" | "INT" | "UNSIGNED_INT";
 
 /**
  * WebGL顶点属性缓冲

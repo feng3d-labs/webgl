@@ -1,11 +1,18 @@
-import { RenderBuffer } from '../RenderBuffer';
-import { WebGLRenderer } from '../WebGLRenderer';
+import { RenderBuffer } from "../RenderBuffer";
 
 declare global
 {
     interface WebGLRenderbuffer
     {
         version: number;
+    }
+}
+
+declare global
+{
+    interface WebGLRenderingContextExt
+    {
+        _renderbuffers: WebGLRenderbuffers;
     }
 }
 
@@ -16,11 +23,12 @@ export class WebGLRenderbuffers
      */
     private renderBuffers = new WeakMap<RenderBuffer, WebGLRenderbuffer>();
 
-    private _webGLRenderer: WebGLRenderer;
+    private gl: WebGLRenderingContext;
 
-    constructor(webGLRenderer: WebGLRenderer)
+    constructor(gl: WebGLRenderingContext)
     {
-        this._webGLRenderer = webGLRenderer;
+        this.gl = gl;
+        gl._renderbuffers = this;
     }
 
     /**
@@ -28,7 +36,7 @@ export class WebGLRenderbuffers
      */
     get(renderBuffer: RenderBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { renderBuffers } = this;
 
         let webGLRenderbuffer = renderBuffers.get(renderBuffer);
@@ -44,15 +52,15 @@ export class WebGLRenderbuffers
         if (!webGLRenderbuffer)
         {
             // Create a renderbuffer object and Set its size and parameters
-            webGLRenderbuffer = webGLContext.createRenderbuffer(); // Create a renderbuffer object
+            webGLRenderbuffer = gl.createRenderbuffer(); // Create a renderbuffer object
             if (!webGLRenderbuffer)
             {
-                console.warn('Failed to create renderbuffer object');
+                console.warn("Failed to create renderbuffer object");
 
                 return;
             }
-            webGLContext.bindRenderbuffer('RENDERBUFFER', webGLRenderbuffer);
-            webGLContext.renderbufferStorage('RENDERBUFFER', renderBuffer.internalformat, renderBuffer.width, renderBuffer.height);
+            gl.bindRenderbuffer(gl.RENDERBUFFER, webGLRenderbuffer);
+            gl.renderbufferStorage(gl.RENDERBUFFER, gl[renderBuffer.internalformat], renderBuffer.width, renderBuffer.height);
 
             webGLRenderbuffer.version = renderBuffer.version;
 
@@ -67,13 +75,13 @@ export class WebGLRenderbuffers
      */
     private clear(renderBuffer: RenderBuffer)
     {
-        const { webGLContext } = this._webGLRenderer;
+        const { gl } = this;
         const { renderBuffers } = this;
 
         const buffer = renderBuffers.get(renderBuffer);
         if (buffer)
         {
-            webGLContext.deleteRenderbuffer(buffer);
+            gl.deleteRenderbuffer(buffer);
             renderBuffers.delete(renderBuffer);
         }
     }

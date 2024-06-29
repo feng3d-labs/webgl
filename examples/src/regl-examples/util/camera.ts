@@ -1,7 +1,7 @@
-import { RenderAtomic } from '../../../../src';
-import { mouseListen as mouseChange } from '../mikolalysenko/mouse-change';
-import { mouseWheelListen as mouseWheel } from '../mikolalysenko/mouse-wheel';
-import { identity, lookAt, perspective } from '../stackgl/gl-mat4';
+import { IRenderObject } from "../../../../src";
+import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
+import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";
+import { identity, lookAt, perspective } from "../stackgl/gl-mat4";
 
 export function createCamera(props)
 {
@@ -19,8 +19,8 @@ export function createCamera(props)
   const right = new Float32Array([1, 0, 0]);
   const front = new Float32Array([0, 0, 1]);
 
-  const minDistance = Math.log('minDistance' in props ? props.minDistance : 0.1);
-  const maxDistance = Math.log('maxDistance' in props ? props.maxDistance : 1000);
+  const minDistance = Math.log("minDistance" in props ? props.minDistance : 0.1);
+  const maxDistance = Math.log("maxDistance" in props ? props.maxDistance : 1000);
 
   let dtheta = 0;
   let dphi = 0;
@@ -100,14 +100,14 @@ export function createCamera(props)
     lookAt(cameraState.view, eye, center, up);
   }
 
-  const injectContext = (renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number) =>
+  const injectContext = (renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number) =>
   {
     Object.keys(cameraState).forEach(function (name)
     {
       renderAtomic.uniforms[name] = () => setupCamera[name];
     });
 
-    renderAtomic.uniforms['projection'] = () =>
+    renderAtomic.uniforms["projection"] = () =>
       perspective(cameraState.projection,
         Math.PI / 4.0,
         viewportWidth / viewportHeight,
@@ -115,7 +115,7 @@ export function createCamera(props)
         1000.0);
   };
 
-  function setupCamera(renderAtomic: RenderAtomic, viewportWidth: number, viewportHeight: number)
+  function setupCamera(renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number)
   {
     updateCamera();
     injectContext(renderAtomic, viewportWidth, viewportHeight);

@@ -1,6 +1,6 @@
-import * as glMatrix from './common';
-import * as quat from './quat';
-import * as mat4 from './mat4';
+import * as glMatrix from "./common";
+import * as quat from "./quat";
+import * as mat4 from "./mat4";
 
 /**
  * Dual Quaternion<br>
