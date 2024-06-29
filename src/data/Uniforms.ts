@@ -10,15 +10,12 @@ export interface UniformTypeMap
 /**
  * Uniform 类型
  */
-export type UniformType = UniformTypeMap[keyof UniformTypeMap];
+export type UniformType = UniformTypeMap[keyof UniformTypeMap] | number | number[] | Float32Array;
 
 /**
  * Uniform 数据
  */
 export interface Uniforms
 {
-    [key: string]: UniformType | number | number[] | Float32Array
-    | { toArray(): number[] | Float32Array }
-    | { toArray(): number[] | Float32Array }[]
-    ;
+    [key: string]: UniformType;
 }

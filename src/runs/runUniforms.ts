@@ -23,19 +23,17 @@ export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObje
         {
             console.error(`沒有找到Uniform ${name} 數據！`);
         }
-        setContext3DUniform(gl, activeInfo, uniformData);
+        runUniform(gl, activeInfo, uniformData);
     }
 }
 
 /**
  * 设置环境Uniform数据
  */
-function setContext3DUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data)
+function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data: any)
 {
     const { _textures } = gl;
 
-    let vec: number[] = data;
-    if (data.toArray) vec = data.toArray();
     const location = webGLUniform.location;
     switch (webGLUniform.type)
     {
@@ -44,22 +42,22 @@ function setContext3DUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUnifo
             gl.uniform1i(location, data);
             break;
         case "FLOAT_MAT3":
-            gl.uniformMatrix3fv(location, false, vec);
+            gl.uniformMatrix3fv(location, false, data);
             break;
         case "FLOAT_MAT4":
-            gl.uniformMatrix4fv(location, false, vec);
+            gl.uniformMatrix4fv(location, false, data);
             break;
         case "FLOAT":
             gl.uniform1f(location, data);
             break;
         case "FLOAT_VEC2":
-            gl.uniform2f(location, vec[0], vec[1]);
+            gl.uniform2f(location, data[0], data[1]);
             break;
         case "FLOAT_VEC3":
-            gl.uniform3f(location, vec[0], vec[1], vec[2]);
+            gl.uniform3f(location, data[0], data[1], data[2]);
             break;
         case "FLOAT_VEC4":
-            gl.uniform4f(location, vec[0], vec[1], vec[2], vec[3]);
+            gl.uniform4f(location, data[0], data[1], data[2], data[3]);
             break;
         case "SAMPLER_2D":
         case "SAMPLER_CUBE":
