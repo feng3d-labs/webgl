@@ -1,5 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
+import { VertexAttributeTypes } from "../data/IVertexAttribute";
 
 declare global
 {
@@ -13,12 +14,14 @@ declare global
         /**
          * 元素数据类型
          */
-        type: DrawElementType;
+        type: VertexAttributeTypes;
 
         /**
          * 元素数组长度
          */
         count: number;
+
+        bytesPerElement: number;
     }
 }
 

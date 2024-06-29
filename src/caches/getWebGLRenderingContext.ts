@@ -39,6 +39,7 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
 
 function initMap(gl: WebGLRenderingContext)
 {
+    gl._webGLBufferMap = new WeakMap();
     gl._elementBufferMap = new WeakMap();
 }
 

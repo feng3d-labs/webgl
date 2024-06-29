@@ -34,11 +34,6 @@ export interface IVertexAttribute
     divisor?: number;
 
     /**
-     * 属性缓冲数据类型
-     */
-    type?: VertexAttributeTypes;
-
-    /**
      * 所在顶点数据中的偏移字节数。
      */
     offset?: number;
@@ -47,11 +42,6 @@ export interface IVertexAttribute
      * 单个顶点数据尺寸。比如单个数据包含position与uv那么值可能为(3+2)*4=20。
      */
     vertexSize?: number;
-
-    /**
-     * 版本号，用于标记是否变化。
-     */
-    version?: number;
 }
 
 /**

@@ -1,4 +1,5 @@
 import { BufferUsage } from "../gl/WebGLEnums";
+import { VertexAttributeTypes } from "./IVertexAttribute";
 
 /**
  * WebGL缓冲区
@@ -7,6 +8,11 @@ import { BufferUsage } from "../gl/WebGLEnums";
  */
 export interface IWebGLBuffer
 {
+    /**
+     * 属性缓冲数据类型
+     */
+    type?: VertexAttributeTypes;
+
     /**
      * 缓冲区尺寸。
      */

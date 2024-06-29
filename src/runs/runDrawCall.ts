@@ -1,3 +1,4 @@
+import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
@@ -58,7 +59,7 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const { _attributeBuffers, _info } = gl;
     //
-    const vertexNum = getAttributeVertexNum(_attributeBuffers, renderAtomic);
+    const vertexNum = getAttributeVertexNum(gl, _attributeBuffers, renderAtomic);
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
     const drawCall = renderAtomic.drawVertex || {};
@@ -93,7 +94,7 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
  * @param attributes
  * @returns
  */
-function getAttributeVertexNum(attributes: WebGLAttributeBuffers, renderAtomic: IRenderObject)
+function getAttributeVertexNum(gl: WebGLRenderingContext, attributes: WebGLAttributeBuffers, renderAtomic: IRenderObject)
 {
     const vertexNum = ((attributelist) =>
     {
@@ -102,9 +103,9 @@ function getAttributeVertexNum(attributes: WebGLAttributeBuffers, renderAtomic: 
             // eslint-disable-next-line no-prototype-builtins
             if (attributelist.hasOwnProperty(attr))
             {
-                const attribute = attributes.get(attributelist[attr]);
+                const buffer = getWebGLBuffer(gl, attributelist[attr].buffer);
 
-                return attribute.count;
+                return buffer.count;
             }
         }
 

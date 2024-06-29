@@ -15,7 +15,7 @@ function main()
         -1.0, -1.0,
     ];
 
-    const positionBuffer: IWebGLBuffer = { data: new Float32Array(positions), usage: "STATIC_DRAW" };
+    const positionBuffer: IWebGLBuffer = { type: "FLOAT", data: new Float32Array(positions), usage: "STATIC_DRAW" };
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
@@ -51,7 +51,7 @@ function main()
             },
             attributes: {
                 aVertexPosition: {
-                    type: "FLOAT",
+                    // type: "FLOAT",
                     buffer: positionBuffer,
                     itemSize: 2,
                 }
