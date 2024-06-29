@@ -114,7 +114,7 @@ export class WebGLAttributeBuffer
         this.attribute = attribute;
 
         //
-        watcher.watch(attribute, "array", this.needsUpdate, this);
+        watcher.watch(attribute.buffer, "data", this.needsUpdate, this);
     }
 
     private needsUpdate()
@@ -140,8 +140,8 @@ export class WebGLAttributeBuffer
             gl.deleteBuffer(buffer);
         }
 
-        const { type, array } = transfromArrayType(attribute.array, attribute.type);
-        const usage = attribute.usage || "STATIC_DRAW";
+        const { type, array } = transfromArrayType(attribute.buffer.data, attribute.type);
+        const usage = attribute.buffer.usage || "STATIC_DRAW";
         const count = array !== undefined ? array.length / attribute.itemSize : 0;
         const normalized = attribute.normalized === true;
 
@@ -164,7 +164,7 @@ export class WebGLAttributeBuffer
 
         gl.deleteBuffer(buffer);
 
-        watcher.watch(attribute, "array", this.needsUpdate, this);
+        watcher.watch(attribute.buffer, "data", this.needsUpdate, this);
 
         this.gl = null;
         this.attribute = null;

@@ -24,11 +24,13 @@ const offsets = [{ offset: [-1, -1] },
 const renderAtomic: IRenderObject = {
     attributes: {
         position: {
-            array: [
-                0.5, 0,
-                0, 0.5,
-                1, 1
-            ], itemSize: 2
+            buffer: {
+                data: [
+                    0.5, 0,
+                    0, 0.5,
+                    1, 1
+                ]
+            }, itemSize: 2
         },
     },
     uniforms: {

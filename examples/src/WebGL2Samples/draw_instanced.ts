@@ -27,14 +27,18 @@ import { IRenderObject, WebGL } from "../../../src";
     const renderAtomic: IRenderObject = {
         attributes: {
             pos: {
-                array: [-0.3, -0.5,
-                    0.3, -0.5,
-                    0.0, 0.5], itemSize: 2
+                buffer: {
+                    data: [-0.3, -0.5,
+                        0.3, -0.5,
+                        0.0, 0.5]
+                }, itemSize: 2
             },
             color: {
-                array: [
-                    1.0, 0.5, 0.0,
-                    0.0, 0.5, 1.0], itemSize: 3, divisor: 1
+                buffer: {
+                    data: [
+                        1.0, 0.5, 0.0,
+                        0.0, 0.5, 1.0]
+                }, itemSize: 3, divisor: 1
             },
         },
         uniforms: {},

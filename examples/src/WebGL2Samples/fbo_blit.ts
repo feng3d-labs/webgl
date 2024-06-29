@@ -34,24 +34,28 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
         const renderAtomic: IRenderObject = {
             attributes: {
                 position: {
-                    array: [
-                        -1.0, -1.0,
-                        1.0, -1.0,
-                        1.0, 1.0,
-                        1.0, 1.0,
-                        -1.0, 1.0,
-                        -1.0, -1.0
-                    ], itemSize: 2
+                    buffer: {
+                        data: [
+                            -1.0, -1.0,
+                            1.0, -1.0,
+                            1.0, 1.0,
+                            1.0, 1.0,
+                            -1.0, 1.0,
+                            -1.0, -1.0
+                        ]
+                    }, itemSize: 2
                 },
                 texcoord: {
-                    array: [
-                        0.0, 1.0,
-                        1.0, 1.0,
-                        1.0, 0.0,
-                        1.0, 0.0,
-                        0.0, 0.0,
-                        0.0, 1.0
-                    ], itemSize: 2
+                    buffer: {
+                        data: [
+                            0.0, 1.0,
+                            1.0, 1.0,
+                            1.0, 0.0,
+                            1.0, 0.0,
+                            0.0, 0.0,
+                            0.0, 1.0
+                        ]
+                    }, itemSize: 2
                 },
             },
             uniforms: {

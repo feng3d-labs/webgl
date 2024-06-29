@@ -4,20 +4,22 @@ import { AttributeBufferSourceTypes } from "./AttributeBuffer";
 /**
  * WebGL缓冲区
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData#gl.element_array_buffer
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
 export interface IWebGLBuffer
 {
     /**
-     *
+     * 缓冲区尺寸。
      */
-    target: "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
-    | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER" | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER" // WebGL2
-    ;
-
     size?: number;
 
+    /**
+     * 缓冲区数据。
+     */
     data?: AttributeBufferSourceTypes;
 
-    usage: BufferUsage;
+    /**
+     * 为优化目的指定数据存储的预期使用模式的GLenum。
+     */
+    usage?: BufferUsage;
 }

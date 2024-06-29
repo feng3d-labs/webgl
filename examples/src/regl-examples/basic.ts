@@ -19,11 +19,13 @@ document.body.appendChild(webglcanvas);
 const renderAtomic: IRenderObject = {
     attributes: {
         position: {
-            array: [
-                -1, 0,
-                0, -1,
-                1, 1
-            ], itemSize: 2
+            buffer: {
+                data: [
+                    -1, 0,
+                    0, -1,
+                    1, 1
+                ]
+            }, itemSize: 2
         },
     },
     uniforms: { color: [1, 0, 0, 1] },

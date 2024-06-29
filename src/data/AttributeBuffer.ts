@@ -1,4 +1,4 @@
-import { BufferUsage } from "../gl/WebGLEnums";
+import { IWebGLBuffer } from "./IWebGLBuffer";
 
 /**
  * 属性缓冲数据类型。
@@ -55,9 +55,11 @@ export type VertexAttributeIntegerTypes = "BYTE" | "UNSIGNED_BYTE" | "SHORT" | "
 export interface AttributeBuffer
 {
     /**
-     * 数据
+     * WebGL缓冲区
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    array: AttributeBufferSourceTypes;
+    buffer: IWebGLBuffer;
 
     /**
      * 单项数据尺寸。
@@ -76,15 +78,6 @@ export interface AttributeBuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/vertexAttribDivisorANGLE
      */
     divisor?: number;
-
-    /**
-     * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
-     *
-     * 为优化目的指定数据存储的预期使用模式的GLenum。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
-     */
-    usage?: BufferUsage;
 
     /**
      * 属性缓冲数据类型

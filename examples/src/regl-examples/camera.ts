@@ -39,8 +39,8 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
 
 const renderAtomic: IRenderObject = {
     attributes: {
-        position: { array: positions, itemSize: 3 },
-        normal: { array: normals, itemSize: 3 },
+        position: { buffer: { data: positions }, itemSize: 3 },
+        normal: { buffer: { data: normals }, itemSize: 3 },
     },
     index: { array: indices },
     uniforms: {},

@@ -165,9 +165,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
     const renderAtomic: IRenderObject = {
         attributes: {
-            position: { array: positions, itemSize: 3 },
-            normal: { array: normals, itemSize: 3 },
-            uv: { array: uvs, itemSize: 2 },
+            position: { buffer: { data: positions }, itemSize: 3 },
+            normal: { buffer: { data: normals }, itemSize: 3 },
+            uv: { buffer: { data: uvs }, itemSize: 2 },
         },
         index: { array: indices },
         uniforms: {
@@ -356,8 +356,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             return pv;
         }, []);
 
-        renderAtomic.attributes.position.array = new Float32Array(positions);
-        renderAtomic.attributes.normal.array = new Float32Array(normals);
+        renderAtomic.attributes.position.buffer.data = new Float32Array(positions);
+        renderAtomic.attributes.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 
