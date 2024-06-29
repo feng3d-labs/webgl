@@ -1,29 +1,6 @@
 import { watcher } from "@feng3d/watcher";
-import { DrawElementType, IIndexBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
+import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/ElementBuffer";
 import { VertexAttributeTypes } from "../data/IVertexAttribute";
-
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _elementBufferMap: WeakMap<IIndexBuffer, WebGLBuffer>
-    }
-
-    interface WebGLBuffer
-    {
-        /**
-         * 元素数据类型
-         */
-        type: VertexAttributeTypes;
-
-        /**
-         * 元素数组长度
-         */
-        count: number;
-
-        bytesPerElement: number;
-    }
-}
 
 /**
  * 获取索引WebGL缓冲区。
@@ -127,3 +104,25 @@ function getArrayBufferViewWithType(array: ElementBufferSourceTypes, type: DrawE
     return array;
 }
 
+declare global
+{
+    interface WebGLRenderingContext
+    {
+        _elementBufferMap: WeakMap<IIndexBuffer, WebGLBuffer>
+    }
+
+    interface WebGLBuffer
+    {
+        /**
+         * 元素数据类型
+         */
+        type: VertexAttributeTypes;
+
+        /**
+         * 元素数组长度
+         */
+        count: number;
+
+        bytesPerElement: number;
+    }
+}
