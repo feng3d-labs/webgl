@@ -1,6 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { Texture } from "../data/Texture";
-import { TextureTarget } from "../gl/WebGLEnums";
+import { Texture, TextureTarget } from "../data/Texture";
 
 declare module "../data/Uniforms"
 {
@@ -39,4 +38,3 @@ export class Texture2D extends Texture
         return { x: this.source?.["width"] || 0, y: this.source?.["height"] || 0 };
     }
 }
-

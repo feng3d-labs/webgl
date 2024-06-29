@@ -1,7 +1,7 @@
 import { watcher } from "@feng3d/watcher";
-import { TextureFormat, TextureMagFilter, TextureMinFilter } from "../gl/WebGLEnums";
 import { isPowerOfTwo } from "../utils/mathUtils";
 import { Texture2D } from "./Texture2D";
+import { TextureFormat, TextureMinFilter, TextureMagFilter } from "../data/Texture";
 
 /**
  * 渲染目标纹理

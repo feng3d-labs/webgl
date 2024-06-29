@@ -1,5 +1,4 @@
 import { FrameBuffer } from "../FrameBuffer";
-import { FramebufferTarget } from "./WebGLEnums";
 
 declare global
 {
@@ -148,3 +147,15 @@ export class WebGLFramebuffers
         }
     }
 }
+
+/**
+ * A GLenum specifying the binding point (target). Possible values:
+ *
+ * gl.FRAMEBUFFER   Collection buffer data storage of color, alpha, depth and stencil buffers used as both a destination for drawing and as a source for reading (see below).
+ *
+ * When using a WebGL 2 context, the following values are available additionally:
+ *
+ * gl.DRAW_FRAMEBUFFER  Used as a destination for drawing operations such as gl.draw*, gl.clear* and gl.blitFramebuffer.
+ * gl.READ_FRAMEBUFFER  Used as a source for reading operations such as gl.readPixels and gl.blitFramebuffer.
+ */
+export type FramebufferTarget = "FRAMEBUFFER" | "DRAW_FRAMEBUFFER" | "READ_FRAMEBUFFER";

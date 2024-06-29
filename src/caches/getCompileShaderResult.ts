@@ -1,5 +1,4 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
-import { ShaderType } from "../gl/WebGLEnums";
 import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
@@ -181,3 +180,10 @@ export interface AttributeInfo
      */
     location: number;
 }
+
+/**
+ * Shader type.
+ *
+ * Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
+ */
+export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
