@@ -3,6 +3,7 @@ import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { IIndexBuffer } from "../data/IIndexBuffer";
 import { IRenderObject } from "../data/IRenderObject";
 import { IVertexAttribute } from "../data/IVertexAttribute";
+import { runVertexAttribute } from "../runs/runVertexAttribute";
 
 declare global
 {
@@ -155,11 +156,11 @@ export class WebGLBindingStates
      */
     private setupVertexAttributes(renderAtomic: IRenderObject)
     {
-        const { _attributeBuffers } = this.gl;
+        const { gl } = this;
 
         this.initAttributes();
 
-        const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
+        const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
 
         for (const name in shaderResult.attributes)
         {
@@ -175,7 +176,7 @@ export class WebGLBindingStates
 
             this.enableAttribute(location, attribute.divisor);
 
-            _attributeBuffers.vertexAttribPointer(location, attribute);
+            runVertexAttribute(gl, location, attribute);
         }
 
         this.disableUnusedAttributes();

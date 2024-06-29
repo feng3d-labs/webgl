@@ -2,7 +2,6 @@ import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
-import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
@@ -57,9 +56,9 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 
 function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const { _attributeBuffers, _info } = gl;
+    const { _info } = gl;
     //
-    const vertexNum = getAttributeVertexNum(gl, _attributeBuffers, renderAtomic);
+    const vertexNum = getAttributeVertexNum(gl, renderAtomic);
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
     const drawCall = renderAtomic.drawVertex || {};
@@ -90,11 +89,8 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 
 /**
  * 获取属性顶点属性。
- *
- * @param attributes
- * @returns
  */
-function getAttributeVertexNum(gl: WebGLRenderingContext, attributes: WebGLAttributeBuffers, renderAtomic: IRenderObject)
+function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const vertexNum = ((attributelist) =>
     {
