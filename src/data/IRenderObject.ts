@@ -6,7 +6,6 @@ import { IDrawVertex } from "./IDrawVertex";
 import { IScissor } from "./IScissor";
 import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
-import { RenderParams } from "./RenderParams";
 import { Uniforms } from "./Uniforms";
 
 /**
@@ -33,11 +32,6 @@ export interface IRenderObject
      * Uniform渲染数据
      */
     uniforms?: LazyObject<Uniforms>;
-
-    /**
-     * 渲染参数
-    */
-    renderParams?: RenderParams;
 
     /**
      * 绘制一定数量顶点。

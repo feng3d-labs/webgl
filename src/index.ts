@@ -5,7 +5,6 @@ export * from "./data/IVertexAttribute";
 export * from "./data/IIndexBuffer";
 export * from "./data/IWebGLBuffer";
 export * from "./data/IRenderObject";
-export * from "./data/RenderParams";
 export * from "./data/IWebGLRenderPipeline";
 export * from "./data/Texture";
 export * from "./data/Uniforms";
