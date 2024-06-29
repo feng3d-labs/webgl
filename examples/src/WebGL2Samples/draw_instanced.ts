@@ -25,7 +25,7 @@ import { IRenderObject, WebGL } from "../../../src";
     }
 
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             pos: {
                 buffer: {
                     data: [-0.3, -0.5,

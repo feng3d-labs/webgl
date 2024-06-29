@@ -106,7 +106,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderO
         }
 
         return 0;
-    })(renderAtomic.attributes);
+    })(renderAtomic.vertices);
 
     return vertexNum;
 }

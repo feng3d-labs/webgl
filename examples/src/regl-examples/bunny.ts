@@ -30,7 +30,7 @@ let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
 const renderAtomic: IRenderObject = {
-    attributes: {
+    vertices: {
         position: { buffer: { data: positions }, itemSize: 3 },
     },
     index: { data: indices },

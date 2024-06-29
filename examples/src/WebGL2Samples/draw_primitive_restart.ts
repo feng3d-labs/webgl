@@ -26,7 +26,7 @@ import { IRenderObject, WebGL } from "../../../src";
     const MAX_UNSIGNED_SHORT = 65535;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             pos: {
                 buffer: {
                     data: [

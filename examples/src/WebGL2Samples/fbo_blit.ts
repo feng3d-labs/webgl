@@ -32,7 +32,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
         });
 
         const renderAtomic: IRenderObject = {
-            attributes: {
+            vertices: {
                 position: {
                     buffer: {
                         data: [

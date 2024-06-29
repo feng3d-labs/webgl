@@ -25,7 +25,7 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
 
     const vertexCount = 12;
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             position: {
                 buffer: {
                     data: [

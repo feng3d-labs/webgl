@@ -30,7 +30,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
         });
 
         const renderAtomic: IRenderObject = {
-            attributes: {},
+            vertices: {},
             uniforms: {
                 diffuse,
                 // eslint-disable-next-line camelcase

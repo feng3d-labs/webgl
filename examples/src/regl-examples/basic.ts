@@ -17,7 +17,7 @@ webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const renderAtomic: IRenderObject = {
-    attributes: {
+    vertices: {
         position: {
             buffer: {
                 data: [

@@ -92,7 +92,7 @@ export class WebGLBindingStates
             if (attributeInfo.location >= 0)
             {
                 const cachedAttribute = cachedAttributes[name];
-                const attribute = renderAtomic.attributes[name];
+                const attribute = renderAtomic.vertices[name];
 
                 if (cachedAttribute === undefined) return true;
 
@@ -131,7 +131,7 @@ export class WebGLBindingStates
 
             if (programAttribute.location >= 0)
             {
-                const attribute = renderAtomic.attributes[name];
+                const attribute = renderAtomic.vertices[name];
 
                 const data: { version: number, attribute: IVertexAttribute } = {} as any;
                 data.attribute = attribute;
@@ -172,7 +172,7 @@ export class WebGLBindingStates
                 continue;
             }
 
-            const attribute = renderAtomic.attributes[name];
+            const attribute = renderAtomic.vertices[name];
 
             this.enableAttribute(location, attribute.divisor);
 

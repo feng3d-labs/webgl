@@ -49,7 +49,7 @@ function main()
             }` },
                 depthStencil: { depth: { depthCompare: "LEQUAL" } }
             },
-            attributes: {
+            vertices: {
                 aVertexPosition: {
                     // type: "FLOAT",
                     buffer: positionBuffer,

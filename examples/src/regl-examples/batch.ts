@@ -22,7 +22,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 1] }];
 
 const renderAtomic: IRenderObject = {
-    attributes: {
+    vertices: {
         position: {
             buffer: {
                 data: [

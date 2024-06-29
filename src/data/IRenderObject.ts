@@ -24,9 +24,9 @@ export interface IRenderObject
     index?: IIndexBuffer;
 
     /**
-     * 属性数据列表
+     * 顶点属性数据列表
      */
-    attributes: { [key: string]: IVertexAttribute; };
+    vertices: { [key: string]: IVertexAttribute; };
 
     /**
      * Uniform渲染数据

@@ -164,7 +164,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             position: { buffer: { data: positions }, itemSize: 3 },
             normal: { buffer: { data: normals }, itemSize: 3 },
             uv: { buffer: { data: uvs }, itemSize: 2 },
@@ -356,8 +356,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             return pv;
         }, []);
 
-        renderAtomic.attributes.position.buffer.data = new Float32Array(positions);
-        renderAtomic.attributes.normal.buffer.data = new Float32Array(normals);
+        renderAtomic.vertices.position.buffer.data = new Float32Array(positions);
+        renderAtomic.vertices.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 

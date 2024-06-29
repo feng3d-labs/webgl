@@ -65,7 +65,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             position: { buffer: { data: positions }, itemSize: 3 },
             uv: { buffer: { data: uvs }, itemSize: 2 },
         },
