@@ -1,6 +1,6 @@
 import { LazyObject } from "../types";
 import { IVertexAttribute } from "./IVertexAttribute";
-import { IIndexBuffer } from "./ElementBuffer";
+import { IIndexBuffer } from "./IIndexBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
 import { IScissor } from "./IScissor";

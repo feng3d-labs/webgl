@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/ElementBuffer";
+import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/IIndexBuffer";
 import { VertexAttributeTypes } from "../data/IVertexAttribute";
 
 /**

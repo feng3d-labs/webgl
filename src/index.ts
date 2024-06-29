@@ -2,7 +2,7 @@ export * from "./FrameBuffer";
 export * from "./RenderBuffer";
 export * from "./WebGL";
 export * from "./data/IVertexAttribute";
-export * from "./data/ElementBuffer";
+export * from "./data/IIndexBuffer";
 export * from "./data/IWebGLBuffer";
 export * from "./data/IRenderObject";
 export * from "./data/RenderParams";

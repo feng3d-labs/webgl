@@ -1,6 +1,6 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
-import { IIndexBuffer } from "../data/ElementBuffer";
+import { IIndexBuffer } from "../data/IIndexBuffer";
 import { IRenderObject } from "../data/IRenderObject";
 import { IVertexAttribute } from "../data/IVertexAttribute";
 
