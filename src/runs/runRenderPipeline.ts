@@ -75,13 +75,24 @@ function runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveStat
 function runDepthStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
 {
     //
-    const { depthtest, depthCompare, depthWriteEnabled } = { ...defaultDepthStencilState, ...depthStencil };
+    const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthStencilState, ...depthStencil };
     if (depthtest)
     {
         gl.enable(gl.DEPTH_TEST);
         //
         gl.depthFunc(gl[depthCompare]);
         gl.depthMask(depthWriteEnabled);
+
+        //
+        if (depthBias)
+        {
+            gl.enable(gl.POLYGON_OFFSET_FILL);
+            gl.polygonOffset(depthBias.factor, depthBias.units);
+        }
+        else
+        {
+            gl.disable(gl.POLYGON_OFFSET_FILL);
+        }
     }
     else
     {

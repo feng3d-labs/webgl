@@ -43,4 +43,37 @@ export interface IDepthStencilState
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
     depthCompare?: DepthFunc;
+
+    /**
+     * 深度偏移。
+     *
+     * 用于在深度测试中提供偏移量，以避免Z-fighting和其他深度相关的渲染问题。
+     */
+    depthBias?: IDepthBias;
+}
+
+/**
+ * 深度偏移。
+ *
+ * 用于在深度测试中提供偏移量，以避免Z-fighting和其他深度相关的渲染问题。
+ */
+export interface IDepthBias
+{
+    /**
+     * 它设置特定于实现的值乘以的乘数，以创建恒定的深度偏移量。缺省值为0。
+     *
+     * 对应WebGPU中的 GPUDepthStencilState.depthBias 。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
+     */
+    units: number;
+
+    /**
+     * 为每个多边形设置可变深度偏移的比例因子。缺省值为0。
+     *
+     * 对应WebGPU中的 GPUDepthStencilState.depthBiasSlopeScale 。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
+     */
+    factor: number;
 }

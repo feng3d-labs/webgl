@@ -6,19 +6,8 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
     renderParams = getRenderParams(renderParams);
 
     const {
-        usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,
         useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
     } = renderParams;
-
-    if (usePolygonOffset)
-    {
-        gl.enable(gl.POLYGON_OFFSET_FILL);
-        gl.polygonOffset(polygonOffsetFactor, polygonOffsetUnits);
-    }
-    else
-    {
-        gl.disable(gl.POLYGON_OFFSET_FILL);
-    }
 
     if (useStencil)
     {

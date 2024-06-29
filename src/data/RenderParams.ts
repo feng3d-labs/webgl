@@ -4,37 +4,6 @@
 export interface RenderParams
 {
     /**
-     * 是否开启 gl.POLYGON_OFFSET_FILL，默认不开启。
-     *
-     * WebGL API的WebGLRenderingContext.polygonOffset()方法指定了计算深度值的比例因子和单位。
-     * 在执行深度测试和将值写入深度缓冲区之前添加偏移量。
-     *
-     * The WebGLRenderingContext.polygonOffset() method of the WebGL API specifies the scale factors and units to calculate depth values.
-     * The offset is added before the depth test is performed and before the value is written into the depth buffer.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
-     */
-    usePolygonOffset?: boolean;
-
-    /**
-     * 为每个多边形设置可变深度偏移的比例因子。缺省值为0。
-     *
-     * A GLfloat which sets the scale factor for the variable depth offset for each polygon. The default value is 0.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
-     */
-    polygonOffsetFactor?: number;
-
-    /**
-     * 它设置特定于实现的值乘以的乘数，以创建恒定的深度偏移量。缺省值为0。
-     *
-     * A GLfloat which sets the multiplier by which an implementation-specific value is multiplied with to create a constant depth offset. The default value is 0.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/polygonOffset
-     */
-    polygonOffsetUnits?: number;
-
-    /**
      * 是否开启模板测试与更新模板缓冲。
      *
      * Activates stencil testing and updates to the stencil buffer.

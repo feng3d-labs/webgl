@@ -1,9 +1,6 @@
 import { RenderParams } from "../data/RenderParams";
 
 export const defaultRenderParams: RenderParams = {
-    usePolygonOffset: false,
-    polygonOffsetFactor: 0,
-    polygonOffsetUnits: 0,
     useStencil: false,
     stencilFunc: "ALWAYS",
     stencilFuncRef: 0,
