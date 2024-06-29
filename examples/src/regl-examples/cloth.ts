@@ -371,7 +371,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     }
 
     const img = new Image();
-    img.src = "../../resources/assets/cloth.png";
+    img.src = "../../assets/cloth.png";
     await img.decode();
 
     const diffuse = new Texture2D();
