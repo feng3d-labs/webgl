@@ -1,9 +1,9 @@
 import { LazyObject } from "../types";
-import { IVertexAttribute } from "./IVertexAttribute";
-import { IIndexBuffer } from "./IIndexBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
+import { IIndexBuffer } from "./IIndexBuffer";
 import { IScissor } from "./IScissor";
+import { IVertexAttributes } from "./IVertexAttributes";
 import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
 import { Uniforms } from "./Uniforms";
@@ -26,7 +26,7 @@ export interface IRenderObject
     /**
      * 顶点属性数据列表
      */
-    vertices: { [key: string]: IVertexAttribute; };
+    vertices: IVertexAttributes;
 
     /**
      * Uniform渲染数据

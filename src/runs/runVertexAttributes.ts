@@ -1,22 +1,13 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
-import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { IRenderObject } from "../data/IRenderObject";
-import { runIndexBuffer } from "../runs/runIndexBuffer";
-import { runVertexAttribute } from "../runs/runVertexAttribute";
-
-export function setup(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
-{
-    setupVertexAttributes(gl, renderAtomic);
-
-    runIndexBuffer(gl, renderAtomic.index);
-}
+import { runVertexAttribute } from "./runVertexAttribute";
 
 /**
  * 设置顶点属性。
  *
  * @param renderAtomic 渲染原子。
  */
-function setupVertexAttributes(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+export function runVertexAttributes(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
 
@@ -35,4 +26,3 @@ function setupVertexAttributes(gl: WebGLRenderingContext, renderAtomic: IRenderO
         runVertexAttribute(gl, location, attribute);
     }
 }
-
