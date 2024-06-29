@@ -1,5 +1,6 @@
 import { watcher } from "@feng3d/watcher";
-import { AttributeBuffer, AttributeBufferSourceTypes, VertexAttributeTypes } from "../data/AttributeBuffer";
+import { IVertexAttribute, VertexAttributeTypes } from "../data/IVertexAttribute";
+import { AttributeBufferSourceTypes } from "../data/IWebGLBuffer";
 
 declare global
 {
@@ -11,7 +12,7 @@ declare global
 
 export class WebGLAttributeBuffers
 {
-    private buffers = new WeakMap<AttributeBuffer, WebGLAttributeBuffer>();
+    private buffers = new WeakMap<IVertexAttribute, WebGLAttributeBuffer>();
 
     private gl: WebGLRenderingContext;
 
@@ -21,14 +22,14 @@ export class WebGLAttributeBuffers
         gl._attributeBuffers = this;
     }
 
-    get(attribute: AttributeBuffer)
+    get(attribute: IVertexAttribute)
     {
         const { buffers } = this;
 
         return buffers.get(attribute);
     }
 
-    remove(attribute: AttributeBuffer)
+    remove(attribute: IVertexAttribute)
     {
         const { buffers } = this;
 
@@ -42,7 +43,7 @@ export class WebGLAttributeBuffers
         }
     }
 
-    update(attribute: AttributeBuffer)
+    update(attribute: IVertexAttribute)
     {
         const { buffers } = this;
 
@@ -56,7 +57,7 @@ export class WebGLAttributeBuffers
         data.updateBuffer();
     }
 
-    vertexAttribPointer(location: number, attribute: AttributeBuffer)
+    vertexAttribPointer(location: number, attribute: IVertexAttribute)
     {
         const { gl } = this;
 
@@ -68,8 +69,8 @@ export class WebGLAttributeBuffers
         const bytesPerElement = attributeBufferCacle.bytesPerElement;
         const normalized = attributeBufferCacle.normalized;
 
-        const stride = size * bytesPerElement;
-        const offset = 0;
+        const stride = attribute.vertexSize || size * bytesPerElement;
+        const offset = attribute.offset || 0;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
@@ -87,7 +88,7 @@ export class WebGLAttributeBuffers
 export class WebGLAttributeBuffer
 {
     //
-    attribute: AttributeBuffer;
+    attribute: IVertexAttribute;
     buffer: WebGLBuffer;
 
     type: VertexAttributeTypes;
@@ -107,7 +108,7 @@ export class WebGLAttributeBuffer
 
     private gl: WebGLRenderingContext;
 
-    constructor(gl: WebGLRenderingContext, attribute: AttributeBuffer)
+    constructor(gl: WebGLRenderingContext, attribute: IVertexAttribute)
     {
         this.gl = gl;
 

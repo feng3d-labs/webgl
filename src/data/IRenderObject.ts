@@ -1,5 +1,5 @@
 import { LazyObject } from "../types";
-import { AttributeBuffer } from "./AttributeBuffer";
+import { IVertexAttribute } from "./IVertexAttribute";
 import { ElementBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
@@ -27,7 +27,7 @@ export interface IRenderObject
     /**
      * 属性数据列表
      */
-    attributes: { [key: string]: AttributeBuffer; };
+    attributes: { [key: string]: IVertexAttribute; };
 
     /**
      * Uniform渲染数据

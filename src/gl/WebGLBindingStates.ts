@@ -1,6 +1,6 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
-import { AttributeBuffer } from "../data/AttributeBuffer";
+import { IVertexAttribute } from "../data/IVertexAttribute";
 import { ElementBuffer } from "../data/ElementBuffer";
 import { IRenderObject } from "../data/IRenderObject";
 
@@ -116,7 +116,7 @@ export class WebGLBindingStates
     {
         const { currentState } = this;
 
-        const cache: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
+        const cache: { [key: string]: { version: number, attribute: IVertexAttribute } } = {};
         let attributesNum = 0;
 
         const shaderResult = getCompileShaderResult(this.gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
@@ -130,7 +130,7 @@ export class WebGLBindingStates
             {
                 const attribute = renderAtomic.attributes[name];
 
-                const data: { version: number, attribute: AttributeBuffer } = {} as any;
+                const data: { version: number, attribute: IVertexAttribute } = {} as any;
                 data.attribute = attribute;
                 data.version = attribute.version;
 
@@ -362,7 +362,7 @@ class BindingState
     /**
      * WebGL属性缓存信息
      */
-    attributes: { [key: string]: { version: number, attribute: AttributeBuffer } } = {};
+    attributes: { [key: string]: { version: number, attribute: IVertexAttribute } } = {};
 
     /**
      * 顶点索引缓冲

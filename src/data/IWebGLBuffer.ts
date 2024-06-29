@@ -1,5 +1,4 @@
 import { BufferUsage } from "../gl/WebGLEnums";
-import { AttributeBufferSourceTypes } from "./AttributeBuffer";
 
 /**
  * WebGL缓冲区
@@ -23,3 +22,15 @@ export interface IWebGLBuffer
      */
     usage?: BufferUsage;
 }
+
+/**
+ * 属性缓冲数据类型。
+ */
+export type AttributeBufferSourceTypes = number[]
+    | Float32Array
+    | Uint32Array
+    | Int32Array
+    | Uint16Array
+    | Int16Array | Uint8ClampedArray
+    | Uint8Array
+    | Int8Array;
