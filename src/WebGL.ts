@@ -1,7 +1,7 @@
 import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
-import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
-import { IWebGLSubmit } from "./data/IWebGLSubmit";
 import { IRenderObject } from "./data/IRenderObject";
+import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
+import { IWebGLRenderPass } from "./data/IWebGLRenderPass";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
 
@@ -13,24 +13,18 @@ import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
 export class WebGL
 {
     /**
-     * 提交渲染数据
+     * 提交一次渲染通道数据。
      *
-     * @param data
+     * @param canvasContext 渲染画布上下文描述。
+     * @param renderPass 渲染通道数据。
      * @returns
      */
-    static submit(data: IWebGLSubmit)
+    static renderPass(canvasContext: IWebGLCanvasContext, renderPass: IWebGLRenderPass)
     {
-        const gl = getWebGLRenderingContext(data.canvasContext);
+        const gl = getWebGLRenderingContext(canvasContext);
+        if (!gl || gl.isContextLost()) return;
 
-        if (!gl) return;
-
-        if (gl.isContextLost()) return;
-
-        //
-        data.renderPasss.forEach((renderPass) =>
-        {
-            runWebGLRenderPass(gl, renderPass);
-        });
+        runWebGLRenderPass(gl, renderPass);
     }
 
     /**
@@ -38,10 +32,10 @@ export class WebGL
      *
      * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
      */
-    static render(canvasContext: IWebGLCanvasContext, renderAtomic: IRenderObject)
+    static renderObject(canvasContext: IWebGLCanvasContext, renderAtomic: IRenderObject)
     {
         const gl = getWebGLRenderingContext(canvasContext);
-        if (gl.isContextLost()) return;
+        if (!gl || gl.isContextLost()) return;
 
         runRenderObject(gl, renderAtomic);
     }

@@ -55,11 +55,8 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGL.submit({
-        canvasContext: { canvasId: "glcanvas" },
-        renderPasss: [{
-            renderObjects: [renderAtomic]
-        }]
+    WebGL.renderPass({ canvasId: "glcanvas" }, {
+        renderObjects: [renderAtomic]
     });
 
     requestAnimationFrame(draw);

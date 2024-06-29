@@ -1,4 +1,5 @@
 import { IRenderObject, WebGL } from "../../../src";
+import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
 import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
 
 (function ()
@@ -73,33 +74,30 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
         }
     };
 
-    const data: IWebGLSubmit = {
-        canvasContext: { canvasId: "glcanvas" },
-        renderPasss: [{
-            passDescriptor: {
-                colorAttachments: [{
-                    clearValue: [0.0, 0.0, 0.0, 1.0],
-                    loadOp: "clear",
-                }],
+    const data: IWebGLRenderPass = {
+        passDescriptor: {
+            colorAttachments: [{
+                clearValue: [0.0, 0.0, 0.0, 1.0],
+                loadOp: "clear",
+            }],
+        },
+        renderObjects: [
+            {
+                ...renderAtomic,
+                drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
+                viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
             },
-            renderObjects: [
-                {
-                    ...renderAtomic,
-                    drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
-                    viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
-                },
-                {
-                    ...renderAtomic,
-                    drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
-                    viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
-                },
-            ],
-        }]
+            {
+                ...renderAtomic,
+                drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
+                viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
+            },
+        ],
     };
 
     function draw()
     {
-        WebGL.submit(data);
+        WebGL.renderPass({ canvasId: "glcanvas" }, data);
 
         requestAnimationFrame(draw);
     }

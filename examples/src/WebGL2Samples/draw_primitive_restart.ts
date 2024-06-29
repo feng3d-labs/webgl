@@ -74,17 +74,14 @@ import { IRenderObject, WebGL } from "../../../src";
 
     function draw()
     {
-        WebGL.submit({
-            canvasContext: { canvasId: "glcanvas" },
-            renderPasss: [{
-                passDescriptor: {
-                    colorAttachments: [{
-                        clearValue: [0.0, 0.0, 0.0, 1.0],
-                        loadOp: "clear",
-                    }],
-                },
-                renderObjects: [renderAtomic]
-            }]
+        WebGL.renderPass({ canvasId: "glcanvas" }, {
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
+            },
+            renderObjects: [renderAtomic]
         });
 
         requestAnimationFrame(draw);

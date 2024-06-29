@@ -108,9 +108,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
         function draw()
         {
-            WebGL.submit({
-                canvasContext: { canvasId: "glcanvas" },
-                renderPasss: [{
+            WebGL.renderPass(
+                { canvasId: "glcanvas" },
+                {
                     passDescriptor: {
                         colorAttachments: [{
                             clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -118,8 +118,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                         }],
                     },
                     renderObjects: [renderAtomic]
-                }]
-            });
+                }
+            );
 
             requestAnimationFrame(draw);
         }

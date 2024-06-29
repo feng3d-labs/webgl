@@ -5,19 +5,15 @@ import { WebGL } from "../../../src";
 
 function main()
 {
-    WebGL.submit({
-        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
-        renderPasss: [
-            {
-                passDescriptor: {
-                    colorAttachments: [{
-                        clearValue: [1, 0, 0, 0.5],
-                        loadOp: "clear",
-                    }],
-                },
-            }
-        ],
-    });
+    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, {
+        passDescriptor: {
+            colorAttachments: [{
+                clearValue: [1, 0, 0, 0.5],
+                loadOp: "clear",
+            }],
+        },
+    }
+    );
 }
 
 window.onload = main;

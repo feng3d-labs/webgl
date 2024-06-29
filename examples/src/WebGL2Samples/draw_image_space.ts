@@ -76,17 +76,14 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             //
             renderAtomic.uniforms["u_imageSize"] = [canvas.width / 2, canvas.height / 2];
 
-            WebGL.submit({
-                canvasContext: { canvasId: "glcanvas" },
-                renderPasss: [{
-                    passDescriptor: {
-                        colorAttachments: [{
-                            clearValue: [0.0, 0.0, 0.0, 1.0],
-                            loadOp: "clear",
-                        }],
-                    },
-                    renderObjects: [renderAtomic]
-                }]
+            WebGL.renderPass({ canvasId: "glcanvas" }, {
+                passDescriptor: {
+                    colorAttachments: [{
+                        clearValue: [0.0, 0.0, 0.0, 1.0],
+                        loadOp: "clear",
+                    }],
+                },
+                renderObjects: [renderAtomic]
             });
 
             requestAnimationFrame(draw);

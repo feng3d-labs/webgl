@@ -73,7 +73,7 @@ function draw()
 
     camera(renderAtomic, webglcanvas.width, webglcanvas.height);
 
-    WebGL.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.renderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

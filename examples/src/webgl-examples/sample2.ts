@@ -1,5 +1,6 @@
 import { mat4 } from "gl-matrix";
 import { IWebGLBuffer, WebGL } from "../../../src";
+import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
 
 main();
 
@@ -18,54 +19,52 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    //
-    WebGL.submit({
-        canvasContext: { canvasId: "glcanvas", contextId: "webgl" },
-        renderPasss: [{
-            passDescriptor: {
-                colorAttachments: [{
-                    clearValue: [0, 0, 0, 1],
-                    loadOp: "clear",
-                }],
-                depthStencilAttachment: {
-                    depthClearValue: 1.0,
-                    depthLoadOp: "clear",
-                },
-            },
-            renderObjects: [{
-                pipeline: {
-                    primitive: { topology: "TRIANGLE_STRIP" },
-                    vertex: {
-                        code: `
-                attribute vec4 aVertexPosition;
-            
-                uniform mat4 uModelViewMatrix;
-                uniform mat4 uProjectionMatrix;
-            
-                void main() {
-                  gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-                }` }, fragment: {
-                        code: `
-                void main() {
-                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-                }` },
-                    depthStencil: { depth: { depthCompare: "LEQUAL" } }
-                },
-                attributes: {
-                    aVertexPosition: {
-                        type: "FLOAT",
-                        array: positionBuffer.data,
-                        itemSize: 2,
-                    }
-                },
-                uniforms: {
-                    uProjectionMatrix: projectionMatrix,
-                    uModelViewMatrix: modelViewMatrix,
-                },
-                drawVertex: { firstVertex: 0, vertexCount: 4 },
+    const renderPasss: IWebGLRenderPass = {
+        passDescriptor: {
+            colorAttachments: [{
+                clearValue: [0, 0, 0, 1],
+                loadOp: "clear",
             }],
+            depthStencilAttachment: {
+                depthClearValue: 1.0,
+                depthLoadOp: "clear",
+            },
+        },
+        renderObjects: [{
+            pipeline: {
+                primitive: { topology: "TRIANGLE_STRIP" },
+                vertex: {
+                    code: `
+            attribute vec4 aVertexPosition;
+        
+            uniform mat4 uModelViewMatrix;
+            uniform mat4 uProjectionMatrix;
+        
+            void main() {
+              gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+            }` }, fragment: {
+                    code: `
+            void main() {
+                gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+            }` },
+                depthStencil: { depth: { depthCompare: "LEQUAL" } }
+            },
+            attributes: {
+                aVertexPosition: {
+                    type: "FLOAT",
+                    array: positionBuffer.data,
+                    itemSize: 2,
+                }
+            },
+            uniforms: {
+                uProjectionMatrix: projectionMatrix,
+                uModelViewMatrix: modelViewMatrix,
+            },
+            drawVertex: { firstVertex: 0, vertexCount: 4 },
         }],
-    });
+    };
+
+    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
 }
 
 function drawScene(canvas: HTMLCanvasElement)

@@ -72,16 +72,10 @@ function _onContextCreationError(event: WebGLContextEvent)
     console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
 }
 
-let autoId = 1;
-function autoCreateCanvas()
+function autoCreateCanvas(canvasId: string)
 {
     const canvas = document.createElement("canvas");
-    canvas.id = `autoCreateCanvas_${autoId++}`;
-    canvas.style.position = "fixed";
-    canvas.style.left = "0px";
-    canvas.style.top = "0px";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
+    canvas.id = canvasId;
     document.body.appendChild(canvas);
 
     return canvas;
@@ -92,7 +86,7 @@ function getCanvas(canvasContext: IWebGLCanvasContext)
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
     {
-        canvas = autoCreateCanvas();
+        canvas = autoCreateCanvas(canvasContext.canvasId);
     }
 
     return canvas;
