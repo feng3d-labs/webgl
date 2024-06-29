@@ -1,4 +1,3 @@
-import { watcher } from "@feng3d/watcher";
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { IVertexAttribute } from "../data/IVertexAttribute";
 

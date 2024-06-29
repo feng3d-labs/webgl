@@ -58,8 +58,12 @@ export class WebGLBindingStates
         {
             this.setupVertexAttributes(renderAtomic);
 
-            const index = renderAtomic.index;
-            bindBuffer(gl, index);
+            //
+            if (renderAtomic.index)
+            {
+                const buffer = getElementWebGLBuffer(gl, renderAtomic.index);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+            }
         }
     }
 
@@ -382,10 +386,3 @@ class BindingState
     }
 }
 
-function bindBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
-{
-    if (element)
-    {
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, getElementWebGLBuffer(gl, element));
-    }
-}
