@@ -6,20 +6,10 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
     renderParams = getRenderParams(renderParams);
 
     const {
-        useViewPort, viewPort,
         usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,
         useScissor, scissor,
         useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
     } = renderParams;
-
-    if (useViewPort)
-    {
-        gl.viewport(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
-    }
-    else
-    {
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    }
 
     if (usePolygonOffset)
     {

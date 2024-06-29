@@ -4,22 +4,6 @@
 export interface RenderParams
 {
     /**
-     * 是否使用 viewport，默认不使用，不使用时viewport为画布区域。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
-     */
-    useViewPort?: boolean;
-
-    /**
-     * 通过WebGL API的WebGLRenderingContext.viewport()方法设置了viewport，指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
-     *
-     * The WebGLRenderingContext.viewport() method of the WebGL API sets the viewport, which specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
-     */
-    viewPort?: { x: number, y: number, width: number, height: number };
-
-    /**
      * 是否开启剪刀裁剪，默认不开启。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor

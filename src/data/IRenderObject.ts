@@ -1,10 +1,11 @@
 import { LazyObject } from "../types";
 import { AttributeBuffer } from "./AttributeBuffer";
-import { IDrawVertex } from "./IDrawVertex";
 import { ElementBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
-import { RenderParams } from "./RenderParams";
+import { IDrawVertex } from "./IDrawVertex";
+import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
+import { RenderParams } from "./RenderParams";
 import { Uniforms } from "./Uniforms";
 
 /**
@@ -46,6 +47,19 @@ export interface IRenderObject
 
     /**
      * 绘制一定数量顶点索引。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
      */
     drawIndexed?: IDrawIndexed;
+
+    /**
+     * 视窗。
+     *
+     * 通过WebGL API的WebGLRenderingContext.viewport()方法设置了viewport，指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
+     *
+     * The WebGLRenderingContext.viewport() method of the WebGL API sets the viewport, which specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
+     */
+    viewport?: IViewport;
 }
