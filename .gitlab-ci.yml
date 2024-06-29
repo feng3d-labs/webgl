@@ -24,6 +24,7 @@ pages:
   stage: deploy
   script:
   - npm run docs
+  - npm run examples
   artifacts:
     paths:
     - public
