@@ -1,4 +1,5 @@
 import { IRenderObject } from "../data/IRenderObject";
+import { setup } from "../gl/WebGLBindingStates";
 import { runDrawCall } from "./runDrawCall";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
@@ -9,15 +10,13 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 {
     const webGLRenderAtomic = renderObject;
 
-    const { _bindingStates } = gl;
-
     runViewPort(gl, webGLRenderAtomic.viewport);
 
     runScissor(gl, webGLRenderAtomic.scissor);
 
     runRenderPipeline(gl, webGLRenderAtomic.pipeline);
 
-    _bindingStates.setup(webGLRenderAtomic);
+    setup(gl, webGLRenderAtomic);
 
     runUniforms(gl, webGLRenderAtomic);
 

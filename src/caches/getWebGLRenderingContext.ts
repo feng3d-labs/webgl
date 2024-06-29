@@ -1,6 +1,5 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
 import { defaults } from "../defaults/defaults";
-import { WebGLBindingStates } from "../gl/WebGLBindingStates";
 import { WebGLCapabilities } from "../gl/WebGLCapabilities";
 import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
@@ -50,7 +49,6 @@ function initWebGLModules(gl: WebGLRenderingContext)
     new WebGLInfo(gl);
     new WebGLTextures(gl);
 
-    new WebGLBindingStates(gl);
     new WebGLRenderbuffers(gl);
     new WebGLFramebuffers(gl);
 }
