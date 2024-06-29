@@ -69,7 +69,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             position: { buffer: { data: positions }, itemSize: 3 },
             uv: { buffer: { data: uvs }, itemSize: 2 },
         },
-        index: { array: indices },
+        index: { data: indices },
         uniforms: {
             view: () =>
             {

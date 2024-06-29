@@ -1,6 +1,6 @@
 import { LazyObject } from "../types";
 import { IVertexAttribute } from "./IVertexAttribute";
-import { ElementBuffer } from "./ElementBuffer";
+import { IIndexBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
 import { IScissor } from "./IScissor";
@@ -22,7 +22,7 @@ export interface IRenderObject
     /**
      * 顶点索引缓冲
      */
-    index?: ElementBuffer;
+    index?: IIndexBuffer;
 
     /**
      * 属性数据列表

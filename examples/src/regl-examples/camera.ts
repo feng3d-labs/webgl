@@ -42,7 +42,7 @@ const renderAtomic: IRenderObject = {
         position: { buffer: { data: positions }, itemSize: 3 },
         normal: { buffer: { data: normals }, itemSize: 3 },
     },
-    index: { array: indices },
+    index: { data: indices },
     uniforms: {},
     pipeline: {
         primitive: { cullMode: "NONE" },

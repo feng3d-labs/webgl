@@ -1,12 +1,12 @@
 import { watcher } from "@feng3d/watcher";
-import { DrawElementType, ElementBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
+import { DrawElementType, IIndexBuffer, ElementBufferSourceTypes } from "../data/ElementBuffer";
 import { VertexAttributeTypes } from "../data/IVertexAttribute";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _elementBufferMap: WeakMap<ElementBuffer, WebGLBuffer>
+        _elementBufferMap: WeakMap<IIndexBuffer, WebGLBuffer>
     }
 
     interface WebGLBuffer
@@ -32,7 +32,7 @@ declare global
  * @param element
  * @returns
  */
-export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
+export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
 {
     let buffer = gl._elementBufferMap.get(element);
 
@@ -44,21 +44,22 @@ export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: Elemen
         const updateBuffer = () =>
         {
             // 获取
-            buffer.type = element.type || getDrawElementType(element.array);
-            const array = getArrayBufferViewWithType(element.array, buffer.type);
+            buffer.type = element.type || getDrawElementType(element.data);
+            const data = getArrayBufferViewWithType(element.data, buffer.type);
 
             // 上传数据到WebGL
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl[element.usage || "STATIC_DRAW"]);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[element.usage || "STATIC_DRAW"]);
 
             //
-            buffer.count = array.length;
+            buffer.count = data.length;
+            buffer.bytesPerElement = data.BYTES_PER_ELEMENT;
         };
 
         updateBuffer();
 
         //
-        watcher.watch(element, "array", updateBuffer);
+        watcher.watch(element, "data", updateBuffer);
     }
 
     return buffer;

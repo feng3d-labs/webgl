@@ -33,7 +33,7 @@ const renderAtomic: IRenderObject = {
     attributes: {
         position: { buffer: { data: positions }, itemSize: 3 },
     },
-    index: { array: indices },
+    index: { data: indices },
     uniforms: {
         model: mat4.identity([]),
         view: () =>

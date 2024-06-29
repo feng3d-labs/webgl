@@ -40,7 +40,7 @@ import { IRenderObject, WebGL } from "../../../src";
         },
         uniforms: {},
         index: {
-            array: [
+            data: [
                 0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
             ]
         },

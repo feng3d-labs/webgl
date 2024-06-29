@@ -169,7 +169,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             normal: { buffer: { data: normals }, itemSize: 3 },
             uv: { buffer: { data: uvs }, itemSize: 2 },
         },
-        index: { array: indices },
+        index: { data: indices },
         uniforms: {
             view: () => camera.view(),
             projection: () =>

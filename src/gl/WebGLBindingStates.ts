@@ -1,6 +1,6 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
-import { ElementBuffer } from "../data/ElementBuffer";
+import { IIndexBuffer } from "../data/ElementBuffer";
 import { IRenderObject } from "../data/IRenderObject";
 import { IVertexAttribute } from "../data/IVertexAttribute";
 
@@ -362,7 +362,7 @@ class BindingState
     /**
      * 顶点索引缓冲
      */
-    index: ElementBuffer;
+    index: IIndexBuffer;
 
     /**
      * 属性数量。
@@ -382,7 +382,7 @@ class BindingState
     }
 }
 
-function bindBuffer(gl: WebGLRenderingContext, element: ElementBuffer)
+function bindBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
 {
     if (element)
     {
