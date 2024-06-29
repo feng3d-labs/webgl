@@ -18,7 +18,7 @@ export interface IIndexBuffer
     type?: DrawElementType;
 
     /**
-     * 数据
+     * 顶点索引数据。
      */
     data: ElementBufferSourceTypes;
 
