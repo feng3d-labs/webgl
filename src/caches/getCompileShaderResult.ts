@@ -14,7 +14,7 @@ declare global
  */
 export function getCompileShaderResult(gl: WebGLRenderingContext, vertex: string, fragment: string)
 {
-    const compileShaderResults = gl._compileShaderResults = gl._compileShaderResults || {};
+    const compileShaderResults = gl._compileShaderResults;
 
     const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
     let result = compileShaderResults[shaderKey];

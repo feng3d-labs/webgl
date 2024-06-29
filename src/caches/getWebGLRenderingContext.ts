@@ -40,6 +40,7 @@ function initMap(gl: WebGLRenderingContext)
 {
     gl._webGLBufferMap = new WeakMap();
     gl._elementBufferMap = new WeakMap();
+    gl._compileShaderResults = {};
 }
 
 function initWebGLModules(gl: WebGLRenderingContext)
