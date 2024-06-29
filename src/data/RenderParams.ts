@@ -4,22 +4,6 @@
 export interface RenderParams
 {
     /**
-     * 是否开启剪刀裁剪，默认不开启。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
-     */
-    useScissor?: boolean;
-
-    /**
-     * WebGL API的WebGLRenderingContext.scissor()方法设置了一个剪刀盒，它将绘图限制为一个指定的矩形。
-     *
-     * The WebGLRenderingContext.scissor() method of the WebGL API sets a scissor box, which limits the drawing to a specified rectangle.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
-     */
-    scissor?: { x: number, y: number, width: number, height: number };
-
-    /**
      * 是否开启 gl.POLYGON_OFFSET_FILL，默认不开启。
      *
      * WebGL API的WebGLRenderingContext.polygonOffset()方法指定了计算深度值的比例因子和单位。

@@ -3,6 +3,7 @@ import { AttributeBuffer } from "./AttributeBuffer";
 import { ElementBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
+import { IScissor } from "./IScissor";
 import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
 import { RenderParams } from "./RenderParams";
@@ -53,13 +54,20 @@ export interface IRenderObject
     drawIndexed?: IDrawIndexed;
 
     /**
-     * 视窗。
+     * 视窗，显示在画布上的区域。
      *
-     * 通过WebGL API的WebGLRenderingContext.viewport()方法设置了viewport，指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
-     *
-     * The WebGLRenderingContext.viewport() method of the WebGL API sets the viewport, which specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
+     * 指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
      */
     viewport?: IViewport;
+
+    /**
+     * 剪刀盒。
+     *
+     * 设置了一个剪刀盒，它将绘图限制为一个指定的矩形。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
+     */
+    scissor?: IScissor;
 }

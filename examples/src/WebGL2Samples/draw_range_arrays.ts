@@ -86,7 +86,7 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
                 {
                     ...renderAtomic,
                     drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
-                    viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height }
+                    viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
                 },
                 {
                     ...renderAtomic,

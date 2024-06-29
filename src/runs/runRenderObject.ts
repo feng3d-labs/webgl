@@ -4,6 +4,7 @@ import { runRenderParams } from "./runRenderParams";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runDrawCall } from "./runDrawCall";
 import { runViewPort } from "./runViewPort";
+import { runScissor } from "./runScissor";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
@@ -11,7 +12,9 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 
     const { _bindingStates } = gl;
 
-    runViewPort(gl, webGLRenderAtomic);
+    runViewPort(gl, webGLRenderAtomic.viewport);
+
+    runScissor(gl, webGLRenderAtomic.scissor);
 
     runRenderPipeline(gl, webGLRenderAtomic.pipeline);
 

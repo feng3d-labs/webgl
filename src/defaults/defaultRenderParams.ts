@@ -1,7 +1,6 @@
 import { RenderParams } from "../data/RenderParams";
 
 export const defaultRenderParams: RenderParams = {
-    useScissor: false,
     usePolygonOffset: false,
     polygonOffsetFactor: 0,
     polygonOffsetUnits: 0,

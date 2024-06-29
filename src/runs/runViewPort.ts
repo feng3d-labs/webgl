@@ -1,8 +1,7 @@
-import { IRenderObject } from "../data/IRenderObject";
+import { IViewport } from "../data/IViewport";
 
-export function runViewPort(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+export function runViewPort(gl: WebGLRenderingContext, viewport?: IViewport)
 {
-    const viewport = renderAtomic.viewport;
     if (viewport)
     {
         gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);

@@ -7,7 +7,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
 
     const {
         usePolygonOffset, polygonOffsetFactor, polygonOffsetUnits,
-        useScissor, scissor,
         useStencil, stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask,
     } = renderParams;
 
@@ -19,16 +18,6 @@ export function runRenderParams(gl: WebGLRenderingContext, renderParams: RenderP
     else
     {
         gl.disable(gl.POLYGON_OFFSET_FILL);
-    }
-
-    if (useScissor)
-    {
-        gl.enable(gl.SCISSOR_TEST);
-        gl.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
-    }
-    else
-    {
-        gl.disable(gl.SCISSOR_TEST);
     }
 
     if (useStencil)
