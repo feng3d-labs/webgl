@@ -1,10 +1,9 @@
 import { IRenderObject } from "../data/IRenderObject";
-import { runUniforms } from "./runUniforms";
-import { runRenderParams } from "./runRenderParams";
-import { runRenderPipeline } from "./runRenderPipeline";
 import { runDrawCall } from "./runDrawCall";
-import { runViewPort } from "./runViewPort";
+import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
+import { runUniforms } from "./runUniforms";
+import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
@@ -17,8 +16,6 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
     runScissor(gl, webGLRenderAtomic.scissor);
 
     runRenderPipeline(gl, webGLRenderAtomic.pipeline);
-
-    runRenderParams(gl, webGLRenderAtomic.renderParams);
 
     _bindingStates.setup(webGLRenderAtomic);
 

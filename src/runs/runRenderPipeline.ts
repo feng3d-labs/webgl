@@ -1,17 +1,16 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
-import { IBlendComponent } from "../data/IBlendComponent";
-import { IDepthStencilState } from "../data/IDepthStencilState";
+import { IBlendComponent } from "../data/IBlendState";
+import { IDepthBias, IDepthState, IDepthStencilState, IStencilFaceState, IStencilState } from "../data/IDepthStencilState";
 import { IPrimitiveState } from "../data/IPrimitiveState";
 import { IFragmentState, IVertexState, IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
 
-const defaultDepthStencilState: IDepthStencilState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" };
+const defaultDepthBias: IDepthBias = { units: 0, factor: 0 };
+const defaultDepthState: IDepthState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS", depthBias: defaultDepthBias };
+const defaultStencilFaceState: IStencilFaceState = { stencilFunc: "ALWAYS", stencilFuncRef: 0, stencilFuncMask: 0b11111111, stencilOpFail: "KEEP", stencilOpZFail: "KEEP", stencilOpZPass: "KEEP", stencilMask: 0b11111111 };
+const defaultStencilState: IStencilState = { useStencil: false, stencilFront: defaultStencilFaceState, stencilBack: defaultStencilFaceState };
+const defaultDepthStencilState: IDepthStencilState = { depth: defaultDepthState, stencil: defaultStencilState };
 const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullMode: "BACK", frontFace: "CCW" };
-
-const defaultBlendComponent: IBlendComponent = {
-    operation: "FUNC_ADD",
-    srcFactor: "SRC_ALPHA",
-    dstFactor: "ONE_MINUS_SRC_ALPHA",
-};
+const defaultBlendComponent: IBlendComponent = { operation: "FUNC_ADD", srcFactor: "SRC_ALPHA", dstFactor: "ONE_MINUS_SRC_ALPHA" };
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
@@ -74,8 +73,14 @@ function runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveStat
 
 function runDepthStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
 {
-    //
-    const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthStencilState, ...depthStencil };
+    runDepthState(gl, depthStencil?.depth || defaultDepthStencilState.depth);
+    runStencilState(gl, depthStencil?.stencil || defaultDepthStencilState.stencil);
+}
+
+function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
+{
+    const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthState, ...depth };
+
     if (depthtest)
     {
         gl.enable(gl.DEPTH_TEST);
@@ -86,8 +91,10 @@ function runDepthStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthSt
         //
         if (depthBias)
         {
+            const { factor, units } = { ...defaultDepthBias, ...depthBias };
+
             gl.enable(gl.POLYGON_OFFSET_FILL);
-            gl.polygonOffset(depthBias.factor, depthBias.units);
+            gl.polygonOffset(factor, units);
         }
         else
         {
@@ -97,5 +104,34 @@ function runDepthStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthSt
     else
     {
         gl.disable(gl.DEPTH_TEST);
+    }
+}
+
+function runStencilState(gl: WebGLRenderingContext, stencil: IStencilState)
+{
+    //
+    const {
+        useStencil, stencilFront, stencilBack,
+    } = { ...defaultStencilState, ...stencil };
+
+    if (useStencil)
+    {
+        gl.enable(gl.STENCIL_TEST);
+        {
+            const { stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask } = { ...defaultStencilFaceState, ...stencilFront };
+            gl.stencilFuncSeparate(gl.FRONT, gl[stencilFunc], stencilFuncRef, stencilFuncMask);
+            gl.stencilOpSeparate(gl.FRONT, gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
+            gl.stencilMaskSeparate(gl.FRONT, stencilMask);
+        }
+        {
+            const { stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask } = { ...defaultStencilFaceState, ...stencilBack };
+            gl.stencilFuncSeparate(gl.BACK, gl[stencilFunc], stencilFuncRef, stencilFuncMask);
+            gl.stencilOpSeparate(gl.BACK, gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
+            gl.stencilMaskSeparate(gl.BACK, stencilMask);
+        }
+    }
+    else
+    {
+        gl.disable(gl.STENCIL_TEST);
     }
 }
