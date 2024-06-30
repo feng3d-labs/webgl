@@ -374,7 +374,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
     img.src = "../../resources/assets/cloth.png";
     await img.decode();
 
-    const diffuse: ITexture = { source: [img] };
+    const diffuse: ITexture = { sources: [{ source: img }] };
 
     draw();
 })();

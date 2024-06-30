@@ -1,5 +1,5 @@
 import { ITexture } from "../data/ITexture";
-import { defaultTexture } from "../runs/runTexture";
+import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
 {
@@ -16,7 +16,7 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
     let webGLTexture = _textureMap.get(texture);
     if (webGLTexture) return webGLTexture;
 
-    const { textureTarget, flipY, premulAlpha, generateMipmap, format, type, source, size } = { ...defaultTexture, ...texture };
+    const { textureTarget, flipY, premulAlpha, generateMipmap, sources } = { ...defaultTexture, ...texture };
 
     webGLTexture = gl.createTexture(); // Create a texture object
 
@@ -29,14 +29,16 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
     // 设置纹理图片
     if (textureTarget === "TEXTURE_2D")
     {
-        if (source[0])
+        const sourceItem = sources[0];
+        if ("source" in sourceItem)
         {
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl[format], gl[format], gl[type], source[0]);
+            const { level, internalformat, format, type, source } = { ...defaultImageSource, ...sourceItem };
+            gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], gl[format], gl[type], source);
         }
         else
         {
-            const [width, height] = size;
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl[format], width, height, 0, gl[format], gl[type], null);
+            const { level, internalformat, width, height, border, format, type, pixels } = { ...defaultBufferSource, ...sourceItem };
+            gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
         }
     }
 

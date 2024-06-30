@@ -15,5 +15,4 @@ export * from "./runs/runUniforms";
 export * from "./shader/Macro";
 export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";
-export * from "./textures/RenderTargetTexture2D";
 

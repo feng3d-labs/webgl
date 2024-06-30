@@ -333,9 +333,8 @@ function initBuffers()
 function initTexture()
 {
   const texture: ITexture = {
-    textureTarget: "TEXTURE_2D", format: "RGBA", type: "UNSIGNED_BYTE",
-    size: [1, 1],
-    source: [new Uint8Array([0, 0, 255, 255]) as any],
+    textureTarget: "TEXTURE_2D",
+    sources: [{ internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE", width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
     sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" },
   };
 
@@ -347,7 +346,7 @@ function initTexture()
 //
 function updateTexture(texture: ITexture, video: HTMLVideoElement)
 {
-  texture.source[0] = video;
+  texture.sources[0] = video;
 }
 
 //

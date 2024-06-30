@@ -24,8 +24,8 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
     loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
         const diffuse: ITexture = {
-            source: [img],
-            sampler:{
+            sources: [{ source: img }],
+            sampler: {
                 minFilter: "LINEAR",
             }
         };

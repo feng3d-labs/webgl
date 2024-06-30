@@ -11,24 +11,9 @@ export interface ITexture
     textureTarget?: TextureTarget;
 
     /**
-     * 纹理尺寸。
+     * 纹理资源。
      */
-    size?: ITextureSize;
-
-    /**
-     * 纹理图片资源。
-     */
-    source?: TexImageSource[]
-
-    /**
-     * 格式
-     */
-    format?: TextureFormat;
-
-    /**
-     * 数据类型
-     */
-    type?: TextureDataType;
+    sources?: ITextureSource[]
 
     /**
      * 是否生成mipmap
@@ -51,7 +36,88 @@ export interface ITexture
     sampler?: ISampler;
 }
 
-export type ITextureSize = [width: number, height?: number, depthOrArrayLayers?: number];
+/**
+ * 纹理资源。
+ */
+export type ITextureSource = IImageSource | IBufferSource;
+
+/**
+ * 纹理图片资源。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+export interface IImageSource
+{
+    /**
+     * mipmap级别
+     */
+    level?: number,
+
+    /**
+     * 内部纹理格式。
+     */
+    internalformat?: TextureFormat,
+
+    /**
+     * 格式
+     */
+    format?: TextureFormat;
+
+    /**
+     * 数据类型
+     */
+    type?: TextureDataType;
+
+    /**
+     * 纹理图片资源。
+     */
+    source: TexImageSource
+}
+
+/**
+ * 纹理数据资源。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+export interface IBufferSource
+{
+    /**
+     * mipmap级别
+     */
+    level?: number,
+
+    /**
+     * 内部纹理格式。
+     */
+    internalformat?: TextureFormat,
+
+    /**
+     * 纹理宽度。
+     */
+    width?: number,
+
+    /**
+     * 纹理高度。
+     */
+    height?: number,
+
+    border?: number,
+
+    /**
+     * 格式
+     */
+    format?: TextureFormat;
+
+    /**
+     * 数据类型
+     */
+    type?: TextureDataType;
+
+    /**
+     * 像素数据。
+     */
+    pixels?: ArrayBufferView;
+}
 
 /**
  * A GLenum specifying the binding point (target). Possible values:
