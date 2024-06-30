@@ -3,7 +3,7 @@ import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
 {
-    interface WebGLRenderingContextExt
+    interface WebGLRenderingContext
     {
         _compileShaderResults: { [key: string]: CompileShaderResult }
     }

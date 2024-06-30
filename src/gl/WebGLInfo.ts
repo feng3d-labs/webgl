@@ -2,7 +2,7 @@ import { DrawMode } from "../data/IPrimitiveState";
 
 declare global
 {
-    interface WebGLRenderingContextExt
+    interface WebGLRenderingContext
     {
         /**
          * WebGL信息

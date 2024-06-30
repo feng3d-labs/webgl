@@ -28,7 +28,7 @@ declare global
 
 declare global
 {
-    interface WebGLRenderingContextExt
+    interface WebGLRenderingContext
     {
         _framebuffers: WebGLFramebuffers;
     }
