@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IWebGLBuffer, WebGL } from "../../../src";
+import { WebGL } from "../../../src";
 import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
 
 main();
@@ -7,15 +7,6 @@ main();
 function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
-
-    const positions = [
-        1.0, 1.0,
-        -1.0, 1.0,
-        1.0, -1.0,
-        -1.0, -1.0,
-    ];
-
-    const positionBuffer: IWebGLBuffer = { type: "FLOAT", data: new Float32Array(positions), usage: "STATIC_DRAW" };
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
@@ -51,8 +42,14 @@ function main()
             },
             vertices: {
                 aVertexPosition: {
-                    // type: "FLOAT",
-                    buffer: positionBuffer,
+                    buffer: {
+                        type: "FLOAT", data: new Float32Array([
+                            1.0, 1.0,
+                            -1.0, 1.0,
+                            1.0, -1.0,
+                            -1.0, -1.0,
+                        ]), usage: "STATIC_DRAW"
+                    },
                     itemSize: 2,
                 }
             },
