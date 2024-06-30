@@ -1,4 +1,4 @@
-import { ITexture, TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/ITexture";
+import { ITexture } from "../data/ITexture";
 import { defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -6,15 +6,6 @@ declare global
     interface WebGLRenderingContext
     {
         _textureMap: WeakMap<ITexture, WebGLTexture>
-    }
-
-    interface WebGLTexture
-    {
-        minFilter?: TextureMinFilter,
-        magFilter?: TextureMagFilter,
-        wrapS?: TextureWrap,
-        wrapT?: TextureWrap,
-        anisotropy?: number,
     }
 }
 

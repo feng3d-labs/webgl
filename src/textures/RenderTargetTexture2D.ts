@@ -5,6 +5,8 @@ const defaultRenderTargetTexture: ITexture = {
     ...defaultTexture,
     size: [1024, 1024],
     format: "RGBA",
-    minFilter: "NEAREST",
-    magFilter: "NEAREST",
+    sampler: {
+        minFilter: "NEAREST",
+        magFilter: "NEAREST",
+    }
 };

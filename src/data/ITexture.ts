@@ -1,3 +1,5 @@
+import { ISampler } from "./ISampler";
+
 /**
  * 纹理
  */
@@ -43,24 +45,10 @@ export interface ITexture
      */
     premulAlpha?: boolean;
 
-    minFilter?: TextureMinFilter;
-
-    magFilter?: TextureMagFilter;
-
     /**
-     * 表示x轴的纹理的回环方式，就是当纹理的宽度小于需要贴图的平面的宽度的时候，平面剩下的部分应该p以何种方式贴图的问题。
+     * 采样器。
      */
-    wrapS?: TextureWrap;
-
-    /**
-     * 表示y轴的纹理回环方式。 magFilter和minFilter表示过滤的方式。
-     */
-    wrapT?: TextureWrap;
-
-    /**
-     * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
-     */
-    anisotropy?: number;
+    sampler?: ISampler;
 }
 
 export type ITextureSize = [width: number, height?: number, depthOrArrayLayers?: number];
@@ -172,41 +160,3 @@ export type TextureFormat = "ALPHA" | "RGB" | `RGBA` | `LUMINANCE` | `LUMINANCE_
     | `R11F_G11F_B10F` | `RGB9_E5` | `RGB16F` | `RGB32F`
     | `RGB8UI` | `RGBA8` | `RGB5_A1` | `RGB10_A2`
     | `RGBA4` | `RGBA16F` | `RGBA32F` | `RGBA8UI`;
-
-/**
- * 纹理放大滤波器
- * Texture magnification filter
- *
- * * `LINEAR`
- * * `NEAREST`
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
- */
-export type TextureMagFilter = "LINEAR" | "NEAREST";
-
-/**
- * 纹理缩小过滤器
- * Texture minification filter
- *
- * * `LINEAR`
- * * `NEAREST`
- * * `NEAREST_MIPMAP_NEAREST`
- * * `LINEAR_MIPMAP_NEAREST`
- * * `NEAREST_MIPMAP_LINEAR`
- * * `LINEAR_MIPMAP_LINEAR`
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
- */
-export type TextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST" | "LINEAR_MIPMAP_NEAREST" | "NEAREST_MIPMAP_LINEAR" | "LINEAR_MIPMAP_LINEAR";
-
-/**
- * 纹理坐标s包装函数枚举
- * Wrapping function for texture coordinate s
- *
- * * `REPEAT`
- * * `CLAMP_TO_EDGE`
- * * `MIRRORED_REPEAT`
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
- */
-export type TextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
