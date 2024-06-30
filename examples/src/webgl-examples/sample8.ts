@@ -346,7 +346,7 @@ function initTexture()
 //
 function updateTexture(texture: ITexture, video: HTMLVideoElement)
 {
-  texture.sources[0] = video;
+  texture.sources = [{ source: video }];
 }
 
 //
