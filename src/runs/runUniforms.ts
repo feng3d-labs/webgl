@@ -1,7 +1,7 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { WebGLUniformType } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
-import { active } from "../gl/WebGLTextures";
+import { runTexture } from "./runTexture";
 import { lazy } from "../types";
 
 /**
@@ -60,7 +60,7 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
             break;
         case "SAMPLER_2D":
         case "SAMPLER_CUBE":
-            active(gl, data, webGLUniform);
+            runTexture(gl, data, webGLUniform);
             break;
         default:
             console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${data}`);

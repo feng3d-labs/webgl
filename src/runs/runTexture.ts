@@ -1,35 +1,29 @@
 import { getWebGLTexture } from "../caches/getWebGLTexture";
 import { Texture } from "../data/Texture";
-import { WebGLUniform } from "../runs/runUniforms";
+import { WebGLUniform } from "./runUniforms";
 
-export function active(gl: WebGLRenderingContext, data: Texture, activeInfo?: WebGLUniform)
+export function runTexture(gl: WebGLRenderingContext, texture: Texture, activeInfo: WebGLUniform)
 {
-    if (activeInfo)
-    {
-        // 激活纹理编号
-        gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-    }
+    gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
 
-    const texture = getWebGLTexture(gl, data);
+    const webGLTexture = getWebGLTexture(gl, texture);
+    // 设置纹理所在采样编号
+    gl.uniform1i(activeInfo.location, activeInfo.textureID);
 
     // 绑定纹理
-    gl.bindTexture(gl[data.textureTarget], texture);
+    gl.bindTexture(gl[texture.textureTarget], webGLTexture);
 
-    setTextureParameters(gl, data);
+    setTextureParameters(gl, webGLTexture, texture);
 
-    if (activeInfo)
-    {
-        // 设置纹理所在采样编号
-        gl.uniform1i(activeInfo.location, activeInfo.textureID);
-    }
-
-    return texture;
+    return webGLTexture;
 }
 
-function setTextureParameters(gl: WebGLRenderingContext, texture: Texture)
+/**
+ * 设置采样参数
+ */
+function setTextureParameters(gl: WebGLRenderingContext, webGLTexture: WebGLTexture, texture: Texture)
 {
     const { textureTarget, type, minFilter, magFilter, wrapS, wrapT, anisotropy } = texture;
-    const webGLTexture = getWebGLTexture(gl, texture);
 
     // 设置纹理参数
     if (webGLTexture.minFilter !== minFilter)
