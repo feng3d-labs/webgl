@@ -2,6 +2,7 @@ const files = {
     "webgl-examples": [
         "sample1",
         "sample2",
+        "sample3",
     ],
     "regl-examples": [
         "basic",
