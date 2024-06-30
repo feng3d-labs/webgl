@@ -23,3 +23,5 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 
     runDrawCall(gl, renderObject);
 }
+
+// export const defaultRenderObject: IRenderObject = { viewport };

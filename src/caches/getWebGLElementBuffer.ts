@@ -1,6 +1,7 @@
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/IIndexBuffer";
 import { VertexAttributeTypes } from "../data/IVertexAttribute";
+import { defaultIndexBuffer } from "../runs/runIndexBuffer";
 
 /**
  * 获取索引WebGL缓冲区。
@@ -26,7 +27,7 @@ export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: IIndex
 
             // 上传数据到WebGL
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[element.usage || "STATIC_DRAW"]);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[element.usage || defaultIndexBuffer.usage]);
 
             //
             buffer.count = data.length;

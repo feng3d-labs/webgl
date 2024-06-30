@@ -10,9 +10,11 @@ export interface IColorTargetState
     /**
      * 控制那些颜色分量是否可以被写入到帧缓冲器。
      *
-     * [red, green, blue, alpha]
+     * [red: boolean, green: boolean, blue: boolean, alpha: boolean]
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/colorMask
      */
-    writeMask?: [boolean, boolean, boolean, boolean];
+    writeMask?: IWriteMask;
 }
+
+export type IWriteMask = [red: boolean, green: boolean, blue: boolean, alpha: boolean];

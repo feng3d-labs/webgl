@@ -1,6 +1,6 @@
 import { IPrimitiveState } from "../data/IPrimitiveState";
 
-const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullMode: "BACK", frontFace: "CCW" };
+export const defaultPrimitiveState: IPrimitiveState = Object.freeze({ topology: "TRIANGLES", cullMode: "BACK", frontFace: "CCW" });
 
 export function runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveState)
 {

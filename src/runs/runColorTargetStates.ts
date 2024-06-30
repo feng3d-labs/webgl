@@ -1,10 +1,10 @@
 import { IBlendComponent, IBlendState } from "../data/IBlendState";
-import { IColorTargetState } from "../data/IColorTargetState";
+import { IColorTargetState, IWriteMask } from "../data/IColorTargetState";
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: IColorTargetState[])
 {
     //
-    const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
+    const colorMask = targets?.[0]?.writeMask || defaultWriteMask;
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
     //
@@ -26,5 +26,8 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: IColor
     }
 }
 
-const defaultBlendComponent: IBlendComponent = { operation: "FUNC_ADD", srcFactor: "SRC_ALPHA", dstFactor: "ONE_MINUS_SRC_ALPHA" };
-const defaultBlendState: IBlendState = { color: defaultBlendComponent, alpha: defaultBlendComponent };
+const defaultWriteMask: IWriteMask = Object.freeze([true, true, true, true]) as any;
+const defaultBlendComponent: IBlendComponent = Object.freeze({ operation: "FUNC_ADD", srcFactor: "SRC_ALPHA", dstFactor: "ONE_MINUS_SRC_ALPHA" });
+const defaultBlendState: IBlendState = Object.freeze({ color: defaultBlendComponent, alpha: defaultBlendComponent });
+const defaultColorTargetState: IColorTargetState = Object.freeze({ writeMask: defaultWriteMask, blend: defaultBlendState });
+export const defaultColorTargetStates: IColorTargetState[] = Object.freeze([defaultColorTargetState]) as any;

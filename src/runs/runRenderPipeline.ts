@@ -1,7 +1,7 @@
 import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
-import { runDepthStencilState } from "./runDepthStencilState";
-import { runPrimitiveState } from "./runPrimitiveState";
-import { runProgram } from "./runProgram";
+import { defaultDepthStencilState, runDepthStencilState } from "./runDepthStencilState";
+import { defaultPrimitiveState, runPrimitiveState } from "./runPrimitiveState";
+import { defaultFragmentState, defaultVertexState, runProgram } from "./runProgram";
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
@@ -11,3 +11,8 @@ export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWe
 
     runDepthStencilState(gl, renderPipeline.depthStencil);
 }
+
+export const defaultRenderPipeline: IWebGLRenderPipeline = Object.freeze({
+    vertex: defaultVertexState, fragment: defaultFragmentState, primitive: defaultPrimitiveState,
+    depthStencil: defaultDepthStencilState
+});

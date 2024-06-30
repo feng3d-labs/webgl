@@ -21,7 +21,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObje
     }
 }
 
-const defaultDrawIndexed: IDrawIndexed = { firstIndex: 0, instanceCount: 1 };
+export const defaultDrawIndexed: IDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
 function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
@@ -55,7 +55,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     }
 }
 
-const defaultDrawVertex: IDrawVertex = { vertexCount: 6, instanceCount: 1, firstVertex: 0 };
+export const defaultDrawVertex: IDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
 function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {

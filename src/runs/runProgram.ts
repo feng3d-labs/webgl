@@ -1,6 +1,6 @@
 import { getCompileShaderResult } from "../caches/getCompileShaderResult";
 import { IFragmentState, IVertexState } from "../data/IWebGLRenderPipeline";
-import { runColorTargetStates } from "./runColorTargetStates";
+import { defaultColorTargetStates, runColorTargetStates } from "./runColorTargetStates";
 
 export function runProgram(gl: WebGLRenderingContext, vertex: IVertexState, fragment: IFragmentState)
 {
@@ -14,3 +14,6 @@ export function runProgram(gl: WebGLRenderingContext, vertex: IVertexState, frag
 
     runColorTargetStates(gl, fragment.targets);
 }
+
+export const defaultVertexState: IVertexState = Object.freeze({ code: "" });
+export const defaultFragmentState: IFragmentState = Object.freeze({ code: "", targets: defaultColorTargetStates });
