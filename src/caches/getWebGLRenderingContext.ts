@@ -1,9 +1,9 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
 import { defaults } from "../defaults/defaults";
-import { WebGLCapabilities } from "../gl/WebGLCapabilities";
 import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
 import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
+import { getWebGLCapabilities } from "./getWebGLCapabilities";
 
 /**
  * 获取WebGL上下文。
@@ -44,7 +44,7 @@ function initMap(gl: WebGLRenderingContext)
 
 function initWebGLModules(gl: WebGLRenderingContext)
 {
-    new WebGLCapabilities(gl);
+    getWebGLCapabilities(gl);
 
     new WebGLInfo(gl);
 
