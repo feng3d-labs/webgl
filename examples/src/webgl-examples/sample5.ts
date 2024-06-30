@@ -65,7 +65,7 @@ function main()
     },
     index: { data: buffers.indices },
     uniforms: {},
-    drawVertex: { firstVertex: 0, vertexCount: 36 },
+    drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
   const renderPasss: IWebGLRenderPass = {
