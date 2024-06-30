@@ -3,10 +3,15 @@ import { IBufferSource, IImageSource, ITexture, ITextureSource } from "../data/I
 import { defaultSampler, runSampler } from "./runSampler";
 import { WebGLUniform } from "./runUniforms";
 
-export const defaultImageSource: IImageSource = Object.freeze({ level: 0, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" }) as any;
-export const defaultBufferSource: IBufferSource = Object.freeze({ level: 0, internalformat: "RGBA", width: 1, height: 1, border: 0, format: "RGBA", type: "UNSIGNED_BYTE" });
-export const defaultTextureSources: ITextureSource[] = Object.freeze([defaultBufferSource]) as any;
-export const defaultTexture: ITexture = Object.freeze({ textureTarget: "TEXTURE_2D", generateMipmap: true, flipY: false, premulAlpha: false, sampler: defaultSampler, sources: defaultTextureSources });
+export const defaultImageSource: IImageSource = { level: 0, source: new ImageData(1, 1) };
+export const defaultBufferSource: IBufferSource = { level: 0, width: 1, height: 1, border: 0 };
+export const defaultTextureSources: ITextureSource[] = [defaultBufferSource];
+export const defaultTexture: ITexture = { textureTarget: "TEXTURE_2D", generateMipmap: false, flipY: false, premulAlpha: false, sampler: defaultSampler, sources: defaultTextureSources, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" };
+
+Object.freeze(defaultImageSource);
+Object.freeze(defaultBufferSource);
+Object.freeze(defaultTextureSources);
+Object.freeze(defaultTexture);
 
 export function runTexture(gl: WebGLRenderingContext, texture: ITexture, activeInfo: WebGLUniform)
 {

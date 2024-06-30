@@ -30,7 +30,7 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     const updateSource = () =>
     {
-        const { textureTarget, flipY, premulAlpha, generateMipmap, sources } = { ...defaultTexture, ...texture };
+        const { textureTarget, flipY, premulAlpha, generateMipmap, internalformat, format, type, sources } = { ...defaultTexture, ...texture };
         //
         // 设置图片y轴方向
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
@@ -45,12 +45,12 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
             {
                 if ("source" in sourceItem)
                 {
-                    const { level, internalformat, format, type, source } = { ...defaultImageSource, ...sourceItem };
+                    const { level, source } = { ...defaultImageSource, ...sourceItem };
                     gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], gl[format], gl[type], source);
                 }
                 else
                 {
-                    const { level, internalformat, width, height, border, format, type, pixels } = { ...defaultBufferSource, ...sourceItem };
+                    const { level, width, height, border, pixels } = { ...defaultBufferSource, ...sourceItem };
                     gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
                 }
             }
@@ -68,25 +68,16 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     updateSource();
 
-    watcher.watch(texture, "sources", updateSource);
-    watcher.watch(texture, "flipY", updateSource);
-    watcher.watch(texture, "generateMipmap", updateSource);
-    watcher.watch(texture, "premulAlpha", updateSource);
+    watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
 
     // watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
     // watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
-
-    // watcher.watch(this as Texture, "format", this.invalidate, this);
-    // watcher.watch(this as Texture, "type", this.invalidate, this);
 
     webGLTexture.destroy = () =>
     {
         _textureMap.delete(texture);
         //
-        watcher.unwatch(texture, "sources", updateSource);
-        watcher.unwatch(texture, "flipY", updateSource);
-        watcher.unwatch(texture, "generateMipmap", updateSource);
-        watcher.unwatch(texture, "premulAlpha", updateSource);
+        watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
     };
 
     return webGLTexture;

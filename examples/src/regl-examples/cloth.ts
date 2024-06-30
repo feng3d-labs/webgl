@@ -374,7 +374,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
     img.src = "../../resources/assets/cloth.png";
     await img.decode();
 
-    const diffuse: ITexture = { sources: [{ source: img }] };
+    const diffuse: ITexture = { generateMipmap: true, sources: [{ source: img }], sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
 
     draw();
 })();

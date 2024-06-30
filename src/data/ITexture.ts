@@ -7,6 +7,8 @@ export interface ITexture
 {
     /**
      * 纹理绑定点。
+     *
+     * 默认"TEXTURE_2D"。
      */
     textureTarget?: TextureTarget;
 
@@ -21,14 +23,39 @@ export interface ITexture
     generateMipmap?: boolean;
 
     /**
-     * 对图像进行Y轴反转。默认值为false
+     * 对图像进行Y轴反转。
+     *
+     * 默认为 false。
      */
     flipY?: boolean;
 
     /**
-     * 将图像RGB颜色值得每一个分量乘以A。默认为false
+     * 将图像RGB颜色值得每一个分量乘以A。
+     *
+     * 默认为 false。
      */
     premulAlpha?: boolean;
+
+    /**
+     * 内部纹理格式。
+     *
+     * 默认 "RGBA"。
+     */
+    internalformat?: TextureFormat,
+
+    /**
+     * 纹理格式。
+     *
+     * 默认 "RGBA"。
+     */
+    format?: TextureFormat;
+
+    /**
+     * 数据类型。
+     *
+     * 默认 "UNSIGNED_BYTE"。
+     */
+    type?: TextureDataType;
 
     /**
      * 采样器。
@@ -49,24 +76,11 @@ export type ITextureSource = IImageSource | IBufferSource;
 export interface IImageSource
 {
     /**
-     * mipmap级别
+     * mipmap级别。
+     *
+     * 默认为 0。
      */
     level?: number,
-
-    /**
-     * 内部纹理格式。
-     */
-    internalformat?: TextureFormat,
-
-    /**
-     * 格式
-     */
-    format?: TextureFormat;
-
-    /**
-     * 数据类型
-     */
-    type?: TextureDataType;
 
     /**
      * 纹理图片资源。
@@ -83,38 +97,34 @@ export interface IBufferSource
 {
     /**
      * mipmap级别
+     *
+     * 默认为 0。
      */
     level?: number,
 
     /**
-     * 内部纹理格式。
-     */
-    internalformat?: TextureFormat,
-
-    /**
      * 纹理宽度。
+     *
+     * 默认为 1。
      */
     width?: number,
 
     /**
      * 纹理高度。
+     *
+     * 默认为 1。
      */
     height?: number,
 
+    /**
+     * 默认为 0。
+     */
     border?: number,
 
     /**
-     * 格式
-     */
-    format?: TextureFormat;
-
-    /**
-     * 数据类型
-     */
-    type?: TextureDataType;
-
-    /**
      * 像素数据。
+     *
+     * 默认为 undefined。
      */
     pixels?: ArrayBufferView;
 }
