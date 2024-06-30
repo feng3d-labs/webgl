@@ -1,4 +1,4 @@
-import { IRenderObject, Texture, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -127,7 +127,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../resources/assets/peppers.png";
     await img.decode();
 
-    const diffuse: Texture = { minFilter: "LINEAR", source: [img] };
+    const diffuse: ITexture = { minFilter: "LINEAR", source: [img] };
 
     draw();
 })();

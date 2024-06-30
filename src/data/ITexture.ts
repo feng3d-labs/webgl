@@ -1,21 +1,7 @@
-export const defaultTexture: Texture = {
-    textureTarget: "TEXTURE_2D",
-    format: "RGBA",
-    type: "UNSIGNED_BYTE",
-    generateMipmap: true,
-    flipY: false,
-    premulAlpha: false,
-    minFilter: "LINEAR_MIPMAP_LINEAR",
-    magFilter: "LINEAR",
-    wrapS: "REPEAT",
-    wrapT: "REPEAT",
-    anisotropy: 1,
-};
-
 /**
  * 纹理
  */
-export interface Texture
+export interface ITexture
 {
     /**
      * 纹理绑定点。

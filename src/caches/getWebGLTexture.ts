@@ -1,10 +1,11 @@
-import { Texture, TextureMagFilter, TextureMinFilter, TextureWrap, defaultTexture } from "../data/Texture";
+import { ITexture, TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/ITexture";
+import { defaultTexture } from "../runs/runTexture";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _textureMap: WeakMap<Texture, WebGLTexture>
+        _textureMap: WeakMap<ITexture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -17,7 +18,7 @@ declare global
     }
 }
 
-export function getWebGLTexture(gl: WebGLRenderingContext, texture: Texture)
+export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
     const _textureMap = gl._textureMap;
 

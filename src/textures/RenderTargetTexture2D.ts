@@ -1,8 +1,7 @@
-import { watcher } from "@feng3d/watcher";
-import { Texture, TextureFormat, TextureMagFilter, TextureMinFilter, defaultTexture } from "../data/Texture";
-import { isPowerOfTwo } from "../utils/mathUtils";
+import { ITexture } from "../data/ITexture";
+import { defaultTexture } from "../runs/runTexture";
 
-const defaultRenderTargetTexture: Texture = {
+const defaultRenderTargetTexture: ITexture = {
     ...defaultTexture,
     size: [1024, 1024],
     format: "RGBA",

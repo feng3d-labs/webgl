@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { RenderBuffer } from "./RenderBuffer";
-import { Texture } from "./data/Texture";
+import { ITexture } from "./data/ITexture";
 
 /**
  * 帧缓冲
@@ -22,7 +22,7 @@ export class FrameBuffer
      *
      * Attaches the texture to the framebuffer's color buffer.
      */
-    texture: Texture;
+    texture: ITexture;
 
     /**
      * 附加到帧缓冲上的深度缓冲。

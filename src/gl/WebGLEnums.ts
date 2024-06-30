@@ -1,4 +1,4 @@
-import { TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/Texture";
+import { TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/ITexture";
 
 /**
  * A GLenum specifying the binding point (target). Possible values:

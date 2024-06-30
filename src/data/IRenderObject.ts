@@ -6,7 +6,7 @@ import { IScissor } from "./IScissor";
 import { IVertexAttributes } from "./IVertexAttributes";
 import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
-import { Uniforms } from "./Uniforms";
+import { IUniforms } from "./IUniforms";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -31,7 +31,7 @@ export interface IRenderObject
     /**
      * Uniform渲染数据
      */
-    uniforms?: LazyObject<Uniforms>;
+    uniforms?: LazyObject<IUniforms>;
 
     /**
      * 绘制一定数量顶点。

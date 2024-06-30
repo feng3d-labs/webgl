@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { IRenderObject, Texture, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 
 (function ()
 {
@@ -24,7 +24,7 @@ import { IRenderObject, Texture, WebGL } from "../../../src";
 
     loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
-        const diffuse: Texture = {
+        const diffuse: ITexture = {
             minFilter: "LINEAR",
             source: [img],
         };
