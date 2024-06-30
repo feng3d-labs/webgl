@@ -1,6 +1,8 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
+import { IDrawIndexed } from "../data/IDrawIndexed";
+import { IDrawVertex } from "../data/IDrawVertex";
 import { IRenderObject } from "../data/IRenderObject";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
@@ -19,6 +21,8 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObje
     }
 }
 
+const defaultDrawIndexed: IDrawIndexed = { firstIndex: 0, instanceCount: 1 };
+
 function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     //
@@ -27,10 +31,10 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     const element = getElementWebGLBuffer(gl, renderAtomic.index);
     const type = element.type;
     //
-    const drawIndexed = renderAtomic.drawIndexed || {};
-    const firstIndex = drawIndexed.firstIndex || 0;
-    const instanceCount = drawIndexed.instanceCount || 1;
-    const indexCount = drawIndexed.indexCount || (element.count - firstIndex);
+    let { indexCount, instanceCount, firstIndex } = renderAtomic.drawIndexed || {};
+    firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
+    instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
+    indexCount = indexCount || (element.count - firstIndex);
 
     //
     if (instanceCount > 1)
@@ -51,17 +55,19 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     }
 }
 
+const defaultDrawVertex: IDrawVertex = { vertexCount: 6, instanceCount: 1, firstVertex: 0 };
+
 function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     //
     const vertexNum = getAttributeVertexNum(gl, renderAtomic);
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
-    const drawCall = renderAtomic.drawVertex || {};
+    let { firstVertex, vertexCount, instanceCount } = renderAtomic.drawVertex || {};
     //
-    const firstVertex = drawCall.firstVertex || 0;
-    const vertexCount = drawCall.vertexCount || vertexNum || 6;
-    const instanceCount = drawCall.instanceCount || 1;
+    firstVertex = firstVertex || defaultDrawVertex.firstVertex;
+    vertexCount = vertexCount || vertexNum || defaultDrawVertex.vertexCount;
+    instanceCount = instanceCount || defaultDrawVertex.instanceCount;
 
     if (instanceCount > 1)
     {
