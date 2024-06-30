@@ -3,7 +3,7 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
 
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 (async () =>
 {
     const canvas = document.createElement("canvas");
@@ -164,12 +164,12 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
-            position: { array: positions, itemSize: 3 },
-            normal: { array: normals, itemSize: 3 },
-            uv: { array: uvs, itemSize: 2 },
+        vertices: {
+            position: { buffer: { data: positions }, numComponents: 3 },
+            normal: { buffer: { data: normals }, numComponents: 3 },
+            uv: { buffer: { data: uvs }, numComponents: 2 },
         },
-        index: { array: indices },
+        index: { data: indices },
         uniforms: {
             view: () => camera.view(),
             projection: () =>
@@ -356,8 +356,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             return pv;
         }, []);
 
-        renderAtomic.attributes.position.array = new Float32Array(positions);
-        renderAtomic.attributes.normal.array = new Float32Array(normals);
+        renderAtomic.vertices.position.buffer.data = new Float32Array(positions);
+        renderAtomic.vertices.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 
@@ -366,7 +366,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
         camera.tick();
 
-        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
         requestAnimationFrame(draw);
     }
 
@@ -374,8 +374,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse = new Texture2D();
-    diffuse.source = img;
+    const diffuse: ITexture = { generateMipmap: true, sources: [{ source: img }], sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
 
     draw();
 })();

@@ -30,10 +30,10 @@ let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
 const renderAtomic: IRenderObject = {
-    attributes: {
-        position: { array: positions, itemSize: 3 },
+    vertices: {
+        position: { buffer: { data: positions }, numComponents: 3 },
     },
-    index: { array: indices },
+    index: { data: indices },
     uniforms: {
         model: mat4.identity([]),
         view: () =>
@@ -77,7 +77,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    WebGL.render({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.renderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

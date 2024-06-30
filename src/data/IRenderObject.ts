@@ -1,13 +1,12 @@
 import { LazyObject } from "../types";
-import { AttributeBuffer } from "./AttributeBuffer";
-import { ElementBuffer } from "./ElementBuffer";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
+import { IIndexBuffer } from "./IIndexBuffer";
 import { IScissor } from "./IScissor";
+import { IVertexAttributes } from "./IVertexAttributes";
 import { IViewport } from "./IViewport";
 import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
-import { RenderParams } from "./RenderParams";
-import { Uniforms } from "./Uniforms";
+import { IUniforms } from "./IUniforms";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -22,22 +21,17 @@ export interface IRenderObject
     /**
      * 顶点索引缓冲
      */
-    index?: ElementBuffer;
+    index?: IIndexBuffer;
 
     /**
-     * 属性数据列表
+     * 顶点属性数据列表
      */
-    attributes: { [key: string]: AttributeBuffer; };
+    vertices: IVertexAttributes;
 
     /**
      * Uniform渲染数据
      */
-    uniforms?: LazyObject<Uniforms>;
-
-    /**
-     * 渲染参数
-    */
-    renderParams?: RenderParams;
+    uniforms?: LazyObject<IUniforms>;
 
     /**
      * 绘制一定数量顶点。

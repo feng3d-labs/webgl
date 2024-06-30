@@ -17,13 +17,15 @@ webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const renderAtomic: IRenderObject = {
-    attributes: {
+    vertices: {
         position: {
-            array: [
-                -1, 0,
-                0, -1,
-                1, 1
-            ], itemSize: 2
+            buffer: {
+                data: [
+                    -1, 0,
+                    0, -1,
+                    1, 1
+                ]
+            }, numComponents: 2
         },
     },
     uniforms: { color: [1, 0, 0, 1] },
@@ -55,11 +57,8 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGL.submit({
-        canvasContext: { canvasId: "glcanvas" },
-        renderPasss: [{
-            renderObjects: [renderAtomic]
-        }]
+    WebGL.renderPass({ canvasId: "glcanvas" }, {
+        renderObjects: [renderAtomic]
     });
 
     requestAnimationFrame(draw);

@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 
 (function ()
 {
@@ -26,32 +26,38 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     }
     loadImage("../../assets/img/Di-3d.png", (img) =>
     {
-        const diffuse = $set(new Texture2D(), {
-            minFilter: "LINEAR",
-            source: img as any,
-        });
+        const diffuse: ITexture = {
+            sources: [{ source: img }],
+            sampler: {
+                minFilter: "LINEAR",
+            }
+        };
 
         const renderAtomic: IRenderObject = {
-            attributes: {
+            vertices: {
                 position: {
-                    array: [
-                        -1.0, -1.0,
-                        1.0, -1.0,
-                        1.0, 1.0,
-                        1.0, 1.0,
-                        -1.0, 1.0,
-                        -1.0, -1.0
-                    ], itemSize: 2
+                    buffer: {
+                        data: [
+                            -1.0, -1.0,
+                            1.0, -1.0,
+                            1.0, 1.0,
+                            1.0, 1.0,
+                            -1.0, 1.0,
+                            -1.0, -1.0
+                        ]
+                    }, numComponents: 2
                 },
                 texcoord: {
-                    array: [
-                        0.0, 1.0,
-                        1.0, 1.0,
-                        1.0, 0.0,
-                        1.0, 0.0,
-                        0.0, 0.0,
-                        0.0, 1.0
-                    ], itemSize: 2
+                    buffer: {
+                        data: [
+                            0.0, 1.0,
+                            1.0, 1.0,
+                            1.0, 0.0,
+                            1.0, 0.0,
+                            0.0, 0.0,
+                            0.0, 1.0
+                        ]
+                    }, numComponents: 2
                 },
             },
             uniforms: {
@@ -108,9 +114,9 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
         function draw()
         {
-            WebGL.submit({
-                canvasContext: { canvasId: "glcanvas" },
-                renderPasss: [{
+            WebGL.renderPass(
+                { canvasId: "glcanvas" },
+                {
                     passDescriptor: {
                         colorAttachments: [{
                             clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -118,8 +124,8 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
                         }],
                     },
                     renderObjects: [renderAtomic]
-                }]
-            });
+                }
+            );
 
             requestAnimationFrame(draw);
         }

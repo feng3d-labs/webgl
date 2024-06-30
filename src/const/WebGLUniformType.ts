@@ -1,4 +1,4 @@
-import { DrawElementType } from "../data/ElementBuffer";
+import { DrawElementType } from "../data/IIndexBuffer";
 
 /**
  * WebGL中Uniform类型

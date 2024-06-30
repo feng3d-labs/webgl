@@ -2,6 +2,12 @@ const files = {
     "webgl-examples": [
         "sample1",
         "sample2",
+        "sample3",
+        "sample4",
+        "sample5",
+        "sample6",
+        "sample7",
+        "sample8",
     ],
     "regl-examples": [
         "basic",
@@ -63,7 +69,7 @@ button.id = "button";
 button.textContent = "View source";
 button.addEventListener("click", function (event)
 {
-    window.open(`https://gitlab.com/feng3d/examples/tree/master/src/${selected}.ts`);
+    window.open(`https://gitlab.com/feng3d/renderer/tree/master/examples/src/${selected}.ts`);
 }, false);
 button.style.display = "none";
 document.body.appendChild(button);

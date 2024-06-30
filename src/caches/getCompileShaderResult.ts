@@ -1,10 +1,9 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
-import { ShaderType } from "../gl/WebGLEnums";
 import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
 {
-    interface WebGLRenderingContextExt
+    interface WebGLRenderingContext
     {
         _compileShaderResults: { [key: string]: CompileShaderResult }
     }
@@ -15,7 +14,7 @@ declare global
  */
 export function getCompileShaderResult(gl: WebGLRenderingContext, vertex: string, fragment: string)
 {
-    const compileShaderResults = gl._compileShaderResults = gl._compileShaderResults || {};
+    const compileShaderResults = gl._compileShaderResults;
 
     const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
     let result = compileShaderResults[shaderKey];
@@ -181,3 +180,10 @@ export interface AttributeInfo
      */
     location: number;
 }
+
+/**
+ * Shader type.
+ *
+ * Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
+ */
+export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";

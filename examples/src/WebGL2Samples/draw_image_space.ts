@@ -1,5 +1,4 @@
-import { $set } from "@feng3d/serialization";
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 
 (function ()
 {
@@ -24,13 +23,15 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
     loadImage("../../assets/img/Di-3d.png", (img) =>
     {
-        const diffuse = $set(new Texture2D(), {
-            minFilter: "LINEAR",
-            source: img as any,
-        });
+        const diffuse: ITexture = {
+            sources: [{ source: img }],
+            sampler: {
+                minFilter: "LINEAR",
+            }
+        };
 
         const renderAtomic: IRenderObject = {
-            attributes: {},
+            vertices: {},
             uniforms: {
                 diffuse,
                 // eslint-disable-next-line camelcase
@@ -76,17 +77,14 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
             //
             renderAtomic.uniforms["u_imageSize"] = [canvas.width / 2, canvas.height / 2];
 
-            WebGL.submit({
-                canvasContext: { canvasId: "glcanvas" },
-                renderPasss: [{
-                    passDescriptor: {
-                        colorAttachments: [{
-                            clearValue: [0.0, 0.0, 0.0, 1.0],
-                            loadOp: "clear",
-                        }],
-                    },
-                    renderObjects: [renderAtomic]
-                }]
+            WebGL.renderPass({ canvasId: "glcanvas" }, {
+                passDescriptor: {
+                    colorAttachments: [{
+                        clearValue: [0.0, 0.0, 0.0, 1.0],
+                        loadOp: "clear",
+                    }],
+                },
+                renderObjects: [renderAtomic]
             });
 
             requestAnimationFrame(draw);

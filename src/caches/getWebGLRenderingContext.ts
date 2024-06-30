@@ -1,12 +1,6 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
 import { defaults } from "../defaults/defaults";
-import { WebGLAttributeBuffers } from "../gl/WebGLAttributeBuffers";
-import { WebGLBindingStates } from "../gl/WebGLBindingStates";
-import { WebGLCapabilities } from "../gl/WebGLCapabilities";
-import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
-import { WebGLInfo } from "../gl/WebGLInfo";
-import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
-import { WebGLTextures } from "../gl/WebGLTextures";
+import { getWebGLCapabilities } from "./getWebGLCapabilities";
 
 /**
  * 获取WebGL上下文。
@@ -23,7 +17,8 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
         const canvas = getCanvas(canvasContext);
         value = getWebGLContext(canvas, canvasContext);
 
-        initWebGLModules(value);
+        //
+        getWebGLCapabilities(value);
         initMap(value);
 
         //
@@ -39,20 +34,10 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
 
 function initMap(gl: WebGLRenderingContext)
 {
+    gl._webGLBufferMap = new WeakMap();
     gl._elementBufferMap = new WeakMap();
-}
-
-function initWebGLModules(gl: WebGLRenderingContext)
-{
-    new WebGLCapabilities(gl);
-
-    new WebGLInfo(gl);
-    new WebGLTextures(gl);
-    new WebGLAttributeBuffers(gl);
-
-    new WebGLBindingStates(gl);
-    new WebGLRenderbuffers(gl);
-    new WebGLFramebuffers(gl);
+    gl._textureMap = new WeakMap();
+    gl._compileShaderResults = {};
 }
 
 function _onContextLost(event: Event)
@@ -72,16 +57,10 @@ function _onContextCreationError(event: WebGLContextEvent)
     console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
 }
 
-let autoId = 1;
-function autoCreateCanvas()
+function autoCreateCanvas(canvasId: string)
 {
     const canvas = document.createElement("canvas");
-    canvas.id = `autoCreateCanvas_${autoId++}`;
-    canvas.style.position = "fixed";
-    canvas.style.left = "0px";
-    canvas.style.top = "0px";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
+    canvas.id = canvasId;
     document.body.appendChild(canvas);
 
     return canvas;
@@ -92,7 +71,7 @@ function getCanvas(canvasContext: IWebGLCanvasContext)
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
     {
-        canvas = autoCreateCanvas();
+        canvas = autoCreateCanvas(canvasContext.canvasId);
     }
 
     return canvas;

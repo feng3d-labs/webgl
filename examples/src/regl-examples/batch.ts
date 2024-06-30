@@ -22,13 +22,15 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 1] }];
 
 const renderAtomic: IRenderObject = {
-    attributes: {
+    vertices: {
         position: {
-            array: [
-                0.5, 0,
-                0, 0.5,
-                1, 1
-            ], itemSize: 2
+            buffer: {
+                data: [
+                    0.5, 0,
+                    0, 0.5,
+                    1, 1
+                ]
+            }, numComponents: 2
         },
     },
     uniforms: {
@@ -70,7 +72,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

@@ -1,4 +1,4 @@
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -65,11 +65,11 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
-            position: { array: positions, itemSize: 3 },
-            uv: { array: uvs, itemSize: 2 },
+        vertices: {
+            position: { buffer: { data: positions }, numComponents: 3 },
+            uv: { buffer: { data: uvs }, numComponents: 2 },
         },
-        index: { array: indices },
+        index: { data: indices },
         uniforms: {
             view: () =>
             {
@@ -119,7 +119,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
         viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-        WebGL.render({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
         requestAnimationFrame(draw);
     }
 
@@ -127,9 +127,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse = new Texture2D();
-    diffuse.minFilter = "LINEAR";
-    diffuse.source = img;
+    const diffuse: ITexture = { sampler: { minFilter: "LINEAR" }, sources: [{ source: img }] };
 
     draw();
 })();

@@ -1,25 +1,27 @@
 import { IRenderObject } from "../data/IRenderObject";
 import { runDrawCall } from "./runDrawCall";
+import { runIndexBuffer } from "./runIndexBuffer";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
 import { runUniforms } from "./runUniforms";
+import { runVertexAttributes } from "./runVertexAttributes";
 import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    const webGLRenderAtomic = renderObject;
+    runViewPort(gl, renderObject.viewport);
 
-    const { _bindingStates } = gl;
+    runScissor(gl, renderObject.scissor);
 
-    runViewPort(gl, webGLRenderAtomic.viewport);
+    runRenderPipeline(gl, renderObject.pipeline);
 
-    runScissor(gl, webGLRenderAtomic.scissor);
+    runVertexAttributes(gl, renderObject);
 
-    runRenderPipeline(gl, webGLRenderAtomic.pipeline);
+    runIndexBuffer(gl, renderObject.index);
 
-    _bindingStates.setup(webGLRenderAtomic);
+    runUniforms(gl, renderObject);
 
-    runUniforms(gl, webGLRenderAtomic);
-
-    runDrawCall(gl, webGLRenderAtomic);
+    runDrawCall(gl, renderObject);
 }
+
+// export const defaultRenderObject: IRenderObject = { viewport };

@@ -1,7 +1,4 @@
-import { IDepthBias, IDepthState } from "../data/IDepthStencilState";
-
-const defaultDepthBias: IDepthBias = { units: 0, factor: 0 };
-export const defaultDepthState: IDepthState = { depthtest: true, depthWriteEnabled: true, depthCompare: "LESS", depthBias: defaultDepthBias };
+import { IDepthState } from "../data/IDepthStencilState";
 
 export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
 {
@@ -17,7 +14,7 @@ export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
         //
         if (depthBias)
         {
-            const { factor, units } = { ...defaultDepthBias, ...depthBias };
+            const { factor, units } = depthBias;
 
             gl.enable(gl.POLYGON_OFFSET_FILL);
             gl.polygonOffset(factor, units);
@@ -32,3 +29,5 @@ export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
         gl.disable(gl.DEPTH_TEST);
     }
 }
+
+export const defaultDepthState: IDepthState = Object.freeze({ depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" });

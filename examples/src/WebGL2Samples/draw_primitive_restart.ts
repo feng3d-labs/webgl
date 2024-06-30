@@ -26,19 +26,21 @@ import { IRenderObject, WebGL } from "../../../src";
     const MAX_UNSIGNED_SHORT = 65535;
 
     const renderAtomic: IRenderObject = {
-        attributes: {
+        vertices: {
             pos: {
-                array: [
-                    -1.0, -1.0,
-                    -1.0, 1.0,
-                    1.0, -1.0,
-                    1.0, 1.0,
-                ], itemSize: 2
+                buffer: {
+                    data: [
+                        -1.0, -1.0,
+                        -1.0, 1.0,
+                        1.0, -1.0,
+                        1.0, 1.0,
+                    ]
+                }, numComponents: 2
             },
         },
         uniforms: {},
         index: {
-            array: [
+            data: [
                 0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
             ]
         },
@@ -74,17 +76,14 @@ import { IRenderObject, WebGL } from "../../../src";
 
     function draw()
     {
-        WebGL.submit({
-            canvasContext: { canvasId: "glcanvas" },
-            renderPasss: [{
-                passDescriptor: {
-                    colorAttachments: [{
-                        clearValue: [0.0, 0.0, 0.0, 1.0],
-                        loadOp: "clear",
-                    }],
-                },
-                renderObjects: [renderAtomic]
-            }]
+        WebGL.renderPass({ canvasId: "glcanvas" }, {
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
+            },
+            renderObjects: [renderAtomic]
         });
 
         requestAnimationFrame(draw);
