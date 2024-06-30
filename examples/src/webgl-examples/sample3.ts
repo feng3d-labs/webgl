@@ -1,6 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { WebGL } from "../../../src";
-import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
+import { IWebGLRenderPass, WebGL } from "../../../src";
 
 main();
 

@@ -8,6 +8,7 @@ export * from "./data/IUniforms";
 export * from "./data/IVertexAttribute";
 export * from "./data/IWebGLBuffer";
 export * from "./data/IWebGLCapabilities";
+export * from "./data/IWebGLRenderPass";
 export * from "./data/IWebGLRenderPipeline";
 export * from "./gl/WebGLEnums";
 export * from "./runs/runUniforms";

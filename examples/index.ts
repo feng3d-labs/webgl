@@ -3,6 +3,7 @@ const files = {
         "sample1",
         "sample2",
         "sample3",
+        "sample4",
     ],
     "regl-examples": [
         "basic",
