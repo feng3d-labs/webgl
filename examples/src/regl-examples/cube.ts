@@ -1,4 +1,4 @@
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture, WebGL } from "../../../src";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -127,9 +127,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../resources/assets/peppers.png";
     await img.decode();
 
-    const diffuse = new Texture2D();
-    diffuse.minFilter = "LINEAR";
-    diffuse.source = img;
+    const diffuse: Texture = { minFilter: "LINEAR", source: [img] };
 
     draw();
 })();

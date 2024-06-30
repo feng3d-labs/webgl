@@ -3,7 +3,7 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
 
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture, WebGL } from "../../../src";
 (async () =>
 {
     const canvas = document.createElement("canvas");
@@ -374,8 +374,7 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
     img.src = "../../resources/assets/cloth.png";
     await img.decode();
 
-    const diffuse = new Texture2D();
-    diffuse.source = img;
+    const diffuse: Texture = { source: [img] };
 
     draw();
 })();

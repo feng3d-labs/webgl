@@ -1,4 +1,4 @@
-import { Texture, TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/Texture";
+import { Texture, TextureMagFilter, TextureMinFilter, TextureWrap, defaultTexture } from "../data/Texture";
 
 declare global
 {
@@ -24,7 +24,7 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: Texture)
     let webGLTexture = _textureMap.get(texture);
     if (webGLTexture) return webGLTexture;
 
-    const { textureTarget, flipY, premulAlpha, generateMipmap } = texture;
+    const { textureTarget, flipY, premulAlpha, generateMipmap, format, type, source, size } = { ...defaultTexture, ...texture };
 
     webGLTexture = gl.createTexture(); // Create a texture object
 
@@ -35,12 +35,33 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: Texture)
     gl.bindTexture(gl[textureTarget], webGLTexture);
 
     // 设置纹理图片
-    texture.setTextureData(gl);
+    if (textureTarget === "TEXTURE_2D")
+    {
+        if (source[0])
+        {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl[format], gl[format], gl[type], source[0]);
+        }
+        else
+        {
+            const [width, height] = size;
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl[format], width, height, 0, gl[format], gl[type], null);
+        }
+    }
 
     if (generateMipmap)
     {
         gl.generateMipmap(gl[textureTarget]);
     }
+
+    // watcher.watch(this as Texture2D, "source", this.invalidate, this);
+    // watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
+    // watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
+
+    // watcher.watch(this as Texture, "format", this.invalidate, this);
+    // watcher.watch(this as Texture, "type", this.invalidate, this);
+    // watcher.watch(this as Texture, "generateMipmap", this.invalidate, this);
+    // watcher.watch(this as Texture, "flipY", this.invalidate, this);
+    // watcher.watch(this as Texture, "premulAlpha", this.invalidate, this);
 
     _textureMap.set(texture, webGLTexture);
 

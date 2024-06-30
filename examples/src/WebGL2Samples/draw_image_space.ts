@@ -1,5 +1,5 @@
 import { $set } from "@feng3d/serialization";
-import { IRenderObject, Texture2D, WebGL } from "../../../src";
+import { IRenderObject, Texture, WebGL } from "../../../src";
 
 (function ()
 {
@@ -24,10 +24,10 @@ import { IRenderObject, Texture2D, WebGL } from "../../../src";
 
     loadImage("../../resources/assets/img/Di-3d.png", (img) =>
     {
-        const diffuse = $set(new Texture2D(), {
+        const diffuse: Texture = {
             minFilter: "LINEAR",
-            source: img as any,
-        });
+            source: [img],
+        };
 
         const renderAtomic: IRenderObject = {
             vertices: {},

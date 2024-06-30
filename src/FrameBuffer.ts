@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { RenderBuffer } from "./RenderBuffer";
-import { RenderTargetTexture2D } from "./textures/RenderTargetTexture2D";
+import { Texture } from "./data/Texture";
 
 /**
  * 帧缓冲
@@ -22,7 +22,7 @@ export class FrameBuffer
      *
      * Attaches the texture to the framebuffer's color buffer.
      */
-    texture = new RenderTargetTexture2D();
+    texture: Texture;
 
     /**
      * 附加到帧缓冲上的深度缓冲。
@@ -41,15 +41,15 @@ export class FrameBuffer
 
     private invalidateSize()
     {
-        if (this.texture)
-        {
-            this.texture.width = this.width;
-            this.texture.height = this.height;
-        }
-        if (this.depthBuffer)
-        {
-            this.depthBuffer.width = this.width;
-            this.depthBuffer.height = this.height;
-        }
+        // if (this.texture)
+        // {
+        //     this.texture.width = this.width;
+        //     this.texture.height = this.height;
+        // }
+        // if (this.depthBuffer)
+        // {
+        //     this.depthBuffer.width = this.width;
+        //     this.depthBuffer.height = this.height;
+        // }
     }
 }
