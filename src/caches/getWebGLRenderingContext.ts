@@ -1,8 +1,5 @@
 import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
 import { defaults } from "../defaults/defaults";
-import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
-import { WebGLInfo } from "../gl/WebGLInfo";
-import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
 import { getWebGLCapabilities } from "./getWebGLCapabilities";
 
 /**
@@ -20,7 +17,8 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
         const canvas = getCanvas(canvasContext);
         value = getWebGLContext(canvas, canvasContext);
 
-        initWebGLModules(value);
+        //
+        getWebGLCapabilities(value);
         initMap(value);
 
         //
@@ -40,16 +38,6 @@ function initMap(gl: WebGLRenderingContext)
     gl._elementBufferMap = new WeakMap();
     gl._textureMap = new WeakMap();
     gl._compileShaderResults = {};
-}
-
-function initWebGLModules(gl: WebGLRenderingContext)
-{
-    getWebGLCapabilities(gl);
-
-    new WebGLInfo(gl);
-
-    new WebGLRenderbuffers(gl);
-    new WebGLFramebuffers(gl);
 }
 
 function _onContextLost(event: Event)

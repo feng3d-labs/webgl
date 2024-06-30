@@ -21,7 +21,6 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObje
 
 function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const { _info } = gl;
     //
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
@@ -45,18 +44,15 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
             const extension = gl.getExtension("ANGLE_instanced_arrays");
             extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type], instanceCount);
         }
-        _info.update(indexCount, drawMode, instanceCount);
     }
     else
     {
         gl.drawElements(gl[drawMode], indexCount, gl[type], firstIndex * ElementTypeMap[type]);
-        _info.update(indexCount, drawMode, 1);
     }
 }
 
 function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const { _info } = gl;
     //
     const vertexNum = getAttributeVertexNum(gl, renderAtomic);
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
@@ -78,12 +74,10 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
             const extension = gl.getExtension("ANGLE_instanced_arrays");
             extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
         }
-        _info.update(vertexCount, drawMode, instanceCount);
     }
     else
     {
         gl.drawArrays(gl[drawMode], firstVertex, vertexCount);
-        _info.update(vertexCount, drawMode, 1);
     }
 }
 
