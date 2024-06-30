@@ -124,7 +124,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     }
 
     const img = new Image();
-    img.src = "../../resources/assets/peppers.png";
+    img.src = "../../assets/peppers.png";
     await img.decode();
 
     const diffuse: ITexture = { sampler: { minFilter: "LINEAR" }, sources: [{ source: img }] };
