@@ -45,7 +45,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
                             -1.0, 1.0,
                             -1.0, -1.0
                         ]
-                    }, itemSize: 2
+                    }, numComponents: 2
                 },
                 texcoord: {
                     buffer: {
@@ -57,7 +57,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
                             0.0, 0.0,
                             0.0, 1.0
                         ]
-                    }, itemSize: 2
+                    }, numComponents: 2
                 },
             },
             uniforms: {

@@ -50,7 +50,7 @@ function main()
                             -1.0, -1.0,
                         ]), usage: "STATIC_DRAW"
                     },
-                    itemSize: 2,
+                    numComponents: 2,
                 }
             },
             uniforms: {

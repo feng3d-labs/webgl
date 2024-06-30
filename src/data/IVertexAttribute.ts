@@ -16,9 +16,9 @@ export interface IVertexAttribute
     buffer: IWebGLBuffer;
 
     /**
-     * 单项数据尺寸。
+     * 顶点数据元素数量。
      */
-    itemSize: 1 | 2 | 3 | 4;
+    numComponents: 1 | 2 | 3 | 4;
 
     /**
      * 是否标准化。

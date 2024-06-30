@@ -165,9 +165,9 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
 
     const renderAtomic: IRenderObject = {
         vertices: {
-            position: { buffer: { data: positions }, itemSize: 3 },
-            normal: { buffer: { data: normals }, itemSize: 3 },
-            uv: { buffer: { data: uvs }, itemSize: 2 },
+            position: { buffer: { data: positions }, numComponents: 3 },
+            normal: { buffer: { data: normals }, numComponents: 3 },
+            uv: { buffer: { data: uvs }, numComponents: 2 },
         },
         index: { data: indices },
         uniforms: {

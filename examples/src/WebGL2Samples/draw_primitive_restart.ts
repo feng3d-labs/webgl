@@ -35,7 +35,7 @@ import { IRenderObject, WebGL } from "../../../src";
                         1.0, -1.0,
                         1.0, 1.0,
                     ]
-                }, itemSize: 2
+                }, numComponents: 2
             },
         },
         uniforms: {},

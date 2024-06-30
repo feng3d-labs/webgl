@@ -3,7 +3,7 @@ import { IVertexAttribute } from "../data/IVertexAttribute";
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
 {
-    const { buffer, itemSize, normalized, divisor } = attribute;
+    const { buffer, numComponents: itemSize, normalized, divisor } = attribute;
     let { vertexSize, offset } = attribute;
 
     gl.enableVertexAttribArray(location);

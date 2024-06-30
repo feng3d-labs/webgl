@@ -25,7 +25,7 @@ const renderAtomic: IRenderObject = {
                     0, -1,
                     1, 1
                 ]
-            }, itemSize: 2
+            }, numComponents: 2
         },
     },
     uniforms: { color: [1, 0, 0, 1] },

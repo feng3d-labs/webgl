@@ -42,7 +42,7 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
                         -0.5, 0.5,
                         -0.5, -0.5,
                     ]
-                }, itemSize: 2
+                }, numComponents: 2
             },
         },
         pipeline: {

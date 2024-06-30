@@ -30,7 +30,7 @@ const renderAtomic: IRenderObject = {
                     0, 0.5,
                     1, 1
                 ]
-            }, itemSize: 2
+            }, numComponents: 2
         },
     },
     uniforms: {

@@ -31,14 +31,14 @@ import { IRenderObject, WebGL } from "../../../src";
                     data: [-0.3, -0.5,
                         0.3, -0.5,
                         0.0, 0.5]
-                }, itemSize: 2
+                }, numComponents: 2
             },
             color: {
                 buffer: {
                     data: [
                         1.0, 0.5, 0.0,
                         0.0, 0.5, 1.0]
-                }, itemSize: 3, divisor: 1
+                }, numComponents: 3, divisor: 1
             },
         },
         uniforms: {},

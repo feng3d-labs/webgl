@@ -66,8 +66,8 @@ import * as mat4 from "./stackgl/gl-mat4";
 
     const renderAtomic: IRenderObject = {
         vertices: {
-            position: { buffer: { data: positions }, itemSize: 3 },
-            uv: { buffer: { data: uvs }, itemSize: 2 },
+            position: { buffer: { data: positions }, numComponents: 3 },
+            uv: { buffer: { data: uvs }, numComponents: 2 },
         },
         index: { data: indices },
         uniforms: {
