@@ -20,7 +20,7 @@ function main()
 
   const texture = initTexture();
 
-  const video = setupVideo("Firefox.mp4");
+  const video = setupVideo("../../Firefox.mp4");
 
   const renderObject: IRenderObject = {
     pipeline: {

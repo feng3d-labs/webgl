@@ -16,7 +16,7 @@ async function main()
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const texture = await loadTexture("cubetexture.png");
+  const texture = await loadTexture("../../cubetexture.png");
 
   const renderObject: IRenderObject = {
     pipeline: {
