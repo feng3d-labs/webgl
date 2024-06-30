@@ -1,4 +1,5 @@
 import { FrameBuffer } from "../FrameBuffer";
+import { getWebGLTexture } from "../caches/getWebGLTexture";
 
 declare global
 {
@@ -56,7 +57,7 @@ export class WebGLFramebuffers
     active(frameBuffer: FrameBuffer)
     {
         const gl = this.gl;
-        const { _renderbuffers, _textures } = this.gl;
+        const { _renderbuffers } = this.gl;
 
         const target: FramebufferTarget = "FRAMEBUFFER";
 
@@ -75,7 +76,7 @@ export class WebGLFramebuffers
         let needCheck = false;
 
         // 设置颜色关联对象
-        const texture = _textures.get(frameBuffer.texture);
+        const texture = getWebGLTexture(gl, frameBuffer.texture);
         if (webGLFramebuffer.texture !== texture)
         {
             gl.framebufferTexture2D(gl[target], gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);

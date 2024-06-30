@@ -4,7 +4,6 @@ import { WebGLCapabilities } from "../gl/WebGLCapabilities";
 import { WebGLFramebuffers } from "../gl/WebGLFramebuffers";
 import { WebGLInfo } from "../gl/WebGLInfo";
 import { WebGLRenderbuffers } from "../gl/WebGLRenderbuffers";
-import { WebGLTextures } from "../gl/WebGLTextures";
 
 /**
  * 获取WebGL上下文。
@@ -39,6 +38,7 @@ function initMap(gl: WebGLRenderingContext)
 {
     gl._webGLBufferMap = new WeakMap();
     gl._elementBufferMap = new WeakMap();
+    gl._textureMap = new WeakMap();
     gl._compileShaderResults = {};
 }
 
@@ -47,7 +47,6 @@ function initWebGLModules(gl: WebGLRenderingContext)
     new WebGLCapabilities(gl);
 
     new WebGLInfo(gl);
-    new WebGLTextures(gl);
 
     new WebGLRenderbuffers(gl);
     new WebGLFramebuffers(gl);

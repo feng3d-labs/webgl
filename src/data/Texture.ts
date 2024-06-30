@@ -8,7 +8,7 @@ export abstract class Texture
     name: string;
 
     /**
-     * 纹理类型
+     * 纹理绑定点。
      */
     textureTarget: TextureTarget;
 
