@@ -3,7 +3,7 @@ import { IVertexAttribute } from "../data/IVertexAttribute";
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
 {
-    const { buffer, numComponents: itemSize, normalized, divisor } = attribute;
+    const { buffer, numComponents, normalized, divisor } = attribute;
     let { vertexSize, offset } = attribute;
 
     gl.enableVertexAttribArray(location);
@@ -26,7 +26,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     const { type, bytesPerElement } = webGLBuffer;
 
     //
-    vertexSize = vertexSize || itemSize * bytesPerElement;
+    vertexSize = vertexSize || numComponents * bytesPerElement;
     offset = offset || 0;
 
     //
@@ -35,10 +35,10 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     //
     if (gl instanceof WebGL2RenderingContext && (type === "INT" || type === "UNSIGNED_INT"))
     {
-        gl.vertexAttribIPointer(location, itemSize, gl[type], vertexSize, offset);
+        gl.vertexAttribIPointer(location, numComponents, gl[type], vertexSize, offset);
     }
     else
     {
-        gl.vertexAttribPointer(location, itemSize, gl[type], normalized, vertexSize, offset);
+        gl.vertexAttribPointer(location, numComponents, gl[type], normalized, vertexSize, offset);
     }
 }
