@@ -6,6 +6,7 @@ const files = {
         "sample4",
         "sample5",
         "sample6",
+        "sample7",
     ],
     "regl-examples": [
         "basic",
