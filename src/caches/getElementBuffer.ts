@@ -1,46 +1,51 @@
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/IIndexBuffer";
-import { VertexAttributeTypes } from "../data/IVertexAttribute";
 import { defaultIndexBuffer } from "../runs/runIndexBuffer";
 
 /**
  * 获取索引WebGL缓冲区。
  *
  * @param gl
- * @param element
+ * @param buffer
  * @returns
  */
-export function getElementBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
+export function getElementBuffer(gl: WebGLRenderingContext, buffer: IIndexBuffer)
 {
-    let buffer = gl._elementBuffers.get(element);
+    let webGLBuffer = gl._buffers.get(buffer);
 
-    if (!buffer)
+    if (!webGLBuffer)
     {
-        buffer = gl.createBuffer();
-        gl._elementBuffers.set(element, buffer);
+        webGLBuffer = gl.createBuffer();
+        gl._buffers.set(buffer, webGLBuffer);
 
         const updateBuffer = () =>
         {
             // 获取
-            buffer.type = element.type || getDrawElementType(element.data);
-            const data = getArrayBufferViewWithType(element.data, buffer.type);
+            webGLBuffer.type = buffer.type || getDrawElementType(buffer.data);
+            const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
 
             // 上传数据到WebGL
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[element.usage || defaultIndexBuffer.usage]);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[buffer.usage || defaultIndexBuffer.usage]);
 
             //
-            buffer.count = data.length;
-            buffer.bytesPerElement = data.BYTES_PER_ELEMENT;
+            webGLBuffer.count = data.length;
+            webGLBuffer.bytesPerElement = data.BYTES_PER_ELEMENT;
         };
 
         updateBuffer();
 
         //
-        watcher.watch(element, "data", updateBuffer);
+        watcher.watch(buffer, "data", updateBuffer);
+
+        //
+        webGLBuffer.destroy = () =>
+        {
+            watcher.unwatch(buffer, "data", updateBuffer);
+        };
     }
 
-    return buffer;
+    return webGLBuffer;
 }
 
 function getDrawElementType(array: ElementBufferSourceTypes)
@@ -103,27 +108,4 @@ function getArrayBufferViewWithType(array: ElementBufferSourceTypes, type: DrawE
     }
 
     return array;
-}
-
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _elementBuffers: WeakMap<IIndexBuffer, WebGLBuffer>
-    }
-
-    interface WebGLBuffer
-    {
-        /**
-         * 元素数据类型
-         */
-        type: VertexAttributeTypes;
-
-        /**
-         * 元素数组长度
-         */
-        count: number;
-
-        bytesPerElement: number;
-    }
 }

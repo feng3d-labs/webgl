@@ -35,7 +35,6 @@ export function getRenderingContext(renderingContext: IRenderingContext)
 function initMap(gl: WebGLRenderingContext)
 {
     gl._buffers = new WeakMap();
-    gl._elementBuffers = new WeakMap();
     gl._textures = new WeakMap();
     gl._renderbuffers = new WeakMap();
     gl._framebuffers = new WeakMap();

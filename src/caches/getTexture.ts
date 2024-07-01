@@ -26,7 +26,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     webGLTexture = gl.createTexture(); // Create a texture object
     gl._textures.set(texture, webGLTexture);
 
-    const updateSource = () =>
+    const updateTexture = () =>
     {
         const { textureTarget, flipY, premulAlpha, generateMipmap, internalformat, format, type, sources } = { ...defaultTexture, ...texture };
         //
@@ -64,18 +64,16 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         }
     };
 
-    updateSource();
+    updateTexture();
 
-    watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
+    watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
 
     // watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
     // watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
 
     webGLTexture.destroy = () =>
     {
-        gl._textures.delete(texture);
-        //
-        watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
+        watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
     };
 
     return webGLTexture;
@@ -88,6 +86,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     gl._textures.delete(texture);
     webGLTexture.destroy();
+    delete webGLTexture.destroy;
     //
     gl.deleteTexture(webGLTexture);
 }
