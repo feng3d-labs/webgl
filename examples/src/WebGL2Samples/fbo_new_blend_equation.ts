@@ -1,10 +1,14 @@
+import { IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IViewport } from "../../../src/data/IViewport";
+import { getShaderSource, loadImage } from "./utility";
+
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
-const isWebGL2 = !!gl;
+const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
 // -- Divide viewport
 
@@ -53,15 +57,12 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-
-const uniformMvpLocation = gl.getUniformLocation(program, "mvp");
-const uniformDiffuseLocation = gl.getUniformLocation(program, "diffuse");
+const program: IRenderPipeline = {
+    vertex: { code: getShaderSource("vs") },
+    fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] },
+};
 
 // -- Initialize buffer
-
-const vertexPosBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
 const positions = new Float32Array([
     -1.0, -1.0,
     1.0, -1.0,
@@ -70,11 +71,8 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexPosBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
 
-const vertexTexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
 const texcoords = new Float32Array([
     0.0, 1.0,
     1.0, 1.0,
@@ -83,103 +81,120 @@ const texcoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-gl.bufferData(gl.ARRAY_BUFFER, texcoords, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexTexBuffer: IBuffer = { data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
-
-const vertexArray = gl.createVertexArray();
-gl.bindVertexArray(vertexArray);
-
-const vertexPosLocation = 0; // set with GLSL layout qualifier
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-const vertexTexLocation = 4; // set with GLSL layout qualifier
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(vertexTexLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-gl.bindVertexArray(null);
+const vertexArray: IVertexArrayObject = {
+    vertices: {
+        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+    }
+};
 
 // -- Load texture then render
-const imageUrl = "../assets/img/Di-3d.png";
-let texture;
+const imageUrl = "../../assets/img/Di-3d.png";
+let texture: ITexture;
 loadImage(imageUrl, function (image)
 {
-    texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texImage2D(
-        gl.TEXTURE_2D,
-        0, // Level of details
-        gl.RGBA, // Format
-        gl.RGBA,
-        gl.UNSIGNED_BYTE, // Size of each channel
-        image
-    );
+    texture = {
+        sources: [{ source: image, level: 0 }],
+        internalformat: "RGBA",
+        format: "RGBA",
+        type: "UNSIGNED_BYTE",
+        sampler: {
+            minFilter: "LINEAR",
+            magFilter: "LINEAR"
+        },
+        generateMipmap: true,
+    };
 
-    gl.generateMipmap(gl.TEXTURE_2D);
     render();
 });
 
 function render()
 {
-    // Clear color buffer
-    gl.clearColor(0.5, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    // Bind program
-    gl.useProgram(program);
-
     const matrix = new Float32Array([
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.0, 0.0, 0.0, 1.0
     ]);
-    gl.uniformMatrix4fv(uniformMvpLocation, false, matrix);
-    gl.uniform1i(uniformDiffuseLocation, 0);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    const renderObject: IRenderObject = {
+        pipeline: program,
+        vertexArray,
+        uniforms: { mvp: matrix, diffuse: texture },
+        drawVertex: { vertexCount: 6 },
+    };
 
-    gl.bindVertexArray(vertexArray);
-
-    gl.enable(gl.BLEND);
+    const renderPass: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [],
+    };
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
+        const viewport0: IViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
-        if (i == Corners.TOP_LEFT)
+        if (i === Corners.TOP_LEFT)
         {
             //pass
         }
-        else if (i == Corners.TOP_RIGHT)
+        else if (i === Corners.TOP_RIGHT)
         {
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            renderPass.renderObjects.push({
+                ...renderObject,
+                viewport: viewport0,
+            });
         }
-        else if (i == Corners.BOTTOM_RIGHT)
+        else if (i === Corners.BOTTOM_RIGHT)
         {
-            gl.blendEquation(gl.MIN);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            renderPass.renderObjects.push({
+                ...renderObject,
+                viewport: viewport0,
+                pipeline: {
+                    ...program, fragment: {
+                        ...program.fragment,
+                        targets: [{
+                            ...program.fragment.targets[0],
+                            blend: {
+                                ...program.fragment.targets[0].blend,
+                                color: { ...program.fragment.targets[0].blend.color, operation: "MIN" },
+                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MIN" },
+                            },
+                        }]
+                    }
+                },
+            });
         }
-        else if (i == Corners.BOTTOM_LEFT)
+        else if (i === Corners.BOTTOM_LEFT)
         {
-            gl.blendEquation(gl.MAX);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            renderPass.renderObjects.push({
+                ...renderObject,
+                viewport: viewport0,
+                pipeline: {
+                    ...program, fragment: {
+                        ...program.fragment,
+                        targets: [{
+                            ...program.fragment.targets[0],
+                            blend: {
+                                ...program.fragment.targets[0].blend,
+                                color: { ...program.fragment.targets[0].blend.color, operation: "MAX" },
+                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MAX" },
+                            },
+                        }]
+                    }
+                },
+            });
         }
     }
 
+    WebGL.runRenderPass(renderingContext, renderPass);
+
     // -- Clean up
-    gl.deleteBuffer(vertexPosBuffer);
-    gl.deleteBuffer(vertexTexBuffer);
-    gl.deleteVertexArray(vertexArray);
-    gl.deleteTexture(texture);
-    gl.deleteProgram(program);
+    WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
+    WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
+    WebGL.deleteVertexArray(renderingContext, vertexArray);
+    WebGL.deleteTexture(renderingContext, texture);
+    WebGL.deleteProgram(renderingContext, program);
 }

@@ -7,15 +7,15 @@ import { runTexture } from "./runTexture";
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    const shaderResult = getProgram(gl, renderAtomic.pipeline);
+    const shaderResult = getProgram(gl, renderObject.pipeline);
 
     for (const name in shaderResult.uniforms)
     {
         const activeInfo = shaderResult.uniforms[name];
         const paths = activeInfo.paths;
-        let uniformData = lazy.getValue(renderAtomic.uniforms[paths[0]], renderAtomic.uniforms);
+        let uniformData = lazy.getValue(renderObject.uniforms[paths[0]], renderObject.uniforms);
         for (let i = 1; i < paths.length; i++)
         {
             uniformData = uniformData[paths[i]];

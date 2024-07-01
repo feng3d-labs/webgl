@@ -1,5 +1,5 @@
 import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
-import { getShaderSource } from "./utility";
+import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -200,15 +200,3 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     WebGL.deleteProgram(canvasContext, program);
     WebGL.deleteVertexArray(canvasContext, vertexArray);
 });
-
-function loadImage(url: string, onload: (img: HTMLImageElement) => void)
-{
-    const img = new Image();
-    img.src = url;
-    img.onload = function ()
-    {
-        onload(img);
-    };
-
-    return img;
-}
