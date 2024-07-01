@@ -36,6 +36,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGL
         const renderbuffer = getWebGLRenderbuffer(gl, view as IRenderbuffer);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, renderbuffer);
     }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     return webGLFramebuffer;
 }

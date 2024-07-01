@@ -7,8 +7,5 @@ import { IWebGLPassDescriptor } from "../data/IWebGLPassDescriptor";
 export function runFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
 {
     const framebuffer = getFramebuffer(gl, passDescriptor);
-    if (framebuffer)
-    {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 }

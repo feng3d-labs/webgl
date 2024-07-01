@@ -129,7 +129,7 @@ import { getShaderSource } from "./utility";
         const renderPassResolve: IWebGLRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
-                    // view: textureColorBuffer,
+                    view: textureColorBuffer,
                     clearValue: [0.7, 0.0, 0.0, 1.0]
                 }]
             },
@@ -191,8 +191,9 @@ import { getShaderSource } from "./utility";
         {
             WebGL.renderPass(canvasContext, fboRenderPass);
             WebGL.blitFramebuffer(canvasContext, blitFramebuffer);
+            WebGL.renderPass(canvasContext, renderPass2);
 
-            requestAnimationFrame(draw);
+            // requestAnimationFrame(draw);
         }
         draw();
     });
