@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IWebGLRenderPass, WebGL } from "../../../src";
+import { IRenderObject, IRenderPass, WebGL } from "../../../src";
 
 let squareRotation = 0.0;
 
@@ -72,7 +72,7 @@ function main()
     drawVertex: { firstVertex: 0, vertexCount: 4 },
   };
 
-  const renderPasss: IWebGLRenderPass = {
+  const renderPasss: IRenderPass = {
     passDescriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -100,7 +100,7 @@ function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
 
     requestAnimationFrame(render);
   }

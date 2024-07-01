@@ -5,7 +5,7 @@ import { IPrimitiveState } from "./IPrimitiveState";
 /**
  * shader
  */
-export interface IWebGLRenderPipeline
+export interface IRenderPipeline
 {
     /**
      * 顶点着色器代码

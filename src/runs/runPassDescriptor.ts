@@ -1,12 +1,12 @@
 import { IRenderPassColorAttachment } from "../data/IRenderPassColorAttachment";
 import { IRenderPassDepthStencilAttachment } from "../data/IRenderPassDepthStencilAttachment";
-import { IWebGLPassDescriptor } from "../data/IWebGLPassDescriptor";
+import { IPassDescriptor } from "../data/IPassDescriptor";
 import { runFramebuffer } from "./runFramebuffer";
 
 const defaultRenderPassColorAttachment: IRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
 const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
 
-export function runWebGLPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
+export function runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
 {
     passDescriptor = passDescriptor || {};
 

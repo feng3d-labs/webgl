@@ -1,4 +1,4 @@
-import { getWebGLProgram } from "../caches/getWebGLProgram";
+import { getProgram } from "../caches/getProgram";
 import { WebGLUniformType } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
 import { lazy } from "../types";
@@ -9,7 +9,7 @@ import { runTexture } from "./runTexture";
  */
 export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const shaderResult = getWebGLProgram(gl, renderAtomic.pipeline);
+    const shaderResult = getProgram(gl, renderAtomic.pipeline);
 
     for (const name in shaderResult.uniforms)
     {

@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IRenderObject, ITexture, IWebGLRenderPass, WebGL } from "../../../src";
+import { IRenderObject, ITexture, IRenderPass, WebGL } from "../../../src";
 
 let cubeRotation = 0.0;
 // will set to true when video can be copied to texture
@@ -102,7 +102,7 @@ function main()
     drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IWebGLRenderPass = {
+  const renderPasss: IRenderPass = {
     passDescriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -136,7 +136,7 @@ function main()
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
     renderObject.uniforms.uNormalMatrix = normalMatrix;
 
-    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
 
     requestAnimationFrame(render);
   }

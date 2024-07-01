@@ -1,21 +1,21 @@
+import { deleteBuffer } from "./caches/getBuffer";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
-import { deleteBuffer } from "./caches/getWebGLBuffer";
-import { deleteProgram } from "./caches/getWebGLProgram";
-import { deleteRenderbuffer } from "./caches/getWebGLRenderbuffer";
-import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
-import { deleteTexture } from "./caches/getWebGLTexture";
+import { deleteProgram } from "./caches/getProgram";
+import { deleteRenderbuffer } from "./caches/getRenderbuffer";
+import { getRenderingContext } from "./caches/getRenderingContext";
+import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
+import { IBuffer } from "./data/IBuffer";
+import { IRenderingContext } from "./data/ICanvasContext";
+import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IRenderObject } from "./data/IRenderObject";
+import { IRenderPass } from "./data/IRenderPass";
+import { IRenderPipeline } from "./data/IRenderPipeline";
 import { IRenderbuffer } from "./data/IRenderbuffer";
 import { ITexture } from "./data/ITexture";
-import { IWebGLBuffer } from "./data/IWebGLBuffer";
-import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
-import { IWebGLPassDescriptor } from "./data/IWebGLPassDescriptor";
-import { IWebGLRenderPass } from "./data/IWebGLRenderPass";
-import { IWebGLRenderPipeline } from "./data/IWebGLRenderPipeline";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
-import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
+import { runRenderPass } from "./runs/runRenderPass";
 
 /**
  * WEBGL 渲染器
@@ -31,12 +31,12 @@ export class WebGL
      * @param renderPass 渲染通道数据。
      * @returns
      */
-    static renderPass(canvasContext: IWebGLCanvasContext, renderPass: IWebGLRenderPass)
+    static runRenderPass(canvasContext: IRenderingContext, renderPass: IRenderPass)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
-        runWebGLRenderPass(gl, renderPass);
+        runRenderPass(gl, renderPass);
     }
 
     /**
@@ -44,57 +44,57 @@ export class WebGL
      *
      * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
      */
-    static renderObject(canvasContext: IWebGLCanvasContext, renderAtomic: IRenderObject)
+    static runRenderObject(canvasContext: IRenderingContext, renderAtomic: IRenderObject)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         runRenderObject(gl, renderAtomic);
     }
 
-    static blitFramebuffer(canvasContext: IWebGLCanvasContext, blitFramebuffer: IBlitFramebuffer)
+    static runBlitFramebuffer(canvasContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    static deleteFramebuffer(canvasContext: IWebGLCanvasContext, passDescriptor: IWebGLPassDescriptor)
+    static deleteFramebuffer(canvasContext: IRenderingContext, passDescriptor: IPassDescriptor)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteFramebuffer(gl, passDescriptor);
     }
 
-    static deleteRenderbuffer(canvasContext: IWebGLCanvasContext, colorRenderbuffer: IRenderbuffer)
+    static deleteRenderbuffer(canvasContext: IRenderingContext, colorRenderbuffer: IRenderbuffer)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteRenderbuffer(gl, colorRenderbuffer);
     }
 
-    static deleteBuffer(canvasContext: IWebGLCanvasContext, vertexPosBuffer: IWebGLBuffer)
+    static deleteBuffer(canvasContext: IRenderingContext, vertexPosBuffer: IBuffer)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteBuffer(gl, vertexPosBuffer);
     }
 
-    static deleteTexture(canvasContext: IWebGLCanvasContext, textureDiffuse: ITexture)
+    static deleteTexture(canvasContext: IRenderingContext, textureDiffuse: ITexture)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteTexture(gl, textureDiffuse);
     }
 
-    static deleteProgram(canvasContext: IWebGLCanvasContext, pipeline: IWebGLRenderPipeline)
+    static deleteProgram(canvasContext: IRenderingContext, pipeline: IRenderPipeline)
     {
-        const gl = getWebGLRenderingContext(canvasContext);
+        const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteProgram(gl, pipeline);

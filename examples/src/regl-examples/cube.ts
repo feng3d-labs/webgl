@@ -119,7 +119,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
         viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
         requestAnimationFrame(draw);
     }
 

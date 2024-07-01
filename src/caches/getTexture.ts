@@ -18,7 +18,7 @@ declare global
     }
 }
 
-export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
     let webGLTexture = gl._textureMap.get(texture);
     if (webGLTexture) return webGLTexture;

@@ -8,7 +8,7 @@ declare global
     }
 }
 
-export function getWebGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
+export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
 {
     let webGLRenderbuffer = gl._renderbuffers_.get(renderbuffer);
     if (webGLRenderbuffer) return webGLRenderbuffer;

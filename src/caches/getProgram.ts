@@ -1,5 +1,5 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
-import { IWebGLRenderPipeline } from "../data/IWebGLRenderPipeline";
+import { IRenderPipeline } from "../data/IRenderPipeline";
 import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
@@ -26,7 +26,7 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getWebGLProgram(gl: WebGLRenderingContext, pipeline: IWebGLRenderPipeline)
+export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;
@@ -41,7 +41,7 @@ export function getWebGLProgram(gl: WebGLRenderingContext, pipeline: IWebGLRende
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: IWebGLRenderPipeline)
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;

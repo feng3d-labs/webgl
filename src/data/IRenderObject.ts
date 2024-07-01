@@ -5,7 +5,7 @@ import { IIndexBuffer } from "./IIndexBuffer";
 import { IScissor } from "./IScissor";
 import { IVertexAttributes } from "./IVertexAttributes";
 import { IViewport } from "./IViewport";
-import { IWebGLRenderPipeline } from "./IWebGLRenderPipeline";
+import { IRenderPipeline } from "./IRenderPipeline";
 import { IUniforms } from "./IUniforms";
 
 /**
@@ -16,7 +16,7 @@ export interface IRenderObject
     /**
      * 渲染程序
      */
-    pipeline: IWebGLRenderPipeline;
+    pipeline: IRenderPipeline;
 
     /**
      * 顶点索引缓冲

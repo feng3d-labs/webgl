@@ -1,20 +1,20 @@
 import { IRenderbuffer } from "../data/IRenderbuffer";
-import { IWebGLPassDescriptor } from "../data/IWebGLPassDescriptor";
-import { getWebGLRenderbuffer } from "./getWebGLRenderbuffer";
-import { getWebGLTexture } from "./getWebGLTexture";
+import { IPassDescriptor } from "../data/IPassDescriptor";
+import { getRenderbuffer } from "./getRenderbuffer";
+import { getTexture } from "./getTexture";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers_: WeakMap<IWebGLPassDescriptor, WebGLFramebuffer>;
+        _framebuffers_: WeakMap<IPassDescriptor, WebGLFramebuffer>;
     }
 }
 
 /**
  * 获取帧缓冲区
  */
-export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
+export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view;
     if (!view) return null;
@@ -28,12 +28,12 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGL
 
     if ("sources" in view)
     {
-        const texture = getWebGLTexture(gl, view);
+        const texture = getTexture(gl, view);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
     }
     else
     {
-        const renderbuffer = getWebGLRenderbuffer(gl, view as IRenderbuffer);
+        const renderbuffer = getRenderbuffer(gl, view as IRenderbuffer);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, renderbuffer);
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -41,7 +41,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGL
     return webGLFramebuffer;
 }
 
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view;
     if (!view) return null;

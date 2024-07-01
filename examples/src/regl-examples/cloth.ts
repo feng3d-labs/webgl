@@ -366,7 +366,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
 
         camera.tick();
 
-        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
         requestAnimationFrame(draw);
     }
 

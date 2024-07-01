@@ -1,8 +1,8 @@
-import { defaultWebGLCanvasContext } from "./defaultWebGLCanvasContext";
+import { defaultCanvasContext } from "./defaultWebGLCanvasContext";
 
 /**
  * 默认值
  */
 export const defaults = Object.freeze({
-    webGLCanvasContext: defaultWebGLCanvasContext,
+    webGLCanvasContext: defaultCanvasContext,
 });

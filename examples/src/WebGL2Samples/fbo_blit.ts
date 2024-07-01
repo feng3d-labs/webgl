@@ -1,5 +1,5 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IWebGLBuffer, IWebGLRenderPass, IWebGLRenderPipeline, WebGL } from "../../../src";
-import { IWebGLCanvasContext } from "../../../src/data/IWebGLCanvasContext";
+import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IBuffer, IRenderPass, IRenderPipeline, WebGL } from "../../../src";
+import { IRenderingContext } from "../../../src/data/ICanvasContext";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -10,9 +10,9 @@ import { getShaderSource } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const canvasContext: IWebGLCanvasContext = { canvasId: "glcanvas" };
+    const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
 
-    const pipeline: IWebGLRenderPipeline = {
+    const pipeline: IRenderPipeline = {
         primitive: { topology: "TRIANGLES", cullMode: "NONE" },
         vertex: {
             code: getShaderSource("vs")
@@ -23,7 +23,7 @@ import { getShaderSource } from "./utility";
         },
     };
 
-    const vertexPosBuffer: IWebGLBuffer = {
+    const vertexPosBuffer: IBuffer = {
         data: new Float32Array([
             -1.0, -1.0,
             1.0, -1.0,
@@ -35,7 +35,7 @@ import { getShaderSource } from "./utility";
         type: "FLOAT",
         usage: "STATIC_DRAW",
     };
-    const vertexTexBuffer: IWebGLBuffer = {
+    const vertexTexBuffer: IBuffer = {
         data: new Float32Array([
             0.0, 1.0,
             1.0, 1.0,
@@ -90,7 +90,7 @@ import { getShaderSource } from "./utility";
         };
 
         // Render FBO
-        const fboRenderPass: IWebGLRenderPass = {
+        const fboRenderPass: IRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
                     view: colorRenderbuffer,
@@ -117,7 +117,7 @@ import { getShaderSource } from "./utility";
         };
 
         //
-        const renderPassResolve: IWebGLRenderPass = {
+        const renderPassResolve: IRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
                     view: textureColorBuffer,
@@ -155,7 +155,7 @@ import { getShaderSource } from "./utility";
             blitFramebuffers,
         };
 
-        const renderPass2: IWebGLRenderPass = {
+        const renderPass2: IRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
                     clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -180,9 +180,9 @@ import { getShaderSource } from "./utility";
         };
 
         // 执行
-        WebGL.renderPass(canvasContext, fboRenderPass);
-        WebGL.blitFramebuffer(canvasContext, blitFramebuffer);
-        WebGL.renderPass(canvasContext, renderPass2);
+        WebGL.runRenderPass(canvasContext, fboRenderPass);
+        WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
+        WebGL.runRenderPass(canvasContext, renderPass2);
 
         // Delete WebGL resources
         WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);

@@ -77,7 +77,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    WebGL.renderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
 
     requestAnimationFrame(draw);
 }

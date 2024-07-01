@@ -1,12 +1,12 @@
-import { IWebGLPassDescriptor } from "./IWebGLPassDescriptor";
+import { IPassDescriptor } from "./IPassDescriptor";
 
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
  */
 export interface IBlitFramebuffer
 {
-    read: IWebGLPassDescriptor;
-    draw: IWebGLPassDescriptor;
+    read: IPassDescriptor;
+    draw: IPassDescriptor;
     blitFramebuffers: IBlitFramebufferItem[];
 }
 

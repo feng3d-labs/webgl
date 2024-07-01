@@ -1,24 +1,24 @@
-import { IWebGLCanvasContext } from "../data/IWebGLCanvasContext";
+import { IRenderingContext } from "../data/ICanvasContext";
 import { defaults } from "../defaults/defaults";
-import { getWebGLCapabilities } from "./getWebGLCapabilities";
+import { getCapabilities } from "./getCapabilities";
 
 /**
  * 获取WebGL上下文。
  *
- * @param canvasContext
+ * @param renderingContext
  * @returns
  */
-export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
+export function getRenderingContext(renderingContext: IRenderingContext)
 {
-    const key = canvasContext.canvasId;
+    const key = renderingContext.canvasId;
     let value = canvasContextMap.get(key);
     if (!value)
     {
-        const canvas = getCanvas(canvasContext);
-        value = getWebGLContext(canvas, canvasContext);
+        const canvas = getCanvas(renderingContext);
+        value = getWebGLContext(canvas, renderingContext);
 
         //
-        getWebGLCapabilities(value);
+        getCapabilities(value);
         initMap(value);
 
         //
@@ -34,8 +34,8 @@ export function getWebGLRenderingContext(canvasContext: IWebGLCanvasContext)
 
 function initMap(gl: WebGLRenderingContext)
 {
-    gl._webGLBufferMap = new WeakMap();
-    gl._elementBufferMap = new WeakMap();
+    gl._buffers = new WeakMap();
+    gl._elementBuffers = new WeakMap();
     gl._textureMap = new WeakMap();
     gl._renderbuffers_ = new WeakMap();
     gl._framebuffers_ = new WeakMap();
@@ -68,7 +68,7 @@ function autoCreateCanvas(canvasId: string)
     return canvas;
 }
 
-function getCanvas(canvasContext: IWebGLCanvasContext)
+function getCanvas(canvasContext: IRenderingContext)
 {
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
@@ -79,7 +79,7 @@ function getCanvas(canvasContext: IWebGLCanvasContext)
     return canvas;
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IWebGLCanvasContext)
+function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IRenderingContext)
 {
     const contextAttributes = Object.assign({}, defaults.webGLCanvasContext, canvasContext);
 
