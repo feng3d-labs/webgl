@@ -5,7 +5,7 @@ import { WebGL } from "../../../src";
 
 function main()
 {
-    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, {
+    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, {
         passDescriptor: {
             colorAttachments: [{
                 clearValue: [1, 0, 0, 0.5],

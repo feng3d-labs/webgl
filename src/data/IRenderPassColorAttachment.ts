@@ -1,5 +1,18 @@
+import { IRenderbuffer } from "./IRenderbuffer";
+import { ITexture } from "./ITexture";
+
 export interface IRenderPassColorAttachment
 {
+    /**
+     * 颜色附件视图。
+     *
+     * 如果没有设置，默认为画布；否则使用 帧缓冲 。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
+     */
+    view?: IRenderbuffer | ITexture;
+
     /**
      * 清除后填充值。
      *

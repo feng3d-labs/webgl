@@ -1,41 +1,61 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { IRenderPipeline } from "../data/IRenderPipeline";
 import { WebGLUniform } from "../runs/runUniforms";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _compileShaderResults: { [key: string]: CompileShaderResult }
+        _programs: { [key: string]: WebGLProgram }
+    }
+
+    export interface WebGLProgram
+    {
+        vertex: WebGLShader, fragment: WebGLShader
+        /**
+         * 属性信息列表
+         */
+        attributes: { [name: string]: AttributeInfo };
+        /**
+         * uniform信息列表
+         */
+        uniforms: { [name: string]: WebGLUniform };
     }
 }
 
 /**
  * 激活渲染程序
  */
-export function getCompileShaderResult(gl: WebGLRenderingContext, vertex: string, fragment: string)
+export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
-    const compileShaderResults = gl._compileShaderResults;
+    const vertex = pipeline.vertex.code;
+    const fragment = pipeline.fragment.code;
 
     const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
-    let result = compileShaderResults[shaderKey];
+    let result = gl._programs[shaderKey];
     if (result) return result;
 
-    // 渲染程序
-    try
-    {
-        result = compileShaderResults[shaderKey] = compileShaderProgram(gl, vertex, fragment);
-    }
-    catch (error)
-    {
-        console.error(`着色器 编译失败！\n${error}`);
-
-        return null;
-    }
+    result = compileShaderProgram(gl, vertex, fragment);
+    gl._programs[shaderKey] = result;
 
     return result;
 }
 
-function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshader: string): CompileShaderResult
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+{
+    const vertex = pipeline.vertex.code;
+    const fragment = pipeline.fragment.code;
+
+    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
+    const result = gl._programs[shaderKey];
+    if (result)
+    {
+        delete gl._programs[shaderKey];
+        gl.deleteProgram(result);
+    }
+}
+
+function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshader: string)
 {
     // 创建着色器程序
     // 编译顶点着色器
@@ -101,7 +121,12 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
         }
     }
 
-    return { program: shaderProgram, vertex: vertexShader, fragment: fragmentShader, attributes, uniforms };
+    shaderProgram.vertex = vertexShader;
+    shaderProgram.fragment = fragmentShader;
+    shaderProgram.attributes = attributes;
+    shaderProgram.uniforms = uniforms;
+
+    return shaderProgram;
 }
 
 /**
@@ -153,19 +178,6 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
     }
 
     return program;
-}
-
-export interface CompileShaderResult
-{
-    program: WebGLProgram, vertex: WebGLShader, fragment: WebGLShader
-    /**
-     * 属性信息列表
-     */
-    attributes: { [name: string]: AttributeInfo };
-    /**
-     * uniform信息列表
-     */
-    uniforms: { [name: string]: WebGLUniform };
 }
 
 export interface AttributeInfo

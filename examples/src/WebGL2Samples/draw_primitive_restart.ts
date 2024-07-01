@@ -76,7 +76,7 @@ import { IRenderObject, WebGL } from "../../../src";
 
     function draw()
     {
-        WebGL.renderPass({ canvasId: "glcanvas" }, {
+        WebGL.runRenderPass({ canvasId: "glcanvas" }, {
             passDescriptor: {
                 colorAttachments: [{
                     clearValue: [0.0, 0.0, 0.0, 1.0],

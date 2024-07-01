@@ -1,4 +1,4 @@
-import { getWebGLTexture } from "../caches/getWebGLTexture";
+import { getTexture } from "../caches/getTexture";
 import { IBufferSource, IImageSource, ITexture, ITextureSource } from "../data/ITexture";
 import { defaultSampler, runSampler } from "./runSampler";
 import { WebGLUniform } from "./runUniforms";
@@ -17,7 +17,7 @@ export function runTexture(gl: WebGLRenderingContext, texture: ITexture, activeI
 {
     gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
 
-    const webGLTexture = getWebGLTexture(gl, texture);
+    const webGLTexture = getTexture(gl, texture);
     // 设置纹理所在采样编号
     gl.uniform1i(activeInfo.location, activeInfo.textureID);
 

@@ -57,7 +57,7 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGL.renderPass({ canvasId: "glcanvas" }, {
+    WebGL.runRenderPass({ canvasId: "glcanvas" }, {
         renderObjects: [renderAtomic]
     });
 

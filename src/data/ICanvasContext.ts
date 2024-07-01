@@ -3,7 +3,7 @@
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext
  */
-export interface IWebGLCanvasContext extends WebGLContextAttributes
+export interface IRenderingContext extends WebGLContextAttributes
 {
     /**
      * 画布编号。

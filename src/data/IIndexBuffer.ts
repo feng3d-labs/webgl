@@ -1,4 +1,4 @@
-import { BufferUsage } from "./IWebGLBuffer";
+import { BufferUsage } from "./IBuffer";
 
 /**
  * WebGL元素缓冲，顶点索引缓冲。

@@ -72,7 +72,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGL.renderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
     }
 
     requestAnimationFrame(draw);

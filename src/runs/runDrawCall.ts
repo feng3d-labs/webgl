@@ -1,5 +1,5 @@
-import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { getElementWebGLBuffer } from "../caches/getWebGLElementBuffer";
+import { getBuffer } from "../caches/getBuffer";
+import { getElementBuffer } from "../caches/getElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IDrawIndexed } from "../data/IDrawIndexed";
 import { IDrawVertex } from "../data/IDrawVertex";
@@ -28,7 +28,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     //
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
-    const element = getElementWebGLBuffer(gl, renderAtomic.index);
+    const element = getElementBuffer(gl, renderAtomic.index);
     const type = element.type;
     //
     let { indexCount, instanceCount, firstIndex } = renderAtomic.drawIndexed || {};
@@ -99,7 +99,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderO
             // eslint-disable-next-line no-prototype-builtins
             if (attributelist.hasOwnProperty(attr))
             {
-                const buffer = getWebGLBuffer(gl, attributelist[attr].buffer);
+                const buffer = getBuffer(gl, attributelist[attr].buffer);
 
                 return buffer.count;
             }

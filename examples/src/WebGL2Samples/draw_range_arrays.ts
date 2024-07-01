@@ -1,6 +1,5 @@
 import { IRenderObject, WebGL } from "../../../src";
-import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
-import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
+import { IRenderPass } from "../../../src/data/IRenderPass";
 
 (function ()
 {
@@ -76,7 +75,7 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
         }
     };
 
-    const data: IWebGLRenderPass = {
+    const data: IRenderPass = {
         passDescriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -99,7 +98,7 @@ import { IWebGLSubmit } from "../../../src/data/IWebGLSubmit";
 
     function draw()
     {
-        WebGL.renderPass({ canvasId: "glcanvas" }, data);
+        WebGL.runRenderPass({ canvasId: "glcanvas" }, data);
 
         requestAnimationFrame(draw);
     }

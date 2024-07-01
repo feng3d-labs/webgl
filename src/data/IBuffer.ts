@@ -5,7 +5,7 @@ import { VertexAttributeTypes } from "./IVertexAttribute";
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export interface IWebGLBuffer
+export interface IBuffer
 {
     /**
      * 属性缓冲数据类型

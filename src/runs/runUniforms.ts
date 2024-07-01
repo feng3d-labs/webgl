@@ -1,15 +1,15 @@
-import { getCompileShaderResult } from "../caches/getCompileShaderResult";
+import { getProgram } from "../caches/getProgram";
 import { WebGLUniformType } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
-import { runTexture } from "./runTexture";
 import { lazy } from "../types";
+import { runTexture } from "./runTexture";
 
 /**
  * 激活常量
  */
 export function runUniforms(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
+    const shaderResult = getProgram(gl, renderAtomic.pipeline);
 
     for (const name in shaderResult.uniforms)
     {

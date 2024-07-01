@@ -84,7 +84,7 @@ import { IRenderObject, WebGL } from "../../../src";
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        WebGL.renderPass({ canvasId: "glcanvas" }, {
+        WebGL.runRenderPass({ canvasId: "glcanvas" }, {
             passDescriptor: {
                 colorAttachments: [{
                     clearValue: [0.0, 0.0, 0.0, 1.0],

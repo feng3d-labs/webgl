@@ -1,135 +1,202 @@
-import { $set } from "@feng3d/serialization";
-import { IRenderObject, ITexture, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IBuffer, IRenderPass, IRenderPipeline, WebGL, IRenderObject } from "../../../src";
+import { IRenderingContext } from "../../../src/data/ICanvasContext";
+import { getShaderSource } from "./utility";
 
 (function ()
 {
-    const div = document.createElement("div");
-    div.innerHTML = `    <div id="info">WebGL 2 Samples - fbo_blit</div>
-    <p id="description">
-        This samples demonstrates blitting on frame buffer objects.
-    </p>`;
-    document.body.appendChild(div);
-
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.body.innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
+    const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
 
-        return;
-    }
-    loadImage("../../assets/img/Di-3d.png", (img) =>
+    const pipeline: IRenderPipeline = {
+        primitive: { topology: "TRIANGLES", cullMode: "NONE" },
+        vertex: {
+            code: getShaderSource("vs")
+        },
+        fragment: {
+            code: getShaderSource("fs"),
+            targets: [{ blend: {} }]
+        },
+    };
+
+    const vertexPosBuffer: IBuffer = {
+        data: new Float32Array([
+            -1.0, -1.0,
+            1.0, -1.0,
+            1.0, 1.0,
+            1.0, 1.0,
+            -1.0, 1.0,
+            -1.0, -1.0
+        ]),
+        type: "FLOAT",
+        usage: "STATIC_DRAW",
+    };
+    const vertexTexBuffer: IBuffer = {
+        data: new Float32Array([
+            0.0, 1.0,
+            1.0, 1.0,
+            1.0, 0.0,
+            1.0, 0.0,
+            0.0, 0.0,
+            0.0, 1.0
+        ]),
+        type: "FLOAT",
+        usage: "STATIC_DRAW",
+    };
+
+    const vertices: IVertexAttributes = {
+        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+    };
+
+    loadImage("../../assets/img/Di-3d.png", (image) =>
     {
-        const diffuse: ITexture = {
-            sources: [{ source: img }],
+        const FRAMEBUFFER_SIZE = {
+            x: image.width,
+            y: image.height
+        };
+
+        const textureDiffuse: ITexture = {
+            flipY: true,
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            sources: [{ source: image }],
             sampler: {
                 minFilter: "LINEAR",
+                magFilter: "LINEAR",
             }
         };
 
-        const renderAtomic: IRenderObject = {
-            vertices: {
-                position: {
-                    buffer: {
-                        data: [
-                            -1.0, -1.0,
-                            1.0, -1.0,
-                            1.0, 1.0,
-                            1.0, 1.0,
-                            -1.0, 1.0,
-                            -1.0, -1.0
-                        ]
-                    }, numComponents: 2
-                },
-                texcoord: {
-                    buffer: {
-                        data: [
-                            0.0, 1.0,
-                            1.0, 1.0,
-                            1.0, 0.0,
-                            1.0, 0.0,
-                            0.0, 0.0,
-                            0.0, 1.0
-                        ]
-                    }, numComponents: 2
-                },
-            },
+        const textureColorBuffer: ITexture = {
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
+            sampler: {
+                minFilter: "LINEAR",
+                magFilter: "LINEAR",
+            }
+        };
+
+        const colorRenderbuffer: IRenderbuffer = {
+            internalformat: "RGBA4",
+            width: FRAMEBUFFER_SIZE.x,
+            height: FRAMEBUFFER_SIZE.y,
+        };
+
+        const renderObject: IRenderObject = {
+            pipeline,
+            viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
+            vertices,
             uniforms: {
-                MVP: [
+                MVP: new Float32Array([
                     0.8, 0.0, 0.0, 0.0,
                     0.0, 0.8, 0.0, 0.0,
                     0.0, 0.0, 0.8, 0.0,
                     0.0, 0.0, 0.0, 1.0
-                ],
-                diffuse,
+                ]),
+                diffuse: textureDiffuse,
             },
-            drawVertex: { instanceCount: 2 },
-            pipeline: {
-                primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
-                vertex: {
-                    code: `#version 300 es
-                #define POSITION_LOCATION 0
-                #define TEXCOORD_LOCATION 4
-                
-                precision highp float;
-                precision highp int;
-        
-                uniform mat4 MVP;
-        
-                layout(location = POSITION_LOCATION) in vec2 position;
-                layout(location = TEXCOORD_LOCATION) in vec2 texcoord;
-        
-                out vec2 v_st;
-        
-                void main()
-                {
-                    v_st = texcoord;
-                    gl_Position = MVP * vec4(position, 0.0, 1.0);
-                }` },
-                fragment: {
-                    code: `#version 300 es
-            precision highp float;
-            precision highp int;
-    
-            uniform sampler2D diffuse;
-    
-            in vec2 v_st;
-    
-            out vec4 color;
-    
-            void main()
-            {
-                color = texture(diffuse, v_st);
-            }`,
-                    targets: [{ blend: {} }]
-                },
-            }
+            drawVertex: { firstVertex: 0, vertexCount: 6 }
         };
 
-        function draw()
-        {
-            WebGL.renderPass(
-                { canvasId: "glcanvas" },
-                {
-                    passDescriptor: {
-                        colorAttachments: [{
-                            clearValue: [0.0, 0.0, 0.0, 1.0],
-                            loadOp: "clear",
-                        }],
-                    },
-                    renderObjects: [renderAtomic]
-                }
-            );
+        // Render FBO
+        const fboRenderPass: IRenderPass = {
+            passDescriptor: {
+                colorAttachments: [{
+                    view: colorRenderbuffer,
+                    clearValue: [0.3, 0.3, 0.3, 1.0]
+                }]
+            },
+            renderObjects: [renderObject],
+        };
 
-            requestAnimationFrame(draw);
+        //
+        const renderPassResolve: IRenderPass = {
+            passDescriptor: {
+                colorAttachments: [{
+                    view: textureColorBuffer,
+                    clearValue: [0.7, 0.0, 0.0, 1.0]
+                }]
+            },
+        };
+
+        const blitFramebuffers: IBlitFramebufferItem[] = [];
+        const TILE = 4;
+        const BORDER = 2;
+        for (let j = 0; j < TILE; j++)
+        {
+            for (let i = 0; i < TILE; i++)
+            {
+                if ((i + j) % 2)
+                {
+                    continue;
+                }
+
+                blitFramebuffers.push(
+                    [0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+                        FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
+                        FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,
+                        FRAMEBUFFER_SIZE.y / TILE * (i + 1) - BORDER,
+                        FRAMEBUFFER_SIZE.y / TILE * (j + 1) - BORDER,
+                        "COLOR_BUFFER_BIT", "LINEAR"]
+                );
+            }
         }
-        draw();
+
+        const blitFramebuffer: IBlitFramebuffer = {
+            read: fboRenderPass.passDescriptor,
+            draw: renderPassResolve.passDescriptor,
+            blitFramebuffers,
+        };
+
+        const renderObject2: IRenderObject = {
+            viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
+            vertices,
+            uniforms: {
+                MVP: new Float32Array([
+                    1.0, 0.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0, 1.0
+                ]),
+                diffuse: textureColorBuffer,
+            },
+            drawVertex: { firstVertex: 0, vertexCount: 6 },
+            pipeline,
+        };
+
+        const renderPass2: IRenderPass = {
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
+            },
+            renderObjects: [renderObject2]
+        };
+
+        // 执行
+        WebGL.runRenderPass(canvasContext, fboRenderPass);
+        WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
+        WebGL.runRenderPass(canvasContext, renderPass2);
+
+        // Delete WebGL resources
+        WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
+        WebGL.deleteFramebuffer(canvasContext, renderPassResolve.passDescriptor);
+        WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
+        WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
+        WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
+        WebGL.deleteTexture(canvasContext, textureDiffuse);
+        WebGL.deleteTexture(canvasContext, textureColorBuffer);
+        WebGL.deleteProgram(canvasContext, pipeline);
+        WebGL.deleteVertexArray(canvasContext, renderObject);
+        WebGL.deleteVertexArray(canvasContext, renderObject2);
     });
 
     function loadImage(url: string, onload: (img: HTMLImageElement) => void)

@@ -1,4 +1,4 @@
-import { IWebGLBuffer } from "./IWebGLBuffer";
+import { IBuffer } from "./IBuffer";
 
 /**
  * 顶点属性数据。
@@ -13,7 +13,7 @@ export interface IVertexAttribute
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    buffer: IWebGLBuffer;
+    buffer: IBuffer;
 
     /**
      * 顶点数据元素数量。

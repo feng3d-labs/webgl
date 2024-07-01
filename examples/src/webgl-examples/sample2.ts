@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 import { WebGL } from "../../../src";
-import { IWebGLRenderPass } from "../../../src/data/IWebGLRenderPass";
+import { IRenderPass } from "../../../src/data/IRenderPass";
 
 main();
 
@@ -10,7 +10,7 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    const renderPasss: IWebGLRenderPass = {
+    const renderPasss: IRenderPass = {
         passDescriptor: {
             colorAttachments: [{
                 clearValue: [0, 0, 0, 1],
@@ -61,7 +61,7 @@ function main()
         }],
     };
 
-    WebGL.renderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
 }
 
 function drawScene(canvas: HTMLCanvasElement)

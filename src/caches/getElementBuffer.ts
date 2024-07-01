@@ -10,14 +10,14 @@ import { defaultIndexBuffer } from "../runs/runIndexBuffer";
  * @param element
  * @returns
  */
-export function getElementWebGLBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
+export function getElementBuffer(gl: WebGLRenderingContext, element: IIndexBuffer)
 {
-    let buffer = gl._elementBufferMap.get(element);
+    let buffer = gl._elementBuffers.get(element);
 
     if (!buffer)
     {
         buffer = gl.createBuffer();
-        gl._elementBufferMap.set(element, buffer);
+        gl._elementBuffers.set(element, buffer);
 
         const updateBuffer = () =>
         {
@@ -109,7 +109,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _elementBufferMap: WeakMap<IIndexBuffer, WebGLBuffer>
+        _elementBuffers: WeakMap<IIndexBuffer, WebGLBuffer>
     }
 
     interface WebGLBuffer

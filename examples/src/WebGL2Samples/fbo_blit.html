@@ -1,34 +1,59 @@
-<html>
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-fbo-blit.cpp -->
+<html lang="en">
 
 <head>
-    <meta charset='utf-8' />
-    <title>feng3d examples</title>
-    <meta name='apple-mobile-web-app-capable' content='yes' />
-    <meta name='full-screen' content='true' />
-    <meta name='screen-orientation' content='portrait' />
-    <meta name='x5-fullscreen' content='true' />
-    <meta name='360-fullscreen' content='true' />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <meta name="viewport"
-        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-        body {
-            color: #cccccc;
-            font-family: Monospace;
-            font-size: 13px;
-            text-align: center;
-            background-color: #050505;
-            margin: 0px;
-            overflow: hidden;
-        }
-    </style>
+    <title>WebGL 2 Samples - fbo_blit</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
+    <div id="info">WebGL 2 Samples - fbo_blit</div>
+    <p id="description">
+        This samples demonstrates blitting on frame buffer objects.
+    </p>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 4
+        
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 MVP;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 texcoord;
+
+        out vec2 v_st;
+
+        void main()
+        {
+            v_st = texcoord;
+            gl_Position = MVP * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        in vec2 v_st;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, v_st);
+        }
+    </script>
     <script type="module" src="./fbo_blit.ts"></script>
 </body>
 

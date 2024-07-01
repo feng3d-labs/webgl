@@ -4,7 +4,7 @@ import { IRenderPassDepthStencilAttachment } from "./IRenderPassDepthStencilAtta
 /**
  * WebGL渲染通道描述
  */
-export interface IWebGLPassDescriptor
+export interface IPassDescriptor
 {
     /**
      * 颜色附件

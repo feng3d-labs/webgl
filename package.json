@@ -16,6 +16,7 @@
   },
   "scripts": {
     "clean": "rimraf \"{lib,dist,public}\"",
+    "dev": "cd examples && npm run dev",
     "build": "vite build",
     "test": "vitest",
     "test:ui": "vitest --ui",
