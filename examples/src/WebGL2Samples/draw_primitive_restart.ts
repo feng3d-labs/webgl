@@ -1,4 +1,4 @@
-import { IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, WebGL } from "../../../src";
+import { IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, WebGL } from "../../../src";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -38,12 +38,16 @@ const program: IRenderPipeline = {
     }
 };
 
-const renderObject: IRenderObject = {
+const vertexArray: IVertexArrayObject = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 2 },
     },
-    uniforms: {},
     index: vertexElementBuffer,
+};
+
+const renderObject: IRenderObject = {
+    vertexArray,
+    uniforms: {},
     drawVertex: { instanceCount: 2 },
     pipeline: program,
 };
@@ -64,4 +68,4 @@ WebGL.runRenderPass(renderingContext, {
 WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
 WebGL.deleteBuffer(renderingContext, vertexElementBuffer);
 WebGL.deleteProgram(renderingContext, program);
-WebGL.deleteVertexArray(renderingContext, renderObject);
+WebGL.deleteVertexArray(renderingContext, vertexArray);

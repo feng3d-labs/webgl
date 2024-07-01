@@ -93,7 +93,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     const renderObject: IRenderObject = {
         pipeline: program,
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
-        vertexArray: vertexArray,
+        vertexArray,
         uniforms: {
             MVP: new Float32Array([
                 0.8, 0.0, 0.0, 0.0,
@@ -160,7 +160,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     const renderObject2: IRenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
-        vertices,
+        vertexArray,
         uniforms: {
             MVP: new Float32Array([
                 1.0, 0.0, 0.0, 0.0,
@@ -199,8 +199,6 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     WebGL.deleteTexture(canvasContext, textureColorBuffer);
     WebGL.deleteProgram(canvasContext, program);
     WebGL.deleteVertexArray(canvasContext, vertexArray);
-    WebGL.deleteVertexArray(canvasContext, renderObject);
-    WebGL.deleteVertexArray(canvasContext, renderObject2);
 });
 
 function loadImage(url: string, onload: (img: HTMLImageElement) => void)

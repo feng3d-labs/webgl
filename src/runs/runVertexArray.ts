@@ -8,7 +8,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrayObjects: WeakMap<IVertexArrayObject, WebGLVertexArrayObject>;
+        _vertexArrays: WeakMap<IVertexArrayObject, WebGLVertexArrayObject>;
     }
 }
 
@@ -17,10 +17,12 @@ declare global
  */
 export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertexArray: IVertexArrayObject)
 {
+    if (!vertexArray) return;
+
     let webGLVertexArrayObject: WebGLVertexArrayObject;
     if (gl instanceof WebGL2RenderingContext)
     {
-        webGLVertexArrayObject = gl._vertexArrayObjects.get(vertexArray);
+        webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
         if (webGLVertexArrayObject)
         {
             gl.bindVertexArray(webGLVertexArrayObject);
@@ -30,7 +32,7 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
 
         webGLVertexArrayObject = gl.createVertexArray();
         gl.bindVertexArray(webGLVertexArrayObject);
-        gl._vertexArrayObjects.set(vertexArray, webGLVertexArrayObject);
+        gl._vertexArrays.set(vertexArray, webGLVertexArrayObject);
     }
 
     //
@@ -60,8 +62,8 @@ export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IVerte
 {
     if (gl instanceof WebGL2RenderingContext)
     {
-        const webGLVertexArrayObject = gl._vertexArrayObjects.get(vertexArray);
-        gl._vertexArrayObjects.delete(vertexArray);
+        const webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
+        gl._vertexArrays.delete(vertexArray);
         gl.deleteVertexArray(webGLVertexArrayObject);
     }
 }

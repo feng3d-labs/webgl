@@ -20,7 +20,7 @@ export interface IRenderObject
     /**
      * 顶点属性以及索引数据。
      */
-    vertexArray: IVertexArrayObject;
+    vertexArray?: IVertexArrayObject;
 
     /**
      * Uniform渲染数据

@@ -34,19 +34,16 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     };
 
     const renderAtomic: IRenderObject = {
-        vertices: {},
         uniforms: {
             diffuse: texture,
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
+        // drawVertex: { firstVertex: 0, vertexCount: 3 },
         pipeline: program
     };
 
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
-
-    //
-    renderAtomic.uniforms["u_imageSize"] = [canvas.width / 2, canvas.height / 2];
 
     const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
 
@@ -63,7 +60,6 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     // Delete WebGL resources
     WebGL.deleteTexture(renderingContext, texture);
     WebGL.deleteProgram(renderingContext, program);
-    WebGL.deleteVertexArray(renderingContext, renderAtomic);
 });
 
 function loadImage(url: string, onload: (img: HTMLImageElement) => void)

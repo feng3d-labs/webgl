@@ -17,7 +17,7 @@ import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
-import { deleteVertexArray } from "./runs/runVertexIndex";
+import { deleteVertexArray } from "./runs/runVertexArray";
 
 /**
  * WEBGL 渲染器
