@@ -65,11 +65,13 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        vertices: {
-            position: { buffer: { data: positions }, numComponents: 3 },
-            uv: { buffer: { data: uvs }, numComponents: 2 },
+        vertexArray: {
+            vertices: {
+                position: { buffer: { data: positions }, numComponents: 3 },
+                uv: { buffer: { data: uvs }, numComponents: 2 },
+            },
+            index: { data: indices }
         },
-        index: { data: indices },
         uniforms: {
             view: () =>
             {

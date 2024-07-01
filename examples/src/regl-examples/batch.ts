@@ -22,16 +22,18 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 1] }];
 
 const renderAtomic: IRenderObject = {
-    vertices: {
-        position: {
-            buffer: {
-                data: [
-                    0.5, 0,
-                    0, 0.5,
-                    1, 1
-                ]
-            }, numComponents: 2
-        },
+    vertexArray: {
+        vertices: {
+            position: {
+                buffer: {
+                    data: [
+                        0.5, 0,
+                        0, 0.5,
+                        1, 1
+                    ]
+                }, numComponents: 2
+            },
+        }
     },
     uniforms: {
         color: () => [

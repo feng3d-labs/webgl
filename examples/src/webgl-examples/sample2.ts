@@ -40,18 +40,20 @@ function main()
             }` },
                 depthStencil: { depth: { depthCompare: "LEQUAL" } }
             },
-            vertices: {
-                aVertexPosition: {
-                    buffer: {
-                        type: "FLOAT", data: new Float32Array([
-                            1.0, 1.0,
-                            -1.0, 1.0,
-                            1.0, -1.0,
-                            -1.0, -1.0,
-                        ]), usage: "STATIC_DRAW"
-                    },
-                    numComponents: 2,
-                }
+            vertexArray: {
+                vertices: {
+                    aVertexPosition: {
+                        buffer: {
+                            type: "FLOAT", data: new Float32Array([
+                                1.0, 1.0,
+                                -1.0, 1.0,
+                                1.0, -1.0,
+                                -1.0, -1.0,
+                            ]), usage: "STATIC_DRAW"
+                        },
+                        numComponents: 2,
+                    }
+                },
             },
             uniforms: {
                 uProjectionMatrix: projectionMatrix,
