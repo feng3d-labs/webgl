@@ -4,13 +4,6 @@ import { getShaderSource } from "./utility";
 
 (function ()
 {
-    const div = document.createElement("div");
-    div.innerHTML = `    <div id="info">WebGL 2 Samples - fbo_blit</div>
-    <p id="description">
-        This samples demonstrates blitting on frame buffer objects.
-    </p>`;
-    document.body.appendChild(div);
-
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
