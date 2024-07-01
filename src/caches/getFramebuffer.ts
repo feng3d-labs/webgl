@@ -7,7 +7,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers_: WeakMap<IPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: WeakMap<IPassDescriptor, WebGLFramebuffer>;
     }
 }
 
@@ -19,12 +19,12 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
     const view = passDescriptor?.colorAttachments?.[0]?.view;
     if (!view) return null;
 
-    let webGLFramebuffer = gl._framebuffers_.get(passDescriptor);
+    let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     if (webGLFramebuffer) return webGLFramebuffer;
 
     webGLFramebuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
-    gl._framebuffers_.set(passDescriptor, webGLFramebuffer);
+    gl._framebuffers.set(passDescriptor, webGLFramebuffer);
 
     if ("sources" in view)
     {
@@ -46,8 +46,8 @@ export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPa
     const view = passDescriptor?.colorAttachments?.[0]?.view;
     if (!view) return null;
 
-    const webGLFramebuffer = gl._framebuffers_.get(passDescriptor);
-    gl._framebuffers_.delete(passDescriptor);
+    const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
+    gl._framebuffers.delete(passDescriptor);
     //
     gl.deleteFramebuffer(webGLFramebuffer);
 }

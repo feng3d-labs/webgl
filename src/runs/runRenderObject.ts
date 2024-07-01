@@ -4,7 +4,7 @@ import { runIndexBuffer } from "./runIndexBuffer";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
 import { runUniforms } from "./runUniforms";
-import { runVertexAttributes } from "./runVertexAttributes";
+import { runVertexArrayObject } from "./runVertexArrayObject";
 import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
@@ -15,13 +15,10 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 
     runRenderPipeline(gl, renderObject.pipeline);
 
-    runVertexAttributes(gl, renderObject);
-
-    runIndexBuffer(gl, renderObject.index);
+    runVertexArrayObject(gl, renderObject);
 
     runUniforms(gl, renderObject);
 
     runDrawCall(gl, renderObject);
 }
 
-// export const defaultRenderObject: IRenderObject = { viewport };

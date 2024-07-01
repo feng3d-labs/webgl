@@ -4,17 +4,17 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _renderbuffers_: WeakMap<IRenderbuffer, WebGLRenderbuffer>;
+        _renderbuffers: WeakMap<IRenderbuffer, WebGLRenderbuffer>;
     }
 }
 
 export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
 {
-    let webGLRenderbuffer = gl._renderbuffers_.get(renderbuffer);
+    let webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
     if (webGLRenderbuffer) return webGLRenderbuffer;
 
     webGLRenderbuffer = gl.createRenderbuffer();
-    gl._renderbuffers_.set(renderbuffer, webGLRenderbuffer);
+    gl._renderbuffers.set(renderbuffer, webGLRenderbuffer);
 
     const { internalformat, width, height } = renderbuffer;
 
@@ -26,8 +26,8 @@ export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRender
 
 export function deleteRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
 {
-    const webGLRenderbuffer = gl._renderbuffers_.get(renderbuffer);
-    gl._renderbuffers_.delete(renderbuffer);
+    const webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
+    gl._renderbuffers.delete(renderbuffer);
     //
     gl.deleteRenderbuffer(webGLRenderbuffer);
 }

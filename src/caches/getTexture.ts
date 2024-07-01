@@ -6,7 +6,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _textureMap: WeakMap<ITexture, WebGLTexture>
+        _textures: WeakMap<ITexture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -20,11 +20,11 @@ declare global
 
 export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
-    let webGLTexture = gl._textureMap.get(texture);
+    let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
 
     webGLTexture = gl.createTexture(); // Create a texture object
-    gl._textureMap.set(texture, webGLTexture);
+    gl._textures.set(texture, webGLTexture);
 
     const updateSource = () =>
     {
@@ -73,7 +73,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     webGLTexture.destroy = () =>
     {
-        gl._textureMap.delete(texture);
+        gl._textures.delete(texture);
         //
         watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
     };
@@ -83,10 +83,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
 export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
-    const webGLTexture = gl._textureMap.get(texture);
+    const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;
 
-    gl._textureMap.delete(texture);
+    gl._textures.delete(texture);
     webGLTexture.destroy();
     //
     gl.deleteTexture(webGLTexture);

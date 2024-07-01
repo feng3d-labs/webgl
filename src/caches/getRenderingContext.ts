@@ -36,9 +36,10 @@ function initMap(gl: WebGLRenderingContext)
 {
     gl._buffers = new WeakMap();
     gl._elementBuffers = new WeakMap();
-    gl._textureMap = new WeakMap();
-    gl._renderbuffers_ = new WeakMap();
-    gl._framebuffers_ = new WeakMap();
+    gl._textures = new WeakMap();
+    gl._renderbuffers = new WeakMap();
+    gl._framebuffers = new WeakMap();
+    gl._vertexArrayObjects = new WeakMap();
     gl._programs = {};
 }
 
