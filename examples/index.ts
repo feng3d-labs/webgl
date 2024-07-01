@@ -25,6 +25,7 @@ const files = {
         "draw_range_arrays",
         "fbo_blit",
         "fbo_multisample",
+        "fbo_new_blend_equation",
     ],
 };
 
