@@ -5,6 +5,8 @@ export * from "./data/IFramebuffer";
 export * from "./data/IIndexBuffer";
 export * from "./data/IRenderObject";
 export * from "./data/IRenderbuffer";
+export * from "./data/IVertexAttributes";
+export * from "./data/IBlitFramebuffer";
 export * from "./data/ITexture";
 export * from "./data/IUniforms";
 export * from "./data/IVertexAttribute";
