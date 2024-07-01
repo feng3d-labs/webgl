@@ -43,7 +43,7 @@ const vertexArray: IVertexArrayObject = {
 };
 
 const vertexCount = 12;
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray,
     pipeline,
 };
@@ -57,12 +57,12 @@ const data: IRenderPass = {
     },
     renderObjects: [
         {
-            ...renderAtomic,
+            ...renderObject,
             drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
             viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
         },
         {
-            ...renderAtomic,
+            ...renderObject,
             drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
             viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
         },

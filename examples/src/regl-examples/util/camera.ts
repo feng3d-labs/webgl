@@ -100,14 +100,14 @@ export function createCamera(props)
     lookAt(cameraState.view, eye, center, up);
   }
 
-  const injectContext = (renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number) =>
+  const injectContext = (renderObject: IRenderObject, viewportWidth: number, viewportHeight: number) =>
   {
     Object.keys(cameraState).forEach(function (name)
     {
-      renderAtomic.uniforms[name] = () => setupCamera[name];
+      renderObject.uniforms[name] = () => setupCamera[name];
     });
 
-    renderAtomic.uniforms["projection"] = () =>
+    renderObject.uniforms["projection"] = () =>
       perspective(cameraState.projection,
         Math.PI / 4.0,
         viewportWidth / viewportHeight,
@@ -115,10 +115,10 @@ export function createCamera(props)
         1000.0);
   };
 
-  function setupCamera(renderAtomic: IRenderObject, viewportWidth: number, viewportHeight: number)
+  function setupCamera(renderObject: IRenderObject, viewportWidth: number, viewportHeight: number)
   {
     updateCamera();
-    injectContext(renderAtomic, viewportWidth, viewportHeight);
+    injectContext(renderObject, viewportWidth, viewportHeight);
   }
 
   Object.keys(cameraState).forEach(function (name)

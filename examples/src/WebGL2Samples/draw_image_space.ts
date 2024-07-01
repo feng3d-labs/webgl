@@ -33,7 +33,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         }
     };
 
-    const renderAtomic: IRenderObject = {
+    const renderObject: IRenderObject = {
         uniforms: {
             diffuse: texture,
             u_imageSize: [canvas.width / 2, canvas.height / 2],
@@ -54,7 +54,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
                 loadOp: "clear",
             }],
         },
-        renderObjects: [renderAtomic]
+        renderObjects: [renderObject]
     });
 
     // Delete WebGL resources
