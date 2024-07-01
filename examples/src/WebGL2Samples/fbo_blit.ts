@@ -10,14 +10,6 @@ import { getShaderSource } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.body.innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
     const canvasContext: IWebGLCanvasContext = { canvasId: "glcanvas" };
 
     const pipeline: IWebGLRenderPipeline = {
