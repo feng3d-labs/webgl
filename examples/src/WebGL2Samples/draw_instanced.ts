@@ -32,7 +32,7 @@ const vertexArray: IVertexArrayObject = {
     },
 };
 
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray,
     uniforms: {},
     drawVertex: { instanceCount: 2 },
@@ -51,7 +51,7 @@ WebGL.runRenderPass(renderingContext, {
             loadOp: "clear",
         }],
     },
-    renderObjects: [renderAtomic]
+    renderObjects: [renderObject]
 });
 
 // -- Delete WebGL resources

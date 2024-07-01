@@ -28,7 +28,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
             position: {
@@ -83,7 +83,7 @@ function draw()
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderObject);
     }
 
     requestAnimationFrame(draw);

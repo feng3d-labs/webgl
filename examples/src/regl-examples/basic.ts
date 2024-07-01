@@ -16,7 +16,7 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
             position: {
@@ -60,7 +60,7 @@ function draw()
     webglcanvas.height = webglcanvas.clientHeight;
 
     WebGL.runRenderPass({ canvasId: "glcanvas" }, {
-        renderObjects: [renderAtomic]
+        renderObjects: [renderObject]
     });
 
     requestAnimationFrame(draw);

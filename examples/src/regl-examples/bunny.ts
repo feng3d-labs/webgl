@@ -29,7 +29,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
             position: { buffer: { data: positions }, numComponents: 3 },
@@ -79,7 +79,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderObject);
 
     requestAnimationFrame(draw);
 }

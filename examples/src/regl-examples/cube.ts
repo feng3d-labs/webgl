@@ -64,7 +64,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderAtomic: IRenderObject = {
+    const renderObject: IRenderObject = {
         vertexArray: {
             vertices: {
                 position: { buffer: { data: positions }, numComponents: 3 },
@@ -121,7 +121,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
         viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderObject);
         requestAnimationFrame(draw);
     }
 

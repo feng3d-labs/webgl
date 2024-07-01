@@ -22,7 +22,7 @@ import { deleteVertexArray } from "./runs/runVertexArray";
 /**
  * WEBGL 渲染器
  *
- * 所有渲染都由该渲染器执行。與2D、3D場景無關，屬於更加底層的API。針對每一個 RenderAtomic 渲染數據進行渲染。
+ * 所有渲染都由该渲染器执行。與2D、3D場景無關，屬於更加底層的API。針對每一個 RenderObject 渲染數據進行渲染。
  */
 export class WebGL
 {
@@ -44,14 +44,14 @@ export class WebGL
     /**
      * 渲染一次。
      *
-     * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
+     * @param renderObject 渲染原子，包含渲染所需的所有数据。
      */
-    static runRenderObject(renderingContext: IRenderingContext, renderAtomic: IRenderObject)
+    static runRenderObject(renderingContext: IRenderingContext, renderObject: IRenderObject)
     {
         const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
-        runRenderObject(gl, renderAtomic);
+        runRenderObject(gl, renderObject);
     }
 
     static runBlitFramebuffer(renderingContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)

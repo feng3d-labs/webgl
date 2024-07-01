@@ -37,7 +37,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderAtomic: IRenderObject = {
+const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
             position: { buffer: { data: positions }, numComponents: 3 },
@@ -73,9 +73,9 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    camera(renderAtomic, webglcanvas.width, webglcanvas.height);
+    camera(renderObject, webglcanvas.width, webglcanvas.height);
 
-    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderAtomic);
+    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderObject);
 
     requestAnimationFrame(draw);
 }

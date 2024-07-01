@@ -163,7 +163,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderAtomic: IRenderObject = {
+    const renderObject: IRenderObject = {
         vertexArray: {
             vertices: {
                 position: { buffer: { data: positions }, numComponents: 3 },
@@ -358,8 +358,8 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
             return pv;
         }, []);
 
-        renderAtomic.vertexArray.vertices.position.buffer.data = new Float32Array(positions);
-        renderAtomic.vertexArray.vertices.normal.buffer.data = new Float32Array(normals);
+        renderObject.vertexArray.vertices.position.buffer.data = new Float32Array(positions);
+        renderObject.vertexArray.vertices.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 
@@ -368,7 +368,7 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
 
         camera.tick();
 
-        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderAtomic);
+        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderObject);
         requestAnimationFrame(draw);
     }
 

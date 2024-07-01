@@ -5,33 +5,33 @@ import { IDrawIndexed } from "../data/IDrawIndexed";
 import { IDrawVertex } from "../data/IDrawVertex";
 import { IRenderObject } from "../data/IRenderObject";
 
-export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    if (renderAtomic.drawVertex)
+    if (renderObject.drawVertex)
     {
-        _runDrawVertex(gl, renderAtomic);
+        _runDrawVertex(gl, renderObject);
     }
-    else if (renderAtomic.drawIndexed)
+    else if (renderObject.drawIndexed)
     {
-        _runDrawIndexed(gl, renderAtomic);
+        _runDrawIndexed(gl, renderObject);
     }
     else
     {
-        renderAtomic.vertexArray?.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
+        renderObject.vertexArray?.index ? _runDrawIndexed(gl, renderObject) : _runDrawVertex(gl, renderObject);
     }
 }
 
 export const defaultDrawIndexed: IDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+function _runDrawIndexed(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     //
-    const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
+    const drawMode = renderObject.pipeline.primitive?.topology || "TRIANGLES";
     //
-    const element = getElementBuffer(gl, renderAtomic.vertexArray.index);
+    const element = getElementBuffer(gl, renderObject.vertexArray.index);
     const type = element.type;
     //
-    let { indexCount, instanceCount, firstIndex } = renderAtomic.drawIndexed || {};
+    let { indexCount, instanceCount, firstIndex } = renderObject.drawIndexed || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
     instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
     indexCount = indexCount || (element.count - firstIndex);
@@ -57,15 +57,15 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 
 export const defaultDrawVertex: IDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
-function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+function _runDrawVertex(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     //
-    const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
+    const drawMode = renderObject.pipeline.primitive?.topology || "TRIANGLES";
     //
-    let { firstVertex, vertexCount, instanceCount } = renderAtomic.drawVertex || {};
+    let { firstVertex, vertexCount, instanceCount } = renderObject.drawVertex || {};
     //
     firstVertex = firstVertex || defaultDrawVertex.firstVertex;
-    vertexCount = vertexCount || getAttributeVertexNum(gl, renderAtomic) || defaultDrawVertex.vertexCount;
+    vertexCount = vertexCount || getAttributeVertexNum(gl, renderObject) || defaultDrawVertex.vertexCount;
     instanceCount = instanceCount || defaultDrawVertex.instanceCount;
 
     if (instanceCount > 1)
@@ -89,7 +89,7 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 /**
  * 获取属性顶点属性。
  */
-function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
+function getAttributeVertexNum(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     const vertexNum = ((vertices) =>
     {
@@ -104,7 +104,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderO
         }
 
         return 0;
-    })(renderAtomic.vertexArray?.vertices);
+    })(renderObject.vertexArray?.vertices);
 
     return vertexNum;
 }
