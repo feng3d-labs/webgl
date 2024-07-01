@@ -1,34 +1,46 @@
-<html>
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-draw-image-space.cpp -->
+<html lang="en">
 
 <head>
-    <meta charset='utf-8' />
-    <title>feng3d examples</title>
-    <meta name='apple-mobile-web-app-capable' content='yes' />
-    <meta name='full-screen' content='true' />
-    <meta name='screen-orientation' content='portrait' />
-    <meta name='x5-fullscreen' content='true' />
-    <meta name='360-fullscreen' content='true' />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <meta name="viewport"
-        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-        body {
-            color: #cccccc;
-            font-family: Monospace;
-            font-size: 13px;
-            text-align: center;
-            background-color: #050505;
-            margin: 0px;
-            overflow: hidden;
-        }
-    </style>
+    <title>WebGL 2 Samples - draw_image_space</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div id="info">WebGL 2 Samples - draw_image_space</div>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+        
+        void main()
+        {
+            gl_Position = vec4(2.f * float(uint(gl_VertexID) % 2u) - 1.f, 2.f * float(uint(gl_VertexID) / 2u) - 1.f, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        uniform vec2 u_imageSize;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
+        }
+    </script>
+
     <script type="module" src="./draw_image_space.ts"></script>
 </body>
 
