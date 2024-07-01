@@ -1,4 +1,5 @@
 import { IBlitFramebuffer, IBlitFramebufferItem, IFramebuffer, IRenderObject, IRenderbuffer, ITexture, IVertexAttributes, IWebGLRenderPass, IWebGLRenderPipeline, WebGL } from "../../../src";
+import { IWebGLCanvasContext } from "../../../src/data/IWebGLCanvasContext";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -24,6 +25,7 @@ import { getShaderSource } from "./utility";
 
         return;
     }
+    const canvasContext: IWebGLCanvasContext = { canvasId: "glcanvas" };
 
     const pipeline: IWebGLRenderPipeline = {
         primitive: { topology: "TRIANGLES", cullMode: "NONE" },
@@ -65,7 +67,7 @@ import { getShaderSource } from "./utility";
                 usage: "STATIC_DRAW",
             }, numComponents: 2
         },
-    }
+    };
 
     loadImage("../../assets/img/Di-3d.png", (image) =>
     {
@@ -177,35 +179,32 @@ import { getShaderSource } from "./utility";
             blitFramebuffers,
         };
 
-        const renderAtomic: IRenderObject = {
-            vertices,
-            uniforms: {
-                MVP: new Float32Array([
-                    0.8, 0.0, 0.0, 0.0,
-                    0.0, 0.8, 0.0, 0.0,
-                    0.0, 0.0, 0.8, 0.0,
-                    0.0, 0.0, 0.0, 1.0
-                ]),
-                diffuse: textureDiffuse,
+        const renderPass2: IWebGLRenderPass = {
+            passDescriptor: {
+                colorAttachments: [{
+                    clearValue: [0.0, 0.0, 0.0, 1.0],
+                    loadOp: "clear",
+                }],
             },
-            drawVertex: { instanceCount: 2 },
-            pipeline,
+            renderObjects: [{
+                viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
+                vertices,
+                uniforms: {
+                    MVP: new Float32Array([
+                        1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0, 1.0
+                    ]),
+                    diffuse: textureColorBuffer,
+                },
+                drawVertex: { firstVertex: 0, vertexCount: 6 },
+                pipeline,
+            }]
         };
-
         function draw()
         {
-            WebGL.renderPass(
-                { canvasId: "glcanvas" },
-                {
-                    passDescriptor: {
-                        colorAttachments: [{
-                            clearValue: [0.0, 0.0, 0.0, 1.0],
-                            loadOp: "clear",
-                        }],
-                    },
-                    renderObjects: [renderAtomic]
-                }
-            );
+            WebGL.renderPass(canvasContext, fboRenderPass);
 
             requestAnimationFrame(draw);
         }
@@ -223,64 +222,4 @@ import { getShaderSource } from "./utility";
 
         return img;
     }
-
-    // -- Init Frame Buffer
-    const framebufferRender = gl.createFramebuffer();
-    const framebufferResolve = gl.createFramebuffer();
-
-    // Blit framebuffers
-    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, framebufferRender);
-    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, framebufferResolve);
-    gl.clearBufferfv(gl.COLOR, 0, [0.7, 0.0, 0.0, 1.0]);
-
-    const TILE = 4;
-    const BORDER = 2;
-    for (let j = 0; j < TILE; j++)
-    {
-        for (let i = 0; i < TILE; i++)
-        {
-            if ((i + j) % 2)
-            {
-                continue;
-            }
-
-            gl.blitFramebuffer(
-                0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-                FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
-                FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,
-                FRAMEBUFFER_SIZE.y / TILE * (i + 1) - BORDER,
-                FRAMEBUFFER_SIZE.y / TILE * (j + 1) - BORDER,
-                gl.COLOR_BUFFER_BIT, gl.LINEAR
-            );
-        }
-    }
-
-    // Pass 2
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearBufferfv(gl.COLOR, 0, [0.0, 0.0, 0.0, 1.0]);
-
-    // Render FB
-    const IDENTITY = new Float32Array([
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    ]);
-    gl.uniformMatrix4fv(mvpLocation, false, IDENTITY);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, textureColorBuffer);
-    gl.bindVertexArray(vertexArray);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-    // Delete WebGL resources
-    gl.deleteFramebuffer(framebufferRender);
-    gl.deleteFramebuffer(framebufferResolve);
-    gl.deleteRenderbuffer(colorRenderbuffer);
-    gl.deleteBuffer(vertexPosBuffer);
-    gl.deleteBuffer(vertexTexBuffer);
-    gl.deleteTexture(textureDiffuse);
-    gl.deleteTexture(textureColorBuffer);
-    gl.deleteProgram(program);
-    gl.deleteVertexArray(vertexArray);
 })();
