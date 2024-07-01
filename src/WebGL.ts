@@ -1,7 +1,9 @@
 import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
+import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IRenderObject } from "./data/IRenderObject";
 import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
 import { IWebGLRenderPass } from "./data/IWebGLRenderPass";
+import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
 
@@ -38,5 +40,13 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         runRenderObject(gl, renderAtomic);
+    }
+
+    static blitFramebuffer(canvasContext: IWebGLCanvasContext, blitFramebuffer: IBlitFramebuffer)
+    {
+        const gl = getWebGLRenderingContext(canvasContext);
+        if (!gl || gl.isContextLost()) return;
+
+        runBlitFramebuffer(gl, blitFramebuffer);
     }
 }
