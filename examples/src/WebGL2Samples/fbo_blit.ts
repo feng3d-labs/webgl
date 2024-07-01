@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IBuffer, IRenderPass, IRenderPipeline, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IBuffer, IRenderPass, IRenderPipeline, WebGL, IRenderObject } from "../../../src";
 import { IRenderingContext } from "../../../src/data/ICanvasContext";
 import { getShaderSource } from "./utility";
 
@@ -89,6 +89,22 @@ import { getShaderSource } from "./utility";
             height: FRAMEBUFFER_SIZE.y,
         };
 
+        const renderObject: IRenderObject = {
+            pipeline,
+            viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
+            vertices,
+            uniforms: {
+                MVP: new Float32Array([
+                    0.8, 0.0, 0.0, 0.0,
+                    0.0, 0.8, 0.0, 0.0,
+                    0.0, 0.0, 0.8, 0.0,
+                    0.0, 0.0, 0.0, 1.0
+                ]),
+                diffuse: textureDiffuse,
+            },
+            drawVertex: { firstVertex: 0, vertexCount: 6 }
+        };
+
         // Render FBO
         const fboRenderPass: IRenderPass = {
             passDescriptor: {
@@ -97,23 +113,7 @@ import { getShaderSource } from "./utility";
                     clearValue: [0.3, 0.3, 0.3, 1.0]
                 }]
             },
-            renderObjects: [
-                {
-                    pipeline,
-                    viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
-                    vertices,
-                    uniforms: {
-                        MVP: new Float32Array([
-                            0.8, 0.0, 0.0, 0.0,
-                            0.0, 0.8, 0.0, 0.0,
-                            0.0, 0.0, 0.8, 0.0,
-                            0.0, 0.0, 0.0, 1.0
-                        ]),
-                        diffuse: textureDiffuse,
-                    },
-                    drawVertex: { firstVertex: 0, vertexCount: 6 }
-                }
-            ],
+            renderObjects: [renderObject],
         };
 
         //
@@ -155,6 +155,22 @@ import { getShaderSource } from "./utility";
             blitFramebuffers,
         };
 
+        const renderObject2: IRenderObject = {
+            viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
+            vertices,
+            uniforms: {
+                MVP: new Float32Array([
+                    1.0, 0.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0, 1.0
+                ]),
+                diffuse: textureColorBuffer,
+            },
+            drawVertex: { firstVertex: 0, vertexCount: 6 },
+            pipeline,
+        };
+
         const renderPass2: IRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
@@ -162,27 +178,19 @@ import { getShaderSource } from "./utility";
                     loadOp: "clear",
                 }],
             },
-            renderObjects: [{
-                viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
-                vertices,
-                uniforms: {
-                    MVP: new Float32Array([
-                        1.0, 0.0, 0.0, 0.0,
-                        0.0, 1.0, 0.0, 0.0,
-                        0.0, 0.0, 1.0, 0.0,
-                        0.0, 0.0, 0.0, 1.0
-                    ]),
-                    diffuse: textureColorBuffer,
-                },
-                drawVertex: { firstVertex: 0, vertexCount: 6 },
-                pipeline,
-            }]
+            renderObjects: [renderObject2]
         };
 
         // 执行
-        WebGL.runRenderPass(canvasContext, fboRenderPass);
-        WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
-        WebGL.runRenderPass(canvasContext, renderPass2);
+        const update = () =>
+        {
+            WebGL.runRenderPass(canvasContext, fboRenderPass);
+            WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
+            WebGL.runRenderPass(canvasContext, renderPass2);
+
+            // requestAnimationFrame(update);
+        };
+        update();
 
         // Delete WebGL resources
         WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
@@ -193,7 +201,8 @@ import { getShaderSource } from "./utility";
         WebGL.deleteTexture(canvasContext, textureDiffuse);
         WebGL.deleteTexture(canvasContext, textureColorBuffer);
         WebGL.deleteProgram(canvasContext, pipeline);
-        // gl.deleteVertexArray(vertexArray);
+        WebGL.deleteVertexArray(canvasContext, renderObject);
+        WebGL.deleteVertexArray(canvasContext, renderObject2);
     });
 
     function loadImage(url: string, onload: (img: HTMLImageElement) => void)

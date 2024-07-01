@@ -16,6 +16,7 @@ import { ITexture } from "./data/ITexture";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
+import { deleteVertexArray } from "./runs/runVertexIndex";
 
 /**
  * WEBGL 渲染器
@@ -98,5 +99,13 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         deleteProgram(gl, pipeline);
+    }
+
+    static deleteVertexArray(canvasContext: IRenderingContext, renderObject: IRenderObject)
+    {
+        const gl = getRenderingContext(canvasContext);
+        if (!gl || gl.isContextLost()) return;
+
+        deleteVertexArray(gl, renderObject);
     }
 }
