@@ -1,13 +1,14 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IBuffer, IPassDescriptor, IRenderPipeline, IRenderbuffer, ITexture } from "../../../src";
+import { IBlitFramebuffer, IBuffer, IPassDescriptor, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
+const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
 // -- Init program
 const PROGRAM = {
@@ -20,16 +21,14 @@ const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") },
         fragment: { code: getShaderSource("fs-render") },
+        primitive: { topology: "LINE_LOOP" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") },
-        fragment: { code: getShaderSource("fs-splash") }
+        fragment: { code: getShaderSource("fs-splash") },
+        primitive: { topology: "TRIANGLES" },
     },
 ];
-
-const mvpLocationTexture = gl.getUniformLocation(programs[PROGRAM.TEXTURE], "MVP");
-const mvpLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "MVP");
-const diffuseLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "diffuse");
 
 // -- Init primitive data
 const vertexCount = 18;
@@ -86,92 +85,82 @@ const colorRenderbuffer: IRenderbuffer = { samples: 4, internalformat: "RGBA8", 
 
 const framebuffers: IPassDescriptor[] = [
     {
-        colorAttachments: [{ view: colorRenderbuffer }],
+        colorAttachments: [{ view: colorRenderbuffer, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     },
     {
-        colorAttachments: [{ view: { texture, level: 0 } }],
+        colorAttachments: [{ view: { texture, level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     },
 ];
 
 // -- Init VertexArray
-const vertexArrays = [
-    gl.createVertexArray(),
-    gl.createVertexArray()
+const vertexArrays: IVertexArrayObject[] = [
+    {
+        vertices: { position: { buffer: vertexDataBuffer, numComponents: 2 } }
+    },
+    {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    },
 ];
 
-const vertexPosLocation = 0; // set with GLSL layout qualifier
-
-gl.bindVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.bindVertexArray(null);
-
-gl.bindVertexArray(vertexArrays[PROGRAM.SPLASH]);
-
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-const vertexTexLocation = 1; // set with GLSL layout qualifier
-gl.enableVertexAttribArray(vertexTexLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-gl.bindVertexArray(null);
+const IDENTITY = mat4.create();
 
 // -- Render
 
 // Pass 1
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.clearBufferfv(gl.COLOR, 0, [0.0, 0.0, 0.0, 1.0]);
-gl.useProgram(programs[PROGRAM.TEXTURE]);
-gl.bindVertexArray(vertexArrays[PROGRAM.TEXTURE]);
+const renderPass1: IRenderPass = {
+    passDescriptor: framebuffers[FRAMEBUFFER.RENDERBUFFER],
+    renderObjects: [{
+        pipeline: programs[PROGRAM.TEXTURE],
+        vertexArray: vertexArrays[PROGRAM.TEXTURE],
+        uniforms: { MVP: IDENTITY },
+        drawVertex: { vertexCount },
+    }]
+};
 
-const IDENTITY = mat4.create();
-gl.uniformMatrix4fv(mvpLocationTexture, false, IDENTITY);
-gl.drawArrays(gl.LINE_LOOP, 0, vertexCount);
+WebGL.runRenderPass(renderingContext, renderPass1);
 
 // Blit framebuffers, no Multisample texture 2d in WebGL 2
-gl.bindFramebuffer(gl.READ_FRAMEBUFFER, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, framebuffers[FRAMEBUFFER.COLORBUFFER]);
-gl.clearBufferfv(gl.COLOR, 0, [0.0, 0.0, 0.0, 1.0]);
-gl.blitFramebuffer(
-    0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-    0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-    gl.COLOR_BUFFER_BIT, gl.NEAREST
-);
+const blitFramebuffer: IBlitFramebuffer = {
+    read: framebuffers[FRAMEBUFFER.RENDERBUFFER],
+    draw: framebuffers[FRAMEBUFFER.COLORBUFFER],
+    blitFramebuffers: [[0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+        0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+        "COLOR_BUFFER_BIT", "NEAREST"]],
+};
+WebGL.runBlitFramebuffer(renderingContext, blitFramebuffer);
 
 // Pass 2
-gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-gl.useProgram(programs[PROGRAM.SPLASH]);
-gl.uniform1i(diffuseLocation, 0);
-gl.activeTexture(gl.TEXTURE0);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.bindVertexArray(vertexArrays[PROGRAM.SPLASH]);
-
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT);
 
 const scaleVector3 = vec3.create();
 vec3.set(scaleVector3, 8.0, 8.0, 8.0);
 const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
-gl.uniformMatrix4fv(mvpLocation, false, mvp);
-gl.drawArrays(gl.TRIANGLES, 0, 6);
+const renderPass2: IRenderPass = {
+    passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    renderObjects: [
+        {
+            pipeline: programs[PROGRAM.SPLASH],
+            vertexArray: vertexArrays[PROGRAM.SPLASH],
+            uniforms: { diffuse: texture, MVP: mvp },
+            drawVertex: { vertexCount: 6 },
+        }
+    ],
+};
+WebGL.runRenderPass(renderingContext, renderPass2);
 
 // -- Delete WebGL resources
-gl.deleteBuffer(vertexPosBuffer);
-gl.deleteBuffer(vertexTexBuffer);
-gl.deleteTexture(texture);
-gl.deleteRenderbuffer(colorRenderbuffer);
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
-gl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-gl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
-gl.deleteProgram(programs[PROGRAM.TEXTURE]);
-gl.deleteProgram(programs[PROGRAM.SPLASH]);
+WebGL.deleteBuffer(renderingContext, vertexDataBuffer);
+WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
+WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
+WebGL.deleteTexture(renderingContext, texture);
+WebGL.deleteRenderbuffer(renderingContext, colorRenderbuffer);
+WebGL.deleteFramebuffer(renderingContext, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
+WebGL.deleteFramebuffer(renderingContext, framebuffers[FRAMEBUFFER.COLORBUFFER]);
+WebGL.deleteVertexArray(renderingContext, vertexArrays[PROGRAM.TEXTURE]);
+WebGL.deleteVertexArray(renderingContext, vertexArrays[PROGRAM.SPLASH]);
+WebGL.deleteProgram(renderingContext, programs[PROGRAM.TEXTURE]);
+WebGL.deleteProgram(renderingContext, programs[PROGRAM.SPLASH]);
