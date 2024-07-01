@@ -40,3 +40,14 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGL
 
     return webGLFramebuffer;
 }
+
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IWebGLPassDescriptor)
+{
+    const view = passDescriptor?.colorAttachments?.[0]?.view;
+    if (!view) return null;
+
+    const webGLFramebuffer = gl._framebuffers_.get(passDescriptor);
+    gl._framebuffers_.delete(passDescriptor);
+    //
+    gl.deleteFramebuffer(webGLFramebuffer);
+}

@@ -20,13 +20,11 @@ declare global
 
 export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
-    const _textureMap = gl._textureMap;
-
-    let webGLTexture = _textureMap.get(texture);
+    let webGLTexture = gl._textureMap.get(texture);
     if (webGLTexture) return webGLTexture;
 
     webGLTexture = gl.createTexture(); // Create a texture object
-    _textureMap.set(texture, webGLTexture);
+    gl._textureMap.set(texture, webGLTexture);
 
     const updateSource = () =>
     {
@@ -75,10 +73,21 @@ export function getWebGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     webGLTexture.destroy = () =>
     {
-        _textureMap.delete(texture);
+        gl._textureMap.delete(texture);
         //
         watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateSource);
     };
 
     return webGLTexture;
+}
+
+export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
+{
+    const webGLTexture = gl._textureMap.get(texture);
+    if (!webGLTexture) return;
+
+    gl._textureMap.delete(texture);
+    webGLTexture.destroy();
+    //
+    gl.deleteTexture(webGLTexture);
 }

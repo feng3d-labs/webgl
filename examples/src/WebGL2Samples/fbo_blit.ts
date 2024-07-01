@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IFramebuffer, IRenderObject, IRenderbuffer, ITexture, IVertexAttributes, IWebGLRenderPass, IWebGLRenderPipeline, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IWebGLBuffer, IWebGLRenderPass, IWebGLRenderPipeline, WebGL } from "../../../src";
 import { IWebGLCanvasContext } from "../../../src/data/IWebGLCanvasContext";
 import { getShaderSource } from "./utility";
 
@@ -23,35 +23,34 @@ import { getShaderSource } from "./utility";
         },
     };
 
+    const vertexPosBuffer: IWebGLBuffer = {
+        data: new Float32Array([
+            -1.0, -1.0,
+            1.0, -1.0,
+            1.0, 1.0,
+            1.0, 1.0,
+            -1.0, 1.0,
+            -1.0, -1.0
+        ]),
+        type: "FLOAT",
+        usage: "STATIC_DRAW",
+    };
+    const vertexTexBuffer: IWebGLBuffer = {
+        data: new Float32Array([
+            0.0, 1.0,
+            1.0, 1.0,
+            1.0, 0.0,
+            1.0, 0.0,
+            0.0, 0.0,
+            0.0, 1.0
+        ]),
+        type: "FLOAT",
+        usage: "STATIC_DRAW",
+    };
+
     const vertices: IVertexAttributes = {
-        position: {
-            buffer: {
-                data: new Float32Array([
-                    -1.0, -1.0,
-                    1.0, -1.0,
-                    1.0, 1.0,
-                    1.0, 1.0,
-                    -1.0, 1.0,
-                    -1.0, -1.0
-                ]),
-                type: "FLOAT",
-                usage: "STATIC_DRAW",
-            }, numComponents: 2
-        },
-        texcoord: {
-            buffer: {
-                data: new Float32Array([
-                    0.0, 1.0,
-                    1.0, 1.0,
-                    1.0, 0.0,
-                    1.0, 0.0,
-                    0.0, 0.0,
-                    0.0, 1.0
-                ]),
-                type: "FLOAT",
-                usage: "STATIC_DRAW",
-            }, numComponents: 2
-        },
+        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
     };
 
     loadImage("../../assets/img/Di-3d.png", (image) =>
@@ -90,14 +89,6 @@ import { getShaderSource } from "./utility";
             height: FRAMEBUFFER_SIZE.y,
         };
 
-        const framebufferRender: IFramebuffer = {
-            colorAttachments: [colorRenderbuffer],
-        };
-
-        const framebufferResolve: IFramebuffer = {
-            colorAttachments: [textureColorBuffer],
-        };
-
         // Render FBO
         const fboRenderPass: IWebGLRenderPass = {
             passDescriptor: {
@@ -125,7 +116,7 @@ import { getShaderSource } from "./utility";
             ],
         };
 
-        // 清理纹理背景颜色。
+        //
         const renderPassResolve: IWebGLRenderPass = {
             passDescriptor: {
                 colorAttachments: [{
@@ -187,15 +178,22 @@ import { getShaderSource } from "./utility";
                 pipeline,
             }]
         };
-        function draw()
-        {
-            WebGL.renderPass(canvasContext, fboRenderPass);
-            WebGL.blitFramebuffer(canvasContext, blitFramebuffer);
-            WebGL.renderPass(canvasContext, renderPass2);
 
-            // requestAnimationFrame(draw);
-        }
-        draw();
+        // 执行
+        WebGL.renderPass(canvasContext, fboRenderPass);
+        WebGL.blitFramebuffer(canvasContext, blitFramebuffer);
+        WebGL.renderPass(canvasContext, renderPass2);
+
+        // Delete WebGL resources
+        WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
+        WebGL.deleteFramebuffer(canvasContext, renderPassResolve.passDescriptor);
+        WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
+        WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
+        WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
+        WebGL.deleteTexture(canvasContext, textureDiffuse);
+        // gl.deleteTexture(textureColorBuffer);
+        // gl.deleteProgram(program);
+        // gl.deleteVertexArray(vertexArray);
     });
 
     function loadImage(url: string, onload: (img: HTMLImageElement) => void)

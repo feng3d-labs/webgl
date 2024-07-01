@@ -23,3 +23,11 @@ export function getWebGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IR
 
     return webGLRenderbuffer;
 }
+
+export function deleteRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
+{
+    const webGLRenderbuffer = gl._renderbuffers_.get(renderbuffer);
+    gl._renderbuffers_.delete(renderbuffer);
+    //
+    gl.deleteRenderbuffer(webGLRenderbuffer);
+}

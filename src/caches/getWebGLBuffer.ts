@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
-import { AttributeBufferSourceTypes, IWebGLBuffer } from "../data/IWebGLBuffer";
 import { VertexAttributeTypes } from "../data/IVertexAttribute";
+import { AttributeBufferSourceTypes, IWebGLBuffer } from "../data/IWebGLBuffer";
 
 declare global
 {
@@ -41,6 +41,14 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, webGLBuffer: IWebGLBuf
     }
 
     return buffer;
+}
+
+export function deleteBuffer(gl: WebGLRenderingContext, webGLBuffer: IWebGLBuffer)
+{
+    const buffer = gl._webGLBufferMap.get(webGLBuffer);
+    gl._webGLBufferMap.delete(webGLBuffer);
+    //
+    gl.deleteBuffer(buffer);
 }
 
 function getWebGLBufferType(data: AttributeBufferSourceTypes)
