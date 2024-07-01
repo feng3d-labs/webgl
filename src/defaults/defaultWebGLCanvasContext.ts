@@ -1,4 +1,4 @@
-import { IRenderingContext } from "../data/ICanvasContext";
+import { IRenderingContext } from "../data/IRenderingContext";
 
 /**
  * 默认WebGL上下文信息。

@@ -24,6 +24,7 @@ const files = {
         "draw_primitive_restart",
         "draw_range_arrays",
         "fbo_blit",
+        "fbo_multisample",
     ],
 };
 

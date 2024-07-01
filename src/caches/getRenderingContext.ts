@@ -1,4 +1,4 @@
-import { IRenderingContext } from "../data/ICanvasContext";
+import { IRenderingContext } from "../data/IRenderingContext";
 import { defaults } from "../defaults/defaults";
 import { getCapabilities } from "./getCapabilities";
 

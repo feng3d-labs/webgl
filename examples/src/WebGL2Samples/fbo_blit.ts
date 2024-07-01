@@ -1,213 +1,209 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IRenderbuffer, ITexture, IVertexAttributes, IBuffer, IRenderPass, IRenderPipeline, WebGL, IRenderObject } from "../../../src";
-import { IRenderingContext } from "../../../src/data/ICanvasContext";
+import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexAttributes, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
-(function ()
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = Math.min(window.innerWidth, window.innerHeight);
+canvas.height = canvas.width;
+document.body.appendChild(canvas);
+
+const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
+
+const pipeline: IRenderPipeline = {
+    primitive: { topology: "TRIANGLES", cullMode: "NONE" },
+    vertex: {
+        code: getShaderSource("vs")
+    },
+    fragment: {
+        code: getShaderSource("fs"),
+        targets: [{ blend: {} }]
+    },
+};
+
+const vertexPosBuffer: IBuffer = {
+    data: new Float32Array([
+        -1.0, -1.0,
+        1.0, -1.0,
+        1.0, 1.0,
+        1.0, 1.0,
+        -1.0, 1.0,
+        -1.0, -1.0
+    ]),
+    type: "FLOAT",
+    usage: "STATIC_DRAW",
+};
+const vertexTexBuffer: IBuffer = {
+    data: new Float32Array([
+        0.0, 1.0,
+        1.0, 1.0,
+        1.0, 0.0,
+        1.0, 0.0,
+        0.0, 0.0,
+        0.0, 1.0
+    ]),
+    type: "FLOAT",
+    usage: "STATIC_DRAW",
+};
+
+const vertices: IVertexAttributes = {
+    position: { buffer: vertexPosBuffer, numComponents: 2 },
+    texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+};
+
+loadImage("../../assets/img/Di-3d.png", (image) =>
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
-    canvas.width = Math.min(window.innerWidth, window.innerHeight);
-    canvas.height = canvas.width;
-    document.body.appendChild(canvas);
-
-    const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
-
-    const pipeline: IRenderPipeline = {
-        primitive: { topology: "TRIANGLES", cullMode: "NONE" },
-        vertex: {
-            code: getShaderSource("vs")
-        },
-        fragment: {
-            code: getShaderSource("fs"),
-            targets: [{ blend: {} }]
-        },
+    const FRAMEBUFFER_SIZE = {
+        x: image.width,
+        y: image.height
     };
 
-    const vertexPosBuffer: IBuffer = {
-        data: new Float32Array([
-            -1.0, -1.0,
-            1.0, -1.0,
-            1.0, 1.0,
-            1.0, 1.0,
-            -1.0, 1.0,
-            -1.0, -1.0
-        ]),
-        type: "FLOAT",
-        usage: "STATIC_DRAW",
-    };
-    const vertexTexBuffer: IBuffer = {
-        data: new Float32Array([
-            0.0, 1.0,
-            1.0, 1.0,
-            1.0, 0.0,
-            1.0, 0.0,
-            0.0, 0.0,
-            0.0, 1.0
-        ]),
-        type: "FLOAT",
-        usage: "STATIC_DRAW",
-    };
-
-    const vertices: IVertexAttributes = {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
-    };
-
-    loadImage("../../assets/img/Di-3d.png", (image) =>
-    {
-        const FRAMEBUFFER_SIZE = {
-            x: image.width,
-            y: image.height
-        };
-
-        const textureDiffuse: ITexture = {
-            flipY: true,
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
-            sources: [{ source: image }],
-            sampler: {
-                minFilter: "LINEAR",
-                magFilter: "LINEAR",
-            }
-        };
-
-        const textureColorBuffer: ITexture = {
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
-            sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
-            sampler: {
-                minFilter: "LINEAR",
-                magFilter: "LINEAR",
-            }
-        };
-
-        const colorRenderbuffer: IRenderbuffer = {
-            internalformat: "RGBA4",
-            width: FRAMEBUFFER_SIZE.x,
-            height: FRAMEBUFFER_SIZE.y,
-        };
-
-        const renderObject: IRenderObject = {
-            pipeline,
-            viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
-            vertices,
-            uniforms: {
-                MVP: new Float32Array([
-                    0.8, 0.0, 0.0, 0.0,
-                    0.0, 0.8, 0.0, 0.0,
-                    0.0, 0.0, 0.8, 0.0,
-                    0.0, 0.0, 0.0, 1.0
-                ]),
-                diffuse: textureDiffuse,
-            },
-            drawVertex: { firstVertex: 0, vertexCount: 6 }
-        };
-
-        // Render FBO
-        const fboRenderPass: IRenderPass = {
-            passDescriptor: {
-                colorAttachments: [{
-                    view: colorRenderbuffer,
-                    clearValue: [0.3, 0.3, 0.3, 1.0]
-                }]
-            },
-            renderObjects: [renderObject],
-        };
-
-        //
-        const renderPassResolve: IRenderPass = {
-            passDescriptor: {
-                colorAttachments: [{
-                    view: textureColorBuffer,
-                    clearValue: [0.7, 0.0, 0.0, 1.0]
-                }]
-            },
-        };
-
-        const blitFramebuffers: IBlitFramebufferItem[] = [];
-        const TILE = 4;
-        const BORDER = 2;
-        for (let j = 0; j < TILE; j++)
-        {
-            for (let i = 0; i < TILE; i++)
-            {
-                if ((i + j) % 2)
-                {
-                    continue;
-                }
-
-                blitFramebuffers.push(
-                    [0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-                        FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
-                        FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,
-                        FRAMEBUFFER_SIZE.y / TILE * (i + 1) - BORDER,
-                        FRAMEBUFFER_SIZE.y / TILE * (j + 1) - BORDER,
-                        "COLOR_BUFFER_BIT", "LINEAR"]
-                );
-            }
+    const textureDiffuse: ITexture = {
+        flipY: true,
+        internalformat: "RGBA",
+        format: "RGBA",
+        type: "UNSIGNED_BYTE",
+        sources: [{ source: image }],
+        sampler: {
+            minFilter: "LINEAR",
+            magFilter: "LINEAR",
         }
+    };
 
-        const blitFramebuffer: IBlitFramebuffer = {
-            read: fboRenderPass.passDescriptor,
-            draw: renderPassResolve.passDescriptor,
-            blitFramebuffers,
-        };
+    const textureColorBuffer: ITexture = {
+        internalformat: "RGBA",
+        format: "RGBA",
+        type: "UNSIGNED_BYTE",
+        sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
+        sampler: {
+            minFilter: "LINEAR",
+            magFilter: "LINEAR",
+        }
+    };
 
-        const renderObject2: IRenderObject = {
-            viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
-            vertices,
-            uniforms: {
-                MVP: new Float32Array([
-                    1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0
-                ]),
-                diffuse: textureColorBuffer,
-            },
-            drawVertex: { firstVertex: 0, vertexCount: 6 },
-            pipeline,
-        };
+    const colorRenderbuffer: IRenderbuffer = {
+        internalformat: "RGBA4",
+        width: FRAMEBUFFER_SIZE.x,
+        height: FRAMEBUFFER_SIZE.y,
+    };
 
-        const renderPass2: IRenderPass = {
-            passDescriptor: {
-                colorAttachments: [{
-                    clearValue: [0.0, 0.0, 0.0, 1.0],
-                    loadOp: "clear",
-                }],
-            },
-            renderObjects: [renderObject2]
-        };
+    const renderObject: IRenderObject = {
+        pipeline,
+        viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
+        vertices,
+        uniforms: {
+            MVP: new Float32Array([
+                0.8, 0.0, 0.0, 0.0,
+                0.0, 0.8, 0.0, 0.0,
+                0.0, 0.0, 0.8, 0.0,
+                0.0, 0.0, 0.0, 1.0
+            ]),
+            diffuse: textureDiffuse,
+        },
+        drawVertex: { firstVertex: 0, vertexCount: 6 }
+    };
 
-        // 执行
-        WebGL.runRenderPass(canvasContext, fboRenderPass);
-        WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
-        WebGL.runRenderPass(canvasContext, renderPass2);
+    // Render FBO
+    const fboRenderPass: IRenderPass = {
+        passDescriptor: {
+            colorAttachments: [{
+                view: colorRenderbuffer,
+                clearValue: [0.3, 0.3, 0.3, 1.0]
+            }]
+        },
+        renderObjects: [renderObject],
+    };
 
-        // Delete WebGL resources
-        WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
-        WebGL.deleteFramebuffer(canvasContext, renderPassResolve.passDescriptor);
-        WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
-        WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
-        WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
-        WebGL.deleteTexture(canvasContext, textureDiffuse);
-        WebGL.deleteTexture(canvasContext, textureColorBuffer);
-        WebGL.deleteProgram(canvasContext, pipeline);
-        WebGL.deleteVertexArray(canvasContext, renderObject);
-        WebGL.deleteVertexArray(canvasContext, renderObject2);
-    });
+    //
+    const renderPassResolve: IRenderPass = {
+        passDescriptor: {
+            colorAttachments: [{
+                view: textureColorBuffer,
+                clearValue: [0.7, 0.0, 0.0, 1.0]
+            }]
+        },
+    };
 
-    function loadImage(url: string, onload: (img: HTMLImageElement) => void)
+    const blitFramebuffers: IBlitFramebufferItem[] = [];
+    const TILE = 4;
+    const BORDER = 2;
+    for (let j = 0; j < TILE; j++)
     {
-        const img = new Image();
-        img.src = url;
-        img.onload = function ()
+        for (let i = 0; i < TILE; i++)
         {
-            onload(img);
-        };
+            if ((i + j) % 2)
+            {
+                continue;
+            }
 
-        return img;
+            blitFramebuffers.push(
+                [0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+                    FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
+                    FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,
+                    FRAMEBUFFER_SIZE.y / TILE * (i + 1) - BORDER,
+                    FRAMEBUFFER_SIZE.y / TILE * (j + 1) - BORDER,
+                    "COLOR_BUFFER_BIT", "LINEAR"]
+            );
+        }
     }
-})();
+
+    const blitFramebuffer: IBlitFramebuffer = {
+        read: fboRenderPass.passDescriptor,
+        draw: renderPassResolve.passDescriptor,
+        blitFramebuffers,
+    };
+
+    const renderObject2: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
+        vertices,
+        uniforms: {
+            MVP: new Float32Array([
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0
+            ]),
+            diffuse: textureColorBuffer,
+        },
+        drawVertex: { firstVertex: 0, vertexCount: 6 },
+        pipeline,
+    };
+
+    const renderPass2: IRenderPass = {
+        passDescriptor: {
+            colorAttachments: [{
+                clearValue: [0.0, 0.0, 0.0, 1.0],
+                loadOp: "clear",
+            }],
+        },
+        renderObjects: [renderObject2]
+    };
+
+    // 执行
+    WebGL.runRenderPass(canvasContext, fboRenderPass);
+    WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
+    WebGL.runRenderPass(canvasContext, renderPass2);
+
+    // Delete WebGL resources
+    WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
+    WebGL.deleteFramebuffer(canvasContext, renderPassResolve.passDescriptor);
+    WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
+    WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
+    WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
+    WebGL.deleteTexture(canvasContext, textureDiffuse);
+    WebGL.deleteTexture(canvasContext, textureColorBuffer);
+    WebGL.deleteProgram(canvasContext, pipeline);
+    WebGL.deleteVertexArray(canvasContext, renderObject);
+    WebGL.deleteVertexArray(canvasContext, renderObject2);
+});
+
+function loadImage(url: string, onload: (img: HTMLImageElement) => void)
+{
+    const img = new Image();
+    img.src = url;
+    img.onload = function ()
+    {
+        onload(img);
+    };
+
+    return img;
+}

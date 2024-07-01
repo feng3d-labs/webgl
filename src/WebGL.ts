@@ -6,7 +6,7 @@ import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
-import { IRenderingContext } from "./data/ICanvasContext";
+import { IRenderingContext } from "./data/IRenderingContext";
 import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IRenderObject } from "./data/IRenderObject";
 import { IRenderPass } from "./data/IRenderPass";
