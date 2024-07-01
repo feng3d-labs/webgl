@@ -1,5 +1,11 @@
 import { ISampler } from "./ISampler";
 
+export interface ITextureView
+{
+    texture: ITexture,
+    level: number
+}
+
 /**
  * 纹理
  */

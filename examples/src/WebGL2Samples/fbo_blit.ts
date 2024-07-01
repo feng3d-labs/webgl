@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexAttributes, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexAttributes, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -9,7 +9,7 @@ document.body.appendChild(canvas);
 
 const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
 
-const pipeline: IRenderPipeline = {
+const program: IRenderPipeline = {
     primitive: { topology: "TRIANGLES", cullMode: "NONE" },
     vertex: {
         code: getShaderSource("vs")
@@ -87,7 +87,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const renderObject: IRenderObject = {
-        pipeline,
+        pipeline: program,
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         vertices,
         uniforms: {
@@ -113,14 +113,16 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         renderObjects: [renderObject],
     };
 
+    const framebufferResolve: IPassDescriptor = {
+        colorAttachments: [{
+            view: { texture: textureColorBuffer, level: 0 },
+            clearValue: [0.7, 0.0, 0.0, 1.0]
+        }]
+    };
+
     //
     const renderPassResolve: IRenderPass = {
-        passDescriptor: {
-            colorAttachments: [{
-                view: textureColorBuffer,
-                clearValue: [0.7, 0.0, 0.0, 1.0]
-            }]
-        },
+        passDescriptor: framebufferResolve,
     };
 
     const blitFramebuffers: IBlitFramebufferItem[] = [];
@@ -165,7 +167,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             diffuse: textureColorBuffer,
         },
         drawVertex: { firstVertex: 0, vertexCount: 6 },
-        pipeline,
+        pipeline: program,
     };
 
     const renderPass2: IRenderPass = {
@@ -185,13 +187,13 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     // Delete WebGL resources
     WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
-    WebGL.deleteFramebuffer(canvasContext, renderPassResolve.passDescriptor);
+    WebGL.deleteFramebuffer(canvasContext, framebufferResolve);
     WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
     WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
     WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
     WebGL.deleteTexture(canvasContext, textureDiffuse);
     WebGL.deleteTexture(canvasContext, textureColorBuffer);
-    WebGL.deleteProgram(canvasContext, pipeline);
+    WebGL.deleteProgram(canvasContext, program);
     WebGL.deleteVertexArray(canvasContext, renderObject);
     WebGL.deleteVertexArray(canvasContext, renderObject2);
 });

@@ -1,4 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
+import { IBuffer, IPassDescriptor, IRenderPipeline, IRenderbuffer, ITexture } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +8,6 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const gl = canvas.getContext("webgl2", { antialias: false });
-const isWebGL2 = !!gl;
 
 // -- Init program
 const PROGRAM = {
@@ -16,10 +16,17 @@ const PROGRAM = {
     MAX: 2
 };
 
-const programs = [
-    createProgram(gl, getShaderSource("vs-render"), getShaderSource("fs-render")),
-    createProgram(gl, getShaderSource("vs-splash"), getShaderSource("fs-splash"))
+const programs: IRenderPipeline[] = [
+    {
+        vertex: { code: getShaderSource("vs-render") },
+        fragment: { code: getShaderSource("fs-render") },
+    },
+    {
+        vertex: { code: getShaderSource("vs-splash") },
+        fragment: { code: getShaderSource("fs-splash") }
+    },
 ];
+
 const mvpLocationTexture = gl.getUniformLocation(programs[PROGRAM.TEXTURE], "MVP");
 const mvpLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "MVP");
 const diffuseLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "diffuse");
@@ -27,7 +34,7 @@ const diffuseLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "diffuse
 // -- Init primitive data
 const vertexCount = 18;
 const data = new Float32Array(vertexCount * 2);
-let angle;
+let angle: number;
 const radius = 0.1;
 for (let i = 0; i < vertexCount; i++)
 {
@@ -37,10 +44,7 @@ for (let i = 0; i < vertexCount; i++)
 }
 
 // -- Init buffers
-const vertexDataBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexDataBuffer: IBuffer = { data, usage: "STATIC_DRAW" };
 
 const positions = new Float32Array([
     -1.0, -1.0,
@@ -50,10 +54,7 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexPosBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
 
 const texCoords = new Float32Array([
     0.0, 1.0,
@@ -63,10 +64,7 @@ const texCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexTexBuffer: IBuffer = { data: texCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -74,33 +72,26 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const texture = gl.createTexture();
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-gl.bindTexture(gl.TEXTURE_2D, null);
+const texture: ITexture = {
+    sampler: { minFilter: "NEAREST", magFilter: "NEAREST" }, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+    sources: [{ level: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0, pixels: null }],
+};
 
 // -- Init Frame Buffers
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
     COLORBUFFER: 1
 };
-const framebuffers = [
-    gl.createFramebuffer(),
-    gl.createFramebuffer()
+const colorRenderbuffer: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+
+const framebuffers: IPassDescriptor[] = [
+    {
+        colorAttachments: [{ view: colorRenderbuffer }],
+    },
+    {
+        colorAttachments: [{ view: { texture, level: 0 } }],
+    },
 ];
-const colorRenderbuffer = gl.createRenderbuffer();
-gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbuffer);
-gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, gl.RGBA8, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
-
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, colorRenderbuffer);
-gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[FRAMEBUFFER.COLORBUFFER]);
-gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
 // -- Init VertexArray
 const vertexArrays = [
