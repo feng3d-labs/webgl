@@ -1,13 +1,34 @@
 /**
+ * 渲染缓冲区。
+ *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
  */
 export interface IRenderbuffer
 {
+    /**
+     * 采用次数。
+     *
+     * 注意： WebGL2 支持。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
+     */
+    samples?: number;
+
+    /**
+     * 渲染缓冲区内部格式。
+     */
+    internalformat: RenderbufferInternalformat,
+
+    /**
+     * 宽度。
+     */
     width: number,
 
+    /**
+     * 高度。
+     */
     height: number
-
-    internalformat: RenderbufferInternalformat,
 }
 
 /**

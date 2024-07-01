@@ -30,10 +30,12 @@ let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
 const renderAtomic: IRenderObject = {
-    vertices: {
-        position: { buffer: { data: positions }, numComponents: 3 },
+    vertexArray: {
+        vertices: {
+            position: { buffer: { data: positions }, numComponents: 3 },
+        },
+        index: { data: indices }
     },
-    index: { data: indices },
     uniforms: {
         model: mat4.identity([]),
         view: () =>

@@ -17,7 +17,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObje
     }
     else
     {
-        renderAtomic.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
+        renderAtomic.vertexArray?.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
     }
 }
 
@@ -28,7 +28,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     //
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
-    const element = getElementBuffer(gl, renderAtomic.index);
+    const element = getElementBuffer(gl, renderAtomic.vertexArray.index);
     const type = element.type;
     //
     let { indexCount, instanceCount, firstIndex } = renderAtomic.drawIndexed || {};
@@ -60,13 +60,12 @@ export const defaultDrawVertex: IDrawVertex = Object.freeze({ vertexCount: 6, in
 function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
     //
-    const vertexNum = getAttributeVertexNum(gl, renderAtomic);
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
     let { firstVertex, vertexCount, instanceCount } = renderAtomic.drawVertex || {};
     //
     firstVertex = firstVertex || defaultDrawVertex.firstVertex;
-    vertexCount = vertexCount || vertexNum || defaultDrawVertex.vertexCount;
+    vertexCount = vertexCount || getAttributeVertexNum(gl, renderAtomic) || defaultDrawVertex.vertexCount;
     instanceCount = instanceCount || defaultDrawVertex.instanceCount;
 
     if (instanceCount > 1)
@@ -92,21 +91,20 @@ function _runDrawVertex(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
  */
 function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const vertexNum = ((attributelist) =>
+    const vertexNum = ((vertices) =>
     {
-        for (const attr in attributelist)
+        for (const attr in vertices)
         {
-            // eslint-disable-next-line no-prototype-builtins
-            if (attributelist.hasOwnProperty(attr))
+            if (vertices.hasOwnProperty(attr))
             {
-                const buffer = getBuffer(gl, attributelist[attr].buffer);
+                const buffer = getBuffer(gl, vertices[attr].buffer);
 
                 return buffer.count;
             }
         }
 
         return 0;
-    })(renderAtomic.vertices);
+    })(renderAtomic.vertexArray?.vertices);
 
     return vertexNum;
 }

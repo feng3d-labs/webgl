@@ -17,16 +17,18 @@ webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
 const renderAtomic: IRenderObject = {
-    vertices: {
-        position: {
-            buffer: {
-                data: [
-                    -1, 0,
-                    0, -1,
-                    1, 1
-                ]
-            }, numComponents: 2
-        },
+    vertexArray: {
+        vertices: {
+            position: {
+                buffer: {
+                    data: [
+                        -1, 0,
+                        0, -1,
+                        1, 1
+                    ]
+                }, numComponents: 2
+            },
+        }
     },
     uniforms: { color: [1, 0, 0, 1] },
     pipeline: {

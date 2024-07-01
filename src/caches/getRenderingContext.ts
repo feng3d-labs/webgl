@@ -1,4 +1,4 @@
-import { IRenderingContext } from "../data/ICanvasContext";
+import { IRenderingContext } from "../data/IRenderingContext";
 import { defaults } from "../defaults/defaults";
 import { getCapabilities } from "./getCapabilities";
 
@@ -38,7 +38,7 @@ function initMap(gl: WebGLRenderingContext)
     gl._textures = new WeakMap();
     gl._renderbuffers = new WeakMap();
     gl._framebuffers = new WeakMap();
-    gl._vertexArrayObjects = new WeakMap();
+    gl._vertexArrays = new WeakMap();
     gl._programs = {};
 }
 

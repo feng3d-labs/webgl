@@ -43,27 +43,29 @@ function main()
       ` },
       depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
     },
-    vertices: {
-      aVertexPosition: {
-        buffer: {
-          type: "FLOAT",
-          data: buffers.position,
-          usage: "STATIC_DRAW",
+    vertexArray: {
+      vertices: {
+        aVertexPosition: {
+          buffer: {
+            type: "FLOAT",
+            data: buffers.position,
+            usage: "STATIC_DRAW",
+          },
+          numComponents: 3,
+          normalized: false,
         },
-        numComponents: 3,
-        normalized: false,
-      },
-      aVertexColor: {
-        buffer: {
-          type: "FLOAT",
-          data: buffers.color,
-          usage: "STATIC_DRAW",
+        aVertexColor: {
+          buffer: {
+            type: "FLOAT",
+            data: buffers.color,
+            usage: "STATIC_DRAW",
+          },
+          numComponents: 4,
+          normalized: false,
         },
-        numComponents: 4,
-        normalized: false,
       },
+      index: { data: buffers.indices }
     },
-    index: { data: buffers.indices },
     uniforms: {},
     drawIndexed: { firstIndex: 0, indexCount: 36 },
   };

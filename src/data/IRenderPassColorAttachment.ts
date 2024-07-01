@@ -1,5 +1,5 @@
 import { IRenderbuffer } from "./IRenderbuffer";
-import { ITexture } from "./ITexture";
+import { ITextureView } from "./ITexture";
 
 export interface IRenderPassColorAttachment
 {
@@ -11,7 +11,7 @@ export interface IRenderPassColorAttachment
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
      */
-    view?: IRenderbuffer | ITexture;
+    view?: IAttachmentView;
 
     /**
      * 清除后填充值。
@@ -31,3 +31,5 @@ export interface IRenderPassColorAttachment
      */
     loadOp?: "load" | "clear";
 }
+
+export type IAttachmentView = IRenderbuffer | ITextureView;

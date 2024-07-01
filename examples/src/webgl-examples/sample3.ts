@@ -51,33 +51,35 @@ function main()
         ` },
         depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
       },
-      vertices: {
-        aVertexPosition: {
-          buffer: {
-            type: "FLOAT",
-            data: new Float32Array([
-              1.0, 1.0,
-              -1.0, 1.0,
-              1.0, -1.0,
-              -1.0, -1.0,
-            ]), usage: "STATIC_DRAW",
+      vertexArray: {
+        vertices: {
+          aVertexPosition: {
+            buffer: {
+              type: "FLOAT",
+              data: new Float32Array([
+                1.0, 1.0,
+                -1.0, 1.0,
+                1.0, -1.0,
+                -1.0, -1.0,
+              ]), usage: "STATIC_DRAW",
+            },
+            numComponents: 2,
+            normalized: false,
           },
-          numComponents: 2,
-          normalized: false,
-        },
-        aVertexColor: {
-          buffer: {
-            type: "FLOAT",
-            data: new Float32Array([
-              1.0, 1.0, 1.0, 1.0, // white
-              1.0, 0.0, 0.0, 1.0, // red
-              0.0, 1.0, 0.0, 1.0, // green
-              0.0, 0.0, 1.0, 1.0, // blue
-            ]),
-            usage: "STATIC_DRAW",
+          aVertexColor: {
+            buffer: {
+              type: "FLOAT",
+              data: new Float32Array([
+                1.0, 1.0, 1.0, 1.0, // white
+                1.0, 0.0, 0.0, 1.0, // red
+                0.0, 1.0, 0.0, 1.0, // green
+                0.0, 0.0, 1.0, 1.0, // blue
+              ]),
+              usage: "STATIC_DRAW",
+            },
+            numComponents: 4,
+            normalized: false,
           },
-          numComponents: 4,
-          normalized: false,
         },
       },
       uniforms: {

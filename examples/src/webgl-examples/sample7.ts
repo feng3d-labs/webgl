@@ -64,36 +64,38 @@ async function main()
       ` },
       depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
     },
-    vertices: {
-      aVertexPosition: {
-        buffer: {
-          type: "FLOAT",
-          data: buffers.position,
-          usage: "STATIC_DRAW",
+    vertexArray: {
+      vertices: {
+        aVertexPosition: {
+          buffer: {
+            type: "FLOAT",
+            data: buffers.position,
+            usage: "STATIC_DRAW",
+          },
+          numComponents: 3,
+          normalized: false,
         },
-        numComponents: 3,
-        normalized: false,
-      },
-      aVertexNormal: {
-        buffer: {
-          type: "FLOAT",
-          data: buffers.normal,
-          usage: "STATIC_DRAW",
+        aVertexNormal: {
+          buffer: {
+            type: "FLOAT",
+            data: buffers.normal,
+            usage: "STATIC_DRAW",
+          },
+          numComponents: 3,
+          normalized: false,
         },
-        numComponents: 3,
-        normalized: false,
-      },
-      aTextureCoord: {
-        buffer: {
-          type: "FLOAT",
-          data: buffers.textureCoord,
-          usage: "STATIC_DRAW",
+        aTextureCoord: {
+          buffer: {
+            type: "FLOAT",
+            data: buffers.textureCoord,
+            usage: "STATIC_DRAW",
+          },
+          numComponents: 2,
+          normalized: false,
         },
-        numComponents: 2,
-        normalized: false,
       },
+      index: { data: buffers.indices }
     },
-    index: { data: buffers.indices },
     uniforms: { uSampler: texture },
     drawIndexed: { firstIndex: 0, indexCount: 36 },
   };

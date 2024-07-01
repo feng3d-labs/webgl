@@ -16,10 +16,17 @@ export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRender
     webGLRenderbuffer = gl.createRenderbuffer();
     gl._renderbuffers.set(renderbuffer, webGLRenderbuffer);
 
-    const { internalformat, width, height } = renderbuffer;
+    const { samples, internalformat, width, height } = renderbuffer;
 
     gl.bindRenderbuffer(gl.RENDERBUFFER, webGLRenderbuffer);
-    gl.renderbufferStorage(gl.RENDERBUFFER, gl[internalformat], width, height);
+    if (samples && gl instanceof WebGL2RenderingContext)
+    {
+        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, gl[internalformat], width, height);
+    }
+    else
+    {
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl[internalformat], width, height);
+    }
 
     return webGLRenderbuffer;
 }

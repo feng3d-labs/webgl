@@ -164,12 +164,14 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
     let viewportHeight = 1;
 
     const renderAtomic: IRenderObject = {
-        vertices: {
-            position: { buffer: { data: positions }, numComponents: 3 },
-            normal: { buffer: { data: normals }, numComponents: 3 },
-            uv: { buffer: { data: uvs }, numComponents: 2 },
+        vertexArray: {
+            vertices: {
+                position: { buffer: { data: positions }, numComponents: 3 },
+                normal: { buffer: { data: normals }, numComponents: 3 },
+                uv: { buffer: { data: uvs }, numComponents: 2 },
+            },
+            index: { data: indices }
         },
-        index: { data: indices },
         uniforms: {
             view: () => camera.view(),
             projection: () =>
@@ -356,8 +358,8 @@ import { IRenderObject, ITexture, WebGL } from "../../../src";
             return pv;
         }, []);
 
-        renderAtomic.vertices.position.buffer.data = new Float32Array(positions);
-        renderAtomic.vertices.normal.buffer.data = new Float32Array(normals);
+        renderAtomic.vertexArray.vertices.position.buffer.data = new Float32Array(positions);
+        renderAtomic.vertexArray.vertices.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 

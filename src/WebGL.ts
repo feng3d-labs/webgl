@@ -6,17 +6,18 @@ import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
-import { IRenderingContext } from "./data/ICanvasContext";
 import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IRenderObject } from "./data/IRenderObject";
 import { IRenderPass } from "./data/IRenderPass";
 import { IRenderPipeline } from "./data/IRenderPipeline";
 import { IRenderbuffer } from "./data/IRenderbuffer";
+import { IRenderingContext } from "./data/IRenderingContext";
 import { ITexture } from "./data/ITexture";
+import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
-import { deleteVertexArray } from "./runs/runVertexIndex";
+import { deleteVertexArray } from "./runs/runVertexArray";
 
 /**
  * WEBGL 渲染器
@@ -45,67 +46,67 @@ export class WebGL
      *
      * @param renderAtomic 渲染原子，包含渲染所需的所有数据。
      */
-    static runRenderObject(canvasContext: IRenderingContext, renderAtomic: IRenderObject)
+    static runRenderObject(renderingContext: IRenderingContext, renderAtomic: IRenderObject)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         runRenderObject(gl, renderAtomic);
     }
 
-    static runBlitFramebuffer(canvasContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)
+    static runBlitFramebuffer(renderingContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    static deleteFramebuffer(canvasContext: IRenderingContext, passDescriptor: IPassDescriptor)
+    static deleteFramebuffer(renderingContext: IRenderingContext, passDescriptor: IPassDescriptor)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteFramebuffer(gl, passDescriptor);
     }
 
-    static deleteRenderbuffer(canvasContext: IRenderingContext, colorRenderbuffer: IRenderbuffer)
+    static deleteRenderbuffer(renderingContext: IRenderingContext, colorRenderbuffer: IRenderbuffer)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteRenderbuffer(gl, colorRenderbuffer);
     }
 
-    static deleteBuffer(canvasContext: IRenderingContext, vertexPosBuffer: IBuffer)
+    static deleteBuffer(renderingContext: IRenderingContext, vertexPosBuffer: IBuffer)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteBuffer(gl, vertexPosBuffer);
     }
 
-    static deleteTexture(canvasContext: IRenderingContext, textureDiffuse: ITexture)
+    static deleteTexture(renderingContext: IRenderingContext, textureDiffuse: ITexture)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteTexture(gl, textureDiffuse);
     }
 
-    static deleteProgram(canvasContext: IRenderingContext, pipeline: IRenderPipeline)
+    static deleteProgram(renderingContext: IRenderingContext, pipeline: IRenderPipeline)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         deleteProgram(gl, pipeline);
     }
 
-    static deleteVertexArray(canvasContext: IRenderingContext, renderObject: IRenderObject)
+    static deleteVertexArray(renderingContext: IRenderingContext, vertexArray: IVertexArrayObject)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
-        deleteVertexArray(gl, renderObject);
+        deleteVertexArray(gl, vertexArray);
     }
 }

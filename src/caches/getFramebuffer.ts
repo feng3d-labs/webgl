@@ -1,5 +1,5 @@
-import { IRenderbuffer } from "../data/IRenderbuffer";
 import { IPassDescriptor } from "../data/IPassDescriptor";
+import { IRenderbuffer } from "../data/IRenderbuffer";
 import { getRenderbuffer } from "./getRenderbuffer";
 import { getTexture } from "./getTexture";
 
@@ -26,10 +26,12 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
     gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
     gl._framebuffers.set(passDescriptor, webGLFramebuffer);
 
-    if ("sources" in view)
+    if ("texture" in view)
     {
-        const texture = getTexture(gl, view);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+        const { texture, level } = view;
+
+        const webGLTexture = getTexture(gl, texture);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, webGLTexture, level);
     }
     else
     {

@@ -38,11 +38,13 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
 }, []);
 
 const renderAtomic: IRenderObject = {
-    vertices: {
-        position: { buffer: { data: positions }, numComponents: 3 },
-        normal: { buffer: { data: normals }, numComponents: 3 },
+    vertexArray: {
+        vertices: {
+            position: { buffer: { data: positions }, numComponents: 3 },
+            normal: { buffer: { data: normals }, numComponents: 3 },
+        },
+        index: { data: indices }
     },
-    index: { data: indices },
     uniforms: {},
     pipeline: {
         primitive: { cullMode: "NONE" },
