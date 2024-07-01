@@ -8,47 +8,75 @@ declare global
     {
         _buffers: WeakMap<IBuffer, WebGLBuffer>
     }
+
+    interface WebGLBuffer
+    {
+        /**
+         * 元素数据类型
+         */
+        type: VertexAttributeTypes;
+
+        /**
+         * 元素数组长度
+         */
+        count: number;
+
+        bytesPerElement: number;
+
+        /**
+         * 销毁。
+         */
+        destroy: () => void;
+    }
 }
 
-export function getBuffer(gl: WebGLRenderingContext, webGLBuffer: IBuffer)
+export function getBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 {
-    let buffer = gl._buffers.get(webGLBuffer);
+    let webGLBuffer = gl._buffers.get(buffer);
 
-    if (!buffer)
+    if (!webGLBuffer)
     {
-        buffer = gl.createBuffer();
-        gl._buffers.set(webGLBuffer, buffer);
+        webGLBuffer = gl.createBuffer();
+        gl._buffers.set(buffer, webGLBuffer);
 
         const updateBuffer = () =>
         {
             // 获取
-            buffer.type = webGLBuffer.type || getWebGLBufferType(webGLBuffer.data);
-            const data = getArrayBufferViewWithType(webGLBuffer.data, buffer.type);
+            webGLBuffer.type = buffer.type || getWebGLBufferType(buffer.data);
+            const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
 
             // 上传数据到WebGL
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, data, gl[webGLBuffer.usage || "STATIC_DRAW"]);
+            gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, data, gl[buffer.usage || "STATIC_DRAW"]);
 
             //
-            buffer.count = data.length;
-            buffer.bytesPerElement = data.BYTES_PER_ELEMENT;
+            webGLBuffer.count = data.length;
+            webGLBuffer.bytesPerElement = data.BYTES_PER_ELEMENT;
         };
 
         updateBuffer();
 
         //
-        watcher.watch(webGLBuffer, "data", updateBuffer);
+        watcher.watch(buffer, "data", updateBuffer);
+
+        //
+        webGLBuffer.destroy = () =>
+        {
+            watcher.unwatch(buffer, "data", updateBuffer);
+        };
     }
 
-    return buffer;
+    return webGLBuffer;
 }
 
-export function deleteBuffer(gl: WebGLRenderingContext, webGLBuffer: IBuffer)
+export function deleteBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 {
-    const buffer = gl._buffers.get(webGLBuffer);
-    gl._buffers.delete(webGLBuffer);
+    const webGLBuffer = gl._buffers.get(buffer);
+    gl._buffers.delete(buffer);
+    webGLBuffer.destroy();
+    delete webGLBuffer.destroy;
     //
-    gl.deleteBuffer(buffer);
+    gl.deleteBuffer(webGLBuffer);
 }
 
 function getWebGLBufferType(data: AttributeBufferSourceTypes)

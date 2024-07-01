@@ -28,13 +28,13 @@ export class WebGL
     /**
      * 提交一次渲染通道数据。
      *
-     * @param canvasContext 渲染画布上下文描述。
+     * @param renderingContext 渲染画布上下文描述。
      * @param renderPass 渲染通道数据。
      * @returns
      */
-    static runRenderPass(canvasContext: IRenderingContext, renderPass: IRenderPass)
+    static runRenderPass(renderingContext: IRenderingContext, renderPass: IRenderPass)
     {
-        const gl = getRenderingContext(canvasContext);
+        const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
         runRenderPass(gl, renderPass);
