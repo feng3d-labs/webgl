@@ -5,7 +5,7 @@ import { defaultFragmentState, defaultVertexState, runProgram } from "./runProgr
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IWebGLRenderPipeline)
 {
-    runProgram(gl, renderPipeline.vertex, renderPipeline.fragment);
+    runProgram(gl, renderPipeline);
 
     runPrimitiveState(gl, renderPipeline.primitive);
 

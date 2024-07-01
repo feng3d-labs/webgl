@@ -1,4 +1,4 @@
-import { getCompileShaderResult } from "../caches/getCompileShaderResult";
+import { getWebGLProgram } from "../caches/getWebGLProgram";
 import { IRenderObject } from "../data/IRenderObject";
 import { runVertexAttribute } from "./runVertexAttribute";
 
@@ -9,7 +9,7 @@ import { runVertexAttribute } from "./runVertexAttribute";
  */
 export function runVertexAttributes(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
 {
-    const shaderResult = getCompileShaderResult(gl, renderAtomic.pipeline.vertex.code, renderAtomic.pipeline.fragment.code);
+    const shaderResult = getWebGLProgram(gl, renderAtomic.pipeline);
 
     for (const name in shaderResult.attributes)
     {

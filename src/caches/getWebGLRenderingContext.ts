@@ -39,7 +39,7 @@ function initMap(gl: WebGLRenderingContext)
     gl._textureMap = new WeakMap();
     gl._renderbuffers_ = new WeakMap();
     gl._framebuffers_ = new WeakMap();
-    gl._compileShaderResults = {};
+    gl._programs = {};
 }
 
 function _onContextLost(event: Event)

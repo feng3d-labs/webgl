@@ -191,8 +191,8 @@ import { getShaderSource } from "./utility";
         WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
         WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
         WebGL.deleteTexture(canvasContext, textureDiffuse);
-        // gl.deleteTexture(textureColorBuffer);
-        // gl.deleteProgram(program);
+        WebGL.deleteTexture(canvasContext, textureColorBuffer);
+        WebGL.deleteProgram(canvasContext, pipeline);
         // gl.deleteVertexArray(vertexArray);
     });
 

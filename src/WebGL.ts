@@ -1,5 +1,6 @@
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteBuffer } from "./caches/getWebGLBuffer";
+import { deleteProgram } from "./caches/getWebGLProgram";
 import { deleteRenderbuffer } from "./caches/getWebGLRenderbuffer";
 import { getWebGLRenderingContext } from "./caches/getWebGLRenderingContext";
 import { deleteTexture } from "./caches/getWebGLTexture";
@@ -11,6 +12,7 @@ import { IWebGLBuffer } from "./data/IWebGLBuffer";
 import { IWebGLCanvasContext } from "./data/IWebGLCanvasContext";
 import { IWebGLPassDescriptor } from "./data/IWebGLPassDescriptor";
 import { IWebGLRenderPass } from "./data/IWebGLRenderPass";
+import { IWebGLRenderPipeline } from "./data/IWebGLRenderPipeline";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runWebGLRenderPass } from "./runs/runWebGLRenderPass";
@@ -88,5 +90,13 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         deleteTexture(gl, textureDiffuse);
+    }
+
+    static deleteProgram(canvasContext: IWebGLCanvasContext, pipeline: IWebGLRenderPipeline)
+    {
+        const gl = getWebGLRenderingContext(canvasContext);
+        if (!gl || gl.isContextLost()) return;
+
+        deleteProgram(gl, pipeline);
     }
 }
