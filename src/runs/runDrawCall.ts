@@ -17,7 +17,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderAtomic: IRenderObje
     }
     else
     {
-        renderAtomic.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
+        renderAtomic.vertexArray.index ? _runDrawIndexed(gl, renderAtomic) : _runDrawVertex(gl, renderAtomic);
     }
 }
 
@@ -28,7 +28,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderAtomic: IRenderObject)
     //
     const drawMode = renderAtomic.pipeline.primitive?.topology || "TRIANGLES";
     //
-    const element = getElementBuffer(gl, renderAtomic.index);
+    const element = getElementBuffer(gl, renderAtomic.vertexArray.index);
     const type = element.type;
     //
     let { indexCount, instanceCount, firstIndex } = renderAtomic.drawIndexed || {};
@@ -106,7 +106,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, renderAtomic: IRenderO
         }
 
         return 0;
-    })(renderAtomic.vertices);
+    })(renderAtomic.vertexArray.vertices);
 
     return vertexNum;
 }

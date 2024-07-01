@@ -12,6 +12,7 @@ export * from "./data/IRenderbuffer";
 export * from "./data/IRenderingContext";
 export * from "./data/ITexture";
 export * from "./data/IUniforms";
+export * from "./data/IVertexArrayObject";
 export * from "./data/IVertexAttribute";
 export * from "./data/IVertexAttributes";
 export * from "./gl/WebGLEnums";

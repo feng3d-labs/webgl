@@ -1,12 +1,11 @@
 import { LazyObject } from "../types";
 import { IDrawIndexed } from "./IDrawIndexed";
 import { IDrawVertex } from "./IDrawVertex";
-import { IIndexBuffer } from "./IIndexBuffer";
-import { IScissor } from "./IScissor";
-import { IVertexAttributes } from "./IVertexAttributes";
-import { IViewport } from "./IViewport";
 import { IRenderPipeline } from "./IRenderPipeline";
+import { IScissor } from "./IScissor";
 import { IUniforms } from "./IUniforms";
+import { IVertexArrayObject } from "./IVertexArrayObject";
+import { IViewport } from "./IViewport";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -19,14 +18,9 @@ export interface IRenderObject
     pipeline: IRenderPipeline;
 
     /**
-     * 顶点索引缓冲
+     * 顶点属性以及索引数据。
      */
-    index?: IIndexBuffer;
-
-    /**
-     * 顶点属性数据列表
-     */
-    vertices: IVertexAttributes;
+    vertexArray: IVertexArrayObject;
 
     /**
      * Uniform渲染数据

@@ -1,5 +1,6 @@
 import { getProgram } from "../caches/getProgram";
-import { IRenderObject } from "../data/IRenderObject";
+import { IRenderPipeline } from "../data/IRenderPipeline";
+import { IVertexArrayObject } from "../data/IVertexArrayObject";
 import { runIndexBuffer } from "./runIndexBuffer";
 import { runVertexAttribute } from "./runVertexAttribute";
 
@@ -7,32 +8,33 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrayObjects: WeakMap<IRenderObject, WebGLVertexArrayObject>;
+        _vertexArrayObjects: WeakMap<IVertexArrayObject, WebGLVertexArrayObject>;
     }
 }
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。
  */
-export function runVertexIndex(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertexArray: IVertexArrayObject)
 {
-    let vertexArray: WebGLVertexArrayObject;
+    let webGLVertexArrayObject: WebGLVertexArrayObject;
     if (gl instanceof WebGL2RenderingContext)
     {
-        vertexArray = gl._vertexArrayObjects.get(renderObject);
-        if (vertexArray)
+        webGLVertexArrayObject = gl._vertexArrayObjects.get(vertexArray);
+        if (webGLVertexArrayObject)
         {
-            gl.bindVertexArray(vertexArray);
+            gl.bindVertexArray(webGLVertexArrayObject);
 
             return;
         }
 
-        vertexArray = gl.createVertexArray();
-        gl.bindVertexArray(vertexArray);
-        gl._vertexArrayObjects.set(renderObject, vertexArray);
+        webGLVertexArrayObject = gl.createVertexArray();
+        gl.bindVertexArray(webGLVertexArrayObject);
+        gl._vertexArrayObjects.set(vertexArray, webGLVertexArrayObject);
     }
 
-    const { pipeline, vertices, index } = renderObject;
+    //
+    const { vertices, index } = vertexArray;
 
     const shaderResult = getProgram(gl, pipeline);
 
@@ -54,12 +56,12 @@ export function runVertexIndex(gl: WebGLRenderingContext, renderObject: IRenderO
     runIndexBuffer(gl, index);
 }
 
-export function deleteVertexArray(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IVertexArrayObject)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
-        const vertexArray = gl._vertexArrayObjects.get(renderObject);
-        gl._vertexArrayObjects.delete(renderObject);
-        gl.deleteVertexArray(vertexArray);
+        const webGLVertexArrayObject = gl._vertexArrayObjects.get(vertexArray);
+        gl._vertexArrayObjects.delete(vertexArray);
+        gl.deleteVertexArray(webGLVertexArrayObject);
     }
 }

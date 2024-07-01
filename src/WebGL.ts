@@ -6,13 +6,14 @@ import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
-import { IRenderingContext } from "./data/IRenderingContext";
 import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IRenderObject } from "./data/IRenderObject";
 import { IRenderPass } from "./data/IRenderPass";
 import { IRenderPipeline } from "./data/IRenderPipeline";
 import { IRenderbuffer } from "./data/IRenderbuffer";
+import { IRenderingContext } from "./data/IRenderingContext";
 import { ITexture } from "./data/ITexture";
+import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
@@ -101,11 +102,11 @@ export class WebGL
         deleteProgram(gl, pipeline);
     }
 
-    static deleteVertexArray(canvasContext: IRenderingContext, renderObject: IRenderObject)
+    static deleteVertexArray(canvasContext: IRenderingContext, vertexArray: IVertexArrayObject)
     {
         const gl = getRenderingContext(canvasContext);
         if (!gl || gl.isContextLost()) return;
 
-        deleteVertexArray(gl, renderObject);
+        deleteVertexArray(gl, vertexArray);
     }
 }

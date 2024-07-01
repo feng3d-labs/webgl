@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexAttributes, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -86,10 +86,14 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         height: FRAMEBUFFER_SIZE.y,
     };
 
+    const vertexArray: IVertexArrayObject = {
+        vertices,
+    };
+
     const renderObject: IRenderObject = {
         pipeline: program,
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
-        vertices,
+        vertexArray: vertexArray,
         uniforms: {
             MVP: new Float32Array([
                 0.8, 0.0, 0.0, 0.0,
@@ -194,6 +198,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     WebGL.deleteTexture(canvasContext, textureDiffuse);
     WebGL.deleteTexture(canvasContext, textureColorBuffer);
     WebGL.deleteProgram(canvasContext, program);
+    WebGL.deleteVertexArray(canvasContext, vertexArray);
     WebGL.deleteVertexArray(canvasContext, renderObject);
     WebGL.deleteVertexArray(canvasContext, renderObject2);
 });

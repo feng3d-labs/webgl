@@ -3,7 +3,7 @@ import { runDrawCall } from "./runDrawCall";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
 import { runUniforms } from "./runUniforms";
-import { runVertexIndex } from "./runVertexIndex";
+import { runVertexArray } from "./runVertexIndex";
 import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
@@ -14,7 +14,7 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 
     runRenderPipeline(gl, renderObject.pipeline);
 
-    runVertexIndex(gl, renderObject);
+    runVertexArray(gl, renderObject.pipeline, renderObject.vertexArray);
 
     runUniforms(gl, renderObject);
 
