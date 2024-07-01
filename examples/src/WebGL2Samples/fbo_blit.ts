@@ -182,15 +182,9 @@ import { getShaderSource } from "./utility";
         };
 
         // 执行
-        const update = () =>
-        {
-            WebGL.runRenderPass(canvasContext, fboRenderPass);
-            WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
-            WebGL.runRenderPass(canvasContext, renderPass2);
-
-            // requestAnimationFrame(update);
-        };
-        update();
+        WebGL.runRenderPass(canvasContext, fboRenderPass);
+        WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
+        WebGL.runRenderPass(canvasContext, renderPass2);
 
         // Delete WebGL resources
         WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
