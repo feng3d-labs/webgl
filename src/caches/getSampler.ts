@@ -34,3 +34,13 @@ export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
 
     return webGLSampler;
 }
+
+export function deleteSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+{
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        const webGLSampler = gl._samplers.get(sampler);
+        gl._samplers.delete(sampler);
+        gl.deleteSampler(webGLSampler);
+    }
+}

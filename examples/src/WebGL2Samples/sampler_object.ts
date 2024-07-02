@@ -1,4 +1,4 @@
-import { IBuffer, IProgram, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBuffer, IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -87,19 +87,6 @@ function render()
         0.0, 0.0, 0.8, 0.0,
         0.0, 0.0, 0.0, 1.0
     ]);
-    // gl.uniformMatrix4fv(uniformMvpLocation, false, matrix);
-    // gl.uniform1i(uniformDiffuse0Location, 0);
-    // gl.uniform1i(uniformDiffuse1Location, 1);
-
-    // gl.bindVertexArray(vertexArray);
-
-    // gl.activeTexture(gl.TEXTURE0);
-    // gl.bindTexture(gl.TEXTURE_2D, texture);
-    // gl.bindSampler(0, samplerA);
-
-    // gl.activeTexture(gl.TEXTURE1);
-    // gl.bindTexture(gl.TEXTURE_2D, texture);
-    // gl.bindSampler(1, samplerB);
 
     const rp: IRenderPass = {
         passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
@@ -120,12 +107,12 @@ function render()
     };
     WebGL.runRenderPass(rc, rp);
 
-    // // Cleanup
-    // gl.deleteBuffer(vertexPosBuffer);
-    // gl.deleteBuffer(vertexTexBuffer);
-    // gl.deleteSampler(samplerA);
-    // gl.deleteSampler(samplerB);
-    // gl.deleteVertexArray(vertexArray);
-    // gl.deleteTexture(texture);
-    // gl.deleteProgram(program);
+    // Cleanup
+    WebGL.deleteBuffer(rc, vertexPosBuffer);
+    WebGL.deleteBuffer(rc, vertexTexBuffer);
+    WebGL.deleteSampler(rc, samplerA);
+    WebGL.deleteSampler(rc, samplerB);
+    WebGL.deleteVertexArray(rc, vertexArray);
+    WebGL.deleteTexture(rc, texture);
+    WebGL.deleteProgram(rc, program);
 }

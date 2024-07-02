@@ -3,6 +3,7 @@ import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";
 import { getRenderingContext } from "./caches/getRenderingContext";
+import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
@@ -13,6 +14,7 @@ import { IRenderPass } from "./data/IRenderPass";
 import { IRenderPipeline } from "./data/IRenderPipeline";
 import { IRenderbuffer } from "./data/IRenderbuffer";
 import { IRenderingContext } from "./data/IRenderingContext";
+import { ISampler } from "./data/ISampler";
 import { ITexture } from "./data/ITexture";
 import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
@@ -80,28 +82,36 @@ export class WebGL
         deleteFramebuffer(gl, passDescriptor);
     }
 
-    static deleteRenderbuffer(renderingContext: IRenderingContext, colorRenderbuffer: IRenderbuffer)
+    static deleteRenderbuffer(renderingContext: IRenderingContext, renderbuffer: IRenderbuffer)
     {
         const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
-        deleteRenderbuffer(gl, colorRenderbuffer);
+        deleteRenderbuffer(gl, renderbuffer);
     }
 
-    static deleteBuffer(renderingContext: IRenderingContext, vertexPosBuffer: IBuffer)
+    static deleteBuffer(renderingContext: IRenderingContext, buffer: IBuffer)
     {
         const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
-        deleteBuffer(gl, vertexPosBuffer);
+        deleteBuffer(gl, buffer);
     }
 
-    static deleteTexture(renderingContext: IRenderingContext, textureDiffuse: ITexture)
+    static deleteTexture(renderingContext: IRenderingContext, texture: ITexture)
     {
         const gl = getRenderingContext(renderingContext);
         if (!gl || gl.isContextLost()) return;
 
-        deleteTexture(gl, textureDiffuse);
+        deleteTexture(gl, texture);
+    }
+
+    static deleteSampler(renderingContext: IRenderingContext, sampler: ISampler)
+    {
+        const gl = getRenderingContext(renderingContext);
+        if (!gl || gl.isContextLost()) return;
+
+        deleteSampler(gl, sampler);
     }
 
     static deleteProgram(renderingContext: IRenderingContext, pipeline: IRenderPipeline)
