@@ -9,11 +9,9 @@ document.body.appendChild(canvas);
 
 const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
 
-const gl = canvas.getContext("webgl2", { antialias: false });
-
 const windowSize = {
-    x: gl.drawingBufferWidth,
-    y: gl.drawingBufferHeight
+    x: canvas.width,
+    y: canvas.height
 };
 
 // -- Initialize program
@@ -78,7 +76,6 @@ const quadVertexArray: IVertexArrayObject = {
 
 // -- Initialize texture targets
 
-gl.activeTexture(gl.TEXTURE0);
 const color1Texture: ITexture = {
     internalformat: "RGBA",
     format: "RGBA",
@@ -87,7 +84,6 @@ const color1Texture: ITexture = {
     sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" },
 };
 
-gl.activeTexture(gl.TEXTURE1);
 const color2Texture: ITexture = {
     internalformat: "RGBA",
     format: "RGBA",
@@ -104,17 +100,6 @@ const frameBuffer: IFramebuffer = {
         { view: { texture: color2Texture, level: 0 } },
     ],
 };
-
-// gl.drawBuffers([
-//     gl.COLOR_ATTACHMENT0,
-//     gl.COLOR_ATTACHMENT1
-// ]);
-
-// const status = gl.checkFramebufferStatus(gl.DRAW_FRAMEBUFFER);
-// if (status !== gl.FRAMEBUFFER_COMPLETE)
-// {
-//     console.log(`fb status: ${status.toString(16)}`);
-// }
 
 // -- Render
 
@@ -144,14 +129,14 @@ const renderPass2: IRenderPass = {
 WebGL.runRenderPass(renderingContext, renderPass2);
 
 // Clean up
-// gl.deleteBuffer(triVertexPosBuffer);
-// gl.deleteBuffer(quadVertexPosBuffer);
-// gl.deleteBuffer(quadVertexTexBuffer);
-// gl.deleteVertexArray(triVertexArray);
-// gl.deleteVertexArray(quadVertexArray);
-// gl.deleteFramebuffer(frameBuffer);
-// gl.deleteTexture(color1Texture);
-// gl.deleteTexture(color2Texture);
-// gl.deleteProgram(drawBufferProgram);
-// gl.deleteProgram(drawProgram);
+WebGL.deleteBuffer(renderingContext, triVertexPosBuffer);
+WebGL.deleteBuffer(renderingContext, quadVertexPosBuffer);
+WebGL.deleteBuffer(renderingContext, quadVertexTexBuffer);
+WebGL.deleteVertexArray(renderingContext, triVertexArray);
+WebGL.deleteVertexArray(renderingContext, quadVertexArray);
+WebGL.deleteFramebuffer(renderingContext, frameBuffer);
+WebGL.deleteTexture(renderingContext, color1Texture);
+WebGL.deleteTexture(renderingContext, color2Texture);
+WebGL.deleteProgram(renderingContext, drawBufferProgram);
+WebGL.deleteProgram(renderingContext, drawProgram);
 
