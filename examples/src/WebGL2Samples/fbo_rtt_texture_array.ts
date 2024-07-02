@@ -24,7 +24,7 @@ const Textures = {
     MAX: 3
 };
 
-const viewport = new Array(Textures.MAX);
+const viewport: { x: number, y: number, z: number, w: number }[] = new Array(Textures.MAX);
 
 viewport[Textures.RED] = {
     x: windowSize.x / 2,
@@ -166,7 +166,7 @@ for (let i = 0; i < Textures.MAX; ++i)
     renderPass.renderObjects.push(
         {
             ...renderObject,
-            viewport: viewport[i],
+            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             uniforms: { ...renderObject.uniforms, layer: i },
             drawVertex: { vertexCount: 6 },
         }
