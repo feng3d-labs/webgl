@@ -26,19 +26,34 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
     gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
     gl._framebuffers.set(passDescriptor, webGLFramebuffer);
 
-    if ("texture" in view)
+    const drawBuffers: number[] = [];
+    passDescriptor.colorAttachments.forEach((item, i) =>
     {
-        const { texture, level } = view;
+        const { view } = item;
+        const attachment = gl[`COLOR_ATTACHMENT${i}`];
+        drawBuffers.push(attachment);
+        if ("texture" in view)
+        {
+            const { texture, level } = view;
 
-        const webGLTexture = getTexture(gl, texture);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, webGLTexture, level);
+            const webGLTexture = getTexture(gl, texture);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment, gl.TEXTURE_2D, webGLTexture, level);
+        }
+        else
+        {
+            const renderbuffer = getRenderbuffer(gl, view as IRenderbuffer);
+            gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
+        }
+    });
+
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        gl.drawBuffers(drawBuffers);
     }
     else
     {
-        const renderbuffer = getRenderbuffer(gl, view as IRenderbuffer);
-        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, renderbuffer);
+        console.error(`WebGL1 不支持 drawBuffers 。`);
     }
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     return webGLFramebuffer;
 }

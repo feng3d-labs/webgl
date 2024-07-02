@@ -26,6 +26,7 @@ const files = {
         "fbo_blit",
         "fbo_multisample",
         "fbo_new_blend_equation",
+        "fbo_rtt_draw_buffers",
     ],
 };
 

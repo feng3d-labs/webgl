@@ -1,16 +1,10 @@
-import { IRenderbuffer } from "./IRenderbuffer";
-import { ITexture } from "./ITexture";
+import { IPassDescriptor } from "./IPassDescriptor";
 
 /**
+ * 等价于 IPassDescriptor 。
+ *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
+ *
+ * @deprecated 请使用 IPassDescriptor 。
  */
-export interface IFramebuffer
-{
-    /**
-     * 颜色附件。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
-     */
-    colorAttachments: (IRenderbuffer | ITexture)[];
-}
+export interface IFramebuffer extends IPassDescriptor { }
