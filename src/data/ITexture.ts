@@ -123,6 +123,13 @@ export interface IBufferSource
     height?: number,
 
     /**
+     * 纹理深度，默认为 1。
+     *
+     * WebGL2 支持。
+     */
+    depth?: number;
+
+    /**
      * 默认为 0。
      */
     border?: number,

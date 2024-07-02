@@ -19,6 +19,16 @@ export interface ISampler
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
      */
     anisotropy?: number;
+
+    /**
+     * 采样时使用的最小Lod等级。
+     */
+    lodMinClamp?: number;
+
+    /**
+     * 采样时使用的最大Lod等级。
+     */
+    lodMaxClamp?: number;
 }
 
 /**

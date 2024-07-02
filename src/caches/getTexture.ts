@@ -52,6 +52,26 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
                 }
             }
+            else if (textureTarget === "TEXTURE_2D_ARRAY")
+            {
+                if (gl instanceof WebGL2RenderingContext)
+                {
+                    if ("source" in sourceItem)
+                    {
+                        console.error(`未处理  ${textureTarget}`);
+                    }
+                    else
+                    {
+                        const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
+                        gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+
+                        gl.texImage3D(gl.TEXTURE_2D_ARRAY,
+                            level, gl[internalformat], width, height,
+                            depth,
+                            border, gl[format], gl[type], pixels);
+                    }
+                }
+            }
             else
             {
                 throw `未处理 ${textureTarget}`;

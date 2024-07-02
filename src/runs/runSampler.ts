@@ -11,10 +11,25 @@ declare global
         wrapS?: TextureWrap,
         wrapT?: TextureWrap,
         anisotropy?: number,
+
+        /**
+         * 采样时使用的最小Lod等级。
+         */
+        lodMinClamp?: number;
+
+        /**
+         * 采样时使用的最大Lod等级。
+         */
+        lodMaxClamp?: number;
     }
 }
 
-export const defaultSampler: ISampler = { minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR", wrapS: "REPEAT", wrapT: "REPEAT", anisotropy: 1 };
+export const defaultSampler: ISampler = {
+    minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR",
+    wrapS: "REPEAT", wrapT: "REPEAT",
+    lodMinClamp: 0, lodMaxClamp: 16,
+    anisotropy: 1,
+};
 
 /**
  * 设置采样参数
@@ -22,7 +37,7 @@ export const defaultSampler: ISampler = { minFilter: "LINEAR_MIPMAP_LINEAR", mag
 export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture, texture: ITexture)
 {
     const { textureTarget } = { ...defaultTexture, ...texture };
-    const { minFilter, magFilter, wrapS, wrapT, anisotropy } = { ...defaultSampler, ...texture.sampler };
+    const { minFilter, magFilter, wrapS, wrapT, anisotropy, lodMinClamp, lodMaxClamp } = { ...defaultSampler, ...texture.sampler };
 
     // 绑定纹理
     gl.bindTexture(gl[textureTarget], webGLTexture);
@@ -47,6 +62,19 @@ export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture
     {
         gl.texParameteri(gl[textureTarget], gl.TEXTURE_WRAP_T, gl[wrapT]);
         webGLTexture.wrapT = wrapT;
+    }
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        if (webGLTexture.lodMinClamp !== lodMinClamp)
+        {
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_BASE_LEVEL, lodMinClamp);
+            webGLTexture.lodMinClamp = lodMinClamp;
+        }
+        if (webGLTexture.lodMaxClamp !== lodMaxClamp)
+        {
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAX_LEVEL, lodMaxClamp);
+            webGLTexture.lodMaxClamp = lodMaxClamp;
+        }
     }
 
     if (webGLTexture.anisotropy !== anisotropy)
