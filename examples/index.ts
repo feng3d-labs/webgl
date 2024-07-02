@@ -33,6 +33,7 @@ const files = {
         "sampler_object",
         "sampler_filter",
         "sampler_wrap",
+        "glsl_centroid",
     ],
 };
 
