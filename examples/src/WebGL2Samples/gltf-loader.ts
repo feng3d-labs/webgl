@@ -14,7 +14,7 @@ export interface IPrimitive
 {
     mode: number,
     indicesComponentType: number,
-    matrix: Float32Array, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices
+    matrix: Float32Array, attributes: { [key: string]: { size: 1 | 2 | 3 | 4, type: number, stride: number, offset: number } }, vertexBuffer: Float32Array, indices
 }
 
 (function ()
