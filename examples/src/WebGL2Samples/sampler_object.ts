@@ -110,8 +110,8 @@ function render()
                 mvp: matrix,
                 material: {
                     diffuse: [
-                        texture1,
-                        texture,
+                        { texture, sampler: samplerA },
+                        { texture, sampler: samplerB },
                     ]
                 },
             },

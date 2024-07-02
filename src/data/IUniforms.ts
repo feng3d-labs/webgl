@@ -1,9 +1,9 @@
-import { ITexture } from "./ITexture";
+import { ISamplerTexture } from "./ISamplerTexture";
 
 /**
  * Uniform 类型
  */
-export type UniformType = ITexture | number | number[] | Float32Array;
+export type UniformType = ISamplerTexture | number | number[] | Float32Array;
 
 /**
  * Uniform 数据

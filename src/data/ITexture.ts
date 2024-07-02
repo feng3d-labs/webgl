@@ -77,11 +77,6 @@ export interface ITexture
      * 默认 "UNSIGNED_BYTE"。
      */
     type?: TextureDataType;
-
-    /**
-     * 采样器。
-     */
-    sampler?: ISampler;
 }
 
 /**

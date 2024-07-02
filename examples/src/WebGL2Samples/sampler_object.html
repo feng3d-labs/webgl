@@ -35,7 +35,7 @@
 
         void main()
         {
-            v_st = textureCoordinates;
+            v_st = textureCoordinates*2.0;
             gl_Position = mvp * vec4(position, 0.0, 1.0) ;
         }
     </script>
