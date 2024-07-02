@@ -32,6 +32,7 @@ const files = {
         "fbo_read_pixels",
         "sampler_object",
         "sampler_filter",
+        "sampler_wrap",
     ],
 };
 
