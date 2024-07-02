@@ -137,7 +137,7 @@ const FRAMEBUFFER = {
 
 const framebuffers: IFramebuffer[] = [
     { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
-    { colorAttachments: [{ view: colorRenderbufferCentroid }] },
+    { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     { colorAttachments: [{ view: { texture: textures[0], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     { colorAttachments: [{ view: { texture: textures[1], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
 ];
@@ -159,7 +159,7 @@ const vertexArrays: IVertexArrayObject[] = [
     {
         vertices: {
             position: { buffer: texVertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: texVertexTexBuffer, numComponents: 1 },
+            texcoord: { buffer: texVertexTexBuffer, numComponents: 2 },
         }
     },
 ];
@@ -235,6 +235,9 @@ WebGL.deleteBuffer(rc, vertexDataBuffer);
 
 WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE]);
 WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE_CENTROID]);
+
+WebGL.deleteSampler(rc, samplers[PROGRAM.TEXTURE]);
+WebGL.deleteSampler(rc, samplers[PROGRAM.TEXTURE_CENTROID]);
 
 WebGL.deleteRenderbuffer(rc, colorRenderbuffer);
 WebGL.deleteRenderbuffer(rc, colorRenderbufferCentroid);
