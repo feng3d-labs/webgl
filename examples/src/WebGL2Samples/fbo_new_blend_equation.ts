@@ -124,7 +124,7 @@ function render()
         pipeline: program,
         vertexArray,
         uniforms: { mvp: matrix, diffuse: texture },
-        drawVertex: { vertexCount: 6 },
+        drawArrays: { vertexCount: 6 },
     };
 
     const renderPass: IRenderPass = {

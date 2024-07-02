@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-fbo-rtt-texture-array.cpp -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - fbo_read_pixels</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - fbo_read_pixels</div>
+    <p id="description">
+        This sample demonstrates rendering to texture in a frame buffer using a texture array. And readpixels from this frame buffer. The data read is printed in the console.
+    </p>
+
+    <script id="vs-layer" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 4
+
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 mvp;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 textureCoordinates;
+
+        out vec2 v_st;
+
+        void main()
+        {
+            v_st = textureCoordinates;
+            gl_Position = mvp * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs-layer" type="x-shader/x-fragment">
+        #version 300 es
+
+        precision highp float;
+        precision highp int;
+        precision lowp sampler2DArray;
+
+        uniform sampler2DArray diffuse;
+        uniform int layer;
+
+        in vec2 v_st;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, vec3(v_st, float(layer)));
+        }
+    </script>
+
+    <script id="vs-multiple-output" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 mvp;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+
+        void main()
+        {
+            gl_Position = mvp * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs-multiple-output" type="x-shader/x-fragment">
+        #version 300 es
+
+        precision highp float;
+        precision highp int;
+
+        layout(location = 0) out vec4 red;
+        layout(location = 1) out vec4 green;
+        layout(location = 2) out vec4 blue;
+
+        void main()
+        {
+            red = vec4(0.5, 0.0, 0.0, 1.0);
+            green = vec4(0.0, 0.3, 0.0, 1.0);
+            blue = vec4(0.0, 0.0, 0.8, 1.0);
+        }
+    </script>
+
+    <script type="module" src="./fbo_read_pixels.ts">
+    </script>
+    <div id="highlightedLines"  style="display: none">#L391-L327</div>
+
+</body>
+
+</html>

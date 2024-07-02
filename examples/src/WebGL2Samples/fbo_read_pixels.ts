@@ -1,4 +1,5 @@
 import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttachmentView } from "../../../src/data/IRenderPassColorAttachment";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +8,6 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
 const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
 
 // -- Divide viewport
@@ -24,7 +24,7 @@ const Textures = {
     MAX: 3
 };
 
-const viewport: { x: number, y: number, z: number, w: number }[] = new Array(Textures.MAX);
+const viewport = new Array(Textures.MAX);
 
 viewport[Textures.RED] = {
     x: windowSize.x / 2,
@@ -105,11 +105,11 @@ const h = 16;
 
 const texture: ITexture = {
     textureTarget: "TEXTURE_2D_ARRAY",
-    internalformat: "RGBA",
-    format: "RGBA",
+    sampler: { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" },
+    sources: [{ width: w, height: h, level: 0, depth: 3 }],
+    internalformat: "RGB8",
+    format: "RGB",
     type: "UNSIGNED_BYTE",
-    sources: [{ level: 0, width: w, height: h, depth: 3 }],
-    sampler: { minFilter: "NEAREST", magFilter: "NEAREST", lodMinClamp: 0, lodMaxClamp: 0 }
 };
 
 // -- Initialize frame buffer
@@ -125,15 +125,13 @@ const frameBuffer: IFramebuffer = {
 // -- Render
 
 // Pass 1
-
 const matrix = new Float32Array([
     1.0, 0.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 0.0,
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 1.0
 ]);
-
-const renderPass1: IRenderPass = {
+const rp1: IRenderPass = {
     passDescriptor: frameBuffer,
     renderObjects: [{
         pipeline: multipleOutputProgram,
@@ -141,40 +139,53 @@ const renderPass1: IRenderPass = {
         vertexArray: multipleOutputVertexArray,
         viewport: { x: 0, y: 0, width: w, height: h },
         drawArrays: { vertexCount: 6 },
-    }]
+    }],
 };
+WebGL.runRenderPass(renderingContext, rp1);
 
 // Pass 2
-
-const renderPass: IRenderPass = {
-    passDescriptor: {
-        colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
-    },
-    renderObjects: [],
+const rp: IRenderPass = {
+    passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    renderObjects: []
 };
 
-const renderObject: IRenderObject = {
+const ro: IRenderObject = {
     pipeline: layerProgram,
-    uniforms: { mvp: matrix, diffuse: texture },
+    uniforms: {
+        mvp: matrix,
+        diffuse: texture,
+        layer: 0,
+    },
     vertexArray: layerVertexArray,
-
+    drawArrays: { vertexCount: 6 },
 };
 
-//
 for (let i = 0; i < Textures.MAX; ++i)
 {
-    renderPass.renderObjects.push(
-        {
-            ...renderObject,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-            uniforms: { ...renderObject.uniforms, layer: i },
-            drawArrays: { vertexCount: 6 },
-        }
-    );
+    rp.renderObjects.push({
+        ...ro,
+        viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+        uniforms: { ...ro.uniforms, layer: i },
+    });
 }
+WebGL.runRenderPass(renderingContext, rp);
 
-WebGL.runRenderPass(renderingContext, renderPass1);
-WebGL.runRenderPass(renderingContext, renderPass);
+const data = new Uint8Array(w * h * 4 * 3);
+
+WebGL.runReadPixels(renderingContext, {
+    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT0",
+    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: 0
+});
+WebGL.runReadPixels(renderingContext, {
+    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
+    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4
+});
+WebGL.runReadPixels(renderingContext, {
+    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
+    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4 * 2
+});
+
+console.log(data);
 
 // Clean up
 WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
@@ -185,3 +196,4 @@ WebGL.deleteFramebuffer(renderingContext, frameBuffer);
 WebGL.deleteTexture(renderingContext, texture);
 WebGL.deleteProgram(renderingContext, multipleOutputProgram);
 WebGL.deleteProgram(renderingContext, layerProgram);
+

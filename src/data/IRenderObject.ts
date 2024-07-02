@@ -1,6 +1,6 @@
 import { LazyObject } from "../types";
-import { IDrawIndexed } from "./IDrawIndexed";
-import { IDrawVertex } from "./IDrawVertex";
+import { IDrawElements } from "./IDrawElements";
+import { IDrawArrays } from "./IDrawArrays";
 import { IRenderPipeline } from "./IRenderPipeline";
 import { IScissor } from "./IScissor";
 import { IUniforms } from "./IUniforms";
@@ -32,14 +32,14 @@ export interface IRenderObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
      */
-    drawVertex?: IDrawVertex;
+    drawArrays?: IDrawArrays;
 
     /**
      * 绘制一定数量顶点索引。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
      */
-    drawIndexed?: IDrawIndexed;
+    drawElements?: IDrawElements;
 
     /**
      * 视窗，显示在画布上的区域。

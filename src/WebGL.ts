@@ -7,6 +7,7 @@ import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
 import { IPassDescriptor } from "./data/IPassDescriptor";
+import { IReadPixels } from "./data/IReadPixels";
 import { IRenderObject } from "./data/IRenderObject";
 import { IRenderPass } from "./data/IRenderPass";
 import { IRenderPipeline } from "./data/IRenderPipeline";
@@ -15,6 +16,7 @@ import { IRenderingContext } from "./data/IRenderingContext";
 import { ITexture } from "./data/ITexture";
 import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
+import { runReadPixels } from "./runs/runReadPixels";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
 import { deleteVertexArray } from "./runs/runVertexArray";
@@ -60,6 +62,14 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         runBlitFramebuffer(gl, blitFramebuffer);
+    }
+
+    static runReadPixels(renderingContext: IRenderingContext, readPixels: IReadPixels)
+    {
+        const gl = getRenderingContext(renderingContext);
+        if (!gl || gl.isContextLost()) return;
+
+        runReadPixels(gl, readPixels);
     }
 
     static deleteFramebuffer(renderingContext: IRenderingContext, passDescriptor: IPassDescriptor)

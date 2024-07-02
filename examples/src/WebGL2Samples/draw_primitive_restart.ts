@@ -48,7 +48,7 @@ const vertexArray: IVertexArrayObject = {
 const renderObject: IRenderObject = {
     vertexArray,
     uniforms: {},
-    drawVertex: { instanceCount: 2 },
+    drawArrays: { instanceCount: 2 },
     pipeline: program,
 };
 

@@ -1,7 +1,9 @@
 /**
- * 绘制指定数量的顶点。
+ * 绘制一定数量顶点。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
  */
-export interface IDrawVertex
+export interface IDrawArrays
 {
     /**
      * 绘制顶点数量。

@@ -1,29 +1,29 @@
 import { getBuffer } from "../caches/getBuffer";
 import { getElementBuffer } from "../caches/getElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
-import { IDrawIndexed } from "../data/IDrawIndexed";
-import { IDrawVertex } from "../data/IDrawVertex";
+import { IDrawElements } from "../data/IDrawElements";
+import { IDrawArrays } from "../data/IDrawArrays";
 import { IRenderObject } from "../data/IRenderObject";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    if (renderObject.drawVertex)
+    if (renderObject.drawArrays)
     {
-        _runDrawVertex(gl, renderObject);
+        _runDrawArrays(gl, renderObject);
     }
-    else if (renderObject.drawIndexed)
+    else if (renderObject.drawElements)
     {
-        _runDrawIndexed(gl, renderObject);
+        _runDrawElements(gl, renderObject);
     }
     else
     {
-        renderObject.vertexArray?.index ? _runDrawIndexed(gl, renderObject) : _runDrawVertex(gl, renderObject);
+        renderObject.vertexArray?.index ? _runDrawElements(gl, renderObject) : _runDrawArrays(gl, renderObject);
     }
 }
 
-export const defaultDrawIndexed: IDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
+export const defaultDrawIndexed: IDrawElements = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawIndexed(gl: WebGLRenderingContext, renderObject: IRenderObject)
+function _runDrawElements(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     //
     const drawMode = renderObject.pipeline.primitive?.topology || "TRIANGLES";
@@ -31,7 +31,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderObject: IRenderObject)
     const element = getElementBuffer(gl, renderObject.vertexArray.index);
     const type = element.type;
     //
-    let { indexCount, instanceCount, firstIndex } = renderObject.drawIndexed || {};
+    let { indexCount, instanceCount, firstIndex } = renderObject.drawElements || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
     instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
     indexCount = indexCount || (element.count - firstIndex);
@@ -55,14 +55,14 @@ function _runDrawIndexed(gl: WebGLRenderingContext, renderObject: IRenderObject)
     }
 }
 
-export const defaultDrawVertex: IDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
+export const defaultDrawVertex: IDrawArrays = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
-function _runDrawVertex(gl: WebGLRenderingContext, renderObject: IRenderObject)
+function _runDrawArrays(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     //
     const drawMode = renderObject.pipeline.primitive?.topology || "TRIANGLES";
     //
-    let { firstVertex, vertexCount, instanceCount } = renderObject.drawVertex || {};
+    let { firstVertex, vertexCount, instanceCount } = renderObject.drawArrays || {};
     //
     firstVertex = firstVertex || defaultDrawVertex.firstVertex;
     vertexCount = vertexCount || getAttributeVertexNum(gl, renderObject) || defaultDrawVertex.vertexCount;
