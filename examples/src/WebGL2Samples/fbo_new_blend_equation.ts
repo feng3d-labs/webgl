@@ -1,4 +1,4 @@
-import { IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { IViewport } from "../../../src/data/IViewport";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -92,6 +92,10 @@ const vertexArray: IVertexArrayObject = {
 };
 
 // -- Load texture then render
+const sampler: ISampler = {
+    minFilter: "LINEAR",
+    magFilter: "LINEAR"
+};
 const imageUrl = "../../assets/img/Di-3d.png";
 let texture: ITexture;
 loadImage(imageUrl, function (image)
@@ -101,10 +105,6 @@ loadImage(imageUrl, function (image)
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
-        sampler: {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR"
-        },
         generateMipmap: true,
     };
 
@@ -123,7 +123,7 @@ function render()
     const renderObject: IRenderObject = {
         pipeline: program,
         vertexArray,
-        uniforms: { mvp: matrix, diffuse: texture },
+        uniforms: { mvp: matrix, diffuse: { texture, sampler } },
         drawArrays: { vertexCount: 6 },
     };
 

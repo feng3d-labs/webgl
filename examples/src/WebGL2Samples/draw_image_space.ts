@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, ITexture, WebGL } from "../../../src";
+import { IRenderObject, IRenderPipeline, ISampler, ITexture, WebGL } from "../../../src";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -16,10 +16,10 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
-        sampler: {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR",
-        }
+    };
+    const sampler: ISampler = {
+        minFilter: "LINEAR",
+        magFilter: "LINEAR",
     };
 
     const program: IRenderPipeline = {
@@ -35,7 +35,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
 
     const renderObject: IRenderObject = {
         uniforms: {
-            diffuse: texture,
+            diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
         // drawVertex: { firstVertex: 0, vertexCount: 3 },

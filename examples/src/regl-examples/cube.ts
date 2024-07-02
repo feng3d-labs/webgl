@@ -1,4 +1,5 @@
 import { IRenderObject, ITexture, WebGL } from "../../../src";
+import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -129,7 +130,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: ITexture = { sampler: { minFilter: "LINEAR" }, sources: [{ source: img }] };
+    const diffuse: ISamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
 
     draw();
 })();

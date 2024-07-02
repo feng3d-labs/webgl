@@ -1,5 +1,6 @@
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IRenderPass, ITexture, WebGL } from "../../../src";
+import { IRenderObject, IRenderPass, ISampler, ITexture, WebGL } from "../../../src";
+import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 
 let cubeRotation = 0.0;
 // will set to true when video can be copied to texture
@@ -129,7 +130,7 @@ function main()
 
     if (copyVideo)
     {
-      updateTexture(texture, video);
+      updateTexture(texture.texture, video);
     }
 
     const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
@@ -332,15 +333,15 @@ function initBuffers()
 //
 // Initialize a texture.
 //
-function initTexture()
+function initTexture(): ISamplerTexture
 {
   const texture: ITexture = {
     textureTarget: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
-    sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" },
   };
+  const sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
 
-  return texture;
+  return { texture, sampler };
 }
 
 //

@@ -1,4 +1,4 @@
-import { IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -81,16 +81,16 @@ const color1Texture: ITexture = {
     format: "RGBA",
     type: "UNSIGNED_BYTE",
     sources: [{ width: windowSize.x, height: windowSize.y }],
-    sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" },
 };
+const color1Sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 const color2Texture: ITexture = {
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",
     sources: [{ width: windowSize.x, height: windowSize.y }],
-    sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" },
 };
+const color2Sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 
@@ -119,8 +119,8 @@ const renderPass2: IRenderPass = {
     renderObjects: [{
         pipeline: drawProgram,
         uniforms: {
-            color1Map: color1Texture,
-            color2Map: color2Texture,
+            color1Map: { texture: color1Texture, sampler: color1Sampler },
+            color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
         vertexArray: quadVertexArray,
         drawArrays: { vertexCount: 6 },
