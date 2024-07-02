@@ -1,8 +1,20 @@
+import { IAttachmentView } from "./IRenderPassColorAttachment";
+
 /**
  * 深度模板附件。
  */
 export interface IRenderPassDepthStencilAttachment
 {
+    /**
+     * 深度附件视图。
+     *
+     * 如果没有设置，默认为画布；否则使用 帧缓冲 。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
+     */
+    view?: IAttachmentView;
+
     /**
      * 清除后填充深度值。
      *
