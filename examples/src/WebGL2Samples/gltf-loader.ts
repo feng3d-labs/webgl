@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { mat4, vec3, quat } from "gl-matrix";
 
 /* eslint-disable no-var */
 export var MinimalGLTFLoader: {
@@ -8,7 +9,7 @@ export var MinimalGLTFLoader: {
             defaultScene
         }) => void) => void
     }
-} = MinimalGLTFLoader || {};
+} = MinimalGLTFLoader || {} as any;
 
 export interface IPrimitive
 {

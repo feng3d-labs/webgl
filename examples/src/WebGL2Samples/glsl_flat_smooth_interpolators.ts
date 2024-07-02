@@ -90,7 +90,6 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
             // WebGL2: create vertexArray
 
-
             // -- Initialize buffer
             const vertices = primitive.vertexBuffer;
             vertexBuffer = { data: vertices, usage: "STATIC_DRAW" };
@@ -165,11 +164,13 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 mat4.invert(localMVNormal, localMV);
                 mat4.transpose(localMVNormal, localMVNormal);
 
+                const vertexArray = vertexArrayMaps[mid][i];
+
                 for (i = 0; i < VIEWPORTS.MAX; ++i)
                 {
                     rp.renderObjects.push({
                         pipeline: programs[i],
-                        vertexArray: vertexArrayMaps[mid][i],
+                        vertexArray,
                         uniforms: {
                             mvp: localMVP,
                             mvNormal: localMVNormal,
