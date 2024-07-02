@@ -1,3 +1,5 @@
+import { CompareFunction } from "./IDepthStencilState";
+
 export interface ISampler
 {
 
@@ -16,6 +18,11 @@ export interface ISampler
     wrapT?: TextureWrap;
 
     /**
+     * 表示y轴的纹理回环方式。 magFilter和minFilter表示过滤的方式。
+     */
+    wrapR?: TextureWrap;
+
+    /**
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
      */
     anisotropy?: number;
@@ -29,6 +36,12 @@ export interface ISampler
      * 采样时使用的最大Lod等级。
      */
     lodMaxClamp?: number;
+
+    compareMode?: "NONE";
+    /**
+     * 比较函数。
+     */
+    compare?: CompareFunction;
 }
 
 /**

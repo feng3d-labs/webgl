@@ -4,7 +4,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _renderbuffers: WeakMap<IRenderbuffer, WebGLRenderbuffer>;
+        _renderbuffers: Map<IRenderbuffer, WebGLRenderbuffer>;
     }
 }
 

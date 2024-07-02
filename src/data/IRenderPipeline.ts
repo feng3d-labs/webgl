@@ -3,6 +3,11 @@ import { IDepthStencilState } from "./IDepthStencilState";
 import { IPrimitiveState } from "./IPrimitiveState";
 
 /**
+ * @deprecated 请使用 `IRenderPipeline` 。
+ */
+export type IProgram = IRenderPipeline;
+
+/**
  * shader
  */
 export interface IRenderPipeline

@@ -1,5 +1,6 @@
 import { mat4 } from "gl-matrix";
-import { IRenderObject, ITexture, IRenderPass, WebGL } from "../../../src";
+import { IRenderObject, IRenderPass, ISampler, ITexture, WebGL } from "../../../src";
+import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 
 let cubeRotation = 0.0;
 
@@ -307,16 +308,18 @@ async function loadTexture(url: string)
     sources: [{ source: img }],
   };
 
+  let sampler: ISampler = {};
+
   if (generateMipmap)
   {
     texture.generateMipmap = generateMipmap;
   }
   else
   {
-    texture.sampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
+    sampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
   }
 
-  return texture;
+  return { texture, sampler } as ISamplerTexture;
 }
 
 function isPowerOf2(value: number)

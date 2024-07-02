@@ -1,4 +1,4 @@
-import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -109,8 +109,8 @@ const texture: ITexture = {
     format: "RGBA",
     type: "UNSIGNED_BYTE",
     sources: [{ level: 0, width: w, height: h, depth: 3 }],
-    sampler: { minFilter: "NEAREST", magFilter: "NEAREST", lodMinClamp: 0, lodMaxClamp: 0 }
 };
+const sampler: ISampler = { minFilter: "NEAREST", magFilter: "NEAREST", lodMinClamp: 0, lodMaxClamp: 0 };
 
 // -- Initialize frame buffer
 
@@ -155,7 +155,7 @@ const renderPass: IRenderPass = {
 
 const renderObject: IRenderObject = {
     pipeline: layerProgram,
-    uniforms: { mvp: matrix, diffuse: texture },
+    uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     vertexArray: layerVertexArray,
 
 };

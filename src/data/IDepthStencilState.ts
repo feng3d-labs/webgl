@@ -40,10 +40,10 @@ export interface IDepthState
      *
      * A GLenum specifying the depth comparison function, which sets the conditions under which the pixel will be drawn. The default value is gl.LESS.
      *
-     * @see DepthFunc
+     * @see CompareFunction
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    depthCompare?: DepthFunc;
+    depthCompare?: CompareFunction;
 
     /**
      * 深度偏移。
@@ -189,7 +189,7 @@ export interface IStencilFaceState
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
  */
-export type DepthFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
+export type CompareFunction = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
 /**
  * A GLenum specifying the test function. The default function is gl.ALWAYS.

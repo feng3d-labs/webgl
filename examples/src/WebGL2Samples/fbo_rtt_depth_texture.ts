@@ -1,4 +1,4 @@
-import { IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -79,12 +79,12 @@ const quadVertexArray: IVertexArrayObject = {
 // the proper texture format combination can be found here
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
 const depthTexture: ITexture = {
-    sampler: { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" },
     sources: [{ width: windowSize.x, height: windowSize.y, level: 0 }],
     internalformat: "DEPTH_COMPONENT16",
     format: "DEPTH_COMPONENT",
     type: "UNSIGNED_SHORT",
 };
+const depthSampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 
@@ -114,7 +114,7 @@ const rp2: IRenderPass = {
     },
     renderObjects: [{
         pipeline: drawProgram,
-        uniforms: { depthMap: depthTexture },
+        uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         vertexArray: quadVertexArray,
         drawArrays: { vertexCount: 6 },
     }],

@@ -34,11 +34,12 @@ export function getRenderingContext(renderingContext: IRenderingContext)
 
 function initMap(gl: WebGLRenderingContext)
 {
-    gl._buffers = new WeakMap();
-    gl._textures = new WeakMap();
-    gl._renderbuffers = new WeakMap();
-    gl._framebuffers = new WeakMap();
-    gl._vertexArrays = new WeakMap();
+    gl._buffers = new Map();
+    gl._textures = new Map();
+    gl._renderbuffers = new Map();
+    gl._framebuffers = new Map();
+    gl._vertexArrays = new Map();
+    gl._samplers = new Map();
     gl._programs = {};
 }
 

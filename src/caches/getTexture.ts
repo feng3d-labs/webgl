@@ -6,11 +6,16 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _textures: WeakMap<ITexture, WebGLTexture>
+        _textures: Map<ITexture, WebGLTexture>
     }
 
     interface WebGLTexture
     {
+        /**
+         * 纹理绑定点。
+         *
+         * 默认"TEXTURE_2D"。
+         */
         textureTarget: TextureTarget;
 
         /**
@@ -48,12 +53,12 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                 if ("source" in sourceItem)
                 {
                     const { level, source } = { ...defaultImageSource, ...sourceItem };
-                    gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], gl[format], gl[type], source);
+                    gl.texImage2D(gl[textureTarget], level, gl[internalformat], gl[format], gl[type], source);
                 }
                 else
                 {
                     const { level, width, height, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                    gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    gl.texImage2D(gl[textureTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
                 }
             }
             else if (textureTarget === "TEXTURE_2D_ARRAY")
@@ -67,7 +72,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     else
                     {
                         const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage3D(gl.TEXTURE_2D_ARRAY,
+                        gl.texImage3D(gl[textureTarget],
                             level, gl[internalformat], width, height,
                             depth,
                             border, gl[format], gl[type], pixels);

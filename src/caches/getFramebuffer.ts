@@ -8,7 +8,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers: WeakMap<IPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: Map<IPassDescriptor, WebGLFramebuffer>;
     }
 }
 

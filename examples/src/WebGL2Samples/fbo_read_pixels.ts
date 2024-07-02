@@ -1,5 +1,4 @@
-import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
-import { IAttachmentView } from "../../../src/data/IRenderPassColorAttachment";
+import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -105,12 +104,12 @@ const h = 16;
 
 const texture: ITexture = {
     textureTarget: "TEXTURE_2D_ARRAY",
-    sampler: { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" },
     sources: [{ width: w, height: h, level: 0, depth: 3 }],
     internalformat: "RGB8",
     format: "RGB",
     type: "UNSIGNED_BYTE",
 };
+const sampler: ISampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 
@@ -153,7 +152,7 @@ const ro: IRenderObject = {
     pipeline: layerProgram,
     uniforms: {
         mvp: matrix,
-        diffuse: texture,
+        diffuse: { texture, sampler },
         layer: 0,
     },
     vertexArray: layerVertexArray,

@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -63,10 +63,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         format: "RGBA",
         type: "UNSIGNED_BYTE",
         sources: [{ source: image }],
-        sampler: {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR",
-        }
+    };
+    const samplerDiffuse: ISampler = {
+        minFilter: "LINEAR",
+        magFilter: "LINEAR",
     };
 
     const textureColorBuffer: ITexture = {
@@ -74,10 +74,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         format: "RGBA",
         type: "UNSIGNED_BYTE",
         sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
-        sampler: {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR",
-        }
+    };
+    const samplerColorBuffer: ISampler = {
+        minFilter: "LINEAR",
+        magFilter: "LINEAR",
     };
 
     const colorRenderbuffer: IRenderbuffer = {
@@ -101,7 +101,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 0.0, 0.0, 0.8, 0.0,
                 0.0, 0.0, 0.0, 1.0
             ]),
-            diffuse: textureDiffuse,
+            diffuse: { texture: textureDiffuse, sampler: samplerDiffuse },
         },
         drawArrays: { firstVertex: 0, vertexCount: 6 }
     };
@@ -168,7 +168,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0
             ]),
-            diffuse: textureColorBuffer,
+            diffuse: { texture: textureColorBuffer, sampler: samplerColorBuffer },
         },
         drawArrays: { firstVertex: 0, vertexCount: 6 },
         pipeline: program,

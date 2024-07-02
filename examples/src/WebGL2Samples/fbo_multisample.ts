@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IBlitFramebuffer, IBuffer, IPassDescriptor, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IBlitFramebuffer, IBuffer, IPassDescriptor, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -72,9 +72,10 @@ const FRAMEBUFFER_SIZE = {
     y: canvas.height
 };
 const texture: ITexture = {
-    sampler: { minFilter: "NEAREST", magFilter: "NEAREST" }, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+    internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ level: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0, pixels: null }],
 };
+const sampler: ISampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Init Frame Buffers
 const FRAMEBUFFER = {
@@ -145,7 +146,7 @@ const renderPass2: IRenderPass = {
         {
             pipeline: programs[PROGRAM.SPLASH],
             vertexArray: vertexArrays[PROGRAM.SPLASH],
-            uniforms: { diffuse: texture, MVP: mvp },
+            uniforms: { diffuse: { texture, sampler }, MVP: mvp },
             drawArrays: { vertexCount: 6 },
         }
     ],
