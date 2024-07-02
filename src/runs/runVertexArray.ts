@@ -8,7 +8,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: WeakMap<IVertexArrayObject, WebGLVertexArrayObject>;
+        _vertexArrays: Map<IVertexArrayObject, WebGLVertexArrayObject>;
     }
 }
 

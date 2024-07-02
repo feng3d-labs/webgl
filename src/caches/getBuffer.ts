@@ -6,7 +6,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _buffers: WeakMap<IBuffer, WebGLBuffer>
+        _buffers: Map<IBuffer, WebGLBuffer>
     }
 
     interface WebGLBuffer

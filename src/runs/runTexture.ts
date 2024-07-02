@@ -15,13 +15,15 @@ Object.freeze(defaultTexture);
 
 export function runTexture(gl: WebGLRenderingContext, texture: ITexture, activeInfo: WebGLUniform)
 {
-    gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
-
-    const webGLTexture = getTexture(gl, texture);
     // 设置纹理所在采样编号
     gl.uniform1i(activeInfo.location, activeInfo.textureID);
-
-    runSampler(gl, webGLTexture, texture);
+    //
+    const webGLTexture = getTexture(gl, texture);
+    gl.activeTexture(gl[`TEXTURE${activeInfo.textureID}`]);
+    // 绑定纹理
+    gl.bindTexture(gl[webGLTexture.textureTarget], webGLTexture);
+    // 运行采样器
+    runSampler(gl, webGLTexture, texture, activeInfo.textureID);
 
     return webGLTexture;
 }
