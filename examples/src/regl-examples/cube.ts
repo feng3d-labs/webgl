@@ -92,7 +92,6 @@ import * as mat4 from "./stackgl/gl-mat4";
             tex: () => diffuse,
         },
         pipeline: {
-            primitive: { cullMode: "NONE" },
             vertex: {
                 code: `precision mediump float;
         attribute vec3 position;

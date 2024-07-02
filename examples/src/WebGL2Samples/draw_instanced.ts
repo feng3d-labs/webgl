@@ -20,7 +20,7 @@ const vertexColorBuffer: IBuffer = {
 };
 
 const program: IRenderPipeline = {
-    primitive: { topology: "TRIANGLES", cullMode: "NONE" },
+    primitive: { topology: "TRIANGLES" },
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };

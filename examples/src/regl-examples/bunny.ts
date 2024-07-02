@@ -55,7 +55,6 @@ const renderObject: IRenderObject = {
                 1000),
     },
     pipeline: {
-        primitive: { cullMode: "NONE" },
         vertex: {
             code: `precision mediump float;
         attribute vec3 position;

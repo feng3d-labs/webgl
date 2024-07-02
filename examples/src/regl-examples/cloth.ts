@@ -183,7 +183,6 @@ import { IRenderObject, ISamplerTexture, WebGL } from "../../../src";
             texture: () => diffuse,
         },
         pipeline: {
-            primitive: { cullMode: "NONE" },
             vertex: {
                 code: `precision mediump float;
 

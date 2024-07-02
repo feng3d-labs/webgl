@@ -10,7 +10,7 @@ document.body.appendChild(canvas);
 const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
 
 const program: IRenderPipeline = {
-    primitive: { topology: "TRIANGLES", cullMode: "NONE" },
+    primitive: { topology: "TRIANGLES" },
     vertex: {
         code: getShaderSource("vs")
     },
