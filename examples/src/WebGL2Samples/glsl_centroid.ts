@@ -1,16 +1,14 @@
+import { mat4, vec3 } from "gl-matrix";
+import { IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { getShaderSource } from "./utility";
+
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
-const isWebGL2 = !!gl;
-if (!isWebGL2)
-{
-    document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-return;
-}
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
 // -- Divide viewport
 const canvasSize = {
@@ -24,7 +22,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport = new Array(VIEWPORTS.MAX);
+const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -48,17 +46,20 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs = [
-    createProgram(gl, getShaderSource("vs-render"), getShaderSource("fs-render")),
-    createProgram(gl, getShaderSource("vs-render-centroid"), getShaderSource("fs-render-centroid")),
-    createProgram(gl, getShaderSource("vs-splash"), getShaderSource("fs-splash"))
+const programs: IProgram[] = [
+    {
+        vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
+        primitive: { topology: "TRIANGLES" },
+    },
+    {
+        vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
+        primitive: { topology: "TRIANGLES" },
+    },
+    {
+        vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
+        primitive: { topology: "TRIANGLES" },
+    }
 ];
-const mvpLocationTextures = [
-    gl.getUniformLocation(programs[PROGRAM.TEXTURE], "MVP"),
-    gl.getUniformLocation(programs[PROGRAM.TEXTURE_CENTROID], "MVP")
-];
-const mvpLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "MVP");
-const diffuseLocation = gl.getUniformLocation(programs[PROGRAM.SPLASH], "diffuse");
 
 // -- Init primitive data
 const vertexCount = 3;
@@ -74,15 +75,9 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexPositionBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
 
-const vertexDataBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexDataBuffer: IBuffer = { data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -94,10 +89,7 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, texVertexPosBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, textureVertexPositions, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const texVertexPosBuffer: IBuffer = { data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -107,10 +99,7 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, texVertexTexBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, textureVertexTexCoords, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const texVertexTexBuffer: IBuffer = { data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -118,139 +107,103 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures = [gl.createTexture(), gl.createTexture()];
+const textures: ITexture[] = [];
+const samplers: ISampler[] = [];
 
-for (var i = 0; i < VIEWPORTS.MAX; ++i)
+for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
-    gl.activeTexture(gl.TEXTURE0 + i);
-    gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    textures[i] = {
+        internalformat: "RGBA",
+        format: "RGBA",
+        type: "UNSIGNED_BYTE",
+        sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, level: 0 }]
+    };
+    samplers[i] = { minFilter: "NEAREST", magFilter: "NEAREST" };
 }
 
 // -- Init Frame Buffers
+
+// non-centroid
+const colorRenderbuffer: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+// centroid
+const colorRenderbufferCentroid: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
     RENDERBUFFER_CENTROID: 1,
     COLORBUFFER: 2,
     COLORBUFFER_CENTROID: 3
 };
-const framebuffers = [
-    gl.createFramebuffer(),
-    gl.createFramebuffer(),
-    gl.createFramebuffer(),
-    gl.createFramebuffer()
+
+const framebuffers: IFramebuffer[] = [
+    { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
+    { colorAttachments: [{ view: colorRenderbufferCentroid }] },
+    { colorAttachments: [{ view: { texture: textures[0], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    { colorAttachments: [{ view: { texture: textures[1], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
 ];
-
-// non-centroid
-const colorRenderbuffer = gl.createRenderbuffer();
-gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbuffer);
-gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, gl.RGBA8, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
-
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, colorRenderbuffer);
-gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-// centroid
-const colorRenderbufferCentroid = gl.createRenderbuffer();
-gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbufferCentroid);
-gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, gl.RGBA8, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
-
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
-gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, colorRenderbufferCentroid);
-gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
 // -- Init VertexArray
-const vertexArrays = [
-    gl.createVertexArray(),
-    gl.createVertexArray(),
-    gl.createVertexArray()
+const vertexArrays: IVertexArrayObject[] = [
+    {
+        vertices: {
+            position: { buffer: vertexPositionBuffer, numComponents: 2 },
+            data: { buffer: vertexDataBuffer, numComponents: 1 },
+        }
+    },
+    {
+        vertices: {
+            position: { buffer: vertexPositionBuffer, numComponents: 2 },
+            data: { buffer: vertexDataBuffer, numComponents: 1 },
+        }
+    },
+    {
+        vertices: {
+            position: { buffer: texVertexPosBuffer, numComponents: 2 },
+            texcoord: { buffer: texVertexTexBuffer, numComponents: 1 },
+        }
+    },
 ];
-
-const vertexPosLocation = 0;
-const vertexDataLocation = 6;
-
-gl.bindVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.enableVertexAttribArray(vertexDataLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
-gl.vertexAttribPointer(vertexDataLocation, 1, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.bindVertexArray(null);
-
-gl.bindVertexArray(vertexArrays[PROGRAM.TEXTURE_CENTROID]);
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.enableVertexAttribArray(vertexDataLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
-gl.vertexAttribPointer(vertexDataLocation, 1, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.bindVertexArray(null);
-
-gl.bindVertexArray(vertexArrays[PROGRAM.SPLASH]);
-
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, texVertexPosBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-const vertexTexLocation = 1;
-gl.enableVertexAttribArray(vertexTexLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, texVertexTexBuffer);
-gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-gl.bindVertexArray(null);
 
 // -- Render
 
 // Pass 1
 const IDENTITY = mat4.create();
-for (i = 0; i < VIEWPORTS.MAX; ++i)
+for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
-    // color buffers
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[i + 2]);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textures[i], 0);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
     // render buffers
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[i]);
-    gl.clearBufferfv(gl.COLOR, 0, [0, 0, 0, 1]);
-    gl.useProgram(programs[i]);
-    gl.bindVertexArray(vertexArrays[i]);
-
-    gl.uniformMatrix4fv(mvpLocationTextures[i], false, IDENTITY);
-    gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    const rp: IRenderPass = {
+        passDescriptor: framebuffers[i],
+        renderObjects: [{
+            pipeline: programs[i],
+            vertexArray: vertexArrays[i],
+            uniforms: { MVP: IDENTITY },
+            drawArrays: { vertexCount },
+        }]
+    };
+    WebGL.runRenderPass(rc, rp);
 
     // Blit framebuffers, no Multisample texture 2d in WebGL 2
     // centroid will only work with multisample
-    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, framebuffers[i]);
-
-    // color buffers
-    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, framebuffers[i + 2]);
-    gl.clearBufferfv(gl.COLOR, 0, [0.0, 0.0, 0.0, 1.0]);
-    gl.blitFramebuffer(
-        0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-        0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-        gl.COLOR_BUFFER_BIT, gl.NEAREST
-    );
-
-    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
-    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+    const blit: IBlitFramebuffer = {
+        read: framebuffers[i],
+        draw: framebuffers[i + 2],
+        blitFramebuffers: [[
+            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
+            "COLOR_BUFFER_BIT", "NEAREST"
+        ]],
+    };
+    WebGL.runBlitFramebuffer(rc, blit);
 }
 
 // Pass 2
-gl.useProgram(programs[PROGRAM.SPLASH]);
-
-gl.bindVertexArray(vertexArrays[PROGRAM.SPLASH]);
+const rp2: IRenderPass = {
+    renderObjects: [],
+};
+const ro: IRenderObject = {
+    pipeline: programs[PROGRAM.SPLASH],
+    vertexArray: vertexArrays[PROGRAM.SPLASH],
+};
 
 const scaleVector3 = vec3.create();
 const invScaleFactor = 0.8 / scaleFactor;
@@ -258,42 +211,44 @@ vec3.set(scaleVector3, invScaleFactor, invScaleFactor, invScaleFactor);
 const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
-for (i = 0; i < VIEWPORTS.MAX; ++i)
+for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
-    gl.uniform1i(diffuseLocation, i);
-
-    gl.activeTexture(gl.TEXTURE0 + i);
-    gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-
-    gl.viewport(viewport[i].x, viewport[i].y, viewport[i].width, viewport[i].height);
-    gl.uniformMatrix4fv(mvpLocation, false, mvp);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    rp2.renderObjects.push(
+        {
+            ...ro,
+            uniforms: {
+                MVP: mvp,
+                diffuse: { texture: textures[i], sampler: samplers[i] },
+            },
+            viewport: viewport[i],
+            drawArrays: { vertexCount: 6 },
+        }
+    );
 }
+WebGL.runRenderPass(rc, rp2);
 
 // -- Delete WebGL resources
-gl.deleteBuffer(texVertexPosBuffer);
-gl.deleteBuffer(texVertexTexBuffer);
-gl.deleteBuffer(vertexPositionBuffer);
-gl.deleteBuffer(vertexDataBuffer);
+WebGL.deleteBuffer(rc, texVertexPosBuffer);
+WebGL.deleteBuffer(rc, texVertexTexBuffer);
+WebGL.deleteBuffer(rc, vertexPositionBuffer);
+WebGL.deleteBuffer(rc, vertexDataBuffer);
 
-gl.deleteTexture(textures[PROGRAM.TEXTURE]);
-gl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);
+WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE]);
+WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE_CENTROID]);
 
-gl.deleteRenderbuffer(colorRenderbuffer);
-gl.deleteRenderbuffer(colorRenderbufferCentroid);
+WebGL.deleteRenderbuffer(rc, colorRenderbuffer);
+WebGL.deleteRenderbuffer(rc, colorRenderbufferCentroid);
 
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
+WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
+WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.COLORBUFFER]);
 
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
-gl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
+WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
+WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
 
-gl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-gl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE_CENTROID]);
-gl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
+WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.TEXTURE]);
+WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.TEXTURE_CENTROID]);
+WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.SPLASH]);
 
-gl.deleteProgram(programs[PROGRAM.TEXTURE]);
-gl.deleteProgram(programs[PROGRAM.TEXTURE_CENTROID]);
-gl.deleteProgram(programs[PROGRAM.SPLASH]);
+WebGL.deleteProgram(rc, programs[PROGRAM.TEXTURE]);
+WebGL.deleteProgram(rc, programs[PROGRAM.TEXTURE_CENTROID]);
+WebGL.deleteProgram(rc, programs[PROGRAM.SPLASH]);
