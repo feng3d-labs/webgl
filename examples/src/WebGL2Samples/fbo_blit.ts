@@ -103,7 +103,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: textureDiffuse,
         },
-        drawVertex: { firstVertex: 0, vertexCount: 6 }
+        drawArrays: { firstVertex: 0, vertexCount: 6 }
     };
 
     // Render FBO
@@ -170,7 +170,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: textureColorBuffer,
         },
-        drawVertex: { firstVertex: 0, vertexCount: 6 },
+        drawArrays: { firstVertex: 0, vertexCount: 6 },
         pipeline: program,
     };
 

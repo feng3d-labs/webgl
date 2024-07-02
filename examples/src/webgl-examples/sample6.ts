@@ -71,7 +71,7 @@ async function main()
       index: { data: buffers.indices }
     },
     uniforms: { uSampler: texture },
-    drawIndexed: { firstIndex: 0, indexCount: 36 },
+    drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
   const renderPasss: IRenderPass = {

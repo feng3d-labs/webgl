@@ -116,7 +116,7 @@ const renderPass1: IRenderPass = {
         pipeline: programs[PROGRAM.TEXTURE],
         vertexArray: vertexArrays[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
-        drawVertex: { vertexCount },
+        drawArrays: { vertexCount },
     }]
 };
 
@@ -146,7 +146,7 @@ const renderPass2: IRenderPass = {
             pipeline: programs[PROGRAM.SPLASH],
             vertexArray: vertexArrays[PROGRAM.SPLASH],
             uniforms: { diffuse: texture, MVP: mvp },
-            drawVertex: { vertexCount: 6 },
+            drawArrays: { vertexCount: 6 },
         }
     ],
 };

@@ -71,7 +71,7 @@ function main()
       }
     },
     uniforms: {},
-    drawVertex: { firstVertex: 0, vertexCount: 4 },
+    drawArrays: { firstVertex: 0, vertexCount: 4 },
   };
 
   const renderPasss: IRenderPass = {

@@ -140,7 +140,7 @@ const renderPass1: IRenderPass = {
         uniforms: { mvp: matrix },
         vertexArray: multipleOutputVertexArray,
         viewport: { x: 0, y: 0, width: w, height: h },
-        drawVertex: { vertexCount: 6 },
+        drawArrays: { vertexCount: 6 },
     }]
 };
 
@@ -168,7 +168,7 @@ for (let i = 0; i < Textures.MAX; ++i)
             ...renderObject,
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             uniforms: { ...renderObject.uniforms, layer: i },
-            drawVertex: { vertexCount: 6 },
+            drawArrays: { vertexCount: 6 },
         }
     );
 }

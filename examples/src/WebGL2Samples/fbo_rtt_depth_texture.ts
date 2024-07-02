@@ -101,7 +101,7 @@ const renderPass: IRenderPass = {
     renderObjects: [{
         pipeline: depthProgram,
         vertexArray: triVertexArray,
-        drawVertex: { vertexCount: 3 },
+        drawArrays: { vertexCount: 3 },
     }],
 
 };
@@ -116,7 +116,7 @@ const rp2: IRenderPass = {
         pipeline: drawProgram,
         uniforms: { depthMap: depthTexture },
         vertexArray: quadVertexArray,
-        drawVertex: { vertexCount: 6 },
+        drawArrays: { vertexCount: 6 },
     }],
 };
 WebGL.runRenderPass(renderingContext, rp2);

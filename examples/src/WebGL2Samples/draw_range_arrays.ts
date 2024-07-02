@@ -58,12 +58,12 @@ const data: IRenderPass = {
     renderObjects: [
         {
             ...renderObject,
-            drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
+            drawArrays: { firstVertex: 0, vertexCount: vertexCount / 2 },
             viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
         },
         {
             ...renderObject,
-            drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
+            drawArrays: { firstVertex: 6, vertexCount: vertexCount / 2 },
             viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
         },
     ],

@@ -108,7 +108,7 @@ const renderPass: IRenderPass = {
     renderObjects: [{
         pipeline: drawBufferProgram,
         vertexArray: triVertexArray,
-        drawVertex: { vertexCount: 3 },
+        drawArrays: { vertexCount: 3 },
     }],
 };
 WebGL.runRenderPass(renderingContext, renderPass);
@@ -123,7 +123,7 @@ const renderPass2: IRenderPass = {
             color2Map: color2Texture,
         },
         vertexArray: quadVertexArray,
-        drawVertex: { vertexCount: 6 },
+        drawArrays: { vertexCount: 6 },
     }],
 };
 WebGL.runRenderPass(renderingContext, renderPass2);
