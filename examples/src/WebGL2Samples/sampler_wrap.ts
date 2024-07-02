@@ -1,16 +1,15 @@
+import { IBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { getShaderSource, loadImage } from "./utility";
+
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
-const isWebGL2 = !!gl;
-if (!isWebGL2)
-{
-    document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
-    return;
-}
+const gl = canvas.getContext("webgl2", { antialias: false });
 
 // -- Divide viewport
 
@@ -27,7 +26,7 @@ const Corners = {
     MAX: 4
 };
 
-const viewport = new Array(Corners.MAX);
+const viewport: { x: number, y: number, z: number, w: number }[] = new Array(Corners.MAX);
 
 viewport[Corners.BOTTOM_LEFT] = {
     x: 0,
@@ -59,15 +58,13 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-
-const uniformMvpLocation = gl.getUniformLocation(program, "mvp");
-const uniformDiffuseLocation = gl.getUniformLocation(program, "diffuse");
+const program: IProgram = {
+    vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    primitive: { topology: "TRIANGLES" },
+};
 
 // -- Initialize buffer
 
-const vertexPosBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
 const positions = new Float32Array([
     -1.0, -1.0,
     1.0, -1.0,
@@ -76,11 +73,8 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexPosBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
 
-const vertexTexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
 const texcoords = new Float32Array([
     -2.0, 2.0,
     2.0, 2.0,
@@ -89,78 +83,59 @@ const texcoords = new Float32Array([
     -2.0, -2.0,
     -2.0, 2.0
 ]);
-gl.bufferData(gl.ARRAY_BUFFER, texcoords, gl.STATIC_DRAW);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
+const vertexTexBuffer: IBuffer = { data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
 
-const vertexArray = gl.createVertexArray();
-gl.bindVertexArray(vertexArray);
-
-const vertexPosLocation = 0; // set with GLSL layout qualifier
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(vertexPosLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-const vertexTexLocation = 4; // set with GLSL layout qualifier
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(vertexTexLocation);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-gl.bindVertexArray(null);
+const vertexArray: IVertexArrayObject = {
+    vertices: {
+        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+    }
+};
 
 // -- Initialize samplers
 
-const samplers = new Array(Corners.MAX);
+const samplers: ISampler[] = new Array(Corners.MAX);
 
 for (let i = 0; i < Corners.MAX; ++i)
 {
-    samplers[i] = gl.createSampler();
-    gl.samplerParameteri(samplers[i], gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    gl.samplerParameteri(samplers[i], gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    samplers[i] = { minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR" };
 }
 
-gl.samplerParameteri(samplers[Corners.TOP_LEFT], gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
-gl.samplerParameteri(samplers[Corners.TOP_RIGHT], gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-gl.samplerParameteri(samplers[Corners.BOTTOM_RIGHT], gl.TEXTURE_WRAP_S, gl.REPEAT);
-gl.samplerParameteri(samplers[Corners.BOTTOM_LEFT], gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+samplers[Corners.TOP_LEFT].wrapS = "MIRRORED_REPEAT";
+samplers[Corners.TOP_RIGHT].wrapS = "CLAMP_TO_EDGE";
+samplers[Corners.BOTTOM_RIGHT].wrapS = "REPEAT";
+samplers[Corners.BOTTOM_LEFT].wrapS = "CLAMP_TO_EDGE";
 
-gl.samplerParameteri(samplers[Corners.TOP_LEFT], gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
-gl.samplerParameteri(samplers[Corners.TOP_RIGHT], gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
-gl.samplerParameteri(samplers[Corners.BOTTOM_RIGHT], gl.TEXTURE_WRAP_T, gl.REPEAT);
-gl.samplerParameteri(samplers[Corners.BOTTOM_LEFT], gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+samplers[Corners.TOP_LEFT].wrapT = "MIRRORED_REPEAT";
+samplers[Corners.TOP_RIGHT].wrapT = "MIRRORED_REPEAT";
+samplers[Corners.BOTTOM_RIGHT].wrapT = "REPEAT";
+samplers[Corners.BOTTOM_LEFT].wrapT = "CLAMP_TO_EDGE";
 
 // -- Load texture then render
 
-const imageUrl = "../assets/img/Di-3d.png";
-let texture;
+const imageUrl = "../../assets/img/Di-3d.png";
+let texture: ITexture;
 loadImage(imageUrl, function (image)
 {
-    texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(
-        gl.TEXTURE_2D,
-        0, // Level of details
-        gl.RGBA, // Format
-        gl.RGBA,
-        gl.UNSIGNED_BYTE, // Size of each channel
-        image
-    );
-
-    gl.generateMipmap(gl.TEXTURE_2D);
+    texture = {
+        sources: [{ source: image, level: 0 }],
+        internalformat: "RGBA",
+        format: "RGBA",
+        type: "UNSIGNED_BYTE",
+        generateMipmap: true,
+    };
     render();
 });
 
 function render()
 {
     // Clear color buffer
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    // Bind program
-    gl.useProgram(program);
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [],
+    };
 
     const matrix = new Float32Array([
         1.0, 0.0, 0.0, 0.0,
@@ -168,31 +143,36 @@ function render()
         0.0, 0.0, 1.0, 0.0,
         0.0, 0.0, 0.0, 1.0
     ]);
-    gl.uniformMatrix4fv(uniformMvpLocation, false, matrix);
-    gl.uniform1i(uniformDiffuseLocation, 0);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    gl.bindVertexArray(vertexArray);
+    const ro: IRenderObject = {
+        pipeline: program,
+        uniforms: { mvp: matrix },
+        vertexArray,
+    };
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-
-        gl.bindSampler(0, samplers[i]);
-        gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, 1);
+        rp.renderObjects.push({
+            ...ro,
+            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+            uniforms: {
+                ...ro.uniforms,
+                diffuse: { texture, sampler: samplers[i] },
+            },
+            drawArrays: { vertexCount: 6, instanceCount: 1 },
+        });
     }
+    WebGL.runRenderPass(rc, rp);
 
     // -- Clean up
 
-    gl.deleteBuffer(vertexPosBuffer);
-    gl.deleteBuffer(vertexTexBuffer);
+    WebGL.deleteBuffer(rc, vertexPosBuffer);
+    WebGL.deleteBuffer(rc, vertexTexBuffer);
     for (let j = 0; j < samplers.length; ++j)
     {
-        gl.deleteSampler(samplers[j]);
+        WebGL.deleteSampler(rc, samplers[j]);
     }
-    gl.deleteVertexArray(vertexArray);
-    gl.deleteTexture(texture);
-    gl.deleteProgram(program);
+    WebGL.deleteVertexArray(rc, vertexArray);
+    WebGL.deleteTexture(rc, texture);
+    WebGL.deleteProgram(rc, program);
 }
