@@ -1,8 +1,15 @@
+import { mat4, vec3 } from "gl-matrix";
+import { IProgram, IRenderingContext } from "../../../src";
+import { IPrimitive, MinimalGLTFLoader } from "./gltf-loader";
+import { getShaderSource } from "./utility";
+
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const gl = canvas.getContext("webgl2", { antialias: false });
 
 // -- Divide viewport
@@ -17,7 +24,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport = new Array(VIEWPORTS.MAX);
+const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -34,12 +41,15 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs = [createProgram(gl, getShaderSource("vs-flat"), getShaderSource("fs-flat")), createProgram(gl, getShaderSource("vs-smooth"), getShaderSource("fs-smooth"))];
+const programs: IProgram[] = [
+    { vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") } },
+    { vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") } }
+];
 const uniformMvpLocations = [gl.getUniformLocation(programs[VIEWPORTS.LEFT], "mvp"), gl.getUniformLocation(programs[VIEWPORTS.RIGHT], "mvp")];
 const uniformMvNormalLocations = [gl.getUniformLocation(programs[VIEWPORTS.LEFT], "mvNormal"), gl.getUniformLocation(programs[VIEWPORTS.RIGHT], "mvNormal")];
 
 // -- Load gltf then render
-const gltfUrl = "../assets/gltf/di_model_tri.gltf";
+const gltfUrl = "../../assets/gltf/di_model_tri.gltf";
 const glTFLoader = new MinimalGLTFLoader.glTFLoader();
 
 glTFLoader.loadGLTF(gltfUrl, function (glTF)
@@ -53,14 +63,16 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     const vertexArrayMaps = {};
 
     // var in loop
-    let mesh;
-    let primitive;
+    let mesh: {
+        primitives: IPrimitive[];
+    };
+    let primitive: IPrimitive;
+    //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
     let vertexBuffer;
     let indicesBuffer;
     let vertexArray;
 
-    let i; let
-        len;
+    let i; let len;
 
     for (const mid in curScene.meshes)
     {
