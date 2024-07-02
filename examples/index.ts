@@ -28,6 +28,7 @@ const files = {
         "fbo_new_blend_equation",
         "fbo_rtt_draw_buffers",
         "fbo_rtt_texture_array",
+        "fbo_rtt_depth_texture",
     ],
 };
 

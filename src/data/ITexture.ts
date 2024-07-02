@@ -257,7 +257,7 @@ export type TextureDataType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT_5_6_5" | "UNSIGN
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TextureFormat = "ALPHA" | "RGB" | `RGBA` | `LUMINANCE` | `LUMINANCE_ALPHA` | `DEPTH_COMPONENT`
+export type TextureFormat = "ALPHA" | "RGB" | `RGBA` | `LUMINANCE` | `LUMINANCE_ALPHA` | `DEPTH_COMPONENT` | `DEPTH_COMPONENT16`
     | `DEPTH_STENCIL` | `SRGB_EXT` | `SRGB_ALPHA_EXT` | `R8` | `R16F` | `R32F`
     | `R8UI` | `RG8` | `RG16F` | `RG32F` | `RG8UI` | `RG16UI`
     | `RG32UI` | `RGB8` | `SRGB8` | `RGB565`

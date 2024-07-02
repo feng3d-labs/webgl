@@ -8,6 +8,4 @@ export function runFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
 {
     const framebuffer = getFramebuffer(gl, passDescriptor);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-
-    
 }
