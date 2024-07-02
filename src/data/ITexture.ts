@@ -1,9 +1,24 @@
 import { ISampler } from "./ISampler";
 
+/**
+ * 纹理视图。
+ */
 export interface ITextureView
 {
+    /**
+     * 纹理。
+     */
     texture: ITexture,
-    level: number
+
+    /**
+     * mipmap级别。
+     */
+    level: number;
+
+    /**
+     * 纹理数组中的层次。
+     */
+    layer?: number;
 }
 
 /**
@@ -121,6 +136,13 @@ export interface IBufferSource
      * 默认为 1。
      */
     height?: number,
+
+    /**
+     * 纹理深度，默认为 1。
+     *
+     * WebGL2 支持。
+     */
+    depth?: number;
 
     /**
      * 默认为 0。

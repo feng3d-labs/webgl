@@ -59,11 +59,12 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
             gl.uniform4f(location, data[0], data[1], data[2], data[3]);
             break;
         case "SAMPLER_2D":
+        case "SAMPLER_2D_ARRAY":
         case "SAMPLER_CUBE":
             runTexture(gl, data, webGLUniform);
             break;
         default:
-            console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${data}`);
+            console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${webGLUniform.type}`);
     }
 }
 

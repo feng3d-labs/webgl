@@ -27,6 +27,7 @@ const files = {
         "fbo_multisample",
         "fbo_new_blend_equation",
         "fbo_rtt_draw_buffers",
+        "fbo_rtt_texture_array",
     ],
 };
 
