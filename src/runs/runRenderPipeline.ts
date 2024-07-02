@@ -7,7 +7,7 @@ export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IRe
 {
     runProgram(gl, renderPipeline);
 
-    runPrimitiveState(gl, renderPipeline.primitive);
+    runPrimitiveState(gl, renderPipeline?.primitive?.cullFace);
 
     runDepthStencilState(gl, renderPipeline.depthStencil);
 }

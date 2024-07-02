@@ -32,7 +32,6 @@ const renderObject: IRenderObject = {
     },
     uniforms: { color: [1, 0, 0, 1] },
     pipeline: {
-        primitive: { cullMode: "NONE" },
         vertex: {
             code: `
                     precision mediump float;

@@ -26,7 +26,7 @@ const vertexPosBuffer: IBuffer = {
 };
 
 const pipeline: IRenderPipeline = {
-    primitive: { topology: "TRIANGLE_STRIP", cullMode: "NONE" },
+    primitive: { topology: "TRIANGLE_STRIP" },
     vertex: {
         code: getShaderSource("vs")
     },

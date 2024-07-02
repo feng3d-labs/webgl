@@ -47,7 +47,6 @@ const renderObject: IRenderObject = {
     },
     uniforms: {},
     pipeline: {
-        primitive: { cullMode: "NONE" },
         vertex: {
             code: `precision mediump float;
         uniform mat4 projection, view;

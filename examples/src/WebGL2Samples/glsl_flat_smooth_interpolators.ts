@@ -1,9 +1,15 @@
+import { mat4, vec3 } from "gl-matrix";
+import { IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IPrimitive, MinimalGLTFLoader } from "./gltf-loader";
+import { getShaderSource } from "./utility";
+
 const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
 // -- Divide viewport
 const canvasSize = {
@@ -17,7 +23,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport = new Array(VIEWPORTS.MAX);
+const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -34,12 +40,20 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs = [createProgram(gl, getShaderSource("vs-flat"), getShaderSource("fs-flat")), createProgram(gl, getShaderSource("vs-smooth"), getShaderSource("fs-smooth"))];
-const uniformMvpLocations = [gl.getUniformLocation(programs[VIEWPORTS.LEFT], "mvp"), gl.getUniformLocation(programs[VIEWPORTS.RIGHT], "mvp")];
-const uniformMvNormalLocations = [gl.getUniformLocation(programs[VIEWPORTS.LEFT], "mvNormal"), gl.getUniformLocation(programs[VIEWPORTS.RIGHT], "mvNormal")];
-
+const programs: IProgram[] = [
+    {
+        vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
+        primitive: { topology: "TRIANGLES" },
+        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+    },
+    {
+        vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
+        primitive: { topology: "TRIANGLES" },
+        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+    }
+];
 // -- Load gltf then render
-const gltfUrl = "../assets/gltf/di_model_tri.gltf";
+const gltfUrl = "../../assets/gltf/di_model_tri.gltf";
 const glTFLoader = new MinimalGLTFLoader.glTFLoader();
 
 glTFLoader.loadGLTF(gltfUrl, function (glTF)
@@ -47,20 +61,21 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     const curScene = glTF.scenes[glTF.defaultScene];
 
     // -- Initialize vertex array
-    const POSITION_LOCATION = 0; // set with GLSL layout qualifier
-    const NORMAL_LOCATION = 1; // set with GLSL layout qualifier
-
-    const vertexArrayMaps = {};
+    const vertexArrayMaps: {
+        [key: string]: IVertexArrayObject[]
+    } = {};
 
     // var in loop
-    let mesh;
-    let primitive;
-    let vertexBuffer;
-    let indicesBuffer;
-    let vertexArray;
+    let mesh: {
+        primitives: IPrimitive[];
+    };
+    let primitive: IPrimitive;
+    //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
+    let vertexBuffer: IBuffer;
+    let indicesBuffer: IIndexBuffer;
+    let vertexArray: IVertexArrayObject;
 
-    let i; let
-        len;
+    let i: number; let len: number;
 
     for (const mid in curScene.meshes)
     {
@@ -72,64 +87,38 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             primitive = mesh.primitives[i];
 
             // create buffers
-            vertexBuffer = gl.createBuffer();
-            indicesBuffer = gl.createBuffer();
 
             // WebGL2: create vertexArray
-            vertexArray = gl.createVertexArray();
-            vertexArrayMaps[mid].push(vertexArray);
 
             // -- Initialize buffer
             const vertices = primitive.vertexBuffer;
-            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+            vertexBuffer = { data: vertices, usage: "STATIC_DRAW" };
 
             const indices = primitive.indices;
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+            indicesBuffer = { data: indices, usage: "STATIC_DRAW" };
 
             // -- VertexAttribPointer
             const positionInfo = primitive.attributes.POSITION;
-
-            gl.bindVertexArray(vertexArray);
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-
-            gl.vertexAttribPointer(
-                POSITION_LOCATION,
-                positionInfo.size,
-                positionInfo.type,
-                false,
-                positionInfo.stride,
-                positionInfo.offset
-            );
-            gl.enableVertexAttribArray(POSITION_LOCATION);
-
             const normalInfo = primitive.attributes.NORMAL;
-            gl.vertexAttribPointer(
-                NORMAL_LOCATION,
-                normalInfo.size,
-                normalInfo.type,
-                false,
-                normalInfo.stride,
-                normalInfo.offset
-            );
-            gl.enableVertexAttribArray(NORMAL_LOCATION);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-
-            gl.bindVertexArray(null);
+            vertexArray = {
+                vertices: {
+                    position: {
+                        buffer: vertexBuffer, numComponents: positionInfo.size, normalized: false,
+                        vertexSize: positionInfo.stride, offset: positionInfo.offset
+                    },
+                    normal: {
+                        buffer: vertexBuffer, numComponents: normalInfo.size, normalized: false,
+                        vertexSize: normalInfo.stride, offset: normalInfo.offset
+                    },
+                },
+                index: indicesBuffer,
+            };
+            vertexArrayMaps[mid].push(vertexArray);
         }
     }
 
     // -- Render preparation
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-
     const translate = vec3.create();
     vec3.set(translate, 0, -18, -60);
     const scale = vec3.create();
@@ -151,8 +140,13 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        const rp: IRenderPass = {
+            passDescriptor: {
+                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
+                depthStencilAttachment: { depthLoadOp: "clear" }
+            },
+            renderObjects: [],
+        };
 
         mat4.rotateY(modelView, modelView, rotatationSpeedY);
 
@@ -170,22 +164,24 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 mat4.invert(localMVNormal, localMV);
                 mat4.transpose(localMVNormal, localMVNormal);
 
-                gl.bindVertexArray(vertexArrayMaps[mid][i]);
+                const vertexArray = vertexArrayMaps[mid][i];
 
                 for (i = 0; i < VIEWPORTS.MAX; ++i)
                 {
-                    gl.useProgram(programs[i]);
-                    gl.uniformMatrix4fv(uniformMvpLocations[i], false, localMVP);
-                    gl.uniformMatrix4fv(uniformMvNormalLocations[i], false, localMVNormal);
-
-                    gl.viewport(viewport[i].x, viewport[i].y, viewport[i].width, viewport[i].height);
-
-                    gl.drawElements(primitive.mode, primitive.indices.length, primitive.indicesComponentType, 0);
+                    rp.renderObjects.push({
+                        pipeline: programs[i],
+                        vertexArray,
+                        uniforms: {
+                            mvp: localMVP,
+                            mvNormal: localMVNormal,
+                        },
+                        viewport: viewport[i],
+                        drawElements: { indexCount: primitive.indices.length, firstIndex: 0 },
+                    });
                 }
-
-                gl.bindVertexArray(null);
             }
         }
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     })();

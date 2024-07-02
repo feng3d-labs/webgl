@@ -52,7 +52,6 @@ const renderObject: IRenderObject = {
         offset: () => offsets[batchId].offset,
     },
     pipeline: {
-        primitive: { cullMode: "NONE" },
         vertex: {
             code: `precision mediump float;
         attribute vec2 position;
