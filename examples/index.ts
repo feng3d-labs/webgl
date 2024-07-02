@@ -30,6 +30,7 @@ const files = {
         "fbo_rtt_texture_array",
         "fbo_rtt_depth_texture",
         "fbo_read_pixels",
+        "sampler_object",
     ],
 };
 
