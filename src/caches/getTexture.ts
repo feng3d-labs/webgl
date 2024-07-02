@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture } from "../data/ITexture";
+import { ITexture, TextureTarget } from "../data/ITexture";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -11,6 +11,8 @@ declare global
 
     interface WebGLTexture
     {
+        textureTarget: TextureTarget;
+
         /**
          * 销毁WebGL纹理。
          */
@@ -35,6 +37,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
         // 绑定纹理
         gl.bindTexture(gl[textureTarget], webGLTexture);
+
+        webGLTexture.textureTarget = textureTarget;
 
         sources.forEach((sourceItem) =>
         {
@@ -63,8 +67,6 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     else
                     {
                         const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage2D(gl.TEXTURE_2D, level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
-
                         gl.texImage3D(gl.TEXTURE_2D_ARRAY,
                             level, gl[internalformat], width, height,
                             depth,

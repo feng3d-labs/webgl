@@ -1,4 +1,4 @@
-import { IBuffer, IFramebuffer, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject } from "../../../src";
+import { IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -50,14 +50,16 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: IRenderPipeline = { vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") } };
+const multipleOutputProgram: IRenderPipeline = {
+    vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
+    primitive: { topology: "TRIANGLES" },
+};
 
 // Layer shaders
-const layerProgram: IRenderPipeline = { vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") } };
-
-const layerUniformMvpLocation = gl.getUniformLocation(layerProgram, "mvp");
-const layerUniformDiffuseLocation = gl.getUniformLocation(layerProgram, "diffuse");
-const layerUniformLayerLocation = gl.getUniformLocation(layerProgram, "layer");
+const layerProgram: IRenderPipeline = {
+    vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
+    primitive: { topology: "TRIANGLES" },
+};
 
 // -- Initialize buffer
 
@@ -98,12 +100,15 @@ const layerVertexArray: IVertexArrayObject = {
 
 // -- Initialize texture
 
+const w = 16;
+const h = 16;
+
 const texture: ITexture = {
     textureTarget: "TEXTURE_2D_ARRAY",
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",
-    sources: [{ width: 16, height: 16, level: 0 }],
+    sources: [{ level: 0, width: w, height: h, depth: 3 }],
     sampler: { minFilter: "NEAREST", magFilter: "NEAREST", lodMinClamp: 0, lodMaxClamp: 0 }
 };
 
@@ -111,45 +116,15 @@ const texture: ITexture = {
 
 const frameBuffer: IFramebuffer = {
     colorAttachments: [
-        { view: { texture, level: 0 } },
-        { view: { texture, level: 0 } },
-        { view: { texture, level: 0 } },
+        { view: { texture, level: 0, layer: Textures.RED } },
+        { view: { texture, level: 0, layer: Textures.GREEN } },
+        { view: { texture, level: 0, layer: Textures.BLUE } },
     ]
 };
-gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, frameBuffer);
-
-const drawBuffers = new Array(3);
-drawBuffers[Textures.RED] = gl.COLOR_ATTACHMENT0;
-drawBuffers[Textures.GREEN] = gl.COLOR_ATTACHMENT1;
-drawBuffers[Textures.BLUE] = gl.COLOR_ATTACHMENT2;
-
-gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.COLOR_ATTACHMENT0, texture, 0, Textures.RED);
-gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.COLOR_ATTACHMENT1, texture, 0, Textures.GREEN);
-gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.COLOR_ATTACHMENT2, texture, 0, Textures.BLUE);
-
-let status = gl.checkFramebufferStatus(gl.DRAW_FRAMEBUFFER);
-if (status != gl.FRAMEBUFFER_COMPLETE)
-{
-    console.log(`fb status: ${status.toString(16)}`);
-
-    return;
-}
-
-gl.drawBuffers(drawBuffers);
-
-gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
 
 // -- Render
 
-// Clear color buffer
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT);
-
 // Pass 1
-gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, frameBuffer);
-
-// Bind program
-gl.useProgram(multipleOutputProgram);
 
 const matrix = new Float32Array([
     1.0, 0.0, 0.0, 0.0,
@@ -157,45 +132,56 @@ const matrix = new Float32Array([
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 1.0
 ]);
-gl.uniformMatrix4fv(multipleOutputUniformMvpLocation, false, matrix);
-gl.bindVertexArray(multipleOutputVertexArray);
-gl.viewport(0, 0, w, h);
-gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+const renderPass1: IRenderPass = {
+    passDescriptor: frameBuffer,
+    renderObjects: [{
+        pipeline: multipleOutputProgram,
+        uniforms: { mvp: matrix },
+        vertexArray: multipleOutputVertexArray,
+        viewport: { x: 0, y: 0, width: w, height: h },
+        drawVertex: { vertexCount: 6 },
+    }]
+};
 
 // Pass 2
-gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
 
-// Bind program
-gl.useProgram(layerProgram);
-gl.uniformMatrix4fv(layerUniformMvpLocation, false, matrix);
-gl.uniform1i(layerUniformDiffuseLocation, 0);
+const renderPass: IRenderPass = {
+    passDescriptor: {
+        colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
+    },
+    renderObjects: [],
+};
 
-gl.activeTexture(gl.TEXTURE0);
-gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture);
-gl.bindVertexArray(layerVertexArray);
+const renderObject: IRenderObject = {
+    pipeline: layerProgram,
+    uniforms: { mvp: matrix, diffuse: texture },
+    vertexArray: layerVertexArray,
 
-status = gl.checkFramebufferStatus(gl.DRAW_FRAMEBUFFER);
-if (status != gl.FRAMEBUFFER_COMPLETE)
-{
-    console.log(`fb status: ${status.toString(16)}`);
+};
 
-    return;
-}
-
+//
 for (let i = 0; i < Textures.MAX; ++i)
 {
-    gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-    gl.uniform1i(layerUniformLayerLocation, i);
-
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    renderPass.renderObjects.push(
+        {
+            ...renderObject,
+            viewport: viewport[i],
+            uniforms: { ...renderObject.uniforms, layer: i },
+            drawVertex: { vertexCount: 6 },
+        }
+    );
 }
 
+WebGL.runRenderPass(renderingContext, renderPass1);
+WebGL.runRenderPass(renderingContext, renderPass);
+
 // Clean up
-gl.deleteBuffer(vertexPosBuffer);
-gl.deleteBuffer(vertexTexBuffer);
-gl.deleteVertexArray(multipleOutputVertexArray);
-gl.deleteVertexArray(layerVertexArray);
-gl.deleteFramebuffer(frameBuffer);
-gl.deleteTexture(texture);
-gl.deleteProgram(multipleOutputProgram);
-gl.deleteProgram(layerProgram);
+WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
+WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
+WebGL.deleteVertexArray(renderingContext, multipleOutputVertexArray);
+WebGL.deleteVertexArray(renderingContext, layerVertexArray);
+WebGL.deleteFramebuffer(renderingContext, frameBuffer);
+WebGL.deleteTexture(renderingContext, texture);
+WebGL.deleteProgram(renderingContext, multipleOutputProgram);
+WebGL.deleteProgram(renderingContext, layerProgram);

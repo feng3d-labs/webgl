@@ -67,12 +67,12 @@ export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture
     {
         if (webGLTexture.lodMinClamp !== lodMinClamp)
         {
-            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_BASE_LEVEL, lodMinClamp);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_BASE_LEVEL, lodMinClamp);
             webGLTexture.lodMinClamp = lodMinClamp;
         }
         if (webGLTexture.lodMaxClamp !== lodMaxClamp)
         {
-            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAX_LEVEL, lodMaxClamp);
+            gl.texParameteri(gl[textureTarget], gl.TEXTURE_MAX_LEVEL, lodMaxClamp);
             webGLTexture.lodMaxClamp = lodMaxClamp;
         }
     }

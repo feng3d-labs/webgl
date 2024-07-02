@@ -1,9 +1,24 @@
 import { ISampler } from "./ISampler";
 
+/**
+ * 纹理视图。
+ */
 export interface ITextureView
 {
+    /**
+     * 纹理。
+     */
     texture: ITexture,
-    level: number
+
+    /**
+     * mipmap级别。
+     */
+    level: number;
+
+    /**
+     * 纹理数组中的层次。
+     */
+    layer?: number;
 }
 
 /**
