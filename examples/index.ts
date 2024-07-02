@@ -34,6 +34,7 @@ const files = {
         "sampler_filter",
         "sampler_wrap",
         "glsl_centroid",
+        "glsl_flat_smooth_interpolators",
     ],
 };
 
