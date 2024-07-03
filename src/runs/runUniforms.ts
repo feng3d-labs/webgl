@@ -24,7 +24,7 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
         {
             console.error(`沒有找到Uniform ${name} 數據！`);
         }
-        runUniform(gl, activeInfo, uniformData);
+        runUniform(gl as any, activeInfo, uniformData);
     }
 }
 
@@ -39,12 +39,25 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
         case "BOOL":
         case "INT":
             gl.uniform1i(location, data);
+            // gl.uniform1iv(location, [data]);
+            break;
+        case "INT_VEC2":
+            gl.uniform2i(location, data[0], data[1]);
+            break;
+        case "INT_VEC3":
+            gl.uniform3i(location, data[0], data[1], data[2]);
+            break;
+        case "INT_VEC4":
+            gl.uniform4i(location, data[0], data[1], data[2], data[3]);
             break;
         case "FLOAT_MAT3":
             gl.uniformMatrix3fv(location, false, data);
             break;
         case "FLOAT_MAT4":
             gl.uniformMatrix4fv(location, false, data);
+            break;
+        case "FLOAT_MAT4x3":
+            (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         case "FLOAT":
             gl.uniform1f(location, data);
