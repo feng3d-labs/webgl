@@ -1,7 +1,7 @@
 /**
  * WebGL中Uniform类型
  */
-export type IWebGLUniformType = keyof typeof webGLUniformType;
+export type IWebGLUniformType = keyof typeof webGLUniformTypeValue;
 
 /**
  * WebGL中Uniform类型对应数值
@@ -19,9 +19,9 @@ export class WebGLUniformTypeUtils
         if (!this._cache)
         {
             this._cache = [];
-            Object.keys(webGLUniformType).forEach((v) =>
+            Object.keys(webGLUniformTypeValue).forEach((v) =>
             {
-                this._cache[webGLUniformType[v]] = v;
+                this._cache[webGLUniformTypeValue[v]] = v;
             });
         }
 
@@ -39,7 +39,7 @@ export class WebGLUniformTypeUtils
      */
     static getValue(type: IWebGLUniformType): number
     {
-        const result = webGLUniformType[type];
+        const result = webGLUniformTypeValue[type];
         console.assert(!!result);
 
         return result as any;
@@ -63,39 +63,44 @@ const samplers = { SAMPLER_2D: 35678, SAMPLER_CUBE: 35680, SAMPLER_3D: 35679, SA
 /**
  * WebGL1 缓冲区数据类型。
  */
-const webGL1UniformBufferType = { FLOAT: 5126, FLOAT_VEC2: 35664, FLOAT_VEC3: 35665, FLOAT_VEC4: 35666, INT: 5124, INT_VEC2: 35667, INT_VEC3: 35668, INT_VEC4: 35669, BOOL: 35670, BOOL_VEC2: 35671, BOOL_VEC3: 35672, BOOL_VEC4: 35673, FLOAT_MAT2: 35674, FLOAT_MAT3: 35675, FLOAT_MAT4: 35676 };
+const webGL1UniformBufferTypeValue = { FLOAT: 5126, FLOAT_VEC2: 35664, FLOAT_VEC3: 35665, FLOAT_VEC4: 35666, INT: 5124, INT_VEC2: 35667, INT_VEC3: 35668, INT_VEC4: 35669, BOOL: 35670, BOOL_VEC2: 35671, BOOL_VEC3: 35672, BOOL_VEC4: 35673, FLOAT_MAT2: 35674, FLOAT_MAT3: 35675, FLOAT_MAT4: 35676 };
 /**
  * WebGL1 纹理数据类型。
  */
-const webGL1UniformTextureType = { SAMPLER_2D: 35678, SAMPLER_CUBE: 35680 };
+const webGL1UniformTextureTypeValue = { SAMPLER_2D: 35678, SAMPLER_CUBE: 35680 };
 
 /**
  * WebGL1 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
  */
-const webGL1UniformType = { ...webGL1UniformBufferType, ...webGL1UniformTextureType };
+const webGL1UniformTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL1UniformTextureTypeValue };
 
 /**
  * 仅 WebGL2 缓冲区数据类型。
  */
-const webGL2OnlyUniformBufferType = { UNSIGNED_INT: 5125, UNSIGNED_INT_VEC2: 36294, UNSIGNED_INT_VEC3: 36295, UNSIGNED_INT_VEC4: 36296, FLOAT_MAT2x3: 35685, FLOAT_MAT2x4: 35686, FLOAT_MAT3x2: 35687, FLOAT_MAT3x4: 35688, FLOAT_MAT4x2: 35689, FLOAT_MAT4x3: 35690 };
+const webGL2OnlyUniformBufferTypeValue = { UNSIGNED_INT: 5125, UNSIGNED_INT_VEC2: 36294, UNSIGNED_INT_VEC3: 36295, UNSIGNED_INT_VEC4: 36296, FLOAT_MAT2x3: 35685, FLOAT_MAT2x4: 35686, FLOAT_MAT3x2: 35687, FLOAT_MAT3x4: 35688, FLOAT_MAT4x2: 35689, FLOAT_MAT4x3: 35690 };
 /**
  * 仅 WebGL2 纹理数据类型。
  */
-const webGL2OnlyUniformTextureType = { SAMPLER_3D: 35679, SAMPLER_2D_SHADOW: 35682, SAMPLER_2D_ARRAY: 36289, SAMPLER_2D_ARRAY_SHADOW: 36292, SAMPLER_CUBE_SHADOW: 36293, INT_SAMPLER_2D: 36298, INT_SAMPLER_3D: 36299, INT_SAMPLER_CUBE: 36300, INT_SAMPLER_2D_ARRAY: 36303, UNSIGNED_INT_SAMPLER_2D: 36306, UNSIGNED_INT_SAMPLER_3D: 36307, UNSIGNED_INT_SAMPLER_CUBE: 36308, UNSIGNED_INT_SAMPLER_2D_ARRAY: 36311 };
+const webGL2OnlyUniformTextureTypeValue = { SAMPLER_3D: 35679, SAMPLER_2D_SHADOW: 35682, SAMPLER_2D_ARRAY: 36289, SAMPLER_2D_ARRAY_SHADOW: 36292, SAMPLER_CUBE_SHADOW: 36293, INT_SAMPLER_2D: 36298, INT_SAMPLER_3D: 36299, INT_SAMPLER_CUBE: 36300, INT_SAMPLER_2D_ARRAY: 36303, UNSIGNED_INT_SAMPLER_2D: 36306, UNSIGNED_INT_SAMPLER_3D: 36307, UNSIGNED_INT_SAMPLER_CUBE: 36308, UNSIGNED_INT_SAMPLER_2D_ARRAY: 36311 };
 /**
  * 仅 WebGL2 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
  */
-const webGL2OnlyUniformType = { ...webGL2OnlyUniformBufferType, ...webGL2OnlyUniformTextureType };
+const webGL2OnlyUniformTypeValue = { ...webGL2OnlyUniformBufferTypeValue, ...webGL2OnlyUniformTextureTypeValue };
 
 /**
- * 所有 WebGL2 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
+ * WebGL Uniform 类型与值的映射。
  */
-const webGL2UniformType = { ...webGL1UniformType, ...webGL2OnlyUniformType };
+const webGLUniformTypeValue = { ...webGL1UniformTypeValue, ...webGL2OnlyUniformTypeValue };
 
 /**
- * WebGL 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
+ * WebGL Uniform 值与类型的映射。
  */
-const webGLUniformType = webGL2UniformType;
+const webGLUniformValueType = Object.keys(webGLUniformTypeValue).reduce((pv, cv) =>
+{
+    pv[webGLUniformTypeValue[cv]] = cv;
+
+    return pv;
+}, {});
 
 /**
  * 顶点索引数据类型对应的字节数量。
