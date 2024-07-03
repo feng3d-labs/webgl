@@ -9,11 +9,13 @@ declare global
     interface WebGLRenderingContext
     {
         _programs: { [key: string]: WebGLProgram }
+        _shaders: { [key: string]: WebGLShader }
     }
 
     export interface WebGLProgram
     {
-        vertex: WebGLShader, fragment: WebGLShader
+        vertex: string;
+        fragment: string;
         /**
          * 属性信息列表
          */
@@ -37,7 +39,7 @@ export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
     let result = gl._programs[shaderKey];
     if (result) return result;
 
-    result = compileShaderProgram(gl, vertex, fragment);
+    result = getWebGLProgram(gl, vertex, fragment);
     gl._programs[shaderKey] = result;
 
     return result;
@@ -57,13 +59,13 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshader: string)
+function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string)
 {
     // 编译顶点着色器
-    const vertexShader = compileShaderCode(gl, "VERTEX_SHADER", vshader);
+    const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
 
     // 编译片段着色器
-    const fragmentShader = compileShaderCode(gl, "FRAGMENT_SHADER", fshader);
+    const fragmentShader = getWebGLShader(gl, "FRAGMENT_SHADER", fshader);
 
     // 创建着色器程序
     const program = createLinkProgram(gl, vertexShader, fragmentShader);
@@ -139,8 +141,8 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
     }
 
     //
-    program.vertex = vertexShader;
-    program.fragment = fragmentShader;
+    program.vertex = vshader;
+    program.fragment = fshader;
     program.attributes = attributes;
     program.uniforms = uniforms;
 
@@ -167,13 +169,18 @@ export interface IUniformBlockInfo
 
 /**
  * 编译着色器代码
+ *
  * @param type 着色器类型
  * @param code 着色器代码
  * @return 编译后的着色器对象
  */
-function compileShaderCode(gl: WebGLRenderingContext, type: ShaderType, code: string)
+function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: string)
 {
-    const shader = gl.createShader(gl[type]);
+    let shader = gl._shaders[code];
+    if (shader) return shader;
+
+    shader = gl.createShader(gl[type]);
+    gl._shaders[code] = shader;
 
     gl.shaderSource(shader, code);
     gl.compileShader(shader);
