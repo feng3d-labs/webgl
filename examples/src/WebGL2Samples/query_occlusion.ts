@@ -8,10 +8,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 // -- Init WebGL Context
-const gl = canvas.getContext("webgl2", { antialias: false });
-const isWebGL2 = !!gl;
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
 // -- Init Program
 const program: IProgram = {
