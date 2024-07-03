@@ -20,29 +20,29 @@ const vertices = new Float32Array([
 ]);
 const vertexPosBuffer: IBuffer = { data: vertices, usage: "STATIC_DRAW" };
 
-const uniformTransformLocation = gl.getUniformBlockIndex(program, "Transform");
-const uniformMaterialLocation = gl.getUniformBlockIndex(program, "Material");
-gl.uniformBlockBinding(program, uniformTransformLocation, 0);
-gl.uniformBlockBinding(program, uniformMaterialLocation, 1);
+// const uniformTransformLocation = gl.getUniformBlockIndex(program, "Transform");
+// const uniformMaterialLocation = gl.getUniformBlockIndex(program, "Material");
+// gl.uniformBlockBinding(program, uniformTransformLocation, 0);
+// gl.uniformBlockBinding(program, uniformMaterialLocation, 1);
 
-const transforms = new Float32Array([
-    1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    -0.5, 0.0, 0.0, 1.0,
+// const transforms = new Float32Array([
+//     1.0, 0.0, 0.0, 0.0,
+//     0.0, 1.0, 0.0, 0.0,
+//     0.0, 0.0, 1.0, 0.0,
+//     -0.5, 0.0, 0.0, 1.0,
 
-    1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    0.5, 0.0, 0.0, 1.0
-]);
-const uniformTransformBuffer: IBuffer = { data: transforms, usage: "DYNAMIC_DRAW" };
+//     1.0, 0.0, 0.0, 0.0,
+//     0.0, 1.0, 0.0, 0.0,
+//     0.0, 0.0, 1.0, 0.0,
+//     0.5, 0.0, 0.0, 1.0
+// ]);
+// const uniformTransformBuffer: IBuffer = { data: transforms, usage: "DYNAMIC_DRAW" };
 
-const materials = new Float32Array([
-    1.0, 0.5, 0.0, 1.0,
-    0.0, 0.5, 1.0, 1.0
-]);
-const uniformMaterialBuffer: IBuffer = { data: materials, usage: "STATIC_DRAW" };
+// const materials = new Float32Array([
+//     1.0, 0.5, 0.0, 1.0,
+//     0.0, 0.5, 1.0, 1.0
+// ]);
+// const uniformMaterialBuffer: IBuffer = { data: materials, usage: "STATIC_DRAW" };
 
 // -- Render
 const rp: IRenderPass = {
@@ -55,19 +55,37 @@ const rp: IRenderPass = {
             },
         },
         uniforms: {
-            Transform: uniformTransformBuffer,
-            Material: uniformMaterialBuffer,
+            Transform: {
+                MVP: [
+                    [1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        -0.5, 0.0, 0.0, 1.0
+                    ],
+                    [1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        0.5, 0.0, 0.0, 1.0
+                    ]
+                ]
+            },
+            Material: {
+                Diffuse: [
+                    [1.0, 0.5, 0.0, 1.0],
+                    [0.0, 0.5, 1.0, 1.0]
+                ]
+            },
         },
         drawArrays: { vertexCount: 3, instanceCount: 2 },
     }]
 };
 WebGL.runRenderPass(rc, rp);
 
-gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformTransformBuffer);
-gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, uniformMaterialBuffer);
+// gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformTransformBuffer);
+// gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, uniformMaterialBuffer);
 
 // -- Delete WebGL resources
-gl.deleteBuffer(vertexPosBuffer);
-gl.deleteBuffer(uniformTransformBuffer);
-gl.deleteBuffer(uniformMaterialBuffer);
-gl.deleteProgram(program);
+// gl.deleteBuffer(vertexPosBuffer);
+// gl.deleteBuffer(uniformTransformBuffer);
+// gl.deleteBuffer(uniformMaterialBuffer);
+// gl.deleteProgram(program);
