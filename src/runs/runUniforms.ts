@@ -1,22 +1,23 @@
 import { getProgram } from "../caches/getProgram";
 import { IWebGLUniformBufferType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
-import { IRenderObject } from "../data/IRenderObject";
+import { IRenderPipeline } from "../data/IRenderPipeline";
 import { ISamplerTexture } from "../data/ISamplerTexture";
 import { IUniformInfo } from "../data/IUniformInfo";
-import { lazy } from "../types";
+import { IUniforms } from "../data/IUniforms";
+import { LazyObject, lazy } from "../types";
 import { runSamplerTexture } from "./runTexture";
 
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: LazyObject<IUniforms>)
 {
-    const shaderResult = getProgram(gl, renderObject.pipeline);
+    const webGLProgram = getProgram(gl, pipeline);
 
-    shaderResult.uniforms.forEach((uniformInfo) =>
+    webGLProgram.uniforms.forEach((uniformInfo) =>
     {
-        const paths = uniformInfo.paths;
-        let uniformData = lazy.getValue(renderObject.uniforms[paths[0]], renderObject.uniforms);
+        const { paths, name, type } = uniformInfo;
+        let uniformData = lazy.getValue(uniforms[paths[0]], uniforms);
         for (let i = 1; i < paths.length; i++)
         {
             uniformData = uniformData[paths[i]];
@@ -26,7 +27,7 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
             console.error(`沒有找到Uniform ${name} 數據！`);
         }
 
-        if (isWebGLUniformTextureType(uniformInfo.type))
+        if (isWebGLUniformTextureType(type))
         {
             runSamplerTexture(gl, uniformInfo, uniformData as ISamplerTexture);
         }
