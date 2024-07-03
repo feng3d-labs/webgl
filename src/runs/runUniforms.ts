@@ -1,8 +1,8 @@
 import { getProgram } from "../caches/getProgram";
-import { IWebGLUniformBufferType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
+import { IWebGLUniformBufferType } from "../const/WebGLUniformType";
 import { IRenderPipeline } from "../data/IRenderPipeline";
 import { ISamplerTexture } from "../data/ISamplerTexture";
-import { IUniformInfo } from "../data/IUniformInfo";
+import { IUniformItemInfo } from "../data/IUniformInfo";
 import { IUniforms } from "../data/IUniforms";
 import { LazyObject, lazy } from "../types";
 import { runSamplerTexture } from "./runTexture";
@@ -16,35 +16,40 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
 
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
-        const { paths, name, type } = uniformInfo;
-        let uniformData = lazy.getValue(uniforms[paths[0]], uniforms);
-        for (let i = 1; i < paths.length; i++)
-        {
-            uniformData = uniformData[paths[i]];
-        }
-        if (uniformData === undefined)
-        {
-            console.error(`沒有找到Uniform ${name} 數據！`);
-        }
+        const { name, type, items, isTexture } = uniformInfo;
 
-        if (isWebGLUniformTextureType(type))
+        items.forEach((v) =>
         {
-            runSamplerTexture(gl, uniformInfo, uniformData as ISamplerTexture);
-        }
-        else
-        {
-            runUniform(gl, uniformInfo, uniformData);
-        }
+            const { paths } = v;
+
+            let uniformData = lazy.getValue(uniforms[paths[0]], uniforms);
+            for (let i = 1; i < paths.length; i++)
+            {
+                uniformData = uniformData[paths[i]];
+            }
+            if (uniformData === undefined)
+            {
+                console.error(`沒有找到Uniform ${name} 數據！`);
+            }
+
+            if (isTexture)
+            {
+                runSamplerTexture(gl, v, uniformData as ISamplerTexture);
+            }
+            else
+            {
+                runUniform(gl, type as IWebGLUniformBufferType, v, uniformData);
+            }
+        });
     });
 }
 
 /**
  * 设置环境Uniform数据
  */
-function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: any)
+function runUniform(gl: WebGLRenderingContext, type: IWebGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
 {
     const location = uniformInfo.location;
-    const type = uniformInfo.type as IWebGLUniformBufferType;
     switch (type)
     {
         case "BOOL":
@@ -127,6 +132,6 @@ function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: 
             (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         default:
-            console.error(`无法识别的uniform类型 ${uniformInfo.name} ${type}`);
+            console.error(`无法识别的uniform类型 ${uniformInfo.paths} ${type}`);
     }
 }

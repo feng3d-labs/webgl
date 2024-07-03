@@ -10,11 +10,24 @@ export interface IUniformInfo
      */
     name: string;
 
-    /**
-     * WebGL中Uniform类型
-     */
     type: IWebGLUniformType;
 
+    /**
+     * 是否纹理。
+     */
+    isTexture: boolean;
+
+    /**
+     * 子项信息列表。
+     */
+    items: IUniformItemInfo[]
+}
+
+/**
+ * WebGL统一变量
+ */
+export interface IUniformItemInfo
+{
     /**
      * uniform地址
      */

@@ -1,7 +1,7 @@
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
 import { IAttributeInfo } from "../data/IAttributeInfo";
 import { IRenderPipeline } from "../data/IRenderPipeline";
-import { IUniformInfo } from "../data/IUniformInfo";
+import { IUniformInfo, IUniformItemInfo } from "../data/IUniformInfo";
 import { getWebGLAttributeValueType } from "./getWebGLAttributeType";
 
 declare global
@@ -89,6 +89,9 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     {
         const activeInfo = gl.getActiveUniform(program, i);
         const { name, size, type } = activeInfo;
+        const typeString = getWebGLUniformType(type);
+        const isTexture = isWebGLUniformTextureType(typeString);
+
         const reg = /(\w+)/g;
 
         const names = [name];
@@ -102,6 +105,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             }
         }
 
+        const items: IUniformItemInfo[] = [];
         for (let j = 0; j < names.length; j++)
         {
             const name = names[j];
@@ -113,15 +117,14 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
                 result = reg.exec(name);
             }
             const location = gl.getUniformLocation(program, name);
-            const typeString = getWebGLUniformType(type);
-            const isTexture = isWebGLUniformTextureType(typeString);
-            uniforms.push({ name, location, type: typeString, paths, textureID });
+            items.push({ location, paths, textureID });
 
             if (isTexture)
             {
                 textureID++;
             }
         }
+        uniforms[i] = { name, type: typeString, isTexture, items };
     }
     if (gl instanceof WebGL2RenderingContext)
     {
