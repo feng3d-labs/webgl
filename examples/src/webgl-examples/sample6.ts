@@ -50,8 +50,8 @@ async function main()
     vertexArray: {
       vertices: {
         aVertexPosition: {
+          type: "FLOAT",
           buffer: {
-            type: "FLOAT",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -59,8 +59,8 @@ async function main()
           normalized: false,
         },
         aTextureCoord: {
+          type: "FLOAT",
           buffer: {
-            type: "FLOAT",
             data: buffers.textureCoord,
             usage: "STATIC_DRAW",
           },

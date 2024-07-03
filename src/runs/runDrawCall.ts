@@ -1,4 +1,4 @@
-import { getBuffer } from "../caches/getBuffer";
+import { getAttributeBuffer } from "../caches/getAttributeBuffer";
 import { getElementBuffer } from "../caches/getElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IDrawElements } from "../data/IDrawElements";
@@ -97,7 +97,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, renderObject: IRenderO
         {
             if (vertices.hasOwnProperty(attr))
             {
-                const buffer = getBuffer(gl, vertices[attr].buffer);
+                const buffer = getAttributeBuffer(gl, vertices[attr]);
 
                 return buffer.count;
             }

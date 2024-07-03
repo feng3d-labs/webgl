@@ -54,8 +54,8 @@ function main()
       vertexArray: {
         vertices: {
           aVertexPosition: {
+            type: "FLOAT",
             buffer: {
-              type: "FLOAT",
               data: new Float32Array([
                 1.0, 1.0,
                 -1.0, 1.0,
@@ -67,8 +67,8 @@ function main()
             normalized: false,
           },
           aVertexColor: {
+            type: "FLOAT",
             buffer: {
-              type: "FLOAT",
               data: new Float32Array([
                 1.0, 1.0, 1.0, 1.0, // white
                 1.0, 0.0, 0.0, 1.0, // red

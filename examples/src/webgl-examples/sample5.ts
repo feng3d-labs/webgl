@@ -46,8 +46,8 @@ function main()
     vertexArray: {
       vertices: {
         aVertexPosition: {
+          type: "FLOAT",
           buffer: {
-            type: "FLOAT",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -55,8 +55,8 @@ function main()
           normalized: false,
         },
         aVertexColor: {
+          type: "FLOAT",
           buffer: {
-            type: "FLOAT",
             data: buffers.color,
             usage: "STATIC_DRAW",
           },

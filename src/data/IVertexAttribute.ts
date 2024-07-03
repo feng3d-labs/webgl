@@ -21,6 +21,11 @@ export interface IVertexAttribute
     numComponents: 1 | 2 | 3 | 4;
 
     /**
+     * 属性缓冲数据类型
+     */
+    type?: VertexAttributeTypes;
+
+    /**
      * 是否标准化。
      */
     normalized?: boolean;

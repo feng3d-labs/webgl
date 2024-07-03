@@ -29,7 +29,6 @@ const vertexPosBuffer: IBuffer = {
         -1.0, 1.0,
         -1.0, -1.0
     ]),
-    type: "FLOAT",
     usage: "STATIC_DRAW",
 };
 const vertexTexBuffer: IBuffer = {
@@ -41,7 +40,6 @@ const vertexTexBuffer: IBuffer = {
         0.0, 0.0,
         0.0, 1.0
     ]),
-    type: "FLOAT",
     usage: "STATIC_DRAW",
 };
 
