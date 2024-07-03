@@ -5,6 +5,7 @@ export * from "./data/ICapabilities";
 export * from "./data/IFramebuffer";
 export * from "./data/IIndexBuffer";
 export * from "./data/IPassDescriptor";
+export * from "./data/IQueryAction";
 export * from "./data/IRenderObject";
 export * from "./data/IRenderPass";
 export * from "./data/IRenderPipeline";

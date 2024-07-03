@@ -1,4 +1,4 @@
-import { IBuffer, IProgram, IRenderingContext, IVertexArrayObject } from "../../../src";
+import { IBuffer, IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -17,6 +17,7 @@ const isWebGL2 = !!gl;
 const program: IProgram = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: { depth: { depthtest: true } },
+    primitive: { topology: "TRIANGLES" },
 };
 
 // -- Init Buffer
@@ -37,40 +38,40 @@ const vertexArray: IVertexArrayObject = {
         pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
 };
-gl.bindVertexArray(vertexArray);
-
 // -- Init Query
-const query = gl.createQuery();
+const query: IQuery = {};
 
 // -- Render
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+const rp: IRenderPass = {
+    passDescriptor: {
+        colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
+        depthStencilAttachment: { depthLoadOp: "clear" },
+    },
+    renderObjects: [],
+};
 
-gl.bindVertexArray(vertexArray);
+const ro: IRenderObject = {
+    vertexArray,
+    pipeline: program,
+    drawArrays: { firstVertex: 0, vertexCount: 3 },
+};
+rp.renderObjects.push(ro);
 
-gl.drawArrays(gl.TRIANGLES, 0, 3);
+rp.renderObjects.push({ action: "beginQuery", target: "ANY_SAMPLES_PASSED", query });
 
-gl.beginQuery(gl.ANY_SAMPLES_PASSED, query);
-gl.drawArrays(gl.TRIANGLES, 3, 3);
-gl.endQuery(gl.ANY_SAMPLES_PASSED);
+rp.renderObjects.push({
+    ...ro,
+    drawArrays: { firstVertex: 3, vertexCount: 3 },
+});
 
-(function tick()
-{
-    if (!gl.getQueryParameter(query, gl.QUERY_RESULT_AVAILABLE))
-    {
-        // A query's result is never available in the same frame
-        // the query was issued.  Try in the next frame.
-        requestAnimationFrame(tick);
+rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
 
-        return;
-    }
+WebGL.runRenderPass(rc, rp);
 
-    const samplesPassed = gl.getQueryParameter(query, gl.QUERY_RESULT);
-    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
-    gl.deleteQuery(query);
-})();
+const samplesPassed = await WebGL.getQueryResult(rc, query);
+document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
 
 // -- Delete WebGL resources
-// gl.deleteBuffer(vertexPosBuffer);
-// gl.deleteProgram(program);
-gl.deleteVertexArray(vertexArray);
+WebGL.deleteBuffer(rc, vertexPosBuffer);
+WebGL.deleteProgram(rc, program);
+WebGL.deleteVertexArray(rc, vertexArray);

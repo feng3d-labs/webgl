@@ -1,6 +1,7 @@
 import { IRenderPass } from "../data/IRenderPass";
-import { runRenderObject } from "./runRenderObject";
 import { runPassDescriptor } from "./runPassDescriptor";
+import { runQueryAction } from "./runQueryAction";
+import { runRenderObject } from "./runRenderObject";
 
 export function runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
 {
@@ -8,6 +9,13 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass
 
     renderPass.renderObjects?.forEach((renderObject) =>
     {
-        runRenderObject(gl, renderObject);
+        if ("action" in renderObject)
+        {
+            runQueryAction(gl, renderObject);
+        }
+        else
+        {
+            runRenderObject(gl, renderObject);
+        }
     });
 }

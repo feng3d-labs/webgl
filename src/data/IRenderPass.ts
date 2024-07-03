@@ -1,4 +1,5 @@
 import { IPassDescriptor } from "./IPassDescriptor";
+import { IQueryAction } from "./IQueryAction";
 import { IRenderObject } from "./IRenderObject";
 
 /**
@@ -16,5 +17,5 @@ export class IRenderPass
     /**
      * 渲染对象列表，默认为 []。
      */
-    renderObjects?: IRenderObject[];
+    renderObjects?: (IRenderObject | IQueryAction)[];
 }
