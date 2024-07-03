@@ -53,7 +53,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
-        sources: [{ source: image, level: 1 }]
+        sources: [{ source: image, level: 0 }]
     };
     const sampler: ISampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 
