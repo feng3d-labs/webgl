@@ -1,4 +1,4 @@
-import { deleteBuffer } from "./caches/getAttributeBuffer";
+import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";

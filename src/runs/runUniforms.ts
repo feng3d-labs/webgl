@@ -1,4 +1,4 @@
-import { getAttributeBuffer } from "../caches/getAttributeBuffer";
+import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { getProgram } from "../caches/getProgram";
 import { IWebGLUniformBufferType } from "../const/WebGLUniformType";
 import { IBuffer } from "../data/IBuffer";
@@ -54,7 +54,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
             const uniformData = lazy.getValue(uniforms[name], uniforms);
 
             //
-            const webGLBuffer = getAttributeBuffer(gl, uniformData as IBuffer);
+            const webGLBuffer = getWebGLBuffer(gl, uniformData as IBuffer);
             gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
         });
     }

@@ -30,7 +30,7 @@ declare global
     }
 }
 
-export function getAttributeBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?: VertexAttributeTypes)
+export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?: VertexAttributeTypes)
 {
     let webGLBuffer = gl._buffers.get(buffer);
     if (webGLBuffer) return webGLBuffer;

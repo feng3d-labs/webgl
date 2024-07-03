@@ -1,5 +1,3 @@
-import { VertexAttributeTypes } from "./IVertexAttribute";
-
 /**
  * WebGL缓冲区
  *
