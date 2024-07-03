@@ -1,5 +1,5 @@
 import { getProgram } from "../caches/getProgram";
-import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { WebGLUniformTypeUtils, isWebGLUniformTextureType } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
 import { ISamplerTexture } from "../data/ISamplerTexture";
 import { IUniformInfo } from "../data/IUniformInfo";
@@ -27,7 +27,7 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
             console.error(`沒有找到Uniform ${name} 數據！`);
         }
 
-        if (WebGLUniformTypeUtils.isTexture(uniformInfo.type))
+        if (isWebGLUniformTextureType(uniformInfo.type))
         {
             runSamplerTexture(gl, uniformInfo, uniformData as ISamplerTexture);
         }

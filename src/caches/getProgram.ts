@@ -1,4 +1,4 @@
-import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
 import { IAttributeInfo } from "../data/IAttributeInfo";
 import { IRenderPipeline } from "../data/IRenderPipeline";
 import { IUniformInfo } from "../data/IUniformInfo";
@@ -111,8 +111,8 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
                 result = reg.exec(name);
             }
             const location = gl.getUniformLocation(shaderProgram, name);
-            const type = WebGLUniformTypeUtils.getType(activeInfo.type);
-            const isTexture = WebGLUniformTypeUtils.isTexture(type);
+            const type = getWebGLUniformType(activeInfo.type);
+            const isTexture = isWebGLUniformTextureType(type);
             uniforms[name] = { activeInfo, location, type, paths, textureID };
 
             if (isTexture)

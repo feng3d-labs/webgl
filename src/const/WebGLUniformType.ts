@@ -4,33 +4,45 @@
 export type IWebGLUniformType = keyof typeof webGLUniformTypeValue;
 
 /**
+ * WebGL中Uniform纹理类型
+ */
+export type IWebGLUniformTextureType = keyof typeof webGLUniformTextureTypeValue;
+
+/**
+ * WebGL中Uniform缓冲区类型
+ */
+export type IWebGLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
+
+/**
+ * 获取Unifrom类型名称
+ *
+ * @param value WebGL中Unifrom类型对应的值。
+ * @returns Unifrom类型名称
+ */
+export function getWebGLUniformType(value: number)
+{
+    const result = webGLUniformValueType[value] as IWebGLUniformType;
+    console.assert(!!result);
+
+    return result;
+}
+
+/**
+ * 判断是否为纹理Unifrom类型。
+ *
+ * @param type Unifrom类型名称
+ * @returns 是否为纹理Unifrom类型。
+ */
+export function isWebGLUniformTextureType(type: IWebGLUniformType): boolean
+{
+    return webGLUniformTextureTypeValue[type] !== undefined;
+}
+
+/**
  * WebGL中Uniform类型对应数值
  */
 export class WebGLUniformTypeUtils
 {
-    /**
-     * 获取Unifrom类型名称
-     *
-     * @param value WebGL中Unifrom类型对应的值。
-     * @returns Unifrom类型名称
-     */
-    static getType(value: number)
-    {
-        if (!this._cache)
-        {
-            this._cache = [];
-            Object.keys(webGLUniformTypeValue).forEach((v) =>
-            {
-                this._cache[webGLUniformTypeValue[v]] = v;
-            });
-        }
-
-        const result = this._cache[value] as IWebGLUniformType;
-        console.assert(!!result);
-
-        return result;
-    }
-
     /**
      * 获取WebGL中Unifrom类型对应的值。
      *
@@ -44,22 +56,8 @@ export class WebGLUniformTypeUtils
 
         return result as any;
     }
-
-    /**
-     * 判断是否为纹理Unifrom类型。
-     *
-     * @param type Unifrom类型名称
-     * @returns 是否为纹理Unifrom类型。
-     */
-    static isTexture(type: IWebGLUniformType): boolean
-    {
-        return samplers[type] !== undefined;
-    }
-
-    private static _cache: string[];
 }
 
-const samplers = { SAMPLER_2D: 35678, SAMPLER_CUBE: 35680, SAMPLER_3D: 35679, SAMPLER_2D_SHADOW: 35682, SAMPLER_2D_ARRAY: 36289, SAMPLER_2D_ARRAY_SHADOW: 36292, SAMPLER_CUBE_SHADOW: 36293, INT_SAMPLER_2D: 36298, INT_SAMPLER_3D: 36299, INT_SAMPLER_CUBE: 36300, INT_SAMPLER_2D_ARRAY: 36303, UNSIGNED_INT_SAMPLER_2D: 36306, UNSIGNED_INT_SAMPLER_3D: 36307, UNSIGNED_INT_SAMPLER_CUBE: 36308, UNSIGNED_INT_SAMPLER_2D_ARRAY: 36311 };
 /**
  * WebGL1 缓冲区数据类型。
  */
@@ -70,11 +68,6 @@ const webGL1UniformBufferTypeValue = { FLOAT: 5126, FLOAT_VEC2: 35664, FLOAT_VEC
 const webGL1UniformTextureTypeValue = { SAMPLER_2D: 35678, SAMPLER_CUBE: 35680 };
 
 /**
- * WebGL1 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
- */
-const webGL1UniformTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL1UniformTextureTypeValue };
-
-/**
  * 仅 WebGL2 缓冲区数据类型。
  */
 const webGL2OnlyUniformBufferTypeValue = { UNSIGNED_INT: 5125, UNSIGNED_INT_VEC2: 36294, UNSIGNED_INT_VEC3: 36295, UNSIGNED_INT_VEC4: 36296, FLOAT_MAT2x3: 35685, FLOAT_MAT2x4: 35686, FLOAT_MAT3x2: 35687, FLOAT_MAT3x4: 35688, FLOAT_MAT4x2: 35689, FLOAT_MAT4x3: 35690 };
@@ -82,15 +75,21 @@ const webGL2OnlyUniformBufferTypeValue = { UNSIGNED_INT: 5125, UNSIGNED_INT_VEC2
  * 仅 WebGL2 纹理数据类型。
  */
 const webGL2OnlyUniformTextureTypeValue = { SAMPLER_3D: 35679, SAMPLER_2D_SHADOW: 35682, SAMPLER_2D_ARRAY: 36289, SAMPLER_2D_ARRAY_SHADOW: 36292, SAMPLER_CUBE_SHADOW: 36293, INT_SAMPLER_2D: 36298, INT_SAMPLER_3D: 36299, INT_SAMPLER_CUBE: 36300, INT_SAMPLER_2D_ARRAY: 36303, UNSIGNED_INT_SAMPLER_2D: 36306, UNSIGNED_INT_SAMPLER_3D: 36307, UNSIGNED_INT_SAMPLER_CUBE: 36308, UNSIGNED_INT_SAMPLER_2D_ARRAY: 36311 };
-/**
- * 仅 WebGL2 缓冲区数据类型以及纹理数据类型组成的统一变量数据类型。
- */
-const webGL2OnlyUniformTypeValue = { ...webGL2OnlyUniformBufferTypeValue, ...webGL2OnlyUniformTextureTypeValue };
 
 /**
  * WebGL Uniform 类型与值的映射。
  */
-const webGLUniformTypeValue = { ...webGL1UniformTypeValue, ...webGL2OnlyUniformTypeValue };
+const webGLUniformTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL1UniformTextureTypeValue, ...webGL2OnlyUniformBufferTypeValue, ...webGL2OnlyUniformTextureTypeValue };
+
+/**
+ * WebGL Uniform 纹理类型与值的映射。
+ */
+const webGLUniformTextureTypeValue = { ...webGL1UniformTextureTypeValue, ...webGL2OnlyUniformTextureTypeValue };
+
+/**
+ * WebGL Uniform 纹理类型与值的映射。
+ */
+const webGLUniformBufferTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL2OnlyUniformBufferTypeValue };
 
 /**
  * WebGL Uniform 值与类型的映射。
