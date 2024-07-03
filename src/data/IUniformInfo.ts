@@ -6,15 +6,33 @@ import { IWebGLUniformType } from "../const/WebGLUniformType";
 export interface IUniformInfo
 {
     /**
-     * WebGL激活信息。
+     * 名称。
      */
-    activeInfo: WebGLActiveInfo;
+    name: string;
 
-    /**
-     * WebGL中Uniform类型
-     */
     type: IWebGLUniformType;
 
+    /**
+     * 是否纹理。
+     */
+    isTexture: boolean;
+
+    /**
+     * 子项信息列表。
+     */
+    items: IUniformItemInfo[]
+
+    /**
+     * 是否在Block中。
+     */
+    inBlock?: boolean;
+}
+
+/**
+ * WebGL统一变量
+ */
+export interface IUniformItemInfo
+{
     /**
      * uniform地址
      */

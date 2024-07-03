@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack: github.com/g-truc/ogl-samples/blob/master/tests/gl-320-draw-instanced.cpp -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - draw_instanced_ubo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - draw_instanced_ubo</div>
+    <p id="description">This samples demonstrates the use of uniform buffer object</p>
+
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+
+        precision highp float;
+        precision highp int;
+
+        layout(std140, column_major) uniform;
+
+        uniform Transform
+        {
+            mat4 MVP[2];
+        } transform;
+
+        layout(location = POSITION_LOCATION) in vec2 pos;
+        flat out int instance;
+
+        void main()
+        {
+            instance = gl_InstanceID;
+            gl_Position = transform.MVP[gl_InstanceID] * vec4(pos, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+        layout(std140) uniform;
+
+        uniform Material
+        {
+            vec4 Diffuse[2];
+        } material;
+
+        flat in int instance;
+        out vec4 color;
+
+        void main()
+        {
+            color = material.Diffuse[instance % 2];
+        }
+    </script>
+
+    <script type="module" src="./draw_instanced_ubo.ts">
+    </script>
+    <div id="highlightedLines"  style="display: none">#L89-L117</div>
+</body>
+</html>

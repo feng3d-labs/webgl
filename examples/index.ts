@@ -37,6 +37,7 @@ const files = {
         "glsl_flat_smooth_interpolators",
         "glsl_non_square_matrix",
         "query_occlusion",
+        "draw_instanced_ubo",
     ],
 };
 

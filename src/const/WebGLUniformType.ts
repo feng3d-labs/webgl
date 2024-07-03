@@ -19,9 +19,9 @@ export type IWebGLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
  * @param value WebGL中Unifrom类型对应的值。
  * @returns Unifrom类型名称
  */
-export function getWebGLUniformType(value: number)
+export function getWebGLUniformType(value: number): IWebGLUniformType
 {
-    const result = webGLUniformValueType[value] as IWebGLUniformType;
+    const result = webGLUniformValueType[value];
     console.assert(!!result);
 
     return result;

@@ -8,15 +8,17 @@ import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    runViewPort(gl, renderObject.viewport);
+    const { viewport, scissor, pipeline, vertexArray, uniforms } = renderObject;
 
-    runScissor(gl, renderObject.scissor);
+    runViewPort(gl, viewport);
 
-    runRenderPipeline(gl, renderObject.pipeline);
+    runScissor(gl, scissor);
 
-    runVertexArray(gl, renderObject.pipeline, renderObject.vertexArray);
+    runRenderPipeline(gl, pipeline);
 
-    runUniforms(gl, renderObject);
+    runVertexArray(gl, pipeline, vertexArray);
+
+    runUniforms(gl, pipeline, uniforms);
 
     runDrawCall(gl, renderObject);
 }

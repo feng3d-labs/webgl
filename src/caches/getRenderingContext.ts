@@ -42,6 +42,7 @@ function initMap(gl: WebGLRenderingContext)
     gl._samplers = new Map();
     gl._querys = new Map();
     gl._programs = {};
+    gl._shaders = {};
 }
 
 function _onContextLost(event: Event)
