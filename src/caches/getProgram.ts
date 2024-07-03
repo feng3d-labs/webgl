@@ -140,18 +140,21 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const numUniformBlocks = gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS);
         const uniformBlockActiveInfos = new Array(numUniformBlocks).fill(0).map((v, i) =>
         {
-            const uniformIndices: number[] = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
-
+            // 获取包含的统一变量列表。
+            const uniformIndices: Uint32Array = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
+            const uniformList: IUniformInfo[] = [];
+            for (let i = 0; i < uniformIndices.length; i++)
+            {
+                const unifrom = uniforms[uniformIndices[i]];
+                unifrom.inBlock = true;
+                uniformList.push(unifrom);
+            }
+            //
             const info: IUniformBlockInfo = {
                 name: gl.getActiveUniformBlockName(program, i),
                 binding: i,
                 dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
-                uniforms: uniformIndices.map((v) =>
-                {
-                    uniforms[v].inBlock = true;
-
-                    return uniforms[v];
-                }),
+                uniforms: uniformList,
             };
 
             return info;

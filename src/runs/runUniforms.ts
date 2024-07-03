@@ -16,7 +16,8 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
 
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
-        const { name, type, items, isTexture } = uniformInfo;
+        const { name, type, items, isTexture, inBlock } = uniformInfo;
+        if (inBlock) return;
 
         items.forEach((v) =>
         {
@@ -41,6 +42,11 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
                 runUniform(gl, type as IWebGLUniformBufferType, v, uniformData);
             }
         });
+    });
+
+    webGLProgram.uniformBlocks.forEach((uniformBlock) =>
+    {
+        uniformBlock.name
     });
 }
 

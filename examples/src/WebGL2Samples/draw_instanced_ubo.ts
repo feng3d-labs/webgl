@@ -55,8 +55,7 @@ const rp: IRenderPass = {
             },
         },
         uniforms: {
-            // Transform: {
-            transform: {
+            Transform: {
                 MVP: [
                     [1.0, 0.0, 0.0, 0.0,
                         0.0, 1.0, 0.0, 0.0,
@@ -70,8 +69,7 @@ const rp: IRenderPass = {
                     ]
                 ]
             },
-            // Material: {
-            material: {
+            Material: {
                 Diffuse: [
                     [1.0, 0.5, 0.0, 1.0],
                     [0.0, 0.5, 1.0, 1.0]
