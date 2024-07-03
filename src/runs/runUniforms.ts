@@ -1,5 +1,5 @@
 import { getProgram } from "../caches/getProgram";
-import { WebGLUniformTypeUtils, isWebGLUniformTextureType } from "../const/WebGLUniformType";
+import { IWebGLUniformBufferType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
 import { ISamplerTexture } from "../data/ISamplerTexture";
 import { IUniformInfo } from "../data/IUniformInfo";
@@ -44,7 +44,8 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
 function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: any)
 {
     const location = uniformInfo.location;
-    switch (uniformInfo.type)
+    const type = uniformInfo.type as IWebGLUniformBufferType;
+    switch (type)
     {
         case "BOOL":
         case "INT":
@@ -126,6 +127,6 @@ function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: 
             (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         default:
-            console.error(`无法识别的uniform类型 ${uniformInfo.activeInfo.name} ${uniformInfo.type}`);
+            console.error(`无法识别的uniform类型 ${uniformInfo.activeInfo.name} ${type}`);
     }
 }

@@ -39,26 +39,6 @@ export function isWebGLUniformTextureType(type: IWebGLUniformType): boolean
 }
 
 /**
- * WebGL中Uniform类型对应数值
- */
-export class WebGLUniformTypeUtils
-{
-    /**
-     * 获取WebGL中Unifrom类型对应的值。
-     *
-     * @param type Unifrom类型名称
-     * @returns WebGL中Unifrom类型对应的值。
-     */
-    static getValue(type: IWebGLUniformType): number
-    {
-        const result = webGLUniformTypeValue[type];
-        console.assert(!!result);
-
-        return result as any;
-    }
-}
-
-/**
  * WebGL1 缓冲区数据类型。
  */
 const webGL1UniformBufferTypeValue = { FLOAT: 5126, FLOAT_VEC2: 35664, FLOAT_VEC3: 35665, FLOAT_VEC4: 35666, INT: 5124, INT_VEC2: 35667, INT_VEC3: 35668, INT_VEC4: 35669, BOOL: 35670, BOOL_VEC2: 35671, BOOL_VEC3: 35672, BOOL_VEC4: 35673, FLOAT_MAT2: 35674, FLOAT_MAT3: 35675, FLOAT_MAT4: 35676 };
