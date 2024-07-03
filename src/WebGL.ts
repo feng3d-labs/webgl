@@ -1,4 +1,4 @@
-import { deleteBuffer } from "./caches/getBuffer";
+import { deleteBuffer } from "./caches/getAttributeBuffer";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";
@@ -8,6 +8,7 @@ import { deleteTexture } from "./caches/getTexture";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
 import { IPassDescriptor } from "./data/IPassDescriptor";
+import { IQuery } from "./data/IQueryAction";
 import { IReadPixels } from "./data/IReadPixels";
 import { IRenderObject } from "./data/IRenderObject";
 import { IRenderPass } from "./data/IRenderPass";
@@ -18,6 +19,7 @@ import { ISampler } from "./data/ISampler";
 import { ITexture } from "./data/ITexture";
 import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
+import { getQueryResult } from "./runs/runQueryAction";
 import { runReadPixels } from "./runs/runReadPixels";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
@@ -128,5 +130,13 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         deleteVertexArray(gl, vertexArray);
+    }
+
+    static getQueryResult(renderingContext: IRenderingContext, query: IQuery)
+    {
+        const gl = getRenderingContext(renderingContext);
+        if (!gl || gl.isContextLost()) return;
+
+        return getQueryResult(gl, query);
     }
 }

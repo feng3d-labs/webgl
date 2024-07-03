@@ -8,11 +8,6 @@ import { VertexAttributeTypes } from "./IVertexAttribute";
 export interface IBuffer
 {
     /**
-     * 属性缓冲数据类型
-     */
-    type?: VertexAttributeTypes;
-
-    /**
      * 缓冲区尺寸。
      */
     size?: number;

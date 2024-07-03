@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { AttributeBufferSourceTypes, IBuffer } from "../data/IBuffer";
-import { VertexAttributeTypes } from "../data/IVertexAttribute";
+import { IVertexAttribute, VertexAttributeTypes } from "../data/IVertexAttribute";
 
 declare global
 {
@@ -30,8 +30,10 @@ declare global
     }
 }
 
-export function getBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
+export function getAttributeBuffer(gl: WebGLRenderingContext, attribute: IVertexAttribute)
 {
+    const { buffer, type } = attribute;
+
     let webGLBuffer = gl._buffers.get(buffer);
 
     if (!webGLBuffer)
@@ -42,7 +44,7 @@ export function getBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
         const updateBuffer = () =>
         {
             // 获取
-            webGLBuffer.type = buffer.type || getWebGLBufferType(buffer.data);
+            webGLBuffer.type = type || getWebGLBufferType(buffer.data);
             const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
 
             // 上传数据到WebGL

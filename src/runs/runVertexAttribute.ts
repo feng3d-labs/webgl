@@ -1,9 +1,9 @@
-import { getBuffer } from "../caches/getBuffer";
+import { getAttributeBuffer } from "../caches/getAttributeBuffer";
 import { IVertexAttribute } from "../data/IVertexAttribute";
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
 {
-    const { buffer, numComponents, normalized, divisor } = attribute;
+    const { numComponents, normalized, divisor } = attribute;
     let { vertexSize, offset } = attribute;
 
     gl.enableVertexAttribArray(location);
@@ -22,7 +22,9 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    const webGLBuffer = getBuffer(gl, buffer);
+    const webGLBuffer = getAttributeBuffer(gl, attribute);
+
+    //
     const { type, bytesPerElement } = webGLBuffer;
 
     //
