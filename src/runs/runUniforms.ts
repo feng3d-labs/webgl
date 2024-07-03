@@ -13,9 +13,8 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
 {
     const shaderResult = getProgram(gl, renderObject.pipeline);
 
-    for (const name in shaderResult.uniforms)
+    shaderResult.uniforms.forEach((uniformInfo) =>
     {
-        const uniformInfo = shaderResult.uniforms[name];
         const paths = uniformInfo.paths;
         let uniformData = lazy.getValue(renderObject.uniforms[paths[0]], renderObject.uniforms);
         for (let i = 1; i < paths.length; i++)
@@ -35,7 +34,7 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
         {
             runUniform(gl, uniformInfo, uniformData);
         }
-    }
+    });
 }
 
 /**

@@ -21,7 +21,7 @@ declare global
         /**
          * uniform信息列表
          */
-        uniforms: { [name: string]: IUniformInfo };
+        uniforms: IUniformInfo[];
     }
 }
 
@@ -81,20 +81,20 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    const uniforms: { [name: string]: IUniformInfo } = {};
+    const uniforms: IUniformInfo[] = [];
     let textureID = 0;
     for (let i = 0; i < numUniforms; i++)
     {
         const activeInfo = gl.getActiveUniform(program, i);
+        const { name, size, type } = activeInfo;
         const reg = /(\w+)/g;
 
-        let name = activeInfo.name;
         const names = [name];
-        if (activeInfo.size > 1)
+        if (size > 1)
         {
-            console.assert(name.substr(-3, 3) === "[0]");
+            console.assert(name.substring(name.length - 3) === "[0]");
             const baseName = name.substring(0, name.length - 3);
-            for (let j = 1; j < activeInfo.size; j++)
+            for (let j = 1; j < size; j++)
             {
                 names[j] = `${baseName}[${j}]`;
             }
@@ -102,7 +102,7 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
 
         for (let j = 0; j < names.length; j++)
         {
-            name = names[j];
+            const name = names[j];
             let result: RegExpExecArray = reg.exec(name);
             const paths: string[] = [];
             while (result)
@@ -111,9 +111,9 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
                 result = reg.exec(name);
             }
             const location = gl.getUniformLocation(program, name);
-            const type = getWebGLUniformType(activeInfo.type);
-            const isTexture = isWebGLUniformTextureType(type);
-            uniforms[name] = { name, location, type, paths, textureID };
+            const typeString = getWebGLUniformType(type);
+            const isTexture = isWebGLUniformTextureType(typeString);
+            uniforms.push({ name, location, type: typeString, paths, textureID });
 
             if (isTexture)
             {
