@@ -87,7 +87,7 @@ WebGL.runRenderPass(rc, rp);
 // gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, uniformMaterialBuffer);
 
 // -- Delete WebGL resources
-// gl.deleteBuffer(vertexPosBuffer);
+WebGL.deleteBuffer(rc, vertexPosBuffer);
 // gl.deleteBuffer(uniformTransformBuffer);
 // gl.deleteBuffer(uniformMaterialBuffer);
-// gl.deleteProgram(program);
+WebGL.deleteProgram(rc, program);
