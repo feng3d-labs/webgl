@@ -41,26 +41,20 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
             // gl.uniform1i(location, data);
             gl.uniform1iv(location, [data]);
             break;
+        case "BOOL_VEC2":
         case "INT_VEC2":
             // gl.uniform2i(location, data[0], data[1]);
             gl.uniform2iv(location, data);
             break;
+        case "BOOL_VEC3":
         case "INT_VEC3":
             // gl.uniform3i(location, data[0], data[1], data[2]);
             gl.uniform3iv(location, data);
             break;
+        case "BOOL_VEC4":
         case "INT_VEC4":
             // gl.uniform4i(location, data[0], data[1], data[2], data[3]);
             gl.uniform4iv(location, data);
-            break;
-        case "FLOAT_MAT3":
-            gl.uniformMatrix3fv(location, false, data);
-            break;
-        case "FLOAT_MAT4":
-            gl.uniformMatrix4fv(location, false, data);
-            break;
-        case "FLOAT_MAT4x3":
-            (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         case "FLOAT":
             // gl.uniform1f(location, data);
@@ -77,6 +71,49 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
         case "FLOAT_VEC4":
             // gl.uniform4f(location, data[0], data[1], data[2], data[3]);
             gl.uniform4fv(location, data);
+            break;
+        case "FLOAT_MAT2":
+            gl.uniformMatrix2fv(location, false, data);
+            break;
+        case "FLOAT_MAT3":
+            gl.uniformMatrix3fv(location, false, data);
+            break;
+        case "FLOAT_MAT4":
+            gl.uniformMatrix4fv(location, false, data);
+            break;
+        case "UNSIGNED_INT":
+            (gl as any as WebGL2RenderingContext).uniform1ui(location, data);
+            (gl as any as WebGL2RenderingContext).uniform1uiv(location, [data]);
+            break;
+        case "UNSIGNED_INT_VEC2":
+            // (gl as any as WebGL2RenderingContext).uniform2ui(location, data[0], data[1]);
+            (gl as any as WebGL2RenderingContext).uniform2uiv(location, data);
+            break;
+        case "UNSIGNED_INT_VEC3":
+            // (gl as any as WebGL2RenderingContext).uniform3ui(location, data[0], data[1], data[2]);
+            (gl as any as WebGL2RenderingContext).uniform3uiv(location, data);
+            break;
+        case "UNSIGNED_INT_VEC4":
+            // (gl as any as WebGL2RenderingContext).uniform4ui(location, data[0], data[1], data[2], data[3]);
+            (gl as any as WebGL2RenderingContext).uniform4uiv(location, data);
+            break;
+        case "FLOAT_MAT2x3":
+            (gl as any as WebGL2RenderingContext).uniformMatrix2x3fv(location, false, data);
+            break;
+        case "FLOAT_MAT2x4":
+            (gl as any as WebGL2RenderingContext).uniformMatrix2x4fv(location, false, data);
+            break;
+        case "FLOAT_MAT3x2":
+            (gl as any as WebGL2RenderingContext).uniformMatrix3x2fv(location, false, data);
+            break;
+        case "FLOAT_MAT3x4":
+            (gl as any as WebGL2RenderingContext).uniformMatrix3x4fv(location, false, data);
+            break;
+        case "FLOAT_MAT4x2":
+            (gl as any as WebGL2RenderingContext).uniformMatrix4x2fv(location, false, data);
+            break;
+        case "FLOAT_MAT4x3":
+            (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         case "SAMPLER_2D":
         case "SAMPLER_2D_ARRAY":
