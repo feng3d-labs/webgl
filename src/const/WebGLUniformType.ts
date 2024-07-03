@@ -1,9 +1,7 @@
-import { DrawElementType } from "../data/IIndexBuffer";
-
 /**
  * WebGL中Uniform类型
  */
-export type WebGLUniformType = keyof typeof webGLUniformType;
+export type IWebGLUniformType = keyof typeof webGLUniformType;
 
 /**
  * WebGL中Uniform类型对应数值
@@ -27,7 +25,7 @@ export class WebGLUniformTypeUtils
             });
         }
 
-        const result = this._cache[value] as WebGLUniformType;
+        const result = this._cache[value] as IWebGLUniformType;
         console.assert(!!result);
 
         return result;
@@ -39,7 +37,7 @@ export class WebGLUniformTypeUtils
      * @param type Unifrom类型名称
      * @returns WebGL中Unifrom类型对应的值。
      */
-    static getValue(type: WebGLUniformType): number
+    static getValue(type: IWebGLUniformType): number
     {
         const result = webGLUniformType[type];
         console.assert(!!result);
@@ -53,7 +51,7 @@ export class WebGLUniformTypeUtils
      * @param type Unifrom类型名称
      * @returns 是否为纹理Unifrom类型。
      */
-    static isTexture(type: WebGLUniformType): boolean
+    static isTexture(type: IWebGLUniformType): boolean
     {
         return samplers[type] !== undefined;
     }

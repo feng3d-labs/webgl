@@ -1,6 +1,7 @@
 import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
+import { IAttributeInfo } from "../data/IAttributeInfo";
 import { IRenderPipeline } from "../data/IRenderPipeline";
-import { WebGLUniform } from "../runs/runUniforms";
+import { IUniformInfo } from "../data/IUniformInfo";
 
 declare global
 {
@@ -15,11 +16,11 @@ declare global
         /**
          * 属性信息列表
          */
-        attributes: { [name: string]: AttributeInfo };
+        attributes: { [name: string]: IAttributeInfo };
         /**
          * uniform信息列表
          */
-        uniforms: { [name: string]: WebGLUniform };
+        uniforms: { [name: string]: IUniformInfo };
     }
 }
 
@@ -69,7 +70,7 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
 
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
-    const attributes: { [name: string]: AttributeInfo } = {};
+    const attributes: { [name: string]: IAttributeInfo } = {};
     let i = 0;
     while (i < numAttributes)
     {
@@ -79,7 +80,7 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
-    const uniforms: { [name: string]: WebGLUniform } = {};
+    const uniforms: { [name: string]: IUniformInfo } = {};
     i = 0;
     let textureID = 0;
     while (i < numUniforms)
@@ -178,19 +179,6 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
     }
 
     return program;
-}
-
-export interface AttributeInfo
-{
-    /**
-     * WebGL激活信息。
-     */
-    activeInfo: WebGLActiveInfo;
-
-    /**
-     * 属性地址
-     */
-    location: number;
 }
 
 /**

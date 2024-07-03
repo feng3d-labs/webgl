@@ -1,6 +1,8 @@
 import { getProgram } from "../caches/getProgram";
-import { WebGLUniformType } from "../const/WebGLUniformType";
+import { WebGLUniformTypeUtils } from "../const/WebGLUniformType";
 import { IRenderObject } from "../data/IRenderObject";
+import { ISamplerTexture } from "../data/ISamplerTexture";
+import { IUniformInfo } from "../data/IUniformInfo";
 import { lazy } from "../types";
 import { runSamplerTexture } from "./runTexture";
 
@@ -13,8 +15,8 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
 
     for (const name in shaderResult.uniforms)
     {
-        const activeInfo = shaderResult.uniforms[name];
-        const paths = activeInfo.paths;
+        const uniformInfo = shaderResult.uniforms[name];
+        const paths = uniformInfo.paths;
         let uniformData = lazy.getValue(renderObject.uniforms[paths[0]], renderObject.uniforms);
         for (let i = 1; i < paths.length; i++)
         {
@@ -24,17 +26,25 @@ export function runUniforms(gl: WebGLRenderingContext, renderObject: IRenderObje
         {
             console.error(`沒有找到Uniform ${name} 數據！`);
         }
-        runUniform(gl as any, activeInfo, uniformData);
+
+        if (WebGLUniformTypeUtils.isTexture(uniformInfo.type))
+        {
+            runSamplerTexture(gl, uniformInfo, uniformData as ISamplerTexture);
+        }
+        else
+        {
+            runUniform(gl, uniformInfo, uniformData);
+        }
     }
 }
 
 /**
  * 设置环境Uniform数据
  */
-function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data: any)
+function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: any)
 {
-    const location = webGLUniform.location;
-    switch (webGLUniform.type)
+    const location = uniformInfo.location;
+    switch (uniformInfo.type)
     {
         case "BOOL":
         case "INT":
@@ -115,43 +125,7 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
         case "FLOAT_MAT4x3":
             (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
-        case "SAMPLER_2D":
-        case "SAMPLER_2D_ARRAY":
-        case "SAMPLER_CUBE":
-            runSamplerTexture(gl, webGLUniform, data);
-            break;
         default:
-            console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${webGLUniform.type}`);
+            console.error(`无法识别的uniform类型 ${uniformInfo.activeInfo.name} ${uniformInfo.type}`);
     }
-}
-
-/**
- * WebGL统一变量
- */
-export interface WebGLUniform
-{
-    /**
-     * WebGL激活信息。
-     */
-    activeInfo: WebGLActiveInfo;
-
-    /**
-     * WebGL中Uniform类型
-     */
-    type: WebGLUniformType;
-
-    /**
-     * uniform地址
-     */
-    location: WebGLUniformLocation;
-
-    /**
-     * texture索引
-     */
-    textureID: number;
-
-    /**
-     * Uniform数组索引，当Uniform数据为数组数据时生效
-     */
-    paths: string[];
 }
