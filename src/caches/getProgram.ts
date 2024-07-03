@@ -58,7 +58,6 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
 
 function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshader: string)
 {
-    // 创建着色器程序
     // 编译顶点着色器
     const vertexShader = compileShaderCode(gl, "VERTEX_SHADER", vshader);
 
@@ -66,26 +65,24 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
     const fragmentShader = compileShaderCode(gl, "FRAGMENT_SHADER", fshader);
 
     // 创建着色器程序
-    const shaderProgram = createLinkProgram(gl, vertexShader, fragmentShader);
+    const program = createLinkProgram(gl, vertexShader, fragmentShader);
 
     // 获取属性信息
-    const numAttributes = gl.getProgramParameter(shaderProgram, gl.ACTIVE_ATTRIBUTES);
+    const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
     const attributes: { [name: string]: IAttributeInfo } = {};
-    let i = 0;
-    while (i < numAttributes)
+    for (let i = 0; i < numAttributes; i++)
     {
-        const activeInfo = gl.getActiveAttrib(shaderProgram, i++);
-        const location = gl.getAttribLocation(shaderProgram, activeInfo.name);
+        const activeInfo = gl.getActiveAttrib(program, i);
+        const location = gl.getAttribLocation(program, activeInfo.name);
         attributes[activeInfo.name] = { activeInfo, location };
     }
     // 获取uniform信息
-    const numUniforms = gl.getProgramParameter(shaderProgram, gl.ACTIVE_UNIFORMS);
+    const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     const uniforms: { [name: string]: IUniformInfo } = {};
-    i = 0;
     let textureID = 0;
-    while (i < numUniforms)
+    for (let i = 0; i < numUniforms; i++)
     {
-        const activeInfo = gl.getActiveUniform(shaderProgram, i++);
+        const activeInfo = gl.getActiveUniform(program, i);
         const reg = /(\w+)/g;
 
         let name = activeInfo.name;
@@ -110,7 +107,7 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
                 paths.push(result[1]);
                 result = reg.exec(name);
             }
-            const location = gl.getUniformLocation(shaderProgram, name);
+            const location = gl.getUniformLocation(program, name);
             const type = getWebGLUniformType(activeInfo.type);
             const isTexture = isWebGLUniformTextureType(type);
             uniforms[name] = { activeInfo, location, type, paths, textureID };
@@ -121,13 +118,48 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
             }
         }
     }
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        const numUniformBlocks = gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS);
+        const uniformBlockActiveInfos = new Array(numUniformBlocks).fill(0).map((v, i) =>
+        {
+            const info: IUniformBlockInfo = {
+                name: gl.getActiveUniformBlockName(program, i),
+                binding: i,
+                dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
+            };
 
-    shaderProgram.vertex = vertexShader;
-    shaderProgram.fragment = fragmentShader;
-    shaderProgram.attributes = attributes;
-    shaderProgram.uniforms = uniforms;
+            const uniformIndices = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
 
-    return shaderProgram;
+            return info;
+        });
+    }
+
+    //
+    program.vertex = vertexShader;
+    program.fragment = fragmentShader;
+    program.attributes = attributes;
+    program.uniforms = uniforms;
+
+    return program;
+}
+
+export interface IUniformBlockInfo
+{
+    /**
+     * 名称。
+     */
+    name: string;
+
+    /**
+     * 绑定位置。
+     */
+    binding: number;
+
+    /**
+     * 数据尺寸。
+     */
+    dataSize: number;
 }
 
 /**
