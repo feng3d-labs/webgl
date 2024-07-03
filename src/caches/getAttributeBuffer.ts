@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { AttributeBufferSourceTypes, IBuffer } from "../data/IBuffer";
-import { IVertexAttribute, VertexAttributeTypes } from "../data/IVertexAttribute";
+import { VertexAttributeTypes } from "../data/IVertexAttribute";
 
 declare global
 {
@@ -30,43 +30,40 @@ declare global
     }
 }
 
-export function getAttributeBuffer(gl: WebGLRenderingContext, attribute: IVertexAttribute)
+export function getAttributeBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?: VertexAttributeTypes)
 {
-    const { buffer, type } = attribute;
-
     let webGLBuffer = gl._buffers.get(buffer);
+    if (webGLBuffer) return webGLBuffer;
 
-    if (!webGLBuffer)
+    webGLBuffer = gl.createBuffer();
+    gl._buffers.set(buffer, webGLBuffer);
+
+    const updateBuffer = () =>
     {
-        webGLBuffer = gl.createBuffer();
-        gl._buffers.set(buffer, webGLBuffer);
+        const target = buffer.target || "ARRAY_BUFFER";
+        // 获取
+        webGLBuffer.type = type || getWebGLBufferType(buffer.data);
+        const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
 
-        const updateBuffer = () =>
-        {
-            // 获取
-            webGLBuffer.type = type || getWebGLBufferType(buffer.data);
-            const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
-
-            // 上传数据到WebGL
-            gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, data, gl[buffer.usage || "STATIC_DRAW"]);
-
-            //
-            webGLBuffer.count = data.length;
-            webGLBuffer.bytesPerElement = data.BYTES_PER_ELEMENT;
-        };
-
-        updateBuffer();
+        // 上传数据到WebGL
+        gl.bindBuffer(gl[target], webGLBuffer);
+        gl.bufferData(gl[target], data, gl[buffer.usage || "STATIC_DRAW"]);
 
         //
-        watcher.watch(buffer, "data", updateBuffer);
+        webGLBuffer.count = data.length;
+        webGLBuffer.bytesPerElement = data.BYTES_PER_ELEMENT;
+    };
 
-        //
-        webGLBuffer.destroy = () =>
-        {
-            watcher.unwatch(buffer, "data", updateBuffer);
-        };
-    }
+    updateBuffer();
+
+    //
+    watcher.watch(buffer, "data", updateBuffer);
+
+    //
+    webGLBuffer.destroy = () =>
+    {
+        watcher.unwatch(buffer, "data", updateBuffer);
+    };
 
     return webGLBuffer;
 }

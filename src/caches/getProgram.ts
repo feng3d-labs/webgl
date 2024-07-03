@@ -27,6 +27,8 @@ declare global
 
         /**
          * 统一变量块信息列表。
+         *
+         * 仅 WebGL2 中存在。
          */
         uniformBlocks: IUniformBlockInfo[];
     }
@@ -140,6 +142,8 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const numUniformBlocks = gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS);
         const uniformBlockActiveInfos = new Array(numUniformBlocks).fill(0).map((v, i) =>
         {
+            //
+            gl.uniformBlockBinding(program, i, i);
             // 获取包含的统一变量列表。
             const uniformIndices: Uint32Array = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
             const uniformList: IUniformInfo[] = [];
@@ -149,10 +153,11 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
                 unifrom.inBlock = true;
                 uniformList.push(unifrom);
             }
+            const name = gl.getActiveUniformBlockName(program, i);
             //
             const info: IUniformBlockInfo = {
-                name: gl.getActiveUniformBlockName(program, i),
-                binding: i,
+                name,
+                index: i,
                 dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
                 uniforms: uniformList,
             };
@@ -184,7 +189,7 @@ export interface IUniformBlockInfo
     /**
      * 绑定位置。
      */
-    binding: number;
+    index: number;
 
     /**
      * 数据尺寸。

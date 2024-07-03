@@ -106,7 +106,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IVertexAttri
         {
             if (vertices.hasOwnProperty(attr))
             {
-                const buffer = getAttributeBuffer(gl, vertices[attr]);
+                const buffer = getAttributeBuffer(gl, vertices[attr].buffer);
 
                 return buffer.count;
             }

@@ -22,7 +22,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    const webGLBuffer = getAttributeBuffer(gl, attribute);
+    const webGLBuffer = getAttributeBuffer(gl, attribute.buffer, attribute.type);
 
     //
     const { type, bytesPerElement } = webGLBuffer;

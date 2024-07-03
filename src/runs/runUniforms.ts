@@ -1,5 +1,7 @@
+import { getAttributeBuffer } from "../caches/getAttributeBuffer";
 import { getProgram } from "../caches/getProgram";
 import { IWebGLUniformBufferType } from "../const/WebGLUniformType";
+import { IBuffer } from "../data/IBuffer";
 import { IRenderPipeline } from "../data/IRenderPipeline";
 import { ISamplerTexture } from "../data/ISamplerTexture";
 import { IUniformItemInfo } from "../data/IUniformInfo";
@@ -44,10 +46,18 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
         });
     });
 
-    webGLProgram.uniformBlocks.forEach((uniformBlock) =>
+    if (gl instanceof WebGL2RenderingContext)
     {
-        uniformBlock.name
-    });
+        webGLProgram.uniformBlocks.forEach((uniformBlock) =>
+        {
+            const { name, index } = uniformBlock;
+            const uniformData = lazy.getValue(uniforms[name], uniforms);
+
+            //
+            const webGLBuffer = getAttributeBuffer(gl, uniformData as IBuffer);
+            gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
+        });
+    }
 }
 
 /**

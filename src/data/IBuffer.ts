@@ -7,6 +7,8 @@ import { VertexAttributeTypes } from "./IVertexAttribute";
  */
 export interface IBuffer
 {
+    target?: "UNIFORM_BUFFER";
+
     /**
      * 缓冲区尺寸。
      */
