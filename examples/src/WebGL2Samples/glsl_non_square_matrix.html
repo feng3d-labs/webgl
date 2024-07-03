@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - glsl_non_square_matrix</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - glsl_non_square_matrix</div>
+    <p id="description">
+        We use a mat4x3 to store the MVP homogenous matrix. The translation needs to be done as an extra step by adding the translation column in the matrix to the position. 
+    </p>
+    
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform mat4x3 MVP;
+
+        layout(location = 0) in vec2 position;
+        layout(location = 1) in vec2 texcoord;
+
+        out vec2 v_st;
+
+        void main()
+        {
+            v_st = texcoord;
+            gl_Position = vec4(MVP * vec4(position, 0.0, 1.0) + MVP[3], 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        in vec2 v_st;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, v_st);
+        }
+    </script>
+
+    <script type="module" src="./glsl_non_square_matrix.ts">
+    </script>
+    <div id="highlightedLines"  style="display: none">#L23-L33</div>
+</body>
+
+</html>
