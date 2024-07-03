@@ -117,11 +117,15 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
                 result = reg.exec(name);
             }
             const location = gl.getUniformLocation(program, name);
-            items.push({ location, paths, textureID });
 
             if (isTexture)
             {
+                items.push({ location, paths, textureID });
                 textureID++;
+            }
+            else
+            {
+                items.push({ location, paths, textureID: -1 });
             }
         }
         uniforms[i] = { name, type: typeString, isTexture, items };
