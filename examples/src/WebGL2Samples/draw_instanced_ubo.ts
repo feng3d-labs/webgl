@@ -55,8 +55,8 @@ const rp: IRenderPass = {
             },
         },
         uniforms: {
-            transform: uniformTransformBuffer,
-            material: uniformMaterialBuffer,
+            Transform: uniformTransformBuffer,
+            Material: uniformMaterialBuffer,
         },
         drawArrays: { vertexCount: 3, instanceCount: 2 },
     }]
