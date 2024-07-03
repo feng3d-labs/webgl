@@ -6,9 +6,9 @@ import { IWebGLUniformType } from "../const/WebGLUniformType";
 export interface IUniformInfo
 {
     /**
-     * WebGL激活信息。
+     * 名称。
      */
-    activeInfo: WebGLActiveInfo;
+    name: string;
 
     /**
      * WebGL中Uniform类型

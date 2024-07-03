@@ -1,9 +1,21 @@
+import { VertexAttributeTypes } from "./IVertexAttribute";
+
 export interface IAttributeInfo
 {
     /**
-     * WebGL激活信息。
+     * 名称。
      */
-    activeInfo: WebGLActiveInfo;
+    name: string;
+
+    /**
+     * 顶点尺寸。
+     */
+    size: number;
+
+    /**
+     * 属性缓冲数据类型
+     */
+    type?: VertexAttributeTypes;
 
     /**
      * 属性地址

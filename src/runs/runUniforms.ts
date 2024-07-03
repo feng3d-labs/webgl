@@ -127,6 +127,6 @@ function runUniform(gl: WebGLRenderingContext, uniformInfo: IUniformInfo, data: 
             (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         default:
-            console.error(`无法识别的uniform类型 ${uniformInfo.activeInfo.name} ${type}`);
+            console.error(`无法识别的uniform类型 ${uniformInfo.name} ${type}`);
     }
 }

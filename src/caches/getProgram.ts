@@ -2,6 +2,7 @@ import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUn
 import { IAttributeInfo } from "../data/IAttributeInfo";
 import { IRenderPipeline } from "../data/IRenderPipeline";
 import { IUniformInfo } from "../data/IUniformInfo";
+import { getWebGLAttributeValueType } from "./getWebGLAttributeType";
 
 declare global
 {
@@ -73,8 +74,10 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
     for (let i = 0; i < numAttributes; i++)
     {
         const activeInfo = gl.getActiveAttrib(program, i);
-        const location = gl.getAttribLocation(program, activeInfo.name);
-        attributes[activeInfo.name] = { activeInfo, location };
+        const { name, size, type } = activeInfo;
+        const location = gl.getAttribLocation(program, name);
+        const typeString = getWebGLAttributeValueType(type as any);
+        attributes[name] = { name, size, type: typeString, location };
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
@@ -110,7 +113,7 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
             const location = gl.getUniformLocation(program, name);
             const type = getWebGLUniformType(activeInfo.type);
             const isTexture = isWebGLUniformTextureType(type);
-            uniforms[name] = { activeInfo, location, type, paths, textureID };
+            uniforms[name] = { name, location, type, paths, textureID };
 
             if (isTexture)
             {
