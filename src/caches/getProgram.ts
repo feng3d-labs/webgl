@@ -17,7 +17,7 @@ declare global
         /**
          * 属性信息列表
          */
-        attributes: { [name: string]: IAttributeInfo };
+        attributes: IAttributeInfo[];
         /**
          * uniform信息列表
          */
@@ -70,14 +70,14 @@ function compileShaderProgram(gl: WebGLRenderingContext, vshader: string, fshade
 
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-    const attributes: { [name: string]: IAttributeInfo } = {};
+    const attributes: IAttributeInfo[] = [];
     for (let i = 0; i < numAttributes; i++)
     {
         const activeInfo = gl.getActiveAttrib(program, i);
         const { name, size, type } = activeInfo;
         const location = gl.getAttribLocation(program, name);
         const typeString = getWebGLAttributeValueType(type as any);
-        attributes[name] = { name, size, type: typeString, location };
+        attributes.push({ name, size, type: typeString, location });
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);

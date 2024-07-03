@@ -40,20 +40,17 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
 
     const shaderResult = getProgram(gl, pipeline);
 
-    for (const name in shaderResult.attributes)
+    //
+    shaderResult.attributes.forEach((activeInfo) =>
     {
-        const activeInfo = shaderResult.attributes[name];
-        const location = activeInfo.location;
+        const { name, location } = activeInfo;
         // 处理 WebGL 内置属性 gl_VertexID 等
-        if (location < 0)
-        {
-            continue;
-        }
+        if (location < 0) return;
 
         const attribute = vertices[name];
 
         runVertexAttribute(gl, location, attribute);
-    }
+    });
 
     runIndexBuffer(gl, index);
 }
