@@ -21,6 +21,11 @@ export interface IUniformInfo
      * 子项信息列表。
      */
     items: IUniformItemInfo[]
+
+    /**
+     * 是否在Block中。
+     */
+    inBlock?: boolean;
 }
 
 /**

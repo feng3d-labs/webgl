@@ -24,6 +24,11 @@ declare global
          * uniform信息列表
          */
         uniforms: IUniformInfo[];
+
+        /**
+         * 统一变量块信息列表。
+         */
+        uniformBlocks: IUniformBlockInfo[];
     }
 }
 
@@ -135,16 +140,23 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const numUniformBlocks = gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS);
         const uniformBlockActiveInfos = new Array(numUniformBlocks).fill(0).map((v, i) =>
         {
+            const uniformIndices: number[] = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
+
             const info: IUniformBlockInfo = {
                 name: gl.getActiveUniformBlockName(program, i),
                 binding: i,
                 dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
-            };
+                uniforms: uniformIndices.map((v) =>
+                {
+                    uniforms[v].inBlock = true;
 
-            const uniformIndices = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
+                    return uniforms[v];
+                }),
+            };
 
             return info;
         });
+        program.uniformBlocks = uniformBlockActiveInfos;
     }
 
     //
@@ -156,6 +168,9 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     return program;
 }
 
+/**
+ * 统一变量块信息。
+ */
 export interface IUniformBlockInfo
 {
     /**
@@ -172,6 +187,11 @@ export interface IUniformBlockInfo
      * 数据尺寸。
      */
     dataSize: number;
+
+    /**
+     * 包含的统一变量列表。
+     */
+    uniforms: IUniformInfo[];
 }
 
 /**
