@@ -14,7 +14,7 @@ Object.freeze(defaultBufferSource);
 Object.freeze(defaultTextureSources);
 Object.freeze(defaultTexture);
 
-export function runSamplerTexture(gl: WebGLRenderingContext, samplerTexture: ISamplerTexture, activeInfo: WebGLUniform)
+export function runSamplerTexture(gl: WebGLRenderingContext, activeInfo: WebGLUniform, samplerTexture: ISamplerTexture)
 {
     const { texture, sampler } = samplerTexture;
 

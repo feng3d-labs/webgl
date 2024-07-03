@@ -118,7 +118,7 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
         case "SAMPLER_2D":
         case "SAMPLER_2D_ARRAY":
         case "SAMPLER_CUBE":
-            runSamplerTexture(gl, data, webGLUniform);
+            runSamplerTexture(gl, webGLUniform, data);
             break;
         default:
             console.error(`无法识别的uniform类型 ${webGLUniform.activeInfo.name} ${webGLUniform.type}`);
