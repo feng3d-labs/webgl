@@ -38,17 +38,20 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
     {
         case "BOOL":
         case "INT":
-            gl.uniform1i(location, data);
-            // gl.uniform1iv(location, [data]);
+            // gl.uniform1i(location, data);
+            gl.uniform1iv(location, [data]);
             break;
         case "INT_VEC2":
-            gl.uniform2i(location, data[0], data[1]);
+            // gl.uniform2i(location, data[0], data[1]);
+            gl.uniform2iv(location, data);
             break;
         case "INT_VEC3":
-            gl.uniform3i(location, data[0], data[1], data[2]);
+            // gl.uniform3i(location, data[0], data[1], data[2]);
+            gl.uniform3iv(location, data);
             break;
         case "INT_VEC4":
-            gl.uniform4i(location, data[0], data[1], data[2], data[3]);
+            // gl.uniform4i(location, data[0], data[1], data[2], data[3]);
+            gl.uniform4iv(location, data);
             break;
         case "FLOAT_MAT3":
             gl.uniformMatrix3fv(location, false, data);
@@ -60,16 +63,20 @@ function runUniform(gl: WebGLRenderingContext, webGLUniform: WebGLUniform, data:
             (gl as any as WebGL2RenderingContext).uniformMatrix4x3fv(location, false, data);
             break;
         case "FLOAT":
-            gl.uniform1f(location, data);
+            // gl.uniform1f(location, data);
+            gl.uniform1fv(location, [data]);
             break;
         case "FLOAT_VEC2":
-            gl.uniform2f(location, data[0], data[1]);
+            // gl.uniform2f(location, data[0], data[1]);
+            gl.uniform2fv(location, data);
             break;
         case "FLOAT_VEC3":
-            gl.uniform3f(location, data[0], data[1], data[2]);
+            // gl.uniform3f(location, data[0], data[1], data[2]);
+            gl.uniform3fv(location, data);
             break;
         case "FLOAT_VEC4":
-            gl.uniform4f(location, data[0], data[1], data[2], data[3]);
+            // gl.uniform4f(location, data[0], data[1], data[2], data[3]);
+            gl.uniform4fv(location, data);
             break;
         case "SAMPLER_2D":
         case "SAMPLER_2D_ARRAY":
