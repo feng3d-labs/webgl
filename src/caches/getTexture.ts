@@ -159,14 +159,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     // eslint-disable-next-line no-lonely-if
                     if (textureTarget === "TEXTURE_2D")
                     {
-                        if (srcOffset)
-                        {
-                            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData, srcOffset || 0);
-                        }
-                        else
-                        {
-                            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
-                        }
+                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData, srcOffset || 0);
                     }
                     else if (textureTarget === "TEXTURE_3D")
                     {
