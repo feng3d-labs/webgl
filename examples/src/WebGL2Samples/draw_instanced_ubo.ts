@@ -1,4 +1,4 @@
-import { IAttributeBuffer, IBuffer, IProgram, IRenderPass, IRenderingContext, IUniformBuffer, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IProgram, IRenderPass, IRenderingContext, IUniformBuffer, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -18,7 +18,7 @@ const vertices = new Float32Array([
     0.3, -0.5,
     0.0, 0.5
 ]);
-const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 const transforms = new Float32Array([
     1.0, 0.0, 0.0, 0.0,
