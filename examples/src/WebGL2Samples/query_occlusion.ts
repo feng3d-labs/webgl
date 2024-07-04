@@ -1,4 +1,4 @@
-import { IBuffer, IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttributeBuffer, IBuffer, IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -28,7 +28,7 @@ const vertices = new Float32Array([
     0.3, -0.5, 0.5,
     0.0, 0.5, 0.5
 ]);
-const vertexPosBuffer: IBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
 const vertexArray: IVertexArrayObject = {

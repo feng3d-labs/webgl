@@ -1,4 +1,4 @@
-import { IBuffer, ICopyBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttributeBuffer, IBuffer, ICopyBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -28,9 +28,9 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
-    const vertexPosBufferDst: IBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
+    const vertexPosBufferDst: IAttributeBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
 
     const cb: ICopyBuffer = {
         read: vertexPosBufferSrc,

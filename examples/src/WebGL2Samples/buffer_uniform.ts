@@ -1,4 +1,4 @@
-import { IBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttributeBuffer, IBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, IUniformBuffer, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -32,7 +32,7 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
     ]);
-    const vertexBuffer: IBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
     //mat4 P, mat4 MV, mat3 Mnormal
     const transforms = new Float32Array([
@@ -52,12 +52,12 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const uniformPerDrawBuffer: IBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
+    const uniformPerDrawBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
 
     const lightPos = new Float32Array([
         0.0, 0.0, 0.0, 0.0,
     ]);
-    const uniformPerPassBuffer: IBuffer = { target: "UNIFORM_BUFFER", data: lightPos, usage: "DYNAMIC_DRAW" };
+    const uniformPerPassBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: lightPos, usage: "DYNAMIC_DRAW" };
 
     //vec3 ambient, diffuse, specular, float shininess
     const material = new Float32Array([
@@ -65,7 +65,7 @@ import { getShaderSource } from "./utility";
         0.5, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 4.0,
     ]);
-    const uniformPerSceneBuffer: IBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
+    const uniformPerSceneBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
     const vertexArray: IVertexArrayObject = {
