@@ -1,4 +1,4 @@
-import { IAttributeBuffer, IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, WebGL } from "../../../src";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -12,7 +12,7 @@ document.body.appendChild(canvas);
 // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
 const MAX_UNSIGNED_SHORT = 65535;
 
-const vertexPosBuffer: IAttributeBuffer = {
+const vertexPosBuffer: IVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,

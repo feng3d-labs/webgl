@@ -1,4 +1,4 @@
-import { IAttributeBuffer, IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IVertexArrayObject, WebGL } from "../../../src";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const vertexPosBuffer: IAttributeBuffer = {
+const vertexPosBuffer: IVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -0.8, -0.8,

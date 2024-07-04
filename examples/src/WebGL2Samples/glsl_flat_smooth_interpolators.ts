@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IAttributeBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
 import { IPrimitive, MinimalGLTFLoader } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
 
@@ -71,7 +71,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: IPrimitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexBuffer: IAttributeBuffer;
+    let vertexBuffer: IVertexBuffer;
     let indicesBuffer: IIndexBuffer;
     let vertexArray: IVertexArrayObject;
 

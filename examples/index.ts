@@ -43,6 +43,8 @@ const files = {
         "texture_2d_array",
         "texture_3d",
         "texture_derivative",
+        "texture_fetch",
+        "texture_format",
     ],
 };
 

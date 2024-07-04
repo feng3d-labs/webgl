@@ -1,4 +1,4 @@
-import { IAttributeBuffer, IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
+import { IVertexBuffer, IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -20,7 +20,7 @@ const program: IRenderPipeline = {
     },
 };
 
-const vertexPosBuffer: IAttributeBuffer = {
+const vertexPosBuffer: IVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,
@@ -32,7 +32,7 @@ const vertexPosBuffer: IAttributeBuffer = {
     ]),
     usage: "STATIC_DRAW",
 };
-const vertexTexBuffer: IAttributeBuffer = {
+const vertexTexBuffer: IVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         0.0, 1.0,

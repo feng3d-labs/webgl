@@ -13,7 +13,7 @@ export interface IVertexAttribute
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    buffer: IAttributeBuffer;
+    buffer: IVertexBuffer;
 
     /**
      * 顶点数据元素数量。
@@ -49,7 +49,7 @@ export interface IVertexAttribute
     vertexSize?: number;
 }
 
-export interface IAttributeBuffer extends IBuffer
+export interface IVertexBuffer extends IBuffer
 {
     target: "ARRAY_BUFFER";
 }

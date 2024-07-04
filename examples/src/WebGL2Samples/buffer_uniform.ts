@@ -1,4 +1,4 @@
-import { IAttributeBuffer, IBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, IUniformBuffer, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, IUniformBuffer, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -32,7 +32,7 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
     ]);
-    const vertexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
     //mat4 P, mat4 MV, mat3 Mnormal
     const transforms = new Float32Array([
