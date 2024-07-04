@@ -1,24 +1,20 @@
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
+import { IProgram, IRenderingContext } from "../../../src";
 
 (function ()
 {
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
 
     // -- Init program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
+    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
     const mvMatrixLocation = gl.getUniformLocation(program, "mvMatrix");
     const pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
     const diffuseLocation = gl.getUniformLocation(program, "diffuse");
