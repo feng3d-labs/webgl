@@ -21,6 +21,7 @@ const renderObject: IRenderObject = {
         vertices: {
             position: {
                 buffer: {
+                    target: "ARRAY_BUFFER",
                     data: new Float32Array([
                         -1, 0,
                         0, -1,

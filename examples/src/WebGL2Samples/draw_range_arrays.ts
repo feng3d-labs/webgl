@@ -9,6 +9,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const vertexPosBuffer: IBuffer = {
+    target: "ARRAY_BUFFER",
     data: new Float32Array([
         -0.8, -0.8,
         0.8, -0.8,

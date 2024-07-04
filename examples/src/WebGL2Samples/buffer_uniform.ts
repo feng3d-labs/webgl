@@ -32,7 +32,7 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
     ]);
-    const vertexBuffer: IBuffer = { data: vertices, usage: "STATIC_DRAW" };
+    const vertexBuffer: IBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
     //mat4 P, mat4 MV, mat3 Mnormal
     const transforms = new Float32Array([

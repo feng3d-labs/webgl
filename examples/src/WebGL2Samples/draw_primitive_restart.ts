@@ -13,6 +13,7 @@ document.body.appendChild(canvas);
 const MAX_UNSIGNED_SHORT = 65535;
 
 const vertexPosBuffer: IBuffer = {
+    target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,
         -1.0, 1.0,

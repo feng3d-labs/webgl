@@ -56,6 +56,7 @@ function main()
           aVertexPosition: {
             type: "FLOAT",
             buffer: {
+              target: "ARRAY_BUFFER",
               data: new Float32Array([
                 1.0, 1.0,
                 -1.0, 1.0,
@@ -69,6 +70,7 @@ function main()
           aVertexColor: {
             type: "FLOAT",
             buffer: {
+              target: "ARRAY_BUFFER",
               data: new Float32Array([
                 1.0, 1.0, 1.0, 1.0, // white
                 1.0, 0.0, 0.0, 1.0, // red

@@ -28,9 +28,9 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IBuffer = { data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: IBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
-    const vertexPosBufferDst: IBuffer = { data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
+    const vertexPosBufferDst: IBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
 
     const cb: ICopyBuffer = {
         read: vertexPosBufferSrc,

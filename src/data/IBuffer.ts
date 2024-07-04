@@ -5,7 +5,8 @@
  */
 export interface IBuffer
 {
-    target?: BufferTarget;
+    // target: BufferTarget;
+    target: "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER";
 
     /**
      * 缓冲区尺寸。

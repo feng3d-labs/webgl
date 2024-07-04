@@ -70,6 +70,7 @@ async function main()
         aVertexPosition: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -79,6 +80,7 @@ async function main()
         aVertexNormal: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.normal,
             usage: "STATIC_DRAW",
           },
@@ -88,6 +90,7 @@ async function main()
         aTextureCoord: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.textureCoord,
             usage: "STATIC_DRAW",
           },

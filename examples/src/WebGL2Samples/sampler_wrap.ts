@@ -73,7 +73,7 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     -2.0, 2.0,
@@ -83,7 +83,7 @@ const texcoords = new Float32Array([
     -2.0, -2.0,
     -2.0, 2.0
 ]);
-const vertexTexBuffer: IBuffer = { data: texcoords, usage: "STATIC_DRAW" };
+const vertexTexBuffer: IBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
 

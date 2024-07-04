@@ -92,7 +92,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
             // -- Initialize buffer
             const vertices = primitive.vertexBuffer;
-            vertexBuffer = { data: vertices, usage: "STATIC_DRAW" };
+            vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
             const indices = primitive.indices;
             indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };

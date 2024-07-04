@@ -21,6 +21,7 @@ const program: IRenderPipeline = {
 };
 
 const vertexPosBuffer: IBuffer = {
+    target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,
         1.0, -1.0,
@@ -32,6 +33,7 @@ const vertexPosBuffer: IBuffer = {
     usage: "STATIC_DRAW",
 };
 const vertexTexBuffer: IBuffer = {
+    target: "ARRAY_BUFFER",
     data: new Float32Array([
         0.0, 1.0,
         1.0, 1.0,

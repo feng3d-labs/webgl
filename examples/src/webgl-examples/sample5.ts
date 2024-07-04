@@ -48,6 +48,7 @@ function main()
         aVertexPosition: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -57,6 +58,7 @@ function main()
         aVertexColor: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.color,
             usage: "STATIC_DRAW",
           },

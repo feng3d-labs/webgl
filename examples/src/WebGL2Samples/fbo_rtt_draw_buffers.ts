@@ -37,7 +37,7 @@ const triPositions = new Float32Array([
     0.5, -0.5, -1.0,
     0.0, 0.5, 1.0
 ]);
-const triVertexPosBuffer: IBuffer = { data: triPositions, usage: "STATIC_DRAW" };
+const triVertexPosBuffer: IBuffer = { target: "ARRAY_BUFFER", data: triPositions, usage: "STATIC_DRAW" };
 
 const quadPositions = new Float32Array([
     -1.0, -1.0,
@@ -47,7 +47,7 @@ const quadPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const quadVertexPosBuffer: IBuffer = { data: quadPositions, usage: "STATIC_DRAW" };
+const quadVertexPosBuffer: IBuffer = { target: "ARRAY_BUFFER", data: quadPositions, usage: "STATIC_DRAW" };
 
 const quadTexcoords = new Float32Array([
     0.0, 0.0,
@@ -57,7 +57,7 @@ const quadTexcoords = new Float32Array([
     0.0, 1.0,
     0.0, 0.0
 ]);
-const quadVertexTexBuffer: IBuffer = { data: quadTexcoords, usage: "STATIC_DRAW" };
+const quadVertexTexBuffer: IBuffer = { target: "ARRAY_BUFFER", data: quadTexcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
