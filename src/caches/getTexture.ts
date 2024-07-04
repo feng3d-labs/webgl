@@ -40,8 +40,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     {
         if (storage)
         {
+            const { textureTarget } = { ...defaultTexture, ...texture };
             const { levels, width, height } = storage;
 
+            gl.bindTexture(gl[textureTarget], webGLTexture);
             gl.texStorage2D(gl.TEXTURE_2D, levels, gl[internalformat], width, height);
         }
     }
@@ -58,7 +60,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
         webGLTexture.textureTarget = textureTarget;
 
-        sources.forEach((sourceItem) =>
+        sources?.forEach((sourceItem) =>
         {
             // 设置纹理图片
             if (textureTarget === "TEXTURE_2D")
@@ -103,10 +105,23 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
             gl.generateMipmap(gl[textureTarget]);
         }
     };
-
     updateTexture();
-
     watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+
+    const writeTexture = () =>
+    {
+        const { writeTextures } = texture;
+        writeTextures?.forEach((v) =>
+        {
+            const { textureTarget, format, type } = { ...defaultTexture, ...texture };
+            const { level, xoffset, yoffset, source } = v;
+
+            gl.bindTexture(gl[textureTarget], webGLTexture);
+            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+        });
+    };
+    writeTexture();
+    watcher.watch(texture, "writeTextures", writeTexture);
 
     // watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
     // watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
@@ -114,6 +129,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     webGLTexture.destroy = () =>
     {
         watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+        watcher.unwatch(texture, "writeTextures", writeTexture);
     };
 
     return webGLTexture;

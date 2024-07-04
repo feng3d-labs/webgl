@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IAttributeBuffer, IIndexBuffer, IProgram, IRenderingContext, ISampler, ITexture, IVertexArrayObject } from "../../../src";
+import { IAttributeBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -11,13 +11,17 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     // -- Init program
-    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
-    const mvMatrixLocation = gl.getUniformLocation(program, "mvMatrix");
-    const pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
-    const diffuseLocation = gl.getUniformLocation(program, "diffuse");
+    const program: IProgram = {
+        vertex: { code: getShaderSource("vs") }, fragment: {
+            code: getShaderSource("fs"), targets: [{
+
+            }]
+        },
+        depthStencil: { depth: { depthtest: true } },
+        primitive: { topology: "TRIANGLES", cullFace: { enableCullFace: true, cullMode: "BACK" } }
+    };
 
     // -- Init buffers
 
@@ -120,7 +124,6 @@ import { getShaderSource, loadImage } from "./utility";
         },
         index: indexBuffer,
     };
-    gl.bindVertexArray(vertexArray);
 
     // -- Init Texture
 
@@ -146,9 +149,9 @@ import { getShaderSource, loadImage } from "./utility";
             wrapT: "CLAMP_TO_EDGE",
         };
 
-        // -- Allocate storage for the texture
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 512, 512);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
+        // // -- Allocate storage for the texture
+        // gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 512, 512);
+        // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
 
         requestAnimationFrame(render);
     });
@@ -206,16 +209,21 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
+    const ro: IRenderObject = {
+        pipeline: program,
+        vertexArray,
+        uniforms: {},
+        drawElements: { indexCount: 36 },
+    };
+
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [ro]
+    };
+
     function render()
     {
         // -- Render
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.BACK);
-
         orientation[0] = 0.00020; // yaw
         orientation[1] = 0.00010; // pitch
         orientation[2] = 0.00005; // roll
@@ -224,16 +232,11 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        gl.bindVertexArray(vertexArray);
-        gl.useProgram(program);
-        gl.uniformMatrix4fv(mvMatrixLocation, false, mvMatrix);
-        gl.uniformMatrix4fv(pMatrixLocation, false, perspectiveMatrix);
-        gl.uniform1i(diffuseLocation, 0);
+        ro.uniforms.mvMatrix = mvMatrix;
+        ro.uniforms.pMatrix = perspectiveMatrix;
+        ro.uniforms.diffuse = { texture, sampler };
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-
-        gl.drawElementsInstanced(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, 1);
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }
