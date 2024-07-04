@@ -22,13 +22,13 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    const webGLBuffer = getWebGLBuffer(gl, attribute.buffer, attribute.type);
+    const webGLBuffer = getWebGLBuffer(gl, attribute.buffer);
 
     //
-    const { type, bytesPerElement } = webGLBuffer;
+    const type = attribute.type || webGLBuffer.data.bufferType;
 
     //
-    vertexSize = vertexSize || numComponents * bytesPerElement;
+    vertexSize = vertexSize || numComponents * webGLBuffer.data.BYTES_PER_ELEMENT;
     offset = offset || 0;
 
     //

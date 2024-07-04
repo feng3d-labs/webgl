@@ -38,13 +38,14 @@ export const defaultDrawIndexed: IDrawElements = Object.freeze({ firstIndex: 0, 
 function _runDrawElements(gl: WebGLRenderingContext, drawMode: DrawMode, index: IIndexBuffer, drawElements: IDrawElements)
 {
     //
-    const element = getWebGLBuffer(gl, index);
-    const type = element.type;
+    const webGLBuffer = getWebGLBuffer(gl, index);
+    const type = webGLBuffer.data.bufferType;
+    const dataLength = webGLBuffer.data.length;
     //
     let { indexCount, instanceCount, firstIndex } = drawElements || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
     instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
-    indexCount = indexCount || (element.count - firstIndex);
+    indexCount = indexCount || (dataLength - firstIndex);
 
     //
     if (instanceCount > 1)
@@ -107,7 +108,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IVertexAttri
             {
                 const buffer = getWebGLBuffer(gl, vertices[attr].buffer);
 
-                return buffer.count;
+                return buffer.data.length;
             }
         }
 

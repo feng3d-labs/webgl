@@ -13,13 +13,6 @@ export interface IIndexBuffer
     target: "ELEMENT_ARRAY_BUFFER";
 
     /**
-     * 元素缓冲数据类型，默认为`UNSIGNED_SHORT`。
-     *
-     * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
-     */
-    type?: DrawElementType;
-
-    /**
      * 顶点索引数据。
      */
     data: ElementBufferSourceTypes;
