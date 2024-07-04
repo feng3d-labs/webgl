@@ -40,6 +40,7 @@ const files = {
         "draw_instanced_ubo",
         "buffer_copy",
         "buffer_uniform",
+        "texture_2d_array",
     ],
 };
 
