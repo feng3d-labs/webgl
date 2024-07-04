@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-texture-derivative.cpp and adapted from Mozilla's sample 5 https://github.com/mdn/webgl-examples/tree/gh-pages/tutorial/sample5 -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - texture_grad</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - texture_grad</div>
+    <p id="description">
+        This sample uses textureGrad for a texture lookup with explicit gradients for textures on each face of the cube. 
+    </p>
+    
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 4
+        
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 mvMatrix;
+        uniform mat4 pMatrix;
+
+        layout(location = POSITION_LOCATION) in vec3 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 texcoord;
+
+        out vec2 v_uv;
+        out vec3 vPosition;
+
+        void main()
+        {
+            v_uv = texcoord;
+            vPosition = vec3(mvMatrix * vec4(position, 1.0));
+            gl_Position = pMatrix * mvMatrix * vec4(position, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+        precision highp sampler2D;
+
+        uniform sampler2D diffuse;
+
+        in vec2 v_uv;
+        in vec3 vPosition;
+
+        out vec4 color;
+
+        void main()
+        {
+            vec2 size = vec2(textureSize(diffuse, 0));
+            vec2 dx = dFdx(v_uv * size);
+            vec2 dy = dFdy(v_uv * size);
+            color = textureGrad(diffuse, v_uv, dx, dy);
+
+            // Compute flat normal using gradient
+            vec3 fdx = vec3(dFdx(vPosition.x), dFdx(vPosition.y), dFdx(vPosition.z));
+            vec3 fdy = vec3(dFdy(vPosition.x), dFdy(vPosition.y), dFdy(vPosition.z));
+
+            vec3 N = normalize(cross(fdx, fdy));
+            color = mix(color, vec4(N, 1.0), 0.5);
+        }
+
+    </script>
+
+    <script type="module" src="./texture_grad.ts">
+    </script>
+    <div id="highlightedLines"  style="display: none">#L63</div>
+</body>
+
+</html>
