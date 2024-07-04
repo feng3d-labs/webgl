@@ -61,7 +61,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     gl.texImage2D(gl[textureTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
                 }
             }
-            else if (textureTarget === "TEXTURE_2D_ARRAY")
+            else if (textureTarget === "TEXTURE_2D_ARRAY" || textureTarget === "TEXTURE_3D")
             {
                 if (gl instanceof WebGL2RenderingContext)
                 {
