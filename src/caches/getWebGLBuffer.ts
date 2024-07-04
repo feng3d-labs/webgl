@@ -38,9 +38,10 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?
     webGLBuffer = gl.createBuffer();
     gl._buffers.set(buffer, webGLBuffer);
 
+    const target = buffer.target || "ARRAY_BUFFER";
+
     const updateBuffer = () =>
     {
-        const target = buffer.target || "ARRAY_BUFFER";
         // 获取
         webGLBuffer.type = type || getWebGLBufferType(buffer.data);
         const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
@@ -54,15 +55,42 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?
         webGLBuffer.bytesPerElement = data.BYTES_PER_ELEMENT;
     };
 
+    const writeBuffer = () =>
+    {
+        const writeBuffers = buffer.writeBuffers;
+
+        if (writeBuffers)
+        {
+            gl.bindBuffer(gl[target], webGLBuffer);
+            writeBuffers.forEach((writeBuffer) =>
+            {
+                const bufferOffset = writeBuffer.bufferOffset || 0;
+                const data = writeBuffer.data;
+
+                gl.bufferSubData(gl[target], bufferOffset, data);
+            });
+            buffer.writeBuffers = null;
+        }
+    };
+
+    const dataChange = () =>
+    {
+        const writeBuffers = buffer.writeBuffers || [];
+        writeBuffers.push({ data: buffer.data });
+        buffer.writeBuffers = writeBuffers;
+    };
+
     updateBuffer();
 
     //
-    watcher.watch(buffer, "data", updateBuffer);
+    watcher.watch(buffer, "data", dataChange);
+    watcher.watch(buffer, "writeBuffers", writeBuffer);
 
     //
     webGLBuffer.destroy = () =>
     {
-        watcher.unwatch(buffer, "data", updateBuffer);
+        watcher.unwatch(buffer, "data", dataChange);
+        watcher.unwatch(buffer, "writeBuffers", writeBuffer);
     };
 
     return webGLBuffer;

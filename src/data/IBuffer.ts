@@ -21,6 +21,21 @@ export interface IBuffer
      * 为优化目的指定数据存储的预期使用模式的GLenum。
      */
     usage?: BufferUsage;
+
+    /**
+     * 写缓冲区。
+     */
+    writeBuffers?: IWriteBuffer[];
+}
+
+export interface IWriteBuffer
+{
+    bufferOffset?: number;
+
+    /**
+     * 写入缓冲区数据。
+     */
+    data: AttributeBufferSourceTypes;
 }
 
 /**
