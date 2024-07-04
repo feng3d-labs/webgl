@@ -202,7 +202,7 @@ export interface IWriteTexture
     /**
      * 纹理图源数据。
      */
-    source: TexImageSource
+    source?: TexImageSource
     /**
      * 写入像素数据。
      */

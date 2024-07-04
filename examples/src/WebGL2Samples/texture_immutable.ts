@@ -65,6 +65,7 @@ import { getShaderSource, loadImage } from "./utility";
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
         }
     };
 
@@ -180,31 +181,6 @@ import { getShaderSource, loadImage } from "./utility";
             minFilter: "LINEAR_MIPMAP_LINEAR",
             magFilter: "LINEAR",
         };
-
-        // gl.texStorage3D(
-        //     gl.TEXTURE_3D, // target
-        //     Math.log2(SIZE), // levels
-        //     gl.R8, // internalformat
-        //     SIZE, // width
-        //     SIZE, // height
-        //     SIZE // depth
-        // );
-
-        // gl.texSubImage3D(
-        //     gl.TEXTURE_3D, // target
-        //     0, // level
-        //     0,
-        //     0,
-        //     0,
-        //     SIZE, // width
-        //     SIZE, // height
-        //     SIZE, // depth
-        //     gl.RED, // format
-        //     gl.UNSIGNED_BYTE, // type
-        //     data
-        // );
-
-        // gl.generateMipmap(gl.TEXTURE_3D);
 
         return { texture3D, sampler3D };
     }
