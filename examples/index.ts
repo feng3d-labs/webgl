@@ -50,6 +50,7 @@ const files = {
         "texture_integer",
         "texture_lod",
         "texture_offset",
+        "texture_pixel_store",
     ],
 };
 
