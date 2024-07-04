@@ -41,10 +41,22 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         if (storage)
         {
             const { textureTarget } = { ...defaultTexture, ...texture };
-            const { levels, width, height } = storage;
+            const { levels, width, height, depth } = storage;
 
             gl.bindTexture(gl[textureTarget], webGLTexture);
-            gl.texStorage2D(gl.TEXTURE_2D, levels, gl[internalformat], width, height);
+
+            if (textureTarget === "TEXTURE_2D")
+            {
+                gl.texStorage2D(gl[textureTarget], levels, gl[internalformat], width, height);
+            }
+            else if (textureTarget === "TEXTURE_3D")
+            {
+                gl.texStorage3D(gl[textureTarget], levels, gl[internalformat], width, height, depth);
+            }
+            else
+            {
+                console.error(`未处理 ${textureTarget} 纹理初始化存储！`);
+            }
         }
     }
 
@@ -116,8 +128,15 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
             const { textureTarget, format, type } = { ...defaultTexture, ...texture };
             const { level, xoffset, yoffset, source } = v;
 
-            gl.bindTexture(gl[textureTarget], webGLTexture);
-            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+            if (textureTarget === "TEXTURE_2D")
+            {
+                gl.bindTexture(gl[textureTarget], webGLTexture);
+                gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+            }
+            else
+            {
+                console.error(`未处理 ${textureTarget} 纹理写入！`);
+            }
         });
     };
     writeTexture();

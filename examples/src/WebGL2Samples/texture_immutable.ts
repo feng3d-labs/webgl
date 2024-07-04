@@ -1,10 +1,16 @@
+import { IProgram, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer } from "../../../src";
+import { snoise } from "./third-party/noise3D";
+import { getShaderSource, loadImage } from "./utility";
+
 (function ()
 {
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const gl = canvas.getContext("webgl2", { antialias: false });
 
     const Corners = {
@@ -13,7 +19,7 @@
         MAX: 2
     };
 
-    const viewports = new Array(Corners.MAX);
+    const viewports: { x: number, y: number, z: number, w: number }[] = new Array(Corners.MAX);
 
     viewports[Corners.LEFT] = {
         x: 0,
@@ -30,12 +36,9 @@
     };
 
     // -- Init program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-    const mvpLocation = gl.getUniformLocation(program, "MVP");
-    const diffuseLocation = gl.getUniformLocation(program, "diffuse");
+    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D = createProgram(gl, getShaderSource("vs-3d"), getShaderSource("fs-3d"));
-    const diffuseLocation3D = gl.getUniformLocation(program3D, "diffuse");
+    const program3D: IProgram = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -46,10 +49,7 @@
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -59,30 +59,17 @@
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    };
 
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindVertexArray(null);
-
-    const texture3D = create3DTexture();
+    const {texture3D,sampler3D} = create3DTexture();
 
     const imageUrl = "../assets/img/Di-3d.png";
     loadImage(imageUrl, function (image)
@@ -163,39 +150,47 @@
             }
         }
 
-        const texture3D = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_3D, texture3D);
-        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_BASE_LEVEL, 0);
-        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAX_LEVEL, Math.log2(SIZE));
-        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        const texture3D: ITexture = {
+            textureTarget: "TEXTURE_3D",
+            internalformat: "R8",
+            format: "RED",
+            type: "UNSIGNED_BYTE",
+            generateMipmap: true,
+            storage: { levels: Math.log2(SIZE), width: SIZE, height: SIZE, depth: SIZE },
+            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
+        };
+        const sampler3D: ISampler = {
+            lodMinClamp: 0,
+            lodMaxClamp: Math.log2(SIZE),
+            minFilter: "LINEAR_MIPMAP_LINEAR",
+            magFilter: "LINEAR",
+        };
 
-        gl.texStorage3D(
-            gl.TEXTURE_3D, // target
-            Math.log2(SIZE), // levels
-            gl.R8, // internalformat
-            SIZE, // width
-            SIZE, // height
-            SIZE // depth
-        );
+        // gl.texStorage3D(
+        //     gl.TEXTURE_3D, // target
+        //     Math.log2(SIZE), // levels
+        //     gl.R8, // internalformat
+        //     SIZE, // width
+        //     SIZE, // height
+        //     SIZE // depth
+        // );
 
-        gl.texSubImage3D(
-            gl.TEXTURE_3D, // target
-            0, // level
-            0,
-            0,
-            0,
-            SIZE, // width
-            SIZE, // height
-            SIZE, // depth
-            gl.RED, // format
-            gl.UNSIGNED_BYTE, // type
-            data
-        );
+        // gl.texSubImage3D(
+        //     gl.TEXTURE_3D, // target
+        //     0, // level
+        //     0,
+        //     0,
+        //     0,
+        //     SIZE, // width
+        //     SIZE, // height
+        //     SIZE, // depth
+        //     gl.RED, // format
+        //     gl.UNSIGNED_BYTE, // type
+        //     data
+        // );
 
-        gl.generateMipmap(gl.TEXTURE_3D);
+        // gl.generateMipmap(gl.TEXTURE_3D);
 
-        return texture3D;
+        return { texture3D, sampler3D };
     }
 })();
