@@ -48,6 +48,7 @@ const files = {
         "texture_grad",
         "texture_immutable",
         "texture_integer",
+        "texture_lod",
     ],
 };
 
