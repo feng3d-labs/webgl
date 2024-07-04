@@ -69,7 +69,7 @@ import { getShaderSource, loadImage } from "./utility";
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
-            sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, border: 0, pixels }],
+            sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, depth: NUM_IMAGES, border: 0, pixels }],
         };
         sampler = {
             minFilter: "LINEAR",
