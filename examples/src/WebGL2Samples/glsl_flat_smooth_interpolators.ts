@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import { IAttributeBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
-import { IPrimitive, MinimalGLTFLoader } from "./gltf-loader";
+import { IPrimitive, MinimalGLTFLoader } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
