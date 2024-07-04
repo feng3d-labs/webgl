@@ -1,5 +1,6 @@
-import { IRenderingContext } from "../../../src";
+import { IAttributeBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { snoise } from "./third-party/noise3D";
+import { getShaderSource } from "./utility";
 
 (function ()
 {
@@ -10,7 +11,6 @@ import { snoise } from "./third-party/noise3D";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     // -- Divide viewport
 
@@ -77,34 +77,23 @@ import { snoise } from "./third-party/noise3D";
         }
     }
 
-    const texture = gl.createTexture();
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_3D, texture);
-    gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_BASE_LEVEL, 0);
-    gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAX_LEVEL, Math.log2(SIZE));
-    gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-    gl.texImage3D(
-        gl.TEXTURE_3D, // target
-        0, // level
-        gl.R8, // internalformat
-        SIZE, // width
-        SIZE, // height
-        SIZE, // depth
-        0, // border
-        gl.RED, // format
-        gl.UNSIGNED_BYTE, // type
-        data // pixel
-    );
-
-    gl.generateMipmap(gl.TEXTURE_3D);
+    const texture: ITexture = {
+        textureTarget: "TEXTURE_3D",
+        internalformat: "R8",
+        format: "RED",
+        type: "UNSIGNED_BYTE",
+        generateMipmap: true,
+        sources: [{ level: 0, width: SIZE, height: SIZE, depth: SIZE, border: 0, pixels: data }],
+    };
+    const sampler: ISampler = {
+        lodMinClamp: 0,
+        lodMaxClamp: Math.log2(SIZE),
+        minFilter: "LINEAR_MIPMAP_LINEAR",
+        magFilter: "LINEAR",
+    };
 
     // -- Initialize program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-
-    const uniformTextureMatrixLocation = gl.getUniformLocation(program, "orientation");
-    const uniformDiffuseLocation = gl.getUniformLocation(program, "diffuse");
+    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -115,10 +104,7 @@ import { snoise } from "./third-party/noise3D";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -128,29 +114,16 @@ import { snoise } from "./third-party/noise3D";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Initilize vertex array
 
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
-
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 1; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindVertexArray(null);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    };
 
     // -- Render
 
@@ -184,6 +157,29 @@ import { snoise } from "./third-party/noise3D";
         ];
     }
 
+    const ro: IRenderObject = {
+        pipeline: program,
+        uniforms: {
+            diffuse: { texture, sampler },
+        },
+        vertexArray,
+        drawArrays: { vertexCount: 6 }
+    };
+
+    const renderObjects: IRenderObject[] = [];
+    for (let i = 0; i < Corners.MAX; ++i)
+    {
+        renderObjects.push({
+            ...ro,
+            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+        });
+    }
+
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects,
+    };
+
     function render()
     {
         orientation[0] += 0.020; // yaw
@@ -196,26 +192,12 @@ import { snoise } from "./third-party/noise3D";
         const yawPitchRollMatrix = new Float32Array(yawPitchRoll(orientation[0], orientation[1], orientation[2]));
         const matrices = [yawMatrix, pitchMatrix, rollMatrix, yawPitchRollMatrix];
 
-        // Clear color buffer
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        // Bind program
-        gl.useProgram(program);
-
-        gl.uniform1i(uniformDiffuseLocation, 0);
-
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_3D, texture);
-
-        gl.bindVertexArray(vertexArray);
-
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-            gl.uniformMatrix4fv(uniformTextureMatrixLocation, false, matrices[i]);
-            gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, 1);
+            renderObjects[i].uniforms.orientation = matrices[i];
         }
+
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }
