@@ -1,4 +1,5 @@
-import { IRenderingContext } from "../../../src";
+import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, ITextureDataType, ITextureFormat, ITextureInternalFormat, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
@@ -9,7 +10,6 @@ import { IRenderingContext } from "../../../src";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     // -- Viewport
 
@@ -46,13 +46,9 @@ import { IRenderingContext } from "../../../src";
     }
 
     // -- Init program
-    const programUint = createProgram(gl, getShaderSource("vs"), getShaderSource("fs-uint"));
-    const mvpUintLocation = gl.getUniformLocation(programUint, "MVP");
-    const diffuseUintLocation = gl.getUniformLocation(programUint, "diffuse");
+    const programUint: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
 
-    const programNormalized = createProgram(gl, getShaderSource("vs"), getShaderSource("fs-normalized"));
-    const mvpNormalizedLocation = gl.getUniformLocation(programNormalized, "MVP");
-    const diffuseNormalizedLocation = gl.getUniformLocation(programNormalized, "diffuse");
+    const programNormalized: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -63,10 +59,7 @@ import { IRenderingContext } from "../../../src";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -76,30 +69,17 @@ import { IRenderingContext } from "../../../src";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    };
 
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindVertexArray(null);
-
-    loadImage("../assets/img/Di-3d.png", function (image)
+    loadImage("../../assets/img/Di-3d.png", function (image)
     {
         const TextureTypes = {
             RGB: 0,
@@ -114,86 +94,86 @@ import { IRenderingContext } from "../../../src";
             MAX: 9
         };
 
-        const textureFormats = new Array(TextureTypes.MAX);
+        const textureFormats: { internalFormat: ITextureInternalFormat, format: ITextureFormat, type: ITextureDataType }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
-            internalFormat: gl.RGB,
-            format: gl.RGB,
-            type: gl.UNSIGNED_BYTE
+            internalFormat: "RGB",
+            format: "RGB",
+            type: "UNSIGNED_BYTE"
         };
 
         textureFormats[TextureTypes.RGB8] = {
-            internalFormat: gl.RGB8,
-            format: gl.RGB,
-            type: gl.UNSIGNED_BYTE
+            internalFormat: "RGB8",
+            format: "RGB",
+            type: "UNSIGNED_BYTE"
         };
 
         textureFormats[TextureTypes.RGB16F] = {
-            internalFormat: gl.RGB16F,
-            format: gl.RGB,
-            type: gl.HALF_FLOAT
+            internalFormat: "RGB16F",
+            format: "RGB",
+            type: "HALF_FLOAT"
         };
 
         textureFormats[TextureTypes.RGBA32F] = {
-            internalFormat: gl.RGBA32F,
-            format: gl.RGBA,
-            type: gl.FLOAT
+            internalFormat: "RGBA32F",
+            format: "RGBA",
+            type: "FLOAT"
         };
 
         textureFormats[TextureTypes.R16F] = {
-            internalFormat: gl.R16F,
-            format: gl.RED,
-            type: gl.HALF_FLOAT
+            internalFormat: "R16F",
+            format: "RED",
+            type: "HALF_FLOAT"
         };
 
         textureFormats[TextureTypes.RG16F] = {
-            internalFormat: gl.RG16F,
-            format: gl.RG,
-            type: gl.HALF_FLOAT
+            internalFormat: "RG16F",
+            format: "RG",
+            type: "HALF_FLOAT"
         };
 
         textureFormats[TextureTypes.RGBA] = {
-            internalFormat: gl.RGBA,
-            format: gl.RGBA,
-            type: gl.UNSIGNED_BYTE
+            internalFormat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE"
         };
 
         textureFormats[TextureTypes.RGB8UI] = {
-            internalFormat: gl.RGB8UI,
-            format: gl.RGB_INTEGER,
-            type: gl.UNSIGNED_BYTE
+            internalFormat: "RGB8UI",
+            format: "RGB_INTEGER",
+            type: "UNSIGNED_BYTE"
         };
 
         textureFormats[TextureTypes.RGBA8UI] = {
-            internalFormat: gl.RGBA8UI,
-            format: gl.RGBA_INTEGER,
-            type: gl.UNSIGNED_BYTE
+            internalFormat: "RGBA8UI",
+            format: "RGBA_INTEGER",
+            type: "UNSIGNED_BYTE"
         };
 
         // -- Init Texture
 
-        gl.activeTexture(gl.TEXTURE0);
-
-        const textures = new Array(TextureTypes.MAX);
+        const textures: ITexture[] = new Array(TextureTypes.MAX);
+        const samplers: ISampler[] = new Array(TextureTypes.MAX);
         let i = 0;
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
-            textures[i] = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-            gl.texImage2D(gl.TEXTURE_2D, 0, textureFormats[i].internalFormat, textureFormats[i].format, textureFormats[i].type, image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_BASE_LEVEL, 0);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, 0);
+            textures[i] = {
+                textureTarget: "TEXTURE_2D",
+                flipY: false,
+                internalformat: textureFormats[i].internalFormat,
+                format: textureFormats[i].format,
+                type: textureFormats[i].type,
+                sources: [{ level: 0, source: image }],
+            };
+            samplers[i] = {
+                minFilter: "NEAREST",
+                magFilter: "NEAREST",
+                lodMinClamp: 0,
+                lodMaxClamp: 0,
+            };
         }
 
         // -- Render
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        gl.bindVertexArray(vertexArray);
-
         const matrix = new Float32Array([
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
@@ -201,39 +181,50 @@ import { IRenderingContext } from "../../../src";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        // Normalized textures
-        gl.useProgram(programNormalized);
-        gl.uniformMatrix4fv(mvpNormalizedLocation, false, matrix);
-        gl.uniform1i(diffuseNormalizedLocation, 0);
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: []
+        };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
-            gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-            gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            rp.renderObjects.push({
+                vertexArray,
+                pipeline: programNormalized,
+                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                uniforms: {
+                    MVP: matrix,
+                    diffuse: { texture: textures[i], sampler: samplers[i] },
+                },
+                drawArrays: { vertexCount: 6 },
+            });
         }
 
         // Unsigned int textures
-        gl.useProgram(programUint);
-        gl.uniformMatrix4fv(mvpUintLocation, false, matrix);
-        gl.uniform1i(diffuseUintLocation, 0);
-
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
-            gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-            gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            rp.renderObjects.push({
+                vertexArray,
+                pipeline: programUint,
+                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                uniforms: {
+                    MVP: matrix,
+                    diffuse: { texture: textures[i], sampler: samplers[i] },
+                },
+                drawArrays: { vertexCount: 6 },
+            });
         }
+        WebGL.runRenderPass(rc, rp);
 
         // Delete WebGL resources
-        gl.deleteBuffer(vertexPosBuffer);
-        gl.deleteBuffer(vertexTexBuffer);
+        WebGL.deleteBuffer(rc, vertexPosBuffer);
+        WebGL.deleteBuffer(rc, vertexTexBuffer);
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
-            gl.deleteTexture(textures[i]);
+            WebGL.deleteTexture(rc, textures[i]);
         }
-        gl.deleteProgram(programUint);
-        gl.deleteProgram(programNormalized);
-        gl.deleteVertexArray(vertexArray);
+        WebGL.deleteProgram(rc, programUint);
+        WebGL.deleteProgram(rc, programNormalized);
+        WebGL.deleteVertexArray(rc, vertexArray);
     });
 })();
