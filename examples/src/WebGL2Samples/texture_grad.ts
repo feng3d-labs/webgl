@@ -1,24 +1,24 @@
+import { mat4, vec3 } from "gl-matrix";
+import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { getShaderSource, loadImage } from "./utility";
+
 (function ()
 {
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
 
     // -- Init program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-    const mvMatrixLocation = gl.getUniformLocation(program, "mvMatrix");
-    const pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
-    const diffuseLocation = gl.getUniformLocation(program, "diffuse");
+    const program: IProgram = {
+        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+        depthStencil: { depth: { depthtest: true } },
+        primitive: { cullFace: { enableCullFace: true, cullMode: "BACK" } },
+    };
 
     // -- Init buffers
 
@@ -59,10 +59,7 @@
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         // Front face
@@ -101,15 +98,9 @@
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
-    const indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
     const cubeVertexIndices = [
         0, 1, 2, 0, 2, 3, // front
         4, 5, 6, 4, 6, 7, // back
@@ -118,51 +109,40 @@
         16, 17, 18, 16, 18, 19, // right
         20, 21, 22, 20, 22, 23 // left
     ];
-
-    // Now send the element array to GL
-
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+    const indexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
-
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 3, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-    gl.bindVertexArray(null);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 3 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        },
+        index: indexBuffer,
+    };
 
     // -- Init Texture
 
-    const imageUrl = "../assets/img/Di-3d.png";
-    let texture;
+    const imageUrl = "../../assets/img/Di-3d.png";
+    let texture: ITexture;
+    let sampler: ISampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
-        texture = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        // -- Allocate storage for the texture
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 512, 512);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
+        texture = {
+            textureTarget: "TEXTURE_2D",
+            flipY: false,
+            internalformat: "RGB8",
+            format: "RGB",
+            type: "UNSIGNED_BYTE",
+            storage: { levels: 1, width: 512, height: 512 },
+            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }]
+        };
+        sampler = {
+            minFilter: "NEAREST",
+            magFilter: "NEAREST",
+            wrapS: "CLAMP_TO_EDGE",
+            wrapT: "CLAMP_TO_EDGE",
+        };
 
         requestAnimationFrame(render);
     });
@@ -220,12 +200,21 @@
         lastMouseY = newY;
     };
 
+    const ro: IRenderObject = {
+        pipeline: program,
+        vertexArray,
+        uniforms: {},
+        drawElements: { indexCount: 36 },
+    };
+
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [ro],
+    };
+
     function render()
     {
         // -- Render
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
         gl.cullFace(gl.BACK);
@@ -238,16 +227,11 @@
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        gl.bindVertexArray(vertexArray);
-        gl.useProgram(program);
-        gl.uniformMatrix4fv(mvMatrixLocation, false, mvMatrix);
-        gl.uniformMatrix4fv(pMatrixLocation, false, perspectiveMatrix);
-        gl.uniform1i(diffuseLocation, 0);
+        ro.uniforms.mvMatrix = mvMatrix;
+        ro.uniforms.pMatrix = perspectiveMatrix;
+        ro.uniforms.diffuse = { texture, sampler };
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-
-        gl.drawElementsInstanced(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, 1);
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }
