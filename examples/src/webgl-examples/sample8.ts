@@ -74,6 +74,7 @@ function main()
         aVertexPosition: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -83,6 +84,7 @@ function main()
         aVertexNormal: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.normal,
             usage: "STATIC_DRAW",
           },
@@ -92,6 +94,7 @@ function main()
         aTextureCoord: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.textureCoord,
             usage: "STATIC_DRAW",
           },
@@ -99,7 +102,7 @@ function main()
           normalized: false,
         },
       },
-      index: { data: buffers.indices }
+      index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
     },
     uniforms: { uSampler: texture },
     drawElements: { firstIndex: 0, indexCount: 36 },

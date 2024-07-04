@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttributeBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
 import { IPrimitive, MinimalGLTFLoader } from "./gltf-loader";
 import { getShaderSource } from "./utility";
 
@@ -71,7 +71,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: IPrimitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexBuffer: IBuffer;
+    let vertexBuffer: IAttributeBuffer;
     let indicesBuffer: IIndexBuffer;
     let vertexArray: IVertexArrayObject;
 
@@ -92,10 +92,10 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
             // -- Initialize buffer
             const vertices = primitive.vertexBuffer;
-            vertexBuffer = { data: vertices, usage: "STATIC_DRAW" };
+            vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
             const indices = primitive.indices;
-            indicesBuffer = { data: indices, usage: "STATIC_DRAW" };
+            indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
 
             // -- VertexAttribPointer
             const positionInfo = primitive.attributes.POSITION;

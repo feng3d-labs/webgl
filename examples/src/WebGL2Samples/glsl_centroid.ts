@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IAttributeBuffer, IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -75,9 +75,9 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer: IBuffer = { data: positions, usage: "STATIC_DRAW" };
+const vertexPositionBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
-const vertexDataBuffer: IBuffer = { data, usage: "STATIC_DRAW" };
+const vertexDataBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -89,7 +89,7 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer: IBuffer = { data: textureVertexPositions, usage: "STATIC_DRAW" };
+const texVertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -99,7 +99,7 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer: IBuffer = { data: textureVertexTexCoords, usage: "STATIC_DRAW" };
+const texVertexTexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage

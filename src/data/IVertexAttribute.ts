@@ -13,7 +13,7 @@ export interface IVertexAttribute
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    buffer: IBuffer;
+    buffer: IAttributeBuffer;
 
     /**
      * 顶点数据元素数量。
@@ -47,6 +47,11 @@ export interface IVertexAttribute
      * 单个顶点数据尺寸。比如单个数据包含position与uv那么值可能为(3+2)*4=20。
      */
     vertexSize?: number;
+}
+
+export interface IAttributeBuffer extends IBuffer
+{
+    target: "ARRAY_BUFFER";
 }
 
 /**

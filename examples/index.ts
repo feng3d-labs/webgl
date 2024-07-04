@@ -39,6 +39,7 @@ const files = {
         "query_occlusion",
         "draw_instanced_ubo",
         "buffer_copy",
+        "buffer_uniform",
     ],
 };
 

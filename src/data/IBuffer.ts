@@ -5,7 +5,8 @@
  */
 export interface IBuffer
 {
-    target?: "UNIFORM_BUFFER";
+    // target: BufferTarget;
+    target: "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER";
 
     /**
      * 缓冲区尺寸。
@@ -21,12 +22,27 @@ export interface IBuffer
      * 为优化目的指定数据存储的预期使用模式的GLenum。
      */
     usage?: BufferUsage;
+
+    /**
+     * 写缓冲区。
+     */
+    writeBuffers?: IWriteBuffer[];
+}
+
+export interface IWriteBuffer
+{
+    bufferOffset?: number;
+
+    /**
+     * 写入缓冲区数据。
+     */
+    data: AttributeBufferSourceTypes;
 }
 
 /**
  * 属性缓冲数据类型。
  */
-export type AttributeBufferSourceTypes = number[]
+export type AttributeBufferSourceTypes =
     | Float32Array
     | Uint32Array
     | Int32Array
@@ -56,3 +72,22 @@ export type AttributeBufferSourceTypes = number[]
 export type BufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
     | "STATIC_READ" | "DYNAMIC_READ" | "STREAM_READ" | "STATIC_COPY" | "DYNAMIC_COPY" | "STREAM_COPY" // WebGL2
     ;
+
+/**
+ * A GLenum specifying the binding point (target). Possible values:
+ *
+ * * gl.ARRAY_BUFFER: Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.
+ * * gl.ELEMENT_ARRAY_BUFFER: Buffer used for element indices.
+ *
+ * When using a WebGL 2 context, the following values are available additionally:
+ * * gl.COPY_READ_BUFFER: Buffer for copying from one buffer object to another.
+ * * gl.COPY_WRITE_BUFFER: Buffer for copying from one buffer object to another.
+ * * gl.TRANSFORM_FEEDBACK_BUFFER: Buffer for transform feedback operations.
+ * * gl.UNIFORM_BUFFER: Buffer used for storing uniform blocks.
+ * * gl.PIXEL_PACK_BUFFER: Buffer used for pixel transfer operations.
+ * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
+ *
+ */
+export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
+    | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
+    | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2

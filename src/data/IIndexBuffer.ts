@@ -10,12 +10,7 @@ import { BufferUsage } from "./IBuffer";
  */
 export interface IIndexBuffer
 {
-    /**
-     * 元素缓冲数据类型，默认为`UNSIGNED_SHORT`。
-     *
-     * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
-     */
-    type?: DrawElementType;
+    target: "ELEMENT_ARRAY_BUFFER";
 
     /**
      * 顶点索引数据。
@@ -35,7 +30,7 @@ export interface IIndexBuffer
 /**
  * 元素缓冲数据类型
  */
-export type ElementBufferSourceTypes = number[] | Uint16Array | Uint32Array | Uint8Array;
+export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 元素缓冲数据类型。

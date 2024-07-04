@@ -1,25 +1,6 @@
 import { TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/ISampler";
 
 /**
- * A GLenum specifying the binding point (target). Possible values:
- *
- * * gl.ARRAY_BUFFER: Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.
- * * gl.ELEMENT_ARRAY_BUFFER: Buffer used for element indices.
- *
- * When using a WebGL 2 context, the following values are available additionally:
- * * gl.COPY_READ_BUFFER: Buffer for copying from one buffer object to another.
- * * gl.COPY_WRITE_BUFFER: Buffer for copying from one buffer object to another.
- * * gl.TRANSFORM_FEEDBACK_BUFFER: Buffer for transform feedback operations.
- * * gl.UNIFORM_BUFFER: Buffer used for storing uniform blocks.
- * * gl.PIXEL_PACK_BUFFER: Buffer used for pixel transfer operations.
- * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
- *
- */
-export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
-    | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
-    | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
-
-/**
  * A GLenum specifying which WebGL capability to enable. Possible values:
  *
  * gl.BLEND	Activates blending of the computed fragment color values. See WebGLRenderingContext.blendFunc().

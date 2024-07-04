@@ -48,6 +48,7 @@ function main()
         aVertexPosition: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.position,
             usage: "STATIC_DRAW",
           },
@@ -57,6 +58,7 @@ function main()
         aVertexColor: {
           type: "FLOAT",
           buffer: {
+            target: "ARRAY_BUFFER",
             data: buffers.color,
             usage: "STATIC_DRAW",
           },
@@ -64,7 +66,7 @@ function main()
           normalized: false,
         },
       },
-      index: { data: buffers.indices }
+      index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
     },
     uniforms: {},
     drawElements: { firstIndex: 0, indexCount: 36 },

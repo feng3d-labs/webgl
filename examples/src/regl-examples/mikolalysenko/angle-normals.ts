@@ -15,13 +15,13 @@ function mulAdd(dest, s, x, y, z)
     dest[2] += s * z;
 }
 
-export function angleNormals(cells, positions)
+export function angleNormals(cells: number[][], positions: number[][])
 {
     const numVerts = positions.length;
     const numCells = cells.length;
 
     // Allocate normal array
-    const normals = new Array(numVerts);
+    const normals: number[][] = new Array(numVerts);
     for (let i = 0; i < numVerts; ++i)
     {
         normals[i] = [0, 0, 0];

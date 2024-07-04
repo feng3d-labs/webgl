@@ -1,4 +1,4 @@
-import { IBuffer, IProgram, IRenderPass, IRenderingContext, WebGL } from "../../../src";
+import { IAttributeBuffer, IBuffer, IProgram, IRenderPass, IRenderingContext, IUniformBuffer, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -18,7 +18,7 @@ const vertices = new Float32Array([
     0.3, -0.5,
     0.0, 0.5
 ]);
-const vertexPosBuffer: IBuffer = { data: vertices, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 const transforms = new Float32Array([
     1.0, 0.0, 0.0, 0.0,
@@ -31,13 +31,13 @@ const transforms = new Float32Array([
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.0, 0.0, 1.0
 ]);
-const uniformTransformBuffer: IBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
+const uniformTransformBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
 
 const materials = new Float32Array([
     1.0, 0.5, 0.0, 1.0,
     0.0, 0.5, 1.0, 1.0
 ]);
-const uniformMaterialBuffer: IBuffer = { target: "UNIFORM_BUFFER", data: materials, usage: "STATIC_DRAW" };
+const uniformMaterialBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: materials, usage: "STATIC_DRAW" };
 
 // -- Render
 const rp: IRenderPass = {
