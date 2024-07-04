@@ -1,4 +1,4 @@
-import { IProgram, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer } from "../../../src";
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -79,23 +79,20 @@ import { getShaderSource, loadImage } from "./utility";
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
-            
+            sources: [{ level: 0, source: image }],
         };
-        const sampler: ISampler = {};
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        const sampler: ISampler = {
+            minFilter: "NEAREST",
+            magFilter: "NEAREST",
+            wrapS: "CLAMP_TO_EDGE",
+            wrapT: "CLAMP_TO_EDGE",
+        };
 
         // -- Render
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        gl.bindVertexArray(vertexArray);
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: []
+        };
 
         const matrix = new Float32Array([
             1.0, 0.0, 0.0, 0.0,
@@ -105,30 +102,41 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // No offset
-        gl.useProgram(programBicubic);
-        gl.uniformMatrix4fv(mvpLocation, false, matrix);
-        gl.uniform1i(diffuseLocation, 0);
-
-        gl.viewport(viewports[Corners.RIGHT].x, viewports[Corners.RIGHT].y, viewports[Corners.RIGHT].z, viewports[Corners.RIGHT].w);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        const ro: IRenderObject = {
+            vertexArray,
+            pipeline: programBicubic,
+            uniforms: {
+                MVP: matrix,
+                diffuse: { texture, sampler },
+            },
+            viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
+            drawArrays: { vertexCount: 6 },
+        };
+        rp.renderObjects.push(ro);
 
         // Offset
-        gl.useProgram(programOffsetBicubic);
-        gl.uniformMatrix4fv(mvpOffsetLocation, false, matrix);
-        gl.uniform1i(diffuseOffsetLocation, 0);
-
         const offset = new Int32Array([100, -80]);
-        gl.uniform2iv(offsetUniformLocation, offset);
 
-        gl.viewport(viewports[Corners.LEFT].x, viewports[Corners.LEFT].y, viewports[Corners.LEFT].z, viewports[Corners.LEFT].w);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        rp.renderObjects.push({
+            vertexArray,
+            pipeline: programOffsetBicubic,
+            uniforms: {
+                MVP: matrix,
+                diffuse: { texture, sampler },
+                offset,
+            },
+            viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
+            drawArrays: { vertexCount: 6 },
+        });
+
+        WebGL.runRenderPass(rc, rp);
 
         // Delete WebGL resources
-        gl.deleteBuffer(vertexPosBuffer);
-        gl.deleteBuffer(vertexTexBuffer);
-        gl.deleteTexture(texture);
-        gl.deleteProgram(programOffsetBicubic);
-        gl.deleteProgram(programBicubic);
-        gl.deleteVertexArray(vertexArray);
+        WebGL.deleteBuffer(rc, vertexPosBuffer);
+        WebGL.deleteBuffer(rc, vertexTexBuffer);
+        WebGL.deleteTexture(rc, texture);
+        WebGL.deleteProgram(rc, programOffsetBicubic);
+        WebGL.deleteProgram(rc, programBicubic);
+        WebGL.deleteVertexArray(rc, vertexArray);
     });
 })();
