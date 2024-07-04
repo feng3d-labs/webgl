@@ -19,6 +19,8 @@ export function getElementBuffer(gl: WebGLRenderingContext, buffer: IIndexBuffer
         webGLBuffer = gl.createBuffer();
         gl._buffers.set(buffer, webGLBuffer);
 
+        const target = buffer.target;
+
         const updateBuffer = () =>
         {
             // 获取
@@ -26,7 +28,7 @@ export function getElementBuffer(gl: WebGLRenderingContext, buffer: IIndexBuffer
             const data = buffer.data;
 
             // 上传数据到WebGL
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
+            gl.bindBuffer(gl[target], webGLBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl[buffer.usage || defaultIndexBuffer.usage]);
 
             //

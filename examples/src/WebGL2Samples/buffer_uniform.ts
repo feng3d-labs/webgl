@@ -23,7 +23,7 @@ import { getShaderSource } from "./utility";
         0, 1, 2,
         2, 3, 0
     ]);
-    const elementBuffer: IIndexBuffer = { data: elementData, usage: "STATIC_DRAW" };
+    const elementBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: elementData, usage: "STATIC_DRAW" };
 
     //vec3 position, vec3 normal, vec4 color
     const vertices = new Float32Array([

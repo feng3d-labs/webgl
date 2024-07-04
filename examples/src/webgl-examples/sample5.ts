@@ -64,7 +64,7 @@ function main()
           normalized: false,
         },
       },
-      index: { data: buffers.indices }
+      index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
     },
     uniforms: {},
     drawElements: { firstIndex: 0, indexCount: 36 },

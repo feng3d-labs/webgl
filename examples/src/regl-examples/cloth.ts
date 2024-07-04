@@ -170,7 +170,7 @@ import { IRenderObject, ISamplerTexture, WebGL } from "../../../src";
                 normal: { buffer: { data: new Float32Array(normals) }, numComponents: 3 },
                 uv: { buffer: { data: new Float32Array(uvs) }, numComponents: 2 },
             },
-            index: { data: new Uint16Array(indices) }
+            index: { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(indices) }
         },
         uniforms: {
             view: () => camera.view(),

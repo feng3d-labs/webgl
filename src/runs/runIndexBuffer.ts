@@ -10,4 +10,5 @@ export function runIndexBuffer(gl: WebGLRenderingContext, index?: IIndexBuffer)
     }
 }
 
-export const defaultIndexBuffer: IIndexBuffer = Object.freeze({ type: "UNSIGNED_SHORT", usage: "STATIC_DRAW", data: new Uint16Array([0, 1, 2, 2, 1, 3]) });
+export const defaultIndexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", type: "UNSIGNED_SHORT", usage: "STATIC_DRAW", data: new Uint16Array([0, 1, 2, 2, 1, 3]) };
+Object.freeze(defaultIndexBuffer);

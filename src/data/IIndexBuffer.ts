@@ -10,6 +10,8 @@ import { BufferUsage } from "./IBuffer";
  */
 export interface IIndexBuffer
 {
+    target: "ELEMENT_ARRAY_BUFFER";
+
     /**
      * 元素缓冲数据类型，默认为`UNSIGNED_SHORT`。
      *

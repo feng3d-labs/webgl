@@ -43,7 +43,7 @@ const renderObject: IRenderObject = {
             position: { buffer: { data: new Float32Array(positions) }, numComponents: 3 },
             normal: { buffer: { data: new Float32Array(normals) }, numComponents: 3 },
         },
-        index: { data: new Uint16Array(indices) }
+        index: { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(indices) }
     },
     uniforms: {},
     pipeline: {

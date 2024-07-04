@@ -22,6 +22,7 @@ const vertexPosBuffer: IBuffer = {
 };
 
 const vertexElementBuffer: IIndexBuffer = {
+    target: "ELEMENT_ARRAY_BUFFER",
     data: new Uint16Array([
         0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
     ])
