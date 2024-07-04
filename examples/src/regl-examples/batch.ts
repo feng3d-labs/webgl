@@ -26,11 +26,11 @@ const renderObject: IRenderObject = {
         vertices: {
             position: {
                 buffer: {
-                    data: [
+                    data: new Float32Array([
                         0.5, 0,
                         0, 0.5,
                         1, 1
-                    ]
+                    ])
                 }, numComponents: 2
             },
         }

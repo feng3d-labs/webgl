@@ -9,14 +9,14 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const vertexPosBuffer: IBuffer = {
-    data: [-0.3, -0.5,
+    data: new Float32Array([-0.3, -0.5,
         0.3, -0.5,
-        0.0, 0.5]
+        0.0, 0.5])
 };
 const vertexColorBuffer: IBuffer = {
-    data: [
+    data: new Float32Array([
         1.0, 0.5, 0.0,
-        0.0, 0.5, 1.0]
+        0.0, 0.5, 1.0])
 };
 
 const program: IRenderPipeline = {

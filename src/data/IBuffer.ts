@@ -41,7 +41,7 @@ export interface IWriteBuffer
 /**
  * 属性缓冲数据类型。
  */
-export type AttributeBufferSourceTypes = number[]
+export type AttributeBufferSourceTypes =
     | Float32Array
     | Uint32Array
     | Int32Array

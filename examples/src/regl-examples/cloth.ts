@@ -166,11 +166,11 @@ import { IRenderObject, ISamplerTexture, WebGL } from "../../../src";
     const renderObject: IRenderObject = {
         vertexArray: {
             vertices: {
-                position: { buffer: { data: positions }, numComponents: 3 },
-                normal: { buffer: { data: normals }, numComponents: 3 },
-                uv: { buffer: { data: uvs }, numComponents: 2 },
+                position: { buffer: { data: new Float32Array(positions) }, numComponents: 3 },
+                normal: { buffer: { data: new Float32Array(normals) }, numComponents: 3 },
+                uv: { buffer: { data: new Float32Array(uvs) }, numComponents: 2 },
             },
-            index: { data: indices }
+            index: { data: new Uint16Array(indices) }
         },
         uniforms: {
             view: () => camera.view(),

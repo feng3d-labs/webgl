@@ -1,6 +1,7 @@
 import { watcher } from "@feng3d/watcher";
 import { DrawElementType, ElementBufferSourceTypes, IIndexBuffer } from "../data/IIndexBuffer";
 import { defaultIndexBuffer } from "../runs/runIndexBuffer";
+import { getWebGLBufferType } from "./getWebGLBuffer";
 
 /**
  * 获取索引WebGL缓冲区。
@@ -21,8 +22,8 @@ export function getElementBuffer(gl: WebGLRenderingContext, buffer: IIndexBuffer
         const updateBuffer = () =>
         {
             // 获取
-            webGLBuffer.type = buffer.type || getDrawElementType(buffer.data);
-            const data = getArrayBufferViewWithType(buffer.data, webGLBuffer.type);
+            webGLBuffer.type = buffer.type || getWebGLBufferType(buffer.data);
+            const data = buffer.data;
 
             // 上传数据到WebGL
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
@@ -46,37 +47,6 @@ export function getElementBuffer(gl: WebGLRenderingContext, buffer: IIndexBuffer
     }
 
     return webGLBuffer;
-}
-
-function getDrawElementType(array: ElementBufferSourceTypes)
-{
-    let type: DrawElementType;
-    if (array instanceof Uint8Array)
-    {
-        type = "UNSIGNED_BYTE";
-    }
-    else if (array instanceof Uint16Array)
-    {
-        type = "UNSIGNED_SHORT";
-    }
-    else if (array instanceof Uint32Array)
-    {
-        type = "UNSIGNED_INT";
-    }
-    else if (array.length < 1 << 8)
-    {
-        type = "UNSIGNED_BYTE";
-    }
-    else if (array.length < 1 << 16)
-    {
-        type = "UNSIGNED_SHORT";
-    }
-    else
-    {
-        type = "UNSIGNED_INT";
-    }
-
-    return type;
 }
 
 function getArrayBufferViewWithType(array: ElementBufferSourceTypes, type: DrawElementType)

@@ -13,18 +13,18 @@ document.body.appendChild(canvas);
 const MAX_UNSIGNED_SHORT = 65535;
 
 const vertexPosBuffer: IBuffer = {
-    data: [
+    data: new Float32Array([
         -1.0, -1.0,
         -1.0, 1.0,
         1.0, -1.0,
         1.0, 1.0,
-    ]
+    ])
 };
 
 const vertexElementBuffer: IIndexBuffer = {
-    data: [
+    data: new Uint16Array([
         0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
-    ]
+    ])
 };
 
 const program: IRenderPipeline = {

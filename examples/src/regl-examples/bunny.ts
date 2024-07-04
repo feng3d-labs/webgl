@@ -32,9 +32,9 @@ let viewportHeight = webglcanvas.clientHeight;
 const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
-            position: { buffer: { data: positions }, numComponents: 3 },
+            position: { buffer: { data: new Float32Array(positions) }, numComponents: 3 },
         },
-        index: { data: indices }
+        index: { data: new Uint16Array(indices) }
     },
     uniforms: {
         model: mat4.identity([]),

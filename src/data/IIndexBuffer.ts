@@ -35,7 +35,7 @@ export interface IIndexBuffer
 /**
  * 元素缓冲数据类型
  */
-export type ElementBufferSourceTypes = number[] | Uint16Array | Uint32Array | Uint8Array;
+export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 元素缓冲数据类型。
