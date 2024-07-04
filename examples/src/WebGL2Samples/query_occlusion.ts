@@ -66,8 +66,10 @@ rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query 
 
 WebGL.runRenderPass(rc, rp);
 
-const samplesPassed = await WebGL.getQueryResult(rc, query);
-document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
+WebGL.getQueryResult(rc, query).then((samplesPassed) =>
+{
+    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
+});
 
 // -- Delete WebGL resources
 WebGL.deleteBuffer(rc, vertexPosBuffer);
