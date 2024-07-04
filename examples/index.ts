@@ -45,6 +45,7 @@ const files = {
         "texture_derivative",
         "texture_fetch",
         "texture_format",
+        "texture_grad",
     ],
 };
 
