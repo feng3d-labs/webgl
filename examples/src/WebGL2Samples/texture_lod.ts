@@ -1,3 +1,6 @@
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { getShaderSource, loadImage } from "./utility";
+
 (function ()
 {
     const canvas = document.createElement("canvas");
@@ -6,14 +9,7 @@
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     // -- Mouse Behaviour
     let scale = 1.0;
@@ -57,7 +53,7 @@
         MAX: 4
     };
 
-    const viewport = new Array(Corners.MAX);
+    const viewport: { x: number, y: number, z: number, w: number }[] = new Array(Corners.MAX);
 
     viewport[Corners.BOTTOM_LEFT] = {
         x: 0,
@@ -88,11 +84,9 @@
     };
 
     // -- Initialize program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-
-    const uniformMvpLocation = gl.getUniformLocation(program, "mvp");
-    const uniformDiffuseLocation = gl.getUniformLocation(program, "diffuse");
-    const uniformLodBiasLocation = gl.getUniformLocation(program, "lodBias");
+    const program: IProgram = {
+        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -103,10 +97,7 @@
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texcoords = new Float32Array([
         0.0, 1.0,
@@ -116,70 +107,79 @@
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texcoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
     // -- Initialize vertex array
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
-
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindVertexArray(null);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    };
 
     // -- Load texture then render
-    const imageUrl = "../assets/img/Di-3d.png";
-    const textures = new Array(Corners.MAX);
+    const imageUrl = "../../assets/img/Di-3d.png";
+    const textures: ITexture[] = new Array(Corners.MAX);
+    const samplers: ISampler[] = new Array(Corners.MAX);
     loadImage(imageUrl, function (image)
     {
-        // -- Initialize Texture
-        gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+        textures[Corners.TOP_LEFT] = {
+            target: "TEXTURE_2D",
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            generateMipmap: true,
+            sources: [{ level: 0, source: image }],
+        };
+        samplers[Corners.TOP_LEFT] = {
+            minFilter: "LINEAR_MIPMAP_LINEAR",
+            magFilter: "LINEAR",
+        };
 
-        textures[Corners.TOP_LEFT] = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, textures[Corners.TOP_LEFT]);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
+        textures[Corners.TOP_RIGHT] = {
+            target: "TEXTURE_2D",
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            generateMipmap: true,
+            sources: [{ level: 0, source: image }],
+        };
+        samplers[Corners.TOP_RIGHT] = {
+            minFilter: "LINEAR_MIPMAP_LINEAR",
+            magFilter: "LINEAR",
+            lodMinClamp: 0,
+            lodMaxClamp: 0,
+        };
 
-        textures[Corners.TOP_RIGHT] = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, textures[Corners.TOP_RIGHT]);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_LOD, 3.0);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAX_LOD, 3.0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
+        textures[Corners.BOTTOM_LEFT] = {
+            target: "TEXTURE_2D",
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            generateMipmap: true,
+            sources: [{ level: 0, source: image }],
+        };
+        samplers[Corners.BOTTOM_LEFT] = {
+            minFilter: "LINEAR_MIPMAP_LINEAR",
+            magFilter: "LINEAR",
+            lodMinClamp: 0.0,
+            lodMaxClamp: 10.0,
+        };
 
-        textures[Corners.BOTTOM_LEFT] = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, textures[Corners.BOTTOM_LEFT]);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_LOD, 0.0);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAX_LOD, 10.0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
-
-        textures[Corners.BOTTOM_RIGHT] = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, textures[Corners.BOTTOM_RIGHT]);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_LOD, 0.0);
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAX_LOD, 10.0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
+        textures[Corners.BOTTOM_RIGHT] = {
+            target: "TEXTURE_2D",
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            generateMipmap: true,
+            sources: [{ level: 0, source: image }],
+        };
+        samplers[Corners.BOTTOM_RIGHT] = {
+            minFilter: "LINEAR_MIPMAP_LINEAR",
+            magFilter: "LINEAR",
+            lodMinClamp: 0.0,
+            lodMaxClamp: 10.0,
+        };
 
         render();
     });
@@ -187,11 +187,10 @@
     function render()
     {
         // Clear color buffer
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        // Bind program
-        gl.useProgram(program);
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: [],
+        };
 
         const matrix = new Float32Array([
             scale, 0.0, 0.0, 0.0,
@@ -199,23 +198,33 @@
             0.0, 0.0, scale, 0.0,
             0.0, 0.0, 0.0, 1.0
         ]);
-        gl.uniformMatrix4fv(uniformMvpLocation, false, matrix);
-        gl.uniform1i(uniformDiffuseLocation, 0);
 
-        gl.activeTexture(gl.TEXTURE0);
-
-        gl.bindVertexArray(vertexArray);
+        const ro: IRenderObject = {
+            pipeline: program,
+            uniforms: {
+                mvp: matrix,
+            },
+            vertexArray,
+            drawArrays: { vertexCount: 6 },
+        };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];
         lodBiasArray[Corners.BOTTOM_LEFT] = 3.5;
         lodBiasArray[Corners.BOTTOM_RIGHT] = 4.0;
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            gl.viewport(viewport[i].x, viewport[i].y, viewport[i].z, viewport[i].w);
-            gl.uniform1f(uniformLodBiasLocation, lodBiasArray[i]);
-            gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-            gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, 1);
+            rp.renderObjects.push({
+                ...ro,
+                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                uniforms: {
+                    mvp: matrix,
+                    lodBias: lodBiasArray[i],
+                    diffuse: { texture: textures[i], sampler: samplers[i] },
+                },
+            });
         }
+
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }
