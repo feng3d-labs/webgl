@@ -1,24 +1,20 @@
+import { IAttributeBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { getShaderSource, loadImage } from "./utility";
+
 (function ()
 {
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.height = window.innerHeight;
     canvas.width = canvas.height * 960 / 540;
     document.body.appendChild(canvas);
 
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
     // -- Init program
-    const program = createProgram(gl, getShaderSource("vs"), getShaderSource("fs"));
-    const mvpLocation = gl.getUniformLocation(program, "MVP");
-    const diffuseLocation = gl.getUniformLocation(program, "diffuse");
-    const layerLocation = gl.getUniformLocation(program, "layer");
+    const program: IProgram = {
+        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    };
 
     // -- Init buffers
     const positions = new Float32Array([
@@ -29,10 +25,7 @@
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -42,31 +35,19 @@
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray = gl.createVertexArray();
-    gl.bindVertexArray(vertexArray);
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 2 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        }
+    };
 
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindVertexArray(null);
-
-    const texture = gl.createTexture();
-    loadImage("../assets/img/di-animation-array.jpg", function (image)
+    let texture: ITexture;
+    let sampler: ISampler;
+    loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {
         const NUM_IMAGES = 3;
         const IMAGE_SIZE = {
@@ -83,25 +64,17 @@
         const pixels = new Uint8Array(imageData.data.buffer);
 
         // -- Init Texture
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texImage3D(
-            gl.TEXTURE_2D_ARRAY,
-            0,
-            gl.RGBA,
-            IMAGE_SIZE.width,
-            IMAGE_SIZE.height,
-            NUM_IMAGES,
-            0,
-            gl.RGBA,
-            gl.UNSIGNED_BYTE,
-            pixels
-        );
-
-        gl.useProgram(program);
-        gl.bindVertexArray(vertexArray);
+        texture = {
+            textureTarget: "TEXTURE_2D_ARRAY",
+            internalformat: "RGBA",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, border: 0, pixels }],
+        };
+        sampler = {
+            minFilter: "LINEAR",
+            magFilter: "LINEAR",
+        };
 
         const matrix = new Float32Array([
             1.0, 0.0, 0.0, 0.0,
@@ -109,20 +82,30 @@
             0.0, 0.0, 1.0, 0.0,
             0.0, 0.0, 0.0, 1.0
         ]);
-        gl.uniformMatrix4fv(mvpLocation, false, matrix);
-        gl.uniform1i(diffuseLocation, 0);
+
+        const ro: IRenderObject = {
+            pipeline: program,
+            vertexArray,
+            uniforms: {
+                MVP: matrix,
+                diffuse: { texture, sampler },
+            },
+            drawArrays: { vertexCount: 6 },
+        };
+
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
+            renderObjects: [ro],
+        };
 
         let frame = 0;
         (function render()
         {
             // -- Render
-            gl.clearColor(1.0, 1.0, 1.0, 1.0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.uniform1i(layerLocation, frame);
+            ro.uniforms.layer = frame;
+            WebGL.runRenderPass(rc, rp);
 
             frame = (frame + 1) % NUM_IMAGES;
-
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
 
             setTimeout(function ()
             {

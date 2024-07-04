@@ -9,17 +9,14 @@ export interface IBuffer
     target: "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER";
 
     /**
-     * 缓冲区尺寸。
-     */
-    size?: number;
-
-    /**
      * 缓冲区数据。
      */
     data?: AttributeBufferSourceTypes;
 
     /**
      * 为优化目的指定数据存储的预期使用模式的GLenum。
+     *
+     * 默认为 "STATIC_DRAW"。
      */
     usage?: BufferUsage;
 
