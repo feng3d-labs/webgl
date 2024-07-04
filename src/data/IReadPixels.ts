@@ -1,6 +1,6 @@
 import { AttachmentPoint } from "../gl/WebGLEnums";
 import { IFramebuffer } from "./IFramebuffer";
-import { TextureDataType, TextureFormat } from "./ITexture";
+import { ITextureDataType, ITextureFormat } from "./ITexture";
 
 /**
  * 读取渲染缓冲区或者纹理视图中的像素值。
@@ -26,14 +26,14 @@ export interface IReadPixels
      *
      * 默认 "RGBA"。
      */
-    format?: TextureFormat;
+    format?: ITextureFormat;
 
     /**
      * 数据类型。
      *
      * 默认 "UNSIGNED_BYTE"。
      */
-    type?: TextureDataType;
+    type?: ITextureDataType;
 
     dstData: ArrayBufferView,
     dstOffset: number
