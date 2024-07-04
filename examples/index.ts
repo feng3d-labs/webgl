@@ -46,6 +46,7 @@ const files = {
         "texture_fetch",
         "texture_format",
         "texture_grad",
+        "texture_immutable",
     ],
 };
 

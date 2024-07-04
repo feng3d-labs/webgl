@@ -47,7 +47,7 @@ import { getShaderSource, loadImage } from "./utility";
     {
         // -- Init Texture
         const texture: ITexture = {
-            textureTarget: "TEXTURE_2D",
+            target: "TEXTURE_2D",
             flipY: false,
             internalformat: "RGBA",
             format: "RGBA",

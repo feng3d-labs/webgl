@@ -129,7 +129,7 @@ import { getShaderSource, loadImage } from "./utility";
     {
         // -- Init 2D Texture
         texture = {
-            textureTarget: "TEXTURE_2D",
+            target: "TEXTURE_2D",
             flipY: false,
             internalformat: "RGB8",
             format: "RGB",

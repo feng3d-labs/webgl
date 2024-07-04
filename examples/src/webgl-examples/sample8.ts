@@ -339,7 +339,7 @@ function initBuffers()
 function initTexture(): ISamplerTexture
 {
   const texture: ITexture = {
-    textureTarget: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+    target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
   };
   const sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };

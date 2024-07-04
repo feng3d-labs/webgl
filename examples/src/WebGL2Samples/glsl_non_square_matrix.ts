@@ -48,7 +48,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
     const texture: ITexture = {
-        textureTarget: "TEXTURE_2D",
+        target: "TEXTURE_2D",
         flipY: false,
         internalformat: "RGBA",
         format: "RGBA",

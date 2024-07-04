@@ -104,7 +104,7 @@ const w = 16;
 const h = 16;
 
 const texture: ITexture = {
-    textureTarget: "TEXTURE_2D_ARRAY",
+    target: "TEXTURE_2D_ARRAY",
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",

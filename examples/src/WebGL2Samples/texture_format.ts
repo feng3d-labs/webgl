@@ -158,7 +158,7 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {
-                textureTarget: "TEXTURE_2D",
+                target: "TEXTURE_2D",
                 flipY: false,
                 internalformat: textureFormats[i].internalFormat,
                 format: textureFormats[i].format,

@@ -65,7 +65,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         texture = {
-            textureTarget: "TEXTURE_2D_ARRAY",
+            target: "TEXTURE_2D_ARRAY",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
