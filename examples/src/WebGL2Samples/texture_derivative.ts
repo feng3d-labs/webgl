@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
+import { IAttributeBuffer, IIndexBuffer, IProgram, IRenderingContext, ISampler, ITexture, IVertexArrayObject } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
-import { IProgram, IRenderingContext } from "../../../src";
 
 (function ()
 {
@@ -58,10 +58,7 @@ import { IProgram, IRenderingContext } from "../../../src";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexPosBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         // Front face
@@ -100,14 +97,9 @@ import { IProgram, IRenderingContext } from "../../../src";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    const vertexTexBuffer: IAttributeBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
-    const indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
     const cubeVertexIndices = [
         0, 1, 2, 0, 2, 3, // front
@@ -118,45 +110,41 @@ import { IProgram, IRenderingContext } from "../../../src";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-    // Now send the element array to GL
-
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+    const indexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray = gl.createVertexArray();
+    const vertexArray: IVertexArrayObject = {
+        vertices: {
+            position: { buffer: vertexPosBuffer, numComponents: 3 },
+            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        },
+        index: indexBuffer,
+    };
     gl.bindVertexArray(vertexArray);
-
-    const vertexPosLocation = 0; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexPosLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
-    gl.vertexAttribPointer(vertexPosLocation, 3, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const vertexTexLocation = 4; // set with GLSL layout qualifier
-    gl.enableVertexAttribArray(vertexTexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexBuffer);
-    gl.vertexAttribPointer(vertexTexLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-    gl.bindVertexArray(null);
 
     // -- Init Texture
 
-    const imageUrl = "../assets/img/Di-3d.png";
-    let texture;
+    const imageUrl = "../../assets/img/Di-3d.png";
+    let texture: ITexture;
+    let sampler: ISampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
-        texture = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        texture = {
+            textureTarget: "TEXTURE_2D",
+            flipY: false,
+            internalformat: "RGB8",
+            format: "RGB",
+            type: "UNSIGNED_BYTE",
+            storage: { levels: 1, width: 512, height: 512 },
+            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }]
+        };
+        sampler = {
+            minFilter: "NEAREST",
+            magFilter: "NEAREST",
+            wrapS: "CLAMP_TO_EDGE",
+            wrapT: "CLAMP_TO_EDGE",
+        };
 
         // -- Allocate storage for the texture
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 512, 512);

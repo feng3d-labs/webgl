@@ -33,9 +33,22 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     webGLTexture = gl.createTexture(); // Create a texture object
     gl._textures.set(texture, webGLTexture);
 
+    //
+    const internalformat = texture.internalformat || defaultTexture.internalformat;
+    const storage = texture.storage;
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        if (storage)
+        {
+            const { levels, width, height } = storage;
+
+            gl.texStorage2D(gl.TEXTURE_2D, levels, gl[internalformat], width, height);
+        }
+    }
+
     const updateTexture = () =>
     {
-        const { textureTarget, flipY, premulAlpha, generateMipmap, internalformat, format, type, sources } = { ...defaultTexture, ...texture };
+        const { textureTarget, flipY, premulAlpha, generateMipmap, format, type, sources } = { ...defaultTexture, ...texture };
         //
         // 设置图片y轴方向
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);

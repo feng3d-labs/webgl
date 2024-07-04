@@ -34,7 +34,21 @@ export interface ITexture
     /**
      * 纹理资源。
      */
-    sources?: ITextureSource[]
+    sources?: ITextureSource[];
+
+    /**
+     * 初始纹理时指定纹理存储的各个级别。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
+     */
+    storage?: ITextureStorage;
+
+    /**
+     * 写入纹理。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+     */
+    writeTextures?: IWriteTexture[];
 
     /**
      * 是否生成mipmap
@@ -148,6 +162,26 @@ export interface IBufferSource
      * 默认为 undefined。
      */
     pixels?: ArrayBufferView;
+}
+
+/**
+ * 写入纹理。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+ */
+export interface IWriteTexture
+{
+    level: number, xoffset: number, yoffset: number, source: TexImageSource
+}
+
+/**
+ * 初始纹理时指定纹理存储的各个级别。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
+ */
+export interface ITextureStorage
+{
+    levels: number, width: number, height: number
 }
 
 /**
