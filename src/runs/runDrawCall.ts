@@ -1,5 +1,4 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { getElementBuffer } from "../caches/getElementBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IDrawArrays } from "../data/IDrawArrays";
 import { IDrawElements } from "../data/IDrawElements";
@@ -39,7 +38,7 @@ export const defaultDrawIndexed: IDrawElements = Object.freeze({ firstIndex: 0, 
 function _runDrawElements(gl: WebGLRenderingContext, drawMode: DrawMode, index: IIndexBuffer, drawElements: IDrawElements)
 {
     //
-    const element = getElementBuffer(gl, index);
+    const element = getWebGLBuffer(gl, index);
     const type = element.type;
     //
     let { indexCount, instanceCount, firstIndex } = drawElements || {};

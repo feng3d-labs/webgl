@@ -38,7 +38,7 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?
     webGLBuffer = gl.createBuffer();
     gl._buffers.set(buffer, webGLBuffer);
 
-    const target = buffer.target || "ARRAY_BUFFER";
+    const target = buffer.target;
 
     const updateBuffer = () =>
     {

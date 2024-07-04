@@ -1,11 +1,11 @@
-import { getElementBuffer } from "../caches/getElementBuffer";
+import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { IIndexBuffer } from "../data/IIndexBuffer";
 
 export function runIndexBuffer(gl: WebGLRenderingContext, index?: IIndexBuffer)
 {
     if (index)
     {
-        const buffer = getElementBuffer(gl, index);
+        const buffer = getWebGLBuffer(gl, index);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 }
