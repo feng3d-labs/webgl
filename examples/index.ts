@@ -42,6 +42,7 @@ const files = {
         "buffer_uniform",
         "texture_2d_array",
         "texture_3d",
+        "texture_derivative",
     ],
 };
 
