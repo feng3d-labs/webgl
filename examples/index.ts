@@ -47,6 +47,7 @@ const files = {
         "texture_format",
         "texture_grad",
         "texture_immutable",
+        "texture_integer",
     ],
 };
 
