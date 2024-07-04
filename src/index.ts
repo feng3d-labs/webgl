@@ -2,6 +2,7 @@ export * from "./WebGL";
 export * from "./data/IBlitFramebuffer";
 export * from "./data/IBuffer";
 export * from "./data/ICapabilities";
+export * from "./data/ICopyBuffer";
 export * from "./data/IFramebuffer";
 export * from "./data/IIndexBuffer";
 export * from "./data/IPassDescriptor";

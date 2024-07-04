@@ -71,11 +71,14 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer, type?
 export function deleteBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 {
     const webGLBuffer = gl._buffers.get(buffer);
-    gl._buffers.delete(buffer);
-    webGLBuffer.destroy();
-    delete webGLBuffer.destroy;
-    //
-    gl.deleteBuffer(webGLBuffer);
+    if (webGLBuffer)
+    {
+        gl._buffers.delete(buffer);
+        webGLBuffer.destroy();
+        delete webGLBuffer.destroy;
+        //
+        gl.deleteBuffer(webGLBuffer);
+    }
 }
 
 function getWebGLBufferType(data: AttributeBufferSourceTypes)

@@ -24,6 +24,8 @@ import { runReadPixels } from "./runs/runReadPixels";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
 import { deleteVertexArray } from "./runs/runVertexArray";
+import { ICopyBuffer } from "./data/ICopyBuffer";
+import { runCopyBuffer } from "./runs/runCopyBuffer";
 
 /**
  * WEBGL 渲染器
@@ -66,6 +68,14 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         runBlitFramebuffer(gl, blitFramebuffer);
+    }
+
+    static runCopyBuffer(renderingContext: IRenderingContext, copyBuffer: ICopyBuffer)
+    {
+        const gl = getRenderingContext(renderingContext);
+        if (!gl || gl.isContextLost()) return;
+
+        runCopyBuffer(gl, copyBuffer);
     }
 
     static runReadPixels(renderingContext: IRenderingContext, readPixels: IReadPixels)
