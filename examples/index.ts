@@ -38,6 +38,7 @@ const files = {
         "glsl_non_square_matrix",
         "query_occlusion",
         "draw_instanced_ubo",
+        "buffer_copy",
     ],
 };
 
