@@ -307,7 +307,7 @@ async function loadTexture(url: string)
   const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
   const texture: ITexture = {
-    textureTarget: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+    target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ source: img }],
   };
 

@@ -1,3 +1,5 @@
+import { TexImage2DTarget } from "../gl/WebGLEnums";
+
 /**
  * 纹理视图。
  */
@@ -29,10 +31,12 @@ export interface ITexture
      *
      * 默认"TEXTURE_2D"。
      */
-    textureTarget?: TextureTarget;
+    target?: ITextureTarget;
 
     /**
      * 纹理资源。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
      */
     sources?: ITextureSource[];
 
@@ -40,6 +44,7 @@ export interface ITexture
      * 初始纹理时指定纹理存储的各个级别。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage3D
      */
     storage?: ITextureStorage;
 
@@ -100,9 +105,15 @@ export type ITextureSource = IImageSource | IBufferSource;
  * 纹理图片资源。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texImage3D
  */
 export interface IImageSource
 {
+    /**
+     * 当上传CubeMap纹理数据时指定位置。
+     */
+    cubeTarget?: TextureCubeMapTarget;
+
     /**
      * mipmap级别。
      *
@@ -123,6 +134,11 @@ export interface IImageSource
  */
 export interface IBufferSource
 {
+    /**
+     * 当上传CubeMap纹理数据时指定位置。
+     */
+    cubeTarget?: TextureCubeMapTarget;
+
     /**
      * mipmap级别
      *
@@ -165,12 +181,36 @@ export interface IBufferSource
 }
 
 /**
+ * A GLenum specifying the texture target.
+ *
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_X: Positive X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_X: Negative X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Y: Positive Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Y: Negative Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Z: Positive Z face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Z: Negative Z face for a cube-mapped texture.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+export type TextureCubeMapTarget =
+    | "TEXTURE_CUBE_MAP_POSITIVE_X"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
+
+/**
  * 写入纹理。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  */
 export interface IWriteTexture
 {
+    /**
+     * 当上传CubeMap纹理数据时指定位置。
+     */
+    cubeTarget?: TextureCubeMapTarget;
     /**
      * mipmap级别。
      */
@@ -228,7 +268,7 @@ export interface ITextureStorage
 }
 
 /**
- * A GLenum specifying the binding point (target). Possible values:
+ * 纹理绑定点。
  *
  * * gl.TEXTURE_2D: A two-dimensional texture.
  * * gl.TEXTURE_CUBE_MAP: A cube-mapped texture.
@@ -240,7 +280,7 @@ export interface ITextureStorage
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindTexture
  */
-export type TextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
+export type ITextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
 
 /**
  * internalformat	format	type

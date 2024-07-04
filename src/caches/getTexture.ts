@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture, TextureTarget } from "../data/ITexture";
+import { ITexture, ITextureTarget } from "../data/ITexture";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -16,7 +16,7 @@ declare global
          *
          * 默认"TEXTURE_2D"。
          */
-        textureTarget: TextureTarget;
+        textureTarget: ITextureTarget;
 
         /**
          * 销毁WebGL纹理。
@@ -40,81 +40,81 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     {
         if (storage)
         {
-            const { textureTarget } = { ...defaultTexture, ...texture };
+            const { target } = { ...defaultTexture, ...texture };
             const { levels, width, height, depth } = storage;
 
-            gl.bindTexture(gl[textureTarget], webGLTexture);
+            gl.bindTexture(gl[target], webGLTexture);
 
-            if (textureTarget === "TEXTURE_2D")
+            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
-                gl.texStorage2D(gl[textureTarget], levels, gl[internalformat], width, height);
+                gl.texStorage2D(gl[target], levels, gl[internalformat], width, height);
             }
-            else if (textureTarget === "TEXTURE_3D")
+            else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
             {
-                gl.texStorage3D(gl[textureTarget], levels, gl[internalformat], width, height, depth);
+                gl.texStorage3D(gl[target], levels, gl[internalformat], width, height, depth);
             }
             else
             {
-                console.error(`未处理 ${textureTarget} 纹理初始化存储！`);
+                console.error(`未处理 ${target} 纹理初始化存储！`);
             }
         }
     }
 
     const updateTexture = () =>
     {
-        const { textureTarget, flipY, premulAlpha, generateMipmap, format, type, sources } = { ...defaultTexture, ...texture };
+        const { target, flipY, premulAlpha, generateMipmap, format, type, sources } = { ...defaultTexture, ...texture };
         //
         // 设置图片y轴方向
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
         // 绑定纹理
-        gl.bindTexture(gl[textureTarget], webGLTexture);
+        gl.bindTexture(gl[target], webGLTexture);
 
-        webGLTexture.textureTarget = textureTarget;
+        webGLTexture.textureTarget = target;
 
         sources?.forEach((sourceItem) =>
         {
             // 设置纹理图片
-            if (textureTarget === "TEXTURE_2D")
+            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
+                const bindTarget = target === "TEXTURE_CUBE_MAP" ? sourceItem.cubeTarget : target;
+
                 if ("source" in sourceItem)
                 {
                     const { level, source } = { ...defaultImageSource, ...sourceItem };
-                    gl.texImage2D(gl[textureTarget], level, gl[internalformat], gl[format], gl[type], source);
+                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
                 }
                 else
                 {
                     const { level, width, height, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                    gl.texImage2D(gl[textureTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
                 }
             }
-            else if (textureTarget === "TEXTURE_2D_ARRAY" || textureTarget === "TEXTURE_3D")
+            else if (target === "TEXTURE_2D_ARRAY" || target === "TEXTURE_3D")
             {
                 if (gl instanceof WebGL2RenderingContext)
                 {
                     if ("source" in sourceItem)
                     {
-                        console.error(`未处理  ${textureTarget}`);
+                        const { level, width, height, depth, border, source } = { ...defaultBufferSource, ...sourceItem };
+                        gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], source);
                     }
                     else
                     {
                         const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage3D(gl[textureTarget],
-                            level, gl[internalformat], width, height,
-                            depth,
-                            border, gl[format], gl[type], pixels);
+                        gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
                     }
                 }
             }
             else
             {
-                throw `未处理 ${textureTarget}`;
+                throw `未处理 ${target}`;
             }
         });
 
         if (generateMipmap)
         {
-            gl.generateMipmap(gl[textureTarget]);
+            gl.generateMipmap(gl[target]);
         }
     };
     updateTexture();
@@ -125,49 +125,53 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         const { writeTextures } = texture;
         writeTextures?.forEach((v) =>
         {
-            const { textureTarget, format, type } = { ...defaultTexture, ...texture };
-            gl.bindTexture(gl[textureTarget], webGLTexture);
+            const { target, format, type } = { ...defaultTexture, ...texture };
+            gl.bindTexture(gl[target], webGLTexture);
 
-            const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset } = v;
+            const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset, cubeTarget } = v;
 
             if (gl instanceof WebGL2RenderingContext)
             {
                 if (source)
                 {
-                    if (textureTarget === "TEXTURE_2D")
+                    if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                     {
+                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
+
                         if (width && height)
                         {
-                            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], source);
                         }
                         else
                         {
-                            gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], source);
                         }
                     }
-                    else if (textureTarget === "TEXTURE_3D")
+                    else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                     {
-                        gl.texSubImage3D(gl[textureTarget], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], source);
+                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], source);
                     }
                     else
                     {
-                        console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的图片资源上传。`);
+                        console.error(`未处理 WebGL1 中 ${target} 纹理类型的图片资源上传！`);
                     }
                 }
                 else
                 {
                     // eslint-disable-next-line no-lonely-if
-                    if (textureTarget === "TEXTURE_2D")
+                    if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                     {
-                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData, srcOffset || 0);
+                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
+
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData, srcOffset || 0);
                     }
-                    else if (textureTarget === "TEXTURE_3D")
+                    else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                     {
-                        gl.texSubImage3D(gl[textureTarget], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], srcData, srcOffset || 0);
+                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], srcData, srcOffset || 0);
                     }
                     else
                     {
-                        console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的像素资源上传。`);
+                        console.error(`未处理 WebGL1 中 ${target} 纹理类型的像素资源上传。`);
                     }
                 }
             }
@@ -175,20 +179,21 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
             else
             {
                 // eslint-disable-next-line no-lonely-if
-                if (textureTarget === "TEXTURE_2D")
+                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                 {
+                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
                     if (source)
                     {
-                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], source);
                     }
                     else
                     {
-                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
                     }
                 }
                 else
                 {
-                    console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的图片资源上传。`);
+                    console.error(`WebGL1 中 不支持 ${target} 纹理类型！`);
                 }
             }
         });

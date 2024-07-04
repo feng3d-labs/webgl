@@ -78,7 +78,7 @@ import { getShaderSource } from "./utility";
     }
 
     const texture: ITexture = {
-        textureTarget: "TEXTURE_3D",
+        target: "TEXTURE_3D",
         internalformat: "R8",
         format: "RED",
         type: "UNSIGNED_BYTE",

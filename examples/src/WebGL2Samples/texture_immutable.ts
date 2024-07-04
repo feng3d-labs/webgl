@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init 2D Texture
         const texture2D: ITexture = {
-            textureTarget: "TEXTURE_2D",
+            target: "TEXTURE_2D",
             flipY: false,
             internalformat: "RGB8",
             format: "RGB",
@@ -167,7 +167,7 @@ import { getShaderSource, loadImage } from "./utility";
         }
 
         const texture3D: ITexture = {
-            textureTarget: "TEXTURE_3D",
+            target: "TEXTURE_3D",
             internalformat: "R8",
             format: "RED",
             type: "UNSIGNED_BYTE",
