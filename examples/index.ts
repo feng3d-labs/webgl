@@ -49,6 +49,7 @@ const files = {
         "texture_immutable",
         "texture_integer",
         "texture_lod",
+        "texture_offset",
     ],
 };
 

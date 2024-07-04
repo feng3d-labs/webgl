@@ -4,7 +4,7 @@ import { ISamplerTexture } from "./ISamplerTexture";
 /**
  * Uniform 类型
  */
-export type IUniformType = ISamplerTexture | ISamplerTexture[] | number | number[] | Float32Array | (number[] | Float32Array)[] | IUniformBuffer | IUniforms;
+export type IUniformType = ISamplerTexture | ISamplerTexture[] | number | number[] | Float32Array | (number[] | Float32Array)[] | Int32Array | IUniformBuffer | IUniforms;
 
 export interface IUniformBuffer extends IBuffer
 {
