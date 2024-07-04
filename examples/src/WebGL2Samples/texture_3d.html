@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-texture-3d.cpp -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - texture_3d</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - texture_3d</div>
+    <p id="description">
+        This sample demonstrates creating a custom 3D texture from simplex noise.
+    </p>
+    <!-- WebGL 2 shaders.
+        This section is adapted from Example 6.15 and 6.16,
+        OpenGL® Programming Guide: The Official Guide to Learning OpenGL®, Version 4.3,
+        Dave Shreiner, Graham Sellers
+     -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 1
+
+        precision highp float;
+        precision highp int;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 in_texcoord;
+
+        // Output 3D texture coordinate after transformation
+        out vec3 v_texcoord;
+
+        // Matrix to transform the texture coordinates into 3D space
+        uniform mat4 orientation;
+
+        void main()
+        {
+            // Multiply the texture coordinate by the transformation
+            // matrix to place it into 3D space
+            v_texcoord = (orientation * vec4(in_texcoord - vec2(0.5, 0.5), 0.5, 1.0)).stp;
+            gl_Position = vec4(position, 0.0, 1.0);
+        }
+
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+
+        precision highp float;
+        precision highp int;
+        precision highp sampler3D;
+
+        uniform sampler3D diffuse;
+
+        in vec3 v_texcoord;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, v_texcoord);
+        }
+    </script>
+
+    <script type="module" src="./texture_3d.ts">
+    </script>
+    <div id="highlightedLines"  style="display: none">#L132-L170</div>
+
+</body>
+
+</html>

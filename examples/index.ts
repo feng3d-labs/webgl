@@ -41,6 +41,7 @@ const files = {
         "buffer_copy",
         "buffer_uniform",
         "texture_2d_array",
+        "texture_3d",
     ],
 };
 
