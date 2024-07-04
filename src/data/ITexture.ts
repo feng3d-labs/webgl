@@ -169,37 +169,48 @@ export interface IBufferSource
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  */
-export type IWriteTexture = IWriteTextureSource | IWriteTextureData;
-
-export interface IWriteTextureSource
+export interface IWriteTexture
 {
+    /**
+     * mipmap级别。
+     */
     level: number,
-    xoffset: number, yoffset: number,
+    /**
+     * 写入x轴偏移。
+     */
+    xoffset: number,
+    /**
+     * 写入Y轴偏移。
+     */
+    yoffset: number,
     /**
      * 写入3D纹理时深度偏移。
      */
     zoffset?: number;
-    source: TexImageSource
-}
-
-export interface IWriteTextureData
-{
-    level: number,
-    xoffset: number, yoffset: number,
     /**
-     * 写入3D纹理时深度偏移。
+     * 写入宽度。
      */
-    zoffset?: number;
-
-    width: number, height: number,
+    width?: number,
+    /**
+     * 写入高度。
+     */
+    height?: number,
     /**
      * 写入3D纹理深度。
      */
     depth?: number,
     /**
-     * 写入数据。
+     * 纹理图源数据。
      */
-    srcData: ArrayBufferView, srcOffset?: number
+    source: TexImageSource
+    /**
+     * 写入像素数据。
+     */
+    srcData?: ArrayBufferView,
+    /**
+     * 写入像素数据偏移。
+     */
+    srcOffset?: number
 }
 
 /**
