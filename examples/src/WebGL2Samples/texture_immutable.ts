@@ -1,4 +1,4 @@
-import { IProgram, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer } from "../../../src";
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -11,7 +11,6 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     const Corners = {
         LEFT: 0,
@@ -69,31 +68,11 @@ import { getShaderSource, loadImage } from "./utility";
         }
     };
 
-    const {texture3D,sampler3D} = create3DTexture();
+    const { texture3D, sampler3D } = create3DTexture();
 
-    const imageUrl = "../assets/img/Di-3d.png";
+    const imageUrl = "../../assets/img/Di-3d.png";
     loadImage(imageUrl, function (image)
     {
-        // -- Init 2D Texture
-        const texture2D = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture2D);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        // -- Allocate storage for the texture
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 512, 512);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
-
-        // -- Render
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        gl.bindVertexArray(vertexArray);
-
         const matrix = new Float32Array([
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
@@ -101,33 +80,69 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        // Immutable 2D texture
-        gl.useProgram(program);
-        gl.uniformMatrix4fv(mvpLocation, false, matrix);
-        gl.uniform1i(diffuseLocation, 0);
+        // -- Init 2D Texture
+        const texture2D: ITexture = {
+            textureTarget: "TEXTURE_2D",
+            flipY: false,
+            internalformat: "RGB8",
+            format: "RGB",
+            type: "UNSIGNED_BYTE",
+            storage: { levels: 1, width: 512, height: 512 },
+            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+        };
+        const sampler2D: ISampler = {
+            minFilter: "NEAREST",
+            magFilter: "LINEAR",
+            wrapS: "CLAMP_TO_EDGE",
+            wrapT: "CLAMP_TO_EDGE",
+        };
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture2D);
-        gl.viewport(viewports[Corners.LEFT].x, viewports[Corners.LEFT].y, viewports[Corners.LEFT].z, viewports[Corners.LEFT].w);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        // -- Render
+        const ro: IRenderObject = {
+            pipeline: program,
+            vertexArray,
+            uniforms: {
+                MVP: matrix,
+            },
+            drawArrays: { vertexCount: 6 },
+        };
+
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: []
+        };
+
+        rp.renderObjects.push({
+            ...ro,
+            pipeline: program,
+            uniforms: {
+                ...ro.uniforms,
+                diffuse: { texture: texture2D, sampler: sampler2D },
+            },
+            viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w }
+        });
 
         // Immutable 3D texture
-        gl.useProgram(program3D);
-        gl.uniform1i(diffuseLocation3D, 1);
+        rp.renderObjects.push({
+            ...ro,
+            pipeline: program3D,
+            uniforms: {
+                ...ro.uniforms,
+                diffuse: { texture: texture3D, sampler: sampler3D },
+            },
+            viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w }
+        });
 
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_3D, texture3D);
-        gl.viewport(viewports[Corners.RIGHT].x, viewports[Corners.RIGHT].y, viewports[Corners.RIGHT].z, viewports[Corners.RIGHT].w);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        WebGL.runRenderPass(rc, rp);
 
         // Delete WebGL resources
-        gl.deleteBuffer(vertexPosBuffer);
-        gl.deleteBuffer(vertexTexBuffer);
-        gl.deleteTexture(texture2D);
-        gl.deleteTexture(texture3D);
-        gl.deleteProgram(program);
-        gl.deleteProgram(program3D);
-        gl.deleteVertexArray(vertexArray);
+        WebGL.deleteBuffer(rc, vertexPosBuffer);
+        WebGL.deleteBuffer(rc, vertexTexBuffer);
+        WebGL.deleteTexture(rc, texture2D);
+        WebGL.deleteTexture(rc, texture3D);
+        WebGL.deleteProgram(rc, program);
+        WebGL.deleteProgram(rc, program3D);
+        WebGL.deleteVertexArray(rc, vertexArray);
     });
 
     function create3DTexture()

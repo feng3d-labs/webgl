@@ -126,17 +126,106 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         writeTextures?.forEach((v) =>
         {
             const { textureTarget, format, type } = { ...defaultTexture, ...texture };
-            const { level, xoffset, yoffset, source } = v;
+            gl.bindTexture(gl[textureTarget], webGLTexture);
 
-            if (textureTarget === "TEXTURE_2D")
+            if (gl instanceof WebGL2RenderingContext)
             {
-                gl.bindTexture(gl[textureTarget], webGLTexture);
-                gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                if ("source" in v)
+                {
+                    const { level, xoffset, yoffset, source } = v;
+                    // eslint-disable-next-line no-lonely-if
+
+                    // target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null
+
+                    if (textureTarget === "TEXTURE_2D")
+                    {
+                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                    }
+                    else
+                    {
+                        console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的图片资源上传。`);
+                    }
+                }
+
+                gl;
+            }
+            // 处理 WebGL1
+            else
+            {
+                // eslint-disable-next-line no-lonely-if
+                if ("source" in v)
+                {
+                    // eslint-disable-next-line no-lonely-if
+                    const { level, xoffset, yoffset, source } = v;
+
+                    if (textureTarget === "TEXTURE_2D")
+                    {
+                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                    }
+                    else
+                    {
+                        console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的图片资源上传。`);
+                    }
+                }
+                else
+                {
+                    const { level, xoffset, yoffset, width, height, srcData } = v;
+                    //
+                    // eslint-disable-next-line no-lonely-if
+                    if (textureTarget === "TEXTURE_2D")
+                    {
+                        gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
+                    }
+                    else
+                    {
+                        console.error(`未处理 WebGL1 中 ${textureTarget} 纹理类型的图片资源上传。`);
+                    }
+                }
+            }
+
+            if ("source" in v)
+            {
+                const { level, xoffset, yoffset, zoffset, source } = v;
+
+                if (textureTarget === "TEXTURE_2D")
+                {
+                    gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                }
+                else if (textureTarget === "TEXTURE_3D")
+                {
+                    if (gl instanceof WebGL2RenderingContext)
+                    {
+                        gl.texSubImage3D(gl[textureTarget], level, xoffset, yoffset, zoffset, gl[format], gl[type], source);
+                    }
+                }
+                else
+                {
+                    console.error(`未处理 ${textureTarget} 纹理写入！`);
+                }
             }
             else
             {
-                console.error(`未处理 ${textureTarget} 纹理写入！`);
+                const { level, xoffset, yoffset, zoffset, width, height, depth, srcData, srcOffset } = v;
+
+                gl.bindTexture(gl[textureTarget], webGLTexture);
+                if (textureTarget === "TEXTURE_2D")
+                {
+                    gl.texSubImage2D(gl[textureTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
+                }
+                else if (textureTarget === "TEXTURE_3D")
+                {
+                    if (gl instanceof WebGL2RenderingContext)
+                    {
+                        gl.texSubImage3D(gl[textureTarget], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], srcData, srcOffset);
+                    }
+                }
+                else
+                {
+                    console.error(`未处理 ${textureTarget} 纹理写入！`);
+                }
+
             }
+
         });
     };
     writeTexture();
