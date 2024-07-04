@@ -44,6 +44,7 @@ const files = {
         "texture_3d",
         "texture_derivative",
         "texture_fetch",
+        "texture_format",
     ],
 };
 
