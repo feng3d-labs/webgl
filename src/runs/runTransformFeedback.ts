@@ -19,7 +19,7 @@ export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedbac
             gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
         }
     }
-    else
+    else if (transformFeedback)
     {
         console.log(`WebGL1 不支持顶点着色器回写数据功能！`);
     }
