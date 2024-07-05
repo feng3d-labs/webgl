@@ -19,21 +19,21 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
 {
     if (!vertexArray) return;
 
-    let webGLVertexArrayObject: WebGLVertexArrayObject;
-    if (gl instanceof WebGL2RenderingContext)
-    {
-        webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
-        if (webGLVertexArrayObject)
-        {
-            gl.bindVertexArray(webGLVertexArrayObject);
+    // let webGLVertexArrayObject: WebGLVertexArrayObject;
+    // if (gl instanceof WebGL2RenderingContext)
+    // {
+    //     webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
+    //     if (webGLVertexArrayObject)
+    //     {
+    //         gl.bindVertexArray(webGLVertexArrayObject);
 
-            return;
-        }
+    //         return;
+    //     }
 
-        webGLVertexArrayObject = gl.createVertexArray();
-        gl.bindVertexArray(webGLVertexArrayObject);
-        gl._vertexArrays.set(vertexArray, webGLVertexArrayObject);
-    }
+    //     webGLVertexArrayObject = gl.createVertexArray();
+    //     gl.bindVertexArray(webGLVertexArrayObject);
+    //     gl._vertexArrays.set(vertexArray, webGLVertexArrayObject);
+    // }
 
     //
     const { vertices, index } = vertexArray;

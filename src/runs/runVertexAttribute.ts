@@ -8,7 +8,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
 
     gl.enableVertexAttribArray(location);
 
-    if (divisor)
+    if (divisor !== undefined)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
