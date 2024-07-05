@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture, ITextureTarget } from "../data/ITexture";
+import { ITexture, ITexturePixelStore, ITextureTarget } from "../data/ITexture";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -24,6 +24,22 @@ declare global
         destroy: () => void;
     }
 }
+
+const defaultTexturePixelStore: ITexturePixelStore = {
+    packAlignment: 4,
+    unpackAlignment: 4,
+    unpackFlipY: false,
+    unpackPremulAlpha: false,
+    unpackColorSpaceConversion: "BROWSER_DEFAULT_WEBGL",
+    packRowLength: 0,
+    packSkipPixels: 0,
+    packSkipRows: 0,
+    unpackRowLength: 0,
+    unpackImageHeight: 0,
+    unpackSkipPixels: 0,
+    unpackSkipRows: 0,
+    unpackSkipImages: 0,
+};
 
 export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
@@ -62,11 +78,9 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     const updateTexture = () =>
     {
-        const { target, flipY, premulAlpha, generateMipmap, format, type, sources } = { ...defaultTexture, ...texture };
-        //
-        // 设置图片y轴方向
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
+        const { target, generateMipmap, format, type, sources, pixelStore } = { ...defaultTexture, ...texture };
+
+        setTexturePixelStore(gl, pixelStore);
         // 绑定纹理
         gl.bindTexture(gl[target], webGLTexture);
 
@@ -118,7 +132,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         }
     };
     updateTexture();
-    watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+    watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
+    watcher.watchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
 
     const writeTexture = () =>
     {
@@ -206,7 +221,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     webGLTexture.destroy = () =>
     {
-        watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+        watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
+        watcher.unwatchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
         watcher.unwatch(texture, "writeTextures", writeTexture);
     };
 
@@ -223,4 +239,48 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
     delete webGLTexture.destroy;
     //
     gl.deleteTexture(webGLTexture);
+}
+
+/**
+ * 设置像素解包打包时参数。
+ *
+ * @param gl
+ * @param pixelStore 像素解包打包时参数。
+ */
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
+{
+    const {
+        packAlignment,
+        unpackAlignment,
+        unpackFlipY,
+        unpackPremulAlpha,
+        unpackColorSpaceConversion,
+        packRowLength,
+        packSkipPixels,
+        packSkipRows,
+        unpackRowLength,
+        unpackImageHeight,
+        unpackSkipPixels,
+        unpackSkipRows,
+        unpackSkipImages,
+    } = { ...defaultTexturePixelStore, ...pixelStore };
+
+    // 设置图片y轴方向
+    gl.pixelStorei(gl.PACK_ALIGNMENT, packAlignment);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, unpackAlignment);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, unpackFlipY);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, unpackPremulAlpha);
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl[unpackColorSpaceConversion]);
+
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        gl.pixelStorei(gl.PACK_ROW_LENGTH, packRowLength);
+        gl.pixelStorei(gl.PACK_SKIP_PIXELS, packSkipPixels);
+        gl.pixelStorei(gl.PACK_SKIP_ROWS, packSkipRows);
+        gl.pixelStorei(gl.UNPACK_ROW_LENGTH, unpackRowLength);
+        gl.pixelStorei(gl.UNPACK_IMAGE_HEIGHT, unpackImageHeight);
+        gl.pixelStorei(gl.UNPACK_SKIP_PIXELS, unpackSkipPixels);
+        gl.pixelStorei(gl.UNPACK_SKIP_ROWS, unpackSkipRows);
+        gl.pixelStorei(gl.UNPACK_SKIP_IMAGES, unpackSkipImages);
+    }
 }

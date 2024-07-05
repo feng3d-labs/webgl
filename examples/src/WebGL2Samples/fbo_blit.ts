@@ -58,10 +58,12 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureDiffuse: ITexture = {
-        flipY: true,
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
+        pixelStore: {
+            unpackFlipY: true,
+        },
         sources: [{ source: image }],
     };
     const samplerDiffuse: ISampler = {

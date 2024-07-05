@@ -159,7 +159,9 @@ import { getShaderSource, loadImage } from "./utility";
         {
             textures[i] = {
                 target: "TEXTURE_2D",
-                flipY: false,
+                pixelStore: {
+                    unpackFlipY: false,
+                },
                 internalformat: textureFormats[i].internalFormat,
                 format: textureFormats[i].format,
                 type: textureFormats[i].type,

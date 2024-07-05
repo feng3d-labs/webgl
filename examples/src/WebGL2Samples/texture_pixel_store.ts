@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderingContext, IVertexArrayObject, ITexture, ISampler, IRenderPass, WebGL } from "../../../src";
+import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -9,10 +9,12 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     // -- Init program
-    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: IProgram = {
+        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -45,16 +47,28 @@ import { getShaderSource, loadImage } from "./utility";
 
     loadImage("../../assets/img/Di-3d.png", function (image)
     {
+        // use canvas to get the pixel data array of the image
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+        const imageData = ctx.getImageData(0, 0, image.width, image.height);
+        const pixels = new Uint8Array(imageData.data.buffer);
+
         // -- Init Texture
         const texture: ITexture = {
             target: "TEXTURE_2D",
             pixelStore: {
+                unpackAlignment: 1,
+                unpackRowLength: image.width,
+                unpackSkipPixels: image.width / 4,
+                unpackSkipRows: image.width / 4,
                 unpackFlipY: false,
             },
             internalformat: "RGBA",
             format: "RGBA",
-            type: "UNSIGNED_BYTE",
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, width: image.width / 2, height: image.height / 2, pixels }]
         };
         const sampler: ISampler = {
             minFilter: "NEAREST",
@@ -62,6 +76,10 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         // -- Render
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: [],
+        };
 
         const matrix = new Float32Array([
             0.5, 0.0, 0.0, 0.0,
@@ -70,20 +88,15 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const rp: IRenderPass = {
-            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: [
-                {
-                    pipeline: program,
-                    vertexArray,
-                    uniforms: {
-                        MVP: matrix,
-                        diffuse: { texture, sampler },
-                    },
-                    drawArrays: { vertexCount: 6 },
-                }
-            ],
-        };
+        rp.renderObjects.push({
+            pipeline: program,
+            vertexArray,
+            uniforms: {
+                MVP: matrix,
+                diffuse: { texture, sampler },
+            },
+            drawArrays: { vertexCount: 6 },
+        });
 
         WebGL.runRenderPass(rc, rp);
 
