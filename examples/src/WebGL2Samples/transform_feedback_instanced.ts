@@ -63,7 +63,7 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: IVertexArrayObject[] = [];
+    const vertexArrays: IVertexArrayObject[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: ITransformFeedback[] = [];
@@ -79,10 +79,17 @@ import { getShaderSource } from "./utility";
         vertexBuffers[va][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: trianglePositions, usage: "STATIC_DRAW" };
         vertexBuffers[va][COLOR_LOCATION] = { target: "ARRAY_BUFFER", data: instanceColors, usage: "STATIC_DRAW" };
 
-        vertexArrays[va] = {
+        vertexArrays[va] = [];
+        vertexArrays[va][0] = {
             vertices: {
                 a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
                 a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
+            }
+        };
+        vertexArrays[va][1] = {
+            vertices: {
+                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2, divisor: 1 },
+                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1, divisor: 1 },
                 a_position: { buffer: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
                 a_color: { buffer: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
             }
@@ -151,15 +158,12 @@ import { getShaderSource } from "./utility";
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
-        const sourceVAO = vertexArrays[currentSourceIdx];
+        const sourceVAO = vertexArrays[currentSourceIdx][0];
 
         const destinationTransformFeedback = transformFeedbacks[destinationIdx];
 
         transformRO.vertexArray = sourceVAO;
         transformRO.transformFeedback = destinationTransformFeedback;
-
-        sourceVAO.vertices.a_offset.divisor = 0;
-        sourceVAO.vertices.a_rotation.divisor = 0;
 
         transformRO.uniforms.u_time = time;
 
@@ -173,10 +177,7 @@ import { getShaderSource } from "./utility";
         transform();
 
         renderRO.viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
-        renderRO.vertexArray = vertexArrays[currentSourceIdx];
-
-        renderRO.vertexArray.vertices.a_offset.divisor = 1;
-        renderRO.vertexArray.vertices.a_rotation.divisor = 1;
+        renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
 
         WebGL.runRenderPass(rc, rp);
 

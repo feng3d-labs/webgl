@@ -1,4 +1,3 @@
-import { watcher } from "@feng3d/watcher";
 import { getProgram } from "../caches/getProgram";
 import { IRenderPipeline } from "../data/IRenderPipeline";
 import { IVertexArrayObject } from "../data/IVertexArrayObject";
@@ -10,14 +9,6 @@ declare global
     interface WebGLRenderingContext
     {
         _vertexArrays: Map<IVertexArrayObject, WebGLVertexArrayObject>;
-    }
-
-    interface WebGLVertexArrayObject
-    {
-        /**
-         * 销毁。
-         */
-        destroy: () => void;
     }
 }
 
@@ -44,11 +35,6 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
         gl._vertexArrays.set(vertexArray, webGLVertexArrayObject);
     }
 
-    const onChanged = () =>
-    {
-        deleteVertexArray(gl, vertexArray);
-    };
-
     //
     const { vertices, index } = vertexArray;
 
@@ -67,28 +53,8 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
             console.error(`缺少顶点 ${name} 数据！`);
         }
 
-        watcher.watch(attribute, "divisor", onChanged);
-
         runVertexAttribute(gl, location, attribute);
     });
-
-    webGLVertexArrayObject.destroy = () =>
-    {
-        shaderResult.attributes.forEach((activeInfo) =>
-        {
-            const { name, location } = activeInfo;
-            // 处理 WebGL 内置属性 gl_VertexID 等
-            if (location < 0) return;
-
-            const attribute = vertices[name];
-            if (!attribute)
-            {
-                console.error(`缺少顶点 ${name} 数据！`);
-            }
-
-            watcher.unwatch(attribute, "divisor", onChanged);
-        });
-    };
 
     runIndexBuffer(gl, index);
 }
@@ -100,6 +66,5 @@ export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IVerte
         const webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
         gl._vertexArrays.delete(vertexArray);
         gl.deleteVertexArray(webGLVertexArrayObject);
-        webGLVertexArrayObject.destroy();
     }
 }
