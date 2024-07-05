@@ -19,12 +19,15 @@ export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFe
         webGLTransformFeedback = gl.createTransformFeedback();
         gl._transforms.set(transformFeedback, webGLTransformFeedback);
 
-        const { index, buffer } = transformFeedback;
-        const webGLBuffer = getWebGLBuffer(gl, buffer);
-
-        //
         gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, webGLTransformFeedback);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
+        transformFeedback.bindBuffers.forEach((v) =>
+        {
+            const { index, buffer } = v;
+            const webGLBuffer = getWebGLBuffer(gl, buffer);
+            gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
+        });
+
+        // 移除可能绑定在GL上的回写数据缓冲区
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
     }
 

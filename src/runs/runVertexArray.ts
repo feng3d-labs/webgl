@@ -48,6 +48,10 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
         if (location < 0) return;
 
         const attribute = vertices[name];
+        if (!attribute)
+        {
+            console.error(`缺少顶点 ${name} 数据！`);
+        }
 
         runVertexAttribute(gl, location, attribute);
     });

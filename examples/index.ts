@@ -54,6 +54,7 @@ const files = {
         "texture_srgb",
         "texture_vertex",
         "transform_feedback_interleaved",
+        "transform_feedback_separated",
     ],
 };
 

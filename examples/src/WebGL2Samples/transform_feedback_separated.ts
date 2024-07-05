@@ -14,15 +14,12 @@ import { getShaderSource } from "./utility";
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     // -- Init Program
-    const PROGRAM_TRANSFORM = 0;
-    const PROGRAM_FEEDBACK = 1;
-
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
         const programTransform: IProgram = {
             vertex: { code: vertexShaderSourceTransform },
             fragment: { code: fragmentShaderSourceTransform },
-            transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "INTERLEAVED_ATTRIBS" },
+            transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
             rasterizerDiscard: true,
         };
 
@@ -33,12 +30,14 @@ import { getShaderSource } from "./utility";
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
+    const PROGRAM_TRANSFORM = 0;
+    const PROGRAM_FEEDBACK = 1;
     const programs = [programTransform, programFeedback];
 
     // -- Init Buffer
-    const SIZE_V4C4 = 32;
+
     const VERTEX_COUNT = 6;
-    const vertices = new Float32Array([
+    const positions = new Float32Array([
         -1.0, -1.0, 0.0, 1.0,
         1.0, -1.0, 0.0, 1.0,
         1.0, 1.0, 0.0, 1.0,
@@ -47,24 +46,34 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
+    const BufferType = {
+        VERTEX: 0,
+        POSITION: 1,
+        COLOR: 2,
+        MAX: 3
+    };
+
     const buffers: IVertexBuffer[] = [
         // Transform buffer
-        { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" },
-        // Feedback empty buffer
-        { target: "ARRAY_BUFFER", size: SIZE_V4C4 * VERTEX_COUNT, usage: "STATIC_COPY" },
+        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        // Feedback empty buffers
+        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
     ];
 
-    // -- Init Vertex Array
+    // -- Init Transform Vertex Array
     const vertexArrays: IVertexArrayObject[] = [
         {
             vertices: {
-                position: { buffer: buffers[PROGRAM_TRANSFORM], numComponents: 4 },
+                position: { buffer: buffers[BufferType.VERTEX], numComponents: 4 },
             }
         },
         {
             vertices: {
-                position: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
-                color: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
+                position: { buffer: buffers[BufferType.POSITION], numComponents: 4 },
+                color: { buffer: buffers[BufferType.COLOR], numComponents: 4 },
             }
         },
     ];
@@ -72,7 +81,8 @@ import { getShaderSource } from "./utility";
     // -- Init TransformFeedback
     const transformFeedback: ITransformFeedback = {
         bindBuffers: [
-            { index: 0, buffer: buffers[PROGRAM_FEEDBACK] }
+            { index: 0, buffer: buffers[BufferType.POSITION] },
+            { index: 1, buffer: buffers[BufferType.COLOR] },
         ]
     };
 
@@ -110,11 +120,12 @@ import { getShaderSource } from "./utility";
     WebGL.runRenderPass(rc, rp);
 
     // -- Delete WebGL resources
-    WebGL.deleteTransformFeedback(rc, transformFeedback);
-    WebGL.deleteBuffer(rc, buffers[PROGRAM_TRANSFORM]);
-    WebGL.deleteBuffer(rc, buffers[PROGRAM_FEEDBACK]);
-    WebGL.deleteProgram(rc, programs[PROGRAM_TRANSFORM]);
-    WebGL.deleteProgram(rc, programs[PROGRAM_FEEDBACK]);
-    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_TRANSFORM]);
-    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_FEEDBACK]);
+    // gl.deleteTransformFeedback(transformFeedback);
+    // gl.deleteBuffer(buffers[BufferType.VERTEX]);
+    // gl.deleteBuffer(buffers[BufferType.POSITION]);
+    // gl.deleteBuffer(buffers[BufferType.COLOR]);
+    // gl.deleteProgram(programs[PROGRAM_TRANSFORM]);
+    // gl.deleteProgram(programs[PROGRAM_FEEDBACK]);
+    // gl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
+    // gl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
 })();

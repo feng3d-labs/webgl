@@ -25,10 +25,10 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     const webGLBuffer = getWebGLBuffer(gl, attribute.buffer);
 
     //
-    const type = attribute.type || webGLBuffer.data?.bufferType;
+    const type = attribute.type || webGLBuffer.data?.bufferType || "FLOAT";
 
     //
-    vertexSize = vertexSize || numComponents * webGLBuffer.data.BYTES_PER_ELEMENT;
+    vertexSize = vertexSize || 0;
     offset = offset || 0;
 
     //
