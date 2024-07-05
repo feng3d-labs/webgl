@@ -57,10 +57,10 @@ import { getShaderSource } from "./utility";
         // Transform buffer
         { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
         // Feedback empty buffers
-        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        // { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
-        // { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
     ];
 
     // -- Init Transform Vertex Array

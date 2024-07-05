@@ -25,7 +25,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     const webGLBuffer = getWebGLBuffer(gl, attribute.buffer);
 
     //
-    const type = attribute.type || webGLBuffer.data?.bufferType;
+    const type = attribute.type || webGLBuffer.data?.bufferType || "FLOAT";
 
     //
     vertexSize = vertexSize || 0;
