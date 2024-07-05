@@ -1,4 +1,4 @@
-import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { IProgram, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -86,8 +86,6 @@ import { getShaderSource } from "./utility";
     };
 
     // First draw, capture the attributes
-    // Disable rasterization, vertices processing only
-    // gl.enable(gl.RASTERIZER_DISCARD);
 
     const matrix = new Float32Array([
         0.5, 0.0, 0.0, 0.0,
@@ -95,15 +93,6 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.5, 0.0,
         0.0, 0.0, 0.0, 1.0
     ]);
-
-    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
-
-    // gl.beginTransformFeedback(gl.TRIANGLES);
-    // gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
-    // gl.endTransformFeedback();
-    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
-
-    // gl.disable(gl.RASTERIZER_DISCARD);
 
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_TRANSFORM],
@@ -115,17 +104,9 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: VERTEX_COUNT },
     });
 
-    // Second draw, reuse captured attributes
-    // gl.useProgram(programs[PROGRAM_FEEDBACK]);
-    // gl.bindVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
-    // gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
-    // gl.bindVertexArray(null);
-
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_FEEDBACK],
-        uniforms: {
-            MVP: matrix,
-        },
+        uniforms: {},
         vertexArray: vertexArrays[PROGRAM_FEEDBACK],
         drawArrays: { vertexCount: VERTEX_COUNT },
     });

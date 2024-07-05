@@ -30,4 +30,5 @@ export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
     }
 }
 
-export const defaultDepthState: IDepthState = Object.freeze({ depthtest: true, depthWriteEnabled: true, depthCompare: "LESS" });
+export const defaultDepthState: IDepthState = { depthtest: false, depthWriteEnabled: true, depthCompare: "LESS" };
+Object.freeze(defaultDepthState);
