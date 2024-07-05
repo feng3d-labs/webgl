@@ -1,14 +1,18 @@
 import { IRenderObject } from "../data/IRenderObject";
 import { runDrawCall } from "./runDrawCall";
+import { defaultPrimitiveState } from "./runPrimitiveState";
 import { runRenderPipeline } from "./runRenderPipeline";
 import { runScissor } from "./runScissor";
+import { endTransformFeedback, runTransformFeedback } from "./runTransformFeedback";
 import { runUniforms } from "./runUniforms";
 import { runVertexArray } from "./runVertexArray";
 import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
-    const { viewport, scissor, pipeline, vertexArray, uniforms } = renderObject;
+    const { viewport, scissor, pipeline, vertexArray, uniforms, transformFeedback } = renderObject;
+
+    const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
 
     runViewPort(gl, viewport);
 
@@ -20,6 +24,9 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRender
 
     runUniforms(gl, pipeline, uniforms);
 
-    runDrawCall(gl, renderObject);
-}
+    runTransformFeedback(gl, transformFeedback, topology);
 
+    runDrawCall(gl, renderObject);
+
+    endTransformFeedback(gl, transformFeedback);
+}

@@ -83,10 +83,24 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
     {
         // 获取
         const data = buffer.data;
+        const size = buffer.size;
+        const usage = buffer.usage || "STATIC_DRAW";
 
         // 上传数据到WebGL
         gl.bindBuffer(gl[target], webGLBuffer);
-        gl.bufferData(gl[target], data, gl[buffer.usage || "STATIC_DRAW"]);
+
+        if (data)
+        {
+            gl.bufferData(gl[target], data, gl[usage]);
+        }
+        else if (size)
+        {
+            gl.bufferData(gl[target], size, gl[usage]);
+        }
+        else
+        {
+            console.log(`初始化缓冲区时必须提供数据或者尺寸！`);
+        }
 
         //
         webGLBuffer.data = data;

@@ -41,6 +41,7 @@ function initMap(gl: WebGLRenderingContext)
     gl._vertexArrays = new Map();
     gl._samplers = new Map();
     gl._querys = new Map();
+    gl._transforms = new Map();
     gl._programs = {};
     gl._shaders = {};
 }

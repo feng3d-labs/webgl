@@ -62,6 +62,7 @@ const renderObject: IRenderObject = {
         void main() {
           gl_FragColor = color;
         }` },
+        depthStencil: { depth: { depthtest: true } },
     }
 };
 

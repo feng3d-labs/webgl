@@ -16,6 +16,7 @@ export * from "./data/IRenderingContext";
 export * from "./data/ISampler";
 export * from "./data/ISamplerTexture";
 export * from "./data/ITexture";
+export * from "./data/ITransformFeedback";
 export * from "./data/IUniforms";
 export * from "./data/IVertexArrayObject";
 export * from "./data/IVertexAttribute";

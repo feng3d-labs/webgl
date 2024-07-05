@@ -53,6 +53,7 @@ const files = {
         "texture_pixel_store",
         "texture_srgb",
         "texture_vertex",
+        "transform_feedback_interleaved",
     ],
 };
 
