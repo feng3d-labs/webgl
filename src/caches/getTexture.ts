@@ -25,7 +25,15 @@ declare global
     }
 }
 
-const defaultTexturePixelStore: ITexturePixelStore = { unpackFlipY: false, premulAlpha: false };
+const defaultTexturePixelStore: ITexturePixelStore = {
+    unpackFlipY: false,
+    premulAlpha: false,
+    packAlignment: 4,
+    unpackAlignment: 4,
+    unpackRowLength: 0,
+    unpackSkipPixels: 0,
+    unpackSkipRows: 0,
+};
 
 export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
@@ -235,9 +243,17 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
  */
 function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
 {
-    const { unpackFlipY: flipY, premulAlpha } = { ...defaultTexturePixelStore, ...pixelStore };
-    //
+    const { unpackFlipY, premulAlpha, unpackAlignment, unpackRowLength, unpackSkipPixels, unpackSkipRows } = { ...defaultTexturePixelStore, ...pixelStore };
+
     // 设置图片y轴方向
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, unpackFlipY);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, unpackAlignment);
+
+    if (gl instanceof WebGL2RenderingContext)
+    {
+        gl.pixelStorei(gl.UNPACK_ROW_LENGTH, unpackRowLength);
+        gl.pixelStorei(gl.UNPACK_SKIP_PIXELS, unpackSkipPixels);
+        gl.pixelStorei(gl.UNPACK_SKIP_ROWS, unpackSkipRows);
+    }
 }

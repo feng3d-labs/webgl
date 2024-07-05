@@ -1,5 +1,3 @@
-import { TexImage2DTarget } from "../gl/WebGLEnums";
-
 /**
  * 纹理视图。
  */
@@ -268,7 +266,7 @@ export interface ITextureStorage
 export interface ITexturePixelStore
 {
     /**
-     * 
+     *
      *
      * gl.PACK_ALIGNMENT
      *
@@ -277,7 +275,7 @@ export interface ITexturePixelStore
     packAlignment?: 1 | 2 | 4 | 8;
 
     /**
-     * 从
+     *
      *
      * gl.UNPACK_ALIGNMENT
      *
@@ -286,7 +284,42 @@ export interface ITexturePixelStore
     unpackAlignment?: 1 | 2 | 4 | 8;
 
     /**
-     * 对图像进行Y轴反转。
+     * Number of pixels in a row.
+     *
+     * gl.UNPACK_ROW_LENGTH
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackRowLength?: number;
+
+    /**
+     *
+     * Number of pixel images skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_PIXELS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipPixels?: number;
+
+    /**
+     *
+     * Number of rows of pixel locations skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_ROWS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipRows?: number;
+
+    /**
+     * 解包图像数据时进行Y轴反转。
      *
      * gl.UNPACK_FLIP_Y_WEBGL
      *

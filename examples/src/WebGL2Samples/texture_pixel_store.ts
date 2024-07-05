@@ -56,18 +56,15 @@ import { getShaderSource, loadImage } from "./utility";
         const imageData = ctx.getImageData(0, 0, image.width, image.height);
         const pixels = new Uint8Array(imageData.data.buffer);
 
-        // gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-        // gl.pixelStorei(gl.UNPACK_ROW_LENGTH, image.width);
-        // gl.pixelStorei(gl.UNPACK_SKIP_PIXELS, image.width / 4);
-        // gl.pixelStorei(gl.UNPACK_SKIP_ROWS, image.height / 4);
-
         // -- Init Texture
         const texture: ITexture = {
             target: "TEXTURE_2D",
             pixelStore: {
                 unpackAlignment: 1,
+                unpackRowLength: image.width,
+                unpackSkipPixels: image.width / 4,
+                unpackSkipRows: image.width / 4,
                 unpackFlipY: false,
-
             },
             internalformat: "RGBA",
             format: "RGBA",
@@ -77,11 +74,6 @@ import { getShaderSource, loadImage } from "./utility";
             minFilter: "NEAREST",
             magFilter: "NEAREST",
         };
-
-        // gl.pixelStorei(gl.UNPACK_ALIGNMENT, 4);
-        // gl.pixelStorei(gl.UNPACK_ROW_LENGTH, 0);
-        // gl.pixelStorei(gl.UNPACK_SKIP_PIXELS, 0);
-        // gl.pixelStorei(gl.UNPACK_SKIP_ROWS, 0);
 
         // -- Render
         const rp: IRenderPass = {
