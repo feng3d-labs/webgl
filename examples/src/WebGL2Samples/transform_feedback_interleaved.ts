@@ -57,7 +57,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init TransformFeedback: Track output buffer
-    const transformFeedback: ITransformFeedback = { index: 0, buffer: buffers[PROGRAM_FEEDBACK] };
+    const transformFeedback: ITransformFeedback = { bindBuffers: [{ index: 0, buffer: buffers[PROGRAM_FEEDBACK] }] };
 
     // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
     // gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, buffers[PROGRAM_FEEDBACK]);

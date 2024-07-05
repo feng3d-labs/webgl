@@ -5,6 +5,14 @@ import { IBuffer } from "./IBuffer";
  */
 export interface ITransformFeedback
 {
+    /**
+     * 绑定缓冲区列表。
+     */
+    bindBuffers: ITransformFeedbacBindBuffer[];
+}
+
+export interface ITransformFeedbacBindBuffer
+{
     index: number;
 
     buffer: IBuffer;

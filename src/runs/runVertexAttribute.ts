@@ -28,7 +28,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     const type = attribute.type || webGLBuffer.data?.bufferType;
 
     //
-    vertexSize = vertexSize || numComponents * webGLBuffer.data.BYTES_PER_ELEMENT;
+    vertexSize = vertexSize || 0;
     offset = offset || 0;
 
     //
