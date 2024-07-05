@@ -22,6 +22,8 @@ export interface IVertexAttribute
 
     /**
      * 属性缓冲数据类型
+     *
+     * 默认从Buffer数据中获取，如果未取到则默认为 "FLOAT" 。
      */
     type?: VertexAttributeTypes;
 

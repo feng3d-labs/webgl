@@ -1,8 +1,9 @@
 import { LazyObject } from "../types";
-import { IDrawElements } from "./IDrawElements";
 import { IDrawArrays } from "./IDrawArrays";
+import { IDrawElements } from "./IDrawElements";
 import { IRenderPipeline } from "./IRenderPipeline";
 import { IScissor } from "./IScissor";
+import { ITransformFeedback } from "./ITransformFeedback";
 import { IUniforms } from "./IUniforms";
 import { IVertexArrayObject } from "./IVertexArrayObject";
 import { IViewport } from "./IViewport";
@@ -58,4 +59,11 @@ export interface IRenderObject
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
      */
     scissor?: IScissor;
+
+    /**
+     * 回写顶点着色器中输出到缓冲区。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/bindTransformFeedback
+     */
+    transformFeedback?: ITransformFeedback;
 }

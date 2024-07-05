@@ -1,4 +1,4 @@
-import { IProgram, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer } from "../../../src";
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,13 +12,12 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     // -- Init Program
     const PROGRAM_TRANSFORM = 0;
     const PROGRAM_FEEDBACK = 1;
 
-    const programTransform = (function (gl, vertexShaderSourceTransform, fragmentShaderSourceTransform)
+    const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
         const varyings = ["gl_Position", "v_color"];
 
@@ -26,10 +25,11 @@ import { getShaderSource } from "./utility";
             vertex: { code: vertexShaderSourceTransform },
             fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings, bufferMode: "INTERLEAVED_ATTRIBS" },
+            rasterizerDiscard: true,
         };
 
         return programTransform;
-    })(gl, getShaderSource("vs-transform"), getShaderSource("fs-transform"));
+    })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
     const programFeedback: IProgram = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
@@ -73,8 +73,8 @@ import { getShaderSource } from "./utility";
         },
         {
             vertices: {
-                position: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
-                color: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
+                position: { type: "FLOAT", buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
+                color: { type: "FLOAT", buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
             }
         },
     ];
@@ -87,39 +87,57 @@ import { getShaderSource } from "./utility";
 
     // First draw, capture the attributes
     // Disable rasterization, vertices processing only
-    gl.enable(gl.RASTERIZER_DISCARD);
+    // gl.enable(gl.RASTERIZER_DISCARD);
 
-    gl.useProgram(programs[PROGRAM_TRANSFORM]);
     const matrix = new Float32Array([
         0.5, 0.0, 0.0, 0.0,
         0.0, 0.5, 0.0, 0.0,
         0.0, 0.0, 0.5, 0.0,
         0.0, 0.0, 0.0, 1.0
     ]);
-    gl.uniformMatrix4fv(mvpLocation, false, matrix);
 
-    gl.bindVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
-    gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
+    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
 
-    gl.beginTransformFeedback(gl.TRIANGLES);
-    gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
-    gl.endTransformFeedback();
-    gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
+    // gl.beginTransformFeedback(gl.TRIANGLES);
+    // gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
+    // gl.endTransformFeedback();
+    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
 
-    gl.disable(gl.RASTERIZER_DISCARD);
+    // gl.disable(gl.RASTERIZER_DISCARD);
+
+    rp.renderObjects.push({
+        pipeline: programs[PROGRAM_TRANSFORM],
+        uniforms: {
+            MVP: matrix,
+        },
+        vertexArray: vertexArrays[PROGRAM_TRANSFORM],
+        transformFeedback,
+        drawArrays: { vertexCount: VERTEX_COUNT },
+    });
 
     // Second draw, reuse captured attributes
-    gl.useProgram(programs[PROGRAM_FEEDBACK]);
-    gl.bindVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
-    gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
-    gl.bindVertexArray(null);
+    // gl.useProgram(programs[PROGRAM_FEEDBACK]);
+    // gl.bindVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
+    // gl.drawArraysInstanced(gl.TRIANGLES, 0, VERTEX_COUNT, 1);
+    // gl.bindVertexArray(null);
+
+    rp.renderObjects.push({
+        pipeline: programs[PROGRAM_FEEDBACK],
+        uniforms: {
+            MVP: matrix,
+        },
+        vertexArray: vertexArrays[PROGRAM_FEEDBACK],
+        drawArrays: { vertexCount: VERTEX_COUNT },
+    });
+
+    WebGL.runRenderPass(rc, rp);
 
     // -- Delete WebGL resources
-    gl.deleteTransformFeedback(transformFeedback);
-    gl.deleteBuffer(buffers[PROGRAM_TRANSFORM]);
-    gl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
-    gl.deleteProgram(programs[PROGRAM_TRANSFORM]);
-    gl.deleteProgram(programs[PROGRAM_FEEDBACK]);
-    gl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
-    gl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
+    // WebGL.deleteTransformFeedback(rc,transformFeedback);
+    // gl.deleteBuffer(buffers[PROGRAM_TRANSFORM]);
+    // gl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
+    // gl.deleteProgram(programs[PROGRAM_TRANSFORM]);
+    // gl.deleteProgram(programs[PROGRAM_FEEDBACK]);
+    // gl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
+    // gl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
 })();
