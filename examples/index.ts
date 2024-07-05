@@ -56,6 +56,7 @@ const files = {
         "transform_feedback_interleaved",
         "transform_feedback_separated",
         "transform_feedback_separated_2",
+        "transform_feedback_instanced",
     ],
 };
 
