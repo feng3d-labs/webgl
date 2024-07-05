@@ -42,7 +42,7 @@ export function beginTransformFeedback(gl: WebGLRenderingContext, transformFeedb
             const webGLTransformFeedback = getWebGLTransformFeedback(gl, transformFeedback);
 
             gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, webGLTransformFeedback);
-            
+
             gl.beginTransformFeedback(gl[topology]);
         }
         else
@@ -76,14 +76,16 @@ export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFe
 
     if (gl instanceof WebGL2RenderingContext)
     {
-        const { index, buffer } = transformFeedback;
-
         webGLTransformFeedback = gl.createTransformFeedback();
+        _transforms.set(transformFeedback, webGLTransformFeedback);
+
+        const { index, buffer } = transformFeedback;
         const webGLBuffer = getWebGLBuffer(gl, buffer);
 
         //
         gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, webGLTransformFeedback);
         gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
     }
 
     return webGLTransformFeedback;
