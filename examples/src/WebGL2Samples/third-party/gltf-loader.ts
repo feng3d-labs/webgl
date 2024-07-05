@@ -2,16 +2,16 @@ import { mat4, quat, vec3 } from "gl-matrix";
 import { DrawMode } from "../../../../src";
 
 /* eslint-disable no-var */
-export var MinimalGLTFLoader: {
-    glTFModel: () => void;
-    Attributes: string[];
-    glTFLoader: new () => {
-        loadGLTF: (gltfUrl: string, cb: (glTF: {
-            scenes: { [key: string]: { meshes: { [key: string]: { primitives } } } },
-            defaultScene
-        }) => void) => void
-    }
-} = MinimalGLTFLoader || {} as any;
+// export var MinimalGLTFLoader: {
+//     glTFModel: () => void;
+//     Attributes: string[];
+//     glTFLoader: new () => {
+//         loadGLTF: (gltfUrl: string, cb: (glTF: {
+//             scenes: { [key: string]: { meshes: { [key: string]: { primitives } } } },
+//             defaultScene
+//         }) => void) => void
+//     }
+// } = MinimalGLTFLoader || {} as any;
 
 export interface IPrimitive
 {
@@ -73,7 +73,7 @@ class Primitive
     }
 }
 
-class glTFModel
+export class glTFModel
 {
     defaultScene: string;
     scenes: {};
@@ -88,13 +88,9 @@ class glTFModel
     }
 }
 
-class glTFLoader
+export class GlTFLoader
 {
-    glTF: null;
-    _parseNode: (json: any, node: any, newScene: any, matrix: any) => void;
-    _parseIndices: (json: any, primitive: any, newPrimitive: any) => void;
-    _parseAttributes: (json: any, primitive: any, newPrimitive: any, matrix: any) => void;
-    loadGLTF: (uri: any, callback: any) => void;
+    glTF: glTFModel;
     _parseDone: boolean;
     _loadDone: boolean;
     _bufferRequested: number;
@@ -104,7 +100,8 @@ class glTFLoader
     _bufferViews: {};
     _pendingTasks: number;
     _finishedPendingTasks: number;
-    onload: null;
+    onload: (glTF: glTFModel) => void;
+    baseUri: string;
 
     constructor()
     {
@@ -233,7 +230,7 @@ class glTFLoader
         this._checkComplete();
     }
 
-    _parseNode(json, node, newScene, matrix)
+    _parseNode(json, node, newScene, matrix?)
     {
         if (matrix === undefined)
         {
@@ -309,7 +306,7 @@ class glTFLoader
             var childNode = json.nodes[childName];
             this._parseNode(json, childNode, newScene, curMatrix);
         }
-    };
+    }
 
     _parseIndices(json, primitive, newPrimitive)
     {
@@ -497,7 +494,7 @@ var Type2NumOfComponent = {
     MAT4: 16
 };
 
-MinimalGLTFLoader.Attributes = [
+export const Attributes = [
     "POSITION",
     "NORMAL",
     "TEXCOORD",
@@ -555,7 +552,7 @@ function _loadJSON(src, callback)
     xobj.onreadystatechange = function ()
     {
         if (xobj.readyState == 4 // Request finished, response ready
-            && xobj.status == "200")
+            && xobj.status == 200)
         { // Status OK
             callback(xobj.responseText, this);
         }
@@ -571,7 +568,7 @@ function _loadArrayBuffer(url, callback)
     xobj.onreadystatechange = function ()
     {
         if (xobj.readyState == 4 // Request finished, response ready
-            && xobj.status == "200")
+            && xobj.status == 200)
         { // Status OK
             var arrayBuffer = xobj.response;
             if (arrayBuffer && callback)

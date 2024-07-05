@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, VertexAttributeTypes, WebGL } from "../../../src";
-import { MinimalGLTFLoader } from "./third-party/gltf-loader";
+import { GlTFLoader, glTFLoader } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -49,7 +49,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Load model then render
-    const glTFLoader = new MinimalGLTFLoader.glTFLoader();
+    const glTFLoader = new GlTFLoader();
     let curScene;
     const gltfUrl = "../../assets/gltf/plane.gltf";
     glTFLoader.loadGLTF(gltfUrl, function (glTF)
