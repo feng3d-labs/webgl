@@ -160,7 +160,7 @@ import { getShaderSource, loadImage } from "./utility";
             textures[i] = {
                 target: "TEXTURE_2D",
                 pixelStore: {
-                    flipY: false,
+                    unpackFlipY: false,
                 },
                 internalformat: textureFormats[i].internalFormat,
                 format: textureFormats[i].format,

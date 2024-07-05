@@ -52,7 +52,7 @@ import { getShaderSource, loadImage } from "./utility";
         const texture: ITexture = {
             target: "TEXTURE_2D",
             pixelStore: {
-                flipY: false,
+                unpackFlipY: false,
             },
             internalformat: "RGBA8UI",
             format: "RGBA_INTEGER",

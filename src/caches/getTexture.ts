@@ -25,7 +25,7 @@ declare global
     }
 }
 
-const defaultTexturePixelStore: ITexturePixelStore = { flipY: false, premulAlpha: false };
+const defaultTexturePixelStore: ITexturePixelStore = { unpackFlipY: false, premulAlpha: false };
 
 export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
@@ -118,7 +118,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         }
     };
     updateTexture();
-    watcher.watchobject(texture, { pixelStore: { flipY: undefined, premulAlpha: undefined } }, updateTexture);
+    watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, premulAlpha: undefined } }, updateTexture);
     watcher.watchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
 
     const writeTexture = () =>
@@ -207,7 +207,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     webGLTexture.destroy = () =>
     {
-        watcher.unwatchobject(texture, { pixelStore: { flipY: undefined, premulAlpha: undefined } }, updateTexture);
+        watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, premulAlpha: undefined } }, updateTexture);
         watcher.unwatchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
         watcher.unwatch(texture, "writeTextures", writeTexture);
     };
@@ -235,7 +235,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
  */
 function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
 {
-    const { flipY, premulAlpha } = { ...defaultTexturePixelStore, ...pixelStore };
+    const { unpackFlipY: flipY, premulAlpha } = { ...defaultTexturePixelStore, ...pixelStore };
     //
     // 设置图片y轴方向
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);

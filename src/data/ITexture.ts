@@ -268,13 +268,31 @@ export interface ITextureStorage
 export interface ITexturePixelStore
 {
     /**
+     * 
+     *
+     * gl.PACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    packAlignment?: 1 | 2 | 4 | 8;
+
+    /**
+     * 从
+     *
+     * gl.UNPACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    unpackAlignment?: 1 | 2 | 4 | 8;
+
+    /**
      * 对图像进行Y轴反转。
      *
      * gl.UNPACK_FLIP_Y_WEBGL
      *
      * 默认为 false。
      */
-    flipY?: boolean;
+    unpackFlipY?: boolean;
 
     /**
      * 将图像RGB颜色值得每一个分量乘以A。

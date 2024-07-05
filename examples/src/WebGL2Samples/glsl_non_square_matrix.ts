@@ -50,7 +50,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     const texture: ITexture = {
         target: "TEXTURE_2D",
         pixelStore: {
-            flipY: false,
+            unpackFlipY: false,
         },
         internalformat: "RGBA",
         format: "RGBA",

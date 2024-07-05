@@ -62,7 +62,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         format: "RGBA",
         type: "UNSIGNED_BYTE",
         pixelStore: {
-            flipY: true,
+            unpackFlipY: true,
         },
         sources: [{ source: image }],
     };

@@ -13,7 +13,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     const texture: ITexture = {
         sources: [{ source: img }],
         pixelStore: {
-            flipY: false,
+            unpackFlipY: false,
         },
         internalformat: "RGBA",
         format: "RGBA",
