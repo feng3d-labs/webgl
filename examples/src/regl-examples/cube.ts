@@ -110,7 +110,8 @@ import * as mat4 from "./stackgl/gl-mat4";
           gl_FragColor = texture2D(tex,vUv);
         }`,
                 targets: [{ blend: {} }],
-            }
+            },
+            depthStencil: { depth: { depthtest: true } },
         }
     };
 

@@ -64,6 +64,7 @@ const renderObject: IRenderObject = {
         }`,
             targets: [{ blend: {} }],
         },
+        depthStencil: { depth: { depthtest: true } },
     }
 };
 

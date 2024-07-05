@@ -225,7 +225,8 @@ import { IRenderObject, ISamplerTexture, WebGL } from "../../../src";
           gl_FragColor = vec4(ambient + diffuse, 1.0);
         }`,
                 targets: [{ blend: {} }],
-            }
+            },
+            depthStencil: { depth: { depthtest: true } },
         }
     };
 

@@ -114,11 +114,11 @@ import { getShaderSource } from "./utility";
     WebGL.runRenderPass(rc, rp);
 
     // -- Delete WebGL resources
-    // WebGL.deleteTransformFeedback(rc,transformFeedback);
-    // gl.deleteBuffer(buffers[PROGRAM_TRANSFORM]);
-    // gl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
-    // gl.deleteProgram(programs[PROGRAM_TRANSFORM]);
-    // gl.deleteProgram(programs[PROGRAM_FEEDBACK]);
-    // gl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
-    // gl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
+    WebGL.deleteTransformFeedback(rc, transformFeedback);
+    WebGL.deleteBuffer(rc, buffers[PROGRAM_TRANSFORM]);
+    WebGL.deleteBuffer(rc, buffers[PROGRAM_FEEDBACK]);
+    WebGL.deleteProgram(rc, programs[PROGRAM_TRANSFORM]);
+    WebGL.deleteProgram(rc, programs[PROGRAM_FEEDBACK]);
+    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_TRANSFORM]);
+    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_FEEDBACK]);
 })();

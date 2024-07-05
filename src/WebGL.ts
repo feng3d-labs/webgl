@@ -1,12 +1,13 @@
-import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";
 import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
+import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
+import { ICopyBuffer } from "./data/ICopyBuffer";
 import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IQuery } from "./data/IQueryAction";
 import { IReadPixels } from "./data/IReadPixels";
@@ -17,15 +18,15 @@ import { IRenderbuffer } from "./data/IRenderbuffer";
 import { IRenderingContext } from "./data/IRenderingContext";
 import { ISampler } from "./data/ISampler";
 import { ITexture } from "./data/ITexture";
+import { ITransformFeedback } from "./data/ITransformFeedback";
 import { IVertexArrayObject } from "./data/IVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
+import { runCopyBuffer } from "./runs/runCopyBuffer";
 import { getQueryResult } from "./runs/runQueryAction";
 import { runReadPixels } from "./runs/runReadPixels";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runRenderPass } from "./runs/runRenderPass";
 import { deleteVertexArray } from "./runs/runVertexArray";
-import { ICopyBuffer } from "./data/ICopyBuffer";
-import { runCopyBuffer } from "./runs/runCopyBuffer";
 
 /**
  * WEBGL 渲染器
@@ -140,6 +141,14 @@ export class WebGL
         if (!gl || gl.isContextLost()) return;
 
         deleteVertexArray(gl, vertexArray);
+    }
+
+    static deleteTransformFeedback(renderingContext: IRenderingContext, transformFeedback: ITransformFeedback)
+    {
+        const gl = getRenderingContext(renderingContext);
+        if (!gl || gl.isContextLost()) return;
+
+        deleteTransformFeedback(gl, transformFeedback);
     }
 
     static getQueryResult(renderingContext: IRenderingContext, query: IQuery)
