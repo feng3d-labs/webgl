@@ -5,6 +5,7 @@ import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
 import { deleteBuffer } from "./caches/getWebGLBuffer";
+import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
 import { IBuffer } from "./data/IBuffer";
 import { ICopyBuffer } from "./data/ICopyBuffer";
