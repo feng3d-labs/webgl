@@ -1,20 +1,17 @@
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { getShaderSource } from "./utility";
+
 (function ()
 {
     // -- Init Canvas
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     canvas.addEventListener("webglcontextlost", function (event)
     {
@@ -30,11 +27,6 @@
     let currentSourceIdx = 0;
 
     const program = initProgram();
-
-    // Get uniform locations for the draw program
-    const drawTimeLocation = gl.getUniformLocation(program, "u_time");
-    const drawAccelerationLocation = gl.getUniformLocation(program, "u_acceleration");
-    const drawColorLocation = gl.getUniformLocation(program, "u_color");
 
     // -- Initialize particle data
 
@@ -63,149 +55,99 @@
     }
 
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs = [gl.createVertexArray(), gl.createVertexArray()];
+    const particleVAOs: IVertexArrayObject[] = [];
 
     // Transform feedback objects track output buffer state
-    const particleTransformFeedbacks = [gl.createTransformFeedback(), gl.createTransformFeedback()];
+    const particleTransformFeedbacks: ITransformFeedback[] = [];
 
-    const particleVBOs = new Array(particleVAOs.length);
+    const particleVBOs: IVertexBuffer[][] = new Array(particleVAOs.length);
 
-    for (let i = 0; i < particleVAOs.length; ++i)
+    for (let i = 0; i < 2; ++i)
     {
         particleVBOs[i] = new Array(NUM_LOCATIONS);
 
         // Set up input
-        gl.bindVertexArray(particleVAOs[i]);
+        particleVBOs[i][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: particlePositions, usage: "STREAM_COPY" };
 
-        particleVBOs[i][POSITION_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, particleVBOs[i][POSITION_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, particlePositions, gl.STREAM_COPY);
-        gl.vertexAttribPointer(POSITION_LOCATION, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(POSITION_LOCATION);
+        particleVBOs[i][VELOCITY_LOCATION] = { target: "ARRAY_BUFFER", data: particleVelocities, usage: "STREAM_COPY" };
 
-        particleVBOs[i][VELOCITY_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, particleVBOs[i][VELOCITY_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, particleVelocities, gl.STREAM_COPY);
-        gl.vertexAttribPointer(VELOCITY_LOCATION, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(VELOCITY_LOCATION);
+        particleVBOs[i][SPAWNTIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleSpawntime, usage: "STREAM_COPY" };
 
-        particleVBOs[i][SPAWNTIME_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, particleVBOs[i][SPAWNTIME_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, particleSpawntime, gl.STREAM_COPY);
-        gl.vertexAttribPointer(SPAWNTIME_LOCATION, 1, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(SPAWNTIME_LOCATION);
+        particleVBOs[i][LIFETIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleLifetime, usage: "STREAM_COPY" };
 
-        particleVBOs[i][LIFETIME_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, particleVBOs[i][LIFETIME_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, particleLifetime, gl.STREAM_COPY);
-        gl.vertexAttribPointer(LIFETIME_LOCATION, 1, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(LIFETIME_LOCATION);
+        particleVBOs[i][ID_LOCATION] = { target: "ARRAY_BUFFER", data: particleIDs, usage: "STREAM_COPY" };
 
-        particleVBOs[i][ID_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, particleVBOs[i][ID_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, particleIDs, gl.STATIC_READ);
-        gl.vertexAttribPointer(ID_LOCATION, 1, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(ID_LOCATION);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        particleVAOs[i] = {
+            vertices: {
+                a_position: { buffer: particleVBOs[i][POSITION_LOCATION], numComponents: 2 },
+                a_velocity: { buffer: particleVBOs[i][VELOCITY_LOCATION], numComponents: 2 },
+                a_spawntime: { buffer: particleVBOs[i][SPAWNTIME_LOCATION], numComponents: 1 },
+                a_lifetime: { buffer: particleVBOs[i][LIFETIME_LOCATION], numComponents: 1 },
+                a_ID: { buffer: particleVBOs[i][ID_LOCATION], numComponents: 1 },
+            }
+        };
 
         // Set up output
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, particleTransformFeedbacks[i]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, particleVBOs[i][POSITION_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 1, particleVBOs[i][VELOCITY_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 2, particleVBOs[i][SPAWNTIME_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 3, particleVBOs[i][LIFETIME_LOCATION]);
+        particleTransformFeedbacks[i] = {
+            bindBuffers: [
+                { index: 0, buffer: particleVBOs[i][POSITION_LOCATION] },
+                { index: 1, buffer: particleVBOs[i][VELOCITY_LOCATION] },
+                { index: 2, buffer: particleVBOs[i][SPAWNTIME_LOCATION] },
+                { index: 3, buffer: particleVBOs[i][LIFETIME_LOCATION] },
+            ]
+        };
     }
 
     function initProgram()
     {
-        // Setup program for transform feedback
-        function createShader(gl, source, type)
-        {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-
-            return shader;
-        }
-
-        const vshader = createShader(gl, getShaderSource("vs-draw"), gl.VERTEX_SHADER);
-        const fshader = createShader(gl, getShaderSource("fs-draw"), gl.FRAGMENT_SHADER);
-
-        const program = gl.createProgram();
-        gl.attachShader(program, vshader);
-        gl.attachShader(program, fshader);
-
-        const varyings = ["v_position", "v_velocity", "v_spawntime", "v_lifetime"];
-        gl.transformFeedbackVaryings(program, varyings, gl.SEPARATE_ATTRIBS);
-        gl.linkProgram(program);
-
-        // check
-        let log = gl.getProgramInfoLog(program);
-        if (log)
-        {
-            console.log(log);
-        }
-
-        log = gl.getShaderInfoLog(vshader);
-        if (log)
-        {
-            console.log(log);
-        }
-
-        log = gl.getShaderInfoLog(fshader);
-        if (log)
-        {
-            console.log(log);
-        }
-
-        gl.deleteShader(vshader);
-        gl.deleteShader(fshader);
+        const program: IProgram = {
+            vertex: { code: getShaderSource("vs-draw") },
+            fragment: {
+                code: getShaderSource("fs-draw"),
+                targets: [{
+                    blend: {
+                        color: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                        alpha: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                    }
+                }]
+            },
+            transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
+            primitive: { topology: "POINTS" },
+        };
 
         return program;
     }
 
-    gl.useProgram(program);
-    gl.uniform4f(drawColorLocation, 0.0, 1.0, 1.0, 1.0);
-    gl.uniform2f(drawAccelerationLocation, 0.0, ACCELERATION);
+    const ro: IRenderObject = {
+        pipeline: program,
+        uniforms: {
+            u_color: [0.0, 1.0, 1.0, 1.0],
+            u_acceleration: [0.0, ACCELERATION],
+        },
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
+        drawArrays: { vertexCount: NUM_PARTICLES },
+    };
 
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [ro],
+    };
 
     function render()
     {
         const time = Date.now() - appStartTime;
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
-        // Set the viewport
-        gl.viewport(0, 0, canvas.width, canvas.height - 10);
-
-        // Clear color buffer
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
         // Toggle source and destination VBO
         const sourceVAO = particleVAOs[currentSourceIdx];
         const destinationTransformFeedback = particleTransformFeedbacks[destinationIdx];
 
-        gl.bindVertexArray(sourceVAO);
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, destinationTransformFeedback);
+        ro.vertexArray = sourceVAO;
+        ro.transformFeedback = destinationTransformFeedback;
 
-        // NOTE: The following four lines shouldn't be necessary, but are required to work in ANGLE
-        // due to a bug in its handling of transform feedback objects.
-        // https://bugs.chromium.org/p/angleproject/issues/detail?id=2051
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, particleVBOs[destinationIdx][POSITION_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 1, particleVBOs[destinationIdx][VELOCITY_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 2, particleVBOs[destinationIdx][SPAWNTIME_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 3, particleVBOs[destinationIdx][LIFETIME_LOCATION]);
+        ro.uniforms.u_time = time;
 
-        // Set uniforms
-        gl.uniform1f(drawTimeLocation, time);
-
-        // Draw particles using transform feedback
-        gl.beginTransformFeedback(gl.POINTS);
-        gl.drawArrays(gl.POINTS, 0, NUM_PARTICLES);
-        gl.endTransformFeedback();
+        WebGL.runRenderPass(rc, rp);
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;
@@ -214,15 +156,4 @@
     }
 
     requestAnimationFrame(render);
-
-    // If you have a long-running page, and need to delete WebGL resources, use:
-    //
-    // gl.deleteProgram(program);
-    // for (var i = 0; i < particleVAOs.length; ++i) {
-    //     gl.deleteVertexArray(particleVAOs[i]);
-    //     gl.deleteTransformFeedback(particleTransformFeedbacks[i]);
-    //     for (var j = 0; j < NUM_LOCATIONS; ++j) {
-    //         gl.deleteBuffer(particleVBOs[i][j]);
-    //     }
-    // }
 })();
