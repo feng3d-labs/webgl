@@ -19,11 +19,6 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
 
-    // -- Initialize vertex array
-    const POSITION_LOCATION = 0; // set with GLSL layout qualifier
-    const TEXCOORD_LOCATION = 4; // set with GLSL layout qualifier
-    const NORMAL_LOCATION = 1; // set with GLSL layout qualifier
-
     const vertexArrayMaps = {};
 
     // var in loop
@@ -172,7 +167,10 @@ import { getShaderSource, loadImage } from "./utility";
     {
         // -- Render
         const rp: IRenderPass = {
-            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            passDescriptor: {
+                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
+                depthStencilAttachment: { depthLoadOp: "clear" }
+            },
             renderObjects: [],
         };
 
