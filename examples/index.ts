@@ -55,6 +55,7 @@ const files = {
         "texture_vertex",
         "transform_feedback_interleaved",
         "transform_feedback_separated",
+        "transform_feedback_separated_2",
     ],
 };
 
