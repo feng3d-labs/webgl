@@ -19,12 +19,10 @@ import { getShaderSource } from "./utility";
 
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const varyings = ["gl_Position", "v_color"];
-
         const programTransform: IProgram = {
             vertex: { code: vertexShaderSourceTransform },
             fragment: { code: fragmentShaderSourceTransform },
-            transformFeedbackVaryings: { varyings, bufferMode: "INTERLEAVED_ATTRIBS" },
+            transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "INTERLEAVED_ATTRIBS" },
             rasterizerDiscard: true,
         };
 
@@ -56,14 +54,6 @@ import { getShaderSource } from "./utility";
         { target: "ARRAY_BUFFER", size: SIZE_V4C4 * VERTEX_COUNT, usage: "STATIC_COPY" },
     ];
 
-    // -- Init TransformFeedback: Track output buffer
-    const transformFeedback: ITransformFeedback = { bindBuffers: [{ index: 0, buffer: buffers[PROGRAM_FEEDBACK] }] };
-
-    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
-    // gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, buffers[PROGRAM_FEEDBACK]);
-    // gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
-    // gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
-
     // -- Init Vertex Array
     const vertexArrays: IVertexArrayObject[] = [
         {
@@ -79,6 +69,13 @@ import { getShaderSource } from "./utility";
         },
     ];
 
+    // -- Init TransformFeedback
+    const transformFeedback: ITransformFeedback = {
+        bindBuffers: [
+            { index: 0, buffer: buffers[PROGRAM_FEEDBACK] }
+        ]
+    };
+
     // -- Render
     const rp: IRenderPass = {
         passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
@@ -86,6 +83,7 @@ import { getShaderSource } from "./utility";
     };
 
     // First draw, capture the attributes
+    // Disable rasterization, vertices processing only
 
     const matrix = new Float32Array([
         0.5, 0.0, 0.0, 0.0,
@@ -96,17 +94,15 @@ import { getShaderSource } from "./utility";
 
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_TRANSFORM],
-        uniforms: {
-            MVP: matrix,
-        },
         vertexArray: vertexArrays[PROGRAM_TRANSFORM],
+        uniforms: { MVP: matrix },
         transformFeedback,
         drawArrays: { vertexCount: VERTEX_COUNT },
     });
 
+    // Second draw, reuse captured attributes
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_FEEDBACK],
-        uniforms: {},
         vertexArray: vertexArrays[PROGRAM_FEEDBACK],
         drawArrays: { vertexCount: VERTEX_COUNT },
     });

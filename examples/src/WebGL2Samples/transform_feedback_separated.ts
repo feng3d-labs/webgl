@@ -11,13 +11,14 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
         const programTransform: IProgram = {
-            vertex: { code: vertexShaderSourceTransform }, fragment: { code: fragmentShaderSourceTransform },
+            vertex: { code: vertexShaderSourceTransform },
+            fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
             rasterizerDiscard: true,
         };
@@ -25,7 +26,9 @@ import { getShaderSource } from "./utility";
         return programTransform;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: IProgram = { vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") } };
+    const programFeedback: IProgram = {
+        vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
+    };
 
     const PROGRAM_TRANSFORM = 0;
     const PROGRAM_FEEDBACK = 1;
@@ -54,8 +57,10 @@ import { getShaderSource } from "./utility";
         // Transform buffer
         { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
         // Feedback empty buffers
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        // { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        // { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
     ];
 
     // -- Init Transform Vertex Array
