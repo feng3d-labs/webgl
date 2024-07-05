@@ -6,6 +6,7 @@ export * from "./data/ICopyBuffer";
 export * from "./data/IFramebuffer";
 export * from "./data/IIndexBuffer";
 export * from "./data/IPassDescriptor";
+export * from "./data/IPrimitiveState";
 export * from "./data/IQueryAction";
 export * from "./data/IRenderObject";
 export * from "./data/IRenderPass";

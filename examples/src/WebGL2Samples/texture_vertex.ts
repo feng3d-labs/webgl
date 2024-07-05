@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IIndexBuffer, IProgram, IRenderObject, IRenderingContext, IVertexArrayObject, IVertexBuffer, VertexAttributeTypes } from "../../../src";
+import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, VertexAttributeTypes, WebGL } from "../../../src";
 import { MinimalGLTFLoader } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -12,7 +12,6 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
-    const gl = canvas.getContext("webgl2", { antialias: false });
 
     // -- Init program
     const program: IProgram = {
@@ -30,23 +29,24 @@ import { getShaderSource, loadImage } from "./utility";
     // var in loop
     let mesh;
     let primitive: {
+        vertexBuffer,
+        indices,
         attributes: {
             POSITION: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
             NORMAL: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
+            TEXCOORD_0: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
         }
     };
     let vertexBuffer: IVertexBuffer;
     let indicesBuffer: IIndexBuffer;
     let vertexArray: IVertexArrayObject;
 
-    let texture;
+    let texture: ITexture;
+    let sampler: ISampler;
 
     const ro: IRenderObject = {
         pipeline: program,
     };
-
-    gl.uniform1i(diffuseLocation, 0);
-    gl.uniform1i(displacementMapLocation, 0);
 
     // -- Load model then render
     const glTFLoader = new MinimalGLTFLoader.glTFLoader();
@@ -75,76 +75,43 @@ import { getShaderSource, loadImage } from "./utility";
                 indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
 
                 // -- VertexAttribPointer
-                gl.bindVertexArray(vertexArray);
-
-                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-
                 const positionInfo = primitive.attributes.POSITION;
-                gl.vertexAttribPointer(
-                    POSITION_LOCATION,
-                    positionInfo.size,
-                    positionInfo.type,
-                    false,
-                    positionInfo.stride,
-                    positionInfo.offset
-                );
-                gl.enableVertexAttribArray(POSITION_LOCATION);
-
                 const normalInfo = primitive.attributes.NORMAL;
-                gl.vertexAttribPointer(
-                    NORMAL_LOCATION,
-                    normalInfo.size,
-                    normalInfo.type,
-                    false,
-                    normalInfo.stride,
-                    normalInfo.offset
-                );
-                gl.enableVertexAttribArray(NORMAL_LOCATION);
-
                 const texcoordInfo = primitive.attributes.TEXCOORD_0;
-                gl.vertexAttribPointer(
-                    TEXCOORD_LOCATION,
-                    texcoordInfo.size,
-                    texcoordInfo.type,
-                    false,
-                    texcoordInfo.stride,
-                    texcoordInfo.offset
-                );
-                gl.enableVertexAttribArray(TEXCOORD_LOCATION);
-
-                gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-
-                gl.bindVertexArray(null);
 
                 //
                 vertexArray = {
                     vertices: {
-                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: positionInfo.type, vertexSize: positionInfo.stride, offset: positionInfo.offset }
-                    }
+                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: positionInfo.type, vertexSize: positionInfo.stride, offset: positionInfo.offset },
+                        normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: normalInfo.type, vertexSize: normalInfo.stride, offset: normalInfo.offset },
+                        texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: texcoordInfo.type, vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
+                    },
+                    index: indicesBuffer,
                 };
                 vertexArrayMaps[mid].push(vertexArray);
             }
         }
 
         // -- Init Texture
-        const imageUrl = "../assets/img/heightmap.jpg";
+        const imageUrl = "../../assets/img/heightmap.jpg";
         loadImage(imageUrl, function (image)
         {
             // -- Init 2D Texture
-            texture = gl.createTexture();
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-            // -- Allocate storage for the texture
-            gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8, 256, 256);
-            gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
+            texture = {
+                target: "TEXTURE_2D",
+                internalformat: "RGB8",
+                format: "RGB",
+                type: "UNSIGNED_BYTE",
+                pixelStore: { unpackFlipY: false },
+                storage: { levels: 1, width: 256, height: 256 },
+                writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+            };
+            sampler = {
+                minFilter: "NEAREST",
+                magFilter: "NEAREST",
+                wrapS: "CLAMP_TO_EDGE",
+                wrapT: "CLAMP_TO_EDGE",
+            };
 
             requestAnimationFrame(render);
         });
@@ -212,9 +179,10 @@ import { getShaderSource, loadImage } from "./utility";
     function render()
     {
         // -- Render
-
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        const rp: IRenderPass = {
+            passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            renderObjects: [],
+        };
 
         orientation[0] = 0.00020; // yaw
         orientation[1] = 0.00010; // pitch
@@ -235,16 +203,23 @@ import { getShaderSource, loadImage } from "./utility";
 
                 mat4.multiply(localMV, mvMatrix, primitive.matrix);
 
-                gl.uniformMatrix4fv(mvMatrixLocation, false, localMV);
-                gl.uniformMatrix4fv(pMatrixLocation, false, perspectiveMatrix);
-
-                gl.bindVertexArray(vertexArrayMaps[mid][i]);
-
-                gl.drawElements(primitive.mode, primitive.indices.length, primitive.indicesComponentType, 0);
-
-                gl.bindVertexArray(null);
+                rp.renderObjects.push({
+                    pipeline: {
+                        ...program,
+                        primitive: { topology: primitive.mode }
+                    },
+                    vertexArray: vertexArrayMaps[mid][i],
+                    uniforms: {
+                        mvMatrix: localMV,
+                        pMatrix: perspectiveMatrix,
+                        displacementMap: { texture, sampler },
+                        diffuse: { texture, sampler },
+                    },
+                    drawElements: { indexCount: primitive.indices.length }
+                });
             }
         }
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }

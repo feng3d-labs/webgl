@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { mat4, vec3, quat } from "gl-matrix";
+import { mat4, quat, vec3 } from "gl-matrix";
+import { DrawMode } from "../../../../src";
 
 /* eslint-disable no-var */
 export var MinimalGLTFLoader: {
@@ -13,7 +14,7 @@ export var MinimalGLTFLoader: {
 
 export interface IPrimitive
 {
-    mode: number,
+    mode: DrawMode,
     indicesComponentType: number,
     matrix: Float32Array, attributes: { [key: string]: { size: 1 | 2 | 3 | 4, type: number, stride: number, offset: number } }, vertexBuffer: Float32Array, indices
 }
