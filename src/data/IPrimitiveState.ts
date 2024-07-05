@@ -18,7 +18,7 @@ export interface IPrimitiveState
      * A GLenum specifying the type primitive to render. Possible values are:
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
      */
-    topology?: DrawMode;
+    topology?: IDrawMode;
 
     cullFace?: ICullFace;
 }
@@ -46,4 +46,4 @@ export interface IPrimitiveState
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type DrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";
+export type IDrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";

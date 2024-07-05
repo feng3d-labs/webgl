@@ -1,43 +1,55 @@
-// @ts-nocheck
-import { mat4, vec3, quat } from "gl-matrix";
+import { mat4, quat, vec3 } from "gl-matrix";
 
+type IAttributeBufferSourceTypes =
+    | Float32Array
+    | Uint32Array
+    | Int32Array
+    | Uint16Array
+    | Int16Array | Uint8ClampedArray
+    | Uint8Array
+    | Int8Array;
+
+type IElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
 /* eslint-disable no-var */
-export var MinimalGLTFLoader: {
-    glTFLoader: new () => {
-        loadGLTF: (gltfUrl: string, cb: (glTF: {
-            scenes: { [key: string]: { meshes: { [key: string]: { primitives } } } },
-            defaultScene
-        }) => void) => void
-    }
-} = MinimalGLTFLoader || {} as any;
 
-export interface IPrimitive
+// Data classes
+class Scene
 {
-    mode: number,
-    indicesComponentType: number,
-    matrix: Float32Array, attributes: { [key: string]: { size: 1 | 2 | 3 | 4, type: number, stride: number, offset: number } }, vertexBuffer: Float32Array, indices
-}
+    meshes: Mesh[];
 
-(function ()
-{
-    // Data classes
-    var Scene = MinimalGLTFLoader.Scene = function ()
+    constructor()
     {
         // not 1-1 to meshes in json file
         // each mesh with a different node hierarchy is a new instance
         this.meshes = [];
         //this.meshes = {};
-    };
+    }
+}
 
-    // Node
+// Node
+class Mesh
+{
+    meshID: string;
+    primitives: Primitive[];
 
-    var Mesh = MinimalGLTFLoader.Mesh = function ()
+    constructor()
     {
         this.meshID = ""; // mesh id name in glTF json meshes
         this.primitives = [];
-    };
+    }
+}
 
-    var Primitive = MinimalGLTFLoader.Primitive = function ()
+export class Primitive
+{
+    mode: number;
+    indices: IElementBufferSourceTypes;
+    indicesComponentType: number;
+    vertexBuffer: IAttributeBufferSourceTypes;
+    matrix: mat4;
+    attributes: {
+        [key: string]: { size: 1 | 2 | 3 | 4, type?: number, stride: number, offset: number },
+    };
+    constructor()
     {
         this.mode = 4; // default: gl.TRIANGLES
 
@@ -52,26 +64,46 @@ export interface IPrimitive
 
         // attribute info (stride, offset, etc)
         this.attributes = {};
-    };
+    }
+}
 
-    /**
-     *
-     */
-    var glTFModel = MinimalGLTFLoader.glTFModel = function ()
+export class glTFModel
+{
+    defaultScene: string;
+    scenes: {};
+    json: null;
+
+    constructor()
     {
         this.defaultScene = "";
         this.scenes = {};
 
         this.json = null;
-    };
+    }
+}
 
-    var glTFLoader = MinimalGLTFLoader.glTFLoader = function ()
+export class GlTFLoader
+{
+    glTF: glTFModel;
+    _parseDone: boolean;
+    _loadDone: boolean;
+    _bufferRequested: number;
+    _bufferLoaded: number;
+    _buffers: {};
+    _bufferTasks: {};
+    _bufferViews: {};
+    _pendingTasks: number;
+    _finishedPendingTasks: number;
+    onload: (glTF: glTFModel) => void;
+    baseUri: string;
+
+    constructor()
     {
         this._init();
         this.glTF = null;
-    };
+    }
 
-    glTFLoader.prototype._init = function ()
+    _init()
     {
         this._parseDone = false;
         this._loadDone = false;
@@ -87,9 +119,9 @@ export interface IPrimitive
         this._finishedPendingTasks = 0;
 
         this.onload = null;
-    };
+    }
 
-    glTFLoader.prototype._getBufferViewData = function (json, bufferViewID, callback)
+    _getBufferViewData(json, bufferViewID, callback)
     {
         var bufferViewData = this._bufferViews[bufferViewID];
         if (!bufferViewData)
@@ -146,12 +178,8 @@ export interface IPrimitive
             //console.log("use cached bufferView " + bufferViewID);
             callback(bufferViewData);
         }
-    };
-
-    // glTFLoader.prototype._doNextLoadTaskInList = function () {
-    // };
-
-    glTFLoader.prototype._checkComplete = function ()
+    }
+    _checkComplete()
     {
         if (this._bufferRequested == this._bufferLoaded
             // && other resources finish loading
@@ -164,9 +192,9 @@ export interface IPrimitive
         {
             this.onload(this.glTF);
         }
-    };
+    }
 
-    glTFLoader.prototype._parseGLTF = function (json)
+    _parseGLTF(json)
     {
         this.glTF.json = json;
         this.glTF.defaultScene = json.scene;
@@ -194,14 +222,9 @@ export interface IPrimitive
 
         this._parseDone = true;
         this._checkComplete();
-    };
+    }
 
-    var translationVec3 = vec3.create();
-    var rotationQuat = quat.create();
-    var scaleVec3 = vec3.create();
-    var TRMatrix = mat4.create();
-
-    glTFLoader.prototype._parseNode = function (json, node, newScene, matrix)
+    _parseNode(json, node, newScene, matrix?)
     {
         if (matrix === undefined)
         {
@@ -277,28 +300,25 @@ export interface IPrimitive
             var childNode = json.nodes[childName];
             this._parseNode(json, childNode, newScene, curMatrix);
         }
-    };
+    }
 
-    glTFLoader.prototype._parseIndices = function (json, primitive, newPrimitive)
+    _parseIndices(json, primitive, newPrimitive: Primitive)
     {
         var accessorName = primitive.indices;
         var accessor = json.accessors[accessorName];
 
         newPrimitive.mode = primitive.mode || 4;
-        newPrimitive.indicesComponentType = accessor.componentType;
+        newPrimitive.indicesComponentType = IDrawElementType2Name[accessor.componentType];
 
         var loader = this;
         this._getBufferViewData(json, accessor.bufferView, function (bufferViewData)
         {
-            newPrimitive.indices = _getAccessorData(bufferViewData, accessor);
+            newPrimitive.indices = _getAccessorData(bufferViewData, accessor) as any;
             loader._checkComplete();
         });
-    };
+    }
 
-    //var tmpVec4 = vec4.create();
-    //var inverseTransposeMatrix = mat4.create();
-
-    glTFLoader.prototype._parseAttributes = function (json, primitive, newPrimitive, matrix)
+    _parseAttributes(json, primitive, newPrimitive: Primitive, matrix)
     {
         // !! Assume interleaved vertex attributes
         // i.e., all attributes share one bufferView
@@ -381,7 +401,7 @@ export interface IPrimitive
 
             loader._checkComplete();
         });
-    };
+    }
 
     /**
      * load a glTF model
@@ -389,7 +409,7 @@ export interface IPrimitive
      * @param {String} uri uri of the .glTF file. Other resources (bins, images) are assumed to be in the same base path
      * @param {Function} callback the onload callback function
      */
-    glTFLoader.prototype.loadGLTF = function (uri, callback)
+    loadGLTF(uri, callback)
     {
         this._init();
 
@@ -441,110 +461,121 @@ export interface IPrimitive
             // Meanwhile start glTF scene parsing
             loader._parseGLTF(json);
         });
-    };
+    }
+}
 
-    // TODO: get from gl context
-    var ComponentType2ByteSize = {
-        5120: 1, // BYTE
-        5121: 1, // UNSIGNED_BYTE
-        5122: 2, // SHORT
-        5123: 2, // UNSIGNED_SHORT
-        5126: 4 // FLOAT
-    };
+var translationVec3 = vec3.create();
+var rotationQuat = quat.create();
+var scaleVec3 = vec3.create();
+var TRMatrix = mat4.create();
 
-    var Type2NumOfComponent = {
-        SCALAR: 1,
-        VEC2: 2,
-        VEC3: 3,
-        VEC4: 4,
-        MAT2: 4,
-        MAT3: 9,
-        MAT4: 16
-    };
+// TODO: get from gl context
+var ComponentType2ByteSize = {
+    5120: 1, // BYTE
+    5121: 1, // UNSIGNED_BYTE
+    5122: 2, // SHORT
+    5123: 2, // UNSIGNED_SHORT
+    5126: 4 // FLOAT
+};
 
-    MinimalGLTFLoader.Attributes = [
-        "POSITION",
-        "NORMAL",
-        "TEXCOORD",
-        "COLOR",
-        "JOINT",
-        "WEIGHT"
-    ];
+var Type2NumOfComponent = {
+    SCALAR: 1,
+    VEC2: 2,
+    VEC3: 3,
+    VEC4: 4,
+    MAT2: 4,
+    MAT3: 9,
+    MAT4: 16
+};
 
-    // ------ Scope limited private util functions---------------
+const IDrawElementType2Name = {
+    5121: "UNSIGNED_BYTE",
+    5123: "UNSIGNED_SHORT",
+    5124: "UNSIGNED_INT",
+};
 
-    function _arrayBuffer2TypedArray(resource, byteOffset, countOfComponentType, componentType)
+export const Attributes = [
+    "POSITION",
+    "NORMAL",
+    "TEXCOORD",
+    "COLOR",
+    "JOINT",
+    "WEIGHT"
+];
+
+// ------ Scope limited private util functions---------------
+
+function _arrayBuffer2TypedArray(resource, byteOffset, countOfComponentType, componentType)
+{
+    switch (componentType)
     {
-        switch (componentType)
-        {
-            // @todo: finish
-            case 5122: return new Int16Array(resource, byteOffset, countOfComponentType);
-            case 5123: return new Uint16Array(resource, byteOffset, countOfComponentType);
-            case 5126: return new Float32Array(resource, byteOffset, countOfComponentType);
-            default: return null;
+        // @todo: finish
+        case 5122: return new Int16Array(resource, byteOffset, countOfComponentType);
+        case 5123: return new Uint16Array(resource, byteOffset, countOfComponentType);
+        case 5126: return new Float32Array(resource, byteOffset, countOfComponentType);
+        default: return null;
+    }
+}
+
+function _getAccessorData(bufferViewData, accessor)
+{
+    return _arrayBuffer2TypedArray(
+        bufferViewData,
+        accessor.byteOffset,
+        accessor.count * Type2NumOfComponent[accessor.type],
+        accessor.componentType
+    );
+}
+
+function _getBaseUri(uri)
+{
+    // https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Source/Core/getBaseUri.js
+
+    var basePath = "";
+    var i = uri.lastIndexOf("/");
+    if (i !== -1)
+    {
+        basePath = uri.substring(0, i + 1);
+    }
+
+    return basePath;
+}
+
+function _loadJSON(src, callback)
+{
+    // native json loading technique from @KryptoniteDove:
+    // http://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
+
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open("GET", src, true);
+    xobj.onreadystatechange = function ()
+    {
+        if (xobj.readyState == 4 // Request finished, response ready
+            && xobj.status == 200)
+        { // Status OK
+            callback(xobj.responseText, this);
         }
-    }
+    };
+    xobj.send(null);
+}
 
-    function _getAccessorData(bufferViewData, accessor)
+function _loadArrayBuffer(url, callback)
+{
+    var xobj = new XMLHttpRequest();
+    xobj.responseType = "arraybuffer";
+    xobj.open("GET", url, true);
+    xobj.onreadystatechange = function ()
     {
-        return _arrayBuffer2TypedArray(
-            bufferViewData,
-            accessor.byteOffset,
-            accessor.count * Type2NumOfComponent[accessor.type],
-            accessor.componentType
-        );
-    }
-
-    function _getBaseUri(uri)
-    {
-        // https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Source/Core/getBaseUri.js
-
-        var basePath = "";
-        var i = uri.lastIndexOf("/");
-        if (i !== -1)
-        {
-            basePath = uri.substring(0, i + 1);
+        if (xobj.readyState == 4 // Request finished, response ready
+            && xobj.status == 200)
+        { // Status OK
+            var arrayBuffer = xobj.response;
+            if (arrayBuffer && callback)
+            {
+                callback(arrayBuffer);
+            }
         }
-
-        return basePath;
-    }
-
-    function _loadJSON(src, callback)
-    {
-        // native json loading technique from @KryptoniteDove:
-        // http://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
-
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open("GET", src, true);
-        xobj.onreadystatechange = function ()
-        {
-            if (xobj.readyState == 4 // Request finished, response ready
-                && xobj.status == "200")
-            { // Status OK
-                callback(xobj.responseText, this);
-            }
-        };
-        xobj.send(null);
-    }
-
-    function _loadArrayBuffer(url, callback)
-    {
-        var xobj = new XMLHttpRequest();
-        xobj.responseType = "arraybuffer";
-        xobj.open("GET", url, true);
-        xobj.onreadystatechange = function ()
-        {
-            if (xobj.readyState == 4 // Request finished, response ready
-                && xobj.status == "200")
-            { // Status OK
-                var arrayBuffer = xobj.response;
-                if (arrayBuffer && callback)
-                {
-                    callback(arrayBuffer);
-                }
-            }
-        };
-        xobj.send(null);
-    }
-})();
+    };
+    xobj.send(null);
+}
