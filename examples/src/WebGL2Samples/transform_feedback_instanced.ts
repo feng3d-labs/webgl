@@ -1,20 +1,17 @@
+import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
+import { getShaderSource } from "./utility";
+
 (function ()
 {
     // -- Init Canvas
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 
     canvas.addEventListener("webglcontextlost", function (event)
     {
@@ -66,98 +63,82 @@
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const drawTimeLocation = gl.getUniformLocation(programs[PROGRAM_DRAW], "u_time");
-
-    const vertexArrays = [gl.createVertexArray(), gl.createVertexArray()];
+    const vertexArrays: IVertexArrayObject[] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks = [gl.createTransformFeedback(), gl.createTransformFeedback()];
+    const transformFeedbacks: ITransformFeedback[] = [];
 
-    const vertexBuffers = new Array(vertexArrays.length);
+    const vertexBuffers: IVertexBuffer[][] = new Array(vertexArrays.length);
 
-    for (let va = 0; va < vertexArrays.length; ++va)
+    for (let va = 0; va < 2; ++va)
     {
-        gl.bindVertexArray(vertexArrays[va]);
         vertexBuffers[va] = new Array(NUM_LOCATIONS);
 
-        vertexBuffers[va][OFFSET_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffers[va][OFFSET_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, instanceOffsets, gl.STREAM_COPY);
-        gl.vertexAttribPointer(OFFSET_LOCATION, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(OFFSET_LOCATION);
+        vertexBuffers[va][OFFSET_LOCATION] = { target: "ARRAY_BUFFER", data: instanceOffsets, usage: "STREAM_COPY" };
+        vertexBuffers[va][ROTATION_LOCATION] = { target: "ARRAY_BUFFER", data: instanceRotations, usage: "STREAM_COPY" };
+        vertexBuffers[va][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: trianglePositions, usage: "STATIC_DRAW" };
+        vertexBuffers[va][COLOR_LOCATION] = { target: "ARRAY_BUFFER", data: instanceColors, usage: "STATIC_DRAW" };
 
-        vertexBuffers[va][ROTATION_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffers[va][ROTATION_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, instanceRotations, gl.STREAM_COPY);
-        gl.vertexAttribPointer(ROTATION_LOCATION, 1, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(ROTATION_LOCATION);
+        vertexArrays[va] = {
+            vertices: {
+                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
+                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
+                a_position: { buffer: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
+                a_color: { buffer: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
+            }
+        };
 
-        vertexBuffers[va][POSITION_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffers[va][POSITION_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, trianglePositions, gl.STATIC_DRAW);
-        gl.vertexAttribPointer(POSITION_LOCATION, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(POSITION_LOCATION);
-
-        vertexBuffers[va][COLOR_LOCATION] = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffers[va][COLOR_LOCATION]);
-        gl.bufferData(gl.ARRAY_BUFFER, instanceColors, gl.STATIC_DRAW);
-        gl.vertexAttribPointer(COLOR_LOCATION, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(COLOR_LOCATION);
-        gl.vertexAttribDivisor(COLOR_LOCATION, 1); // attribute used once per instance
-
-        gl.bindVertexArray(null);
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-        // Set up output
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedbacks[va]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, vertexBuffers[va][OFFSET_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 1, vertexBuffers[va][ROTATION_LOCATION]);
-
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
+        transformFeedbacks[va] = {
+            bindBuffers: [
+                { index: 0, buffer: vertexBuffers[va][OFFSET_LOCATION] },
+                { index: 1, buffer: vertexBuffers[va][ROTATION_LOCATION] },
+            ]
+        };
     }
+
+    const transformRO: IRenderObject = {
+        pipeline: programs[PROGRAM_TRANSFORM],
+        vertexArray: null,
+        transformFeedback: null,
+        uniforms: {},
+        drawArrays: { vertexCount: NUM_INSTANCES },
+    };
+
+    const renderRO: IRenderObject = {
+        pipeline: programs[PROGRAM_DRAW],
+        uniforms: {},
+        drawArrays: { vertexCount: 3, instanceCount: NUM_INSTANCES },
+    };
+
+    const rp: IRenderPass = {
+        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        renderObjects: [transformRO, renderRO],
+    };
 
     render();
 
     function initPrograms()
     {
-        // Setup program for transform feedback shaders
-        function createShader(gl, source, type)
-        {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-
-            return shader;
-        }
-
-        const vshaderTransform = createShader(gl, getShaderSource("vs-emit"), gl.VERTEX_SHADER);
-        const fshaderTransform = createShader(gl, getShaderSource("fs-emit"), gl.FRAGMENT_SHADER);
-
-        const programTransform = gl.createProgram();
-        gl.attachShader(programTransform, vshaderTransform);
-        gl.deleteShader(vshaderTransform);
-        gl.attachShader(programTransform, fshaderTransform);
-        gl.deleteShader(fshaderTransform);
-
-        const varyings = ["v_offset", "v_rotation"];
-        gl.transformFeedbackVaryings(programTransform, varyings, gl.SEPARATE_ATTRIBS);
-        gl.linkProgram(programTransform);
-
-        // check
-        let log = gl.getProgramInfoLog(programTransform);
-        if (log)
-        {
-            console.log(log);
-        }
-
-        log = gl.getShaderInfoLog(vshaderTransform);
-        if (log)
-        {
-            console.log(log);
-        }
+        const programTransform: IProgram = {
+            vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
+            transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
+            rasterizerDiscard: true,
+            primitive: { topology: "POINTS" },
+        };
 
         // Setup program for draw shader
-        const programDraw = createProgram(gl, getShaderSource("vs-draw"), getShaderSource("fs-draw"));
+        const programDraw: IProgram = {
+            vertex: { code: getShaderSource("vs-draw") }, fragment: {
+                code: getShaderSource("fs-draw"),
+                targets: [{
+                    blend: {
+                        color: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                        alpha: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                    }
+                }]
+            },
+            primitive: { topology: "TRIANGLES" },
+        };
 
         const programs = [programTransform, programDraw];
 
@@ -166,7 +147,7 @@
 
     function transform()
     {
-        const programTransform = programs[PROGRAM_TRANSFORM];
+        const time = Date.now();
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
@@ -174,35 +155,13 @@
 
         const destinationTransformFeedback = transformFeedbacks[destinationIdx];
 
-        gl.useProgram(programTransform);
+        transformRO.vertexArray = sourceVAO;
+        transformRO.transformFeedback = destinationTransformFeedback;
 
-        gl.bindVertexArray(sourceVAO);
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, destinationTransformFeedback);
+        sourceVAO.vertices.a_offset.divisor = 0;
+        sourceVAO.vertices.a_rotation.divisor = 0;
 
-        // NOTE: The following two lines shouldn't be necessary, but are required to work in ANGLE
-        // due to a bug in its handling of transform feedback objects.
-        // https://bugs.chromium.org/p/angleproject/issues/detail?id=2051
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, vertexBuffers[destinationIdx][OFFSET_LOCATION]);
-        gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 1, vertexBuffers[destinationIdx][ROTATION_LOCATION]);
-
-        // Attributes per-vertex when doing transform feedback needs setting to 0 when doing transform feedback
-        gl.vertexAttribDivisor(OFFSET_LOCATION, 0);
-        gl.vertexAttribDivisor(ROTATION_LOCATION, 0);
-
-        // Turn off rasterization - we are not drawing
-        gl.enable(gl.RASTERIZER_DISCARD);
-
-        // Update position and rotation using transform feedback
-        gl.beginTransformFeedback(gl.POINTS);
-        gl.drawArrays(gl.POINTS, 0, NUM_INSTANCES);
-        gl.endTransformFeedback();
-
-        // Restore state
-        gl.disable(gl.RASTERIZER_DISCARD);
-        gl.useProgram(null);
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-        gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
-        gl.bindBuffer(gl.TRANSFORM_FEEDBACK_BUFFER, null);
+        transformRO.uniforms.u_time = time;
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;
@@ -213,30 +172,13 @@
         // Rotate triangles
         transform();
 
-        // Set the viewport
-        gl.viewport(0, 0, canvas.width, canvas.height - 10);
+        renderRO.viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
+        renderRO.vertexArray = vertexArrays[currentSourceIdx];
 
-        // Clear color buffer
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
+        renderRO.vertexArray.vertices.a_offset.divisor = 1;
+        renderRO.vertexArray.vertices.a_rotation.divisor = 1;
 
-        gl.bindVertexArray(vertexArrays[currentSourceIdx]);
-
-        // Attributes per-instance when drawing sets back to 1 when drawing instances
-        gl.vertexAttribDivisor(OFFSET_LOCATION, 1);
-        gl.vertexAttribDivisor(ROTATION_LOCATION, 1);
-
-        gl.useProgram(programs[PROGRAM_DRAW]);
-
-        // Enable blending
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-
-        // Set uniforms
-        const time = Date.now();
-        gl.uniform1f(drawTimeLocation, time);
-
-        gl.drawArraysInstanced(gl.TRIANGLES, 0, 3, NUM_INSTANCES);
+        WebGL.runRenderPass(rc, rp);
 
         requestAnimationFrame(render);
     }
