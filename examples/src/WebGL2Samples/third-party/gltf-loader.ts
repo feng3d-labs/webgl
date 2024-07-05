@@ -1,24 +1,7 @@
 import { mat4, quat, vec3 } from "gl-matrix";
-import { DrawMode } from "../../../../src";
+import { IAttributeBufferSourceTypes, IDrawMode, IDrawElementType, IElementBufferSourceTypes, VertexAttributeTypes } from "../../../../src";
 
 /* eslint-disable no-var */
-// export var MinimalGLTFLoader: {
-//     glTFModel: () => void;
-//     Attributes: string[];
-//     glTFLoader: new () => {
-//         loadGLTF: (gltfUrl: string, cb: (glTF: {
-//             scenes: { [key: string]: { meshes: { [key: string]: { primitives } } } },
-//             defaultScene
-//         }) => void) => void
-//     }
-// } = MinimalGLTFLoader || {} as any;
-
-export interface IPrimitive
-{
-    mode: DrawMode,
-    indicesComponentType: number,
-    matrix: Float32Array, attributes: { [key: string]: { size: 1 | 2 | 3 | 4, type: number, stride: number, offset: number } }, vertexBuffer: Float32Array, indices
-}
 
 // Data classes
 class Scene
@@ -47,20 +30,22 @@ class Mesh
     }
 }
 
-class Primitive
+export class Primitive
 {
-    mode: number;
-    indices: null;
-    indicesComponentType: number;
-    vertexBuffer: null;
+    mode: IDrawMode;
+    indices: IElementBufferSourceTypes;
+    indicesComponentType: IDrawElementType;
+    vertexBuffer: IAttributeBufferSourceTypes;
     matrix: mat4;
-    attributes: {};
+    attributes: {
+        [key: string]: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
+    };
     constructor()
     {
-        this.mode = 4; // default: gl.TRIANGLES
+        this.mode = "TRIANGLES"; // default: gl.TRIANGLES
 
         this.indices = null;
-        this.indicesComponentType = 5123; // default: gl.UNSIGNED_SHORT
+        this.indicesComponentType = "UNSIGNED_SHORT"; // default: gl.UNSIGNED_SHORT
 
         // !!: assume vertex buffer is interleaved
         // see discussion https://github.com/KhronosGroup/glTF/issues/21
@@ -308,23 +293,23 @@ export class GlTFLoader
         }
     }
 
-    _parseIndices(json, primitive, newPrimitive)
+    _parseIndices(json, primitive, newPrimitive: Primitive)
     {
         var accessorName = primitive.indices;
         var accessor = json.accessors[accessorName];
 
-        newPrimitive.mode = primitive.mode || 4;
-        newPrimitive.indicesComponentType = accessor.componentType;
+        newPrimitive.mode = IDrawMode2Name[primitive.mode || 4];
+        newPrimitive.indicesComponentType = IDrawElementType2Name[accessor.componentType];
 
         var loader = this;
         this._getBufferViewData(json, accessor.bufferView, function (bufferViewData)
         {
-            newPrimitive.indices = _getAccessorData(bufferViewData, accessor);
+            newPrimitive.indices = _getAccessorData(bufferViewData, accessor) as any;
             loader._checkComplete();
         });
     }
 
-    _parseAttributes(json, primitive, newPrimitive, matrix)
+    _parseAttributes(json, primitive, newPrimitive: Primitive, matrix)
     {
         // !! Assume interleaved vertex attributes
         // i.e., all attributes share one bufferView
@@ -398,7 +383,7 @@ export class GlTFLoader
                 newPrimitive.attributes[attributeName] = {
                     //GLuint program location,
                     size: Type2NumOfComponent[accessor.type],
-                    type: accessor.componentType,
+                    type: VertexAttributeType2Name[accessor.componentType],
                     //GLboolean normalized
                     stride: accessor.byteStride,
                     offset: accessor.byteOffset
@@ -492,6 +477,35 @@ var Type2NumOfComponent = {
     MAT2: 4,
     MAT3: 9,
     MAT4: 16
+};
+
+const VertexAttributeType2Name = {
+    5126: "FLOAT",
+    5120: "BYTE",
+    5122: "SHORT",
+    5121: "UNSIGNED_BYTE",
+    5123: "UNSIGNED_SHORT",
+    5131: "HALF_FLOAT",
+    5124: "INT",
+    5125: "UNSIGNED_INT",
+    36255: "INT_2_10_10_10_REV",
+    33640: "UNSIGNED_INT_2_10_10_10_REV"
+};
+
+const IDrawMode2Name = {
+    0: "POINTS",
+    3: "LINE_STRIP",
+    2: "LINE_LOOP",
+    1: "LINES",
+    5: "TRIANGLE_STRIP",
+    6: "TRIANGLE_FAN",
+    4: "TRIANGLES",
+};
+
+const IDrawElementType2Name = {
+    5121: "UNSIGNED_BYTE",
+    5123: "UNSIGNED_SHORT",
+    5124: "UNSIGNED_INT",
 };
 
 export const Attributes = [

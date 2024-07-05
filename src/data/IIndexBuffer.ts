@@ -15,7 +15,7 @@ export interface IIndexBuffer
     /**
      * 顶点索引数据。
      */
-    data: ElementBufferSourceTypes;
+    data: IElementBufferSourceTypes;
 
     /**
      * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
@@ -30,7 +30,7 @@ export interface IIndexBuffer
 /**
  * 元素缓冲数据类型
  */
-export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
+export type IElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 元素缓冲数据类型。
@@ -46,4 +46,4 @@ export type ElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
  *
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type DrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT";
+export type IDrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT";

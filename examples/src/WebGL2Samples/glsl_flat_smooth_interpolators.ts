@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
-import { IPrimitive, MinimalGLTFLoader } from "./third-party/gltf-loader";
+import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -54,7 +54,7 @@ const programs: IProgram[] = [
 ];
 // -- Load gltf then render
 const gltfUrl = "../../assets/gltf/di_model_tri.gltf";
-const glTFLoader = new MinimalGLTFLoader.glTFLoader();
+const glTFLoader = new GlTFLoader();
 
 glTFLoader.loadGLTF(gltfUrl, function (glTF)
 {
@@ -67,9 +67,9 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // var in loop
     let mesh: {
-        primitives: IPrimitive[];
+        primitives: Primitive[];
     };
-    let primitive: IPrimitive;
+    let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
     let vertexBuffer: IVertexBuffer;
     let indicesBuffer: IIndexBuffer;

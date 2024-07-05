@@ -11,7 +11,7 @@ export interface IBuffer
     /**
      * 缓冲区数据。
      */
-    data?: AttributeBufferSourceTypes;
+    data?: IAttributeBufferSourceTypes;
 
     /**
      * 为优化目的指定数据存储的预期使用模式的GLenum。
@@ -33,13 +33,13 @@ export interface IWriteBuffer
     /**
      * 写入缓冲区数据。
      */
-    data: AttributeBufferSourceTypes;
+    data: IAttributeBufferSourceTypes;
 }
 
 /**
  * 属性缓冲数据类型。
  */
-export type AttributeBufferSourceTypes =
+export type IAttributeBufferSourceTypes =
     | Float32Array
     | Uint32Array
     | Int32Array

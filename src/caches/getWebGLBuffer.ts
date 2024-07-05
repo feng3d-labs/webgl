@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { AttributeBufferSourceTypes, IBuffer } from "../data/IBuffer";
+import { IAttributeBufferSourceTypes, IBuffer } from "../data/IBuffer";
 
 declare global
 {
@@ -10,7 +10,7 @@ declare global
 
     interface WebGLBuffer
     {
-        data: AttributeBufferSourceTypes;
+        data: IAttributeBufferSourceTypes;
 
         /**
          * 销毁。

@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, VertexAttributeTypes, WebGL } from "../../../src";
-import { GlTFLoader, glTFLoader } from "./third-party/gltf-loader";
+import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -28,15 +28,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     // var in loop
     let mesh;
-    let primitive: {
-        vertexBuffer,
-        indices,
-        attributes: {
-            POSITION: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
-            NORMAL: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
-            TEXCOORD_0: { size: 1 | 2 | 3 | 4, type?: VertexAttributeTypes, stride: number, offset: number },
-        }
-    };
+    let primitive: Primitive;
     let vertexBuffer: IVertexBuffer;
     let indicesBuffer: IIndexBuffer;
     let vertexArray: IVertexArrayObject;
