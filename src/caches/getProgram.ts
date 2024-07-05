@@ -1,6 +1,6 @@
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
 import { IAttributeInfo } from "../data/IAttributeInfo";
-import { IRenderPipeline } from "../data/IRenderPipeline";
+import { IRenderPipeline, ITransformFeedbackVaryings } from "../data/IRenderPipeline";
 import { IUniformInfo, IUniformItemInfo } from "../data/IUniformInfo";
 import { getWebGLAttributeValueType } from "./getWebGLAttributeType";
 
@@ -39,14 +39,15 @@ declare global
  */
 export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
-    const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment.code;
-
-    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
+    const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
     if (result) return result;
 
-    result = getWebGLProgram(gl, vertex, fragment);
+    const vertex = pipeline.vertex.code;
+    const fragment = pipeline.fragment.code;
+    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
+
+    result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
     gl._programs[shaderKey] = result;
 
     return result;
@@ -57,7 +58,7 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;
 
-    const shaderKey = `${vertex}/n-------------shader-------------/n${fragment}`;
+    const shaderKey = getKey(pipeline);
     const result = gl._programs[shaderKey];
     if (result)
     {
@@ -66,7 +67,16 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string)
+function getKey(pipeline: IRenderPipeline)
+{
+    const vertex = pipeline.vertex.code;
+    const fragment = pipeline.fragment.code;
+    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
+
+    return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
+}
+
+function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: ITransformFeedbackVaryings)
 {
     // 编译顶点着色器
     const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
@@ -75,7 +85,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     const fragmentShader = getWebGLShader(gl, "FRAGMENT_SHADER", fshader);
 
     // 创建着色器程序
-    const program = createLinkProgram(gl, vertexShader, fragmentShader);
+    const program = createLinkProgram(gl, vertexShader, fragmentShader, transformFeedbackVaryings);
 
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
@@ -232,7 +242,7 @@ function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: strin
     return shader;
 }
 
-function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader)
+function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: ITransformFeedbackVaryings)
 {
     // 创建程序对象
     const program = gl.createProgram();
@@ -240,6 +250,18 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
     // 添加着色器
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
+
+    if (transformFeedbackVaryings)
+    {
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.transformFeedbackVaryings(program, transformFeedbackVaryings.varyings, gl[transformFeedbackVaryings.bufferMode]);
+        }
+        else
+        {
+            console.error(`WebGL1 不支持 transformFeedbackVaryings 功能！`);
+        }
+    }
 
     // 链接程序
     gl.linkProgram(program);

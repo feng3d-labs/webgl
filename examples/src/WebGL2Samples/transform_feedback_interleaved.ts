@@ -1,20 +1,18 @@
+import { IProgram, IRenderingContext } from "../../../src";
+import { getShaderSource } from "./utility";
+
 (function ()
 {
     // -- Init Canvas
     const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
+    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const gl = canvas.getContext("webgl2", { antialias: false });
-    const isWebGL2 = !!gl;
-    if (!isWebGL2)
-    {
-        document.getElementById("info").innerHTML = "WebGL 2 is not available.  See <a href=\"https://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation\">How to get a WebGL 2 implementation</a>";
-
-        return;
-    }
 
     // -- Init Program
     const PROGRAM_TRANSFORM = 0;
@@ -22,40 +20,15 @@
 
     const programTransform = (function (gl, vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        function createShader(gl, source, type)
-        {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-
-            return shader;
-        }
-
-        const vshaderTransform = createShader(gl, vertexShaderSourceTransform, gl.VERTEX_SHADER);
-        const fshaderTransform = createShader(gl, fragmentShaderSourceTransform, gl.FRAGMENT_SHADER);
-
-        const programTransform = gl.createProgram();
-        gl.attachShader(programTransform, vshaderTransform);
-        gl.deleteShader(vshaderTransform);
-        gl.attachShader(programTransform, fshaderTransform);
-        gl.deleteShader(fshaderTransform);
-
         const varyings = ["gl_Position", "v_color"];
-        gl.transformFeedbackVaryings(programTransform, varyings, gl.INTERLEAVED_ATTRIBS);
-        gl.linkProgram(programTransform);
 
-        // check
-        let log = gl.getProgramInfoLog(programTransform);
-        if (log)
-        {
-            console.log(log);
-        }
+        const programTransform: IProgram = {
+            vertex: { code: vertexShaderSourceTransform },
+            fragment: { code: fragmentShaderSourceTransform },
+            transformFeedbackVaryings: { varyings, bufferMode: "INTERLEAVED_ATTRIBS" },
+        };
 
-        log = gl.getShaderInfoLog(vshaderTransform);
-        if (log)
-        {
-            console.log(log);
-        }
+        // gl.transformFeedbackVaryings(programTransform, varyings, gl.INTERLEAVED_ATTRIBS);
 
         return programTransform;
     })(gl, getShaderSource("vs-transform"), getShaderSource("fs-transform"));
