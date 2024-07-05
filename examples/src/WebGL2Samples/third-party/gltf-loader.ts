@@ -91,9 +91,6 @@ class glTFModel
 class glTFLoader
 {
     glTF: null;
-    _getBufferViewData: (json: any, bufferViewID: any, callback: any) => void;
-    _checkComplete: () => void;
-    _parseGLTF: (json: any) => void;
     _parseNode: (json: any, node: any, newScene: any, matrix: any) => void;
     _parseIndices: (json: any, primitive: any, newPrimitive: any) => void;
     _parseAttributes: (json: any, primitive: any, newPrimitive: any, matrix: any) => void;
@@ -132,361 +129,354 @@ class glTFLoader
 
         this.onload = null;
     }
-}
 
-glTFLoader.prototype._getBufferViewData = function (json, bufferViewID, callback)
-{
-    var bufferViewData = this._bufferViews[bufferViewID];
-    if (!bufferViewData)
+    _getBufferViewData(json, bufferViewID, callback)
     {
-        // load bufferView for the first time
-        var bufferView = json.bufferViews[bufferViewID];
-        var bufferData = this._buffers[bufferView.buffer];
-        if (bufferData)
+        var bufferViewData = this._bufferViews[bufferViewID];
+        if (!bufferViewData)
         {
-            // buffer already loaded
-            //console.log("dependent buffer ready, create bufferView" + bufferViewID);
-            this._bufferViews[bufferViewID] = bufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
-            callback(bufferViewData);
+            // load bufferView for the first time
+            var bufferView = json.bufferViews[bufferViewID];
+            var bufferData = this._buffers[bufferView.buffer];
+            if (bufferData)
+            {
+                // buffer already loaded
+                //console.log("dependent buffer ready, create bufferView" + bufferViewID);
+                this._bufferViews[bufferViewID] = bufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
+                callback(bufferViewData);
+            }
+            else
+            {
+                // buffer not yet loaded
+                // add pending task to _bufferTasks
+                //console.log("pending Task: wait for buffer to load bufferView " + bufferViewID);
+                this._pendingTasks++;
+                var bufferTask = this._bufferTasks[bufferView.buffer];
+                if (!bufferTask)
+                {
+                    this._bufferTasks[bufferView.buffer] = [];
+                    bufferTask = this._bufferTasks[bufferView.buffer];
+                }
+                var loader = this;
+                bufferTask.push(function (newBufferData)
+                {
+                    // share same bufferView
+                    // hierarchy needs to be post processed in the renderer
+                    var curBufferViewData = loader._bufferViews[bufferViewID];
+                    if (!curBufferViewData)
+                    {
+                        console.log(`create new BufferView Data for ${bufferViewID}`);
+                        curBufferViewData = loader._bufferViews[bufferViewID] = newBufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
+                    }
+                    loader._finishedPendingTasks++;
+                    callback(curBufferViewData);
+
+                    // // create new bufferView for each mesh access with a different hierarchy
+                    // // hierarchy transformation will be prepared in this way
+                    // console.log('create new BufferView Data for ' + bufferViewID);
+                    // loader._bufferViews[bufferViewID] = newBufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
+                    // loader._finishedPendingTasks++;
+                    // callback(loader._bufferViews[bufferViewID]);
+                });
+            }
         }
         else
         {
-            // buffer not yet loaded
-            // add pending task to _bufferTasks
-            //console.log("pending Task: wait for buffer to load bufferView " + bufferViewID);
-            this._pendingTasks++;
-            var bufferTask = this._bufferTasks[bufferView.buffer];
-            if (!bufferTask)
-            {
-                this._bufferTasks[bufferView.buffer] = [];
-                bufferTask = this._bufferTasks[bufferView.buffer];
-            }
-            var loader = this;
-            bufferTask.push(function (newBufferData)
-            {
-                // share same bufferView
-                // hierarchy needs to be post processed in the renderer
-                var curBufferViewData = loader._bufferViews[bufferViewID];
-                if (!curBufferViewData)
-                {
-                    console.log(`create new BufferView Data for ${bufferViewID}`);
-                    curBufferViewData = loader._bufferViews[bufferViewID] = newBufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
-                }
-                loader._finishedPendingTasks++;
-                callback(curBufferViewData);
-
-                // // create new bufferView for each mesh access with a different hierarchy
-                // // hierarchy transformation will be prepared in this way
-                // console.log('create new BufferView Data for ' + bufferViewID);
-                // loader._bufferViews[bufferViewID] = newBufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
-                // loader._finishedPendingTasks++;
-                // callback(loader._bufferViews[bufferViewID]);
-            });
+            // no need to load buffer from file
+            // use cached ones
+            //console.log("use cached bufferView " + bufferViewID);
+            callback(bufferViewData);
         }
     }
-    else
+    _checkComplete()
     {
-        // no need to load buffer from file
-        // use cached ones
-        //console.log("use cached bufferView " + bufferViewID);
-        callback(bufferViewData);
-    }
-};
-
-// glTFLoader.prototype._doNextLoadTaskInList = function () {
-// };
-
-glTFLoader.prototype._checkComplete = function ()
-{
-    if (this._bufferRequested == this._bufferLoaded
-        // && other resources finish loading
-    )
-    {
-        this._loadDone = true;
-    }
-
-    if (this._loadDone && this._parseDone && this._pendingTasks == this._finishedPendingTasks)
-    {
-        this.onload(this.glTF);
-    }
-};
-
-glTFLoader.prototype._parseGLTF = function (json)
-{
-    this.glTF.json = json;
-    this.glTF.defaultScene = json.scene;
-
-    // Iterate through every scene
-    for (var sceneID in json.scenes)
-    {
-        var newScene = new Scene();
-        this.glTF.scenes[sceneID] = newScene;
-
-        var scene = json.scenes[sceneID];
-        var nodes = scene.nodes;
-        var nodeLen = nodes.length;
-
-        // Iterate through every node within scene
-        for (var n = 0; n < nodeLen; ++n)
+        if (this._bufferRequested == this._bufferLoaded
+            // && other resources finish loading
+        )
         {
-            var nodeName = nodes[n];
-            var node = json.nodes[nodeName];
+            this._loadDone = true;
+        }
 
-            // Traverse node
-            this._parseNode(json, node, newScene);
+        if (this._loadDone && this._parseDone && this._pendingTasks == this._finishedPendingTasks)
+        {
+            this.onload(this.glTF);
         }
     }
 
-    this._parseDone = true;
-    this._checkComplete();
-};
+    _parseGLTF(json)
+    {
+        this.glTF.json = json;
+        this.glTF.defaultScene = json.scene;
+
+        // Iterate through every scene
+        for (var sceneID in json.scenes)
+        {
+            var newScene = new Scene();
+            this.glTF.scenes[sceneID] = newScene;
+
+            var scene = json.scenes[sceneID];
+            var nodes = scene.nodes;
+            var nodeLen = nodes.length;
+
+            // Iterate through every node within scene
+            for (var n = 0; n < nodeLen; ++n)
+            {
+                var nodeName = nodes[n];
+                var node = json.nodes[nodeName];
+
+                // Traverse node
+                this._parseNode(json, node, newScene);
+            }
+        }
+
+        this._parseDone = true;
+        this._checkComplete();
+    }
+
+    _parseNode(json, node, newScene, matrix)
+    {
+        if (matrix === undefined)
+        {
+            matrix = mat4.create();
+        }
+
+        var curMatrix = mat4.create();
+
+        if (node.hasOwnProperty("matrix"))
+        {
+            // matrix
+            for (var i = 0; i < 16; ++i)
+            {
+                curMatrix[i] = node.matrix[i];
+            }
+            mat4.multiply(curMatrix, matrix, curMatrix);
+            //mat4.multiply(curMatrix, curMatrix, matrix);
+        }
+        else
+        {
+            // translation, rotation, scale (TRS)
+            // TODO: these labels are optional
+            vec3.set(translationVec3, node.translation[0], node.translation[1], node.translation[2]);
+            quat.set(rotationQuat, node.rotation[0], node.rotation[1], node.rotation[2], node.rotation[3]);
+            mat4.fromRotationTranslation(TRMatrix, rotationQuat, translationVec3);
+            mat4.multiply(curMatrix, curMatrix, TRMatrix);
+            vec3.set(scaleVec3, node.scale[0], node.scale[1], node.scale[2]);
+            mat4.scale(curMatrix, curMatrix, scaleVec3);
+        }
+
+        // Iterate through every mesh within node
+        var meshes = node.meshes;
+        if (meshes)
+        {
+            var meshLen = meshes.length;
+            for (var m = 0; m < meshLen; ++m)
+            {
+                var newMesh = new Mesh();
+                newScene.meshes.push(newMesh);
+
+                var meshName = meshes[m];
+                var mesh = json.meshes[meshName];
+
+                newMesh.meshID = meshName;
+
+                // Iterate through primitives
+                var primitives = mesh.primitives;
+                var primitiveLen = primitives.length;
+
+                for (var p = 0; p < primitiveLen; ++p)
+                {
+                    var newPrimitive = new Primitive();
+                    newMesh.primitives.push(newPrimitive);
+
+                    var primitive = primitives[p];
+
+                    if (primitive.indices)
+                    {
+                        this._parseIndices(json, primitive, newPrimitive);
+                    }
+
+                    this._parseAttributes(json, primitive, newPrimitive, curMatrix);
+                }
+            }
+        }
+
+        // Go through all the children recursively
+        var children = node.children;
+        var childreLen = children.length;
+        for (var c = 0; c < childreLen; ++c)
+        {
+            var childName = children[c];
+            var childNode = json.nodes[childName];
+            this._parseNode(json, childNode, newScene, curMatrix);
+        }
+    };
+
+    _parseIndices(json, primitive, newPrimitive)
+    {
+        var accessorName = primitive.indices;
+        var accessor = json.accessors[accessorName];
+
+        newPrimitive.mode = primitive.mode || 4;
+        newPrimitive.indicesComponentType = accessor.componentType;
+
+        var loader = this;
+        this._getBufferViewData(json, accessor.bufferView, function (bufferViewData)
+        {
+            newPrimitive.indices = _getAccessorData(bufferViewData, accessor);
+            loader._checkComplete();
+        });
+    }
+
+    _parseAttributes(json, primitive, newPrimitive, matrix)
+    {
+        // !! Assume interleaved vertex attributes
+        // i.e., all attributes share one bufferView
+
+        // vertex buffer processing
+        var firstSemantic = Object.keys(primitive.attributes)[0];
+        var firstAccessor = json.accessors[primitive.attributes[firstSemantic]];
+        var vertexBufferViewID = firstAccessor.bufferView;
+        var bufferView = json.bufferViews[vertexBufferViewID];
+
+        var loader = this;
+
+        this._getBufferViewData(json, vertexBufferViewID, function (bufferViewData)
+        {
+            var data = newPrimitive.vertexBuffer = _arrayBuffer2TypedArray(
+                bufferViewData,
+                0,
+                bufferView.byteLength / ComponentType2ByteSize[firstAccessor.componentType],
+                firstAccessor.componentType
+            );
+
+            for (var attributeName in primitive.attributes)
+            {
+                var accessorName = primitive.attributes[attributeName];
+                var accessor = json.accessors[accessorName];
+
+                var componentTypeByteSize = ComponentType2ByteSize[accessor.componentType];
+
+                var stride = accessor.byteStride / componentTypeByteSize;
+                var offset = accessor.byteOffset / componentTypeByteSize;
+                var count = accessor.count;
+
+                // // Matrix transformation
+                // if (attributeName === 'POSITION') {
+                //     for (var i = 0; i < count; ++i) {
+                //         // TODO: add vec2 and other(needed?) support
+                //         vec4.set(tmpVec4, data[stride * i + offset]
+                //                         , data[stride * i + offset + 1]
+                //                         , data[stride * i + offset + 2]
+                //                         , 1);
+                //         vec4.transformMat4(tmpVec4, tmpVec4, matrix);
+                //         vec4.scale(tmpVec4, tmpVec4, 1 / tmpVec4[3]);
+                //         data[stride * i + offset] = tmpVec4[0];
+                //         data[stride * i + offset + 1] = tmpVec4[1];
+                //         data[stride * i + offset + 2] = tmpVec4[2];
+                //     }
+                // }
+                // else if (attributeName === 'NORMAL') {
+                //     mat4.invert(inverseTransposeMatrix, matrix);
+                //     mat4.transpose(inverseTransposeMatrix, inverseTransposeMatrix);
+
+                //     for (var i = 0; i < count; ++i) {
+                //         // @todo: add vec2 and other(needed?) support
+                //         vec4.set(tmpVec4, data[stride * i + offset]
+                //                         , data[stride * i + offset + 1]
+                //                         , data[stride * i + offset + 2]
+                //                         , 0);
+                //         vec4.transformMat4(tmpVec4, tmpVec4, inverseTransposeMatrix);
+                //         vec4.normalize(tmpVec4, tmpVec4);
+                //         data[stride * i + offset] = tmpVec4[0];
+                //         data[stride * i + offset + 1] = tmpVec4[1];
+                //         data[stride * i + offset + 2] = tmpVec4[2];
+                //     }
+                // }
+
+                // local transform matrix
+
+                mat4.copy(newPrimitive.matrix, matrix);
+
+                // for vertexAttribPointer
+                newPrimitive.attributes[attributeName] = {
+                    //GLuint program location,
+                    size: Type2NumOfComponent[accessor.type],
+                    type: accessor.componentType,
+                    //GLboolean normalized
+                    stride: accessor.byteStride,
+                    offset: accessor.byteOffset
+                };
+            }
+
+            loader._checkComplete();
+        });
+    }
+
+    /**
+     * load a glTF model
+     *
+     * @param {String} uri uri of the .glTF file. Other resources (bins, images) are assumed to be in the same base path
+     * @param {Function} callback the onload callback function
+     */
+    loadGLTF(uri, callback)
+    {
+        this._init();
+
+        this.onload = callback || function (glTF)
+        {
+            console.log("glTF model loaded.");
+            console.log(glTF);
+        };
+
+        this.glTF = new glTFModel();
+
+        this.baseUri = _getBaseUri(uri);
+
+        var loader = this;
+
+        _loadJSON(uri, function (response)
+        {
+            // Parse JSON string into object
+            var json = JSON.parse(response);
+
+            var b;
+
+            var loadArrayBufferCallback = function (resource)
+            {
+                loader._buffers[b] = resource;
+                loader._bufferLoaded++;
+                if (loader._bufferTasks[b])
+                {
+                    var i; var len;
+                    for (i = 0, len = loader._bufferTasks[b].length; i < len; ++i)
+                    {
+                        (loader._bufferTasks[b][i])(resource);
+                    }
+                }
+                loader._checkComplete();
+            };
+
+            // Launch loading resources: buffers, images, etc.
+            if (json.buffers)
+            {
+                for (b in json.buffers)
+                {
+                    loader._bufferRequested++;
+
+                    _loadArrayBuffer(`${loader.baseUri}/${json.buffers[b].uri}`, loadArrayBufferCallback);
+                }
+            }
+
+            // Meanwhile start glTF scene parsing
+            loader._parseGLTF(json);
+        });
+    }
+}
 
 var translationVec3 = vec3.create();
 var rotationQuat = quat.create();
 var scaleVec3 = vec3.create();
 var TRMatrix = mat4.create();
-
-glTFLoader.prototype._parseNode = function (json, node, newScene, matrix)
-{
-    if (matrix === undefined)
-    {
-        matrix = mat4.create();
-    }
-
-    var curMatrix = mat4.create();
-
-    if (node.hasOwnProperty("matrix"))
-    {
-        // matrix
-        for (var i = 0; i < 16; ++i)
-        {
-            curMatrix[i] = node.matrix[i];
-        }
-        mat4.multiply(curMatrix, matrix, curMatrix);
-        //mat4.multiply(curMatrix, curMatrix, matrix);
-    }
-    else
-    {
-        // translation, rotation, scale (TRS)
-        // TODO: these labels are optional
-        vec3.set(translationVec3, node.translation[0], node.translation[1], node.translation[2]);
-        quat.set(rotationQuat, node.rotation[0], node.rotation[1], node.rotation[2], node.rotation[3]);
-        mat4.fromRotationTranslation(TRMatrix, rotationQuat, translationVec3);
-        mat4.multiply(curMatrix, curMatrix, TRMatrix);
-        vec3.set(scaleVec3, node.scale[0], node.scale[1], node.scale[2]);
-        mat4.scale(curMatrix, curMatrix, scaleVec3);
-    }
-
-    // Iterate through every mesh within node
-    var meshes = node.meshes;
-    if (meshes)
-    {
-        var meshLen = meshes.length;
-        for (var m = 0; m < meshLen; ++m)
-        {
-            var newMesh = new Mesh();
-            newScene.meshes.push(newMesh);
-
-            var meshName = meshes[m];
-            var mesh = json.meshes[meshName];
-
-            newMesh.meshID = meshName;
-
-            // Iterate through primitives
-            var primitives = mesh.primitives;
-            var primitiveLen = primitives.length;
-
-            for (var p = 0; p < primitiveLen; ++p)
-            {
-                var newPrimitive = new Primitive();
-                newMesh.primitives.push(newPrimitive);
-
-                var primitive = primitives[p];
-
-                if (primitive.indices)
-                {
-                    this._parseIndices(json, primitive, newPrimitive);
-                }
-
-                this._parseAttributes(json, primitive, newPrimitive, curMatrix);
-            }
-        }
-    }
-
-    // Go through all the children recursively
-    var children = node.children;
-    var childreLen = children.length;
-    for (var c = 0; c < childreLen; ++c)
-    {
-        var childName = children[c];
-        var childNode = json.nodes[childName];
-        this._parseNode(json, childNode, newScene, curMatrix);
-    }
-};
-
-glTFLoader.prototype._parseIndices = function (json, primitive, newPrimitive)
-{
-    var accessorName = primitive.indices;
-    var accessor = json.accessors[accessorName];
-
-    newPrimitive.mode = primitive.mode || 4;
-    newPrimitive.indicesComponentType = accessor.componentType;
-
-    var loader = this;
-    this._getBufferViewData(json, accessor.bufferView, function (bufferViewData)
-    {
-        newPrimitive.indices = _getAccessorData(bufferViewData, accessor);
-        loader._checkComplete();
-    });
-};
-
-//var tmpVec4 = vec4.create();
-//var inverseTransposeMatrix = mat4.create();
-
-glTFLoader.prototype._parseAttributes = function (json, primitive, newPrimitive, matrix)
-{
-    // !! Assume interleaved vertex attributes
-    // i.e., all attributes share one bufferView
-
-    // vertex buffer processing
-    var firstSemantic = Object.keys(primitive.attributes)[0];
-    var firstAccessor = json.accessors[primitive.attributes[firstSemantic]];
-    var vertexBufferViewID = firstAccessor.bufferView;
-    var bufferView = json.bufferViews[vertexBufferViewID];
-
-    var loader = this;
-
-    this._getBufferViewData(json, vertexBufferViewID, function (bufferViewData)
-    {
-        var data = newPrimitive.vertexBuffer = _arrayBuffer2TypedArray(
-            bufferViewData,
-            0,
-            bufferView.byteLength / ComponentType2ByteSize[firstAccessor.componentType],
-            firstAccessor.componentType
-        );
-
-        for (var attributeName in primitive.attributes)
-        {
-            var accessorName = primitive.attributes[attributeName];
-            var accessor = json.accessors[accessorName];
-
-            var componentTypeByteSize = ComponentType2ByteSize[accessor.componentType];
-
-            var stride = accessor.byteStride / componentTypeByteSize;
-            var offset = accessor.byteOffset / componentTypeByteSize;
-            var count = accessor.count;
-
-            // // Matrix transformation
-            // if (attributeName === 'POSITION') {
-            //     for (var i = 0; i < count; ++i) {
-            //         // TODO: add vec2 and other(needed?) support
-            //         vec4.set(tmpVec4, data[stride * i + offset]
-            //                         , data[stride * i + offset + 1]
-            //                         , data[stride * i + offset + 2]
-            //                         , 1);
-            //         vec4.transformMat4(tmpVec4, tmpVec4, matrix);
-            //         vec4.scale(tmpVec4, tmpVec4, 1 / tmpVec4[3]);
-            //         data[stride * i + offset] = tmpVec4[0];
-            //         data[stride * i + offset + 1] = tmpVec4[1];
-            //         data[stride * i + offset + 2] = tmpVec4[2];
-            //     }
-            // }
-            // else if (attributeName === 'NORMAL') {
-            //     mat4.invert(inverseTransposeMatrix, matrix);
-            //     mat4.transpose(inverseTransposeMatrix, inverseTransposeMatrix);
-
-            //     for (var i = 0; i < count; ++i) {
-            //         // @todo: add vec2 and other(needed?) support
-            //         vec4.set(tmpVec4, data[stride * i + offset]
-            //                         , data[stride * i + offset + 1]
-            //                         , data[stride * i + offset + 2]
-            //                         , 0);
-            //         vec4.transformMat4(tmpVec4, tmpVec4, inverseTransposeMatrix);
-            //         vec4.normalize(tmpVec4, tmpVec4);
-            //         data[stride * i + offset] = tmpVec4[0];
-            //         data[stride * i + offset + 1] = tmpVec4[1];
-            //         data[stride * i + offset + 2] = tmpVec4[2];
-            //     }
-            // }
-
-            // local transform matrix
-
-            mat4.copy(newPrimitive.matrix, matrix);
-
-            // for vertexAttribPointer
-            newPrimitive.attributes[attributeName] = {
-                //GLuint program location,
-                size: Type2NumOfComponent[accessor.type],
-                type: accessor.componentType,
-                //GLboolean normalized
-                stride: accessor.byteStride,
-                offset: accessor.byteOffset
-            };
-        }
-
-        loader._checkComplete();
-    });
-};
-
-/**
- * load a glTF model
- *
- * @param {String} uri uri of the .glTF file. Other resources (bins, images) are assumed to be in the same base path
- * @param {Function} callback the onload callback function
- */
-glTFLoader.prototype.loadGLTF = function (uri, callback)
-{
-    this._init();
-
-    this.onload = callback || function (glTF)
-    {
-        console.log("glTF model loaded.");
-        console.log(glTF);
-    };
-
-    this.glTF = new glTFModel();
-
-    this.baseUri = _getBaseUri(uri);
-
-    var loader = this;
-
-    _loadJSON(uri, function (response)
-    {
-        // Parse JSON string into object
-        var json = JSON.parse(response);
-
-        var b;
-
-        var loadArrayBufferCallback = function (resource)
-        {
-            loader._buffers[b] = resource;
-            loader._bufferLoaded++;
-            if (loader._bufferTasks[b])
-            {
-                var i; var len;
-                for (i = 0, len = loader._bufferTasks[b].length; i < len; ++i)
-                {
-                    (loader._bufferTasks[b][i])(resource);
-                }
-            }
-            loader._checkComplete();
-        };
-
-        // Launch loading resources: buffers, images, etc.
-        if (json.buffers)
-        {
-            for (b in json.buffers)
-            {
-                loader._bufferRequested++;
-
-                _loadArrayBuffer(`${loader.baseUri}/${json.buffers[b].uri}`, loadArrayBufferCallback);
-            }
-        }
-
-        // Meanwhile start glTF scene parsing
-        loader._parseGLTF(json);
-    });
-};
 
 // TODO: get from gl context
 var ComponentType2ByteSize = {
