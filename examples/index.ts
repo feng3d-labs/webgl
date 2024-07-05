@@ -52,6 +52,7 @@ const files = {
         "texture_offset",
         "texture_pixel_store",
         "texture_srgb",
+        "texture_vertex",
     ],
 };
 
