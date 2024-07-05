@@ -5,6 +5,29 @@ import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
+    const IDrawMode2Name = {
+        0: "POINTS",
+        3: "LINE_STRIP",
+        2: "LINE_LOOP",
+        1: "LINES",
+        5: "TRIANGLE_STRIP",
+        6: "TRIANGLE_FAN",
+        4: "TRIANGLES",
+    };
+
+    const VertexAttributeType2Name = {
+        5126: "FLOAT",
+        5120: "BYTE",
+        5122: "SHORT",
+        5121: "UNSIGNED_BYTE",
+        5123: "UNSIGNED_SHORT",
+        5131: "HALF_FLOAT",
+        5124: "INT",
+        5125: "UNSIGNED_INT",
+        36255: "INT_2_10_10_10_REV",
+        33640: "UNSIGNED_INT_2_10_10_10_REV"
+    };
+
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
@@ -69,9 +92,9 @@ import { getShaderSource, loadImage } from "./utility";
                 //
                 vertexArray = {
                     vertices: {
-                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: positionInfo.type, vertexSize: positionInfo.stride, offset: positionInfo.offset },
-                        normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: normalInfo.type, vertexSize: normalInfo.stride, offset: normalInfo.offset },
-                        texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: texcoordInfo.type, vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
+                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
+                        normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
+                        texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
                     },
                     index: indicesBuffer,
                 };
@@ -196,7 +219,7 @@ import { getShaderSource, loadImage } from "./utility";
                 rp.renderObjects.push({
                     pipeline: {
                         ...program,
-                        primitive: { topology: primitive.mode }
+                        primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
                     vertexArray: vertexArrayMaps[mid][i],
                     uniforms: {
