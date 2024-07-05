@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "../../../src";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -49,7 +49,9 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     // -- Init Texture
     const texture: ITexture = {
         target: "TEXTURE_2D",
-        flipY: false,
+        pixelStore: {
+            flipY: false,
+        },
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",

@@ -1,5 +1,5 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture, ITextureTarget } from "../data/ITexture";
+import { ITexture, ITexturePixelStore, ITextureTarget } from "../data/ITexture";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -24,6 +24,8 @@ declare global
         destroy: () => void;
     }
 }
+
+const defaultTexturePixelStore: ITexturePixelStore = { flipY: false, premulAlpha: false };
 
 export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
@@ -62,11 +64,9 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     const updateTexture = () =>
     {
-        const { target, flipY, premulAlpha, generateMipmap, format, type, sources } = { ...defaultTexture, ...texture };
-        //
-        // 设置图片y轴方向
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
+        const { target, generateMipmap, format, type, sources, pixelStore } = { ...defaultTexture, ...texture };
+
+        setTexturePixelStore(gl, pixelStore);
         // 绑定纹理
         gl.bindTexture(gl[target], webGLTexture);
 
@@ -118,7 +118,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
         }
     };
     updateTexture();
-    watcher.watchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+    watcher.watchobject(texture, { pixelStore: { flipY: undefined, premulAlpha: undefined } }, updateTexture);
+    watcher.watchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
 
     const writeTexture = () =>
     {
@@ -206,7 +207,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
     webGLTexture.destroy = () =>
     {
-        watcher.unwatchs(texture, ["sources", "flipY", "generateMipmap", "premulAlpha", "internalformat", "format", "type"], updateTexture);
+        watcher.unwatchobject(texture, { pixelStore: { flipY: undefined, premulAlpha: undefined } }, updateTexture);
+        watcher.unwatchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
         watcher.unwatch(texture, "writeTextures", writeTexture);
     };
 
@@ -223,4 +225,19 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
     delete webGLTexture.destroy;
     //
     gl.deleteTexture(webGLTexture);
+}
+
+/**
+ * 设置像素解包打包时参数。
+ *
+ * @param gl
+ * @param pixelStore 像素解包打包时参数。
+ */
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
+{
+    const { flipY, premulAlpha } = { ...defaultTexturePixelStore, ...pixelStore };
+    //
+    // 设置图片y轴方向
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premulAlpha);
 }

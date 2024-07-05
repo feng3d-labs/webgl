@@ -61,18 +61,11 @@ export interface ITexture
     generateMipmap?: boolean;
 
     /**
-     * 对图像进行Y轴反转。
+     * 像素解包打包时参数。
      *
-     * 默认为 false。
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
      */
-    flipY?: boolean;
-
-    /**
-     * 将图像RGB颜色值得每一个分量乘以A。
-     *
-     * 默认为 false。
-     */
-    premulAlpha?: boolean;
+    pixelStore?: ITexturePixelStore;
 
     /**
      * 内部纹理格式。
@@ -265,6 +258,32 @@ export interface ITextureStorage
      * 3D纹理深度。
      */
     depth?: number
+}
+
+/**
+ * 像素解包打包时参数。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
+ */
+export interface ITexturePixelStore
+{
+    /**
+     * 对图像进行Y轴反转。
+     *
+     * gl.UNPACK_FLIP_Y_WEBGL
+     *
+     * 默认为 false。
+     */
+    flipY?: boolean;
+
+    /**
+     * 将图像RGB颜色值得每一个分量乘以A。
+     *
+     * gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
+     *
+     * 默认为 false。
+     */
+    premulAlpha?: boolean;
 }
 
 /**

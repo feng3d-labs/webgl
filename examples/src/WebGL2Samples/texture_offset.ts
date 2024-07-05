@@ -75,7 +75,9 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init Texture
         const texture: ITexture = {
             target: "TEXTURE_2D",
-            flipY: false,
+            pixelStore: {
+                flipY: false,
+            },
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
