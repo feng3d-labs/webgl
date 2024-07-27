@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { WebGL } from "../../../src";
+import { WebGL } from "@feng3d/webgl-renderer";
 import { IRenderPass } from "../../../src/data/IRenderPass";
 
 main();

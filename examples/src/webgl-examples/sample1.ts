@@ -1,7 +1,7 @@
 // see https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample1/webgl-demo.js
 // https://mdn.github.io/dom-examples/webgl-examples/tutorial/sample1/
 
-import { WebGL } from "../../../src";
+import { WebGL } from "@feng3d/webgl-renderer";
 
 function main()
 {

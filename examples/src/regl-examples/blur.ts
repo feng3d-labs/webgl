@@ -1,7 +1,7 @@
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 
-import { IRenderObject, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
 canvas.id = "glcanvas";

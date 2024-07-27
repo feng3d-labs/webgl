@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderingContext, IVertexArrayObject, ITexture, ISampler, IRenderPass, WebGL } from "../../../src";
+import { IVertexBuffer, IProgram, IRenderingContext, IVertexArrayObject, ITexture, ISampler, IRenderPass, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()

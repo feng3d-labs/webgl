@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");

@@ -1,4 +1,4 @@
-import { IRenderObject, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";

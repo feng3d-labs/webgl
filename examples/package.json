@@ -1,8 +1,5 @@
 {
-  "name": "@feng3d/renderer",
   "private": true,
-  "author": "feng",
-  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -14,6 +11,7 @@
     "vite": "^3.0.7"
   },
   "dependencies": {
-    "gl-matrix": "^3.4.3"
+    "gl-matrix": "^3.4.3",
+    "@feng3d/webgl-renderer": "^0.0.1"
   }
 }

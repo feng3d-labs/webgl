@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
 

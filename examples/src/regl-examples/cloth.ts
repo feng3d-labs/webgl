@@ -3,7 +3,7 @@ import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
 
-import { IRenderObject, ISamplerTexture, WebGL } from "../../../src";
+import { IRenderObject, ISamplerTexture, WebGL } from "@feng3d/webgl-renderer";
 (async () =>
 {
     const canvas = document.createElement("canvas");

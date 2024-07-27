@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IRenderPass, ISampler, ITexture, WebGL } from "../../../src";
+import { IRenderObject, IRenderPass, ISampler, ITexture, WebGL } from "@feng3d/webgl-renderer";
 import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 
 let cubeRotation = 0.0;

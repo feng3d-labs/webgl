@@ -1,4 +1,4 @@
-import { IRenderObject, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的

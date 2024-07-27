@@ -1,4 +1,4 @@
-import { IRenderObject, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
 import { createCamera } from "./util/camera";

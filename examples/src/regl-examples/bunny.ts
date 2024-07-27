@@ -1,4 +1,4 @@
-import { IRenderObject, WebGL } from "../../../src";
+import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 

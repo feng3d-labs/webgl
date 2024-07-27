@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "../../../src";
+import { IVertexBuffer, IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");

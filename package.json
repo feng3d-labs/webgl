@@ -1,6 +1,6 @@
 {
-  "name": "@feng3d/renderer",
-  "version": "0.9.0",
+  "name": "@feng3d/webgl-renderer",
+  "version": "0.0.1",
   "description": "渲染库",
   "author": "feng",
   "license": "MIT",
@@ -15,8 +15,8 @@
     }
   },
   "scripts": {
-    "clean": "rimraf \"{lib,dist,public}\"",
     "dev": "cd examples && npm run dev",
+    "clean": "rimraf \"{lib,dist,public}\"",
     "build": "vite build",
     "test": "vitest",
     "test:ui": "vitest --ui",

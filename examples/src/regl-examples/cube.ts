@@ -1,4 +1,4 @@
-import { IRenderObject, ITexture, WebGL } from "../../../src";
+import { IRenderObject, ITexture, WebGL } from "@feng3d/webgl-renderer";
 import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 import * as mat4 from "./stackgl/gl-mat4";
 

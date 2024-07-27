@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, ISampler, ITexture, WebGL } from "../../../src";
+import { IRenderObject, IRenderPipeline, ISampler, ITexture, WebGL } from "@feng3d/webgl-renderer";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
