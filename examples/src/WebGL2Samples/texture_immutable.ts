@@ -11,6 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     const Corners = {
         LEFT: 0,
@@ -136,16 +137,16 @@ import { getShaderSource, loadImage } from "./utility";
             viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w }
         });
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         // Delete WebGL resources
-        WebGL.deleteBuffer(rc, vertexPosBuffer);
-        WebGL.deleteBuffer(rc, vertexTexBuffer);
-        WebGL.deleteTexture(rc, texture2D);
-        WebGL.deleteTexture(rc, texture3D);
-        WebGL.deleteProgram(rc, program);
-        WebGL.deleteProgram(rc, program3D);
-        WebGL.deleteVertexArray(rc, vertexArray);
+        webgl.deleteBuffer(vertexPosBuffer);
+        webgl.deleteBuffer(vertexTexBuffer);
+        webgl.deleteTexture(texture2D);
+        webgl.deleteTexture(texture3D);
+        webgl.deleteProgram(program);
+        webgl.deleteProgram(program3D);
+        webgl.deleteVertexArray(vertexArray);
     });
 
     function create3DTexture()

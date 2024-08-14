@@ -5,7 +5,8 @@ import { WebGL } from "@feng3d/webgl-renderer";
 
 function main()
 {
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, {
+    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+    webgl.runRenderPass({
         passDescriptor: {
             colorAttachments: [{
                 clearValue: [1, 0, 0, 0.5],

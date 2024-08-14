@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,8 +7,8 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const gl = canvas.getContext("webgl2", { antialias: false });
 const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
 
@@ -173,15 +173,15 @@ for (let i = 0; i < Textures.MAX; ++i)
     );
 }
 
-WebGL.runRenderPass(renderingContext, renderPass1);
-WebGL.runRenderPass(renderingContext, renderPass);
+webgl.runRenderPass(renderPass1);
+webgl.runRenderPass(renderPass);
 
 // Clean up
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
-WebGL.deleteVertexArray(renderingContext, multipleOutputVertexArray);
-WebGL.deleteVertexArray(renderingContext, layerVertexArray);
-WebGL.deleteFramebuffer(renderingContext, frameBuffer);
-WebGL.deleteTexture(renderingContext, texture);
-WebGL.deleteProgram(renderingContext, multipleOutputProgram);
-WebGL.deleteProgram(renderingContext, layerProgram);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteBuffer(vertexTexBuffer);
+webgl.deleteVertexArray(multipleOutputVertexArray);
+webgl.deleteVertexArray(layerVertexArray);
+webgl.deleteFramebuffer(frameBuffer);
+webgl.deleteTexture(texture);
+webgl.deleteProgram(multipleOutputProgram);
+webgl.deleteProgram(layerProgram);

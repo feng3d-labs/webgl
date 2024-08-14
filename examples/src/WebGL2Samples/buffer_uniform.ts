@@ -12,6 +12,7 @@ import { getShaderSource } from "./utility";
 
     // --Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init Program
     const program: IProgram = {
@@ -106,7 +107,7 @@ import { getShaderSource } from "./utility";
         lightPos[1] = Math.sin(6 * uTime);
         uniformPerPassBuffer.writeBuffers = [{ bufferOffset: 0, data: lightPos }];
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

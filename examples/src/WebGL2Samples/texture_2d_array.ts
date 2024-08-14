@@ -10,6 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: IProgram = {
@@ -103,7 +104,7 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Render
             ro.uniforms.layer = frame;
-            WebGL.runRenderPass(rc, rp);
+            webgl.runRenderPass(rp);
 
             frame = (frame + 1) % NUM_IMAGES;
 

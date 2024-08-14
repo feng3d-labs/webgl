@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,8 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
 
@@ -140,7 +141,7 @@ const rp1: IRenderPass = {
         drawArrays: { vertexCount: 6 },
     }],
 };
-WebGL.runRenderPass(renderingContext, rp1);
+webgl.runRenderPass(rp1);
 
 // Pass 2
 const rp: IRenderPass = {
@@ -167,19 +168,19 @@ for (let i = 0; i < Textures.MAX; ++i)
         uniforms: { ...ro.uniforms, layer: i },
     });
 }
-WebGL.runRenderPass(renderingContext, rp);
+webgl.runRenderPass(rp);
 
 const data = new Uint8Array(w * h * 4 * 3);
 
-WebGL.runReadPixels(renderingContext, {
+webgl.runReadPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT0",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: 0
 });
-WebGL.runReadPixels(renderingContext, {
+webgl.runReadPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4
 });
-WebGL.runReadPixels(renderingContext, {
+webgl.runReadPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4 * 2
 });
@@ -187,12 +188,12 @@ WebGL.runReadPixels(renderingContext, {
 console.log(data);
 
 // Clean up
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
-WebGL.deleteVertexArray(renderingContext, multipleOutputVertexArray);
-WebGL.deleteVertexArray(renderingContext, layerVertexArray);
-WebGL.deleteFramebuffer(renderingContext, frameBuffer);
-WebGL.deleteTexture(renderingContext, texture);
-WebGL.deleteProgram(renderingContext, multipleOutputProgram);
-WebGL.deleteProgram(renderingContext, layerProgram);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteBuffer(vertexTexBuffer);
+webgl.deleteVertexArray(multipleOutputVertexArray);
+webgl.deleteVertexArray(layerVertexArray);
+webgl.deleteFramebuffer(frameBuffer);
+webgl.deleteTexture(texture);
+webgl.deleteProgram(multipleOutputProgram);
+webgl.deleteProgram(layerProgram);
 

@@ -12,6 +12,7 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
     {
@@ -179,7 +180,7 @@ import { getShaderSource } from "./utility";
         renderRO.viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
         renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

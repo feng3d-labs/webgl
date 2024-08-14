@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBlitFramebuffer, IBlitFramebufferItem, IBuffer, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, WebGL } from "@feng3d/webgl-renderer";
+import { IBlitFramebuffer, IBlitFramebufferItem, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,8 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const canvasContext: IRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
 
 const program: IRenderPipeline = {
     primitive: { topology: "TRIANGLES" },
@@ -187,18 +188,18 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // 执行
-    WebGL.runRenderPass(canvasContext, fboRenderPass);
-    WebGL.runBlitFramebuffer(canvasContext, blitFramebuffer);
-    WebGL.runRenderPass(canvasContext, renderPass2);
+    webgl.runRenderPass(fboRenderPass);
+    webgl.runBlitFramebuffer(blitFramebuffer);
+    webgl.runRenderPass(renderPass2);
 
     // Delete WebGL resources
-    WebGL.deleteFramebuffer(canvasContext, fboRenderPass.passDescriptor);
-    WebGL.deleteFramebuffer(canvasContext, framebufferResolve);
-    WebGL.deleteRenderbuffer(canvasContext, colorRenderbuffer);
-    WebGL.deleteBuffer(canvasContext, vertexPosBuffer);
-    WebGL.deleteBuffer(canvasContext, vertexTexBuffer);
-    WebGL.deleteTexture(canvasContext, textureDiffuse);
-    WebGL.deleteTexture(canvasContext, textureColorBuffer);
-    WebGL.deleteProgram(canvasContext, program);
-    WebGL.deleteVertexArray(canvasContext, vertexArray);
+    webgl.deleteFramebuffer(fboRenderPass.passDescriptor);
+    webgl.deleteFramebuffer(framebufferResolve);
+    webgl.deleteRenderbuffer(colorRenderbuffer);
+    webgl.deleteBuffer(vertexPosBuffer);
+    webgl.deleteBuffer(vertexTexBuffer);
+    webgl.deleteTexture(textureDiffuse);
+    webgl.deleteTexture(textureColorBuffer);
+    webgl.deleteProgram(program);
+    webgl.deleteVertexArray(vertexArray);
 });

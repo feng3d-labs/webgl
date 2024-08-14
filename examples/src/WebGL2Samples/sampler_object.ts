@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,8 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas" };
+const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Initialize program
 
@@ -105,14 +106,14 @@ function render()
             drawArrays: { vertexCount: 6, instanceCount: 1 },
         }],
     };
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // Cleanup
-    WebGL.deleteBuffer(rc, vertexPosBuffer);
-    WebGL.deleteBuffer(rc, vertexTexBuffer);
-    WebGL.deleteSampler(rc, samplerA);
-    WebGL.deleteSampler(rc, samplerB);
-    WebGL.deleteVertexArray(rc, vertexArray);
-    WebGL.deleteTexture(rc, texture);
-    WebGL.deleteProgram(rc, program);
+    webgl.deleteBuffer(vertexPosBuffer);
+    webgl.deleteBuffer(vertexTexBuffer);
+    webgl.deleteSampler(samplerA);
+    webgl.deleteSampler(samplerB);
+    webgl.deleteVertexArray(vertexArray);
+    webgl.deleteTexture(texture);
+    webgl.deleteProgram(program);
 }

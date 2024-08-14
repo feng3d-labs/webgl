@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IRenderObject, IRenderPass, IRenderPipeline, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IRenderObject, IRenderPass, IRenderPipeline, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -7,6 +7,9 @@ canvas.id = "glcanvas";
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
+
+const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
 
 const vertexPosBuffer: IVertexBuffer = {
     target: "ARRAY_BUFFER",
@@ -70,10 +73,8 @@ const data: IRenderPass = {
     ],
 };
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+webgl.runRenderPass(data);
 
-WebGL.runRenderPass(renderingContext, data);
-
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteProgram(renderingContext, pipeline);
-WebGL.deleteVertexArray(renderingContext, vertexArray);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteProgram(pipeline);
+webgl.deleteVertexArray(vertexArray);

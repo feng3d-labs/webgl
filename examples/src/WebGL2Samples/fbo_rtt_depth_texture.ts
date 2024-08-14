@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,12 +7,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
-const gl = canvas.getContext("webgl2", { antialias: false });
+const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const webgl = new WebGL(renderingContext);
 
 const windowSize = {
-    x: gl.drawingBufferWidth,
-    y: gl.drawingBufferHeight
+    x: canvas.width,
+    y: canvas.height
 };
 
 // -- Initialize program
@@ -105,7 +105,7 @@ const renderPass: IRenderPass = {
     }],
 
 };
-WebGL.runRenderPass(renderingContext, renderPass);
+webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw
 const rp2: IRenderPass = {
@@ -119,16 +119,16 @@ const rp2: IRenderPass = {
         drawArrays: { vertexCount: 6 },
     }],
 };
-WebGL.runRenderPass(renderingContext, rp2);
+webgl.runRenderPass(rp2);
 
 // Clean up
-WebGL.deleteBuffer(renderingContext, triVertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, quadVertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, quadVertexTexBuffer);
-WebGL.deleteVertexArray(renderingContext, triVertexArray);
-WebGL.deleteVertexArray(renderingContext, quadVertexArray);
-WebGL.deleteFramebuffer(renderingContext, frameBuffer);
-WebGL.deleteTexture(renderingContext, depthTexture);
-WebGL.deleteProgram(renderingContext, depthProgram);
-WebGL.deleteProgram(renderingContext, drawProgram);
+webgl.deleteBuffer(triVertexPosBuffer);
+webgl.deleteBuffer(quadVertexPosBuffer);
+webgl.deleteBuffer(quadVertexTexBuffer);
+webgl.deleteVertexArray(triVertexArray);
+webgl.deleteVertexArray(quadVertexArray);
+webgl.deleteFramebuffer(frameBuffer);
+webgl.deleteTexture(depthTexture);
+webgl.deleteProgram(depthProgram);
+webgl.deleteProgram(drawProgram);
 

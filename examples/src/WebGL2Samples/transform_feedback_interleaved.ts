@@ -12,6 +12,7 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     // -- Init Program
     const PROGRAM_TRANSFORM = 0;
@@ -107,14 +108,14 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: VERTEX_COUNT },
     });
 
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // -- Delete WebGL resources
-    WebGL.deleteTransformFeedback(rc, transformFeedback);
-    WebGL.deleteBuffer(rc, buffers[PROGRAM_TRANSFORM]);
-    WebGL.deleteBuffer(rc, buffers[PROGRAM_FEEDBACK]);
-    WebGL.deleteProgram(rc, programs[PROGRAM_TRANSFORM]);
-    WebGL.deleteProgram(rc, programs[PROGRAM_FEEDBACK]);
-    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_TRANSFORM]);
-    WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM_FEEDBACK]);
+    webgl.deleteTransformFeedback(transformFeedback);
+    webgl.deleteBuffer(buffers[PROGRAM_TRANSFORM]);
+    webgl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
+    webgl.deleteProgram(programs[PROGRAM_TRANSFORM]);
+    webgl.deleteProgram(programs[PROGRAM_FEEDBACK]);
+    webgl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
+    webgl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
 })();

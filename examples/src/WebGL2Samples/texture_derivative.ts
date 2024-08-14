@@ -1,5 +1,5 @@
+import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -11,6 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: IProgram = {
@@ -238,7 +239,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.pMatrix = perspectiveMatrix;
         ro.uniforms.diffuse = { texture, sampler };
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

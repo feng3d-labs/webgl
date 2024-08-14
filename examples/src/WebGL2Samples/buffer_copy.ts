@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, ICopyBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { ICopyBuffer, IRenderPass, IRenderPipeline, IRenderingContext, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,9 +12,10 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IProgram = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         primitive: { topology: "TRIANGLES" },
     };
@@ -37,7 +38,7 @@ import { getShaderSource } from "./utility";
         write: vertexPosBufferDst,
         readOffset: 0, writeOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
     };
-    WebGL.runCopyBuffer(rc, cb);
+    webgl.runCopyBuffer(cb);
 
     // -- Init Vertex Array
     const vertexArray: IVertexArrayObject = {
@@ -55,11 +56,11 @@ import { getShaderSource } from "./utility";
             drawArrays: { vertexCount: 6 },
         }]
     };
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // -- Delete WebGL resources
-    WebGL.deleteBuffer(rc, vertexPosBufferSrc);
-    WebGL.deleteBuffer(rc, vertexPosBufferDst);
-    WebGL.deleteProgram(rc, program);
-    WebGL.deleteVertexArray(rc, vertexArray);
+    webgl.deleteBuffer(vertexPosBufferSrc);
+    webgl.deleteBuffer(vertexPosBufferDst);
+    webgl.deleteProgram(program);
+    webgl.deleteVertexArray(vertexArray);
 })();

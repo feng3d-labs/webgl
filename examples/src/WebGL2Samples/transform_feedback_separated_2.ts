@@ -12,6 +12,7 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
     {
@@ -147,7 +148,7 @@ import { getShaderSource } from "./utility";
 
         ro.uniforms.u_time = time;
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

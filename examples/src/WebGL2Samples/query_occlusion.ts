@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -10,6 +10,7 @@ document.body.appendChild(canvas);
 
 // -- Init WebGL Context
 const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Init Program
 const program: IProgram = {
@@ -64,14 +65,14 @@ rp.renderObjects.push({
 
 rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
 
-WebGL.runRenderPass(rc, rp);
+webgl.runRenderPass(rp);
 
-WebGL.getQueryResult(rc, query).then((samplesPassed) =>
+webgl.getQueryResult(query).then((samplesPassed) =>
 {
     document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
 });
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(rc, vertexPosBuffer);
-WebGL.deleteProgram(rc, program);
-WebGL.deleteVertexArray(rc, vertexArray);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteProgram(program);
+webgl.deleteVertexArray(vertexArray);

@@ -12,6 +12,7 @@ import { getShaderSource } from "./utility";
 
     // -- Init WebGL Context
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
@@ -117,7 +118,7 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: VERTEX_COUNT },
     });
 
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // -- Delete WebGL resources
     // gl.deleteTransformFeedback(transformFeedback);

@@ -8,6 +8,7 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Init program
 const program: IProgram = {
@@ -76,12 +77,12 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             drawArrays: { vertexCount: 6 },
         }]
     };
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // Delete WebGL resources
-    WebGL.deleteBuffer(rc, vertexPosBuffer);
-    WebGL.deleteBuffer(rc, vertexTexBuffer);
-    WebGL.deleteTexture(rc, texture);
-    WebGL.deleteProgram(rc, program);
-    WebGL.deleteVertexArray(rc, vertexArray);
+    webgl.deleteBuffer(vertexPosBuffer);
+    webgl.deleteBuffer(vertexTexBuffer);
+    webgl.deleteTexture(texture);
+    webgl.deleteProgram(program);
+    webgl.deleteVertexArray(vertexArray);
 });

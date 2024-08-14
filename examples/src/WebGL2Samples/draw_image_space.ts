@@ -8,6 +8,9 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
+const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
+
 loadImage("../../assets/img/Di-3d.png", (img) =>
 {
     const texture: ITexture = {
@@ -47,9 +50,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
 
-    const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
-
-    WebGL.runRenderPass(renderingContext, {
+    webgl.runRenderPass({
         passDescriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -60,8 +61,8 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     });
 
     // Delete WebGL resources
-    WebGL.deleteTexture(renderingContext, texture);
-    WebGL.deleteProgram(renderingContext, program);
+    webgl.deleteTexture(texture);
+    webgl.deleteProgram(program);
 });
 
 function loadImage(url: string, onload: (img: HTMLImageElement) => void)

@@ -1,5 +1,5 @@
+import { IBlitFramebuffer, IPassDescriptor, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IBlitFramebuffer, IBuffer, IPassDescriptor, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -9,6 +9,7 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(renderingContext);
 
 // -- Init program
 const PROGRAM = {
@@ -121,7 +122,7 @@ const renderPass1: IRenderPass = {
     }]
 };
 
-WebGL.runRenderPass(renderingContext, renderPass1);
+webgl.runRenderPass(renderPass1);
 
 // Blit framebuffers, no Multisample texture 2d in WebGL 2
 const blitFramebuffer: IBlitFramebuffer = {
@@ -131,7 +132,7 @@ const blitFramebuffer: IBlitFramebuffer = {
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
         "COLOR_BUFFER_BIT", "NEAREST"]],
 };
-WebGL.runBlitFramebuffer(renderingContext, blitFramebuffer);
+webgl.runBlitFramebuffer(blitFramebuffer);
 
 // Pass 2
 
@@ -151,17 +152,17 @@ const renderPass2: IRenderPass = {
         }
     ],
 };
-WebGL.runRenderPass(renderingContext, renderPass2);
+webgl.runRenderPass(renderPass2);
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(renderingContext, vertexDataBuffer);
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, vertexTexBuffer);
-WebGL.deleteTexture(renderingContext, texture);
-WebGL.deleteRenderbuffer(renderingContext, colorRenderbuffer);
-WebGL.deleteFramebuffer(renderingContext, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-WebGL.deleteFramebuffer(renderingContext, framebuffers[FRAMEBUFFER.COLORBUFFER]);
-WebGL.deleteVertexArray(renderingContext, vertexArrays[PROGRAM.TEXTURE]);
-WebGL.deleteVertexArray(renderingContext, vertexArrays[PROGRAM.SPLASH]);
-WebGL.deleteProgram(renderingContext, programs[PROGRAM.TEXTURE]);
-WebGL.deleteProgram(renderingContext, programs[PROGRAM.SPLASH]);
+webgl.deleteBuffer(vertexDataBuffer);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteBuffer(vertexTexBuffer);
+webgl.deleteTexture(texture);
+webgl.deleteRenderbuffer(colorRenderbuffer);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
+webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
+webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
+webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
+webgl.deleteProgram(programs[PROGRAM.SPLASH]);

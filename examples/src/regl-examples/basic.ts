@@ -16,6 +16,8 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
+const webgl = new WebGL({ canvasId: "glcanvas" });
+
 const renderObject: IRenderObject = {
     vertexArray: {
         vertices: {
@@ -60,7 +62,7 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas" }, {
+    webgl.runRenderPass({
         renderObjects: [renderObject]
     });
 

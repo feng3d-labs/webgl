@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderingContext, IVertexArrayObject, ITexture, ISampler, IRenderPass, WebGL } from "@feng3d/webgl-renderer";
+import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,6 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
@@ -85,13 +86,13 @@ import { getShaderSource, loadImage } from "./utility";
             ],
         };
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         // Delete WebGL resources
-        WebGL.deleteBuffer(rc, vertexPosBuffer);
-        WebGL.deleteBuffer(rc, vertexTexBuffer);
-        WebGL.deleteTexture(rc, texture);
-        WebGL.deleteProgram(rc, program);
-        WebGL.deleteVertexArray(rc, vertexArray);
+        webgl.deleteBuffer(vertexPosBuffer);
+        webgl.deleteBuffer(vertexTexBuffer);
+        webgl.deleteTexture(texture);
+        webgl.deleteProgram(program);
+        webgl.deleteVertexArray(vertexArray);
     });
 })();

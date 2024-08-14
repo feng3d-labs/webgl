@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { IRenderingContext } from "../../../src/data/IRenderingContext";
 import { getShaderSource } from "./utility";
 
@@ -7,6 +7,9 @@ canvas.id = "glcanvas";
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
+
+const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
 
 // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.18
 // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
@@ -54,9 +57,7 @@ const renderObject: IRenderObject = {
     pipeline: program,
 };
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
-
-WebGL.runRenderPass(renderingContext, {
+webgl.runRenderPass({
     passDescriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -67,7 +68,7 @@ WebGL.runRenderPass(renderingContext, {
 });
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, vertexElementBuffer);
-WebGL.deleteProgram(renderingContext, program);
-WebGL.deleteVertexArray(renderingContext, vertexArray);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteBuffer(vertexElementBuffer);
+webgl.deleteProgram(program);
+webgl.deleteVertexArray(vertexArray);

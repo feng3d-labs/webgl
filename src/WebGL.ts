@@ -36,6 +36,15 @@ import { deleteVertexArray } from "./runs/runVertexArray";
  */
 export class WebGL
 {
+    private _renderingContext: IRenderingContext;
+    private _gl: WebGLRenderingContext;
+
+    constructor(renderingContext: IRenderingContext)
+    {
+        this._renderingContext = renderingContext;
+        this._gl = getRenderingContext(this._renderingContext);
+    }
+
     /**
      * 提交一次渲染通道数据。
      *
@@ -43,12 +52,9 @@ export class WebGL
      * @param renderPass 渲染通道数据。
      * @returns
      */
-    static runRenderPass(renderingContext: IRenderingContext, renderPass: IRenderPass)
+    runRenderPass(renderPass: IRenderPass)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runRenderPass(gl, renderPass);
+        runRenderPass(this._gl, renderPass);
     }
 
     /**
@@ -56,107 +62,68 @@ export class WebGL
      *
      * @param renderObject 渲染原子，包含渲染所需的所有数据。
      */
-    static runRenderObject(renderingContext: IRenderingContext, renderObject: IRenderObject)
+    runRenderObject(renderObject: IRenderObject)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runRenderObject(gl, renderObject);
+        runRenderObject(this._gl, renderObject);
     }
 
-    static runBlitFramebuffer(renderingContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)
+    runBlitFramebuffer(blitFramebuffer: IBlitFramebuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runBlitFramebuffer(gl, blitFramebuffer);
+        runBlitFramebuffer(this._gl, blitFramebuffer);
     }
 
-    static runCopyBuffer(renderingContext: IRenderingContext, copyBuffer: ICopyBuffer)
+    runCopyBuffer(copyBuffer: ICopyBuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runCopyBuffer(gl, copyBuffer);
+        runCopyBuffer(this._gl, copyBuffer);
     }
 
-    static runReadPixels(renderingContext: IRenderingContext, readPixels: IReadPixels)
+    runReadPixels(readPixels: IReadPixels)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runReadPixels(gl, readPixels);
+        runReadPixels(this._gl, readPixels);
     }
 
-    static deleteFramebuffer(renderingContext: IRenderingContext, passDescriptor: IPassDescriptor)
+    deleteFramebuffer(passDescriptor: IPassDescriptor)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteFramebuffer(gl, passDescriptor);
+        deleteFramebuffer(this._gl, passDescriptor);
     }
 
-    static deleteRenderbuffer(renderingContext: IRenderingContext, renderbuffer: IRenderbuffer)
+    deleteRenderbuffer(renderbuffer: IRenderbuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteRenderbuffer(gl, renderbuffer);
+        deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    static deleteBuffer(renderingContext: IRenderingContext, buffer: IBuffer)
+    deleteBuffer(buffer: IBuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteBuffer(gl, buffer);
+        deleteBuffer(this._gl, buffer);
     }
 
-    static deleteTexture(renderingContext: IRenderingContext, texture: ITexture)
+    deleteTexture(texture: ITexture)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteTexture(gl, texture);
+        deleteTexture(this._gl, texture);
     }
 
-    static deleteSampler(renderingContext: IRenderingContext, sampler: ISampler)
+    deleteSampler(sampler: ISampler)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteSampler(gl, sampler);
+        deleteSampler(this._gl, sampler);
     }
 
-    static deleteProgram(renderingContext: IRenderingContext, pipeline: IRenderPipeline)
+    deleteProgram(pipeline: IRenderPipeline)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteProgram(gl, pipeline);
+        deleteProgram(this._gl, pipeline);
     }
 
-    static deleteVertexArray(renderingContext: IRenderingContext, vertexArray: IVertexArrayObject)
+    deleteVertexArray(vertexArray: IVertexArrayObject)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteVertexArray(gl, vertexArray);
+        deleteVertexArray(this._gl, vertexArray);
     }
 
-    static deleteTransformFeedback(renderingContext: IRenderingContext, transformFeedback: ITransformFeedback)
+    deleteTransformFeedback(transformFeedback: ITransformFeedback)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteTransformFeedback(gl, transformFeedback);
+        deleteTransformFeedback(this._gl, transformFeedback);
     }
 
-    static getQueryResult(renderingContext: IRenderingContext, query: IQuery)
+    getQueryResult(query: IQuery)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        return getQueryResult(gl, query);
+        return getQueryResult(this._gl, query);
     }
 }

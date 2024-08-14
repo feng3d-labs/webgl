@@ -1,5 +1,5 @@
-import { mat4, vec3 } from "gl-matrix";
 import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -11,7 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: IProgram = {
@@ -216,11 +216,6 @@ import { getShaderSource, loadImage } from "./utility";
 
     function render()
     {
-        // -- Render
-        gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.BACK);
-
         orientation[0] = 0.00020; // yaw
         orientation[1] = 0.00010; // pitch
         orientation[2] = 0.00005; // roll
@@ -233,7 +228,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.pMatrix = perspectiveMatrix;
         ro.uniforms.diffuse = { texture, sampler };
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

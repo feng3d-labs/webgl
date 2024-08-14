@@ -1,11 +1,12 @@
+import { WebGL, IRenderObject, IVertexArrayObject, IRenderPipeline } from "@feng3d/webgl-renderer";
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
-
-import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
 
 const canvas = document.body.appendChild(document.createElement("canvas"));
 canvas.id = "glcanvas";
 window.addEventListener("resize", fit(canvas), false);
+
+const webgl = new WebGL({ canvasId: "glcanvas" });
 
 const camera = attachCamera(canvas);
 
@@ -28,52 +29,61 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const renderObject: IRenderObject = {
-    vertexArray: {
-        vertices: {
-            position: {
-                buffer: {
-                    target: "ARRAY_BUFFER",
-                    data: new Float32Array([
-                        0.5, 0,
-                        0, 0.5,
-                        1, 1
-                    ])
-                }, numComponents: 2
-            },
-        }
-    },
-    uniforms: {
-        color: () => [
-            Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
-            Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
-            Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
-            1],
-        angle: () => 0.01 * tick,
-        offset: () => offsets[batchId].offset,
-    },
-    pipeline: {
-        vertex: {
-            code: `precision mediump float;
-        attribute vec2 position;
-        uniform float angle;
-        uniform vec2 offset;
-        void main() {
-          gl_Position = vec4(
-            cos(angle) * position.x + sin(angle) * position.y + offset.x,
-            -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
-        }` },
-        fragment: {
-            code: `precision mediump float;
-        uniform vec4 color;
-        void main() {
-          gl_FragColor = color;
-        }`,
-            targets: [{ blend: {} }],
+const vertexArray: IVertexArrayObject = {
+    vertices: {
+        position: {
+            buffer: {
+                target: "ARRAY_BUFFER",
+                data: new Float32Array([
+                    0.5, 0,
+                    0, 0.5,
+                    1, 1
+                ])
+            }, numComponents: 2
         },
-        depthStencil: { depth: { depthtest: true } },
     }
 };
+
+const pipeline: IRenderPipeline = {
+    vertex: {
+        code: `precision mediump float;
+    attribute vec2 position;
+    uniform float angle;
+    uniform vec2 offset;
+    void main() {
+      gl_Position = vec4(
+        cos(angle) * position.x + sin(angle) * position.y + offset.x,
+        -sin(angle) * position.x + cos(angle) * position.y + offset.y, 0, 1);
+    }` },
+    fragment: {
+        code: `precision mediump float;
+    uniform vec4 color;
+    void main() {
+      gl_FragColor = color;
+    }`,
+        targets: [{ blend: {} }],
+    },
+    depthStencil: { depth: { depthtest: true } },
+};
+
+function getRenderObject(tick: number, batchId: number)
+{
+    const renderObject: IRenderObject = {
+        vertexArray,
+        uniforms: {
+            color: () => [
+                Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
+                Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
+                Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
+                1],
+            angle: () => 0.01 * tick,
+            offset: () => offsets[batchId].offset,
+        },
+        pipeline,
+    };
+
+    return renderObject;
+}
 
 function draw()
 {
@@ -81,11 +91,14 @@ function draw()
     canvas.height = canvas.clientHeight;
 
     tick++;
+    const renderObjects: IRenderObject[] = [];
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderObject);
+        renderObjects.push(getRenderObject(tick, batchId));
     }
+
+    webgl.runRenderPass({ renderObjects });
 
     requestAnimationFrame(draw);
 }

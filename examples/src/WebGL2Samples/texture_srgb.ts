@@ -10,6 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     // -- Initialize program
 
@@ -90,13 +91,13 @@ import { getShaderSource, loadImage } from "./utility";
             },
             drawArrays: { vertexCount: 6 },
         });
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         // Cleanup
-        WebGL.deleteBuffer(rc, vertexPosBuffer);
-        WebGL.deleteBuffer(rc, vertexTexBuffer);
-        WebGL.deleteVertexArray(rc, vertexArray);
-        WebGL.deleteTexture(rc, texture);
-        WebGL.deleteProgram(rc, program);
+        webgl.deleteBuffer(vertexPosBuffer);
+        webgl.deleteBuffer(vertexTexBuffer);
+        webgl.deleteVertexArray(vertexArray);
+        webgl.deleteTexture(texture);
+        webgl.deleteProgram(program);
     }
 })();

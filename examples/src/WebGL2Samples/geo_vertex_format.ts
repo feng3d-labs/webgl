@@ -1,5 +1,5 @@
-import { mat4, vec3 } from "gl-matrix";
 import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -12,6 +12,7 @@ import { getShaderSource, loadImage } from "./utility";
     document.body.appendChild(canvas);
 
     const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: IProgram = {
@@ -241,7 +242,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.u_viewProj = viewProj;
         ro.uniforms.s_tex2D = { texture, sampler };
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
 

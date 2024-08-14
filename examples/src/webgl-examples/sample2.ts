@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
-import { WebGL } from "@feng3d/webgl-renderer";
 import { IRenderPass } from "../../../src/data/IRenderPass";
+import { WebGL } from "@feng3d/webgl-renderer";
 
 main();
 
@@ -9,6 +9,8 @@ function main()
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
+
+    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
     const renderPasss: IRenderPass = {
         passDescriptor: {
@@ -65,7 +67,7 @@ function main()
         }],
     };
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 }
 
 function drawScene(canvas: HTMLCanvasElement)

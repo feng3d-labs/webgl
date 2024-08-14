@@ -1,5 +1,5 @@
+import { IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
 
@@ -10,6 +10,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Divide viewport
 const canvasSize = {
@@ -181,7 +182,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 }
             }
         }
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     })();

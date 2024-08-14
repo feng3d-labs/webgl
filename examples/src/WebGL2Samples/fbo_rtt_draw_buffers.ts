@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,6 +8,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
 
 const windowSize = {
     x: canvas.width,
@@ -111,7 +112,7 @@ const renderPass: IRenderPass = {
         drawArrays: { vertexCount: 3 },
     }],
 };
-WebGL.runRenderPass(renderingContext, renderPass);
+webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw to screen
 const renderPass2: IRenderPass = {
@@ -126,17 +127,17 @@ const renderPass2: IRenderPass = {
         drawArrays: { vertexCount: 6 },
     }],
 };
-WebGL.runRenderPass(renderingContext, renderPass2);
+webgl.runRenderPass(renderPass2);
 
 // Clean up
-WebGL.deleteBuffer(renderingContext, triVertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, quadVertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, quadVertexTexBuffer);
-WebGL.deleteVertexArray(renderingContext, triVertexArray);
-WebGL.deleteVertexArray(renderingContext, quadVertexArray);
-WebGL.deleteFramebuffer(renderingContext, frameBuffer);
-WebGL.deleteTexture(renderingContext, color1Texture);
-WebGL.deleteTexture(renderingContext, color2Texture);
-WebGL.deleteProgram(renderingContext, drawBufferProgram);
-WebGL.deleteProgram(renderingContext, drawProgram);
+webgl.deleteBuffer(triVertexPosBuffer);
+webgl.deleteBuffer(quadVertexPosBuffer);
+webgl.deleteBuffer(quadVertexTexBuffer);
+webgl.deleteVertexArray(triVertexArray);
+webgl.deleteVertexArray(quadVertexArray);
+webgl.deleteFramebuffer(frameBuffer);
+webgl.deleteTexture(color1Texture);
+webgl.deleteTexture(color2Texture);
+webgl.deleteProgram(drawBufferProgram);
+webgl.deleteProgram(drawProgram);
 
