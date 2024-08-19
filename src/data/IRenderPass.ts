@@ -12,7 +12,7 @@ export class IRenderPass
     /**
      * WebGL渲染通道描述
      */
-    passDescriptor?: IPassDescriptor;
+    descriptor?: IPassDescriptor;
 
     /**
      * 渲染对象列表，默认为 []。

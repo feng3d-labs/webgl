@@ -5,7 +5,7 @@ import { runRenderObject } from "./runRenderObject";
 
 export function runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
 {
-    runPassDescriptor(gl, renderPass.passDescriptor);
+    runPassDescriptor(gl, renderPass.descriptor);
 
     renderPass.renderObjects?.forEach((renderObject) =>
     {
