@@ -42,7 +42,7 @@ const uniformMaterialBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: 
 
 // -- Render
 const rp: IRenderPass = {
-    passDescriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
+    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: program,
         vertexArray: {

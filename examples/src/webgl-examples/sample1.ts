@@ -7,7 +7,7 @@ function main()
 {
     const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
     webgl.runRenderPass({
-        passDescriptor: {
+        descriptor: {
             colorAttachments: [{
                 clearValue: [1, 0, 0, 0.5],
                 loadOp: "clear",

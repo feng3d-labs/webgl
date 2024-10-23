@@ -111,7 +111,7 @@ function main()
   };
 
   const renderPasss: IRenderPass = {
-    passDescriptor: {
+    descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
         loadOp: "clear",

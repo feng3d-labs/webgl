@@ -111,7 +111,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     // Render FBO
     const fboRenderPass: IRenderPass = {
-        passDescriptor: {
+        descriptor: {
             colorAttachments: [{
                 view: colorRenderbuffer,
                 clearValue: [0.3, 0.3, 0.3, 1.0]
@@ -129,7 +129,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     //
     const renderPassResolve: IRenderPass = {
-        passDescriptor: framebufferResolve,
+        descriptor: framebufferResolve,
     };
 
     const blitFramebuffers: IBlitFramebufferItem[] = [];
@@ -156,8 +156,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     }
 
     const blitFramebuffer: IBlitFramebuffer = {
-        read: fboRenderPass.passDescriptor,
-        draw: renderPassResolve.passDescriptor,
+        read: fboRenderPass.descriptor,
+        draw: renderPassResolve.descriptor,
         blitFramebuffers,
     };
 
@@ -178,7 +178,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const renderPass2: IRenderPass = {
-        passDescriptor: {
+        descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
                 loadOp: "clear",
@@ -193,7 +193,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     webgl.runRenderPass(renderPass2);
 
     // Delete WebGL resources
-    webgl.deleteFramebuffer(fboRenderPass.passDescriptor);
+    webgl.deleteFramebuffer(fboRenderPass.descriptor);
     webgl.deleteFramebuffer(framebufferResolve);
     webgl.deleteRenderbuffer(colorRenderbuffer);
     webgl.deleteBuffer(vertexPosBuffer);

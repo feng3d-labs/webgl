@@ -97,7 +97,7 @@ const frameBuffer: IFramebuffer = {
 
 // Pass 1: Depth
 const renderPass: IRenderPass = {
-    passDescriptor: frameBuffer,
+    descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
         vertexArray: triVertexArray,
@@ -109,7 +109,7 @@ webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw
 const rp2: IRenderPass = {
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects: [{

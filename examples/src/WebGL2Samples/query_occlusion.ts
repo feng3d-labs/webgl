@@ -42,7 +42,7 @@ const query: IQuery = {};
 
 // -- Render
 const rp: IRenderPass = {
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },

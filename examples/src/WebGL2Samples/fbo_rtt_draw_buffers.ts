@@ -105,7 +105,7 @@ const frameBuffer: IFramebuffer = {
 // -- Render
 
 const renderPass: IRenderPass = {
-    passDescriptor: frameBuffer,
+    descriptor: frameBuffer,
     renderObjects: [{
         pipeline: drawBufferProgram,
         vertexArray: triVertexArray,
@@ -116,7 +116,7 @@ webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw to screen
 const renderPass2: IRenderPass = {
-    passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: drawProgram,
         uniforms: {

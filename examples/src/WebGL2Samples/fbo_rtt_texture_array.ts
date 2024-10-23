@@ -134,7 +134,7 @@ const matrix = new Float32Array([
 ]);
 
 const renderPass1: IRenderPass = {
-    passDescriptor: frameBuffer,
+    descriptor: frameBuffer,
     renderObjects: [{
         pipeline: multipleOutputProgram,
         uniforms: { mvp: matrix },
@@ -147,7 +147,7 @@ const renderPass1: IRenderPass = {
 // Pass 2
 
 const renderPass: IRenderPass = {
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects: [],

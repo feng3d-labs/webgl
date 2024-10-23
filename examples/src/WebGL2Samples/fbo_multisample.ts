@@ -113,7 +113,7 @@ const IDENTITY = mat4.create();
 
 // Pass 1
 const renderPass1: IRenderPass = {
-    passDescriptor: framebuffers[FRAMEBUFFER.RENDERBUFFER],
+    descriptor: framebuffers[FRAMEBUFFER.RENDERBUFFER],
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
         vertexArray: vertexArrays[PROGRAM.TEXTURE],
@@ -142,7 +142,7 @@ const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
 const renderPass2: IRenderPass = {
-    passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],

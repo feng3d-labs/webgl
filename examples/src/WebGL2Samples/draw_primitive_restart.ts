@@ -58,7 +58,7 @@ const renderObject: IRenderObject = {
 };
 
 webgl.runRenderPass({
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
             loadOp: "clear",

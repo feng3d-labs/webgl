@@ -51,7 +51,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     canvas.height = canvas.width;
 
     webgl.runRenderPass({
-        passDescriptor: {
+        descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
                 loadOp: "clear",

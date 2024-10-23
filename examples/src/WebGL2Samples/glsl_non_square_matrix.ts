@@ -69,7 +69,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     ]);
 
     const rp: IRenderPass = {
-        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },

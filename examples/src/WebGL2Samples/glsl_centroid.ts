@@ -173,7 +173,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
     const rp: IRenderPass = {
-        passDescriptor: framebuffers[i],
+        descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
             vertexArray: vertexArrays[i],

@@ -142,7 +142,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     (function render()
     {
         const rp: IRenderPass = {
-            passDescriptor: {
+            descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },

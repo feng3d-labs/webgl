@@ -48,7 +48,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 webgl.runRenderPass({
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
             loadOp: "clear",

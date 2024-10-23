@@ -132,7 +132,7 @@ const matrix = new Float32Array([
     0.0, 0.0, 0.0, 1.0
 ]);
 const rp1: IRenderPass = {
-    passDescriptor: frameBuffer,
+    descriptor: frameBuffer,
     renderObjects: [{
         pipeline: multipleOutputProgram,
         uniforms: { mvp: matrix },
@@ -145,7 +145,7 @@ webgl.runRenderPass(rp1);
 
 // Pass 2
 const rp: IRenderPass = {
-    passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: []
 };
 

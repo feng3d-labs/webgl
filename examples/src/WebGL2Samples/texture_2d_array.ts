@@ -95,7 +95,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         const rp: IRenderPass = {
-            passDescriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
+            descriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
             renderObjects: [ro],
         };
 

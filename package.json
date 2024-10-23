@@ -58,6 +58,7 @@
     "vitest": "^0.32.2"
   },
   "dependencies": {
+    "@feng3d/renderer-common": "0.0.1",
     "@feng3d/serialization": "^0.8.1",
     "@feng3d/watcher": "^0.8.3"
   }

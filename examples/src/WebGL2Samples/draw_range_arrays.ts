@@ -53,7 +53,7 @@ const renderObject: IRenderObject = {
 };
 
 const data: IRenderPass = {
-    passDescriptor: {
+    descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
             loadOp: "clear",

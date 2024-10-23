@@ -7,7 +7,7 @@ import { IRenderObject } from "./IRenderObject";
  *
  * 包含渲染通道描述以及需要渲染的对象列表。
  */
-export class IRenderPass
+export interface IRenderPass
 {
     /**
      * WebGL渲染通道描述
