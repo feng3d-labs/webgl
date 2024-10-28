@@ -14,7 +14,7 @@ import { IPassDescriptor } from "./data/IPassDescriptor";
 import { IQuery } from "./data/IQueryAction";
 import { IReadPixels } from "./data/IReadPixels";
 import { IRenderObject } from "./data/IRenderObject";
-import { IRenderPass } from "./data/IRenderPass";
+import { IGLRenderPass } from "./data/IRenderPass";
 import { IRenderPipeline } from "./data/IRenderPipeline";
 import { IRenderbuffer } from "./data/IRenderbuffer";
 import { IRenderingContext } from "./data/IRenderingContext";
@@ -53,7 +53,7 @@ export class WebGL implements IWebRenderer
      * @param renderPass 渲染通道数据。
      * @returns
      */
-    runRenderPass(renderPass: IRenderPass)
+    runRenderPass(renderPass: IGLRenderPass)
     {
         runRenderPass(this._gl, renderPass);
     }

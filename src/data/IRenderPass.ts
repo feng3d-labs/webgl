@@ -1,3 +1,4 @@
+import { IRenderPass } from "@feng3d/renderer-common";
 import { IPassDescriptor } from "./IPassDescriptor";
 import { IQueryAction } from "./IQueryAction";
 import { IRenderObject } from "./IRenderObject";
@@ -7,7 +8,7 @@ import { IRenderObject } from "./IRenderObject";
  *
  * 包含渲染通道描述以及需要渲染的对象列表。
  */
-export interface IRenderPass
+export interface IGLRenderPass extends IRenderPass
 {
     /**
      * WebGL渲染通道描述
