@@ -7,21 +7,21 @@ import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
 import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
-import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
-import { IBuffer } from "./data/IBuffer";
-import { ICopyBuffer } from "./data/ICopyBuffer";
-import { IPassDescriptor } from "./data/IPassDescriptor";
-import { IQuery } from "./data/IQueryAction";
-import { IReadPixels } from "./data/IReadPixels";
-import { IRenderObject } from "./data/IRenderObject";
-import { IGLRenderPass } from "./data/IRenderPass";
-import { IRenderPipeline } from "./data/IRenderPipeline";
-import { IRenderbuffer } from "./data/IRenderbuffer";
-import { IRenderingContext } from "./data/IRenderingContext";
-import { ISampler } from "./data/ISampler";
-import { ITexture } from "./data/ITexture";
-import { ITransformFeedback } from "./data/ITransformFeedback";
-import { IVertexArrayObject } from "./data/IVertexArrayObject";
+import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
+import { IGLBuffer } from "./data/IGLBuffer";
+import { IGLCopyBuffer } from "./data/IGLCopyBuffer";
+import { IGLPassDescriptor } from "./data/IGLPassDescriptor";
+import { IGLQuery } from "./data/IGLQueryAction";
+import { IGLReadPixels } from "./data/IGLReadPixels";
+import { IGLRenderObject } from "./data/IGLRenderObject";
+import { IGLRenderPass } from "./data/IGLRenderPass";
+import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
+import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
+import { IGLRenderingContext } from "./data/IGLRenderingContext";
+import { IGLSampler } from "./data/IGLSampler";
+import { IGLTexture } from "./data/IGLTexture";
+import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
+import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runCopyBuffer } from "./runs/runCopyBuffer";
 import { getQueryResult } from "./runs/runQueryAction";
@@ -37,10 +37,10 @@ import { deleteVertexArray } from "./runs/runVertexArray";
  */
 export class WebGL implements IWebRenderer
 {
-    private _renderingContext: IRenderingContext;
+    private _renderingContext: IGLRenderingContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext: IRenderingContext)
+    constructor(renderingContext: IGLRenderingContext)
     {
         this._renderingContext = renderingContext;
         this._gl = getRenderingContext(this._renderingContext);
@@ -63,67 +63,67 @@ export class WebGL implements IWebRenderer
      *
      * @param renderObject 渲染原子，包含渲染所需的所有数据。
      */
-    runRenderObject(renderObject: IRenderObject)
+    runRenderObject(renderObject: IGLRenderObject)
     {
         runRenderObject(this._gl, renderObject);
     }
 
-    runBlitFramebuffer(blitFramebuffer: IBlitFramebuffer)
+    runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
     {
         runBlitFramebuffer(this._gl, blitFramebuffer);
     }
 
-    runCopyBuffer(copyBuffer: ICopyBuffer)
+    runCopyBuffer(copyBuffer: IGLCopyBuffer)
     {
         runCopyBuffer(this._gl, copyBuffer);
     }
 
-    runReadPixels(readPixels: IReadPixels)
+    runReadPixels(readPixels: IGLReadPixels)
     {
         runReadPixels(this._gl, readPixels);
     }
 
-    deleteFramebuffer(passDescriptor: IPassDescriptor)
+    deleteFramebuffer(passDescriptor: IGLPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }
 
-    deleteRenderbuffer(renderbuffer: IRenderbuffer)
+    deleteRenderbuffer(renderbuffer: IGLRenderbuffer)
     {
         deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    deleteBuffer(buffer: IBuffer)
+    deleteBuffer(buffer: IGLBuffer)
     {
         deleteBuffer(this._gl, buffer);
     }
 
-    deleteTexture(texture: ITexture)
+    deleteTexture(texture: IGLTexture)
     {
         deleteTexture(this._gl, texture);
     }
 
-    deleteSampler(sampler: ISampler)
+    deleteSampler(sampler: IGLSampler)
     {
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(pipeline: IRenderPipeline)
+    deleteProgram(pipeline: IGLRenderPipeline)
     {
         deleteProgram(this._gl, pipeline);
     }
 
-    deleteVertexArray(vertexArray: IVertexArrayObject)
+    deleteVertexArray(vertexArray: IGLVertexArrayObject)
     {
         deleteVertexArray(this._gl, vertexArray);
     }
 
-    deleteTransformFeedback(transformFeedback: ITransformFeedback)
+    deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
     {
         deleteTransformFeedback(this._gl, transformFeedback);
     }
 
-    getQueryResult(query: IQuery)
+    getQueryResult(query: IGLQuery)
     {
         return getQueryResult(this._gl, query);
     }

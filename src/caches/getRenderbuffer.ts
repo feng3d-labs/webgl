@@ -1,14 +1,14 @@
-import { IRenderbuffer } from "../data/IRenderbuffer";
+import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _renderbuffers: Map<IRenderbuffer, WebGLRenderbuffer>;
+        _renderbuffers: Map<IGLRenderbuffer, WebGLRenderbuffer>;
     }
 }
 
-export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
+export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRenderbuffer)
 {
     let webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
     if (webGLRenderbuffer) return webGLRenderbuffer;
@@ -31,7 +31,7 @@ export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRender
     return webGLRenderbuffer;
 }
 
-export function deleteRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IRenderbuffer)
+export function deleteRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRenderbuffer)
 {
     const webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
     gl._renderbuffers.delete(renderbuffer);

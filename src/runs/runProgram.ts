@@ -1,8 +1,8 @@
 import { getProgram } from "../caches/getProgram";
-import { IFragmentState, IRenderPipeline, IVertexState } from "../data/IRenderPipeline";
+import { IFragmentState, IGLRenderPipeline, IVertexState } from "../data/IGLRenderPipeline";
 import { defaultColorTargetStates, runColorTargetStates } from "./runColorTargetStates";
 
-export function runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+export function runProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
 {
     const program = getProgram(gl, pipeline);
     gl.useProgram(program);

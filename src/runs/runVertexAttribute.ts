@@ -1,7 +1,7 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { IVertexAttribute } from "../data/IVertexAttribute";
+import { IGLVertexAttribute } from "../data/IGLVertexAttribute";
 
-export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
+export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IGLVertexAttribute)
 {
     const { numComponents, normalized, divisor } = attribute;
     let { vertexSize, offset } = attribute;

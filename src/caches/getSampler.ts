@@ -1,15 +1,15 @@
-import { ISampler } from "../data/ISampler";
+import { IGLSampler } from "../data/IGLSampler";
 import { defaultSampler } from "../runs/runSampler";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _samplers: Map<ISampler, WebGLSampler>;
+        _samplers: Map<IGLSampler, WebGLSampler>;
     }
 }
 
-export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function getSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
     if (webGLSampler) return webGLSampler;
@@ -35,7 +35,7 @@ export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
     return webGLSampler;
 }
 
-export function deleteSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function deleteSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

@@ -1,4 +1,4 @@
-import { IGLRenderPass } from "../data/IRenderPass";
+import { IGLRenderPass } from "../data/IGLRenderPass";
 import { runPassDescriptor } from "./runPassDescriptor";
 import { runQueryAction } from "./runQueryAction";
 import { runRenderObject } from "./runRenderObject";

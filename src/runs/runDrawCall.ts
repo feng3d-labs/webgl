@@ -1,14 +1,14 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
-import { IDrawArrays } from "../data/IDrawArrays";
-import { IDrawElements } from "../data/IDrawElements";
-import { IIndexBuffer } from "../data/IIndexBuffer";
-import { IDrawMode } from "../data/IPrimitiveState";
-import { IRenderObject } from "../data/IRenderObject";
-import { IVertexAttributes } from "../data/IVertexAttributes";
+import { IGLDrawArrays } from "../data/IGLDrawArrays";
+import { IGLDrawElements } from "../data/IGLDrawElements";
+import { IGLIndexBuffer } from "../data/IGLIndexBuffer";
+import { IGLDrawMode } from "../data/IGLPrimitiveState";
+import { IGLRenderObject } from "../data/IGLRenderObject";
+import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 import { defaultPrimitiveState } from "./runPrimitiveState";
 
-export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
     const { pipeline, vertexArray, drawElements, drawArrays } = renderObject;
     const { vertices, index } = { ...vertexArray };
@@ -33,9 +33,9 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObje
     }
 }
 
-export const defaultDrawIndexed: IDrawElements = Object.freeze({ firstIndex: 0, instanceCount: 1 });
+export const defaultDrawIndexed: IGLDrawElements = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawElements(gl: WebGLRenderingContext, drawMode: IDrawMode, index: IIndexBuffer, drawElements: IDrawElements)
+function _runDrawElements(gl: WebGLRenderingContext, drawMode: IGLDrawMode, index: IGLIndexBuffer, drawElements: IGLDrawElements)
 {
     //
     const webGLBuffer = getWebGLBuffer(gl, index);
@@ -66,9 +66,9 @@ function _runDrawElements(gl: WebGLRenderingContext, drawMode: IDrawMode, index:
     }
 }
 
-export const defaultDrawVertex: IDrawArrays = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
+export const defaultDrawVertex: IGLDrawArrays = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
-function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IDrawMode, vertices: IVertexAttributes, drawArrays: IDrawArrays)
+function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IGLVertexAttributes, drawArrays: IGLDrawArrays)
 {
     //
     let { firstVertex, vertexCount, instanceCount } = drawArrays || {};
@@ -98,7 +98,7 @@ function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IDrawMode, vertices
 /**
  * 获取属性顶点属性。
  */
-function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IVertexAttributes)
+function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IGLVertexAttributes)
 {
     const vertexNum = ((vertices) =>
     {

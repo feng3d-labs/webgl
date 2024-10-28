@@ -1,12 +1,12 @@
-import { IRenderPassColorAttachment } from "../data/IRenderPassColorAttachment";
-import { IRenderPassDepthStencilAttachment } from "../data/IRenderPassDepthStencilAttachment";
-import { IPassDescriptor } from "../data/IPassDescriptor";
+import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
+import { IGLRenderPassDepthStencilAttachment } from "../data/IGLRenderPassDepthStencilAttachment";
+import { IGLPassDescriptor } from "../data/IGLPassDescriptor";
 import { runFramebuffer } from "./runFramebuffer";
 
-const defaultRenderPassColorAttachment: IRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+const defaultRenderPassColorAttachment: IGLRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
+const defaultDepthStencilAttachment: IGLRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
 
-export function runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
+export function runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLPassDescriptor)
 {
     passDescriptor = passDescriptor || {};
 

@@ -1,7 +1,7 @@
-import { ICullFace } from "../data/ICullFace";
-import { IPrimitiveState } from "../data/IPrimitiveState";
+import { IGLCullFace } from "../data/IGLCullFace";
+import { IGLPrimitiveState } from "../data/IGLPrimitiveState";
 
-export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: ICullFace)
+export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: IGLCullFace)
 {
     //
     const { enableCullFace: enableCullMode, cullMode, frontFace } = { ...defaultCullFace, ...cullFace };
@@ -17,8 +17,8 @@ export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: ICullFac
     }
 }
 
-const defaultCullFace: ICullFace = { enableCullFace: false, cullMode: "BACK", frontFace: "CCW" };
-export const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullFace: defaultCullFace };
+const defaultCullFace: IGLCullFace = { enableCullFace: false, cullMode: "BACK", frontFace: "CCW" };
+export const defaultPrimitiveState: IGLPrimitiveState = { topology: "TRIANGLES", cullFace: defaultCullFace };
 
 Object.freeze(defaultCullFace);
 Object.freeze(defaultPrimitiveState);

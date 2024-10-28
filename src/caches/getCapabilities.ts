@@ -1,8 +1,8 @@
-import { ICapabilities } from "../data/ICapabilities";
+import { IGLCapabilities } from "../data/IGLCapabilities";
 
 export function getCapabilities(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
 {
-    const capabilities: ICapabilities = {} as any;
+    const capabilities: IGLCapabilities = {} as any;
     gl._capabilities = capabilities;
     //
     capabilities.maxAnisotropy = gl.getExtension("EXT_texture_filter_anisotropic") ? gl.getParameter(gl.getExtension("EXT_texture_filter_anisotropic").MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;

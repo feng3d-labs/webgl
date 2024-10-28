@@ -1,6 +1,6 @@
-import { IDepthState } from "../data/IDepthStencilState";
+import { IGLDepthState } from "../data/IGLDepthStencilState";
 
-export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
+export function runDepthState(gl: WebGLRenderingContext, depth: IGLDepthState)
 {
     const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthState, ...depth };
 
@@ -30,5 +30,5 @@ export function runDepthState(gl: WebGLRenderingContext, depth: IDepthState)
     }
 }
 
-export const defaultDepthState: IDepthState = { depthtest: false, depthWriteEnabled: true, depthCompare: "LESS" };
+export const defaultDepthState: IGLDepthState = { depthtest: false, depthWriteEnabled: true, depthCompare: "LESS" };
 Object.freeze(defaultDepthState);

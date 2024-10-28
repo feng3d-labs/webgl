@@ -1,4 +1,4 @@
-import { IRenderObject } from "../data/IRenderObject";
+import { IGLRenderObject } from "../data/IGLRenderObject";
 import { runDrawCall } from "./runDrawCall";
 import { defaultPrimitiveState } from "./runPrimitiveState";
 import { runRenderPipeline } from "./runRenderPipeline";
@@ -8,7 +8,7 @@ import { runUniforms } from "./runUniforms";
 import { runVertexArray } from "./runVertexArray";
 import { runViewPort } from "./runViewPort";
 
-export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function runRenderObject(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
     const { viewport, scissor, pipeline, vertexArray, uniforms, transformFeedback } = renderObject;
 

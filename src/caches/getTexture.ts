@@ -1,12 +1,12 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture, ITexturePixelStore, ITextureTarget } from "../data/ITexture";
+import { IGLTexture, ITexturePixelStore, GLTextureTarget } from "../data/IGLTexture";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _textures: Map<ITexture, WebGLTexture>
+        _textures: Map<IGLTexture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -16,7 +16,7 @@ declare global
          *
          * 默认"TEXTURE_2D"。
          */
-        textureTarget: ITextureTarget;
+        textureTarget: GLTextureTarget;
 
         /**
          * 销毁WebGL纹理。
@@ -41,7 +41,7 @@ const defaultTexturePixelStore: ITexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
@@ -229,7 +229,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     return webGLTexture;
 }
 
-export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function deleteTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 {
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;

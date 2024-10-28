@@ -1,11 +1,11 @@
 import { watcher } from "@feng3d/watcher";
-import { IAttributeBufferSourceTypes, IBuffer } from "../data/IBuffer";
+import { IAttributeBufferSourceTypes, IGLBuffer } from "../data/IGLBuffer";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _buffers: Map<IBuffer, WebGLBuffer>
+        _buffers: Map<IGLBuffer, WebGLBuffer>
     }
 
     interface WebGLBuffer
@@ -69,7 +69,7 @@ Int8Array.prototype.bufferType = "BYTE";
 // eslint-disable-next-line no-extend-native
 Uint8ClampedArray.prototype.bufferType = "BYTE";
 
-export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
+export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
 {
     let webGLBuffer = gl._buffers.get(buffer);
     if (webGLBuffer) return webGLBuffer;
@@ -147,7 +147,7 @@ export function getWebGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
     return webGLBuffer;
 }
 
-export function deleteBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
+export function deleteBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
 {
     const webGLBuffer = gl._buffers.get(buffer);
     if (webGLBuffer)

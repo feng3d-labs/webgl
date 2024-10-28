@@ -1,17 +1,17 @@
 /**
  * WebGL中Uniform类型
  */
-export type IWebGLUniformType = keyof typeof webGLUniformTypeValue;
+export type IGLUniformType = keyof typeof webGLUniformTypeValue;
 
 /**
  * WebGL中Uniform纹理类型
  */
-export type IWebGLUniformTextureType = keyof typeof webGLUniformTextureTypeValue;
+export type IGLUniformTextureType = keyof typeof webGLUniformTextureTypeValue;
 
 /**
  * WebGL中Uniform缓冲区类型
  */
-export type IWebGLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
+export type IGLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
 
 /**
  * 获取Unifrom类型名称
@@ -19,7 +19,7 @@ export type IWebGLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
  * @param value WebGL中Unifrom类型对应的值。
  * @returns Unifrom类型名称
  */
-export function getWebGLUniformType(value: number): IWebGLUniformType
+export function getWebGLUniformType(value: number): IGLUniformType
 {
     const result = webGLUniformValueType[value];
     console.assert(!!result);
@@ -33,7 +33,7 @@ export function getWebGLUniformType(value: number): IWebGLUniformType
  * @param type Unifrom类型名称
  * @returns 是否为纹理Unifrom类型。
  */
-export function isWebGLUniformTextureType(type: IWebGLUniformType): boolean
+export function isWebGLUniformTextureType(type: IGLUniformType): boolean
 {
     return webGLUniformTextureTypeValue[type] !== undefined;
 }

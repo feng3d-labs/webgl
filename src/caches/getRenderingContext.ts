@@ -1,4 +1,4 @@
-import { IRenderingContext } from "../data/IRenderingContext";
+import { IGLRenderingContext } from "../data/IGLRenderingContext";
 import { defaults } from "../defaults/defaults";
 import { getCapabilities } from "./getCapabilities";
 
@@ -8,7 +8,7 @@ import { getCapabilities } from "./getCapabilities";
  * @param renderingContext
  * @returns
  */
-export function getRenderingContext(renderingContext: IRenderingContext)
+export function getRenderingContext(renderingContext: IGLRenderingContext)
 {
     const key = renderingContext.canvasId;
     let value = canvasContextMap.get(key);
@@ -72,7 +72,7 @@ function autoCreateCanvas(canvasId: string)
     return canvas;
 }
 
-function getCanvas(canvasContext: IRenderingContext)
+function getCanvas(canvasContext: IGLRenderingContext)
 {
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
@@ -83,7 +83,7 @@ function getCanvas(canvasContext: IRenderingContext)
     return canvas;
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IRenderingContext)
+function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IGLRenderingContext)
 {
     const contextAttributes = Object.assign({}, defaults.webGLCanvasContext, canvasContext);
 

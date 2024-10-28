@@ -1,7 +1,7 @@
 import { deleteWebGLQuery, getWebGLQuery } from "../caches/getWebGLQuery";
-import { IQuery, IQueryAction } from "../data/IQueryAction";
+import { IGLQuery, IGLQueryAction } from "../data/IGLQueryAction";
 
-export function runQueryAction(gl: WebGLRenderingContext, queryAction: IQueryAction)
+export function runQueryAction(gl: WebGLRenderingContext, queryAction: IGLQueryAction)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
@@ -21,7 +21,7 @@ export function runQueryAction(gl: WebGLRenderingContext, queryAction: IQueryAct
 /**
  * 获取查询结果。
  */
-export async function getQueryResult(gl: WebGLRenderingContext, query: IQuery)
+export async function getQueryResult(gl: WebGLRenderingContext, query: IGLQuery)
 {
     if (query.result !== undefined) return query.result;
 
