@@ -10,7 +10,7 @@ import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCopyBuffer } from "./data/IGLCopyBuffer";
-import { IGLPassDescriptor } from "./data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLQuery } from "./data/IGLQueryAction";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderObject } from "./data/IGLRenderObject";
@@ -83,7 +83,7 @@ export class WebGL implements IWebRenderer
         runReadPixels(this._gl, readPixels);
     }
 
-    deleteFramebuffer(passDescriptor: IGLPassDescriptor)
+    deleteFramebuffer(passDescriptor: IGLRenderPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }

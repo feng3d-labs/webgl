@@ -1,10 +1,10 @@
-import { IGLRenderPassColorAttachment as IGLRenderPassColorAttachment } from "./IGLRenderPassColorAttachment";
-import { IGLRenderPassDepthStencilAttachment as IGLRenderPassDepthStencilAttachment } from "./IGLRenderPassDepthStencilAttachment";
+import { IGLRenderPassColorAttachment } from "./IGLRenderPassColorAttachment";
+import { IGLRenderPassDepthStencilAttachment } from "./IGLRenderPassDepthStencilAttachment";
 
 /**
  * WebGL渲染通道描述
  */
-export interface IGLPassDescriptor
+export interface IGLRenderPassDescriptor
 {
     /**
      * 颜色附件

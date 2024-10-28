@@ -1,12 +1,12 @@
-import { IGLPassDescriptor } from "./IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
 
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
  */
 export interface IGLBlitFramebuffer
 {
-    read: IGLPassDescriptor;
-    draw: IGLPassDescriptor;
+    read: IGLRenderPassDescriptor;
+    draw: IGLRenderPassDescriptor;
     blitFramebuffers: IGLBlitFramebufferItem[];
 }
 

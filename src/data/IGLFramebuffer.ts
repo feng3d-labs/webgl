@@ -1,4 +1,4 @@
-import { IGLPassDescriptor } from "./IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
 
 /**
  * 等价于 IPassDescriptor 。
@@ -7,4 +7,4 @@ import { IGLPassDescriptor } from "./IGLPassDescriptor";
  *
  * @deprecated 请使用 IPassDescriptor 。
  */
-export interface IGLFramebuffer extends IGLPassDescriptor { }
+export interface IGLFramebuffer extends IGLRenderPassDescriptor { }

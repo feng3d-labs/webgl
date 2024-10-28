@@ -1,4 +1,4 @@
-import { IGLPassDescriptor } from "../data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLTextureView } from "../data/IGLTexture";
 import { getRenderbuffer } from "./getRenderbuffer";
@@ -8,7 +8,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers: Map<IGLPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: Map<IGLRenderPassDescriptor, WebGLFramebuffer>;
     }
 }
 
@@ -17,7 +17,7 @@ const defaultTextureView: Partial<IGLTextureView> = { level: 0, layer: 0 };
 /**
  * 获取帧缓冲区
  */
-export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLPassDescriptor)
+export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
@@ -112,7 +112,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLPas
     return webGLFramebuffer;
 }
 
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLPassDescriptor)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
 {
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     gl._framebuffers.delete(passDescriptor);
