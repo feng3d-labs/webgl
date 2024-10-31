@@ -10,7 +10,7 @@ export default defineConfig({
             input: getHtmlNamesObject(),
         },
         sourcemap: true,
-        outDir: "../public"
+        outDir: "public"
     },
     base: "./",
     plugins: [
