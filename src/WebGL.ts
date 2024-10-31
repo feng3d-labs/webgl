@@ -1,4 +1,3 @@
-import { IWebRenderer } from "@feng3d/renderer-common";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";
@@ -35,7 +34,7 @@ import { deleteVertexArray } from "./runs/runVertexArray";
  *
  * 所有渲染都由该渲染器执行。與2D、3D場景無關，屬於更加底層的API。針對每一個 RenderObject 渲染數據進行渲染。
  */
-export class WebGL implements IWebRenderer
+export class WebGL
 {
     private _renderingContext: IGLRenderingContext;
     private _gl: WebGLRenderingContext;
