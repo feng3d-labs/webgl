@@ -1,6 +1,6 @@
 {
   "name": "@feng3d/webgl-renderer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "渲染库",
   "author": "feng",
   "license": "MIT",
