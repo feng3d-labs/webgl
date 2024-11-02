@@ -8,7 +8,7 @@ import { IGLPrimitiveState } from "./IGLPrimitiveState";
 export type IProgram = IGLRenderPipeline;
 
 /**
- * shader
+ * 渲染管线。
  */
 export interface IGLRenderPipeline
 {
