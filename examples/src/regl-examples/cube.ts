@@ -1,5 +1,4 @@
-import { WebGL, IRenderObject } from "@feng3d/webgl-renderer";
-import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
+import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl-renderer";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -67,7 +66,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
+    const renderObject: IGLRenderObject = {
         vertexArray: {
             vertices: {
                 position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
@@ -132,7 +131,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: ISamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
+    const diffuse: IGLSamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
 
     draw();
 })();

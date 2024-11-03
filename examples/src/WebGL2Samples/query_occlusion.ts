@@ -1,4 +1,4 @@
-import { IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -9,11 +9,11 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // -- Init WebGL Context
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: IProgram = {
+const program: IGLProgram = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: { depth: { depthtest: true } },
     primitive: { topology: "TRIANGLES" },
@@ -29,19 +29,19 @@ const vertices = new Float32Array([
     0.3, -0.5, 0.5,
     0.0, 0.5, 0.5
 ]);
-const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
 };
 // -- Init Query
-const query: IQuery = {};
+const query: IGLQuery = {};
 
 // -- Render
-const rp: IRenderPass = {
+const rp: IGLRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
@@ -49,7 +49,7 @@ const rp: IRenderPass = {
     renderObjects: [],
 };
 
-const ro: IRenderObject = {
+const ro: IGLRenderObject = {
     vertexArray,
     pipeline: program,
     drawArrays: { firstVertex: 0, vertexCount: 3 },

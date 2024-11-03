@@ -5,7 +5,7 @@ import { IGLPrimitiveState } from "./IGLPrimitiveState";
 /**
  * @deprecated 请使用 `IRenderPipeline` 。
  */
-export type IProgram = IGLRenderPipeline;
+export type IGLProgram = IGLRenderPipeline;
 
 /**
  * 渲染管线。

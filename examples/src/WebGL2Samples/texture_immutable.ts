@@ -1,4 +1,4 @@
-import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -10,7 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     const Corners = {
@@ -36,9 +36,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const program: IProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D: IProgram = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
+    const program3D: IGLProgram = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -49,7 +49,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -59,10 +59,10 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // -- Init 2D Texture
-        const texture2D: ITexture = {
+        const texture2D: IGLTexture = {
             target: "TEXTURE_2D",
             pixelStore: {
                 unpackFlipY: false,
@@ -94,7 +94,7 @@ import { getShaderSource, loadImage } from "./utility";
             storage: { levels: 1, width: 512, height: 512 },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
         };
-        const sampler2D: ISampler = {
+        const sampler2D: IGLSampler = {
             minFilter: "NEAREST",
             magFilter: "LINEAR",
             wrapS: "CLAMP_TO_EDGE",
@@ -102,7 +102,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         // -- Render
-        const ro: IRenderObject = {
+        const ro: IGLRenderObject = {
             pipeline: program,
             vertexArray,
             uniforms: {
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
             drawArrays: { vertexCount: 6 },
         };
 
-        const rp: IRenderPass = {
+        const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects: []
         };
@@ -169,7 +169,7 @@ import { getShaderSource, loadImage } from "./utility";
             }
         }
 
-        const texture3D: ITexture = {
+        const texture3D: IGLTexture = {
             target: "TEXTURE_3D",
             internalformat: "R8",
             format: "RED",
@@ -178,7 +178,7 @@ import { getShaderSource, loadImage } from "./utility";
             storage: { levels: Math.log2(SIZE), width: SIZE, height: SIZE, depth: SIZE },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
         };
-        const sampler3D: ISampler = {
+        const sampler3D: IGLSampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
             minFilter: "LINEAR_MIPMAP_LINEAR",

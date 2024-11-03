@@ -1,4 +1,5 @@
-import { WebGL, IRenderObject } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, WebGL } from "@feng3d/webgl-renderer";
+
 import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
 import { createCamera } from "./util/camera";
@@ -39,7 +40,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderObject: IRenderObject = {
+const renderObject: IGLRenderObject = {
     vertexArray: {
         vertices: {
             position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },

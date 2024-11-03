@@ -1,4 +1,5 @@
-import { IRenderObject, ISamplerTexture, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl-renderer";
+
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
@@ -165,7 +166,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
+    const renderObject: IGLRenderObject = {
         vertexArray: {
             vertices: {
                 position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
@@ -379,7 +380,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse: ISamplerTexture = { texture: { generateMipmap: true, sources: [{ source: img }] }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
+    const diffuse: IGLSamplerTexture = { texture: { generateMipmap: true, sources: [{ source: img }] }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
 
     draw();
 })();

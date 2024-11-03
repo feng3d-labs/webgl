@@ -1,4 +1,4 @@
-import { IIndexBuffer, IProgram, IRenderPass, IRenderingContext, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLIndexBuffer, IGLProgram, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -9,7 +9,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -41,7 +41,7 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs: IProgram[] = [
+const programs: IGLProgram[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
         primitive: { topology: "TRIANGLES" },
@@ -63,7 +63,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: IVertexArrayObject[]
+        [key: string]: IGLVertexArrayObject[]
     } = {};
 
     // var in loop
@@ -72,9 +72,9 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexBuffer: IVertexBuffer;
-    let indicesBuffer: IIndexBuffer;
-    let vertexArray: IVertexArrayObject;
+    let vertexBuffer: IGLVertexBuffer;
+    let indicesBuffer: IGLIndexBuffer;
+    let vertexArray: IGLVertexArrayObject;
 
     let i: number; let len: number;
 
@@ -141,7 +141,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
-        const rp: IRenderPass = {
+        const rp: IGLRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }

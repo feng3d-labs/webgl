@@ -1,4 +1,4 @@
-import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,7 +11,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
@@ -64,12 +64,12 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: IVertexArrayObject[][] = [];
+    const vertexArrays: IGLVertexArrayObject[][] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks: ITransformFeedback[] = [];
+    const transformFeedbacks: IGLTransformFeedback[] = [];
 
-    const vertexBuffers: IVertexBuffer[][] = new Array(vertexArrays.length);
+    const vertexBuffers: IGLVertexBuffer[][] = new Array(vertexArrays.length);
 
     for (let va = 0; va < 2; ++va)
     {
@@ -104,7 +104,7 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    const transformRO: IRenderObject = {
+    const transformRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
         vertexArray: null,
         transformFeedback: null,
@@ -112,13 +112,13 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: NUM_INSTANCES },
     };
 
-    const renderRO: IRenderObject = {
+    const renderRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
         drawArrays: { vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [transformRO, renderRO],
     };
@@ -127,7 +127,7 @@ import { getShaderSource } from "./utility";
 
     function initPrograms()
     {
-        const programTransform: IProgram = {
+        const programTransform: IGLProgram = {
             vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
             rasterizerDiscard: true,
@@ -135,7 +135,7 @@ import { getShaderSource } from "./utility";
         };
 
         // Setup program for draw shader
-        const programDraw: IProgram = {
+        const programDraw: IGLProgram = {
             vertex: { code: getShaderSource("vs-draw") }, fragment: {
                 code: getShaderSource("fs-draw"),
                 targets: [{

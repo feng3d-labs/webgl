@@ -1,4 +1,4 @@
-import { IFramebuffer, IRenderObject, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const renderingContext: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
@@ -50,13 +50,13 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: IRenderPipeline = {
+const multipleOutputProgram: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
     primitive: { topology: "TRIANGLES" },
 };
 
 // Layer shaders
-const layerProgram: IRenderPipeline = {
+const layerProgram: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
     primitive: { topology: "TRIANGLES" },
 };
@@ -71,7 +71,7 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     0.0, 0.0,
@@ -81,17 +81,17 @@ const texcoords = new Float32Array([
     0.0, 1.0,
     0.0, 0.0
 ]);
-const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
+const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
-const multipleOutputVertexArray: IVertexArrayObject = {
+const multipleOutputVertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
     }
 };
 
-const layerVertexArray: IVertexArrayObject = {
+const layerVertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -103,18 +103,18 @@ const layerVertexArray: IVertexArrayObject = {
 const w = 16;
 const h = 16;
 
-const texture: ITexture = {
+const texture: IGLTexture = {
     target: "TEXTURE_2D_ARRAY",
     sources: [{ width: w, height: h, level: 0, depth: 3 }],
     internalformat: "RGB8",
     format: "RGB",
     type: "UNSIGNED_BYTE",
 };
-const sampler: ISampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" };
+const sampler: IGLSampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IFramebuffer = {
+const frameBuffer: IGLFramebuffer = {
     colorAttachments: [
         { view: { texture, level: 0, layer: Textures.RED } },
         { view: { texture, level: 0, layer: Textures.GREEN } },
@@ -131,7 +131,7 @@ const matrix = new Float32Array([
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 1.0
 ]);
-const rp1: IRenderPass = {
+const rp1: IGLRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: multipleOutputProgram,
@@ -144,12 +144,12 @@ const rp1: IRenderPass = {
 webgl.runRenderPass(rp1);
 
 // Pass 2
-const rp: IRenderPass = {
+const rp: IGLRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: []
 };
 
-const ro: IRenderObject = {
+const ro: IGLRenderObject = {
     pipeline: layerProgram,
     uniforms: {
         mvp: matrix,

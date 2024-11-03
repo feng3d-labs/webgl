@@ -13,7 +13,7 @@ export interface IGLVertexAttribute
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    buffer: IVertexBuffer;
+    buffer: IGLVertexBuffer;
 
     /**
      * 顶点数据元素数量。
@@ -51,7 +51,7 @@ export interface IGLVertexAttribute
     vertexSize?: number;
 }
 
-export interface IVertexBuffer extends IGLBuffer
+export interface IGLVertexBuffer extends IGLBuffer
 {
     target: "ARRAY_BUFFER";
 }

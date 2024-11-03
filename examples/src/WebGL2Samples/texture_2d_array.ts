@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -9,11 +9,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.width = canvas.height * 960 / 540;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -26,7 +26,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -36,18 +36,18 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
         }
     };
 
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: IGLTexture;
+    let sampler: IGLSampler;
     loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {
         const NUM_IMAGES = 3;
@@ -84,7 +84,7 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IRenderObject = {
+        const ro: IGLRenderObject = {
             pipeline: program,
             vertexArray,
             uniforms: {
@@ -94,7 +94,7 @@ import { getShaderSource, loadImage } from "./utility";
             drawArrays: { vertexCount: 6 },
         };
 
-        const rp: IRenderPass = {
+        const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
             renderObjects: [ro],
         };

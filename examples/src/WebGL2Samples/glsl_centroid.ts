@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -47,7 +47,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IProgram[] = [
+const programs: IGLProgram[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
         primitive: { topology: "TRIANGLES" },
@@ -76,9 +76,9 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+const vertexPositionBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
-const vertexDataBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
+const vertexDataBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -90,7 +90,7 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
+const texVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -100,7 +100,7 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
+const texVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -108,8 +108,8 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures: ITexture[] = [];
-const samplers: ISampler[] = [];
+const textures: IGLTexture[] = [];
+const samplers: IGLSampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
@@ -125,9 +125,9 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 // -- Init Frame Buffers
 
 // non-centroid
-const colorRenderbuffer: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+const colorRenderbuffer: IGLRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 // centroid
-const colorRenderbufferCentroid: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+const colorRenderbufferCentroid: IGLRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
@@ -136,7 +136,7 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IFramebuffer[] = [
+const framebuffers: IGLFramebuffer[] = [
     { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     { colorAttachments: [{ view: { texture: textures[0], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
@@ -144,7 +144,7 @@ const framebuffers: IFramebuffer[] = [
 ];
 
 // -- Init VertexArray
-const vertexArrays: IVertexArrayObject[] = [
+const vertexArrays: IGLVertexArrayObject[] = [
     {
         vertices: {
             position: { buffer: vertexPositionBuffer, numComponents: 2 },
@@ -172,7 +172,7 @@ const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
@@ -185,7 +185,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 
     // Blit framebuffers, no Multisample texture 2d in WebGL 2
     // centroid will only work with multisample
-    const blit: IBlitFramebuffer = {
+    const blit: IGLBlitFramebuffer = {
         read: framebuffers[i],
         draw: framebuffers[i + 2],
         blitFramebuffers: [[
@@ -198,10 +198,10 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 }
 
 // Pass 2
-const rp2: IRenderPass = {
+const rp2: IGLRenderPass = {
     renderObjects: [],
 };
-const ro: IRenderObject = {
+const ro: IGLRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
     vertexArray: vertexArrays[PROGRAM.SPLASH],
 };

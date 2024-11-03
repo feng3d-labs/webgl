@@ -1,6 +1,5 @@
+import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, IGLTexture, WebGL } from "@feng3d/webgl-renderer";
 import { mat4 } from "gl-matrix";
-import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
-import { WebGL, IRenderObject, IRenderPass, ITexture, ISampler } from "@feng3d/webgl-renderer";
 
 let cubeRotation = 0.0;
 
@@ -21,7 +20,7 @@ async function main()
 
   const texture = await loadTexture("../../cubetexture.png");
 
-  const renderObject: IRenderObject = {
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {
@@ -106,7 +105,7 @@ async function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IRenderPass = {
+  const renderPasss: IGLRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -308,12 +307,12 @@ async function loadTexture(url: string)
 
   const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-  const texture: ITexture = {
+  const texture: IGLTexture = {
     target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ source: img }],
   };
 
-  let sampler: ISampler = {};
+  let sampler: IGLSampler = {};
 
   if (generateMipmap)
   {
@@ -324,7 +323,7 @@ async function loadTexture(url: string)
     sampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
   }
 
-  return { texture, sampler } as ISamplerTexture;
+  return { texture, sampler } as IGLSamplerTexture;
 }
 
 function isPowerOf2(value: number)

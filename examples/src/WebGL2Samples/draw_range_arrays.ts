@@ -1,5 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
-import { IRenderingContext } from "../../../src/data/IRenderingContext";
+import { IGLRenderingContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,10 +7,10 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const vertexPosBuffer: IVertexBuffer = {
+const vertexPosBuffer: IGLVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -0.8, -0.8,
@@ -29,7 +28,7 @@ const vertexPosBuffer: IVertexBuffer = {
     ])
 };
 
-const pipeline: IRenderPipeline = {
+const pipeline: IGLRenderPipeline = {
     primitive: { topology: "TRIANGLE_STRIP" },
     vertex: {
         code: getShaderSource("vs")
@@ -40,19 +39,19 @@ const pipeline: IRenderPipeline = {
     }
 };
 
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
     }
 };
 
 const vertexCount = 12;
-const renderObject: IRenderObject = {
+const renderObject: IGLRenderObject = {
     vertexArray,
     pipeline,
 };
 
-const data: IRenderPass = {
+const data: IGLRenderPass = {
     descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],

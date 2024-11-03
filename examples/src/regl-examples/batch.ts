@@ -1,4 +1,4 @@
-import { WebGL, IRenderObject, IRenderPipeline, IVertexArrayObject } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";
@@ -23,7 +23,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: IRenderPipeline = {
+const pipeline: IGLRenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;
@@ -43,7 +43,7 @@ const pipeline: IRenderPipeline = {
     depthStencil: { depth: { depthtest: true } },
 };
 
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         position: {
             buffer: {
@@ -60,7 +60,7 @@ const vertexArray: IVertexArrayObject = {
 
 function getRenderObject(tick: number, batchId: number)
 {
-    const renderObject: IRenderObject = {
+    const renderObject: IGLRenderObject = {
         vertexArray,
         uniforms: {
             color: () => [
@@ -83,7 +83,7 @@ function draw()
     webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    const renderObjects: IRenderObject[] = [];
+    const renderObjects: IGLRenderObject[] = [];
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;

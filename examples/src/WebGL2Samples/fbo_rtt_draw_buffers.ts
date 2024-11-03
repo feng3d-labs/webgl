@@ -1,4 +1,4 @@
-import { IFramebuffer, IRenderPass, IRenderPipeline, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 const windowSize = {
@@ -18,14 +18,14 @@ const windowSize = {
 // -- Initialize program
 
 // Draw buffer shaders
-const drawBufferProgram: IRenderPipeline = {
+const drawBufferProgram: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
     primitive: { topology: "TRIANGLES" },
 };
 
 // Draw shaders
-const drawProgram: IRenderPipeline = {
+const drawProgram: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
     primitive: { topology: "TRIANGLES" },
@@ -38,7 +38,7 @@ const triPositions = new Float32Array([
     0.5, -0.5, -1.0,
     0.0, 0.5, 1.0
 ]);
-const triVertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: triPositions, usage: "STATIC_DRAW" };
+const triVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: triPositions, usage: "STATIC_DRAW" };
 
 const quadPositions = new Float32Array([
     -1.0, -1.0,
@@ -48,7 +48,7 @@ const quadPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const quadVertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: quadPositions, usage: "STATIC_DRAW" };
+const quadVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadPositions, usage: "STATIC_DRAW" };
 
 const quadTexcoords = new Float32Array([
     0.0, 0.0,
@@ -58,17 +58,17 @@ const quadTexcoords = new Float32Array([
     0.0, 1.0,
     0.0, 0.0
 ]);
-const quadVertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: quadTexcoords, usage: "STATIC_DRAW" };
+const quadVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadTexcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
-const triVertexArray: IVertexArrayObject = {
+const triVertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: triVertexPosBuffer, numComponents: 3 }
     }
 };
 
-const quadVertexArray: IVertexArrayObject = {
+const quadVertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: quadVertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: quadVertexTexBuffer, numComponents: 2 },
@@ -77,25 +77,25 @@ const quadVertexArray: IVertexArrayObject = {
 
 // -- Initialize texture targets
 
-const color1Texture: ITexture = {
+const color1Texture: IGLTexture = {
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",
     sources: [{ width: windowSize.x, height: windowSize.y }],
 };
-const color1Sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color1Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
-const color2Texture: ITexture = {
+const color2Texture: IGLTexture = {
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",
     sources: [{ width: windowSize.x, height: windowSize.y }],
 };
-const color2Sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IFramebuffer = {
+const frameBuffer: IGLFramebuffer = {
     colorAttachments: [
         { view: { texture: color1Texture, level: 0 } },
         { view: { texture: color2Texture, level: 0 } },
@@ -104,7 +104,7 @@ const frameBuffer: IFramebuffer = {
 
 // -- Render
 
-const renderPass: IRenderPass = {
+const renderPass: IGLRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: drawBufferProgram,
@@ -115,7 +115,7 @@ const renderPass: IRenderPass = {
 webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw to screen
-const renderPass2: IRenderPass = {
+const renderPass2: IGLRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: drawProgram,

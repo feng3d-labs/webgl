@@ -1,4 +1,4 @@
-import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -10,11 +10,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: {
             code: getShaderSource("fs"), targets: [{
 
@@ -63,7 +63,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         // Front face
@@ -102,7 +102,7 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
 
@@ -115,10 +115,10 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-    const indexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
+    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 3 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -129,8 +129,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: IGLTexture;
+    let sampler: IGLSampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -212,14 +212,14 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
         uniforms: {},
         drawElements: { indexCount: 36 },
     };
 
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro]
     };

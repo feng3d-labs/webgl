@@ -1,4 +1,4 @@
-import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -11,11 +11,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         primitive: { topology: "TRIANGLES", cullFace: { enableCullFace: true, cullMode: "BACK" } },
         depthStencil: { depth: { depthtest: true } },
@@ -59,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const normals = HalfFloat.Float16Array([
         // Front face
@@ -98,7 +98,7 @@ import { getShaderSource, loadImage } from "./utility";
         1, 0, 0,
         1, 0, 0
     ]);
-    const vertexNorBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: normals, usage: "STATIC_DRAW" };
+    const vertexNorBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: normals, usage: "STATIC_DRAW" };
 
     const texCoords = HalfFloat.Float16Array([
         // Front face
@@ -137,7 +137,7 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
 
@@ -150,11 +150,11 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-    const indexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
+    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
 
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             a_position: { type: "FLOAT", buffer: vertexPosBuffer, numComponents: 3 },
             a_normal: { type: "HALF_FLOAT", buffer: vertexNorBuffer, numComponents: 3 },
@@ -166,8 +166,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: IGLTexture;
+    let sampler: IGLSampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -209,7 +209,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const lightPosition = [0.0, 0.0, 5.0];
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
         uniforms: {
@@ -221,7 +221,7 @@ import { getShaderSource, loadImage } from "./utility";
         drawElements: { indexCount: 36 },
     };
 
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };

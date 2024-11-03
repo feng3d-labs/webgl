@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl-renderer";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -18,7 +18,7 @@ function main()
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const renderObject: IRenderObject = {
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {
@@ -74,7 +74,7 @@ function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IRenderPass = {
+  const renderPasss: IGLRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],

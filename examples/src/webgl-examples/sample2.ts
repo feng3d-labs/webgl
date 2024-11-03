@@ -1,6 +1,5 @@
+import { IGLRenderPass, WebGL } from "@feng3d/webgl-renderer";
 import { mat4 } from "gl-matrix";
-import { IRenderPass } from "../../../src/data/IRenderPass";
-import { WebGL } from "@feng3d/webgl-renderer";
 
 main();
 
@@ -12,7 +11,7 @@ function main()
 
     const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
-    const renderPasss: IRenderPass = {
+    const renderPasss: IGLRenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0, 0, 0, 1],

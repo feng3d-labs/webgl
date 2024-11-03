@@ -1,4 +1,4 @@
-import { IBlitFramebuffer, IBlitFramebufferItem, IPassDescriptor, IRenderObject, IRenderPass, IRenderPipeline, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexAttributes, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,10 +7,10 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const program: IRenderPipeline = {
+const program: IGLRenderPipeline = {
     primitive: { topology: "TRIANGLES" },
     vertex: {
         code: getShaderSource("vs")
@@ -21,7 +21,7 @@ const program: IRenderPipeline = {
     },
 };
 
-const vertexPosBuffer: IVertexBuffer = {
+const vertexPosBuffer: IGLVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,
@@ -33,7 +33,7 @@ const vertexPosBuffer: IVertexBuffer = {
     ]),
     usage: "STATIC_DRAW",
 };
-const vertexTexBuffer: IVertexBuffer = {
+const vertexTexBuffer: IGLVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         0.0, 1.0,
@@ -46,7 +46,7 @@ const vertexTexBuffer: IVertexBuffer = {
     usage: "STATIC_DRAW",
 };
 
-const vertices: IVertexAttributes = {
+const vertices: IGLVertexAttributes = {
     position: { buffer: vertexPosBuffer, numComponents: 2 },
     texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
 };
@@ -58,7 +58,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         y: image.height
     };
 
-    const textureDiffuse: ITexture = {
+    const textureDiffuse: IGLTexture = {
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
@@ -67,33 +67,33 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         },
         sources: [{ source: image }],
     };
-    const samplerDiffuse: ISampler = {
+    const samplerDiffuse: IGLSampler = {
         minFilter: "LINEAR",
         magFilter: "LINEAR",
     };
 
-    const textureColorBuffer: ITexture = {
+    const textureColorBuffer: IGLTexture = {
         internalformat: "RGBA",
         format: "RGBA",
         type: "UNSIGNED_BYTE",
         sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
     };
-    const samplerColorBuffer: ISampler = {
+    const samplerColorBuffer: IGLSampler = {
         minFilter: "LINEAR",
         magFilter: "LINEAR",
     };
 
-    const colorRenderbuffer: IRenderbuffer = {
+    const colorRenderbuffer: IGLRenderbuffer = {
         internalformat: "RGBA4",
         width: FRAMEBUFFER_SIZE.x,
         height: FRAMEBUFFER_SIZE.y,
     };
 
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices,
     };
 
-    const renderObject: IRenderObject = {
+    const renderObject: IGLRenderObject = {
         pipeline: program,
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         vertexArray,
@@ -110,7 +110,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // Render FBO
-    const fboRenderPass: IRenderPass = {
+    const fboRenderPass: IGLRenderPass = {
         descriptor: {
             colorAttachments: [{
                 view: colorRenderbuffer,
@@ -120,7 +120,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         renderObjects: [renderObject],
     };
 
-    const framebufferResolve: IPassDescriptor = {
+    const framebufferResolve: IGLRenderPassDescriptor = {
         colorAttachments: [{
             view: { texture: textureColorBuffer, level: 0 },
             clearValue: [0.7, 0.0, 0.0, 1.0]
@@ -128,11 +128,11 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     //
-    const renderPassResolve: IRenderPass = {
+    const renderPassResolve: IGLRenderPass = {
         descriptor: framebufferResolve,
     };
 
-    const blitFramebuffers: IBlitFramebufferItem[] = [];
+    const blitFramebuffers: IGLBlitFramebufferItem[] = [];
     const TILE = 4;
     const BORDER = 2;
     for (let j = 0; j < TILE; j++)
@@ -155,13 +155,13 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         }
     }
 
-    const blitFramebuffer: IBlitFramebuffer = {
+    const blitFramebuffer: IGLBlitFramebuffer = {
         read: fboRenderPass.descriptor,
         draw: renderPassResolve.descriptor,
         blitFramebuffers,
     };
 
-    const renderObject2: IRenderObject = {
+    const renderObject2: IGLRenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
         vertexArray,
         uniforms: {
@@ -177,7 +177,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         pipeline: program,
     };
 
-    const renderPass2: IRenderPass = {
+    const renderPass2: IGLRenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],

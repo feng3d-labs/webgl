@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, IUniformBuffer, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLUniformBuffer, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,11 +11,11 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // --Init WebGL Context
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -24,7 +24,7 @@ import { getShaderSource } from "./utility";
         0, 1, 2,
         2, 3, 0
     ]);
-    const elementBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: elementData, usage: "STATIC_DRAW" };
+    const elementBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: elementData, usage: "STATIC_DRAW" };
 
     //vec3 position, vec3 normal, vec4 color
     const vertices = new Float32Array([
@@ -33,7 +33,7 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
     ]);
-    const vertexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
     //mat4 P, mat4 MV, mat3 Mnormal
     const transforms = new Float32Array([
@@ -53,12 +53,12 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const uniformPerDrawBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
+    const uniformPerDrawBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
 
     const lightPos = new Float32Array([
         0.0, 0.0, 0.0, 0.0,
     ]);
-    const uniformPerPassBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: lightPos, usage: "DYNAMIC_DRAW" };
+    const uniformPerPassBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: lightPos, usage: "DYNAMIC_DRAW" };
 
     //vec3 ambient, diffuse, specular, float shininess
     const material = new Float32Array([
@@ -66,10 +66,10 @@ import { getShaderSource } from "./utility";
         0.5, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 4.0,
     ]);
-    const uniformPerSceneBuffer: IUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
+    const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             position: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 0 },
             normal: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 12 },
@@ -78,7 +78,7 @@ import { getShaderSource } from "./utility";
         index: elementBuffer,
     };
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
         uniforms: {
@@ -89,7 +89,7 @@ import { getShaderSource } from "./utility";
         drawElements: { indexCount: 6, firstIndex: 0 }
     };
 
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };

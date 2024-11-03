@@ -1,4 +1,4 @@
-import { IProgram, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,11 +7,11 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program
-const program: IProgram = {
+const program: IGLProgram = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     primitive: { topology: "TRIANGLES" },
 };
@@ -25,7 +25,7 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texCoords = new Float32Array([
     0.0, 1.0,
@@ -35,10 +35,10 @@ const texCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
 // -- Init VertexArray
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -48,7 +48,7 @@ const vertexArray: IVertexArrayObject = {
 loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
-    const texture: ITexture = {
+    const texture: IGLTexture = {
         target: "TEXTURE_2D",
         pixelStore: {
             unpackFlipY: false,
@@ -58,7 +58,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         type: "UNSIGNED_BYTE",
         sources: [{ source: image, level: 0 }]
     };
-    const sampler: ISampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
+    const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 
     // -- Render
     const matrix = new Float32Array([
@@ -68,7 +68,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         0.2, -0.2, 0.0 //translation
     ]);
 
-    const rp: IRenderPass = {
+    const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
