@@ -7,6 +7,7 @@ export * from "./data/IGLIndexBuffer";
 export * from "./data/IGLPassDescriptor";
 export * from "./data/IGLPrimitiveState";
 export * from "./data/IGLQueryAction";
+export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";
 export * from "./data/IGLRenderingContext";
 export * from "./data/IGLRenderObject";
