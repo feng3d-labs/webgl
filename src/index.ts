@@ -22,7 +22,6 @@ export * from "./data/IGLVertexAttribute";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 export * from "./gl/WebGLEnums";
-export * from "./runs/runUniforms";
 export * from "./shader/Macro";
 export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";
