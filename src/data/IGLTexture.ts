@@ -1,4 +1,5 @@
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
+import { IGLTextureStorage } from "./IGLTextureStorage";
 
 /**
  * 纹理视图。
@@ -46,7 +47,7 @@ export interface IGLTexture
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage3D
      */
-    storage?: ITextureStorage;
+    storage?: IGLTextureStorage;
 
     /**
      * 写入纹理。
@@ -244,20 +245,6 @@ export interface IWriteTexture
      * 写入像素数据偏移。
      */
     srcOffset?: number
-}
-
-/**
- * 初始纹理时指定纹理存储的各个级别。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
- */
-export interface ITextureStorage
-{
-    levels: number, width: number, height: number;
-    /**
-     * 3D纹理深度。
-     */
-    depth?: number
 }
 
 /**
