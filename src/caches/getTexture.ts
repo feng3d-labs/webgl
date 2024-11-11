@@ -1,5 +1,6 @@
 import { watcher } from "@feng3d/watcher";
-import { IGLTexture, ITexturePixelStore, GLTextureTarget } from "../data/IGLTexture";
+import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
+import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
@@ -25,7 +26,7 @@ declare global
     }
 }
 
-const defaultTexturePixelStore: ITexturePixelStore = {
+const defaultTexturePixelStore: IGLTexturePixelStore = {
     packAlignment: 4,
     unpackAlignment: 4,
     unpackFlipY: false,
@@ -247,7 +248,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: IGLTexture)
  * @param gl
  * @param pixelStore 像素解包打包时参数。
  */
-function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTexturePixelStore)
 {
     const {
         packAlignment,

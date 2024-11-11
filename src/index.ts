@@ -21,6 +21,7 @@ export * from "./data/IGLRenderPipeline";
 export * from "./data/IGLSampler";
 export * from "./data/IGLSamplerTexture";
 export * from "./data/IGLTexture";
+export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTransformFeedback";
 export * from "./data/IGLUniforms";
 export * from "./data/IGLVertexArrayObject";

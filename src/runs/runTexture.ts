@@ -1,6 +1,6 @@
 import { getTexture } from "../caches/getTexture";
 import { IGLSamplerTexture } from "../data/IGLSamplerTexture";
-import { IGLBufferSource, IGLImageSource, IGLTexture, ITexturePixelStore, IGLTextureSource } from "../data/IGLTexture";
+import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "../data/IGLTexture";
 import { IUniformItemInfo } from "../data/IGLUniformInfo";
 import { runSampler } from "./runSampler";
 
