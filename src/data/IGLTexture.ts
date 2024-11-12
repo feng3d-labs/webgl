@@ -119,6 +119,9 @@ export interface IGLImageSource
      * 纹理图片资源。
      */
     source: TexImageSource
+
+    width?: number;
+    height?: number;
 }
 
 /**
