@@ -120,8 +120,20 @@ export interface IGLImageSource
      */
     source: TexImageSource
 
+    /**
+     * WebGL2支持
+     */
     width?: number;
+
+    /**
+     * WebGL2支持
+     */
     height?: number;
+
+    /**
+     * WebGL2支持
+     */
+    border?: number;
 }
 
 /**
@@ -175,6 +187,11 @@ export interface IGLBufferSource
      * 默认为 undefined。
      */
     pixels?: ArrayBufferView;
+
+    /**
+     * 默认为 0。
+     */
+    srcOffset?: number;
 }
 
 /**

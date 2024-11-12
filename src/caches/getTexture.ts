@@ -96,13 +96,27 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
                 if ("source" in sourceItem)
                 {
-                    const { level, source } = { ...defaultImageSource, ...sourceItem };
-                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                    const { level, source, width, height, border } = { ...defaultImageSource, ...sourceItem };
+                    if (width && height)
+                    {
+                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], source);
+                    }
+                    else
+                    {
+                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                    }
                 }
                 else
                 {
-                    const { level, width, height, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    const { level, width, height, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                    if (srcOffset)
+                    {
+                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels, srcOffset);
+                    }
+                    else
+                    {
+                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    }
                 }
             }
             else if (target === "TEXTURE_2D_ARRAY" || target === "TEXTURE_3D")
@@ -116,8 +130,15 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     }
                     else
                     {
-                        const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
+                        const { level, width, height, depth, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                        if (srcOffset)
+                        {
+                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels, srcOffset);
+                        }
+                        else
+                        {
+                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
+                        }
                     }
                 }
             }
