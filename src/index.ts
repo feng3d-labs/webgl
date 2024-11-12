@@ -38,3 +38,5 @@ export * from "./shader/ShaderMacroUtils";
 
 export * from "./WebGL";
 
+export * as internal from "./internal";
+
