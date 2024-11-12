@@ -26,7 +26,7 @@ declare global
     }
 }
 
-const defaultTexturePixelStore: IGLTexturePixelStore = {
+export const defaultTexturePixelStore: IGLTexturePixelStore = {
     packAlignment: 4,
     unpackAlignment: 4,
     unpackFlipY: false,
