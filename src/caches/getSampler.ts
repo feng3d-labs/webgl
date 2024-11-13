@@ -1,5 +1,5 @@
 import { IGLSampler } from "../data/IGLSampler";
-import { defaultSampler } from "../runs/runSampler";
+import { defaultGLSampler } from "../runs/runSampler";
 
 declare global
 {
@@ -19,7 +19,7 @@ export function getSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
         webGLSampler = gl.createSampler();
         gl._samplers.set(sampler, webGLSampler);
 
-        const { minFilter, magFilter, wrapS, wrapT, wrapR, lodMinClamp, lodMaxClamp, compareMode, compare } = { ...defaultSampler, ...sampler };
+        const { minFilter, magFilter, wrapS, wrapT, wrapR, lodMinClamp, lodMaxClamp, compareMode, compare } = { ...defaultGLSampler, ...sampler };
 
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MAG_FILTER, gl[magFilter]);

@@ -16,7 +16,7 @@ declare global
     }
 }
 
-export const defaultSampler: IGLSampler = {
+export const defaultGLSampler: IGLSampler = {
     minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR",
     wrapS: "REPEAT", wrapT: "REPEAT", wrapR: "REPEAT",
     lodMinClamp: 0, lodMaxClamp: 16,
@@ -39,7 +39,7 @@ export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture
     }
     else
     {
-        const { minFilter, magFilter, wrapS, wrapT } = { ...defaultSampler, ...sampler };
+        const { minFilter, magFilter, wrapS, wrapT } = { ...defaultGLSampler, ...sampler };
 
         // 设置纹理参数
         if (webGLTexture.minFilter !== minFilter)
@@ -65,7 +65,7 @@ export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture
     }
 
     //
-    const anisotropy = sampler?.anisotropy || defaultSampler.anisotropy;
+    const anisotropy = sampler?.anisotropy || defaultGLSampler.anisotropy;
     if (webGLTexture.anisotropy !== anisotropy)
     {
         const extension = gl.getExtension("EXT_texture_filter_anisotropic");
