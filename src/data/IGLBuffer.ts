@@ -5,8 +5,7 @@
  */
 export interface IGLBuffer
 {
-    // target: BufferTarget;
-    target: "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER";
+    target: GLBufferTarget;
 
     /**
      * 缓冲区数据。
@@ -38,7 +37,11 @@ export interface IGLWriteBuffer
     /**
      * 写入缓冲区数据。
      */
-    data: IAttributeBufferSourceTypes;
+    data: BufferSource;
+
+    dataOffset?: number
+
+    size?: number
 }
 
 /**
@@ -93,3 +96,4 @@ export type GLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // We
 export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
     | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
     | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
+// export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER"; 

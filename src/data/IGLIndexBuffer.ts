@@ -1,4 +1,4 @@
-import { GLBufferUsage } from "./IGLBuffer";
+import { GLBufferUsage, IGLBuffer } from "./IGLBuffer";
 
 /**
  * WebGL元素缓冲，顶点索引缓冲。
@@ -11,6 +11,8 @@ import { GLBufferUsage } from "./IGLBuffer";
 export interface IGLIndexBuffer
 {
     target: "ELEMENT_ARRAY_BUFFER";
+
+    buffer: IGLBuffer;
 
     /**
      * 顶点索引数据。
