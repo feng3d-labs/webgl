@@ -10,7 +10,7 @@ export interface IGLBuffer
     /**
      * 缓冲区数据。
      */
-    data?: IAttributeBufferSourceTypes;
+    data?: BufferSource;
 
     /**
      * 创建指定尺寸的空缓冲区。

@@ -1,4 +1,4 @@
-import { GLBufferUsage, IGLBuffer } from "./IGLBuffer";
+import { IGLBuffer } from "./IGLBuffer";
 
 /**
  * WebGL元素缓冲，顶点索引缓冲。
@@ -8,25 +8,14 @@ import { GLBufferUsage, IGLBuffer } from "./IGLBuffer";
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export interface IGLIndexBuffer
+export interface IGLIndexBuffer extends IGLBuffer
 {
     target: "ELEMENT_ARRAY_BUFFER";
-
-    buffer: IGLBuffer;
 
     /**
      * 顶点索引数据。
      */
     data: IElementBufferSourceTypes;
-
-    /**
-     * A GLenum specifying the intended usage pattern of the data store for optimization purposes.
-     *
-     * 为优化目的指定数据存储的预期使用模式的GLenum。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
-     */
-    usage?: GLBufferUsage;
 }
 
 /**

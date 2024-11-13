@@ -1,4 +1,4 @@
-import { getWebGLBuffer } from "../caches/getWebGLBuffer";
+import { getBufferType } from "../caches/getWebGLBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IGLDrawArrays } from "../data/IGLDrawArrays";
 import { IGLDrawElements } from "../data/IGLDrawElements";
@@ -37,10 +37,8 @@ export const defaultDrawIndexed: IGLDrawElements = Object.freeze({ firstIndex: 0
 
 function _runDrawElements(gl: WebGLRenderingContext, drawMode: IGLDrawMode, index: IGLIndexBuffer, drawElements: IGLDrawElements)
 {
-    //
-    const webGLBuffer = getWebGLBuffer(gl, index);
-    const type = webGLBuffer.data.bufferType;
-    const dataLength = webGLBuffer.data.length;
+    const type = getBufferType(index.data);
+    const dataLength = index.data.length;
     //
     let { indexCount, instanceCount, firstIndex } = drawElements || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
@@ -106,9 +104,7 @@ function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IGLVertexAtt
         {
             if (vertices.hasOwnProperty(attr))
             {
-                const buffer = getWebGLBuffer(gl, vertices[attr].buffer);
-
-                return buffer.data.length;
+                return vertices[attr].buffer.data.length;
             }
         }
 

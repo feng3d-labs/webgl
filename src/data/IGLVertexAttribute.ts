@@ -1,4 +1,4 @@
-import { IGLBuffer } from "./IGLBuffer";
+import { IAttributeBufferSourceTypes, IGLBuffer } from "./IGLBuffer";
 
 /**
  * 顶点属性数据。
@@ -54,6 +54,11 @@ export interface IGLVertexAttribute
 export interface IGLVertexBuffer extends IGLBuffer
 {
     target: "ARRAY_BUFFER";
+
+    /**
+     * 缓冲区数据。
+     */
+    data?: IAttributeBufferSourceTypes;
 }
 
 /**
