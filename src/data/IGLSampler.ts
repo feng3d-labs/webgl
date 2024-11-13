@@ -37,7 +37,7 @@ export interface IGLSampler
      */
     lodMaxClamp?: number;
 
-    compareMode?: "NONE";
+    compareMode?: "NONE" | "COMPARE_REF_TO_TEXTURE";
     /**
      * 比较函数。
      */
