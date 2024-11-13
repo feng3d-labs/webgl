@@ -37,12 +37,14 @@ export interface IGLSampler
      */
     lodMaxClamp?: number;
 
-    compareMode?: "NONE" | "COMPARE_REF_TO_TEXTURE";
+    compareMode?: GLSamplerCompareMode;
     /**
      * 比较函数。
      */
     compare?: GLCompareFunction;
 }
+
+export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
 
 /**
  * 纹理放大滤波器
