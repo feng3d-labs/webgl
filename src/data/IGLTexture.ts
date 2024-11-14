@@ -131,6 +131,13 @@ export interface IGLImageSource
     height?: number;
 
     /**
+     * 纹理深度，默认为 1。
+     *
+     * WebGL2 支持。
+     */
+    depth?: number;
+
+    /**
      * WebGL2支持
      */
     border?: number;
