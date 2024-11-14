@@ -7,6 +7,13 @@ export interface IGLBuffer
 {
     target: GLBufferTarget;
 
+    /** 
+     * 被bindBuffer多次绑定到不同位置时，需要填入多个值。
+     * 
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/bindBuffer) 
+     */
+    targets?: GLBufferTarget[];
+
     /**
      * 缓冲区数据。
      */
