@@ -38,5 +38,7 @@ export * from "./shader/ShaderMacroUtils";
 
 export * from "./WebGL";
 
+export * from "./runs/runDrawCall";
+
 export * as internal from "./internal";
 

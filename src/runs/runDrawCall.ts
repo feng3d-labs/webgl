@@ -72,7 +72,7 @@ function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertic
     let { firstVertex, vertexCount, instanceCount } = drawArrays || {};
     //
     firstVertex = firstVertex || defaultDrawVertex.firstVertex;
-    vertexCount = vertexCount || getAttributeVertexNum(gl, vertices) || defaultDrawVertex.vertexCount;
+    vertexCount = vertexCount || getAttributeVertexNum(vertices) || defaultDrawVertex.vertexCount;
     instanceCount = instanceCount || defaultDrawVertex.instanceCount;
 
     if (instanceCount > 1)
@@ -96,7 +96,7 @@ function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertic
 /**
  * 获取属性顶点属性。
  */
-function getAttributeVertexNum(gl: WebGLRenderingContext, vertices: IGLVertexAttributes)
+export function getAttributeVertexNum(vertices: IGLVertexAttributes)
 {
     const vertexNum = ((vertices) =>
     {

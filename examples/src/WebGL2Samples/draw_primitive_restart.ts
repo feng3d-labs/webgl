@@ -52,7 +52,7 @@ const vertexArray: IGLVertexArrayObject = {
 const renderObject: IGLRenderObject = {
     vertexArray,
     uniforms: {},
-    drawArrays: { instanceCount: 2 },
+    drawElements: { instanceCount: 2 },
     pipeline: program,
 };
 
