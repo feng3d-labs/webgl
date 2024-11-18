@@ -25,6 +25,8 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     if (webGLFramebuffer) return webGLFramebuffer;
 
+    const multisample = passDescriptor.multisample;
+
     webGLFramebuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
     gl._framebuffers.set(passDescriptor, webGLFramebuffer);
@@ -61,7 +63,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         }
         else
         {
-            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer);
+            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer, multisample);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
         }
     });
