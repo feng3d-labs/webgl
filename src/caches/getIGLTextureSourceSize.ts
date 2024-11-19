@@ -21,5 +21,10 @@ export function getIGLTextureSourceSize(glTextureSource: IGLTextureSource)
         size[1] = glBufferSource.height;
     }
 
+    if (glTextureSource.depth)
+    {
+        size[2] = glTextureSource.depth;
+    }
+
     return size;
 }
