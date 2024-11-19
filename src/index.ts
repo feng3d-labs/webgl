@@ -23,6 +23,7 @@ export * from "./data/IGLRenderPassDepthStencilAttachment";
 export * from "./data/IGLRenderPipeline";
 export * from "./data/IGLSampler";
 export * from "./data/IGLSamplerTexture";
+export * from "./data/IGLScissor";
 export * from "./data/IGLTexture";
 export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTextureStorage";

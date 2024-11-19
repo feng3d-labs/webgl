@@ -8,6 +8,11 @@
 export interface IGLScissor
 {
     /**
+     * 是否开启
+     */
+    enable?: boolean;
+
+    /**
      * 剪刀盒X轴最小值（像素）。
      */
     x: number,
