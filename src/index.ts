@@ -1,6 +1,8 @@
+export * from "./data/IGLBlendState";
 export * from "./data/IGLBlitFramebuffer";
 export * from "./data/IGLBuffer";
 export * from "./data/IGLCapabilities";
+export * from "./data/IGLColorTargetState";
 export * from "./data/IGLCopyBuffer";
 export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLDrawArrays";
@@ -29,6 +31,8 @@ export * from "./data/IGLVertexArrayObject";
 export * from "./data/IGLVertexAttribute";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
+
+export * from "./runs/runColorTargetStates";
 
 export * from "./gl/WebGLEnums";
 
