@@ -33,6 +33,7 @@ export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 
 export * from "./runs/runColorTargetStates";
+export * from "./runs/runPassDescriptor";
 
 export * from "./gl/WebGLEnums";
 

@@ -4,7 +4,7 @@ import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
 import { runFramebuffer } from "./runFramebuffer";
 
 const defaultRenderPassColorAttachment: IGLRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-const defaultDepthStencilAttachment: IGLRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+export const defaultDepthStencilAttachment: IGLRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
 
 export function runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
 {
