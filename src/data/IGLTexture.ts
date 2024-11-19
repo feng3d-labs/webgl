@@ -54,7 +54,7 @@ export interface IGLTexture
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
      */
-    writeTextures?: IWriteTexture[];
+    writeTextures?: IGLWriteTexture[];
 
     /**
      * 是否生成mipmap
@@ -226,7 +226,7 @@ export type TextureCubeMapTarget =
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  */
-export interface IWriteTexture
+export interface IGLWriteTexture
 {
     /**
      * 当上传CubeMap纹理数据时指定位置。
