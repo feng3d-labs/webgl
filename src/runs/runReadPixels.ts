@@ -7,7 +7,7 @@ export function runReadPixels(gl: WebGLRenderingContext, readPixels: IGLReadPixe
     {
         const { frameBuffer, attachmentPoint, x, y, width, height, format, type, dstData, dstOffset } = readPixels;
 
-        const webGLFramebuffer = getFramebuffer(gl, readPixels.frameBuffer);
+        const webGLFramebuffer = getFramebuffer(gl, frameBuffer);
         gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
 
         gl.readBuffer(gl[attachmentPoint]);
