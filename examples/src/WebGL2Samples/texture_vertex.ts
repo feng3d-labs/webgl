@@ -233,7 +233,8 @@ import { getShaderSource, loadImage } from "./utility";
                 });
             }
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

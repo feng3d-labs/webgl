@@ -368,7 +368,15 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        webgl.runRenderPass({ renderObjects: [renderObject] });
+        webgl.submit({
+            commandEncoders: [{
+                passEncoders: [
+                    {
+                        renderObjects: [renderObject]
+                    }
+                ]
+            }]
+        });
 
         requestAnimationFrame(draw);
     }

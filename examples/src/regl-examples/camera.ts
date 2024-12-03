@@ -75,7 +75,15 @@ function draw()
 
     camera(renderObject, canvas.width, canvas.height);
 
-    webgl.runRenderPass({ renderObjects: [renderObject] });
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
+    });
 
     requestAnimationFrame(draw);
 }

@@ -104,7 +104,8 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Render
             ro.uniforms.layer = frame;
-            webgl.runRenderPass(rp);
+
+            webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
             frame = (frame + 1) % NUM_IMAGES;
 

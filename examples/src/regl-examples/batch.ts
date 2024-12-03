@@ -87,7 +87,15 @@ function draw()
         renderObjects.push(getRenderObject(tick, batchId));
     }
 
-    webgl.runRenderPass({ renderObjects });
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects
+                }
+            ]
+        }]
+    });
 
     requestAnimationFrame(draw);
 }

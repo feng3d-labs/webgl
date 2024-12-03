@@ -78,7 +78,7 @@ function main()
     drawArrays: { firstVertex: 0, vertexCount: 4 },
   };
 
-  const renderPasss: IGLRenderPass = {
+  const renderPass: IGLRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -106,7 +106,7 @@ function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    webgl.runRenderPass(renderPasss);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
     requestAnimationFrame(render);
   }

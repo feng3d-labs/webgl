@@ -57,7 +57,8 @@ const rp: IGLRenderPass = {
         drawArrays: { vertexCount: 3, instanceCount: 2 },
     }]
 };
-webgl.runRenderPass(rp);
+
+webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 // -- Delete WebGL resources
 webgl.deleteBuffer(vertexPosBuffer);

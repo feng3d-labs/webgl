@@ -46,14 +46,20 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         pipeline: program
     };
 
-    webgl.runRenderPass({
-        descriptor: {
-            colorAttachments: [{
-                clearValue: [0.0, 0.0, 0.0, 1.0],
-                loadOp: "clear",
-            }],
-        },
-        renderObjects: [renderObject]
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    descriptor: {
+                        colorAttachments: [{
+                            clearValue: [0.0, 0.0, 0.0, 1.0],
+                            loadOp: "clear",
+                        }],
+                    },
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
     });
 
     // Delete WebGL resources

@@ -242,7 +242,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.u_viewProj = viewProj;
         ro.uniforms.s_tex2D = { texture, sampler };
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
 

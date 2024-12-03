@@ -108,7 +108,7 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: VERTEX_COUNT },
     });
 
-    webgl.runRenderPass(rp);
+    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);

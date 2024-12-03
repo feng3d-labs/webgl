@@ -142,7 +142,6 @@ const rp1: IGLRenderPass = {
             drawArrays: { vertexCount: 6 },
         }],
 };
-webgl.runRenderPass(rp1);
 
 // Pass 2
 const rp: IGLRenderPass = {
@@ -170,7 +169,8 @@ for (let i = 0; i < Textures.MAX; ++i)
             uniforms: { ...ro.uniforms, layer: i },
         });
 }
-webgl.runRenderPass(rp);
+
+webgl.submit({ commandEncoders: [{ passEncoders: [rp1, rp] }] });
 
 const data = new Uint8Array(w * h * 4 * 3);
 

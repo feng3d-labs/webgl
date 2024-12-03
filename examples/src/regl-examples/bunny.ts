@@ -79,7 +79,15 @@ function draw()
     viewportHeight = canvas.height = canvas.clientHeight;
 
     tick++;
-    webgl.runRenderPass({ renderObjects: [renderObject] });
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
+    });
 
     requestAnimationFrame(draw);
 }

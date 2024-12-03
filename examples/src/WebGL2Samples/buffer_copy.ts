@@ -39,7 +39,6 @@ import { getShaderSource } from "./utility";
         destination: vertexPosBufferDst,
         sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
     };
-    webgl.runCopyBuffer(cb);
 
     // -- Init Vertex Array
     const vertexArray: IGLVertexArrayObject = {
@@ -57,7 +56,8 @@ import { getShaderSource } from "./utility";
             drawArrays: { vertexCount: 6 },
         }]
     };
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [cb, rp] }] });
 
     // -- Delete WebGL resources
     webgl.deleteBuffer(vertexPosBufferSrc);

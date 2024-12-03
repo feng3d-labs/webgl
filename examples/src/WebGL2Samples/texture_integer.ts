@@ -87,7 +87,7 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects: [ro],
         };
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
         webgl.deleteBuffer(vertexPosBuffer);

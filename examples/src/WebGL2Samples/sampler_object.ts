@@ -106,7 +106,8 @@ function render()
             drawArrays: { vertexCount: 6, instanceCount: 1 },
         }],
     };
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // Cleanup
     webgl.deleteBuffer(vertexPosBuffer);

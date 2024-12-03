@@ -174,8 +174,7 @@ for (let i = 0; i < Textures.MAX; ++i)
     );
 }
 
-webgl.runRenderPass(renderPass1);
-webgl.runRenderPass(renderPass);
+webgl.submit({ commandEncoders: [{ passEncoders: [renderPass1, renderPass] }] });
 
 // Clean up
 webgl.deleteBuffer(vertexPosBuffer);

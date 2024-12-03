@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -168,6 +168,7 @@ const vertexArrays: IGLVertexArrayObject[] = [
 ];
 
 // -- Render
+const passEncoders: IGLPassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();
@@ -183,7 +184,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             drawArrays: { vertexCount },
         }]
     };
-    webgl.runRenderPass(rp);
+    passEncoders.push(rp);
 
     // Blit framebuffers, no Multisample texture 2d in WebGL 2
     // centroid will only work with multisample
@@ -197,7 +198,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             "COLOR_BUFFER_BIT", "NEAREST"
         ]],
     };
-    webgl.runBlitFramebuffer(blit);
+    passEncoders.push(blit);
 }
 
 // Pass 2
@@ -229,7 +230,9 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         }
     );
 }
-webgl.runRenderPass(rp2);
+passEncoders.push(rp2);
+
+webgl.submit({ commandEncoders: [{ passEncoders }] });
 
 // -- Delete WebGL resources
 webgl.deleteBuffer(texVertexPosBuffer);

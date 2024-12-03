@@ -6,15 +6,21 @@ import { WebGL } from "@feng3d/webgl";
 function main()
 {
     const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
-    webgl.runRenderPass({
-        descriptor: {
-            colorAttachments: [{
-                clearValue: [1, 0, 0, 0.5],
-                loadOp: "clear",
-            }],
-        },
-    }
-    );
+
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    descriptor: {
+                        colorAttachments: [{
+                            clearValue: [1, 0, 0, 0.5],
+                            loadOp: "clear",
+                        }],
+                    },
+                }
+            ]
+        }]
+    });
 }
 
 window.onload = main;

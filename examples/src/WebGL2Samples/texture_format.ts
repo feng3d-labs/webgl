@@ -219,7 +219,8 @@ import { getShaderSource, loadImage } from "./utility";
                     drawArrays: { vertexCount: 6 },
                 });
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
         webgl.deleteBuffer(vertexPosBuffer);

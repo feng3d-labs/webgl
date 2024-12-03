@@ -105,7 +105,6 @@ const renderPass: IGLRenderPass = {
     }],
 
 };
-webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw
 const rp2: IGLRenderPass = {
@@ -119,7 +118,8 @@ const rp2: IGLRenderPass = {
         drawArrays: { vertexCount: 6 },
     }],
 };
-webgl.runRenderPass(rp2);
+
+webgl.submit({ commandEncoders: [{ passEncoders: [renderPass, rp2] }] });
 
 // Clean up
 webgl.deleteBuffer(triVertexPosBuffer);

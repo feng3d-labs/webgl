@@ -77,7 +77,8 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             drawArrays: { vertexCount: 6 },
         }]
     };
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // Delete WebGL resources
     webgl.deleteBuffer(vertexPosBuffer);

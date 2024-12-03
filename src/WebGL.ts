@@ -71,31 +71,6 @@ export class WebGL
         this._runWebGL.runSubmit(this.gl, submit);
     }
 
-    /**
-     * 提交一次渲染通道数据。
-     *
-     * @param renderingContext 渲染画布上下文描述。
-     * @param renderPass 渲染通道数据。
-     * @returns
-     */
-    runRenderPass(renderPass: IGLRenderPass)
-    {
-        const submit: IGLSubmit = { commandEncoders: [{ passEncoders: [renderPass] }] };
-        this.submit(submit);
-    }
-
-    runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
-    {
-        const submit: IGLSubmit = { commandEncoders: [{ passEncoders: [blitFramebuffer] }] };
-        this.submit(submit);
-    }
-
-    runCopyBuffer(copyBuffer: IGLCopyBufferToBuffer)
-    {
-        const submit: IGLSubmit = { commandEncoders: [{ passEncoders: [copyBuffer] }] };
-        this.submit(submit);
-    }
-
     runReadPixels(readPixels: IGLReadPixels)
     {
         runReadPixels(this.gl, readPixels);

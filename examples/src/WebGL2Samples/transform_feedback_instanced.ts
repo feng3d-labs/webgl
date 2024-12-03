@@ -180,7 +180,7 @@ import { getShaderSource } from "./utility";
 
         renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

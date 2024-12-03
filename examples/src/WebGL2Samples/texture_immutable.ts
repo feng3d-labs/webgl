@@ -139,7 +139,7 @@ import { getShaderSource, loadImage } from "./utility";
                 },
             });
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
         webgl.deleteBuffer(vertexPosBuffer);

@@ -51,7 +51,7 @@ const renderObject: IGLRenderObject = {
     pipeline,
 };
 
-const data: IGLRenderPass = {
+const rp: IGLRenderPass = {
     descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -72,7 +72,7 @@ const data: IGLRenderPass = {
     ],
 };
 
-webgl.runRenderPass(data);
+webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(pipeline);

@@ -109,7 +109,7 @@ function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IGLRenderPass = {
+  const renderPass: IGLRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -143,14 +143,14 @@ function main()
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
     renderObject.uniforms.uNormalMatrix = normalMatrix;
 
-    webgl.runRenderPass(renderPasss);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 }
 
-function setupVideo(url)
+function setupVideo(url: string)
 {
   const video = document.createElement("video");
 

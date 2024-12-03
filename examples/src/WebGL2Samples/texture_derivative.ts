@@ -239,7 +239,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.pMatrix = perspectiveMatrix;
         ro.uniforms.diffuse = { texture, sampler };
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

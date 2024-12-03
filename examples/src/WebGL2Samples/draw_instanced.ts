@@ -46,14 +46,20 @@ const renderObject: IGLRenderObject = {
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-webgl.runRenderPass({
-    descriptor: {
-        colorAttachments: [{
-            clearValue: [0.0, 0.0, 0.0, 1.0],
-            loadOp: "clear",
-        }],
-    },
-    renderObjects: [renderObject]
+webgl.submit({
+    commandEncoders: [{
+        passEncoders: [
+            {
+                descriptor: {
+                    colorAttachments: [{
+                        clearValue: [0.0, 0.0, 0.0, 1.0],
+                        loadOp: "clear",
+                    }],
+                },
+                renderObjects: [renderObject]
+            }
+        ]
+    }]
 });
 
 // -- Delete WebGL resources

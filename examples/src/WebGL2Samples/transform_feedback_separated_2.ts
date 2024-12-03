@@ -148,7 +148,7 @@ import { getShaderSource } from "./utility";
 
         ro.uniforms.u_time = time;
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

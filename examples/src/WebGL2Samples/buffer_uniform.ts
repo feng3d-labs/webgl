@@ -107,7 +107,7 @@ import { getShaderSource } from "./utility";
         lightPos[1] = Math.sin(6 * uTime);
         uniformPerPassBuffer.writeBuffers = [{ bufferOffset: 0, data: lightPos }];
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

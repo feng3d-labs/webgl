@@ -189,9 +189,15 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // 执行
-    webgl.runRenderPass(fboRenderPass);
-    webgl.runBlitFramebuffer(blitFramebuffer);
-    webgl.runRenderPass(renderPass2);
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                fboRenderPass,
+                blitFramebuffer,
+                renderPass2,
+            ]
+        }]
+    });
 
     // Delete WebGL resources
     webgl.deleteFramebuffer(fboRenderPass.descriptor);

@@ -65,7 +65,7 @@ rp.renderObjects.push({
 
 rp.renderObjects.push({ __type: "IGLQueryAction", action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
 
-webgl.runRenderPass(rp);
+webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 webgl.getQueryResult(query).then((samplesPassed) =>
 {

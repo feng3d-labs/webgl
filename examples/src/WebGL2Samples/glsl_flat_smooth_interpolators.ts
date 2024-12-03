@@ -185,7 +185,8 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 }
             }
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     })();

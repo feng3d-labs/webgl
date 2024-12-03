@@ -200,7 +200,7 @@ import { getShaderSource } from "./utility";
             renderObjects[i].uniforms.orientation = matrices[i];
         }
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

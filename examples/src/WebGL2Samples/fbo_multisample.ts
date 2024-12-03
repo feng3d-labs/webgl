@@ -123,8 +123,6 @@ const renderPass1: IGLRenderPass = {
     }]
 };
 
-webgl.runRenderPass(renderPass1);
-
 // Blit framebuffers, no Multisample texture 2d in WebGL 2
 const blitFramebuffer: IGLBlitFramebuffer = {
     __type: "IGLBlitFramebuffer",
@@ -134,7 +132,6 @@ const blitFramebuffer: IGLBlitFramebuffer = {
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
         "COLOR_BUFFER_BIT", "NEAREST"]],
 };
-webgl.runBlitFramebuffer(blitFramebuffer);
 
 // Pass 2
 
@@ -154,7 +151,8 @@ const renderPass2: IGLRenderPass = {
         }
     ],
 };
-webgl.runRenderPass(renderPass2);
+
+webgl.submit({ commandEncoders: [{ passEncoders: [renderPass1, blitFramebuffer, renderPass2] }] });
 
 // -- Delete WebGL resources
 webgl.deleteBuffer(vertexDataBuffer);

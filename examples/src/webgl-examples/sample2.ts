@@ -11,7 +11,7 @@ function main()
 
     const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
-    const renderPasss: IGLRenderPass = {
+    const renderPass: IGLRenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0, 0, 0, 1],
@@ -66,7 +66,7 @@ function main()
         }],
     };
 
-    webgl.runRenderPass(renderPasss);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 }
 
 function drawScene(canvas: HTMLCanvasElement)

@@ -193,7 +193,8 @@ function render()
         }
     }
 
-    webgl.runRenderPass(renderPass);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
+
 
     // -- Clean up
     webgl.deleteBuffer(vertexPosBuffer);

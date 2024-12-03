@@ -120,7 +120,16 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = canvas.width = canvas.clientWidth;
         viewportHeight = canvas.height = canvas.clientHeight;
 
-        webgl.runRenderPass({ renderObjects: [renderObject] });
+        webgl.submit({
+            commandEncoders: [{
+                passEncoders: [
+                    {
+                        renderObjects: [renderObject]
+                    }
+                ]
+            }]
+        });
+        
         requestAnimationFrame(draw);
     }
 
