@@ -88,16 +88,6 @@ export class WebGL
         this.submit(submit);
     }
 
-    /**
-     * 渲染一次。
-     *
-     * @param renderObject 渲染原子，包含渲染所需的所有数据。
-     */
-    runRenderObject(renderObject: IGLRenderObject)
-    {
-        runRenderObject(this.gl, renderObject);
-    }
-
     runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
     {
         runBlitFramebuffer(this.gl, blitFramebuffer);

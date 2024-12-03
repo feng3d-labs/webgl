@@ -34,9 +34,6 @@ export * from "./data/IGLVertexAttribute";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 
-export * from "./runs/runColorTargetStates";
-export * from "./runs/runPassDescriptor";
-
 export * from "./gl/WebGLEnums";
 
 export * from "./shader/Macro";
@@ -44,8 +41,6 @@ export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";
 
 export * from "./WebGL";
-
-export * from "./runs/runDrawCall";
 
 export * as internal from "./internal";
 

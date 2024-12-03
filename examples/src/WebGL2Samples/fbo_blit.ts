@@ -156,6 +156,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     }
 
     const blitFramebuffer: IGLBlitFramebuffer = {
+        __type: "IGLBlitFramebuffer",
         read: fboRenderPass.descriptor,
         draw: renderPassResolve.descriptor,
         blitFramebuffers,

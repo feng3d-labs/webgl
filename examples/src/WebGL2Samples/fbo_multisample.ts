@@ -127,6 +127,7 @@ webgl.runRenderPass(renderPass1);
 
 // Blit framebuffers, no Multisample texture 2d in WebGL 2
 const blitFramebuffer: IGLBlitFramebuffer = {
+    __type: "IGLBlitFramebuffer",
     read: framebuffers[FRAMEBUFFER.RENDERBUFFER],
     draw: framebuffers[FRAMEBUFFER.COLORBUFFER],
     blitFramebuffers: [[0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,

@@ -5,6 +5,11 @@ import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
  */
 export interface IGLBlitFramebuffer
 {
+    /**
+     * 数据类型。
+     */
+    readonly __type: "IGLBlitFramebuffer";
+
     read: IGLRenderPassDescriptor;
     draw: IGLRenderPassDescriptor;
     blitFramebuffers: IGLBlitFramebufferItem[];

@@ -1,7 +1,11 @@
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
+import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLRenderPass } from "./data/IGLRenderPass";
+import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
+import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
 import { IGLSubmit } from "./data/IGLSubmit";
-import { runPassDescriptor } from "./runs/runPassDescriptor";
+import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
+import { runFramebuffer } from "./runs/runFramebuffer";
 import { runQueryAction } from "./runs/runQueryAction";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runScissor } from "./runs/runScissor";
@@ -31,6 +35,10 @@ export class RunWebGL
             {
                 this.runRenderPass(gl, passEncoder);
             }
+            else if (passEncoder.__type === "IGLBlitFramebuffer")
+            {
+                runBlitFramebuffer(gl, passEncoder);
+            }
             else
             {
                 console.error(`未处理 passEncoder ${passEncoder}`);
@@ -40,7 +48,7 @@ export class RunWebGL
 
     protected runRenderPass(gl: WebGLRenderingContext, renderPass: IGLRenderPass)
     {
-        runPassDescriptor(gl, renderPass.descriptor);
+        this.runPassDescriptor(gl, renderPass.descriptor);
 
         renderPass.renderObjects?.forEach((renderObject) =>
         {
@@ -63,4 +71,35 @@ export class RunWebGL
         });
     }
 
+    private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
+    {
+        passDescriptor = passDescriptor || {};
+
+        //
+        const colorAttachment = Object.assign({}, defaultRenderPassColorAttachment, passDescriptor.colorAttachments?.[0]);
+
+        //
+        runFramebuffer(gl, passDescriptor);
+
+        //
+        const { clearValue, loadOp } = colorAttachment;
+        gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
+
+        //
+        const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
+        const { depthClearValue, depthLoadOp, stencilClearValue, stencilLoadOp } = depthStencilAttachment;
+        gl.clearDepth(depthClearValue);
+        gl.clearStencil(stencilClearValue);
+
+        //
+        gl.clear((loadOp === "clear" ? gl.COLOR_BUFFER_BIT : 0)
+            | (depthLoadOp === "clear" ? gl.DEPTH_BUFFER_BIT : 0)
+            | (stencilLoadOp === "clear" ? gl.STENCIL_BUFFER_BIT : 0)
+        );
+    }
+
+
 }
+
+export const defaultRenderPassColorAttachment: IGLRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
+export const defaultDepthStencilAttachment: IGLRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };

@@ -188,6 +188,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     // Blit framebuffers, no Multisample texture 2d in WebGL 2
     // centroid will only work with multisample
     const blit: IGLBlitFramebuffer = {
+        __type: "IGLBlitFramebuffer",
         read: framebuffers[i],
         draw: framebuffers[i + 2],
         blitFramebuffers: [[
