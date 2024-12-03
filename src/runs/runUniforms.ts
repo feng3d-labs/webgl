@@ -1,18 +1,18 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { getProgram } from "../caches/getProgram";
-import { IWebGLUniformBufferType } from "../const/WebGLUniformType";
-import { IBuffer } from "../data/IBuffer";
-import { IRenderPipeline } from "../data/IRenderPipeline";
-import { ISamplerTexture } from "../data/ISamplerTexture";
-import { IUniformItemInfo } from "../data/IUniformInfo";
-import { IUniforms } from "../data/IUniforms";
+import { IGLUniformBufferType } from "../const/WebGLUniformType";
+import { IGLBuffer } from "../data/IGLBuffer";
+import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
+import { IGLSamplerTexture } from "../data/IGLSamplerTexture";
+import { IUniformItemInfo } from "../data/IGLUniformInfo";
+import { IGLUniforms } from "../data/IGLUniforms";
 import { LazyObject, lazy } from "../types";
 import { runSamplerTexture } from "./runTexture";
 
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: LazyObject<IUniforms>)
+export function runUniforms(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, uniforms: LazyObject<IGLUniforms>)
 {
     const webGLProgram = getProgram(gl, pipeline);
 
@@ -37,11 +37,11 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
 
             if (isTexture)
             {
-                runSamplerTexture(gl, v, uniformData as ISamplerTexture);
+                runSamplerTexture(gl, v, uniformData as IGLSamplerTexture);
             }
             else
             {
-                runUniform(gl, type as IWebGLUniformBufferType, v, uniformData);
+                runUniform(gl, type as IGLUniformBufferType, v, uniformData);
             }
         });
     });
@@ -54,7 +54,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
             const uniformData = lazy.getValue(uniforms[name], uniforms);
 
             //
-            const webGLBuffer = getWebGLBuffer(gl, uniformData as IBuffer);
+            const webGLBuffer = getWebGLBuffer(gl, uniformData as IGLBuffer);
             gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
         });
     }
@@ -63,7 +63,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline
 /**
  * 设置环境Uniform数据
  */
-function runUniform(gl: WebGLRenderingContext, type: IWebGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
+function runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
 {
     const location = uniformInfo.location;
     switch (type)

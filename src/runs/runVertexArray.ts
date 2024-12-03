@@ -1,6 +1,6 @@
 import { getProgram } from "../caches/getProgram";
-import { IRenderPipeline } from "../data/IRenderPipeline";
-import { IVertexArrayObject } from "../data/IVertexArrayObject";
+import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
+import { IGLVertexArrayObject } from "../data/IGLVertexArrayObject";
 import { runIndexBuffer } from "./runIndexBuffer";
 import { runVertexAttribute } from "./runVertexAttribute";
 
@@ -8,14 +8,14 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: Map<IVertexArrayObject, WebGLVertexArrayObject>;
+        _vertexArrays: Map<IGLVertexArrayObject, WebGLVertexArrayObject>;
     }
 }
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。
  */
-export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertexArray: IVertexArrayObject)
+export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, vertexArray: IGLVertexArrayObject)
 {
     if (!vertexArray) return;
 
@@ -59,7 +59,7 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipel
     runIndexBuffer(gl, index);
 }
 
-export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IVertexArrayObject)
+export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IGLVertexArrayObject)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

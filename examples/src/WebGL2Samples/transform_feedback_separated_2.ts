@@ -1,4 +1,4 @@
-import { IProgram, IRenderObject, IRenderPass, IRenderingContext, ITransformFeedback, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,7 +11,8 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
     {
@@ -55,12 +56,12 @@ import { getShaderSource } from "./utility";
     }
 
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs: IVertexArrayObject[] = [];
+    const particleVAOs: IGLVertexArrayObject[] = [];
 
     // Transform feedback objects track output buffer state
-    const particleTransformFeedbacks: ITransformFeedback[] = [];
+    const particleTransformFeedbacks: IGLTransformFeedback[] = [];
 
-    const particleVBOs: IVertexBuffer[][] = new Array(particleVAOs.length);
+    const particleVBOs: IGLVertexBuffer[][] = new Array(particleVAOs.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -100,7 +101,7 @@ import { getShaderSource } from "./utility";
 
     function initProgram()
     {
-        const program: IProgram = {
+        const program: IGLProgram = {
             vertex: { code: getShaderSource("vs-draw") },
             fragment: {
                 code: getShaderSource("fs-draw"),
@@ -118,7 +119,7 @@ import { getShaderSource } from "./utility";
         return program;
     }
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
@@ -128,8 +129,8 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: NUM_PARTICLES },
     };
 
-    const rp: IRenderPass = {
-        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    const rp: IGLRenderPass = {
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
 
@@ -147,7 +148,7 @@ import { getShaderSource } from "./utility";
 
         ro.uniforms.u_time = time;
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

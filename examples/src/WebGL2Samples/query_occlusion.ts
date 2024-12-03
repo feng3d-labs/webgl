@@ -1,4 +1,4 @@
-import { IVertexBuffer, IBuffer, IProgram, IQuery, IRenderObject, IRenderPass, IRenderingContext, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -9,10 +9,11 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // -- Init WebGL Context
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: IProgram = {
+const program: IGLProgram = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: { depth: { depthtest: true } },
     primitive: { topology: "TRIANGLES" },
@@ -28,27 +29,27 @@ const vertices = new Float32Array([
     0.3, -0.5, 0.5,
     0.0, 0.5, 0.5
 ]);
-const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
 };
 // -- Init Query
-const query: IQuery = {};
+const query: IGLQuery = {};
 
 // -- Render
-const rp: IRenderPass = {
-    passDescriptor: {
+const rp: IGLRenderPass = {
+    descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },
     renderObjects: [],
 };
 
-const ro: IRenderObject = {
+const ro: IGLRenderObject = {
     vertexArray,
     pipeline: program,
     drawArrays: { firstVertex: 0, vertexCount: 3 },
@@ -64,14 +65,14 @@ rp.renderObjects.push({
 
 rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
 
-WebGL.runRenderPass(rc, rp);
+webgl.runRenderPass(rp);
 
-WebGL.getQueryResult(rc, query).then((samplesPassed) =>
+webgl.getQueryResult(query).then((samplesPassed) =>
 {
     document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
 });
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(rc, vertexPosBuffer);
-WebGL.deleteProgram(rc, program);
-WebGL.deleteVertexArray(rc, vertexArray);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteProgram(program);
+webgl.deleteVertexArray(vertexArray);

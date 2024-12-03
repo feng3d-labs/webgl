@@ -1,5 +1,5 @@
+import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IRenderPass, WebGL } from "@feng3d/webgl-renderer";
 
 let squareRotation = 0.0;
 
@@ -12,7 +12,9 @@ function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-  const renderObject: IRenderObject = {
+  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLE_STRIP" },
       vertex: {
@@ -76,8 +78,8 @@ function main()
     drawArrays: { firstVertex: 0, vertexCount: 4 },
   };
 
-  const renderPasss: IRenderPass = {
-    passDescriptor: {
+  const renderPasss: IGLRenderPass = {
+    descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
         loadOp: "clear",
@@ -104,7 +106,7 @@ function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 
     requestAnimationFrame(render);
   }

@@ -1,7 +1,7 @@
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
-import { IAttributeInfo } from "../data/IAttributeInfo";
-import { IRenderPipeline, ITransformFeedbackVaryings } from "../data/IRenderPipeline";
-import { IUniformInfo, IUniformItemInfo } from "../data/IUniformInfo";
+import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
+import { IGLRenderPipeline, ITransformFeedbackVaryings } from "../data/IGLRenderPipeline";
+import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getWebGLAttributeValueType } from "./getWebGLAttributeType";
 
 declare global
@@ -19,11 +19,11 @@ declare global
         /**
          * 属性信息列表
          */
-        attributes: IAttributeInfo[];
+        attributes: IGLAttributeInfo[];
         /**
          * uniform信息列表
          */
-        uniforms: IUniformInfo[];
+        uniforms: IGLUniformInfo[];
 
         /**
          * 统一变量块信息列表。
@@ -37,7 +37,7 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+export function getProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
@@ -53,7 +53,7 @@ export function getProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;
@@ -67,7 +67,7 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function getKey(pipeline: IRenderPipeline)
+function getKey(pipeline: IGLRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;
@@ -89,7 +89,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
 
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-    const attributes: IAttributeInfo[] = [];
+    const attributes: IGLAttributeInfo[] = [];
     for (let i = 0; i < numAttributes; i++)
     {
         const activeInfo = gl.getActiveAttrib(program, i);
@@ -100,7 +100,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    const uniforms: IUniformInfo[] = [];
+    const uniforms: IGLUniformInfo[] = [];
     let textureID = 0;
     for (let i = 0; i < numUniforms; i++)
     {
@@ -156,7 +156,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             gl.uniformBlockBinding(program, i, i);
             // 获取包含的统一变量列表。
             const uniformIndices: Uint32Array = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
-            const uniformList: IUniformInfo[] = [];
+            const uniformList: IGLUniformInfo[] = [];
             for (let i = 0; i < uniformIndices.length; i++)
             {
                 const unifrom = uniforms[uniformIndices[i]];
@@ -209,7 +209,7 @@ export interface IUniformBlockInfo
     /**
      * 包含的统一变量列表。
      */
-    uniforms: IUniformInfo[];
+    uniforms: IGLUniformInfo[];
 }
 
 /**

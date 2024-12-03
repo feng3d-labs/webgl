@@ -1,4 +1,4 @@
-import { IVertexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,9 +7,8 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-
-const gl = canvas.getContext("webgl2", { antialias: false });
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const webgl = new WebGL(rc);
 
 // -- Divide viewport
 
@@ -58,7 +57,7 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IProgram = {
+const program: IGLProgram = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     primitive: { topology: "TRIANGLES" },
 };
@@ -73,7 +72,7 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     -2.0, 2.0,
@@ -83,11 +82,11 @@ const texcoords = new Float32Array([
     -2.0, -2.0,
     -2.0, 2.0
 ]);
-const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
+const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
 
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -96,7 +95,7 @@ const vertexArray: IVertexArrayObject = {
 
 // -- Initialize samplers
 
-const samplers: ISampler[] = new Array(Corners.MAX);
+const samplers: IGLSampler[] = new Array(Corners.MAX);
 
 for (let i = 0; i < Corners.MAX; ++i)
 {
@@ -116,7 +115,7 @@ samplers[Corners.BOTTOM_LEFT].wrapT = "CLAMP_TO_EDGE";
 // -- Load texture then render
 
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: ITexture;
+let texture: IGLTexture;
 loadImage(imageUrl, function (image)
 {
     texture = {
@@ -132,8 +131,8 @@ loadImage(imageUrl, function (image)
 function render()
 {
     // Clear color buffer
-    const rp: IRenderPass = {
-        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    const rp: IGLRenderPass = {
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [],
     };
 
@@ -144,7 +143,7 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         uniforms: { mvp: matrix },
         vertexArray,
@@ -162,17 +161,17 @@ function render()
             drawArrays: { vertexCount: 6, instanceCount: 1 },
         });
     }
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // -- Clean up
 
-    WebGL.deleteBuffer(rc, vertexPosBuffer);
-    WebGL.deleteBuffer(rc, vertexTexBuffer);
+    webgl.deleteBuffer(vertexPosBuffer);
+    webgl.deleteBuffer(vertexTexBuffer);
     for (let j = 0; j < samplers.length; ++j)
     {
-        WebGL.deleteSampler(rc, samplers[j]);
+        webgl.deleteSampler(samplers[j]);
     }
-    WebGL.deleteVertexArray(rc, vertexArray);
-    WebGL.deleteTexture(rc, texture);
-    WebGL.deleteProgram(rc, program);
+    webgl.deleteVertexArray(vertexArray);
+    webgl.deleteTexture(texture);
+    webgl.deleteProgram(program);
 }

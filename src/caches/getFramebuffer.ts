@@ -1,6 +1,6 @@
-import { IPassDescriptor } from "../data/IPassDescriptor";
-import { IRenderbuffer } from "../data/IRenderbuffer";
-import { ITextureView } from "../data/ITexture";
+import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
+import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
+import { IGLTextureView } from "../data/IGLTexture";
 import { getRenderbuffer } from "./getRenderbuffer";
 import { getTexture } from "./getTexture";
 
@@ -8,22 +8,24 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers: Map<IPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: Map<IGLRenderPassDescriptor, WebGLFramebuffer>;
     }
 }
 
-const defaultTextureView: Partial<ITextureView> = { level: 0, layer: 0 };
+const defaultTextureView: Partial<IGLTextureView> = { level: 0, layer: 0 };
 
 /**
  * 获取帧缓冲区
  */
-export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
+export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
 
     let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     if (webGLFramebuffer) return webGLFramebuffer;
+
+    const multisample = passDescriptor.multisample;
 
     webGLFramebuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
@@ -61,7 +63,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
         }
         else
         {
-            const renderbuffer = getRenderbuffer(gl, view as IRenderbuffer);
+            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer, multisample);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
         }
     });
@@ -104,7 +106,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
         }
         else
         {
-            const renderbuffer = getRenderbuffer(gl, view as IRenderbuffer);
+            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
         }
     }
@@ -112,7 +114,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassD
     return webGLFramebuffer;
 }
 
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IPassDescriptor)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
 {
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     gl._framebuffers.delete(passDescriptor);

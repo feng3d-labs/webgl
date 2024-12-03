@@ -1,6 +1,5 @@
+import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, IGLTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IRenderPass, ISampler, ITexture, WebGL } from "@feng3d/webgl-renderer";
-import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
 
 let cubeRotation = 0.0;
 // will set to true when video can be copied to texture
@@ -15,6 +14,8 @@ function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
+  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   const buffers = initBuffers();
@@ -23,7 +24,7 @@ function main()
 
   const video = setupVideo("../../Firefox.mp4");
 
-  const renderObject: IRenderObject = {
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {
@@ -108,8 +109,8 @@ function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IRenderPass = {
-    passDescriptor: {
+  const renderPasss: IGLRenderPass = {
+    descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
         loadOp: "clear",
@@ -142,7 +143,7 @@ function main()
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
     renderObject.uniforms.uNormalMatrix = normalMatrix;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 
     requestAnimationFrame(render);
   }
@@ -336,13 +337,13 @@ function initBuffers()
 //
 // Initialize a texture.
 //
-function initTexture(): ISamplerTexture
+function initTexture(): IGLSamplerTexture
 {
-  const texture: ITexture = {
+  const texture: IGLTexture = {
     target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
   };
-  const sampler: ISampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
+  const sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
 
   return { texture, sampler };
 }
@@ -350,7 +351,7 @@ function initTexture(): ISamplerTexture
 //
 // copy the video texture
 //
-function updateTexture(texture: ITexture, video: HTMLVideoElement)
+function updateTexture(texture: IGLTexture, video: HTMLVideoElement)
 {
   texture.sources = [{ source: video }];
 }

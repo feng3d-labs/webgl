@@ -6,21 +6,21 @@ import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
 import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
-import { IBlitFramebuffer } from "./data/IBlitFramebuffer";
-import { IBuffer } from "./data/IBuffer";
-import { ICopyBuffer } from "./data/ICopyBuffer";
-import { IPassDescriptor } from "./data/IPassDescriptor";
-import { IQuery } from "./data/IQueryAction";
-import { IReadPixels } from "./data/IReadPixels";
-import { IRenderObject } from "./data/IRenderObject";
-import { IRenderPass } from "./data/IRenderPass";
-import { IRenderPipeline } from "./data/IRenderPipeline";
-import { IRenderbuffer } from "./data/IRenderbuffer";
-import { IRenderingContext } from "./data/IRenderingContext";
-import { ISampler } from "./data/ISampler";
-import { ITexture } from "./data/ITexture";
-import { ITransformFeedback } from "./data/ITransformFeedback";
-import { IVertexArrayObject } from "./data/IVertexArrayObject";
+import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
+import { IGLBuffer } from "./data/IGLBuffer";
+import { IGLCopyBuffer } from "./data/IGLCopyBuffer";
+import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
+import { IGLQuery } from "./data/IGLQueryAction";
+import { IGLReadPixels } from "./data/IGLReadPixels";
+import { IGLRenderObject } from "./data/IGLRenderObject";
+import { IGLRenderPass } from "./data/IGLRenderPass";
+import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
+import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
+import { IGLRenderingContext } from "./data/IGLRenderingContext";
+import { IGLSampler } from "./data/IGLSampler";
+import { IGLTexture } from "./data/IGLTexture";
+import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
+import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
 import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runCopyBuffer } from "./runs/runCopyBuffer";
 import { getQueryResult } from "./runs/runQueryAction";
@@ -36,6 +36,15 @@ import { deleteVertexArray } from "./runs/runVertexArray";
  */
 export class WebGL
 {
+    private _renderingContext: IGLRenderingContext;
+    private _gl: WebGLRenderingContext;
+
+    constructor(renderingContext: IGLRenderingContext)
+    {
+        this._renderingContext = renderingContext;
+        this._gl = getRenderingContext(this._renderingContext);
+    }
+
     /**
      * 提交一次渲染通道数据。
      *
@@ -43,12 +52,9 @@ export class WebGL
      * @param renderPass 渲染通道数据。
      * @returns
      */
-    static runRenderPass(renderingContext: IRenderingContext, renderPass: IRenderPass)
+    runRenderPass(renderPass: IGLRenderPass)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runRenderPass(gl, renderPass);
+        runRenderPass(this._gl, renderPass);
     }
 
     /**
@@ -56,107 +62,68 @@ export class WebGL
      *
      * @param renderObject 渲染原子，包含渲染所需的所有数据。
      */
-    static runRenderObject(renderingContext: IRenderingContext, renderObject: IRenderObject)
+    runRenderObject(renderObject: IGLRenderObject)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runRenderObject(gl, renderObject);
+        runRenderObject(this._gl, renderObject);
     }
 
-    static runBlitFramebuffer(renderingContext: IRenderingContext, blitFramebuffer: IBlitFramebuffer)
+    runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runBlitFramebuffer(gl, blitFramebuffer);
+        runBlitFramebuffer(this._gl, blitFramebuffer);
     }
 
-    static runCopyBuffer(renderingContext: IRenderingContext, copyBuffer: ICopyBuffer)
+    runCopyBuffer(copyBuffer: IGLCopyBuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runCopyBuffer(gl, copyBuffer);
+        runCopyBuffer(this._gl, copyBuffer);
     }
 
-    static runReadPixels(renderingContext: IRenderingContext, readPixels: IReadPixels)
+    runReadPixels(readPixels: IGLReadPixels)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        runReadPixels(gl, readPixels);
+        runReadPixels(this._gl, readPixels);
     }
 
-    static deleteFramebuffer(renderingContext: IRenderingContext, passDescriptor: IPassDescriptor)
+    deleteFramebuffer(passDescriptor: IGLRenderPassDescriptor)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteFramebuffer(gl, passDescriptor);
+        deleteFramebuffer(this._gl, passDescriptor);
     }
 
-    static deleteRenderbuffer(renderingContext: IRenderingContext, renderbuffer: IRenderbuffer)
+    deleteRenderbuffer(renderbuffer: IGLRenderbuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteRenderbuffer(gl, renderbuffer);
+        deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    static deleteBuffer(renderingContext: IRenderingContext, buffer: IBuffer)
+    deleteBuffer(buffer: IGLBuffer)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteBuffer(gl, buffer);
+        deleteBuffer(this._gl, buffer);
     }
 
-    static deleteTexture(renderingContext: IRenderingContext, texture: ITexture)
+    deleteTexture(texture: IGLTexture)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteTexture(gl, texture);
+        deleteTexture(this._gl, texture);
     }
 
-    static deleteSampler(renderingContext: IRenderingContext, sampler: ISampler)
+    deleteSampler(sampler: IGLSampler)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteSampler(gl, sampler);
+        deleteSampler(this._gl, sampler);
     }
 
-    static deleteProgram(renderingContext: IRenderingContext, pipeline: IRenderPipeline)
+    deleteProgram(pipeline: IGLRenderPipeline)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteProgram(gl, pipeline);
+        deleteProgram(this._gl, pipeline);
     }
 
-    static deleteVertexArray(renderingContext: IRenderingContext, vertexArray: IVertexArrayObject)
+    deleteVertexArray(vertexArray: IGLVertexArrayObject)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteVertexArray(gl, vertexArray);
+        deleteVertexArray(this._gl, vertexArray);
     }
 
-    static deleteTransformFeedback(renderingContext: IRenderingContext, transformFeedback: ITransformFeedback)
+    deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        deleteTransformFeedback(gl, transformFeedback);
+        deleteTransformFeedback(this._gl, transformFeedback);
     }
 
-    static getQueryResult(renderingContext: IRenderingContext, query: IQuery)
+    getQueryResult(query: IGLQuery)
     {
-        const gl = getRenderingContext(renderingContext);
-        if (!gl || gl.isContextLost()) return;
-
-        return getQueryResult(gl, query);
+        return getQueryResult(this._gl, query);
     }
 }

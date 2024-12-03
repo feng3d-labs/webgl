@@ -1,14 +1,14 @@
-import { IQuery } from "../data/IQueryAction";
+import { IGLQuery } from "../data/IGLQueryAction";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _querys: Map<IQuery, WebGLQuery>
+        _querys: Map<IGLQuery, WebGLQuery>
     }
 }
 
-export function getWebGLQuery(gl: WebGLRenderingContext, query: IQuery)
+export function getWebGLQuery(gl: WebGLRenderingContext, query: IGLQuery)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
@@ -24,7 +24,7 @@ export function getWebGLQuery(gl: WebGLRenderingContext, query: IQuery)
     return null;
 }
 
-export function deleteWebGLQuery(gl: WebGLRenderingContext, query: IQuery)
+export function deleteWebGLQuery(gl: WebGLRenderingContext, query: IGLQuery)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

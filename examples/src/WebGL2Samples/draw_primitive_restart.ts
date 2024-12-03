@@ -1,5 +1,4 @@
-import { IVertexBuffer, IBuffer, IIndexBuffer, IRenderObject, IRenderPipeline, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
-import { IRenderingContext } from "../../../src/data/IRenderingContext";
+import { IGLIndexBuffer, IGLRenderingContext, IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,11 +7,14 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
+const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
+const webgl = new WebGL(renderingContext);
+
 // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.18
 // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
 const MAX_UNSIGNED_SHORT = 65535;
 
-const vertexPosBuffer: IVertexBuffer = {
+const vertexPosBuffer: IGLVertexBuffer = {
     target: "ARRAY_BUFFER",
     data: new Float32Array([
         -1.0, -1.0,
@@ -22,14 +24,14 @@ const vertexPosBuffer: IVertexBuffer = {
     ])
 };
 
-const vertexElementBuffer: IIndexBuffer = {
+const vertexElementBuffer: IGLIndexBuffer = {
     target: "ELEMENT_ARRAY_BUFFER",
     data: new Uint16Array([
         0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
     ])
 };
 
-const program: IRenderPipeline = {
+const program: IGLRenderPipeline = {
     primitive: { topology: "TRIANGLE_STRIP" },
     vertex: {
         code: getShaderSource("vs")
@@ -40,24 +42,22 @@ const program: IRenderPipeline = {
     }
 };
 
-const vertexArray: IVertexArrayObject = {
+const vertexArray: IGLVertexArrayObject = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 2 },
     },
     index: vertexElementBuffer,
 };
 
-const renderObject: IRenderObject = {
+const renderObject: IGLRenderObject = {
     vertexArray,
     uniforms: {},
-    drawArrays: { instanceCount: 2 },
+    drawElements: { instanceCount: 2 },
     pipeline: program,
 };
 
-const renderingContext: IRenderingContext = { canvasId: "glcanvas" };
-
-WebGL.runRenderPass(renderingContext, {
-    passDescriptor: {
+webgl.runRenderPass({
+    descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
             loadOp: "clear",
@@ -67,7 +67,7 @@ WebGL.runRenderPass(renderingContext, {
 });
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(renderingContext, vertexPosBuffer);
-WebGL.deleteBuffer(renderingContext, vertexElementBuffer);
-WebGL.deleteProgram(renderingContext, program);
-WebGL.deleteVertexArray(renderingContext, vertexArray);
+webgl.deleteBuffer(vertexPosBuffer);
+webgl.deleteBuffer(vertexElementBuffer);
+webgl.deleteProgram(program);
+webgl.deleteVertexArray(vertexArray);

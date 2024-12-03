@@ -1,4 +1,5 @@
-import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -10,6 +11,8 @@ webglcanvas.style.top = "0px";
 webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
+
+const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -29,7 +32,7 @@ let tick = 0;
 let viewportWidth = webglcanvas.clientWidth;
 let viewportHeight = webglcanvas.clientHeight;
 
-const renderObject: IRenderObject = {
+const renderObject: IGLRenderObject = {
     vertexArray: {
         vertices: {
             position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
@@ -79,7 +82,7 @@ function draw()
     viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
     tick++;
-    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderObject);
+    webgl.runRenderPass({ renderObjects: [renderObject] });
 
     requestAnimationFrame(draw);
 }

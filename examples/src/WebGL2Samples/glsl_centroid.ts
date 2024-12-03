@@ -1,5 +1,5 @@
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
-import { IVertexBuffer, IBlitFramebuffer, IBuffer, IFramebuffer, IProgram, IRenderObject, IRenderPass, IRenderbuffer, IRenderingContext, ISampler, ITexture, IVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const webgl = new WebGL(rc);
 
 // -- Divide viewport
 const canvasSize = {
@@ -46,7 +47,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IProgram[] = [
+const programs: IGLProgram[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
         primitive: { topology: "TRIANGLES" },
@@ -75,9 +76,9 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+const vertexPositionBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
-const vertexDataBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
+const vertexDataBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -89,7 +90,7 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
+const texVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -99,7 +100,7 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
+const texVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -107,8 +108,8 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures: ITexture[] = [];
-const samplers: ISampler[] = [];
+const textures: IGLTexture[] = [];
+const samplers: IGLSampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
@@ -124,9 +125,9 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 // -- Init Frame Buffers
 
 // non-centroid
-const colorRenderbuffer: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 // centroid
-const colorRenderbufferCentroid: IRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+const colorRenderbufferCentroid: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
@@ -135,15 +136,15 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IFramebuffer[] = [
-    { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
-    { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
+const framebuffers: IGLFramebuffer[] = [
+    { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
+    { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
     { colorAttachments: [{ view: { texture: textures[0], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     { colorAttachments: [{ view: { texture: textures[1], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
 ];
 
 // -- Init VertexArray
-const vertexArrays: IVertexArrayObject[] = [
+const vertexArrays: IGLVertexArrayObject[] = [
     {
         vertices: {
             position: { buffer: vertexPositionBuffer, numComponents: 2 },
@@ -171,8 +172,8 @@ const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IRenderPass = {
-        passDescriptor: framebuffers[i],
+    const rp: IGLRenderPass = {
+        descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
             vertexArray: vertexArrays[i],
@@ -180,11 +181,11 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             drawArrays: { vertexCount },
         }]
     };
-    WebGL.runRenderPass(rc, rp);
+    webgl.runRenderPass(rp);
 
     // Blit framebuffers, no Multisample texture 2d in WebGL 2
     // centroid will only work with multisample
-    const blit: IBlitFramebuffer = {
+    const blit: IGLBlitFramebuffer = {
         read: framebuffers[i],
         draw: framebuffers[i + 2],
         blitFramebuffers: [[
@@ -193,14 +194,14 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             "COLOR_BUFFER_BIT", "NEAREST"
         ]],
     };
-    WebGL.runBlitFramebuffer(rc, blit);
+    webgl.runBlitFramebuffer(blit);
 }
 
 // Pass 2
-const rp2: IRenderPass = {
+const rp2: IGLRenderPass = {
     renderObjects: [],
 };
-const ro: IRenderObject = {
+const ro: IGLRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
     vertexArray: vertexArrays[PROGRAM.SPLASH],
 };
@@ -225,33 +226,33 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         }
     );
 }
-WebGL.runRenderPass(rc, rp2);
+webgl.runRenderPass(rp2);
 
 // -- Delete WebGL resources
-WebGL.deleteBuffer(rc, texVertexPosBuffer);
-WebGL.deleteBuffer(rc, texVertexTexBuffer);
-WebGL.deleteBuffer(rc, vertexPositionBuffer);
-WebGL.deleteBuffer(rc, vertexDataBuffer);
+webgl.deleteBuffer(texVertexPosBuffer);
+webgl.deleteBuffer(texVertexTexBuffer);
+webgl.deleteBuffer(vertexPositionBuffer);
+webgl.deleteBuffer(vertexDataBuffer);
 
-WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE]);
-WebGL.deleteTexture(rc, textures[PROGRAM.TEXTURE_CENTROID]);
+webgl.deleteTexture(textures[PROGRAM.TEXTURE]);
+webgl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);
 
-WebGL.deleteSampler(rc, samplers[PROGRAM.TEXTURE]);
-WebGL.deleteSampler(rc, samplers[PROGRAM.TEXTURE_CENTROID]);
+webgl.deleteSampler(samplers[PROGRAM.TEXTURE]);
+webgl.deleteSampler(samplers[PROGRAM.TEXTURE_CENTROID]);
 
-WebGL.deleteRenderbuffer(rc, colorRenderbuffer);
-WebGL.deleteRenderbuffer(rc, colorRenderbufferCentroid);
+webgl.deleteRenderbuffer(colorRenderbuffer);
+webgl.deleteRenderbuffer(colorRenderbufferCentroid);
 
-WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.COLORBUFFER]);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
 
-WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
-WebGL.deleteFramebuffer(rc, framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
+webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
 
-WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.TEXTURE]);
-WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.TEXTURE_CENTROID]);
-WebGL.deleteVertexArray(rc, vertexArrays[PROGRAM.SPLASH]);
+webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
+webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE_CENTROID]);
+webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
 
-WebGL.deleteProgram(rc, programs[PROGRAM.TEXTURE]);
-WebGL.deleteProgram(rc, programs[PROGRAM.TEXTURE_CENTROID]);
-WebGL.deleteProgram(rc, programs[PROGRAM.SPLASH]);
+webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
+webgl.deleteProgram(programs[PROGRAM.TEXTURE_CENTROID]);
+webgl.deleteProgram(programs[PROGRAM.SPLASH]);

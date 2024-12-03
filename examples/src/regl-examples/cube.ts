@@ -1,5 +1,4 @@
-import { IRenderObject, ITexture, WebGL } from "@feng3d/webgl-renderer";
-import { ISamplerTexture } from "../../../src/data/ISamplerTexture";
+import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -12,6 +11,8 @@ import * as mat4 from "./stackgl/gl-mat4";
     webglcanvas.style.width = "100%";
     webglcanvas.style.height = "100%";
     document.body.appendChild(webglcanvas);
+
+    const webgl = new WebGL({ canvasId: "glcanvas" });
 
     const cubePosition = [
         [-0.5, +0.5, +0.5], [+0.5, +0.5, +0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5], // positive z face.
@@ -65,7 +66,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
+    const renderObject: IGLRenderObject = {
         vertexArray: {
             vertices: {
                 position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
@@ -122,7 +123,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
         viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
 
-        WebGL.runRenderObject({ canvasId: "glcanvas" }, renderObject);
+        webgl.runRenderPass({ renderObjects: [renderObject] });
         requestAnimationFrame(draw);
     }
 
@@ -130,7 +131,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: ISamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
+    const diffuse: IGLSamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
 
     draw();
 })();

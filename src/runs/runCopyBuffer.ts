@@ -1,7 +1,7 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { ICopyBuffer } from "../data/ICopyBuffer";
+import { IGLCopyBuffer } from "../data/IGLCopyBuffer";
 
-export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: ICopyBuffer)
+export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBuffer)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
