@@ -83,15 +83,16 @@ const FRAMEBUFFER = {
     RENDERBUFFER: 0,
     COLORBUFFER: 1
 };
-const colorRenderbuffer: IGLRenderbuffer = { samples: 4, internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 
 const framebuffers: IGLRenderPassDescriptor[] = [
     {
         colorAttachments: [{ view: colorRenderbuffer, clearValue: [0.0, 0.0, 0.0, 1.0] }],
+        multisample: 4 // 多重采样
     },
     {
         colorAttachments: [{ view: { texture, level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
-    },
+    }
 ];
 
 // -- Init VertexArray

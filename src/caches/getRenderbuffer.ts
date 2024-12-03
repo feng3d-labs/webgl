@@ -21,7 +21,7 @@ export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRend
     gl.bindRenderbuffer(gl.RENDERBUFFER, webGLRenderbuffer);
     if (multisample === 4 && gl instanceof WebGL2RenderingContext)
     {
-        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, gl[internalformat], width, height);
+        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, multisample, gl[internalformat], width, height);
     }
     else
     {
