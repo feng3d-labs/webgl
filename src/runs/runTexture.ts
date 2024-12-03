@@ -1,20 +1,20 @@
 import { getTexture } from "../caches/getTexture";
-import { ISamplerTexture } from "../data/ISamplerTexture";
-import { IBufferSource, IImageSource, ITexture, ITexturePixelStore, ITextureSource } from "../data/ITexture";
-import { IUniformItemInfo } from "../data/IUniformInfo";
+import { IGLSamplerTexture } from "../data/IGLSamplerTexture";
+import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "../data/IGLTexture";
+import { IUniformItemInfo } from "../data/IGLUniformInfo";
 import { runSampler } from "./runSampler";
 
-export const defaultImageSource: IImageSource = { level: 0, source: new ImageData(1, 1) };
-export const defaultBufferSource: IBufferSource = { level: 0, width: 1, height: 1, depth: 1, border: 0 };
-export const defaultTextureSources: ITextureSource[] = [defaultBufferSource];
-export const defaultTexture: ITexture = { target: "TEXTURE_2D", generateMipmap: false, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" };
+export const defaultImageSource: IGLImageSource = { level: 0, source: new ImageData(1, 1) };
+export const defaultBufferSource: IGLBufferSource = { level: 0, width: 1, height: 1, depth: 1, border: 0 };
+export const defaultTextureSources: IGLTextureSource[] = [defaultBufferSource];
+export const defaultTexture: IGLTexture = { target: "TEXTURE_2D", generateMipmap: false, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" };
 
 Object.freeze(defaultImageSource);
 Object.freeze(defaultBufferSource);
 Object.freeze(defaultTextureSources);
 Object.freeze(defaultTexture);
 
-export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: IUniformItemInfo, samplerTexture: ISamplerTexture)
+export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: IUniformItemInfo, samplerTexture: IGLSamplerTexture)
 {
     const { texture, sampler } = samplerTexture;
     const { location, textureID } = uniformInfo;

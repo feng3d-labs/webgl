@@ -1,7 +1,7 @@
 import { getFramebuffer } from "../caches/getFramebuffer";
-import { IBlitFramebuffer } from "../data/IBlitFramebuffer";
+import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
 
-export function runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IBlitFramebuffer)
+export function runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IGLBlitFramebuffer)
 {
     const { read, draw, blitFramebuffers } = blitFramebuffer;
 

@@ -1,4 +1,5 @@
-import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+
 import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
 import { createCamera } from "./util/camera";
@@ -11,6 +12,8 @@ webglcanvas.style.top = "0px";
 webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
+
+const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
 
 const camera = createCamera({
     center: [0, 2.5, 0]
@@ -37,7 +40,7 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
     return pv;
 }, []);
 
-const renderObject: IRenderObject = {
+const renderObject: IGLRenderObject = {
     vertexArray: {
         vertices: {
             position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
@@ -75,7 +78,7 @@ function draw()
 
     camera(renderObject, webglcanvas.width, webglcanvas.height);
 
-    WebGL.runRenderObject({ canvasId: "glcanvas", antialias: true }, renderObject);
+    webgl.runRenderPass({ renderObjects: [renderObject] });
 
     requestAnimationFrame(draw);
 }

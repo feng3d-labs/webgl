@@ -1,6 +1,6 @@
-import { IScissor } from "../data/IScissor";
+import { IGLScissor } from "../data/IGLScissor";
 
-export function runScissor(gl: WebGLRenderingContext, scissor?: IScissor)
+export function runScissor(gl: WebGLRenderingContext, scissor?: IGLScissor)
 {
     if (scissor)
     {

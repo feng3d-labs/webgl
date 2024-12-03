@@ -1,5 +1,5 @@
+import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
-import { IRenderObject, IRenderPass, WebGL } from "@feng3d/webgl-renderer";
 
 let cubeRotation = 0.0;
 
@@ -12,11 +12,13 @@ function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
+  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const renderObject: IRenderObject = {
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {
@@ -72,8 +74,8 @@ function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IRenderPass = {
-    passDescriptor: {
+  const renderPasss: IGLRenderPass = {
+    descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
         loadOp: "clear",
@@ -100,7 +102,7 @@ function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 
     requestAnimationFrame(render);
   }

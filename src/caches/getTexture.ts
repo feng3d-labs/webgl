@@ -1,12 +1,13 @@
 import { watcher } from "@feng3d/watcher";
-import { ITexture, ITexturePixelStore, ITextureTarget } from "../data/ITexture";
+import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
+import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _textures: Map<ITexture, WebGLTexture>
+        _textures: Map<IGLTexture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -16,7 +17,7 @@ declare global
          *
          * 默认"TEXTURE_2D"。
          */
-        textureTarget: ITextureTarget;
+        textureTarget: GLTextureTarget;
 
         /**
          * 销毁WebGL纹理。
@@ -25,7 +26,7 @@ declare global
     }
 }
 
-const defaultTexturePixelStore: ITexturePixelStore = {
+export const defaultTexturePixelStore: IGLTexturePixelStore = {
     packAlignment: 4,
     unpackAlignment: 4,
     unpackFlipY: false,
@@ -41,7 +42,7 @@ const defaultTexturePixelStore: ITexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
@@ -95,13 +96,27 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                 if ("source" in sourceItem)
                 {
-                    const { level, source } = { ...defaultImageSource, ...sourceItem };
-                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                    const { level, source, width, height, border } = { ...defaultImageSource, ...sourceItem };
+                    if (width && height)
+                    {
+                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], source);
+                    }
+                    else
+                    {
+                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                    }
                 }
                 else
                 {
-                    const { level, width, height, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                    gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    const { level, width, height, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                    if (srcOffset)
+                    {
+                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels, srcOffset);
+                    }
+                    else
+                    {
+                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                    }
                 }
             }
             else if (target === "TEXTURE_2D_ARRAY" || target === "TEXTURE_3D")
@@ -115,8 +130,15 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
                     }
                     else
                     {
-                        const { level, width, height, depth, border, pixels } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
+                        const { level, width, height, depth, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                        if (srcOffset)
+                        {
+                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels, srcOffset);
+                        }
+                        else
+                        {
+                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
+                        }
                     }
                 }
             }
@@ -229,7 +251,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: ITexture)
     return webGLTexture;
 }
 
-export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function deleteTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 {
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;
@@ -247,7 +269,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
  * @param gl
  * @param pixelStore 像素解包打包时参数。
  */
-function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: ITexturePixelStore)
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTexturePixelStore)
 {
     const {
         packAlignment,

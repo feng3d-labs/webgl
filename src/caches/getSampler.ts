@@ -1,15 +1,15 @@
-import { ISampler } from "../data/ISampler";
-import { defaultSampler } from "../runs/runSampler";
+import { IGLSampler } from "../data/IGLSampler";
+import { defaultGLSampler } from "../runs/runSampler";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _samplers: Map<ISampler, WebGLSampler>;
+        _samplers: Map<IGLSampler, WebGLSampler>;
     }
 }
 
-export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function getSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
     if (webGLSampler) return webGLSampler;
@@ -19,7 +19,7 @@ export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
         webGLSampler = gl.createSampler();
         gl._samplers.set(sampler, webGLSampler);
 
-        const { minFilter, magFilter, wrapS, wrapT, wrapR, lodMinClamp, lodMaxClamp, compareMode, compare } = { ...defaultSampler, ...sampler };
+        const { minFilter, magFilter, wrapS, wrapT, wrapR, lodMinClamp, lodMaxClamp, compareMode, compare } = { ...defaultGLSampler, ...sampler };
 
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MAG_FILTER, gl[magFilter]);
@@ -35,7 +35,7 @@ export function getSampler(gl: WebGLRenderingContext, sampler?: ISampler)
     return webGLSampler;
 }
 
-export function deleteSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function deleteSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

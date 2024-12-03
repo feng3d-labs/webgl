@@ -1,5 +1,5 @@
+import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
-import { IRenderObject, ITexture, IRenderPass, WebGL, ISampler } from "@feng3d/webgl-renderer";
 
 let cubeRotation = 0.0;
 
@@ -12,13 +12,15 @@ async function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
+  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   const buffers = initBuffers();
 
   const texture = await loadTexture("../../cubetexture.png");
 
-  const renderObject: IRenderObject = {
+  const renderObject: IGLRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {
@@ -76,8 +78,8 @@ async function main()
     drawElements: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IRenderPass = {
-    passDescriptor: {
+  const renderPasss: IGLRenderPass = {
+    descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
         loadOp: "clear",
@@ -104,7 +106,7 @@ async function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 
     requestAnimationFrame(render);
   }
@@ -231,12 +233,12 @@ async function loadTexture(url: string)
 
   const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-  const texture: ITexture = {
+  const texture: IGLTexture = {
     target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ source: img }],
   };
 
-  let sampler: ISampler = {};
+  let sampler: IGLSampler = {};
   if (generateMipmap)
   {
     texture.generateMipmap = generateMipmap;

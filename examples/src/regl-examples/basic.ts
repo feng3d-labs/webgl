@@ -1,4 +1,4 @@
-import { IRenderObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, WebGL } from "@feng3d/webgl";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -16,7 +16,9 @@ webglcanvas.style.width = "100%";
 webglcanvas.style.height = "100%";
 document.body.appendChild(webglcanvas);
 
-const renderObject: IRenderObject = {
+const webgl = new WebGL({ canvasId: "glcanvas" });
+
+const renderObject: IGLRenderObject = {
     vertexArray: {
         vertices: {
             position: {
@@ -60,7 +62,7 @@ function draw()
     webglcanvas.width = webglcanvas.clientWidth;
     webglcanvas.height = webglcanvas.clientHeight;
 
-    WebGL.runRenderPass({ canvasId: "glcanvas" }, {
+    webgl.runRenderPass({
         renderObjects: [renderObject]
     });
 

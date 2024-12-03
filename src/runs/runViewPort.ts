@@ -1,6 +1,6 @@
-import { IViewport } from "../data/IViewport";
+import { IGLViewport } from "../data/IGLViewport";
 
-export function runViewPort(gl: WebGLRenderingContext, viewport?: IViewport)
+export function runViewPort(gl: WebGLRenderingContext, viewport?: IGLViewport)
 {
     if (viewport)
     {

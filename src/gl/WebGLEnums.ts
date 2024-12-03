@@ -1,4 +1,4 @@
-import { TextureMagFilter, TextureMinFilter, TextureWrap } from "../data/ISampler";
+import { TextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../data/IGLSampler";
 
 /**
  * A GLenum specifying which WebGL capability to enable. Possible values:
@@ -100,17 +100,17 @@ export interface TexParameteri extends TexParameteri_WebGL2
     /**
      * Texture minification filter
      */
-    TEXTURE_MIN_FILTER: TextureMinFilter;
+    TEXTURE_MIN_FILTER: GLTextureMinFilter;
 
     /**
      * Wrapping function for texture coordinate s
      */
-    TEXTURE_WRAP_S: TextureWrap;
+    TEXTURE_WRAP_S: GLTextureWrap;
 
     /**
      * Wrapping function for texture coordinate t
      */
-    TEXTURE_WRAP_T: TextureWrap;
+    TEXTURE_WRAP_T: GLTextureWrap;
 }
 
 /**
@@ -163,7 +163,7 @@ export interface TexParameteri_WebGL2
     /**
      * Wrapping function for texture coordinate r
      */
-    TEXTURE_WRAP_R: TextureWrap;
+    TEXTURE_WRAP_R: GLTextureWrap;
 }
 
 /**
@@ -336,7 +336,7 @@ export type PrecisionType = "LOW_FLOAT" | "MEDIUM_FLOAT" | "HIGH_FLOAT" | "LOW_I
  * gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
  * gl.COLOR_ATTACHMENT1 gl.COLOR_ATTACHMENT2 gl.COLOR_ATTACHMENT3 gl.COLOR_ATTACHMENT4 gl.COLOR_ATTACHMENT5 gl.COLOR_ATTACHMENT6 gl.COLOR_ATTACHMENT7 gl.COLOR_ATTACHMENT8 gl.COLOR_ATTACHMENT9 gl.COLOR_ATTACHMENT10 gl.COLOR_ATTACHMENT11 gl.COLOR_ATTACHMENT12 gl.COLOR_ATTACHMENT13 gl.COLOR_ATTACHMENT14 gl.COLOR_ATTACHMENT15
  */
-export type AttachmentPoint = "COLOR_ATTACHMENT0" | "DEPTH_ATTACHMENT" | "STENCIL_ATTACHMENT"
+export type GLAttachmentPoint = "COLOR_ATTACHMENT0" | "DEPTH_ATTACHMENT" | "STENCIL_ATTACHMENT"
     | "DEPTH_STENCIL_ATTACHMENT"
     | "COLOR_ATTACHMENT1" | "COLOR_ATTACHMENT2" | "COLOR_ATTACHMENT3" | "COLOR_ATTACHMENT4" | "COLOR_ATTACHMENT5"
     | "COLOR_ATTACHMENT6" | "COLOR_ATTACHMENT7" | "COLOR_ATTACHMENT8" | "COLOR_ATTACHMENT9" | "COLOR_ATTACHMENT10"

@@ -1,15 +1,15 @@
-import { ITransformFeedback } from "../data/ITransformFeedback";
+import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
 import { getWebGLBuffer } from "./getWebGLBuffer";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _transforms: Map<ITransformFeedback, WebGLTransformFeedback>;
+        _transforms: Map<IGLTransformFeedback, WebGLTransformFeedback>;
     }
 }
 
-export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: ITransformFeedback)
+export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
 {
     let webGLTransformFeedback = gl._transforms.get(transformFeedback);
     if (webGLTransformFeedback) return webGLTransformFeedback;
@@ -34,7 +34,7 @@ export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFe
     return webGLTransformFeedback;
 }
 
-export function deleteTransformFeedback(gl: WebGLRenderingContext, transformFeedback: ITransformFeedback)
+export function deleteTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
 {
     const webGLTransformFeedback = gl._transforms.get(transformFeedback);
     if (!webGLTransformFeedback) return;

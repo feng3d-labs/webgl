@@ -1,5 +1,5 @@
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
-import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,11 +10,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
-    const gl = canvas.getContext("webgl2", { antialias: false });
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depth: { depthtest: true } },
         primitive: { cullFace: { enableCullFace: true, cullMode: "BACK" } },
@@ -59,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         // Front face
@@ -98,7 +98,7 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer: IVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
     const cubeVertexIndices = [
@@ -109,10 +109,10 @@ import { getShaderSource, loadImage } from "./utility";
         16, 17, 18, 16, 18, 19, // right
         20, 21, 22, 20, 22, 23 // left
     ];
-    const indexBuffer: IIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
+    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IVertexArrayObject = {
+    const vertexArray: IGLVertexArrayObject = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 3 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -123,8 +123,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: IGLTexture;
+    let sampler: IGLSampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -202,25 +202,20 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
         uniforms: {},
         drawElements: { indexCount: 36 },
     };
 
-    const rp: IRenderPass = {
-        passDescriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    const rp: IGLRenderPass = {
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
 
     function render()
     {
-        // -- Render
-        gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.BACK);
-
         orientation[0] = 0.00020; // yaw
         orientation[1] = 0.00010; // pitch
         orientation[2] = 0.00005; // roll
@@ -233,7 +228,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.pMatrix = perspectiveMatrix;
         ro.uniforms.diffuse = { texture, sampler };
 
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

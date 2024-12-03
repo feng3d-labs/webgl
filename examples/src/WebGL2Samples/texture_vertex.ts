@@ -1,5 +1,5 @@
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
-import { IIndexBuffer, IProgram, IRenderObject, IRenderPass, IRenderingContext, ISampler, ITexture, IVertexArrayObject, IVertexBuffer, VertexAttributeTypes, WebGL } from "@feng3d/webgl-renderer";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -34,10 +34,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IProgram = {
+    const program: IGLProgram = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
@@ -47,14 +48,14 @@ import { getShaderSource, loadImage } from "./utility";
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IVertexBuffer;
-    let indicesBuffer: IIndexBuffer;
-    let vertexArray: IVertexArrayObject;
+    let vertexBuffer: IGLVertexBuffer;
+    let indicesBuffer: IGLIndexBuffer;
+    let vertexArray: IGLVertexArrayObject;
 
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: IGLTexture;
+    let sampler: IGLSampler;
 
-    const ro: IRenderObject = {
+    const ro: IGLRenderObject = {
         pipeline: program,
     };
 
@@ -189,8 +190,8 @@ import { getShaderSource, loadImage } from "./utility";
     function render()
     {
         // -- Render
-        const rp: IRenderPass = {
-            passDescriptor: {
+        const rp: IGLRenderPass = {
+            descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
@@ -232,7 +233,7 @@ import { getShaderSource, loadImage } from "./utility";
                 });
             }
         }
-        WebGL.runRenderPass(rc, rp);
+        webgl.runRenderPass(rp);
 
         requestAnimationFrame(render);
     }

@@ -1,8 +1,8 @@
 import { getWebGLTransformFeedback } from "../caches/getWebGLTransformFeedback";
-import { IDrawMode } from "../data/IPrimitiveState";
-import { ITransformFeedback } from "../data/ITransformFeedback";
+import { IGLDrawMode } from "../data/IGLPrimitiveState";
+import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
 
-export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: ITransformFeedback, topology: IDrawMode)
+export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback, topology: IGLDrawMode)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
@@ -25,7 +25,7 @@ export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedbac
     }
 }
 
-export function endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: ITransformFeedback)
+export function endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
 {
     //
     if (transformFeedback)

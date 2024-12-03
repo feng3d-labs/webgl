@@ -1,6 +1,5 @@
+import { IGLRenderPass, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
-import { WebGL } from "@feng3d/webgl-renderer";
-import { IRenderPass } from "../../../src/data/IRenderPass";
 
 main();
 
@@ -10,8 +9,10 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    const renderPasss: IRenderPass = {
-        passDescriptor: {
+    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+
+    const renderPasss: IGLRenderPass = {
+        descriptor: {
             colorAttachments: [{
                 clearValue: [0, 0, 0, 1],
                 loadOp: "clear",
@@ -65,7 +66,7 @@ function main()
         }],
     };
 
-    WebGL.runRenderPass({ canvasId: "glcanvas", contextId: "webgl" }, renderPasss);
+    webgl.runRenderPass(renderPasss);
 }
 
 function drawScene(canvas: HTMLCanvasElement)
