@@ -4,14 +4,11 @@ import { angleNormals } from "./mikolalysenko/angle-normals";
 import * as bunny from "./mikolalysenko/bunny";
 import { createCamera } from "./util/camera";
 
-const webglcanvas = document.createElement("canvas");
-webglcanvas.id = "glcanvas";
-webglcanvas.style.position = "fixed";
-webglcanvas.style.left = "0px";
-webglcanvas.style.top = "0px";
-webglcanvas.style.width = "100%";
-webglcanvas.style.height = "100%";
-document.body.appendChild(webglcanvas);
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
 
@@ -73,10 +70,10 @@ const renderObject: IGLRenderObject = {
 
 function draw()
 {
-    webglcanvas.width = webglcanvas.clientWidth;
-    webglcanvas.height = webglcanvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
-    camera(renderObject, webglcanvas.width, webglcanvas.height);
+    camera(renderObject, canvas.width, canvas.height);
 
     webgl.runRenderPass({ renderObjects: [renderObject] });
 

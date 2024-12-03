@@ -56,14 +56,14 @@ const ro: IGLRenderObject = {
 };
 rp.renderObjects.push(ro);
 
-rp.renderObjects.push({ action: "beginQuery", target: "ANY_SAMPLES_PASSED", query });
+rp.renderObjects.push({ __type: "IGLQueryAction", action: "beginQuery", target: "ANY_SAMPLES_PASSED", query });
 
 rp.renderObjects.push({
     ...ro,
     drawArrays: { firstVertex: 3, vertexCount: 3 },
 });
 
-rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
+rp.renderObjects.push({ __type: "IGLQueryAction", action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
 
 webgl.runRenderPass(rp);
 

@@ -135,13 +135,14 @@ const matrix = new Float32Array([
 
 const renderPass1: IGLRenderPass = {
     descriptor: frameBuffer,
-    renderObjects: [{
-        pipeline: multipleOutputProgram,
-        uniforms: { mvp: matrix },
-        vertexArray: multipleOutputVertexArray,
-        viewport: { x: 0, y: 0, width: w, height: h },
-        drawArrays: { vertexCount: 6 },
-    }]
+    renderObjects: [
+        { __type: "IGLViewport", x: 0, y: 0, width: w, height: h },
+        {
+            pipeline: multipleOutputProgram,
+            uniforms: { mvp: matrix },
+            vertexArray: multipleOutputVertexArray,
+            drawArrays: { vertexCount: 6 },
+        }]
 };
 
 // Pass 2
@@ -164,9 +165,9 @@ const renderObject: IGLRenderObject = {
 for (let i = 0; i < Textures.MAX; ++i)
 {
     renderPass.renderObjects.push(
+        { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
         {
             ...renderObject,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             uniforms: { ...renderObject.uniforms, layer: i },
             drawArrays: { vertexCount: 6 },
         }

@@ -3,14 +3,11 @@ import { IGLRenderObject, WebGL } from "@feng3d/webgl";
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 
-const webglcanvas = document.createElement("canvas");
-webglcanvas.id = "glcanvas";
-webglcanvas.style.position = "fixed";
-webglcanvas.style.left = "0px";
-webglcanvas.style.top = "0px";
-webglcanvas.style.width = "100%";
-webglcanvas.style.height = "100%";
-document.body.appendChild(webglcanvas);
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
 
@@ -29,8 +26,8 @@ const indices = bunny.cells.reduce((pv: number[], cv: number[]) =>
 }, []);
 
 let tick = 0;
-let viewportWidth = webglcanvas.clientWidth;
-let viewportHeight = webglcanvas.clientHeight;
+let viewportWidth = canvas.clientWidth;
+let viewportHeight = canvas.clientHeight;
 
 const renderObject: IGLRenderObject = {
     vertexArray: {
@@ -78,8 +75,8 @@ const renderObject: IGLRenderObject = {
 
 function draw()
 {
-    viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
-    viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
+    viewportWidth = canvas.width = canvas.clientWidth;
+    viewportHeight = canvas.height = canvas.clientHeight;
 
     tick++;
     webgl.runRenderPass({ renderObjects: [renderObject] });

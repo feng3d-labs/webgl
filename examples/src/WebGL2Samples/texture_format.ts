@@ -191,31 +191,33 @@ import { getShaderSource, loadImage } from "./utility";
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
-            rp.renderObjects.push({
-                vertexArray,
-                pipeline: programNormalized,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    MVP: matrix,
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-                drawArrays: { vertexCount: 6 },
-            });
+            rp.renderObjects.push(
+                { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                {
+                    vertexArray,
+                    pipeline: programNormalized,
+                    uniforms: {
+                        MVP: matrix,
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                    drawArrays: { vertexCount: 6 },
+                });
         }
 
         // Unsigned int textures
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
-            rp.renderObjects.push({
-                vertexArray,
-                pipeline: programUint,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    MVP: matrix,
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-                drawArrays: { vertexCount: 6 },
-            });
+            rp.renderObjects.push(
+                { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                {
+                    vertexArray,
+                    pipeline: programUint,
+                    uniforms: {
+                        MVP: matrix,
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                    drawArrays: { vertexCount: 6 },
+                });
         }
         webgl.runRenderPass(rp);
 

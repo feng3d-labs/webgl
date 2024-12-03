@@ -214,15 +214,16 @@ import { getShaderSource, loadImage } from "./utility";
         lodBiasArray[Corners.BOTTOM_RIGHT] = 4.0;
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            rp.renderObjects.push({
-                ...ro,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    mvp: matrix,
-                    lodBias: lodBiasArray[i],
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-            });
+            rp.renderObjects.push(
+                { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                {
+                    ...ro,
+                    uniforms: {
+                        mvp: matrix,
+                        lodBias: lodBiasArray[i],
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                });
         }
 
         webgl.runRenderPass(rp);

@@ -9,11 +9,8 @@ import * as vec3 from "./stackgl/gl-vec3";
 {
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
-    canvas.style.position = "fixed";
-    canvas.style.left = "0px";
-    canvas.style.top = "0px";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
     const webgl = new WebGL({ canvasId: "glcanvas" });

@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -93,9 +93,9 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         vertices,
     };
 
+    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
     const renderObject: IGLRenderObject = {
         pipeline: program,
-        viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         vertexArray,
         uniforms: {
             MVP: new Float32Array([
@@ -117,7 +117,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 clearValue: [0.3, 0.3, 0.3, 1.0]
             }]
         },
-        renderObjects: [renderObject],
+        renderObjects: [viewport, renderObject],
     };
 
     const framebufferResolve: IGLRenderPassDescriptor = {
@@ -161,8 +161,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         blitFramebuffers,
     };
 
+    const viewport2: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height };
     const renderObject2: IGLRenderObject = {
-        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
         vertexArray,
         uniforms: {
             MVP: new Float32Array([
@@ -184,7 +184,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 loadOp: "clear",
             }],
         },
-        renderObjects: [renderObject2]
+        renderObjects: [viewport2, renderObject2]
     };
 
     // 执行

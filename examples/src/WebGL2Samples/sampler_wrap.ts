@@ -151,15 +151,16 @@ function render()
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        rp.renderObjects.push({
-            ...ro,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture, sampler: samplers[i] },
-            },
-            drawArrays: { vertexCount: 6, instanceCount: 1 },
-        });
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+            {
+                ...ro,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture, sampler: samplers[i] },
+                },
+                drawArrays: { vertexCount: 6, instanceCount: 1 },
+            });
     }
     webgl.runRenderPass(rp);
 

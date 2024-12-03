@@ -133,13 +133,14 @@ const matrix = new Float32Array([
 ]);
 const rp1: IGLRenderPass = {
     descriptor: frameBuffer,
-    renderObjects: [{
-        pipeline: multipleOutputProgram,
-        uniforms: { mvp: matrix },
-        vertexArray: multipleOutputVertexArray,
-        viewport: { x: 0, y: 0, width: w, height: h },
-        drawArrays: { vertexCount: 6 },
-    }],
+    renderObjects: [
+        { __type: "IGLViewport", x: 0, y: 0, width: w, height: h },
+        {
+            pipeline: multipleOutputProgram,
+            uniforms: { mvp: matrix },
+            vertexArray: multipleOutputVertexArray,
+            drawArrays: { vertexCount: 6 },
+        }],
 };
 webgl.runRenderPass(rp1);
 
@@ -162,11 +163,12 @@ const ro: IGLRenderObject = {
 
 for (let i = 0; i < Textures.MAX; ++i)
 {
-    rp.renderObjects.push({
-        ...ro,
-        viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-        uniforms: { ...ro.uniforms, layer: i },
-    });
+    rp.renderObjects.push(
+        { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+        {
+            ...ro,
+            uniforms: { ...ro.uniforms, layer: i },
+        });
 }
 webgl.runRenderPass(rp);
 

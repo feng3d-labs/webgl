@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -167,18 +167,20 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: 6 }
     };
 
+    const renderPassObjects: IGLRenderPassObject[] = [];
     const renderObjects: IGLRenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        renderObjects.push({
-            ...ro,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-        });
+        renderPassObjects.push(
+            { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+            ro,
+        );
+        renderObjects.push(ro);
     }
 
     const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects,
+        renderObjects: renderPassObjects,
     };
 
     function render()

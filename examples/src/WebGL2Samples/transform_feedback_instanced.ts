@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -112,6 +112,7 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: NUM_INSTANCES },
     };
 
+    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const renderRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
@@ -120,7 +121,7 @@ import { getShaderSource } from "./utility";
 
     const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [transformRO, renderRO],
+        renderObjects: [transformRO, viewport, renderRO],
     };
 
     render();
@@ -177,7 +178,6 @@ import { getShaderSource } from "./utility";
         // Rotate triangles
         transform();
 
-        renderRO.viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
         renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
 
         webgl.runRenderPass(rp);

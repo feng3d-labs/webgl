@@ -155,16 +155,17 @@ function render()
     // Bind samplers
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        rp.renderObjects.push({
-            ...ro,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: {
-                    texture, sampler: samplers[i]
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+            {
+                ...ro,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: {
+                        texture, sampler: samplers[i]
+                    }
                 }
-            }
-        });
+            });
     }
 
     webgl.runRenderPass(rp);

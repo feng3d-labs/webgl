@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL, IGLViewport } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -119,19 +119,19 @@ import { getShaderSource } from "./utility";
         return program;
     }
 
+    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const ro: IGLRenderObject = {
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
             u_acceleration: [0.0, ACCELERATION],
         },
-        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         drawArrays: { vertexCount: NUM_PARTICLES },
     };
 
     const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [ro],
+        renderObjects: [viewport, ro],
     };
 
     function render()

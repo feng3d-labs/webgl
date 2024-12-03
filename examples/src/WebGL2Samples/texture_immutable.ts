@@ -116,26 +116,28 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects: []
         };
 
-        rp.renderObjects.push({
-            ...ro,
-            pipeline: program,
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture: texture2D, sampler: sampler2D },
-            },
-            viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w }
-        });
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
+            {
+                ...ro,
+                pipeline: program,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture: texture2D, sampler: sampler2D },
+                },
+            });
 
         // Immutable 3D texture
-        rp.renderObjects.push({
-            ...ro,
-            pipeline: program3D,
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture: texture3D, sampler: sampler3D },
-            },
-            viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w }
-        });
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
+            {
+                ...ro,
+                pipeline: program3D,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture: texture3D, sampler: sampler3D },
+                },
+            });
 
         webgl.runRenderPass(rp);
 

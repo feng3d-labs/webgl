@@ -104,32 +104,33 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // No offset
-        const ro: IGLRenderObject = {
-            vertexArray,
-            pipeline: programBicubic,
-            uniforms: {
-                MVP: matrix,
-                diffuse: { texture, sampler },
-            },
-            viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
-            drawArrays: { vertexCount: 6 },
-        };
-        rp.renderObjects.push(ro);
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
+            {
+                vertexArray,
+                pipeline: programBicubic,
+                uniforms: {
+                    MVP: matrix,
+                    diffuse: { texture, sampler },
+                },
+                drawArrays: { vertexCount: 6 },
+            });
 
         // Offset
         const offset = new Int32Array([100, -80]);
 
-        rp.renderObjects.push({
-            vertexArray,
-            pipeline: programOffsetBicubic,
-            uniforms: {
-                MVP: matrix,
-                diffuse: { texture, sampler },
-                offset,
-            },
-            viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
-            drawArrays: { vertexCount: 6 },
-        });
+        rp.renderObjects.push(
+            { __type: "IGLViewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
+            {
+                vertexArray,
+                pipeline: programOffsetBicubic,
+                uniforms: {
+                    MVP: matrix,
+                    diffuse: { texture, sampler },
+                    offset,
+                },
+                drawArrays: { vertexCount: 6 },
+            });
 
         webgl.runRenderPass(rp);
 

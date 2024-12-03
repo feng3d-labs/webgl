@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLIndexBuffer, IGLProgram, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -24,9 +24,10 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
+const viewport: IGLViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
+    __type: "IGLViewport",
     x: 0,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -34,6 +35,7 @@ viewport[VIEWPORTS.LEFT] = {
 };
 
 viewport[VIEWPORTS.RIGHT] = {
+    __type: "IGLViewport",
     x: canvasSize.x / 2,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -169,16 +171,17 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
                 for (i = 0; i < VIEWPORTS.MAX; ++i)
                 {
-                    rp.renderObjects.push({
-                        pipeline: programs[i],
-                        vertexArray,
-                        uniforms: {
-                            mvp: localMVP,
-                            mvNormal: localMVNormal,
-                        },
-                        viewport: viewport[i],
-                        drawElements: { indexCount: primitive.indices.length, firstIndex: 0 },
-                    });
+                    rp.renderObjects.push(
+                        viewport[i],
+                        {
+                            pipeline: programs[i],
+                            vertexArray,
+                            uniforms: {
+                                mvp: localMVP,
+                                mvNormal: localMVNormal,
+                            },
+                            drawElements: { indexCount: primitive.indices.length, firstIndex: 0 },
+                        });
                 }
             }
         }

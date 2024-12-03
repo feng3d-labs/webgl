@@ -135,7 +135,7 @@ function render()
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        const viewport0: IGLViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
+        const viewport0: IGLViewport = { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
         if (i === Corners.TOP_LEFT)
         {
@@ -143,50 +143,53 @@ function render()
         }
         else if (i === Corners.TOP_RIGHT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-            });
+            renderPass.renderObjects.push(
+                viewport0,
+                {
+                    ...renderObject,
+                });
         }
         else if (i === Corners.BOTTOM_RIGHT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-                pipeline: {
-                    ...program, fragment: {
-                        ...program.fragment,
-                        targets: [{
-                            ...program.fragment.targets[0],
-                            blend: {
-                                ...program.fragment.targets[0].blend,
-                                color: { ...program.fragment.targets[0].blend.color, operation: "MIN" },
-                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MIN" },
-                            },
-                        }]
-                    }
-                },
-            });
+            renderPass.renderObjects.push(
+                viewport0,
+                {
+                    ...renderObject,
+                    pipeline: {
+                        ...program, fragment: {
+                            ...program.fragment,
+                            targets: [{
+                                ...program.fragment.targets[0],
+                                blend: {
+                                    ...program.fragment.targets[0].blend,
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "MIN" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MIN" },
+                                },
+                            }]
+                        }
+                    },
+                });
         }
         else if (i === Corners.BOTTOM_LEFT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-                pipeline: {
-                    ...program, fragment: {
-                        ...program.fragment,
-                        targets: [{
-                            ...program.fragment.targets[0],
-                            blend: {
-                                ...program.fragment.targets[0].blend,
-                                color: { ...program.fragment.targets[0].blend.color, operation: "MAX" },
-                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MAX" },
-                            },
-                        }]
-                    }
-                },
-            });
+            renderPass.renderObjects.push(
+                viewport0,
+                {
+                    ...renderObject,
+                    pipeline: {
+                        ...program, fragment: {
+                            ...program.fragment,
+                            targets: [{
+                                ...program.fragment.targets[0],
+                                blend: {
+                                    ...program.fragment.targets[0].blend,
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "MAX" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MAX" },
+                                },
+                            }]
+                        }
+                    },
+                });
         }
     }
 

@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -23,9 +23,10 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
+const viewport: IGLViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
+    __type: "IGLViewport",
     x: 0,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -33,6 +34,7 @@ viewport[VIEWPORTS.LEFT] = {
 };
 
 viewport[VIEWPORTS.RIGHT] = {
+    __type: "IGLViewport",
     x: canvasSize.x / 2,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -215,13 +217,13 @@ mat4.scale(mvp, IDENTITY, scaleVector3);
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     rp2.renderObjects.push(
+        viewport[i],
         {
             ...ro,
             uniforms: {
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            viewport: viewport[i],
             drawArrays: { vertexCount: 6 },
         }
     );
