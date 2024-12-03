@@ -8,6 +8,10 @@ import { IGLBuffer } from "./IGLBuffer";
 export interface IGLCopyBufferToBuffer
 {
     /**
+     * 数据类型。
+     */
+    readonly __type: "IGLCopyBufferToBuffer";
+    /**
      * 源缓冲区。
      */
     source: IGLBuffer,

@@ -22,7 +22,6 @@ import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
-import { runCopyBuffer } from "./runs/runCopyBuffer";
 import { getQueryResult } from "./runs/runQueryAction";
 import { runReadPixels } from "./runs/runReadPixels";
 import { deleteVertexArray } from "./runs/runVertexArray";
@@ -93,7 +92,8 @@ export class WebGL
 
     runCopyBuffer(copyBuffer: IGLCopyBufferToBuffer)
     {
-        runCopyBuffer(this.gl, copyBuffer);
+        const submit: IGLSubmit = { commandEncoders: [{ passEncoders: [copyBuffer] }] };
+        this.submit(submit);
     }
 
     runReadPixels(readPixels: IGLReadPixels)

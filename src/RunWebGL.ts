@@ -1,10 +1,13 @@
+import { getFramebuffer } from "./caches/getFramebuffer";
+import { getWebGLBuffer } from "./caches/getWebGLBuffer";
+import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
+import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLRenderPass } from "./data/IGLRenderPass";
 import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
 import { IGLSubmit } from "./data/IGLSubmit";
-import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runFramebuffer } from "./runs/runFramebuffer";
 import { runQueryAction } from "./runs/runQueryAction";
 import { runRenderObject } from "./runs/runRenderObject";
@@ -37,7 +40,11 @@ export class RunWebGL
             }
             else if (passEncoder.__type === "IGLBlitFramebuffer")
             {
-                runBlitFramebuffer(gl, passEncoder);
+                this.runBlitFramebuffer(gl, passEncoder);
+            }
+            else if (passEncoder.__type === "IGLCopyBufferToBuffer")
+            {
+                this.runCopyBuffer(gl, passEncoder);
             }
             else
             {
@@ -98,7 +105,55 @@ export class RunWebGL
         );
     }
 
+    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IGLBlitFramebuffer)
+    {
+        const { read, draw, blitFramebuffers } = blitFramebuffer;
 
+        const readFramebuffer = getFramebuffer(gl, read);
+        const drawFramebuffer = getFramebuffer(gl, draw);
+
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.bindFramebuffer(gl.READ_FRAMEBUFFER, readFramebuffer);
+            gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, drawFramebuffer);
+
+            draw.colorAttachments.forEach((item, i) =>
+            {
+                const clearValue = draw.colorAttachments[i]?.clearValue;
+                if (clearValue)
+                {
+                    gl.clearBufferfv(gl.COLOR, i, clearValue);
+                }
+            });
+
+            blitFramebuffers.forEach((item) =>
+            {
+                const [srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter] = item;
+
+                gl.blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, gl[mask], gl[filter]);
+            });
+        }
+    }
+
+
+    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBufferToBuffer)
+    {
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            const { source: read, destination: write, sourceOffset: readOffset, destinationOffset: writeOffset, size } = copyBuffer;
+
+            const rb = getWebGLBuffer(gl, read);
+            const wb = getWebGLBuffer(gl, write);
+
+            gl.bindBuffer(gl.COPY_READ_BUFFER, rb);
+            gl.bindBuffer(gl.COPY_WRITE_BUFFER, wb);
+            gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.COPY_WRITE_BUFFER, readOffset, writeOffset, size);
+        }
+        else
+        {
+            console.error(`WebGL1 不支持拷贝缓冲区功能！`);
+        }
+    }
 }
 
 export const defaultRenderPassColorAttachment: IGLRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
