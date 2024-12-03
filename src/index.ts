@@ -3,7 +3,7 @@ export * from "./data/IGLBlitFramebuffer";
 export * from "./data/IGLBuffer";
 export * from "./data/IGLCapabilities";
 export * from "./data/IGLColorTargetState";
-export * from "./data/IGLCopyBuffer";
+export * from "./data/IGLCopyBufferToBuffer";
 export * from "./data/IGLCullFace";
 export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLDrawArrays";

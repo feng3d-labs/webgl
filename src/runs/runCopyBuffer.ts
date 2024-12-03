@@ -1,11 +1,11 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { IGLCopyBuffer } from "../data/IGLCopyBuffer";
+import { IGLCopyBufferToBuffer } from "../data/IGLCopyBufferToBuffer";
 
-export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBuffer)
+export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBufferToBuffer)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
-        const { read, write, readOffset, writeOffset, size } = copyBuffer;
+        const { source: read, destination: write, sourceOffset: readOffset, destinationOffset: writeOffset, size } = copyBuffer;
 
         const rb = getWebGLBuffer(gl, read);
         const wb = getWebGLBuffer(gl, write);

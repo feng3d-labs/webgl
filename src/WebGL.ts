@@ -9,11 +9,10 @@ import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLBuffer } from "./data/IGLBuffer";
-import { IGLCopyBuffer } from "./data/IGLCopyBuffer";
+import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLQuery } from "./data/IGLQueryAction";
 import { IGLReadPixels } from "./data/IGLReadPixels";
-import { IGLRenderObject } from "./data/IGLRenderObject";
 import { IGLRenderPass } from "./data/IGLRenderPass";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
@@ -23,11 +22,9 @@ import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
-import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
 import { runCopyBuffer } from "./runs/runCopyBuffer";
 import { getQueryResult } from "./runs/runQueryAction";
 import { runReadPixels } from "./runs/runReadPixels";
-import { runRenderObject } from "./runs/runRenderObject";
 import { deleteVertexArray } from "./runs/runVertexArray";
 
 /**
@@ -90,10 +87,11 @@ export class WebGL
 
     runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
     {
-        runBlitFramebuffer(this.gl, blitFramebuffer);
+        const submit: IGLSubmit = { commandEncoders: [{ passEncoders: [blitFramebuffer] }] };
+        this.submit(submit);
     }
 
-    runCopyBuffer(copyBuffer: IGLCopyBuffer)
+    runCopyBuffer(copyBuffer: IGLCopyBufferToBuffer)
     {
         runCopyBuffer(this.gl, copyBuffer);
     }

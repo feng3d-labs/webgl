@@ -1,4 +1,4 @@
-import { IGLCopyBuffer, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCopyBufferToBuffer, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -33,10 +33,10 @@ import { getShaderSource } from "./utility";
 
     const vertexPosBufferDst: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
 
-    const cb: IGLCopyBuffer = {
-        read: vertexPosBufferSrc,
-        write: vertexPosBufferDst,
-        readOffset: 0, writeOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
+    const cb: IGLCopyBufferToBuffer = {
+        source: vertexPosBufferSrc,
+        destination: vertexPosBufferDst,
+        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
     };
     webgl.runCopyBuffer(cb);
 
