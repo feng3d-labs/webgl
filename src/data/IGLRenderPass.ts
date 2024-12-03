@@ -12,6 +12,10 @@ import { IGLViewport } from "./IGLViewport";
 export interface IGLRenderPass
 {
     /**
+     * 数据类型。
+     */
+    readonly __type?: "IGLRenderPass";
+    /**
      * WebGL渲染通道描述
      */
     descriptor?: IGLRenderPassDescriptor;

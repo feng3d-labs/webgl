@@ -72,7 +72,7 @@ function autoCreateCanvas(canvasId: string)
     return canvas;
 }
 
-function getCanvas(canvasContext: IGLRenderingContext)
+export function getCanvas(canvasContext: IGLRenderingContext)
 {
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
