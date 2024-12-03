@@ -6,6 +6,11 @@
 export interface IGLQueryAction
 {
     /**
+     * 数据类型。
+     */
+    readonly __type: "IGLQueryAction";
+
+    /**
      * 开始查询或者结束查询。
      */
     action: "beginQuery" | "endQuery";

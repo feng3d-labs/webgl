@@ -8,6 +8,11 @@
 export interface IGLScissor
 {
     /**
+     * 数据类型。
+     */
+    readonly __type: "IGLScissor";
+
+    /**
      * 是否开启
      */
     enable?: boolean;

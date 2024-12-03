@@ -4,6 +4,11 @@
 export interface IGLViewport
 {
     /**
+     * 数据类型。
+     */
+    readonly __type: "IGLViewport";
+
+    /**
      * 视窗X轴最小值（像素）。
      */
     x: number,

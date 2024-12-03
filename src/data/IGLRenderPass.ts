@@ -1,6 +1,8 @@
 import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
 import { IGLQueryAction } from "./IGLQueryAction";
 import { IGLRenderObject } from "./IGLRenderObject";
+import { IGLScissor } from "./IGLScissor";
+import { IGLViewport } from "./IGLViewport";
 
 /**
  * WebGL渲染通道
@@ -17,5 +19,7 @@ export interface IGLRenderPass
     /**
      * 渲染对象列表，默认为 []。
      */
-    renderObjects?: (IGLRenderObject | IGLQueryAction)[];
+    renderObjects?: IGLRenderPassObject[];
 }
+
+export type IGLRenderPassObject = IGLRenderObject | IGLQueryAction | IGLViewport | IGLScissor;
