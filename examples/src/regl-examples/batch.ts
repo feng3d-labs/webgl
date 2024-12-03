@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, WebGL } from "@feng3d/webgl";
 
 const webglcanvas = document.createElement("canvas");
 webglcanvas.id = "glcanvas";

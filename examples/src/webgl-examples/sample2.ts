@@ -1,4 +1,4 @@
-import { IGLRenderPass, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderPass, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 main();

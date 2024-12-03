@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.3",
-    "@feng3d/webgl-renderer": "0.0.2"
+    "@feng3d/webgl": "0.0.2"
   }
 }

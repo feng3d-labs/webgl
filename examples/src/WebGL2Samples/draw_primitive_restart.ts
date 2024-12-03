@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLRenderingContext, IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLIndexBuffer, IGLRenderingContext, IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");

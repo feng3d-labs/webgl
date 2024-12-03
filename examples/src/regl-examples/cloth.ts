@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";

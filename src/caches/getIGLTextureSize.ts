@@ -1,4 +1,4 @@
-import { IGLTexture } from "@feng3d/webgl-renderer";
+import { IGLTexture } from "@feng3d/webgl";
 import { getIGLTextureSourceSize } from "./getIGLTextureSourceSize";
 
 export function getIGLTextureSize(glTexture: IGLTexture)

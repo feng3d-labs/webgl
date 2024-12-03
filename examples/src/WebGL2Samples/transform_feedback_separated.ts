@@ -1,4 +1,4 @@
-import { IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()

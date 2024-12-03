@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let squareRotation = 0.0;

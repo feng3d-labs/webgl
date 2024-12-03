@@ -1,4 +1,4 @@
-import { IGLRenderObject } from "@feng3d/webgl-renderer";
+import { IGLRenderObject } from "@feng3d/webgl";
 
 import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
 import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";

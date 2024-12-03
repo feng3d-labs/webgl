@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl-renderer";
+import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>

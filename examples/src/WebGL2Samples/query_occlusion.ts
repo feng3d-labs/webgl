@@ -1,4 +1,4 @@
-import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl-renderer";
+import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
