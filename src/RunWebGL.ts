@@ -1,3 +1,4 @@
+import { watcher } from "@feng3d/watcher";
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
@@ -13,10 +14,11 @@ import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthSt
 import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTextureView } from "./data/IGLTexture";
 import { runFramebuffer } from "./runs/runFramebuffer";
-import { runQueryAction } from "./runs/runQueryAction";
+import { runOcclusionQuery } from "./runs/runOcclusionQuery";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runScissor } from "./runs/runScissor";
 import { runViewPort } from "./runs/runViewPort";
+import { _GL_Submit_Times } from "./const/const";
 
 export class RunWebGL
 {
@@ -28,6 +30,9 @@ export class RunWebGL
 
             return commandBuffer;
         });
+
+        // 派发提交WebGPU事件
+        gl[_GL_Submit_Times] = ~~gl[_GL_Submit_Times] + 1;
     }
 
     protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: IGLCommandEncoder)
@@ -113,17 +118,17 @@ export class RunWebGL
     {
         renderObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type === "IGLQueryAction")
-            {
-                runQueryAction(gl, renderObject);
-            }
-            else if (renderObject.__type === "IGLViewport")
+            if (renderObject.__type === "IGLViewport")
             {
                 runViewPort(gl, renderObject)
             }
             else if (renderObject.__type === "IGLScissor")
             {
                 runScissor(gl, renderObject);
+            }
+            else if (renderObject.__type === "IGLOcclusionQuery")
+            {
+                runOcclusionQuery(gl, renderObject);
             }
             else
             {

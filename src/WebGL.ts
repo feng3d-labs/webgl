@@ -9,7 +9,6 @@ import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
-import { IGLQuery } from "./data/IGLQueryAction";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
@@ -19,7 +18,6 @@ import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
-import { getQueryResult } from "./runs/runQueryAction";
 import { runReadPixels } from "./runs/runReadPixels";
 import { deleteVertexArray } from "./runs/runVertexArray";
 
@@ -94,10 +92,5 @@ export class WebGL
     deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
     {
         deleteTransformFeedback(this._gl, transformFeedback);
-    }
-
-    getQueryResult(query: IGLQuery)
-    {
-        return getQueryResult(this._gl, query);
     }
 }

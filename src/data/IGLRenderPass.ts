@@ -1,5 +1,5 @@
+import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
-import { IGLQueryAction } from "./IGLQueryAction";
 import { IGLRenderObject } from "./IGLRenderObject";
 import { IGLScissor } from "./IGLScissor";
 import { IGLViewport } from "./IGLViewport";
@@ -26,4 +26,4 @@ export interface IGLRenderPass
     renderObjects?: IGLRenderPassObject[];
 }
 
-export type IGLRenderPassObject = IGLRenderObject | IGLQueryAction | IGLViewport | IGLScissor;
+export type IGLRenderPassObject = IGLRenderObject | IGLOcclusionQuery | IGLViewport | IGLScissor;

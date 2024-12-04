@@ -1,5 +1,6 @@
-import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
+import { watcher } from "@feng3d/watcher";
 
 // -- Init Canvas
 const canvas = document.createElement("canvas");
@@ -37,8 +38,6 @@ const vertexArray: IGLVertexArrayObject = {
         pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
 };
-// -- Init Query
-const query: IGLQuery = {};
 
 // -- Render
 const rp: IGLRenderPass = {
@@ -56,20 +55,21 @@ const ro: IGLRenderObject = {
 };
 rp.renderObjects.push(ro);
 
-rp.renderObjects.push({ __type: "IGLQueryAction", action: "beginQuery", target: "ANY_SAMPLES_PASSED", query });
+const occlusionQuery: IGLOcclusionQuery = {
+    __type: "IGLOcclusionQuery",
+    renderObjects: [{
+        ...ro,
+        drawArrays: { firstVertex: 3, vertexCount: 3 },
+    }]
+};
 
-rp.renderObjects.push({
-    ...ro,
-    drawArrays: { firstVertex: 3, vertexCount: 3 },
-});
-
-rp.renderObjects.push({ __type: "IGLQueryAction", action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
+rp.renderObjects.push(occlusionQuery);
 
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
-webgl.getQueryResult(query).then((samplesPassed) =>
+watcher.watch(occlusionQuery, "result", () =>
 {
-    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
+    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(occlusionQuery.result.result)}`;
 });
 
 // -- Delete WebGL resources
