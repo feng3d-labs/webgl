@@ -65,16 +65,13 @@ export class RunWebGL
     {
         if (renderPass.descriptor?.multisample && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
         {
-            const { passDescriptor, blitFramebuffer, renderbuffers } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
+            const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
             this.runPassDescriptor(gl, passDescriptor);
 
             this.runRenderObjects(gl, renderPass.renderObjects);
 
             this.runBlitFramebuffer(gl, blitFramebuffer);
-
-            // 销毁临时渲染缓冲区
-            renderbuffers;
         }
         else
         {
