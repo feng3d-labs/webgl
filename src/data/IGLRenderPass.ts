@@ -15,10 +15,11 @@ export interface IGLRenderPass
      * 数据类型。
      */
     readonly __type?: "IGLRenderPass";
+
     /**
      * WebGL渲染通道描述
      */
-    descriptor?: IGLRenderPassDescriptor;
+    readonly descriptor?: IGLRenderPassDescriptor;
 
     /**
      * 渲染对象列表，默认为 []。
