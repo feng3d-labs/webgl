@@ -139,10 +139,8 @@ const FRAMEBUFFER = {
 };
 
 const framebuffers: IGLFramebuffer[] = [
-    { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
-    { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
-    { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], multisample: 4 },
+    { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], multisample: 4 },
 ];
 
 // -- Init VertexArray
@@ -185,20 +183,6 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         }]
     };
     passEncoders.push(rp);
-
-    // Blit framebuffers, no Multisample texture 2d in WebGL 2
-    // centroid will only work with multisample
-    const blit: IGLBlitFramebuffer = {
-        __type: "IGLBlitFramebuffer",
-        read: framebuffers[i],
-        draw: framebuffers[i + 2],
-        blitFramebuffers: [[
-            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-            "COLOR_BUFFER_BIT", "NEAREST"
-        ]],
-    };
-    passEncoders.push(blit);
 }
 
 // Pass 2
