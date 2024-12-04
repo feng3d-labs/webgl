@@ -32,12 +32,12 @@ export class WebGL
 {
     private _runWebGL: RunWebGL = new RunWebGL();
     private _renderingContext: IGLRenderingContext;
-    gl: WebGLRenderingContext;
+    private _gl: WebGLRenderingContext;
 
     constructor(renderingContext?: IGLRenderingContext)
     {
         this._renderingContext = renderingContext;
-        this.gl = getRenderingContext(this._renderingContext);
+        this._gl = getRenderingContext(this._renderingContext);
     }
 
     /**
@@ -48,56 +48,56 @@ export class WebGL
      */
     submit(submit: IGLSubmit)
     {
-        this._runWebGL.runSubmit(this.gl, submit);
+        this._runWebGL.runSubmit(this._gl, submit);
     }
 
     runReadPixels(readPixels: IGLReadPixels)
     {
-        runReadPixels(this.gl, readPixels);
+        runReadPixels(this._gl, readPixels);
     }
 
     deleteFramebuffer(passDescriptor: IGLRenderPassDescriptor)
     {
-        deleteFramebuffer(this.gl, passDescriptor);
+        deleteFramebuffer(this._gl, passDescriptor);
     }
 
     deleteRenderbuffer(renderbuffer: IGLRenderbuffer)
     {
-        deleteRenderbuffer(this.gl, renderbuffer);
+        deleteRenderbuffer(this._gl, renderbuffer);
     }
 
     deleteBuffer(buffer: IGLBuffer)
     {
-        deleteBuffer(this.gl, buffer);
+        deleteBuffer(this._gl, buffer);
     }
 
     deleteTexture(texture: IGLTexture)
     {
-        deleteTexture(this.gl, texture);
+        deleteTexture(this._gl, texture);
     }
 
     deleteSampler(sampler: IGLSampler)
     {
-        deleteSampler(this.gl, sampler);
+        deleteSampler(this._gl, sampler);
     }
 
     deleteProgram(pipeline: IGLRenderPipeline)
     {
-        deleteProgram(this.gl, pipeline);
+        deleteProgram(this._gl, pipeline);
     }
 
     deleteVertexArray(vertexArray: IGLVertexArrayObject)
     {
-        deleteVertexArray(this.gl, vertexArray);
+        deleteVertexArray(this._gl, vertexArray);
     }
 
     deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
     {
-        deleteTransformFeedback(this.gl, transformFeedback);
+        deleteTransformFeedback(this._gl, transformFeedback);
     }
 
     getQueryResult(query: IGLQuery)
     {
-        return getQueryResult(this.gl, query);
+        return getQueryResult(this._gl, query);
     }
 }
