@@ -4,11 +4,20 @@ import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachme
 import { IGLRenderPassDepthStencilAttachment } from "../data/IGLRenderPassDepthStencilAttachment";
 import { IGLTextureView } from "../data/IGLTexture";
 
+/**
+ * 通过 IGLBlitFramebuffer 实现纹理之间拷贝并不靠谱。
+ * 
+ * @param copyTextureToTexture GL纹理之间拷贝。
+ * @returns 
+ */
 export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToTexture)
 {
     const { source, destination, copySize } = copyTextureToTexture;
 
-    console.assert(source.aspect === destination.aspect, `拷贝纹理时两个纹理的 aspect 必须相同！`)
+    const sourceAspect = source.aspect || "all";
+    const destinationAspect = destination.aspect || "all";
+
+    console.assert(sourceAspect === destinationAspect, `拷贝纹理时两个纹理的 aspect 必须相同！`)
 
     const sourceColorAttachments: IGLRenderPassColorAttachment[] = [];
     let sourceDepthStencilAttachment: IGLRenderPassDepthStencilAttachment;
@@ -17,29 +26,31 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToText
 
     //
     let mask: "COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
-    if (source.aspect === "all")
+    if (sourceAspect === "all")
     {
         mask = "COLOR_BUFFER_BIT";
         sourceColorAttachments.push({ view: getIGLTextureView(source) });
         destinationColorAttachments.push({ view: getIGLTextureView(destination) });
     }
-    else if (source.aspect === "depth-only")
+    else if (sourceAspect === "depth-only")
     {
         mask = "DEPTH_BUFFER_BIT";
         sourceDepthStencilAttachment = { view: getIGLTextureView(source) };
         destinationDepthStencilAttachment = { view: getIGLTextureView(destination) };
     }
-    else if (source.aspect === "stencil-only")
+    else if (sourceAspect === "stencil-only")
     {
         mask = "STENCIL_BUFFER_BIT";
         sourceDepthStencilAttachment = { view: getIGLTextureView(source) };
         destinationDepthStencilAttachment = { view: getIGLTextureView(destination) };
     }
 
+    const sourceOrigin = source.origin || [0, 0];
+    const destinationOrigin = destination.origin || [0, 0];
     //
     const blitFramebufferItem: IGLBlitFramebufferItem = [
-        source.origin[0], source.origin[1], source.origin[0] + copySize[0], source.origin[1] + copySize[1],
-        destination.origin[0], destination.origin[1], destination.origin[0] + copySize[0], destination.origin[1] + copySize[1],
+        sourceOrigin[0], sourceOrigin[1], sourceOrigin[0] + copySize[0], sourceOrigin[1] + copySize[1],
+        destinationOrigin[0], destinationOrigin[1], destinationOrigin[0] + copySize[0], destinationOrigin[1] + copySize[1],
         mask, "NEAREST",
     ];
 
@@ -64,7 +75,7 @@ function getIGLTextureView(source: IGLImageCopyTexture)
     const textureView: IGLTextureView = {
         texture: source.texture,
         baseMipLevel: source.mipLevel,
-        baseArrayLayer: source.origin[2],
+        baseArrayLayer: source.origin?.[2],
     };
     return textureView;
 }
