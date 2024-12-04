@@ -62,7 +62,7 @@ function getGLRenderbufferInternalformat(internalformat?: IGLTextureInternalForm
 
     const renderbufferInternalformat = internalformatMap[internalformat];
 
-    console.assert(renderbufferInternalformat, `没有找到 ${internalformat} 到 GLRenderbufferInternalformat 的映射值！`);
+    console.assert(!!renderbufferInternalformat, `没有找到 ${internalformat} 到 GLRenderbufferInternalformat 的映射值！`);
 
     return renderbufferInternalformat;
 }

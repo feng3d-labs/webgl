@@ -124,7 +124,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
  */
 export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor, handleMultisample = true)
 {
-    if (handleMultisample && passDescriptor[_IGLRenderPassDescriptorWithMultisample])
+    if (handleMultisample && passDescriptor?.[_IGLRenderPassDescriptorWithMultisample])
     {
         deleteRenderPassDescriptorWithMultisample(gl, passDescriptor[_IGLRenderPassDescriptorWithMultisample]);
         return;

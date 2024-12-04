@@ -2,18 +2,15 @@ import { RunWebGL } from "./RunWebGL";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
 import { deleteProgram } from "./caches/getProgram";
 import { deleteRenderbuffer } from "./caches/getRenderbuffer";
-import { getCanvas, getRenderingContext } from "./caches/getRenderingContext";
+import { getRenderingContext } from "./caches/getRenderingContext";
 import { deleteSampler } from "./caches/getSampler";
 import { deleteTexture } from "./caches/getTexture";
 import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
-import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLBuffer } from "./data/IGLBuffer";
-import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLQuery } from "./data/IGLQueryAction";
 import { IGLReadPixels } from "./data/IGLReadPixels";
-import { IGLRenderPass } from "./data/IGLRenderPass";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLRenderingContext } from "./data/IGLRenderingContext";
@@ -37,27 +34,10 @@ export class WebGL
     private _renderingContext: IGLRenderingContext;
     gl: WebGLRenderingContext;
 
-    constructor(renderingContext: IGLRenderingContext)
-    {
-        this.init(renderingContext);
-    }
-
-    init(renderingContext: IGLRenderingContext)
+    constructor(renderingContext?: IGLRenderingContext)
     {
         this._renderingContext = renderingContext;
-        const gl = getRenderingContext(this._renderingContext);
-
-        const canvas = getCanvas(renderingContext);
-        canvas.addEventListener("webglcontextlost", function _onContextLost(event: Event)
-        {
-            console.warn("WebGLRenderer: Context Lost.");
-
-            this.init(renderingContext);
-        });
-
-        this.gl = gl;
-
-        return this;
+        this.gl = getRenderingContext(this._renderingContext);
     }
 
     /**
