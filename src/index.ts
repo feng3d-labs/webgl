@@ -13,6 +13,7 @@ export * from "./data/IGLFramebuffer";
 export * from "./data/IGLIndexBuffer";
 export * from "./data/IGLPassDescriptor";
 export * from "./data/IGLPrimitiveState";
+export * from "./data/IGLSubmit";
 export * from "./data/IGLQueryAction";
 export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";
@@ -34,6 +35,8 @@ export * from "./data/IGLVertexArrayObject";
 export * from "./data/IGLVertexAttribute";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
+
+export * from "./runs/runDrawCall";
 
 export * from "./gl/WebGLEnums";
 
