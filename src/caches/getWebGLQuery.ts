@@ -1,4 +1,4 @@
-import { IGLQuery } from "../data/IGLQueryAction";
+import { IGLQuery } from "../data/IGLOcclusionQuery";
 
 declare global
 {
