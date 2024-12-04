@@ -122,7 +122,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     const framebufferResolve: IGLRenderPassDescriptor = {
         colorAttachments: [{
-            view: { texture: textureColorBuffer, level: 0 },
+            view: { texture: textureColorBuffer, baseMipLevel: 0 },
             clearValue: [0.7, 0.0, 0.0, 1.0]
         }]
     };

@@ -12,7 +12,7 @@ declare global
     }
 }
 
-const defaultTextureView: Partial<IGLTextureView> = { level: 0, layer: 0 };
+const defaultTextureView: Partial<IGLTextureView> = { baseMipLevel: 0, baseArrayLayer: 0 };
 
 /**
  * 获取帧缓冲区
@@ -40,7 +40,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         drawBuffers.push(attachment);
         if ("texture" in view)
         {
-            const { texture, level, layer } = { ...defaultTextureView, ...view };
+            const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
 
             const webGLTexture = getTexture(gl, texture);
             const textureTarget = webGLTexture.textureTarget;
@@ -83,7 +83,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         const { view } = passDescriptor.depthStencilAttachment;
         if ("texture" in view)
         {
-            const { texture, level, layer } = { ...defaultTextureView, ...view };
+            const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
 
             const webGLTexture = getTexture(gl, texture);
             const textureTarget = webGLTexture.textureTarget;

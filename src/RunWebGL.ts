@@ -1,8 +1,10 @@
 import { getFramebuffer } from "./caches/getFramebuffer";
+import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getWebGLBuffer } from "./caches/getWebGLBuffer";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
+import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLRenderPass } from "./data/IGLRenderPass";
 import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
@@ -41,6 +43,10 @@ export class RunWebGL
             else if (passEncoder.__type === "IGLBlitFramebuffer")
             {
                 this.runBlitFramebuffer(gl, passEncoder);
+            }
+            else if (passEncoder.__type === "IGLCopyTextureToTexture")
+            {
+                this.runCopyTextureToTexture(gl, passEncoder);
             }
             else if (passEncoder.__type === "IGLCopyBufferToBuffer")
             {
@@ -103,6 +109,12 @@ export class RunWebGL
             | (depthLoadOp === "clear" ? gl.DEPTH_BUFFER_BIT : 0)
             | (stencilLoadOp === "clear" ? gl.STENCIL_BUFFER_BIT : 0)
         );
+    }
+
+    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: IGLCopyTextureToTexture)
+    {
+        const blitFramebuffer = getIGLBlitFramebuffer(copyTextureToTexture);
+        this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 
     private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IGLBlitFramebuffer)

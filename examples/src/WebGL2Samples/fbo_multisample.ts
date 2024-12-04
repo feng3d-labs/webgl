@@ -91,7 +91,7 @@ const framebuffers: IGLRenderPassDescriptor[] = [
         multisample: 4 // 多重采样
     },
     {
-        colorAttachments: [{ view: { texture, level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
+        colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     }
 ];
 

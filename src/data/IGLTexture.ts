@@ -14,12 +14,12 @@ export interface IGLTextureView
     /**
      * mipmap级别。
      */
-    level: number;
+    baseMipLevel: number;
 
     /**
      * 纹理数组中的层次。
      */
-    layer?: number;
+    baseArrayLayer?: number;
 }
 
 /**

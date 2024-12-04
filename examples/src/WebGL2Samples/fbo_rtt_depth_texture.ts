@@ -90,7 +90,7 @@ const depthSampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE
 
 const frameBuffer: IGLFramebuffer = {
     colorAttachments: [],
-    depthStencilAttachment: { view: { texture: depthTexture, level: 0 }, depthLoadOp: "clear" },
+    depthStencilAttachment: { view: { texture: depthTexture, baseMipLevel: 0 }, depthLoadOp: "clear" },
 };
 
 // -- Render

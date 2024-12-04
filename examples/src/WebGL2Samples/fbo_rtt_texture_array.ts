@@ -116,9 +116,9 @@ const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST", lodMin
 
 const frameBuffer: IGLFramebuffer = {
     colorAttachments: [
-        { view: { texture, level: 0, layer: Textures.RED } },
-        { view: { texture, level: 0, layer: Textures.GREEN } },
-        { view: { texture, level: 0, layer: Textures.BLUE } },
+        { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.RED } },
+        { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.GREEN } },
+        { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.BLUE } },
     ]
 };
 

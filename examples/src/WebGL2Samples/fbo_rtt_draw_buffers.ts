@@ -97,8 +97,8 @@ const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDG
 
 const frameBuffer: IGLFramebuffer = {
     colorAttachments: [
-        { view: { texture: color1Texture, level: 0 } },
-        { view: { texture: color2Texture, level: 0 } },
+        { view: { texture: color1Texture, baseMipLevel: 0 } },
+        { view: { texture: color2Texture, baseMipLevel: 0 } },
     ],
 };
 
