@@ -1,15 +1,17 @@
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
+import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
 import { getWebGLBuffer } from "./caches/getWebGLBuffer";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
 import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
-import { IGLRenderPass } from "./data/IGLRenderPass";
+import { IGLRenderPass, IGLRenderPassObject } from "./data/IGLRenderPass";
 import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
 import { IGLSubmit } from "./data/IGLSubmit";
+import { IGLTextureView } from "./data/IGLTexture";
 import { runFramebuffer } from "./runs/runFramebuffer";
 import { runQueryAction } from "./runs/runQueryAction";
 import { runRenderObject } from "./runs/runRenderObject";
@@ -61,27 +63,26 @@ export class RunWebGL
 
     protected runRenderPass(gl: WebGLRenderingContext, renderPass: IGLRenderPass)
     {
-        this.runPassDescriptor(gl, renderPass.descriptor);
-
-        renderPass.renderObjects?.forEach((renderObject) =>
+        if (renderPass.descriptor?.multisample && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
         {
-            if (renderObject.__type === "IGLQueryAction")
-            {
-                runQueryAction(gl, renderObject);
-            }
-            else if (renderObject.__type === "IGLViewport")
-            {
-                runViewPort(gl, renderObject)
-            }
-            else if (renderObject.__type === "IGLScissor")
-            {
-                runScissor(gl, renderObject);
-            }
-            else
-            {
-                runRenderObject(gl, renderObject);
-            }
-        });
+            const { passDescriptor, blitFramebuffer, renderbuffers } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
+
+            this.runPassDescriptor(gl, passDescriptor);
+
+            this.runRenderObjects(gl, renderPass.renderObjects);
+
+            this.runBlitFramebuffer(gl, blitFramebuffer);
+
+            // 销毁临时渲染缓冲区
+            renderbuffers;
+        }
+        else
+        {
+            this.runPassDescriptor(gl, renderPass.descriptor);
+
+            this.runRenderObjects(gl, renderPass.renderObjects);
+        }
+
     }
 
     private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
@@ -109,6 +110,29 @@ export class RunWebGL
             | (depthLoadOp === "clear" ? gl.DEPTH_BUFFER_BIT : 0)
             | (stencilLoadOp === "clear" ? gl.STENCIL_BUFFER_BIT : 0)
         );
+    }
+
+    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: IGLRenderPassObject[])
+    {
+        renderObjects?.forEach((renderObject) =>
+        {
+            if (renderObject.__type === "IGLQueryAction")
+            {
+                runQueryAction(gl, renderObject);
+            }
+            else if (renderObject.__type === "IGLViewport")
+            {
+                runViewPort(gl, renderObject)
+            }
+            else if (renderObject.__type === "IGLScissor")
+            {
+                runScissor(gl, renderObject);
+            }
+            else
+            {
+                runRenderObject(gl, renderObject);
+            }
+        });
     }
 
     private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: IGLCopyTextureToTexture)

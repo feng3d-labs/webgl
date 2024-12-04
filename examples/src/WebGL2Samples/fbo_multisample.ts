@@ -85,15 +85,10 @@ const FRAMEBUFFER = {
 };
 const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 
-const framebuffers: IGLRenderPassDescriptor[] = [
-    {
-        colorAttachments: [{ view: colorRenderbuffer, clearValue: [0.0, 0.0, 0.0, 1.0] }],
-        multisample: 4 // 多重采样
-    },
-    {
-        colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
-    }
-];
+const framebuffer: IGLRenderPassDescriptor = {
+    colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
+    multisample: 4 // 多重采样
+};
 
 // -- Init VertexArray
 const vertexArrays: IGLVertexArrayObject[] = [
@@ -114,23 +109,13 @@ const IDENTITY = mat4.create();
 
 // Pass 1
 const renderPass1: IGLRenderPass = {
-    descriptor: framebuffers[FRAMEBUFFER.RENDERBUFFER],
+    descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
         vertexArray: vertexArrays[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
         drawArrays: { vertexCount },
     }]
-};
-
-// Blit framebuffers, no Multisample texture 2d in WebGL 2
-const blitFramebuffer: IGLBlitFramebuffer = {
-    __type: "IGLBlitFramebuffer",
-    read: framebuffers[FRAMEBUFFER.RENDERBUFFER],
-    draw: framebuffers[FRAMEBUFFER.COLORBUFFER],
-    blitFramebuffers: [[0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-        0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-        "COLOR_BUFFER_BIT", "NEAREST"]],
 };
 
 // Pass 2
@@ -152,17 +137,25 @@ const renderPass2: IGLRenderPass = {
     ],
 };
 
-webgl.submit({ commandEncoders: [{ passEncoders: [renderPass1, blitFramebuffer, renderPass2] }] });
+webgl.submit({
+    commandEncoders: [{
+        passEncoders: [renderPass1,
+            // blitFramebuffer,
+            renderPass2]
+    }]
+});
 
 // -- Delete WebGL resources
 webgl.deleteBuffer(vertexDataBuffer);
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteBuffer(vertexTexBuffer);
 webgl.deleteTexture(texture);
+webgl.deleteSampler(sampler);
 webgl.deleteRenderbuffer(colorRenderbuffer);
-webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
-webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
+webgl.deleteFramebuffer(framebuffer);
 webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
 webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
 webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
 webgl.deleteProgram(programs[PROGRAM.SPLASH]);
+
+webgl;

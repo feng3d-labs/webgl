@@ -1,7 +1,8 @@
 import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLTextureView } from "../data/IGLTexture";
-import { getRenderbuffer } from "./getRenderbuffer";
+import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
+import { deleteRenderbuffer, getRenderbuffer } from "./getRenderbuffer";
 import { getTexture } from "./getTexture";
 
 declare global
@@ -114,10 +115,34 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     return webGLFramebuffer;
 }
 
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
+/**
+ * 
+ * @param gl 
+ * @param passDescriptor 
+ * @param handleMultisample 处理存在多重采样的渲染通道描述。
+ * @returns 
+ */
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor, handleMultisample = true)
 {
+    if (handleMultisample && passDescriptor[_IGLRenderPassDescriptorWithMultisample])
+    {
+        deleteRenderPassDescriptorWithMultisample(gl, passDescriptor[_IGLRenderPassDescriptorWithMultisample]);
+        return;
+    }
+
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     gl._framebuffers.delete(passDescriptor);
     //
     gl.deleteFramebuffer(webGLFramebuffer);
+}
+
+function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, renderPassDescriptorWithMultisample: IGLRenderPassDescriptorWithMultisample)
+{
+    deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.read, false);
+    deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.draw, false);
+
+    renderPassDescriptorWithMultisample.renderbuffers.forEach((v) =>
+    {
+        deleteRenderbuffer(gl, v);
+    })
 }
