@@ -25,6 +25,13 @@ export interface IGLRenderPass
      * 渲染对象列表，默认为 []。
      */
     renderObjects?: IGLRenderPassObject[];
+
+    /**
+     * 渲染不被遮挡查询结果。具体数据保存在各子项的"result"属性中。
+     *
+     * 当提交WebGL后自动获取结果后填充该属性。
+     */
+    occlusionQueryResults?: IGLOcclusionQuery[];
 }
 
 export type IGLRenderPassObject = IGLRenderObject | IGLOcclusionQuery | IGLViewport | IGLScissor;

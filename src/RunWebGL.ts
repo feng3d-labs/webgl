@@ -1,8 +1,9 @@
-import { watcher } from "@feng3d/watcher";
 import { getFramebuffer } from "./caches/getFramebuffer";
+import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
 import { getWebGLBuffer } from "./caches/getWebGLBuffer";
+import { _GL_Submit_Times } from "./const/const";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
@@ -18,7 +19,6 @@ import { runOcclusionQuery } from "./runs/runOcclusionQuery";
 import { runRenderObject } from "./runs/runRenderObject";
 import { runScissor } from "./runs/runScissor";
 import { runViewPort } from "./runs/runViewPort";
-import { _GL_Submit_Times } from "./const/const";
 
 export class RunWebGL
 {
@@ -68,6 +68,11 @@ export class RunWebGL
 
     protected runRenderPass(gl: WebGLRenderingContext, renderPass: IGLRenderPass)
     {
+        // 处理不被遮挡查询
+        const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderObjects);
+        //
+        occlusionQuery.init();
+
         if (renderPass.descriptor?.multisample && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
         {
             const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
@@ -85,6 +90,7 @@ export class RunWebGL
             this.runRenderObjects(gl, renderPass.renderObjects);
         }
 
+        occlusionQuery.resolve(renderPass);
     }
 
     private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)

@@ -1,3 +1,4 @@
+import { IGLOcclusionQueryStep } from "../caches/getGLRenderOcclusionQuery";
 import { IGLRenderObject } from "./IGLRenderObject";
 
 export interface IGLOcclusionQuery
@@ -10,6 +11,13 @@ export interface IGLOcclusionQuery
      * 渲染对象列表。
      */
     renderObjects: IGLRenderObject[];
+
+    /**
+     * 临时变量, 执行过程中由引擎自动填充。
+     * 
+     * @internal
+     */
+    _step?: IGLOcclusionQueryStep;
 
     /**
      * 渲染完成后由引擎自动填充。
