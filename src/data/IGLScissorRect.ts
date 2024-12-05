@@ -5,7 +5,7 @@
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
  */
-export interface IGLScissor
+export interface IGLScissorRect
 {
     /**
      * 数据类型。

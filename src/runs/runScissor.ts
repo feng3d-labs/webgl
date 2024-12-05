@@ -1,6 +1,6 @@
-import { IGLScissor } from "../data/IGLScissor";
+import { IGLScissorRect } from "../data/IGLScissorRect";
 
-export function runScissor(gl: WebGLRenderingContext, scissor?: IGLScissor)
+export function runScissor(gl: WebGLRenderingContext, scissor?: IGLScissorRect)
 {
     if (scissor)
     {
