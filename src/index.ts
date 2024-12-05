@@ -13,7 +13,7 @@ export * from "./data/IGLDrawElements";
 export * from "./data/IGLFramebuffer";
 export * from "./data/IGLIndexBuffer";
 export * from "./data/IGLOcclusionQuery";
-export * from "./data/IGLPassDescriptor";
+export * from "./data/IGLRenderPassDescriptor";
 export * from "./data/IGLPrimitiveState";
 export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";

@@ -1,4 +1,4 @@
-import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLTextureView } from "../data/IGLTexture";
 import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";

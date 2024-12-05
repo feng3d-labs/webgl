@@ -1,5 +1,5 @@
 import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
-import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
 import { IGLTextureInternalFormat, IGLTextureView } from "../data/IGLTexture";

@@ -1,5 +1,5 @@
 import { getFramebuffer } from "../caches/getFramebuffer";
-import { IGLRenderPassDescriptor } from "../data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 
 /**
  * 运行帧缓冲区

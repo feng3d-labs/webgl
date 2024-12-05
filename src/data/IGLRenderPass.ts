@@ -1,6 +1,6 @@
 import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
-import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
 import { IGLRenderObject } from "./IGLRenderObject";
+import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
 import { IGLScissorRect } from "./IGLScissorRect";
 import { IGLViewport } from "./IGLViewport";
 

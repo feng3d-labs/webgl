@@ -8,7 +8,7 @@ import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
-import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLRenderPass, IGLRenderPassObject } from "./data/IGLRenderPass";
 import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";

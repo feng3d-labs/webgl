@@ -9,7 +9,7 @@ import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
-import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";

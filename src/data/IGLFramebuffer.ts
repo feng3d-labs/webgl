@@ -1,4 +1,4 @@
-import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
 
 /**
  * 等价于 IPassDescriptor 。

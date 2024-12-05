@@ -1,4 +1,4 @@
-import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
+import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
 
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
