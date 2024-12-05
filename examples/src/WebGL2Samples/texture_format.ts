@@ -231,6 +231,5 @@ import { getShaderSource, loadImage } from "./utility";
         }
         webgl.deleteProgram(programUint);
         webgl.deleteProgram(programNormalized);
-        webgl.deleteVertexArray(vertexArray);
     });
 })();

@@ -159,7 +159,6 @@ import { getShaderSource, loadImage } from "./utility";
             a_normal: { type: "HALF_FLOAT", buffer: vertexNorBuffer, numComponents: 3 },
             a_texCoord: { type: "HALF_FLOAT", buffer: vertexTexBuffer, numComponents: 2 },
         },
-        indices: new Uint16Array(cubeVertexIndices),
     };
 
     // -- Init Texture
@@ -211,6 +210,7 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
+        indices: new Uint16Array(cubeVertexIndices),
         uniforms: {
             u_model: modelMatrix,
             u_modelInvTrans: modelInvTrans,

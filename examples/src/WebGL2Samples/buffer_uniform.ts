@@ -74,12 +74,12 @@ import { getShaderSource } from "./utility";
             normal: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 12 },
             color: { buffer: vertexBuffer, numComponents: 4, vertexSize: 40, offset: 24 },
         },
-        indices: elementData,
     };
 
     const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
+        indices: elementData,
         uniforms: {
             PerDraw: uniformPerDrawBuffer,
             PerPass: uniformPerPassBuffer,

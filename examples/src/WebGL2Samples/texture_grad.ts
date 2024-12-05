@@ -116,7 +116,6 @@ import { getShaderSource, loadImage } from "./utility";
             position: { buffer: vertexPosBuffer, numComponents: 3 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
         },
-        indices: new Uint16Array(cubeVertexIndices),
     };
 
     // -- Init Texture
@@ -204,6 +203,7 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: IGLRenderObject = {
         pipeline: program,
         vertexArray,
+        indices: new Uint16Array(cubeVertexIndices),
         uniforms: {},
         drawIndexed: { indexCount: 36 },
     };

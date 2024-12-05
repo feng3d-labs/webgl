@@ -153,8 +153,6 @@ webgl.deleteTexture(texture);
 webgl.deleteSampler(sampler);
 webgl.deleteRenderbuffer(colorRenderbuffer);
 webgl.deleteFramebuffer(framebuffer);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
 webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
 webgl.deleteProgram(programs[PROGRAM.SPLASH]);
 

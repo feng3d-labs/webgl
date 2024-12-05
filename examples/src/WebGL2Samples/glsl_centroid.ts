@@ -239,10 +239,6 @@ webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
 
-webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE_CENTROID]);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
-
 webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
 webgl.deleteProgram(programs[PROGRAM.TEXTURE_CENTROID]);
 webgl.deleteProgram(programs[PROGRAM.SPLASH]);

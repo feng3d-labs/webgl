@@ -208,5 +208,4 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     webgl.deleteTexture(textureDiffuse);
     webgl.deleteTexture(textureColorBuffer);
     webgl.deleteProgram(program);
-    webgl.deleteVertexArray(vertexArray);
 });

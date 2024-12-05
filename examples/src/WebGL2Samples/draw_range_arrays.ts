@@ -76,4 +76,3 @@ webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(pipeline);
-webgl.deleteVertexArray(vertexArray);

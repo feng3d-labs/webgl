@@ -125,8 +125,6 @@ webgl.submit({ commandEncoders: [{ passEncoders: [renderPass, rp2] }] });
 webgl.deleteBuffer(triVertexPosBuffer);
 webgl.deleteBuffer(quadVertexPosBuffer);
 webgl.deleteBuffer(quadVertexTexBuffer);
-webgl.deleteVertexArray(triVertexArray);
-webgl.deleteVertexArray(quadVertexArray);
 webgl.deleteFramebuffer(frameBuffer);
 webgl.deleteTexture(depthTexture);
 webgl.deleteProgram(depthProgram);

@@ -148,7 +148,6 @@ import { getShaderSource, loadImage } from "./utility";
         webgl.deleteTexture(texture3D);
         webgl.deleteProgram(program);
         webgl.deleteProgram(program3D);
-        webgl.deleteVertexArray(vertexArray);
     });
 
     function create3DTexture()

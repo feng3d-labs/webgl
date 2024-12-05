@@ -10,8 +10,8 @@ import { defaultPrimitiveState } from "./runPrimitiveState";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
-    const { pipeline, vertexArray, drawIndexed, drawVertex } = renderObject;
-    const { vertices, indices } = { ...vertexArray };
+    const { pipeline, vertexArray, indices, drawIndexed, drawVertex } = renderObject;
+    const { vertices } = { ...vertexArray };
 
     const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
 

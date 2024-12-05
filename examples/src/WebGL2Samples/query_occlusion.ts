@@ -75,4 +75,3 @@ watcher.watch(occlusionQuery, "result", () =>
 // -- Delete WebGL resources
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(program);
-webgl.deleteVertexArray(vertexArray);

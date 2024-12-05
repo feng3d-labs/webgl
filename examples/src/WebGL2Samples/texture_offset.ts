@@ -140,6 +140,5 @@ import { getShaderSource, loadImage } from "./utility";
         webgl.deleteTexture(texture);
         webgl.deleteProgram(programOffsetBicubic);
         webgl.deleteProgram(programBicubic);
-        webgl.deleteVertexArray(vertexArray);
     });
 })();

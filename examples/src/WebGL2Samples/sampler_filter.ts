@@ -177,7 +177,6 @@ function render()
     {
         webgl.deleteSampler(samplers[(j + 1) % samplers.length]);
     }
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

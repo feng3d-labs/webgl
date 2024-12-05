@@ -116,6 +116,4 @@ import { getShaderSource } from "./utility";
     webgl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
     webgl.deleteProgram(programs[PROGRAM_TRANSFORM]);
     webgl.deleteProgram(programs[PROGRAM_FEEDBACK]);
-    webgl.deleteVertexArray(vertexArrays[PROGRAM_TRANSFORM]);
-    webgl.deleteVertexArray(vertexArrays[PROGRAM_FEEDBACK]);
 })();

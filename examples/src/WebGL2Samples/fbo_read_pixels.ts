@@ -192,8 +192,6 @@ console.log(data);
 // Clean up
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteBuffer(vertexTexBuffer);
-webgl.deleteVertexArray(multipleOutputVertexArray);
-webgl.deleteVertexArray(layerVertexArray);
 webgl.deleteFramebuffer(frameBuffer);
 webgl.deleteTexture(texture);
 webgl.deleteProgram(multipleOutputProgram);

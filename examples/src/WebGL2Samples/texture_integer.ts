@@ -94,6 +94,5 @@ import { getShaderSource, loadImage } from "./utility";
         webgl.deleteBuffer(vertexTexBuffer);
         webgl.deleteTexture(texture);
         webgl.deleteProgram(program);
-        webgl.deleteVertexArray(vertexArray);
     });
 })();

@@ -1,5 +1,6 @@
 import { IGLCanvasContext } from "../data/IGLCanvasContext";
 import { defaultCanvasContext } from "../defaults/defaults";
+import { ChainMap } from "../utils/ChainMap";
 import { getCapabilities } from "./getCapabilities";
 
 /**
@@ -38,7 +39,7 @@ function initMap(gl: WebGLRenderingContext)
     gl._textures = new Map();
     gl._renderbuffers = new Map();
     gl._framebuffers = new Map();
-    gl._vertexArrays = new Map();
+    gl._vertexArrays = new ChainMap();
     gl._samplers = new Map();
     gl._transforms = new Map();
     gl._programs = {};

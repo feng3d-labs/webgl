@@ -5,6 +5,7 @@ import { IGLRenderPipeline } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 import { IGLVertexArrayObject } from "./IGLVertexArrayObject";
+import { IElementBufferSourceTypes } from "./IGLIndexBuffer";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -25,6 +26,11 @@ export interface IGLRenderObject
      * 顶点属性以及索引数据。
      */
     vertexArray?: IGLVertexArrayObject;
+
+    /**
+     * 顶点索引数据
+     */
+    indices?: IElementBufferSourceTypes;
 
     /**
      * Uniform渲染数据

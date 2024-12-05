@@ -43,7 +43,7 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
 
-    const vertexArrayMaps = {};
+    const vertexArrayMaps: { [key: string]: { vertexArray: IGLVertexArrayObject, indices: IElementBufferSourceTypes }[] } = {};
 
     // var in loop
     let mesh;
@@ -97,9 +97,8 @@ import { getShaderSource, loadImage } from "./utility";
                         normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
                         texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
                     },
-                    indices: indicesBuffer,
                 };
-                vertexArrayMaps[mid].push(vertexArray);
+                vertexArrayMaps[mid].push({ vertexArray, indices: indicesBuffer });
             }
         }
 
@@ -222,7 +221,8 @@ import { getShaderSource, loadImage } from "./utility";
                         ...program,
                         primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
-                    vertexArray: vertexArrayMaps[mid][i],
+                    vertexArray: vertexArrayMaps[mid][i].vertexArray,
+                    indices: vertexArrayMaps[mid][i].indices,
                     uniforms: {
                         mvMatrix: localMV,
                         pMatrix: perspectiveMatrix,

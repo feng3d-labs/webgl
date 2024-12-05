@@ -114,7 +114,6 @@ function render()
     webgl.deleteBuffer(vertexTexBuffer);
     webgl.deleteSampler(samplerA);
     webgl.deleteSampler(samplerB);
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

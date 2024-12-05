@@ -170,8 +170,8 @@ import * as vec3 from "./stackgl/gl-vec3";
                 normal: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(normals) }, numComponents: 3 },
                 uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
             },
-            indices: new Uint16Array(indices)
         },
+        indices: new Uint16Array(indices),
         uniforms: {
             view: () => camera.view(),
             projection: () =>

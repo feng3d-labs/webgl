@@ -1,6 +1,8 @@
 import { getProgram } from "../caches/getProgram";
+import { IElementBufferSourceTypes } from "../data/IGLIndexBuffer";
 import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
 import { IGLVertexArrayObject } from "../data/IGLVertexArrayObject";
+import { ChainMap } from "../utils/ChainMap";
 import { runIndexBuffer } from "./runIndexBuffer";
 import { runVertexAttribute } from "./runVertexAttribute";
 
@@ -8,21 +10,21 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: Map<IGLVertexArrayObject, WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[IGLRenderPipeline, IGLVertexArrayObject, IElementBufferSourceTypes], WebGLVertexArrayObject>;
     }
 }
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。
  */
-export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, vertexArray: IGLVertexArrayObject)
+export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, vertexArray: IGLVertexArrayObject, indices: IElementBufferSourceTypes)
 {
     if (!vertexArray) return;
 
     let webGLVertexArrayObject: WebGLVertexArrayObject;
     if (gl instanceof WebGL2RenderingContext)
     {
-        webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
+        webGLVertexArrayObject = gl._vertexArrays.get([pipeline, vertexArray, indices]);
         if (webGLVertexArrayObject)
         {
             gl.bindVertexArray(webGLVertexArrayObject);
@@ -32,11 +34,11 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPip
 
         webGLVertexArrayObject = gl.createVertexArray();
         gl.bindVertexArray(webGLVertexArrayObject);
-        gl._vertexArrays.set(vertexArray, webGLVertexArrayObject);
+        gl._vertexArrays.set([pipeline, vertexArray, indices], webGLVertexArrayObject);
     }
 
     //
-    const { vertices, indices } = vertexArray;
+    const { vertices } = vertexArray;
 
     const shaderResult = getProgram(gl, pipeline);
 
@@ -57,14 +59,4 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPip
     });
 
     runIndexBuffer(gl, indices);
-}
-
-export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IGLVertexArrayObject)
-{
-    if (gl instanceof WebGL2RenderingContext)
-    {
-        const webGLVertexArrayObject = gl._vertexArrays.get(vertexArray);
-        gl._vertexArrays.delete(vertexArray);
-        gl.deleteVertexArray(webGLVertexArrayObject);
-    }
 }

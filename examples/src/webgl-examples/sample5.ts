@@ -68,8 +68,8 @@ function main()
           normalized: false,
         },
       },
-      indices: buffers.indices
     },
+    indices: buffers.indices,
     uniforms: {},
     drawIndexed: { firstIndex: 0, indexCount: 36 },
   };

@@ -44,11 +44,11 @@ const vertexArray: IGLVertexArrayObject = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 2 },
     },
-    indices: indices,
 };
 
 const renderObject: IGLRenderObject = {
     vertexArray,
+    indices: indices,
     uniforms: {},
     drawIndexed: { instanceCount: 2 },
     pipeline: program,
@@ -72,4 +72,3 @@ webgl.submit({
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteBuffer(getIGLIndexBuffer(indices));
 webgl.deleteProgram(program);
-webgl.deleteVertexArray(vertexArray);

@@ -9,17 +9,15 @@ import { deleteBuffer } from "./caches/getWebGLBuffer";
 import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
-import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLReadPixels } from "./data/IGLReadPixels";
+import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
 import { runReadPixels } from "./runs/runReadPixels";
-import { deleteVertexArray } from "./runs/runVertexArray";
 
 /**
  * WEBGL 对象。
@@ -82,11 +80,6 @@ export class WebGL
     deleteProgram(pipeline: IGLRenderPipeline)
     {
         deleteProgram(this._gl, pipeline);
-    }
-
-    deleteVertexArray(vertexArray: IGLVertexArrayObject)
-    {
-        deleteVertexArray(this._gl, vertexArray);
     }
 
     deleteTransformFeedback(transformFeedback: IGLTransformFeedback)

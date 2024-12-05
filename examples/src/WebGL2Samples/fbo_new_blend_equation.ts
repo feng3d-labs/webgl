@@ -199,7 +199,6 @@ function render()
     // -- Clean up
     webgl.deleteBuffer(vertexPosBuffer);
     webgl.deleteBuffer(vertexTexBuffer);
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

@@ -63,5 +63,4 @@ import { getShaderSource } from "./utility";
     webgl.deleteBuffer(vertexPosBufferSrc);
     webgl.deleteBuffer(vertexPosBufferDst);
     webgl.deleteProgram(program);
-    webgl.deleteVertexArray(vertexArray);
 })();

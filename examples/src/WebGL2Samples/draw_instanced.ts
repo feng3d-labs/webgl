@@ -66,4 +66,3 @@ webgl.submit({
 webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteBuffer(vertexColorBuffer);
 webgl.deleteProgram(program);
-webgl.deleteVertexArray(vertexArray);
