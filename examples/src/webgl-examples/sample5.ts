@@ -45,28 +45,26 @@ function main()
       ` },
       depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
     },
-    vertexArray: {
-      vertices: {
-        aVertexPosition: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.position,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 3,
-          normalized: false,
+    vertices: {
+      aVertexPosition: {
+        type: "FLOAT",
+        buffer: {
+          target: "ARRAY_BUFFER",
+          data: buffers.position,
+          usage: "STATIC_DRAW",
         },
-        aVertexColor: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.color,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 4,
-          normalized: false,
+        numComponents: 3,
+        normalized: false,
+      },
+      aVertexColor: {
+        type: "FLOAT",
+        buffer: {
+          target: "ARRAY_BUFFER",
+          data: buffers.color,
+          usage: "STATIC_DRAW",
         },
+        numComponents: 4,
+        normalized: false,
       },
     },
     indices: buffers.indices,

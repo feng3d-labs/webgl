@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -43,14 +43,13 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertexArray: IGLVertexArrayObject, indices: IElementBufferSourceTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: IGLVertexAttributes, indices: IElementBufferSourceTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
     let vertexBuffer: IGLVertexBuffer;
     let indicesBuffer: IElementBufferSourceTypes;
-    let vertexArray: IGLVertexArrayObject;
 
     let texture: IGLTexture;
     let sampler: IGLSampler;
@@ -91,14 +90,13 @@ import { getShaderSource, loadImage } from "./utility";
                 const texcoordInfo = primitive.attributes.TEXCOORD_0;
 
                 //
-                vertexArray = {
+                vertexArrayMaps[mid].push({
                     vertices: {
                         position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
                         normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
                         texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
-                    },
-                };
-                vertexArrayMaps[mid].push({ vertexArray, indices: indicesBuffer });
+                    }, indices: indicesBuffer
+                });
             }
         }
 
@@ -221,7 +219,7 @@ import { getShaderSource, loadImage } from "./utility";
                         ...program,
                         primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
-                    vertexArray: vertexArrayMaps[mid][i].vertexArray,
+                    vertices: vertexArrayMaps[mid][i].vertices,
                     indices: vertexArrayMaps[mid][i].indices,
                     uniforms: {
                         mvMatrix: localMV,

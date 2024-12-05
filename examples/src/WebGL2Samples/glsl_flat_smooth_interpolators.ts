@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -65,7 +65,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: { vertexArray: IGLVertexArrayObject, indices: IElementBufferSourceTypes }[]
+        [key: string]: { vertexArray: { vertices?: IGLVertexAttributes }, indices: IElementBufferSourceTypes }[]
     } = {};
 
     // var in loop
@@ -75,7 +75,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
     let vertexBuffer: IGLVertexBuffer;
-    let vertexArray: IGLVertexArrayObject;
+    let vertexArray: { vertices?: IGLVertexAttributes };
 
     let i: number; let len: number;
 
@@ -173,7 +173,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                         viewport[i],
                         {
                             pipeline: programs[i],
-                            vertexArray,
+                            vertices: vertexArray.vertices,
                             indices,
                             uniforms: {
                                 mvp: localMVP,

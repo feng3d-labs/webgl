@@ -41,22 +41,20 @@ function main()
             }` },
                 depthStencil: { depth: { depthCompare: "LEQUAL" } }
             },
-            vertexArray: {
-                vertices: {
-                    aVertexPosition: {
-                        type: "FLOAT",
-                        buffer: {
-                            target: "ARRAY_BUFFER",
-                            data: new Float32Array([
-                                1.0, 1.0,
-                                -1.0, 1.0,
-                                1.0, -1.0,
-                                -1.0, -1.0,
-                            ]), usage: "STATIC_DRAW"
-                        },
-                        numComponents: 2,
-                    }
-                },
+            vertices: {
+                aVertexPosition: {
+                    type: "FLOAT",
+                    buffer: {
+                        target: "ARRAY_BUFFER",
+                        data: new Float32Array([
+                            1.0, 1.0,
+                            -1.0, 1.0,
+                            1.0, -1.0,
+                            -1.0, -1.0,
+                        ]), usage: "STATIC_DRAW"
+                    },
+                    numComponents: 2,
+                }
             },
             uniforms: {
                 uProjectionMatrix: projectionMatrix,

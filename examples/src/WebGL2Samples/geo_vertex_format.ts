@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -153,7 +153,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Init VertexArray
 
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             a_position: { type: "FLOAT", buffer: vertexPosBuffer, numComponents: 3 },
             a_normal: { type: "HALF_FLOAT", buffer: vertexNorBuffer, numComponents: 3 },
@@ -209,7 +209,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const ro: IGLRenderObject = {
         pipeline: program,
-        vertexArray,
+        vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),
         uniforms: {
             u_model: modelMatrix,

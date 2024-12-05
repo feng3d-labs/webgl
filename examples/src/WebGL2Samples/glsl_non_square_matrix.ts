@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -38,7 +38,7 @@ const texCoords = new Float32Array([
 const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
 // -- Init VertexArray
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -73,7 +73,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         renderObjects: [{
             pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },
-            vertexArray,
+            vertices: vertexArray.vertices,
             drawVertex: { vertexCount: 6 },
         }]
     };

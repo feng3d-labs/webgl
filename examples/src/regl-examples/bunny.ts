@@ -30,10 +30,8 @@ let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
 const renderObject: IGLRenderObject = {
-    vertexArray: {
-        vertices: {
-            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-        },
+    vertices: {
+        position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
     },
     indices: new Uint16Array(indices),
     uniforms: {

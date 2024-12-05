@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -86,7 +86,7 @@ const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoor
 
 // -- Initilize vertex array
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -146,7 +146,7 @@ function render()
     const ro: IGLRenderObject = {
         pipeline: program,
         uniforms: { mvp: matrix },
-        vertexArray,
+        vertices: vertexArray.vertices,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)

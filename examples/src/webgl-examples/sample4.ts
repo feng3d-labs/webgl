@@ -41,38 +41,36 @@ function main()
       ` },
       depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
     },
-    vertexArray: {
-      vertices: {
-        aVertexPosition: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: new Float32Array([
-              1.0, 1.0,
-              -1.0, 1.0,
-              1.0, -1.0,
-              -1.0, -1.0,
-            ]), usage: "STATIC_DRAW",
-          },
-          numComponents: 2,
-          normalized: false,
+    vertices: {
+      aVertexPosition: {
+        type: "FLOAT",
+        buffer: {
+          target: "ARRAY_BUFFER",
+          data: new Float32Array([
+            1.0, 1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            -1.0, -1.0,
+          ]), usage: "STATIC_DRAW",
         },
-        aVertexColor: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: new Float32Array([
-              1.0, 1.0, 1.0, 1.0, // white
-              1.0, 0.0, 0.0, 1.0, // red
-              0.0, 1.0, 0.0, 1.0, // green
-              0.0, 0.0, 1.0, 1.0, // blue
-            ]),
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 4,
-          normalized: false,
+        numComponents: 2,
+        normalized: false,
+      },
+      aVertexColor: {
+        type: "FLOAT",
+        buffer: {
+          target: "ARRAY_BUFFER",
+          data: new Float32Array([
+            1.0, 1.0, 1.0, 1.0, // white
+            1.0, 0.0, 0.0, 1.0, // red
+            0.0, 1.0, 0.0, 1.0, // green
+            0.0, 0.0, 1.0, 1.0, // blue
+          ]),
+          usage: "STATIC_DRAW",
         },
-      }
+        numComponents: 4,
+        normalized: false,
+      },
     },
     uniforms: {},
     drawVertex: { firstVertex: 0, vertexCount: 4 },

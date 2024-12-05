@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
     ];
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 3 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -202,7 +202,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const ro: IGLRenderObject = {
         pipeline: program,
-        vertexArray,
+        vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),
         uniforms: {},
         drawIndexed: { indexCount: 36 },

@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLUniformBuffer, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLUniformBuffer, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -68,7 +68,7 @@ import { getShaderSource } from "./utility";
     const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 0 },
             normal: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 12 },
@@ -78,7 +78,7 @@ import { getShaderSource } from "./utility";
 
     const ro: IGLRenderObject = {
         pipeline: program,
-        vertexArray,
+        vertices: vertexArray.vertices,
         indices: elementData,
         uniforms: {
             PerDraw: uniformPerDrawBuffer,

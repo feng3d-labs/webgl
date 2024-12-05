@@ -1,4 +1,4 @@
-import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 import { watcher } from "@feng3d/watcher";
 
@@ -33,7 +33,7 @@ const vertices = new Float32Array([
 const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
@@ -49,7 +49,7 @@ const rp: IGLRenderPass = {
 };
 
 const ro: IGLRenderObject = {
-    vertexArray,
+    vertices: vertexArray.vertices,
     pipeline: program,
     drawVertex: { firstVertex: 0, vertexCount: 3 },
 };

@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -39,7 +39,7 @@ const pipeline: IGLRenderPipeline = {
     }
 };
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
     }
@@ -47,7 +47,7 @@ const vertexArray: IGLVertexArrayObject = {
 
 const vertexCount = 12;
 const renderObject: IGLRenderObject = {
-    vertexArray,
+    vertices: vertexArray.vertices,
     pipeline,
 };
 

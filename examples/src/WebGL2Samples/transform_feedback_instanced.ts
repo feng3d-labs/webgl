@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -64,7 +64,7 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: IGLVertexArrayObject[][] = [];
+    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
@@ -106,7 +106,8 @@ import { getShaderSource } from "./utility";
 
     const transformRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
-        vertexArray: null,
+        vertices: null,
+        indices: null,
         transformFeedback: null,
         uniforms: {},
         drawVertex: { vertexCount: NUM_INSTANCES },
@@ -164,7 +165,8 @@ import { getShaderSource } from "./utility";
 
         const destinationTransformFeedback = transformFeedbacks[destinationIdx];
 
-        transformRO.vertexArray = sourceVAO;
+        transformRO.vertices = sourceVAO.vertices;
+        transformRO.indices = sourceVAO.indices;
         transformRO.transformFeedback = destinationTransformFeedback;
 
         transformRO.uniforms.u_time = time;
@@ -178,7 +180,8 @@ import { getShaderSource } from "./utility";
         // Rotate triangles
         transform();
 
-        renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
+        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

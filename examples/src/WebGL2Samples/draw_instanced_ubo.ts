@@ -45,10 +45,8 @@ const rp: IGLRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: program,
-        vertexArray: {
-            vertices: {
-                pos: { buffer: vertexPosBuffer, numComponents: 2 },
-            },
+        vertices: {
+            pos: { buffer: vertexPosBuffer, numComponents: 2 },
         },
         uniforms: {
             Transform: uniformTransformBuffer,

@@ -1,4 +1,4 @@
-import { IGLCopyBufferToBuffer, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCopyBufferToBuffer, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -41,7 +41,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Init Vertex Array
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             pos: { buffer: vertexPosBufferDst, numComponents: 2 },
         }
@@ -52,7 +52,7 @@ import { getShaderSource } from "./utility";
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertexArray,
+            vertices: vertexArray.vertices,
             drawVertex: { vertexCount: 6 },
         }]
     };

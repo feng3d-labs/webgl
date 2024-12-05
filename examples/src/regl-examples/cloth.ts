@@ -164,12 +164,10 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportHeight = 1;
 
     const renderObject: IGLRenderObject = {
-        vertexArray: {
-            vertices: {
-                position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-                normal: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(normals) }, numComponents: 3 },
-                uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
-            },
+        vertices: {
+            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
+            normal: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(normals) }, numComponents: 3 },
+            uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
         },
         indices: new Uint16Array(indices),
         uniforms: {
@@ -358,8 +356,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        renderObject.vertexArray.vertices.position.buffer.data = new Float32Array(positions);
-        renderObject.vertexArray.vertices.normal.buffer.data = new Float32Array(normals);
+        renderObject.vertices.position.buffer.data = new Float32Array(positions);
+        renderObject.vertices.normal.buffer.data = new Float32Array(normals);
 
         tick++;
 

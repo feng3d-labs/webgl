@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -91,7 +91,7 @@ const framebuffer: IGLRenderPassDescriptor = {
 };
 
 // -- Init VertexArray
-const vertexArrays: IGLVertexArrayObject[] = [
+const vertexArrays: { vertices?: IGLVertexAttributes }[] = [
     {
         vertices: { position: { buffer: vertexDataBuffer, numComponents: 2 } }
     },
@@ -112,7 +112,7 @@ const renderPass1: IGLRenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
-        vertexArray: vertexArrays[PROGRAM.TEXTURE],
+        vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
         uniforms: { MVP: IDENTITY },
         drawVertex: { vertexCount },
     }]
@@ -130,7 +130,7 @@ const renderPass2: IGLRenderPass = {
     renderObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
-            vertexArray: vertexArrays[PROGRAM.SPLASH],
+            vertices: vertexArrays[PROGRAM.SPLASH].vertices,
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
             drawVertex: { vertexCount: 6 },
         }

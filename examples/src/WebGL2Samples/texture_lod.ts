@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
     const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
     // -- Initialize vertex array
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -205,7 +205,7 @@ import { getShaderSource, loadImage } from "./utility";
             uniforms: {
                 mvp: matrix,
             },
-            vertexArray,
+            vertices: vertexArray.vertices,
             drawVertex: { vertexCount: 6 },
         };
 

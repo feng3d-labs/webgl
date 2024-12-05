@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -42,12 +42,10 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Initialize vertex array
 
-    const vertexArray: IGLVertexArrayObject = {
-        vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
-        }
-    };
+    const vertices: IGLVertexAttributes = {
+        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+    }
 
     // -- Load texture then render
 
@@ -84,7 +82,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
         rp.renderObjects.push({
             pipeline: program,
-            vertexArray,
+            vertices,
             uniforms: {
                 mvp: matrix,
                 material: { diffuse: { texture, sampler } },

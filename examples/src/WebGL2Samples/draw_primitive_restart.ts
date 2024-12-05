@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getIGLIndexBuffer } from "../../../src/runs/runIndexBuffer";
 import { getShaderSource } from "./utility";
 
@@ -40,14 +40,14 @@ const indices = new Uint16Array([
     0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
 ]);
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 2 },
     },
 };
 
 const renderObject: IGLRenderObject = {
-    vertexArray,
+    vertices: vertexArray.vertices,
     indices: indices,
     uniforms: {},
     drawIndexed: { instanceCount: 2 },

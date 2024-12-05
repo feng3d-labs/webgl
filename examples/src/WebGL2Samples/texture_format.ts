@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -73,7 +73,7 @@ import { getShaderSource, loadImage } from "./utility";
     const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -194,7 +194,7 @@ import { getShaderSource, loadImage } from "./utility";
             rp.renderObjects.push(
                 { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
-                    vertexArray,
+                    vertices: vertexArray.vertices,
                     pipeline: programNormalized,
                     uniforms: {
                         MVP: matrix,
@@ -210,7 +210,7 @@ import { getShaderSource, loadImage } from "./utility";
             rp.renderObjects.push(
                 { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
-                    vertexArray,
+                    vertices: vertexArray.vertices,
                     pipeline: programUint,
                     uniforms: {
                         MVP: matrix,

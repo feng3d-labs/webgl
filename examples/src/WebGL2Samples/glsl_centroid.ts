@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -144,7 +144,7 @@ const framebuffers: IGLFramebuffer[] = [
 ];
 
 // -- Init VertexArray
-const vertexArrays: IGLVertexArrayObject[] = [
+const vertexArrays: { vertices?: IGLVertexAttributes }[] = [
     {
         vertices: {
             position: { buffer: vertexPositionBuffer, numComponents: 2 },
@@ -177,7 +177,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
-            vertexArray: vertexArrays[i],
+            vertices: vertexArrays[i].vertices,
             uniforms: { MVP: IDENTITY },
             drawVertex: { vertexCount },
         }]
@@ -191,7 +191,7 @@ const rp2: IGLRenderPass = {
 };
 const ro: IGLRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
-    vertexArray: vertexArrays[PROGRAM.SPLASH],
+    vertices: vertexArrays[PROGRAM.SPLASH].vertices,
 };
 
 const scaleVector3 = vec3.create();

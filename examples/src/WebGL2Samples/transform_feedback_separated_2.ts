@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL, IGLViewport } from "@feng3d/webgl";
+import { IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLProgram, IGLVertexBuffer, WebGL, IGLViewport, IGLVertexAttributes, IElementBufferSourceTypes } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -56,7 +56,7 @@ import { getShaderSource } from "./utility";
     }
 
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs: IGLVertexArrayObject[] = [];
+    const particleVAOs: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[] = [];
 
     // Transform feedback objects track output buffer state
     const particleTransformFeedbacks: IGLTransformFeedback[] = [];
@@ -143,7 +143,8 @@ import { getShaderSource } from "./utility";
         const sourceVAO = particleVAOs[currentSourceIdx];
         const destinationTransformFeedback = particleTransformFeedbacks[destinationIdx];
 
-        ro.vertexArray = sourceVAO;
+        ro.vertices = sourceVAO.vertices;
+        ro.indices = sourceVAO.indices;
         ro.transformFeedback = destinationTransformFeedback;
 
         ro.uniforms.u_time = time;

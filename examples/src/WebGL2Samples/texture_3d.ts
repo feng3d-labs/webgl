@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -119,7 +119,7 @@ import { getShaderSource } from "./utility";
 
     // -- Initilize vertex array
 
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -163,7 +163,7 @@ import { getShaderSource } from "./utility";
         uniforms: {
             diffuse: { texture, sampler },
         },
-        vertexArray,
+        vertices: vertexArray.vertices,
         drawVertex: { vertexCount: 6 }
     };
 

@@ -1,11 +1,11 @@
 import { LazyObject } from "../types";
-import { IGLDrawVertex } from "./IGLDrawVertex";
 import { IGLDrawIndexed } from "./IGLDrawIndexed";
+import { IGLDrawVertex } from "./IGLDrawVertex";
+import { IElementBufferSourceTypes } from "./IGLIndexBuffer";
 import { IGLRenderPipeline } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
-import { IGLVertexArrayObject } from "./IGLVertexArrayObject";
-import { IElementBufferSourceTypes } from "./IGLIndexBuffer";
+import { IGLVertexAttributes } from "./IGLVertexAttributes";
 
 /**
  * 渲染原子（该对象会收集一切渲染所需数据以及参数）
@@ -23,9 +23,9 @@ export interface IGLRenderObject
     pipeline: IGLRenderPipeline;
 
     /**
-     * 顶点属性以及索引数据。
+     * 顶点属性数据列表
      */
-    vertexArray?: IGLVertexArrayObject;
+    vertices?: IGLVertexAttributes;
 
     /**
      * 顶点索引数据

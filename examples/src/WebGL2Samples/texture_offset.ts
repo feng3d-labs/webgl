@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -63,7 +63,7 @@ import { getShaderSource, loadImage } from "./utility";
     const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
             position: { buffer: vertexPosBuffer, numComponents: 2 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -107,7 +107,7 @@ import { getShaderSource, loadImage } from "./utility";
         rp.renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
-                vertexArray,
+                vertices: vertexArray.vertices,
                 pipeline: programBicubic,
                 uniforms: {
                     MVP: matrix,
@@ -122,7 +122,7 @@ import { getShaderSource, loadImage } from "./utility";
         rp.renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
-                vertexArray,
+                vertices: vertexArray.vertices,
                 pipeline: programOffsetBicubic,
                 uniforms: {
                     MVP: matrix,

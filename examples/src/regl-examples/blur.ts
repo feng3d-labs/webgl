@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, WebGL } from "@feng3d/webgl";
+import { IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -30,7 +30,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: {
             buffer: {
@@ -70,7 +70,7 @@ const pipeline: IGLRenderPipeline = {
 function getRenderObject(tick: number, batchId: number)
 {
     const renderObject: IGLRenderObject = {
-        vertexArray,
+        vertices: vertexArray.vertices,
         uniforms: {
             color: () => [
                 Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),

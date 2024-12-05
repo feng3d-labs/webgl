@@ -1,4 +1,4 @@
-import { IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -62,13 +62,13 @@ const quadVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: qua
 
 // -- Initialize vertex array
 
-const triVertexArray: IGLVertexArrayObject = {
+const triVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: triVertexPosBuffer, numComponents: 3 }
     }
 };
 
-const quadVertexArray: IGLVertexArrayObject = {
+const quadVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: quadVertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: quadVertexTexBuffer, numComponents: 2 },
@@ -108,7 +108,7 @@ const renderPass: IGLRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: drawBufferProgram,
-        vertexArray: triVertexArray,
+        vertices: triVertexArray.vertices,
         drawVertex: { vertexCount: 3 },
     }],
 };
@@ -122,7 +122,7 @@ const renderPass2: IGLRenderPass = {
             color1Map: { texture: color1Texture, sampler: color1Sampler },
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
-        vertexArray: quadVertexArray,
+        vertices: quadVertexArray.vertices,
         drawVertex: { vertexCount: 6 },
     }],
 };

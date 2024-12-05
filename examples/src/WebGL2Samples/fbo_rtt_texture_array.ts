@@ -1,4 +1,4 @@
-import { IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -85,13 +85,13 @@ const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoor
 
 // -- Initialize vertex array
 
-const multipleOutputVertexArray: IGLVertexArrayObject = {
+const multipleOutputVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
     }
 };
 
-const layerVertexArray: IGLVertexArrayObject = {
+const layerVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         position: { buffer: vertexPosBuffer, numComponents: 2 },
         textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
@@ -140,7 +140,7 @@ const renderPass1: IGLRenderPass = {
         {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
-            vertexArray: multipleOutputVertexArray,
+            vertices: multipleOutputVertexArray.vertices,
             drawVertex: { vertexCount: 6 },
         }]
 };
@@ -157,7 +157,7 @@ const renderPass: IGLRenderPass = {
 const renderObject: IGLRenderObject = {
     pipeline: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
-    vertexArray: layerVertexArray,
+    vertices: layerVertexArray.vertices,
 
 };
 

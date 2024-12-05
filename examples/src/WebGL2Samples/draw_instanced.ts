@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -29,7 +29,7 @@ const program: IGLRenderPipeline = {
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
         pos: { buffer: vertexPosBuffer, numComponents: 2 },
         color: { buffer: vertexColorBuffer, numComponents: 3, divisor: 1 },
@@ -37,7 +37,7 @@ const vertexArray: IGLVertexArrayObject = {
 };
 
 const renderObject: IGLRenderObject = {
-    vertexArray,
+    vertices: vertexArray.vertices,
     uniforms: {},
     drawVertex: { instanceCount: 2 },
     pipeline: program

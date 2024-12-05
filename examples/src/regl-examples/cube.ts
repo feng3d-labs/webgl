@@ -64,11 +64,9 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderObject: IGLRenderObject = {
-        vertexArray: {
-            vertices: {
-                position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-                uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
-            },
+        vertices: {
+            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
+            uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
         },
         indices: new Uint16Array(indices),
         uniforms: {
@@ -129,7 +127,7 @@ import * as mat4 from "./stackgl/gl-mat4";
                 ]
             }]
         });
-        
+
         requestAnimationFrame(draw);
     }
 

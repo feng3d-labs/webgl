@@ -8,13 +8,13 @@ import { runVertexArray } from "./runVertexArray";
 
 export function runRenderObject(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
-    const { pipeline, vertexArray, indices, uniforms, transformFeedback } = renderObject;
+    const { pipeline, vertices, indices, uniforms, transformFeedback } = renderObject;
 
     const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
 
     runRenderPipeline(gl, pipeline);
 
-    runVertexArray(gl, pipeline, vertexArray, indices);
+    runVertexArray(gl, pipeline, vertices, indices);
 
     runUniforms(gl, pipeline, uniforms);
 

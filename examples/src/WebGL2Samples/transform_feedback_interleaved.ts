@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -56,7 +56,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: IGLVertexArrayObject[] = [
+    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[] = [
         {
             vertices: {
                 position: { buffer: buffers[PROGRAM_TRANSFORM], numComponents: 4 },
@@ -95,7 +95,8 @@ import { getShaderSource } from "./utility";
 
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_TRANSFORM],
-        vertexArray: vertexArrays[PROGRAM_TRANSFORM],
+        vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
+        indices: vertexArrays[PROGRAM_TRANSFORM].indices,
         uniforms: { MVP: matrix },
         transformFeedback,
         drawVertex: { vertexCount: VERTEX_COUNT },
@@ -104,7 +105,8 @@ import { getShaderSource } from "./utility";
     // Second draw, reuse captured attributes
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_FEEDBACK],
-        vertexArray: vertexArrays[PROGRAM_FEEDBACK],
+        vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+        indices: vertexArrays[PROGRAM_FEEDBACK].indices,
         drawVertex: { vertexCount: VERTEX_COUNT },
     });
 
