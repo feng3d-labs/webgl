@@ -1,6 +1,7 @@
 export * from "./data/IGLBlendState";
 export * from "./data/IGLBlitFramebuffer";
 export * from "./data/IGLBuffer";
+export * from "./data/IGLCanvasContext";
 export * from "./data/IGLCapabilities";
 export * from "./data/IGLColorTargetState";
 export * from "./data/IGLCommandEncoder";
@@ -16,7 +17,6 @@ export * from "./data/IGLPassDescriptor";
 export * from "./data/IGLPrimitiveState";
 export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";
-export * from "./data/IGLRenderingContext";
 export * from "./data/IGLRenderObject";
 export * from "./data/IGLRenderPass";
 export * from "./data/IGLRenderPassColorAttachment";

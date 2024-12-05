@@ -1,4 +1,4 @@
-import { IGLCanvasContext } from "../data/IGLRenderingContext";
+import { IGLCanvasContext } from "../data/IGLCanvasContext";
 
 /**
  * 默认WebGL上下文信息。

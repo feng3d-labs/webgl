@@ -1,4 +1,4 @@
-import { IGLCanvasContext } from "../data/IGLRenderingContext";
+import { IGLCanvasContext } from "../data/IGLCanvasContext";
 import { defaults } from "../defaults/defaults";
 import { getCapabilities } from "./getCapabilities";
 
