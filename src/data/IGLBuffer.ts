@@ -52,18 +52,6 @@ export interface IGLWriteBuffer
 }
 
 /**
- * 属性缓冲数据类型。
- */
-export type IAttributeBufferSourceTypes =
-    | Float32Array
-    | Uint32Array
-    | Int32Array
-    | Uint16Array
-    | Int16Array | Uint8ClampedArray
-    | Uint8Array
-    | Int8Array;
-
-/**
  * A GLenum specifying the intended usage pattern of the data store for optimization purposes. Possible values:
  *
  * * gl.STATIC_DRAW: The contents are intended to be specified once by the application, and used many times as the source for WebGL drawing and image specification commands.

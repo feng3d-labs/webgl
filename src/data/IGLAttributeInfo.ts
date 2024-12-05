@@ -1,4 +1,4 @@
-import { VertexAttributeTypes } from "./IGLVertexAttribute";
+import { VertexAttributeTypes } from "./IGLVertexAttributes";
 
 export interface IGLAttributeInfo
 {

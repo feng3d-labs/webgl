@@ -1,5 +1,6 @@
 import { watcher } from "@feng3d/watcher";
-import { IAttributeBufferSourceTypes, IGLBuffer } from "../data/IGLBuffer";
+import { IGLBuffer } from "../data/IGLBuffer";
+import { IAttributeBufferSourceTypes } from "../data/IGLVertexAttributes";
 
 declare global
 {

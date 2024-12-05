@@ -1,5 +1,5 @@
 import { getBufferType, getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { IGLVertexAttribute } from "../data/IGLVertexAttribute";
+import { IGLVertexAttribute } from "../data/IGLVertexAttributes";
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IGLVertexAttribute)
 {
