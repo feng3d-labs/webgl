@@ -1,5 +1,5 @@
 import { IGLCanvasContext } from "../data/IGLCanvasContext";
-import { defaults } from "../defaults/defaults";
+import { defaultCanvasContext } from "../defaults/defaults";
 import { getCapabilities } from "./getCapabilities";
 
 /**
@@ -84,7 +84,7 @@ export function getCanvas(canvasContext: IGLCanvasContext)
 
 function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IGLCanvasContext)
 {
-    const contextAttributes = Object.assign({}, defaults.webGLCanvasContext, canvasContext);
+    const contextAttributes = Object.assign({}, defaultCanvasContext, canvasContext);
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;
