@@ -27,7 +27,7 @@ const VIEWPORTS = {
 const viewport: IGLViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
-    __type: "IGLViewport",
+    __type: "Viewport",
     x: 0,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -35,7 +35,7 @@ viewport[VIEWPORTS.LEFT] = {
 };
 
 viewport[VIEWPORTS.RIGHT] = {
-    __type: "IGLViewport",
+    __type: "Viewport",
     x: canvasSize.x / 2,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,

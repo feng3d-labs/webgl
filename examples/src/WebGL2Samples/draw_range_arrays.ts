@@ -59,12 +59,12 @@ const rp: IGLRenderPass = {
         }],
     },
     renderObjects: [
-        { __type: "IGLViewport", x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
+        { __type: "Viewport", x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
         {
             ...renderObject,
             drawArrays: { firstVertex: 0, vertexCount: vertexCount / 2 },
         },
-        { __type: "IGLViewport", x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
+        { __type: "Viewport", x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
         {
             ...renderObject,
             drawArrays: { firstVertex: 6, vertexCount: vertexCount / 2 },

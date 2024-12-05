@@ -192,7 +192,7 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
             rp.renderObjects.push(
-                { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
                     vertexArray,
                     pipeline: programNormalized,
@@ -208,7 +208,7 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
             rp.renderObjects.push(
-                { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
                     vertexArray,
                     pipeline: programUint,

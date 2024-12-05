@@ -6,7 +6,7 @@ export interface IGLViewport
     /**
      * 数据类型。
      */
-    readonly __type: "IGLViewport";
+    readonly __type: "Viewport";
 
     /**
      * 视窗X轴最小值（像素）。

@@ -10,7 +10,7 @@ export interface IGLScissorRect
     /**
      * 数据类型。
      */
-    readonly __type: "IGLScissor";
+    readonly __type: "ScissorRect";
 
     /**
      * 是否开启

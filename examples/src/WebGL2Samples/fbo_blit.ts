@@ -93,7 +93,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         vertices,
     };
 
-    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
+    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
     const renderObject: IGLRenderObject = {
         pipeline: program,
         vertexArray,
@@ -156,13 +156,13 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     }
 
     const blitFramebuffer: IGLBlitFramebuffer = {
-        __type: "IGLBlitFramebuffer",
+        __type: "BlitFramebuffer",
         read: fboRenderPass.descriptor,
         draw: renderPassResolve.descriptor,
         blitFramebuffers,
     };
 
-    const viewport2: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height };
+    const viewport2: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height };
     const renderObject2: IGLRenderObject = {
         vertexArray,
         uniforms: {

@@ -14,7 +14,7 @@ export interface IGLRenderPass
     /**
      * 数据类型。
      */
-    readonly __type?: "IGLRenderPass";
+    readonly __type?: "RenderPass";
 
     /**
      * WebGL渲染通道描述

@@ -112,7 +112,7 @@ import { getShaderSource } from "./utility";
         drawArrays: { vertexCount: NUM_INSTANCES },
     };
 
-    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
+    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const renderRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},

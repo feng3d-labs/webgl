@@ -136,7 +136,7 @@ const matrix = new Float32Array([
 const renderPass1: IGLRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [
-        { __type: "IGLViewport", x: 0, y: 0, width: w, height: h },
+        { __type: "Viewport", x: 0, y: 0, width: w, height: h },
         {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
@@ -165,7 +165,7 @@ const renderObject: IGLRenderObject = {
 for (let i = 0; i < Textures.MAX; ++i)
 {
     renderPass.renderObjects.push(
-        { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+        { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
         {
             ...renderObject,
             uniforms: { ...renderObject.uniforms, layer: i },

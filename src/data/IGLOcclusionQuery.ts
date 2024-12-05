@@ -6,7 +6,7 @@ export interface IGLOcclusionQuery
     /**
      * 数据类型。
      */
-    readonly __type: "IGLOcclusionQuery";
+    readonly __type: "OcclusionQuery";
     /**
      * 渲染对象列表。
      */

@@ -8,7 +8,7 @@ export interface IGLBlitFramebuffer
     /**
      * 数据类型。
      */
-    readonly __type: "IGLBlitFramebuffer";
+    readonly __type: "BlitFramebuffer";
 
     read: IGLRenderPassDescriptor;
     draw: IGLRenderPassDescriptor;

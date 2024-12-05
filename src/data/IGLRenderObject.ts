@@ -14,7 +14,7 @@ export interface IGLRenderObject
     /**
      * 数据类型。
      */
-    readonly __type?: "IGLRenderObject";
+    readonly __type?: "RenderObject";
 
     /**
      * 渲染程序

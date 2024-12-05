@@ -135,7 +135,7 @@ function render()
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        const viewport0: IGLViewport = { __type: "IGLViewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
+        const viewport0: IGLViewport = { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
         if (i === Corners.TOP_LEFT)
         {

@@ -119,7 +119,7 @@ import { getShaderSource } from "./utility";
         return program;
     }
 
-    const viewport: IGLViewport = { __type: "IGLViewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
+    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const ro: IGLRenderObject = {
         pipeline: program,
         uniforms: {

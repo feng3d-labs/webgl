@@ -43,19 +43,19 @@ export class RunWebGL
             {
                 this.runRenderPass(gl, passEncoder as IGLRenderPass);
             }
-            else if (passEncoder.__type === "IGLRenderPass")
+            else if (passEncoder.__type === "RenderPass")
             {
                 this.runRenderPass(gl, passEncoder);
             }
-            else if (passEncoder.__type === "IGLBlitFramebuffer")
+            else if (passEncoder.__type === "BlitFramebuffer")
             {
                 this.runBlitFramebuffer(gl, passEncoder);
             }
-            else if (passEncoder.__type === "IGLCopyTextureToTexture")
+            else if (passEncoder.__type === "CopyTextureToTexture")
             {
                 this.runCopyTextureToTexture(gl, passEncoder);
             }
-            else if (passEncoder.__type === "IGLCopyBufferToBuffer")
+            else if (passEncoder.__type === "CopyBufferToBuffer")
             {
                 this.runCopyBuffer(gl, passEncoder);
             }
@@ -124,15 +124,15 @@ export class RunWebGL
     {
         renderObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type === "IGLViewport")
+            if (renderObject.__type === "Viewport")
             {
                 runViewPort(gl, renderObject)
             }
-            else if (renderObject.__type === "IGLScissor")
+            else if (renderObject.__type === "ScissorRect")
             {
                 runScissor(gl, renderObject);
             }
-            else if (renderObject.__type === "IGLOcclusionQuery")
+            else if (renderObject.__type === "OcclusionQuery")
             {
                 runOcclusionQuery(gl, renderObject);
             }

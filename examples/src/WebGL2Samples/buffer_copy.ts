@@ -34,7 +34,7 @@ import { getShaderSource } from "./utility";
     const vertexPosBufferDst: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
 
     const cb: IGLCopyBufferToBuffer = {
-        __type: "IGLCopyBufferToBuffer",
+        __type: "CopyBufferToBuffer",
         source: vertexPosBufferSrc,
         destination: vertexPosBufferDst,
         sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT

@@ -117,7 +117,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         rp.renderObjects.push(
-            { __type: "IGLViewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
+            { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
                 ...ro,
                 pipeline: program,
@@ -129,7 +129,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // Immutable 3D texture
         rp.renderObjects.push(
-            { __type: "IGLViewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
+            { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
                 ...ro,
                 pipeline: program3D,

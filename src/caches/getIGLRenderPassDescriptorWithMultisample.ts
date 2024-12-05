@@ -43,7 +43,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 
     // 拷贝 渲染缓冲区到 IGLTexture
     const blitFramebuffer: IGLBlitFramebuffer = {
-        __type: "IGLBlitFramebuffer",
+        __type: "BlitFramebuffer",
         read: passDescriptor,
         draw: sourcePassDescriptor,
         blitFramebuffers: [[0, 0, textureSize[0], textureSize[1],

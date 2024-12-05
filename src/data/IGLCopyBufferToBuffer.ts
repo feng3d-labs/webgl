@@ -10,7 +10,7 @@ export interface IGLCopyBufferToBuffer
     /**
      * 数据类型。
      */
-    readonly __type: "IGLCopyBufferToBuffer";
+    readonly __type: "CopyBufferToBuffer";
     /**
      * 源缓冲区。
      */

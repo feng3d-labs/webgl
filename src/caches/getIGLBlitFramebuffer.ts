@@ -55,7 +55,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToText
     ];
 
     const blitFramebuffer: IGLBlitFramebuffer = {
-        __type: "IGLBlitFramebuffer",
+        __type: "BlitFramebuffer",
         read: {
             colorAttachments: sourceColorAttachments,
             depthStencilAttachment: sourceDepthStencilAttachment,

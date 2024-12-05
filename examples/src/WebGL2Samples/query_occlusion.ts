@@ -56,7 +56,7 @@ const ro: IGLRenderObject = {
 rp.renderObjects.push(ro);
 
 const occlusionQuery: IGLOcclusionQuery = {
-    __type: "IGLOcclusionQuery",
+    __type: "OcclusionQuery",
     renderObjects: [{
         ...ro,
         drawArrays: { firstVertex: 3, vertexCount: 3 },
