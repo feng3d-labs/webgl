@@ -1,5 +1,11 @@
+import { IGLCanvasTexture } from "./IGLCanvasTexture";
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 import { IGLTextureStorage } from "./IGLTextureStorage";
+
+/**
+ * 类似纹理，包含画布纹理以及正常纹理。
+ */
+export type IGLTextureLike = IGLCanvasTexture | IGLTexture;
 
 /**
  * 纹理视图。

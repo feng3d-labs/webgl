@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.3",
+    "@feng3d/webgpu": "0.0.1",
     "@feng3d/webgl": "0.0.2"
   }
 }

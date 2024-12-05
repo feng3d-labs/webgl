@@ -1,4 +1,4 @@
-import { IGLProgram, IGLRenderPass, IGLRenderingContext, IGLUniformBuffer, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLProgram, IGLRenderPass, IGLCanvasContext, IGLUniformBuffer, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program

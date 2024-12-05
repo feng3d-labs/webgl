@@ -1,4 +1,4 @@
-import { IGLRenderingContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLTexture, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLTexture, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +7,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 loadImage("../../assets/img/Di-3d.png", (img) =>

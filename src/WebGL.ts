@@ -12,7 +12,7 @@ import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
-import { IGLRenderingContext } from "./data/IGLRenderingContext";
+import { IGLCanvasContext } from "./data/IGLRenderingContext";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTexture } from "./data/IGLTexture";
@@ -29,10 +29,10 @@ import { deleteVertexArray } from "./runs/runVertexArray";
 export class WebGL
 {
     private _runWebGL: RunWebGL = new RunWebGL();
-    private _renderingContext: IGLRenderingContext;
+    private _renderingContext: IGLCanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext?: IGLRenderingContext)
+    constructor(renderingContext?: IGLCanvasContext)
     {
         this._renderingContext = renderingContext;
         this._gl = getRenderingContext(this._renderingContext);

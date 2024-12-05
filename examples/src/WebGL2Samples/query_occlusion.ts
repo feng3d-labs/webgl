@@ -1,4 +1,4 @@
-import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 import { watcher } from "@feng3d/watcher";
 
@@ -10,7 +10,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // -- Init WebGL Context
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
