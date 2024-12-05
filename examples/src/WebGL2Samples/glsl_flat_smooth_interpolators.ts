@@ -75,7 +75,6 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
     let vertexBuffer: IGLVertexBuffer;
-    let indicesBuffer: IGLIndexBuffer;
     let vertexArray: IGLVertexArrayObject;
 
     let i: number; let len: number;
@@ -98,7 +97,6 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
             const indices = primitive.indices;
-            indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
 
             // -- VertexAttribPointer
             const positionInfo = primitive.attributes.POSITION;
@@ -115,7 +113,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                         vertexSize: normalInfo.stride, offset: normalInfo.offset
                     },
                 },
-                index: indicesBuffer,
+                indices: indices,
             };
             vertexArrayMaps[mid].push(vertexArray);
         }

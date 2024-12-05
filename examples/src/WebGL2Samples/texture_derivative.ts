@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -115,7 +115,6 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
     const vertexArray: IGLVertexArrayObject = {
@@ -123,7 +122,7 @@ import { getShaderSource, loadImage } from "./utility";
             position: { buffer: vertexPosBuffer, numComponents: 3 },
             texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
         },
-        index: indexBuffer,
+        indices: new Uint16Array(cubeVertexIndices),
     };
 
     // -- Init Texture

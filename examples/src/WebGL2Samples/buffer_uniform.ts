@@ -24,7 +24,6 @@ import { getShaderSource } from "./utility";
         0, 1, 2,
         2, 3, 0
     ]);
-    const elementBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: elementData, usage: "STATIC_DRAW" };
 
     //vec3 position, vec3 normal, vec4 color
     const vertices = new Float32Array([
@@ -75,7 +74,7 @@ import { getShaderSource } from "./utility";
             normal: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 12 },
             color: { buffer: vertexBuffer, numComponents: 4, vertexSize: 40, offset: 24 },
         },
-        index: elementBuffer,
+        indices: elementData,
     };
 
     const ro: IGLRenderObject = {

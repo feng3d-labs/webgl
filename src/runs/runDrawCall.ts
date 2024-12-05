@@ -2,7 +2,7 @@ import { getBufferType } from "../caches/getWebGLBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
-import { IGLIndexBuffer } from "../data/IGLIndexBuffer";
+import { IElementBufferSourceTypes } from "../data/IGLIndexBuffer";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLRenderObject } from "../data/IGLRenderObject";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
@@ -11,7 +11,7 @@ import { defaultPrimitiveState } from "./runPrimitiveState";
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
     const { pipeline, vertexArray, drawIndexed, drawVertex } = renderObject;
-    const { vertices, index } = { ...vertexArray };
+    const { vertices, indices } = { ...vertexArray };
 
     const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
 
@@ -21,11 +21,11 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderOb
     }
     else if (drawIndexed)
     {
-        _runDrawIndexed(gl, topology, index, drawIndexed);
+        _runDrawIndexed(gl, topology, indices, drawIndexed);
     }
-    else if (index)
+    else if (indices)
     {
-        _runDrawIndexed(gl, topology, index, drawIndexed);
+        _runDrawIndexed(gl, topology, indices, drawIndexed);
     }
     else
     {
@@ -35,10 +35,10 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderOb
 
 export const defaultDrawIndexed: IGLDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, index: IGLIndexBuffer, drawIndexed: IGLDrawIndexed)
+function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IElementBufferSourceTypes, drawIndexed: IGLDrawIndexed)
 {
-    const type = getBufferType(index.data);
-    const dataLength = index.data.length;
+    const type = getBufferType(indices);
+    const dataLength = indices.length;
     //
     let { indexCount, instanceCount, firstIndex } = drawIndexed || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;

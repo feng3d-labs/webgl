@@ -1,12 +1,12 @@
-import { IGLIndexBuffer } from "./IGLIndexBuffer";
+import { IElementBufferSourceTypes } from "./IGLIndexBuffer";
 import { IGLVertexAttributes } from "./IGLVertexAttributes";
 
 export interface IGLVertexArrayObject
 {
     /**
-     * 顶点索引缓冲
+     * 顶点索引数据
      */
-    index?: IGLIndexBuffer;
+    indices?: IElementBufferSourceTypes;
 
     /**
      * 顶点属性数据列表

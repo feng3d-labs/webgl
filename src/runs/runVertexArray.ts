@@ -36,7 +36,7 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPip
     }
 
     //
-    const { vertices, index } = vertexArray;
+    const { vertices, indices } = vertexArray;
 
     const shaderResult = getProgram(gl, pipeline);
 
@@ -56,7 +56,7 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPip
         runVertexAttribute(gl, location, attribute);
     });
 
-    runIndexBuffer(gl, index);
+    runIndexBuffer(gl, indices);
 }
 
 export function deleteVertexArray(gl: WebGLRenderingContext, vertexArray: IGLVertexArrayObject)

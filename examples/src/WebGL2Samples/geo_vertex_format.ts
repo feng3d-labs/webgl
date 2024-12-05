@@ -150,7 +150,6 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
 
@@ -160,7 +159,7 @@ import { getShaderSource, loadImage } from "./utility";
             a_normal: { type: "HALF_FLOAT", buffer: vertexNorBuffer, numComponents: 3 },
             a_texCoord: { type: "HALF_FLOAT", buffer: vertexTexBuffer, numComponents: 2 },
         },
-        index: indexBuffer,
+        indices: new Uint16Array(cubeVertexIndices),
     };
 
     // -- Init Texture

@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -49,7 +49,7 @@ import { getShaderSource, loadImage } from "./utility";
     let mesh;
     let primitive: Primitive;
     let vertexBuffer: IGLVertexBuffer;
-    let indicesBuffer: IGLIndexBuffer;
+    let indicesBuffer: IElementBufferSourceTypes;
     let vertexArray: IGLVertexArrayObject;
 
     let texture: IGLTexture;
@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
                 vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
                 const indices = primitive.indices;
-                indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
+                indicesBuffer = indices;
 
                 // -- VertexAttribPointer
                 const positionInfo = primitive.attributes.POSITION;
@@ -97,7 +97,7 @@ import { getShaderSource, loadImage } from "./utility";
                         normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
                         texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
                     },
-                    index: indicesBuffer,
+                    indices: indicesBuffer,
                 };
                 vertexArrayMaps[mid].push(vertexArray);
             }
