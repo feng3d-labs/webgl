@@ -1,7 +1,7 @@
 import { getBufferType } from "../caches/getWebGLBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
-import { IGLDrawArrays } from "../data/IGLDrawArrays";
-import { IGLDrawElements } from "../data/IGLDrawElements";
+import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
+import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndexBuffer } from "../data/IGLIndexBuffer";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLRenderObject } from "../data/IGLRenderObject";
@@ -10,37 +10,37 @@ import { defaultPrimitiveState } from "./runPrimitiveState";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
 {
-    const { pipeline, vertexArray, drawElements, drawArrays } = renderObject;
+    const { pipeline, vertexArray, drawIndexed, drawVertex } = renderObject;
     const { vertices, index } = { ...vertexArray };
 
     const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
 
-    if (drawArrays)
+    if (drawVertex)
     {
-        _runDrawArrays(gl, topology, vertices, drawArrays);
+        _runDrawVertex(gl, topology, vertices, drawVertex);
     }
-    else if (drawElements)
+    else if (drawIndexed)
     {
-        _runDrawElements(gl, topology, index, drawElements);
+        _runDrawIndexed(gl, topology, index, drawIndexed);
     }
     else if (index)
     {
-        _runDrawElements(gl, topology, index, drawElements);
+        _runDrawIndexed(gl, topology, index, drawIndexed);
     }
     else
     {
-        _runDrawArrays(gl, topology, vertices, drawArrays);
+        _runDrawVertex(gl, topology, vertices, drawVertex);
     }
 }
 
-export const defaultDrawIndexed: IGLDrawElements = Object.freeze({ firstIndex: 0, instanceCount: 1 });
+export const defaultDrawIndexed: IGLDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawElements(gl: WebGLRenderingContext, drawMode: IGLDrawMode, index: IGLIndexBuffer, drawElements: IGLDrawElements)
+function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, index: IGLIndexBuffer, drawIndexed: IGLDrawIndexed)
 {
     const type = getBufferType(index.data);
     const dataLength = index.data.length;
     //
-    let { indexCount, instanceCount, firstIndex } = drawElements || {};
+    let { indexCount, instanceCount, firstIndex } = drawIndexed || {};
     firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
     instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
     indexCount = indexCount || (dataLength - firstIndex);
@@ -64,9 +64,9 @@ function _runDrawElements(gl: WebGLRenderingContext, drawMode: IGLDrawMode, inde
     }
 }
 
-export const defaultDrawVertex: IGLDrawArrays = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
+export const defaultDrawVertex: IGLDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
-function _runDrawArrays(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IGLVertexAttributes, drawArrays: IGLDrawArrays)
+function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IGLVertexAttributes, drawArrays: IGLDrawVertex)
 {
     //
     let { firstVertex, vertexCount, instanceCount } = drawArrays || {};

@@ -139,7 +139,7 @@ const rp1: IGLRenderPass = {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             vertexArray: multipleOutputVertexArray,
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }],
 };
 
@@ -157,7 +157,7 @@ const ro: IGLRenderObject = {
         layer: 0,
     },
     vertexArray: layerVertexArray,
-    drawArrays: { vertexCount: 6 },
+    drawVertex: { vertexCount: 6 },
 };
 
 for (let i = 0; i < Textures.MAX; ++i)

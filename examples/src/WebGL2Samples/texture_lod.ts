@@ -206,7 +206,7 @@ import { getShaderSource, loadImage } from "./utility";
                 mvp: matrix,
             },
             vertexArray,
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];

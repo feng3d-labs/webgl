@@ -51,7 +51,7 @@ const rp: IGLRenderPass = {
 const ro: IGLRenderObject = {
     vertexArray,
     pipeline: program,
-    drawArrays: { firstVertex: 0, vertexCount: 3 },
+    drawVertex: { firstVertex: 0, vertexCount: 3 },
 };
 rp.renderObjects.push(ro);
 
@@ -59,7 +59,7 @@ const occlusionQuery: IGLOcclusionQuery = {
     __type: "OcclusionQuery",
     renderObjects: [{
         ...ro,
-        drawArrays: { firstVertex: 3, vertexCount: 3 },
+        drawVertex: { firstVertex: 3, vertexCount: 3 },
     }]
 };
 

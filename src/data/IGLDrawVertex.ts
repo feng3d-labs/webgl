@@ -1,9 +1,9 @@
 /**
- * 绘制一定数量顶点。
+ * 根据顶点数据绘制图元。
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
  */
-export interface IGLDrawArrays
+export interface IGLDrawVertex
 {
     /**
      * 绘制顶点数量。

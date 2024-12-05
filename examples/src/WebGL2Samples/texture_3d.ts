@@ -164,7 +164,7 @@ import { getShaderSource } from "./utility";
             diffuse: { texture, sampler },
         },
         vertexArray,
-        drawArrays: { vertexCount: 6 }
+        drawVertex: { vertexCount: 6 }
     };
 
     const renderPassObjects: IGLRenderPassObject[] = [];

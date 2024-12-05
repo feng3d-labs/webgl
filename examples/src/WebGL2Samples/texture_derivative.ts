@@ -216,7 +216,7 @@ import { getShaderSource, loadImage } from "./utility";
         pipeline: program,
         vertexArray,
         uniforms: {},
-        drawElements: { indexCount: 36 },
+        drawIndexed: { indexCount: 36 },
     };
 
     const rp: IGLRenderPass = {

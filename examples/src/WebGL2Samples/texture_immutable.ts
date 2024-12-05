@@ -108,7 +108,7 @@ import { getShaderSource, loadImage } from "./utility";
             uniforms: {
                 MVP: matrix,
             },
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         };
 
         const rp: IGLRenderPass = {

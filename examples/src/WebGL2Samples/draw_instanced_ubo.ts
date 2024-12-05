@@ -54,7 +54,7 @@ const rp: IGLRenderPass = {
             Transform: uniformTransformBuffer,
             Material: uniformMaterialBuffer,
         },
-        drawArrays: { vertexCount: 3, instanceCount: 2 },
+        drawVertex: { vertexCount: 3, instanceCount: 2 },
     }]
 };
 

@@ -108,14 +108,14 @@ import { getShaderSource } from "./utility";
         vertexArray: vertexArrays[PROGRAM_TRANSFORM],
         uniforms: { MVP: matrix },
         transformFeedback,
-        drawArrays: { vertexCount: VERTEX_COUNT },
+        drawVertex: { vertexCount: VERTEX_COUNT },
     });
 
     // Second draw, reuse captured attributes
     rp.renderObjects.push({
         pipeline: programs[PROGRAM_FEEDBACK],
         vertexArray: vertexArrays[PROGRAM_FEEDBACK],
-        drawArrays: { vertexCount: VERTEX_COUNT },
+        drawVertex: { vertexCount: VERTEX_COUNT },
     });
 
     webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

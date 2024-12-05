@@ -200,7 +200,7 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    drawArrays: { vertexCount: 6 },
+                    drawVertex: { vertexCount: 6 },
                 });
         }
 
@@ -216,7 +216,7 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    drawArrays: { vertexCount: 6 },
+                    drawVertex: { vertexCount: 6 },
                 });
         }
 

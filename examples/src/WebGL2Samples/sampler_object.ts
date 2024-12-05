@@ -103,7 +103,7 @@ function render()
                     ]
                 },
             },
-            drawArrays: { vertexCount: 6, instanceCount: 1 },
+            drawVertex: { vertexCount: 6, instanceCount: 1 },
         }],
     };
 

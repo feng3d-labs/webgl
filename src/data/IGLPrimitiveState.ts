@@ -16,7 +16,7 @@ export interface IGLPrimitiveState
      * * TRIANGLE_FAN  绘制三角扇形。
      *
      * A GLenum specifying the type primitive to render. Possible values are:
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
     topology?: IGLDrawMode;
 

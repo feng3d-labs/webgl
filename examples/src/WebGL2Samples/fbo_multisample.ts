@@ -114,7 +114,7 @@ const renderPass1: IGLRenderPass = {
         pipeline: programs[PROGRAM.TEXTURE],
         vertexArray: vertexArrays[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
-        drawArrays: { vertexCount },
+        drawVertex: { vertexCount },
     }]
 };
 
@@ -132,7 +132,7 @@ const renderPass2: IGLRenderPass = {
             pipeline: programs[PROGRAM.SPLASH],
             vertexArray: vertexArrays[PROGRAM.SPLASH],
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }
     ],
 };

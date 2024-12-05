@@ -126,7 +126,7 @@ import { getShaderSource } from "./utility";
             u_color: [0.0, 1.0, 1.0, 1.0],
             u_acceleration: [0.0, ACCELERATION],
         },
-        drawArrays: { vertexCount: NUM_PARTICLES },
+        drawVertex: { vertexCount: NUM_PARTICLES },
     };
 
     const rp: IGLRenderPass = {

@@ -1,6 +1,6 @@
 import { LazyObject } from "../types";
-import { IGLDrawArrays } from "./IGLDrawArrays";
-import { IGLDrawElements } from "./IGLDrawElements";
+import { IGLDrawVertex } from "./IGLDrawVertex";
+import { IGLDrawIndexed } from "./IGLDrawIndexed";
 import { IGLRenderPipeline } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
@@ -34,34 +34,16 @@ export interface IGLRenderObject
     /**
      * 绘制一定数量顶点。
      *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawArrays
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
-    drawArrays?: IGLDrawArrays;
+    drawVertex?: IGLDrawVertex;
 
     /**
-     * 绘制一定数量顶点索引。
+     * 根据索引数据绘制图元。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
      */
-    drawElements?: IGLDrawElements;
-
-    // /**
-    //  * 视窗，显示在画布上的区域。
-    //  *
-    //  * 指定了x和y从标准化设备坐标到窗口坐标的仿射变换。
-    //  *
-    //  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/viewport
-    //  */
-    // viewport?: IGLViewport;
-
-    // /**
-    //  * 剪刀盒。
-    //  *
-    //  * 设置了一个剪刀盒，它将绘图限制为一个指定的矩形。
-    //  *
-    //  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
-    //  */
-    // scissor?: IGLScissor;
+    drawIndexed?: IGLDrawIndexed;
 
     /**
      * 回写顶点着色器中输出到缓冲区。

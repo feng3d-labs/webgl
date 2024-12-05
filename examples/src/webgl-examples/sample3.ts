@@ -90,7 +90,7 @@ function main()
         uProjectionMatrix: projectionMatrix,
         uModelViewMatrix: modelViewMatrix,
       },
-      drawArrays: { firstVertex: 0, vertexCount: 4 },
+      drawVertex: { firstVertex: 0, vertexCount: 4 },
     }],
   };
 

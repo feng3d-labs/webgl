@@ -101,7 +101,7 @@ const renderPass: IGLRenderPass = {
     renderObjects: [{
         pipeline: depthProgram,
         vertexArray: triVertexArray,
-        drawArrays: { vertexCount: 3 },
+        drawVertex: { vertexCount: 3 },
     }],
 
 };
@@ -115,7 +115,7 @@ const rp2: IGLRenderPass = {
         pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         vertexArray: quadVertexArray,
-        drawArrays: { vertexCount: 6 },
+        drawVertex: { vertexCount: 6 },
     }],
 };
 

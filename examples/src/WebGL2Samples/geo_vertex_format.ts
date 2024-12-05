@@ -218,7 +218,7 @@ import { getShaderSource, loadImage } from "./utility";
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
-        drawElements: { indexCount: 36 },
+        drawIndexed: { indexCount: 36 },
     };
 
     const rp: IGLRenderPass = {

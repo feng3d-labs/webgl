@@ -109,7 +109,7 @@ const renderPass: IGLRenderPass = {
     renderObjects: [{
         pipeline: drawBufferProgram,
         vertexArray: triVertexArray,
-        drawArrays: { vertexCount: 3 },
+        drawVertex: { vertexCount: 3 },
     }],
 };
 
@@ -123,7 +123,7 @@ const renderPass2: IGLRenderPass = {
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
         vertexArray: quadVertexArray,
-        drawArrays: { vertexCount: 6 },
+        drawVertex: { vertexCount: 6 },
     }],
 };
 

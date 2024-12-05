@@ -113,7 +113,7 @@ import { getShaderSource, loadImage } from "./utility";
                     MVP: matrix,
                     diffuse: { texture, sampler },
                 },
-                drawArrays: { vertexCount: 6 },
+                drawVertex: { vertexCount: 6 },
             });
 
         // Offset
@@ -129,7 +129,7 @@ import { getShaderSource, loadImage } from "./utility";
                     diffuse: { texture, sampler },
                     offset,
                 },
-                drawArrays: { vertexCount: 6 },
+                drawVertex: { vertexCount: 6 },
             });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

@@ -53,7 +53,7 @@ import { getShaderSource } from "./utility";
         renderObjects: [{
             pipeline: program,
             vertexArray,
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }]
     };
 

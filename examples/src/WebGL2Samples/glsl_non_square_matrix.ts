@@ -74,7 +74,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },
             vertexArray,
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }]
     };
 

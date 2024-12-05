@@ -179,7 +179,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             pipeline: programs[i],
             vertexArray: vertexArrays[i],
             uniforms: { MVP: IDENTITY },
-            drawArrays: { vertexCount },
+            drawVertex: { vertexCount },
         }]
     };
     passEncoders.push(rp);
@@ -210,7 +210,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }
     );
 }

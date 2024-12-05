@@ -109,14 +109,14 @@ import { getShaderSource } from "./utility";
         vertexArray: null,
         transformFeedback: null,
         uniforms: {},
-        drawArrays: { vertexCount: NUM_INSTANCES },
+        drawVertex: { vertexCount: NUM_INSTANCES },
     };
 
     const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const renderRO: IGLRenderObject = {
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
-        drawArrays: { vertexCount: 3, instanceCount: NUM_INSTANCES },
+        drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
     const rp: IGLRenderPass = {

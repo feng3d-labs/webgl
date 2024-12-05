@@ -149,7 +149,7 @@ function render()
         pipeline: program,
         uniforms: { mvp: matrix },
         vertexArray,
-        drawArrays: { vertexCount: 6, instanceCount: 1 },
+        drawVertex: { vertexCount: 6, instanceCount: 1 },
     };
 
     // Bind samplers

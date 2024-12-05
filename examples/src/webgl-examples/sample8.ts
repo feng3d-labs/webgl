@@ -106,7 +106,7 @@ function main()
       index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
     },
     uniforms: { uSampler: texture },
-    drawElements: { firstIndex: 0, indexCount: 36 },
+    drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
   const renderPass: IGLRenderPass = {

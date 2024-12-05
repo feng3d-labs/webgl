@@ -180,7 +180,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },
-                            drawElements: { indexCount: primitive.indices.length, firstIndex: 0 },
+                            drawIndexed: { indexCount: primitive.indices.length, firstIndex: 0 },
                         });
                 }
             }

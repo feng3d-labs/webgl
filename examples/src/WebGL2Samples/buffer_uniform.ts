@@ -86,7 +86,7 @@ import { getShaderSource } from "./utility";
             PerPass: uniformPerPassBuffer,
             PerScene: uniformPerSceneBuffer,
         },
-        drawElements: { indexCount: 6, firstIndex: 0 }
+        drawIndexed: { indexCount: 6, firstIndex: 0 }
     };
 
     const rp: IGLRenderPass = {

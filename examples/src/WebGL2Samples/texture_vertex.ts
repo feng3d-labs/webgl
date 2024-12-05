@@ -229,7 +229,7 @@ import { getShaderSource, loadImage } from "./utility";
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    drawElements: { indexCount: primitive.indices.length }
+                    drawIndexed: { indexCount: primitive.indices.length }
                 });
             }
         }

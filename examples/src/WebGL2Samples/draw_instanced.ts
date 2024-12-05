@@ -39,7 +39,7 @@ const vertexArray: IGLVertexArrayObject = {
 const renderObject: IGLRenderObject = {
     vertexArray,
     uniforms: {},
-    drawArrays: { instanceCount: 2 },
+    drawVertex: { instanceCount: 2 },
     pipeline: program
 };
 
