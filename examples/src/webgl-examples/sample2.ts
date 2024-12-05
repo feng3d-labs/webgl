@@ -44,15 +44,12 @@ function main()
             vertices: {
                 aVertexPosition: {
                     type: "FLOAT",
-                    buffer: {
-                        target: "ARRAY_BUFFER",
-                        data: new Float32Array([
-                            1.0, 1.0,
-                            -1.0, 1.0,
-                            1.0, -1.0,
-                            -1.0, -1.0,
-                        ]), usage: "STATIC_DRAW"
-                    },
+                    data: new Float32Array([
+                        1.0, 1.0,
+                        -1.0, 1.0,
+                        1.0, -1.0,
+                        -1.0, -1.0,
+                    ]),
                     numComponents: 2,
                 }
             },

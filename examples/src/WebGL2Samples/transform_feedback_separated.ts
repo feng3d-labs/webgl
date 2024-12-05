@@ -1,4 +1,4 @@
-import { IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLProgram, IGLVertexBuffer, WebGL, IGLVertexAttributes, IElementBufferSourceTypes } from "@feng3d/webgl";
+import { IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -54,27 +54,27 @@ import { getShaderSource } from "./utility";
         MAX: 3
     };
 
-    const buffers: IGLVertexBuffer[] = [
+    const buffers: IAttributeBufferSourceTypes[] = [
         // Transform buffer
-        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        positions,
         // Feedback empty buffers
         // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
         // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        positions.slice(),
+        positions.slice(),
     ];
 
     // -- Init Transform Vertex Array
     const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[] = [
         {
             vertices: {
-                position: { buffer: buffers[BufferType.VERTEX], numComponents: 4 },
+                position: { data: buffers[BufferType.VERTEX], numComponents: 4 },
             }
         },
         {
             vertices: {
-                position: { buffer: buffers[BufferType.POSITION], numComponents: 4 },
-                color: { buffer: buffers[BufferType.COLOR], numComponents: 4 },
+                position: { data: buffers[BufferType.POSITION], numComponents: 4 },
+                color: { data: buffers[BufferType.COLOR], numComponents: 4 },
             }
         },
     ];
@@ -82,8 +82,8 @@ import { getShaderSource } from "./utility";
     // -- Init TransformFeedback
     const transformFeedback: IGLTransformFeedback = {
         bindBuffers: [
-            { index: 0, buffer: buffers[BufferType.POSITION] },
-            { index: 1, buffer: buffers[BufferType.COLOR] },
+            { index: 0, data: buffers[BufferType.POSITION] },
+            { index: 1, data: buffers[BufferType.COLOR] },
         ]
     };
 

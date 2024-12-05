@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -48,7 +48,7 @@ import { getShaderSource, loadImage } from "./utility";
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IGLVertexBuffer;
+    let vertexBuffer: IAttributeBufferSourceTypes;
     let indicesBuffer: IElementBufferSourceTypes;
 
     let texture: IGLTexture;
@@ -79,7 +79,7 @@ import { getShaderSource, loadImage } from "./utility";
 
                 // -- Initialize buffer
                 const vertices = primitive.vertexBuffer;
-                vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+                vertexBuffer = vertices;
 
                 const indices = primitive.indices;
                 indicesBuffer = indices;
@@ -92,9 +92,9 @@ import { getShaderSource, loadImage } from "./utility";
                 //
                 vertexArrayMaps[mid].push({
                     vertices: {
-                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
-                        normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
-                        texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
+                        position: { data: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
+                        normal: { data: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
+                        texcoord: { data: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
                     }, indices: indicesBuffer
                 });
             }

@@ -49,7 +49,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -59,14 +58,13 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
     const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, numComponents: 2 },
+            in_texcoord: { data: texCoords, numComponents: 2 },
+            texcoord: { data: texCoords, numComponents: 2 },
         }
     };
 
@@ -142,8 +140,6 @@ import { getShaderSource, loadImage } from "./utility";
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(vertexPosBuffer);
-        webgl.deleteBuffer(vertexTexBuffer);
         webgl.deleteTexture(texture2D);
         webgl.deleteTexture(texture3D);
         webgl.deleteProgram(program);

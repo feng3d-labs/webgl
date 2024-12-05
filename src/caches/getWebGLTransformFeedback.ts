@@ -1,4 +1,5 @@
 import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
+import { getIGLVertexBuffer } from "../runs/getIGLBuffer";
 import { getWebGLBuffer } from "./getWebGLBuffer";
 
 declare global
@@ -22,7 +23,8 @@ export function getWebGLTransformFeedback(gl: WebGLRenderingContext, transformFe
         gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, webGLTransformFeedback);
         transformFeedback.bindBuffers.forEach((v) =>
         {
-            const { index, buffer } = v;
+            const { index, data } = v;
+            const buffer = getIGLVertexBuffer(data, "STREAM_COPY");
             const webGLBuffer = getWebGLBuffer(gl, buffer);
             gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
         });

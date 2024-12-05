@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { getIGLVertexBuffer, IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -48,24 +48,24 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: IGLVertexBuffer[] = [
+    const buffers: IAttributeBufferSourceTypes[] = [
         // Transform buffer
-        { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" },
+        vertices,
         // Feedback empty buffer
-        { target: "ARRAY_BUFFER", size: SIZE_V4C4 * VERTEX_COUNT, usage: "STATIC_COPY" },
+        new Float32Array(SIZE_V4C4 * VERTEX_COUNT / Float32Array.BYTES_PER_ELEMENT),
     ];
 
     // -- Init Vertex Array
     const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[] = [
         {
             vertices: {
-                position: { buffer: buffers[PROGRAM_TRANSFORM], numComponents: 4 },
+                position: { data: buffers[PROGRAM_TRANSFORM], numComponents: 4 },
             }
         },
         {
             vertices: {
-                position: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
-                color: { buffer: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
+                position: { data: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
+                color: { data: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
             }
         },
     ];
@@ -73,7 +73,7 @@ import { getShaderSource } from "./utility";
     // -- Init TransformFeedback
     const transformFeedback: IGLTransformFeedback = {
         bindBuffers: [
-            { index: 0, buffer: buffers[PROGRAM_FEEDBACK] }
+            { index: 0, data: buffers[PROGRAM_FEEDBACK] }
         ]
     };
 
@@ -114,8 +114,8 @@ import { getShaderSource } from "./utility";
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
-    webgl.deleteBuffer(buffers[PROGRAM_TRANSFORM]);
-    webgl.deleteBuffer(buffers[PROGRAM_FEEDBACK]);
+    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_TRANSFORM]));
+    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_FEEDBACK]));
     webgl.deleteProgram(programs[PROGRAM_TRANSFORM]);
     webgl.deleteProgram(programs[PROGRAM_FEEDBACK]);
 })();

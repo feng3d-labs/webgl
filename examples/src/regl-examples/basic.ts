@@ -18,14 +18,12 @@ const webgl = new WebGL({ canvasId: "glcanvas" });
 const renderObject: IGLRenderObject = {
     vertices: {
         position: {
-            buffer: {
-                target: "ARRAY_BUFFER",
-                data: new Float32Array([
-                    -1, 0,
-                    0, -1,
-                    1, 1
-                ])
-            }, numComponents: 2
+            data: new Float32Array([
+                -1, 0,
+                0, -1,
+                1, 1
+            ]),
+            numComponents: 2
         },
     },
     uniforms: { color: [1, 0, 0, 1] },

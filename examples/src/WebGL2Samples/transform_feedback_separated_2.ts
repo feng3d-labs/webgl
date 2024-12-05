@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLTransformFeedback, IGLProgram, IGLVertexBuffer, WebGL, IGLViewport, IGLVertexAttributes, IElementBufferSourceTypes } from "@feng3d/webgl";
+import { IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -61,40 +61,40 @@ import { getShaderSource } from "./utility";
     // Transform feedback objects track output buffer state
     const particleTransformFeedbacks: IGLTransformFeedback[] = [];
 
-    const particleVBOs: IGLVertexBuffer[][] = new Array(particleVAOs.length);
+    const particleVBOs: IAttributeBufferSourceTypes[][] = new Array(particleVAOs.length);
 
     for (let i = 0; i < 2; ++i)
     {
         particleVBOs[i] = new Array(NUM_LOCATIONS);
 
         // Set up input
-        particleVBOs[i][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: particlePositions, usage: "STREAM_COPY" };
+        particleVBOs[i][POSITION_LOCATION] = particlePositions.slice();
 
-        particleVBOs[i][VELOCITY_LOCATION] = { target: "ARRAY_BUFFER", data: particleVelocities, usage: "STREAM_COPY" };
+        particleVBOs[i][VELOCITY_LOCATION] = particleVelocities.slice();
 
-        particleVBOs[i][SPAWNTIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleSpawntime, usage: "STREAM_COPY" };
+        particleVBOs[i][SPAWNTIME_LOCATION] = particleSpawntime.slice();
 
-        particleVBOs[i][LIFETIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleLifetime, usage: "STREAM_COPY" };
+        particleVBOs[i][LIFETIME_LOCATION] = particleLifetime.slice();
 
-        particleVBOs[i][ID_LOCATION] = { target: "ARRAY_BUFFER", data: particleIDs, usage: "STREAM_COPY" };
+        particleVBOs[i][ID_LOCATION] = particleIDs.slice();
 
         particleVAOs[i] = {
             vertices: {
-                a_position: { buffer: particleVBOs[i][POSITION_LOCATION], numComponents: 2 },
-                a_velocity: { buffer: particleVBOs[i][VELOCITY_LOCATION], numComponents: 2 },
-                a_spawntime: { buffer: particleVBOs[i][SPAWNTIME_LOCATION], numComponents: 1 },
-                a_lifetime: { buffer: particleVBOs[i][LIFETIME_LOCATION], numComponents: 1 },
-                a_ID: { buffer: particleVBOs[i][ID_LOCATION], numComponents: 1 },
+                a_position: { data: particleVBOs[i][POSITION_LOCATION], numComponents: 2 },
+                a_velocity: { data: particleVBOs[i][VELOCITY_LOCATION], numComponents: 2 },
+                a_spawntime: { data: particleVBOs[i][SPAWNTIME_LOCATION], numComponents: 1 },
+                a_lifetime: { data: particleVBOs[i][LIFETIME_LOCATION], numComponents: 1 },
+                a_ID: { data: particleVBOs[i][ID_LOCATION], numComponents: 1 },
             }
         };
 
         // Set up output
         particleTransformFeedbacks[i] = {
             bindBuffers: [
-                { index: 0, buffer: particleVBOs[i][POSITION_LOCATION] },
-                { index: 1, buffer: particleVBOs[i][VELOCITY_LOCATION] },
-                { index: 2, buffer: particleVBOs[i][SPAWNTIME_LOCATION] },
-                { index: 3, buffer: particleVBOs[i][LIFETIME_LOCATION] },
+                { index: 0, data: particleVBOs[i][POSITION_LOCATION] },
+                { index: 1, data: particleVBOs[i][VELOCITY_LOCATION] },
+                { index: 2, data: particleVBOs[i][SPAWNTIME_LOCATION] },
+                { index: 3, data: particleVBOs[i][LIFETIME_LOCATION] },
             ]
         };
     }

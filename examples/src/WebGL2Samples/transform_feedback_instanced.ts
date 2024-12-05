@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -69,37 +69,37 @@ import { getShaderSource } from "./utility";
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
 
-    const vertexBuffers: IGLVertexBuffer[][] = new Array(vertexArrays.length);
+    const vertexBuffers: IAttributeBufferSourceTypes[][] = new Array(vertexArrays.length);
 
     for (let va = 0; va < 2; ++va)
     {
         vertexBuffers[va] = new Array(NUM_LOCATIONS);
 
-        vertexBuffers[va][OFFSET_LOCATION] = { target: "ARRAY_BUFFER", data: instanceOffsets, usage: "STREAM_COPY" };
-        vertexBuffers[va][ROTATION_LOCATION] = { target: "ARRAY_BUFFER", data: instanceRotations, usage: "STREAM_COPY" };
-        vertexBuffers[va][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: trianglePositions, usage: "STATIC_DRAW" };
-        vertexBuffers[va][COLOR_LOCATION] = { target: "ARRAY_BUFFER", data: instanceColors, usage: "STATIC_DRAW" };
+        vertexBuffers[va][OFFSET_LOCATION] = instanceOffsets.slice();
+        vertexBuffers[va][ROTATION_LOCATION] = instanceRotations.slice();
+        vertexBuffers[va][POSITION_LOCATION] = trianglePositions.slice();
+        vertexBuffers[va][COLOR_LOCATION] = instanceColors.slice();
 
         vertexArrays[va] = [];
         vertexArrays[va][0] = {
             vertices: {
-                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
-                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
+                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
+                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
             }
         };
         vertexArrays[va][1] = {
             vertices: {
-                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2, divisor: 1 },
-                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1, divisor: 1 },
-                a_position: { buffer: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
-                a_color: { buffer: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
+                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2, divisor: 1 },
+                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1, divisor: 1 },
+                a_position: { data: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
+                a_color: { data: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
             }
         };
 
         transformFeedbacks[va] = {
             bindBuffers: [
-                { index: 0, buffer: vertexBuffers[va][OFFSET_LOCATION] },
-                { index: 1, buffer: vertexBuffers[va][ROTATION_LOCATION] },
+                { index: 0, data: vertexBuffers[va][OFFSET_LOCATION] },
+                { index: 1, data: vertexBuffers[va][ROTATION_LOCATION] },
             ]
         };
     }

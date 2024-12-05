@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -26,7 +26,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
+    const vertexPosBuffer: IAttributeBufferSourceTypes = positions;
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -36,13 +36,13 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
+    const vertexTexBuffer: IAttributeBufferSourceTypes = texCoords;
 
     // -- Init VertexArray
     const vertexArray: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: vertexPosBuffer, numComponents: 2 },
+            texcoord: { data: vertexTexBuffer, numComponents: 2 },
         }
     };
 
@@ -103,8 +103,8 @@ import { getShaderSource, loadImage } from "./utility";
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(vertexPosBuffer);
-        webgl.deleteBuffer(vertexTexBuffer);
+        webgl.deleteBuffer(getIGLBuffer(vertexPosBuffer));
+        webgl.deleteBuffer(getIGLBuffer(vertexTexBuffer));
         webgl.deleteTexture(texture);
         webgl.deleteProgram(program);
     });

@@ -17,11 +17,9 @@ export interface IGLVertexAttributes
 export interface IGLVertexAttribute
 {
     /**
-     * WebGL缓冲区
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
+     * 顶点数据。
      */
-    buffer: IGLVertexBuffer;
+    data: IAttributeBufferSourceTypes;
 
     /**
      * 顶点数据元素数量。

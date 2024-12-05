@@ -52,21 +52,13 @@ async function main()
     vertices: {
       aVertexPosition: {
         type: "FLOAT",
-        buffer: {
-          target: "ARRAY_BUFFER",
-          data: buffers.position,
-          usage: "STATIC_DRAW",
-        },
+        data: buffers.position,
         numComponents: 3,
         normalized: false,
       },
       aTextureCoord: {
         type: "FLOAT",
-        buffer: {
-          target: "ARRAY_BUFFER",
-          data: buffers.textureCoord,
-          usage: "STATIC_DRAW",
-        },
+        data: buffers.textureCoord,
         numComponents: 2,
         normalized: false,
       },

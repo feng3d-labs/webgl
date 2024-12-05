@@ -1,5 +1,6 @@
 import { getBufferType, getWebGLBuffer } from "../caches/getWebGLBuffer";
 import { IGLVertexAttribute } from "../data/IGLVertexAttributes";
+import { getIGLVertexBuffer } from "./getIGLBuffer";
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IGLVertexAttribute)
 {
@@ -22,14 +23,15 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    const type = attribute.type || getBufferType(attribute.buffer.data) || "FLOAT";
+    const type = attribute.type || getBufferType(attribute.data) || "FLOAT";
 
     //
     vertexSize = vertexSize || 0;
     offset = offset || 0;
 
     //
-    const webGLBuffer = getWebGLBuffer(gl, attribute.buffer);
+    const buffer = getIGLVertexBuffer(attribute.data);
+    const webGLBuffer = getWebGLBuffer(gl, buffer);
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
     //

@@ -48,21 +48,13 @@ function main()
     vertices: {
       aVertexPosition: {
         type: "FLOAT",
-        buffer: {
-          target: "ARRAY_BUFFER",
-          data: buffers.position,
-          usage: "STATIC_DRAW",
-        },
+        data: buffers.position,
         numComponents: 3,
         normalized: false,
       },
       aVertexColor: {
         type: "FLOAT",
-        buffer: {
-          target: "ARRAY_BUFFER",
-          data: buffers.color,
-          usage: "STATIC_DRAW",
-        },
+        data: buffers.color,
         numComponents: 4,
         normalized: false,
       },

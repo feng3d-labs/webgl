@@ -14,11 +14,11 @@ export function runRenderObject(gl: WebGLRenderingContext, renderObject: IGLRend
 
     runRenderPipeline(gl, pipeline);
 
+    runTransformFeedback(gl, transformFeedback, topology);
+
     runVertexArray(gl, pipeline, vertices, indices);
 
     runUniforms(gl, pipeline, uniforms);
-
-    runTransformFeedback(gl, transformFeedback, topology);
 
     runDrawCall(gl, renderObject);
 

@@ -65,8 +65,8 @@ import * as mat4 from "./stackgl/gl-mat4";
 
     const renderObject: IGLRenderObject = {
         vertices: {
-            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-            uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
+            position: { data: new Float32Array(positions), numComponents: 3 },
+            uv: { data: new Float32Array(uvs), numComponents: 2 },
         },
         indices: new Uint16Array(indices),
         uniforms: {

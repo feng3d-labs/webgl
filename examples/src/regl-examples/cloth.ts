@@ -1,4 +1,4 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { getIGLVertexBuffer, IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -165,9 +165,9 @@ import * as vec3 from "./stackgl/gl-vec3";
 
     const renderObject: IGLRenderObject = {
         vertices: {
-            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-            normal: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(normals) }, numComponents: 3 },
-            uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
+            position: { data: new Float32Array(positions), numComponents: 3 },
+            normal: { data: new Float32Array(normals), numComponents: 3 },
+            uv: { data: new Float32Array(uvs), numComponents: 2 },
         },
         indices: new Uint16Array(indices),
         uniforms: {
@@ -356,8 +356,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        renderObject.vertices.position.buffer.data = new Float32Array(positions);
-        renderObject.vertices.normal.buffer.data = new Float32Array(normals);
+        getIGLVertexBuffer(renderObject.vertices.position.data).data = new Float32Array(positions);
+        getIGLVertexBuffer(renderObject.vertices.normal.data).data = new Float32Array(normals);
 
         tick++;
 

@@ -103,7 +103,7 @@ export function getAttributeVertexNum(vertices: IGLVertexAttributes)
         {
             if (vertices.hasOwnProperty(attr))
             {
-                return vertices[attr].buffer.data.length;
+                return vertices[attr].data.length;
             }
         }
 

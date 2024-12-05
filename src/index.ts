@@ -8,8 +8,8 @@ export * from "./data/IGLCommandEncoder";
 export * from "./data/IGLCopyBufferToBuffer";
 export * from "./data/IGLCullFace";
 export * from "./data/IGLDepthStencilState";
-export * from "./data/IGLDrawVertex";
 export * from "./data/IGLDrawIndexed";
+export * from "./data/IGLDrawVertex";
 export * from "./data/IGLFramebuffer";
 export * from "./data/IGLIndexBuffer";
 export * from "./data/IGLOcclusionQuery";
@@ -34,8 +34,10 @@ export * from "./data/IGLUniforms";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 
+export * from "./runs/getIGLBuffer";
 export * from "./runs/runColorTargetStates";
 export * from "./runs/runDrawCall";
+export * from "./runs/runVertexAttribute";
 export * from "./RunWebGL";
 
 export * from "./defaults/defaults";
