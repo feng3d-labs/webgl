@@ -226,14 +226,11 @@ async function loadTexture(url: string)
   const texture: IGLTexture = {
     target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
     sources: [{ source: img }],
+    generateMipmap,
   };
 
   let sampler: IGLSampler = {};
   if (generateMipmap)
-  {
-    texture.generateMipmap = generateMipmap;
-  }
-  else
   {
     sampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
   }

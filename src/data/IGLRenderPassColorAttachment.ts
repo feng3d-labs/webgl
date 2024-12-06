@@ -11,7 +11,7 @@ export interface IGLRenderPassColorAttachment
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
      */
-    view?: IGLAttachmentView;
+    readonly view?: IGLAttachmentView;
 
     /**
      * 清除后填充值。
@@ -20,7 +20,7 @@ export interface IGLRenderPassColorAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clearColor
      */
-    clearValue?: [red: number, green: number, blue: number, alpha: number];
+    readonly clearValue?: [red: number, green: number, blue: number, alpha: number];
 
     /**
      * 是否清除颜色附件。
@@ -29,7 +29,7 @@ export interface IGLRenderPassColorAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
-    loadOp?: "load" | "clear";
+    readonly loadOp?: "load" | "clear";
 }
 
 export type IGLAttachmentView = IGLRenderbuffer | IGLTextureView;

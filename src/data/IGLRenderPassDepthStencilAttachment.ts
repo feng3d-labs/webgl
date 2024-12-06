@@ -13,7 +13,7 @@ export interface IGLRenderPassDepthStencilAttachment
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
      */
-    view?: IGLAttachmentView;
+    readonly view?: IGLAttachmentView;
 
     /**
      * 清除后填充深度值。
@@ -22,7 +22,7 @@ export interface IGLRenderPassDepthStencilAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clearDepth
      */
-    depthClearValue?: number;
+    readonly depthClearValue?: number;
 
     /**
      * 是否清除深度值。
@@ -31,7 +31,7 @@ export interface IGLRenderPassDepthStencilAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
-    depthLoadOp?: "load" | "clear";
+    readonly depthLoadOp?: "load" | "clear";
 
     /**
      * 清除后填充模板值。
@@ -40,7 +40,7 @@ export interface IGLRenderPassDepthStencilAttachment
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/clearStencil
      */
-    stencilClearValue?: number;
+    readonly stencilClearValue?: number;
 
     /**
      * 是否清除模板值。
@@ -49,5 +49,5 @@ export interface IGLRenderPassDepthStencilAttachment
      *
      * @see https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/clear
      */
-    stencilLoadOp?: "load" | "clear";
+    readonly stencilLoadOp?: "load" | "clear";
 }

@@ -15,17 +15,17 @@ export interface IGLTextureView
     /**
      * 纹理。
      */
-    texture: IGLTexture,
+    readonly texture: IGLTexture,
 
     /**
      * mipmap级别。
      */
-    baseMipLevel: number;
+    readonly baseMipLevel: number;
 
     /**
      * 纹理数组中的层次。
      */
-    baseArrayLayer?: number;
+    readonly baseArrayLayer?: number;
 }
 
 /**
@@ -38,7 +38,7 @@ export interface IGLTexture
      *
      * 默认"TEXTURE_2D"。
      */
-    target?: GLTextureTarget;
+    readonly target?: GLTextureTarget;
 
     /**
      * 纹理资源。
@@ -53,7 +53,7 @@ export interface IGLTexture
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage3D
      */
-    storage?: IGLTextureStorage;
+    readonly storage?: IGLTextureStorage;
 
     /**
      * 写入纹理。
@@ -65,35 +65,35 @@ export interface IGLTexture
     /**
      * 是否生成mipmap
      */
-    generateMipmap?: boolean;
+    readonly generateMipmap?: boolean;
 
     /**
      * 像素解包打包时参数。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
      */
-    pixelStore?: IGLTexturePixelStore;
+    readonly pixelStore?: IGLTexturePixelStore;
 
     /**
      * 内部纹理格式。
      *
      * 默认 "RGBA"。
      */
-    internalformat?: IGLTextureInternalFormat,
+    readonly internalformat?: IGLTextureInternalFormat,
 
     /**
      * 纹理格式。
      *
      * 默认 "RGBA"。
      */
-    format?: IGLTextureFormat;
+    readonly format?: IGLTextureFormat;
 
     /**
      * 数据类型。
      *
      * 默认 "UNSIGNED_BYTE"。
      */
-    type?: IGLTextureDataType;
+    readonly type?: IGLTextureDataType;
 }
 
 /**
