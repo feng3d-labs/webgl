@@ -2,7 +2,7 @@ import { getBufferType } from "../caches/getWebGLBuffer";
 import { ElementTypeMap } from "../const/WebGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
-import { IElementBufferSourceTypes } from "../data/IGLIndexBuffer";
+import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLRenderObject } from "../data/IGLRenderObject";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
@@ -34,7 +34,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderOb
 
 export const defaultDrawIndexed: IGLDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
 
-function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IElementBufferSourceTypes, drawIndexed: IGLDrawIndexed)
+function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IGLIndicesDataTypes, drawIndexed: IGLDrawIndexed)
 {
     const type = getBufferType(indices);
     const dataLength = indices.length;

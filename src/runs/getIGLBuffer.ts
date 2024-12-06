@@ -1,6 +1,6 @@
 import { GLBufferTarget, GLBufferUsage, IGLBuffer } from "../data/IGLBuffer";
-import { IElementBufferSourceTypes, IGLIndexBuffer } from "../data/IGLIndexBuffer";
-import { IAttributeBufferSourceTypes, IGLVertexBuffer } from "../data/IGLVertexAttributes";
+import { IGLIndicesDataTypes, IGLIndexBuffer } from "../data/IGLIndexBuffer";
+import { IGLVertexDataTypes, IGLVertexBuffer } from "../data/IGLVertexAttributes";
 
 export function getIGLBuffer(data: BufferSource, target?: GLBufferTarget, usage: GLBufferUsage = "STATIC_DRAW")
 {
@@ -16,14 +16,14 @@ export function getIGLBuffer(data: BufferSource, target?: GLBufferTarget, usage:
     return indexBuffer;
 }
 
-export function getIGLVertexBuffer(data: IAttributeBufferSourceTypes, usage?: "STREAM_COPY")
+export function getIGLVertexBuffer(data: IGLVertexDataTypes, usage?: "STREAM_COPY")
 {
     const vertexBuffer: IGLVertexBuffer = data[_IGLBuffer] = data[_IGLBuffer] || getIGLBuffer(data, "ARRAY_BUFFER", usage);
 
     return vertexBuffer;
 }
 
-export function getIGLIndexBuffer(indices: IElementBufferSourceTypes)
+export function getIGLIndexBuffer(indices: IGLIndicesDataTypes)
 {
     const indexBuffer: IGLIndexBuffer = indices[_IGLBuffer] = indices[_IGLBuffer] || getIGLBuffer(indices, "ELEMENT_ARRAY_BUFFER");
 

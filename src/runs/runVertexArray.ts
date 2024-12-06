@@ -1,5 +1,5 @@
 import { getProgram } from "../caches/getProgram";
-import { IElementBufferSourceTypes } from "../data/IGLIndexBuffer";
+import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 import { ChainMap } from "../utils/ChainMap";
@@ -10,14 +10,14 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: ChainMap<[IGLRenderPipeline, IGLVertexAttributes, IElementBufferSourceTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[IGLRenderPipeline, IGLVertexAttributes, IGLIndicesDataTypes], WebGLVertexArrayObject>;
     }
 }
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。
  */
-export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, vertices: IGLVertexAttributes, indices: IElementBufferSourceTypes)
+export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, vertices: IGLVertexAttributes, indices: IGLIndicesDataTypes)
 {
     if (!vertices && !indices) return;
 

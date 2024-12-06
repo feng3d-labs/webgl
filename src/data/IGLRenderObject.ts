@@ -1,7 +1,7 @@
 import { LazyObject } from "../types";
 import { IGLDrawIndexed } from "./IGLDrawIndexed";
 import { IGLDrawVertex } from "./IGLDrawVertex";
-import { IElementBufferSourceTypes } from "./IGLIndexBuffer";
+import { IGLIndicesDataTypes } from "./IGLIndexBuffer";
 import { IGLRenderPipeline } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
@@ -30,7 +30,7 @@ export interface IGLRenderObject
     /**
      * 顶点索引数据
      */
-    indices?: IElementBufferSourceTypes;
+    indices?: IGLIndicesDataTypes;
 
     /**
      * Uniform渲染数据

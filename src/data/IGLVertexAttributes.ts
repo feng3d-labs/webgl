@@ -17,9 +17,9 @@ export interface IGLVertexAttributes
 export interface IGLVertexAttribute
 {
     /**
-     * 顶点数据。
+     * 顶点属性数据。
      */
-    data: IAttributeBufferSourceTypes;
+    data: IGLVertexDataTypes;
 
     /**
      * 顶点数据元素数量。
@@ -64,13 +64,13 @@ export interface IGLVertexBuffer extends IGLBuffer
     /**
      * 缓冲区数据。
      */
-    data?: IAttributeBufferSourceTypes;
+    data?: IGLVertexDataTypes;
 }
 
 /**
- * 属性缓冲数据类型。
+ * 顶点属性数据类型。
  */
-export type IAttributeBufferSourceTypes =
+export type IGLVertexDataTypes =
     | Float32Array
     | Uint32Array
     | Int32Array

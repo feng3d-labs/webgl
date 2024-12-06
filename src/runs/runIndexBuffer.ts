@@ -1,8 +1,8 @@
 import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { IElementBufferSourceTypes } from "../data/IGLIndexBuffer";
+import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { getIGLIndexBuffer } from "./getIGLBuffer";
 
-export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IElementBufferSourceTypes)
+export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IGLIndicesDataTypes)
 {
     if (!indices) return;
 

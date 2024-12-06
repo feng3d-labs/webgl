@@ -1,5 +1,4 @@
-import { IGLBuffer } from "./IGLBuffer";
-import { IAttributeBufferSourceTypes } from "./IGLVertexAttributes";
+import { IGLVertexDataTypes } from "./IGLVertexAttributes";
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/createTransformFeedback
@@ -16,5 +15,5 @@ export interface IGLTransformFeedbacBindBuffer
 {
     index: number;
 
-    data: IAttributeBufferSourceTypes;
+    data: IGLVertexDataTypes;
 }

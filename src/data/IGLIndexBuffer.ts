@@ -15,13 +15,13 @@ export interface IGLIndexBuffer extends IGLBuffer
     /**
      * 顶点索引数据。
      */
-    data: IElementBufferSourceTypes;
+    data: IGLIndicesDataTypes;
 }
 
 /**
- * 元素缓冲数据类型
+ * 顶点索引数据类型
  */
-export type IElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
+export type IGLIndicesDataTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 元素缓冲数据类型。

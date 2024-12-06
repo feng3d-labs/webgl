@@ -1,6 +1,6 @@
 import { watcher } from "@feng3d/watcher";
 import { IGLBuffer } from "../data/IGLBuffer";
-import { IAttributeBufferSourceTypes } from "../data/IGLVertexAttributes";
+import { IGLVertexDataTypes } from "../data/IGLVertexAttributes";
 
 declare global
 {
@@ -106,7 +106,7 @@ export function deleteBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
     }
 }
 
-export function getBufferType(data?: IAttributeBufferSourceTypes)
+export function getBufferType(data?: IGLVertexDataTypes)
 {
     return bufferTypeMap[data?.constructor.name];
 }
