@@ -1,12 +1,12 @@
 import { GLBufferTarget, GLBufferUsage, IGLBuffer } from "../data/IGLBuffer";
-import { IGLIndicesDataTypes, IGLIndexBuffer } from "../data/IGLIndexBuffer";
-import { IGLVertexDataTypes, IGLVertexBuffer } from "../data/IGLVertexAttributes";
+import { IGLIndexBuffer, IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
+import { IGLVertexBuffer, IGLVertexDataTypes } from "../data/IGLVertexAttributes";
 
 export function getIGLBuffer(data: BufferSource, target?: GLBufferTarget, usage: GLBufferUsage = "STATIC_DRAW")
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
-    console.assert(target, `初始化时不能为空，请使用 getIGLIndexBuffer getIGLVertexBuffer 等进行特定类型初始化！`);
+    console.assert(target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
 
     const indexBuffer: IGLBuffer = data[_IGLBuffer] = {
         target: target, usage: usage,

@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -126,9 +126,10 @@ function render()
         drawVertex: { vertexCount: 6 },
     };
 
+    const renderObjects: IGLRenderPassObject[] = [];
     const renderPass: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [],
+        renderObjects: renderObjects,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -141,7 +142,7 @@ function render()
         }
         else if (i === Corners.TOP_RIGHT)
         {
-            renderPass.renderObjects.push(
+            renderObjects.push(
                 viewport0,
                 {
                     ...renderObject,
@@ -149,7 +150,7 @@ function render()
         }
         else if (i === Corners.BOTTOM_RIGHT)
         {
-            renderPass.renderObjects.push(
+            renderObjects.push(
                 viewport0,
                 {
                     ...renderObject,
@@ -170,7 +171,7 @@ function render()
         }
         else if (i === Corners.BOTTOM_LEFT)
         {
-            renderPass.renderObjects.push(
+            renderObjects.push(
                 viewport0,
                 {
                     ...renderObject,

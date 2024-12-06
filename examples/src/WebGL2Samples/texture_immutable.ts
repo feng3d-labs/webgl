@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -109,12 +109,13 @@ import { getShaderSource, loadImage } from "./utility";
             drawVertex: { vertexCount: 6 },
         };
 
+        const renderObjects: IGLRenderPassObject[] = [];
         const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: []
+            renderObjects: renderObjects
         };
 
-        rp.renderObjects.push(
+        renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
                 ...ro,
@@ -126,7 +127,7 @@ import { getShaderSource, loadImage } from "./utility";
             });
 
         // Immutable 3D texture
-        rp.renderObjects.push(
+        renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
                 ...ro,

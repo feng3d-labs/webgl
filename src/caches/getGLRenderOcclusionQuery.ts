@@ -1,7 +1,7 @@
 import { IGLOcclusionQuery, IGLQuery } from "../data/IGLOcclusionQuery";
 import { IGLRenderPass, IGLRenderPassObject } from "../data/IGLRenderPass";
 
-export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: IGLRenderPassObject[])
+export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly IGLRenderPassObject[])
 {
     if (!renderObjects) return defautRenderOcclusionQuery;
     if (!(gl instanceof WebGL2RenderingContext)) return defautRenderOcclusionQuery;

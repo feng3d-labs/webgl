@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderbuffer, IGLSampler, IGLTexture, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -180,9 +180,10 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     passEncoders.push(rp);
 }
 
+const renderObjects: IGLRenderPassObject[] = [];
 // Pass 2
 const rp2: IGLRenderPass = {
-    renderObjects: [],
+    renderObjects: renderObjects,
 };
 const ro: IGLRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
@@ -197,7 +198,7 @@ mat4.scale(mvp, IDENTITY, scaleVector3);
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
-    rp2.renderObjects.push(
+    renderObjects.push(
         viewport[i],
         {
             ...ro,

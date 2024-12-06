@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -87,10 +87,12 @@ import { getShaderSource } from "./utility";
         ]
     };
 
+    const renderObjects: IGLRenderPassObject[] = [];
+    
     // -- Render
     const rp: IGLRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [],
+        renderObjects: renderObjects,
     };
 
     // First draw, capture the attributes
@@ -103,7 +105,7 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    rp.renderObjects.push({
+    renderObjects.push({
         pipeline: programs[PROGRAM_TRANSFORM],
         vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
         indices: vertexArrays[PROGRAM_TRANSFORM].indices,
@@ -113,7 +115,7 @@ import { getShaderSource } from "./utility";
     });
 
     // Second draw, reuse captured attributes
-    rp.renderObjects.push({
+    renderObjects.push({
         pipeline: programs[PROGRAM_FEEDBACK],
         vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
         indices: vertexArrays[PROGRAM_FEEDBACK].indices,

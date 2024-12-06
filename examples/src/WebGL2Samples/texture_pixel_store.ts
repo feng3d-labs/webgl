@@ -1,4 +1,4 @@
-import { getIGLBuffer, IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -76,10 +76,11 @@ import { getShaderSource, loadImage } from "./utility";
             magFilter: "NEAREST",
         };
 
+        const renderObjects: IGLRenderPassObject[] = [];
         // -- Render
         const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -89,7 +90,7 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        rp.renderObjects.push({
+        renderObjects.push({
             pipeline: program,
             vertices: vertexArray.vertices,
             indices: vertexArray.indices,

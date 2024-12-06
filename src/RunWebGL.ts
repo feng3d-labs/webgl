@@ -8,10 +8,10 @@ import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
-import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLRenderPass, IGLRenderPassObject } from "./data/IGLRenderPass";
 import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
+import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTextureView } from "./data/IGLTexture";
 import { runFramebuffer } from "./runs/runFramebuffer";
@@ -120,7 +120,7 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: IGLRenderPassObject[])
+    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: readonly IGLRenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {

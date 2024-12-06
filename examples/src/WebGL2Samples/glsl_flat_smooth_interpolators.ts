@@ -1,4 +1,4 @@
-import { IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -138,12 +138,13 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
+        const renderObjects: IGLRenderPassObject[] = [];
         const rp: IGLRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         mat4.rotateY(modelView, modelView, rotatationSpeedY);
@@ -167,7 +168,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
                 for (i = 0; i < VIEWPORTS.MAX; ++i)
                 {
-                    rp.renderObjects.push(
+                    renderObjects.push(
                         viewport[i],
                         {
                             pipeline: programs[i],

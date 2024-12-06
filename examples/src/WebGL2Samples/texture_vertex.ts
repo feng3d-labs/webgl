@@ -1,4 +1,4 @@
-import { IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -186,13 +186,14 @@ import { getShaderSource, loadImage } from "./utility";
     const localMV = mat4.create();
     function render()
     {
+        const renderObjects: IGLRenderPassObject[] = [];
         // -- Render
         const rp: IGLRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         orientation[0] = 0.00020; // yaw
@@ -214,7 +215,7 @@ import { getShaderSource, loadImage } from "./utility";
 
                 mat4.multiply(localMV, mvMatrix, primitive.matrix);
 
-                rp.renderObjects.push({
+                renderObjects.push({
                     pipeline: {
                         ...program,
                         primitive: { topology: IDrawMode2Name[primitive.mode] }

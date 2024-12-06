@@ -1,6 +1,6 @@
-import { IGLOcclusionQuery, IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
-import { getShaderSource } from "./utility";
 import { watcher } from "@feng3d/watcher";
+import { IGLCanvasContext, IGLOcclusionQuery, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { getShaderSource } from "./utility";
 
 // -- Init Canvas
 const canvas = document.createElement("canvas");
@@ -38,13 +38,14 @@ const vertexArray: { vertices?: IGLVertexAttributes } = {
     }
 };
 
+const renderObjects: IGLRenderPassObject[] = [];
 // -- Render
 const rp: IGLRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },
-    renderObjects: [],
+    renderObjects: renderObjects,
 };
 
 const ro: IGLRenderObject = {
@@ -52,7 +53,7 @@ const ro: IGLRenderObject = {
     pipeline: program,
     drawVertex: { firstVertex: 0, vertexCount: 3 },
 };
-rp.renderObjects.push(ro);
+renderObjects.push(ro);
 
 const occlusionQuery: IGLOcclusionQuery = {
     __type: "OcclusionQuery",
@@ -62,7 +63,7 @@ const occlusionQuery: IGLOcclusionQuery = {
     }]
 };
 
-rp.renderObjects.push(occlusionQuery);
+renderObjects.push(occlusionQuery);
 
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

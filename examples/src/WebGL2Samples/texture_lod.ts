@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -185,10 +185,11 @@ import { getShaderSource, loadImage } from "./utility";
 
     function render()
     {
+        const renderObjects: IGLRenderPassObject[] = [];
         // Clear color buffer
         const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -212,7 +213,7 @@ import { getShaderSource, loadImage } from "./utility";
         lodBiasArray[Corners.BOTTOM_RIGHT] = 4.0;
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            rp.renderObjects.push(
+            renderObjects.push(
                 { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
                     ...ro,

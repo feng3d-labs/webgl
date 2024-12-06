@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -141,10 +141,11 @@ const rp1: IGLRenderPass = {
         }],
 };
 
+const renderObjects: IGLRenderPassObject[] = [];
 // Pass 2
 const rp: IGLRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    renderObjects: []
+    renderObjects: renderObjects
 };
 
 const ro: IGLRenderObject = {
@@ -160,7 +161,7 @@ const ro: IGLRenderObject = {
 
 for (let i = 0; i < Textures.MAX; ++i)
 {
-    rp.renderObjects.push(
+    renderObjects.push(
         { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
         {
             ...ro,

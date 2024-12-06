@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -88,10 +88,11 @@ import { getShaderSource, loadImage } from "./utility";
             wrapT: "CLAMP_TO_EDGE",
         };
 
+        const renderObjects: IGLRenderPassObject[] = [];
         // -- Render
         const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: []
+            renderObjects: renderObjects
         };
 
         const matrix = new Float32Array([
@@ -102,7 +103,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // No offset
-        rp.renderObjects.push(
+        renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
                 vertices: vertexArray.vertices,
@@ -117,7 +118,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Offset
         const offset = new Int32Array([100, -80]);
 
-        rp.renderObjects.push(
+        renderObjects.push(
             { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
                 vertices: vertexArray.vertices,

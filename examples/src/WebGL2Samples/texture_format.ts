@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -182,14 +182,15 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
+        const renderObjects: IGLRenderPassObject[] = [];
         const rp: IGLRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: []
+            renderObjects: renderObjects
         };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
-            rp.renderObjects.push(
+            renderObjects.push(
                 { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
                     vertices: vertexArray.vertices,
@@ -205,7 +206,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Unsigned int textures
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
-            rp.renderObjects.push(
+            renderObjects.push(
                 { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
                     vertices: vertexArray.vertices,
