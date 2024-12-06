@@ -1,4 +1,4 @@
-import { getIGLVertexBuffer, IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { getIGLVertexBuffer, IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -48,7 +48,7 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: IAttributeBufferSourceTypes[] = [
+    const buffers: IGLVertexDataTypes[] = [
         // Transform buffer
         vertices,
         // Feedback empty buffer
@@ -56,7 +56,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes }[] = [
+    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes }[] = [
         {
             vertices: {
                 position: { data: buffers[PROGRAM_TRANSFORM], numComponents: 4 },

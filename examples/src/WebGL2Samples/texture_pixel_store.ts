@@ -1,4 +1,4 @@
-import { getIGLBuffer, IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -26,7 +26,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IAttributeBufferSourceTypes = positions;
+    const vertexPosBuffer: IGLVertexDataTypes = positions;
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -36,10 +36,10 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IAttributeBufferSourceTypes = texCoords;
+    const vertexTexBuffer: IGLVertexDataTypes = texCoords;
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IGLVertexAttributes, indices?: IElementBufferSourceTypes } = {
+    const vertexArray: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes } = {
         vertices: {
             position: { data: vertexPosBuffer, numComponents: 2 },
             texcoord: { data: vertexTexBuffer, numComponents: 2 },

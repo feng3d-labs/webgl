@@ -1,4 +1,4 @@
-import { IAttributeBufferSourceTypes, IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -43,13 +43,13 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertices?: IGLVertexAttributes, indices: IElementBufferSourceTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: IGLVertexAttributes, indices: IGLIndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IAttributeBufferSourceTypes;
-    let indicesBuffer: IElementBufferSourceTypes;
+    let vertexBuffer: IGLVertexDataTypes;
+    let indicesBuffer: IGLIndicesDataTypes;
 
     let texture: IGLTexture;
     let sampler: IGLSampler;

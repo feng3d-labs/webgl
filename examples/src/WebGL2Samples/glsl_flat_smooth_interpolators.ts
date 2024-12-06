@@ -1,4 +1,4 @@
-import { IElementBufferSourceTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderPass, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -65,7 +65,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: { vertexArray: { vertices?: IGLVertexAttributes }, indices: IElementBufferSourceTypes }[]
+        [key: string]: { vertexArray: { vertices?: IGLVertexAttributes }, indices: IGLIndicesDataTypes }[]
     } = {};
 
     // var in loop

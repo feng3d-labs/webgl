@@ -1,6 +1,6 @@
 import { mat4, quat, vec3 } from "gl-matrix";
 
-type IAttributeBufferSourceTypes =
+type IGLVertexDataTypes =
     | Float32Array
     | Uint32Array
     | Int32Array
@@ -9,7 +9,7 @@ type IAttributeBufferSourceTypes =
     | Uint8Array
     | Int8Array;
 
-type IElementBufferSourceTypes = Uint16Array | Uint32Array | Uint8Array;
+type IGLIndicesDataTypes = Uint16Array | Uint32Array | Uint8Array;
 
 // Data classes
 class Scene
@@ -41,9 +41,9 @@ class Mesh
 export class Primitive
 {
     mode: number;
-    indices: IElementBufferSourceTypes;
+    indices: IGLIndicesDataTypes;
     indicesComponentType: number;
-    vertexBuffer: IAttributeBufferSourceTypes;
+    vertexBuffer: IGLVertexDataTypes;
     matrix: mat4;
     attributes: {
         [key: string]: { size: 1 | 2 | 3 | 4, type?: number, stride: number, offset: number },
