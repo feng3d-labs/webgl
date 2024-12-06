@@ -8,7 +8,7 @@ declare global
     }
 }
 
-export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRenderbuffer, multisample?: 4)
+export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRenderbuffer, sampleCount?: 4)
 {
     let webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
     if (webGLRenderbuffer) return webGLRenderbuffer;
@@ -19,9 +19,9 @@ export function getRenderbuffer(gl: WebGLRenderingContext, renderbuffer: IGLRend
     const { internalformat, width, height } = renderbuffer;
 
     gl.bindRenderbuffer(gl.RENDERBUFFER, webGLRenderbuffer);
-    if (multisample === 4 && gl instanceof WebGL2RenderingContext)
+    if (sampleCount === 4 && gl instanceof WebGL2RenderingContext)
     {
-        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, multisample, gl[internalformat], width, height);
+        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, sampleCount, gl[internalformat], width, height);
     }
     else
     {

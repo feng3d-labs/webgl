@@ -73,7 +73,7 @@ export class RunWebGL
         //
         occlusionQuery.init();
 
-        if (renderPass.descriptor?.multisample && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
+        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
         {
             const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 

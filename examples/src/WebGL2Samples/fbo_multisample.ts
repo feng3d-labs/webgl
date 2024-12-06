@@ -78,7 +78,7 @@ const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 // -- Init Frame Buffers
 const framebuffer: IGLRenderPassDescriptor = {
     colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
-    multisample: 4 // 多重采样
+    sampleCount: 4 // 多重采样
 };
 
 // -- Init VertexArray

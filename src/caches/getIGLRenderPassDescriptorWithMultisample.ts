@@ -38,7 +38,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
             return colorAttachment;
         }),
         depthStencilAttachment: sourcePassDescriptor.depthStencilAttachment,
-        multisample: sourcePassDescriptor.multisample,
+        sampleCount: sourcePassDescriptor.sampleCount,
     };
 
     // 拷贝 渲染缓冲区到 IGLTexture

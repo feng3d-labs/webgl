@@ -25,5 +25,5 @@ export interface IGLRenderPassDescriptor
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
      */
-    readonly multisample?: 4;
+    readonly sampleCount?: 4;
 }
