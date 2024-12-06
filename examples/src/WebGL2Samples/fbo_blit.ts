@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLSampler, IGLTexture, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -21,34 +21,26 @@ const program: IGLRenderPipeline = {
     },
 };
 
-const vertexPosBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([
-        -1.0, -1.0,
-        1.0, -1.0,
-        1.0, 1.0,
-        1.0, 1.0,
-        -1.0, 1.0,
-        -1.0, -1.0
-    ]),
-    usage: "STATIC_DRAW",
-};
-const vertexTexBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([
-        0.0, 1.0,
-        1.0, 1.0,
-        1.0, 0.0,
-        1.0, 0.0,
-        0.0, 0.0,
-        0.0, 1.0
-    ]),
-    usage: "STATIC_DRAW",
-};
+const vertexPosBuffer = new Float32Array([
+    -1.0, -1.0,
+    1.0, -1.0,
+    1.0, 1.0,
+    1.0, 1.0,
+    -1.0, 1.0,
+    -1.0, -1.0
+]);
+const vertexTexBuffer = new Float32Array([
+    0.0, 1.0,
+    1.0, 1.0,
+    1.0, 0.0,
+    1.0, 0.0,
+    0.0, 0.0,
+    0.0, 1.0
+]);
 
 const vertices: IGLVertexAttributes = {
-    position: { buffer: vertexPosBuffer, numComponents: 2 },
-    texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+    position: { data: vertexPosBuffer, numComponents: 2 },
+    texcoord: { data: vertexTexBuffer, numComponents: 2 },
 };
 
 loadImage("../../assets/img/Di-3d.png", (image) =>
@@ -203,8 +195,6 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     webgl.deleteFramebuffer(fboRenderPass.descriptor);
     webgl.deleteFramebuffer(framebufferResolve);
     webgl.deleteRenderbuffer(colorRenderbuffer);
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     webgl.deleteTexture(textureDiffuse);
     webgl.deleteTexture(textureColorBuffer);
     webgl.deleteProgram(program);

@@ -30,12 +30,11 @@ const vertices = new Float32Array([
     0.3, -0.5, 0.5,
     0.0, 0.5, 0.5
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
+        pos: { data: vertices, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
     }
 };
 
@@ -73,5 +72,4 @@ watcher.watch(occlusionQuery, "result", () =>
 });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(program);

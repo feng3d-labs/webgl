@@ -1,4 +1,4 @@
-import { IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -37,7 +37,6 @@ const triPositions = new Float32Array([
     0.5, -0.5, -1.0,
     0.0, 0.5, 1.0
 ]);
-const triVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: triPositions, usage: "STATIC_DRAW" };
 
 const quadPositions = new Float32Array([
     -1.0, -1.0,
@@ -47,7 +46,6 @@ const quadPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const quadVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadPositions, usage: "STATIC_DRAW" };
 
 const quadTexcoords = new Float32Array([
     0.0, 0.0,
@@ -57,20 +55,19 @@ const quadTexcoords = new Float32Array([
     0.0, 1.0,
     0.0, 0.0
 ]);
-const quadVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadTexcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
 const triVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        position: { buffer: triVertexPosBuffer, numComponents: 3 },
+        position: { data: triPositions, numComponents: 3 },
     }
 };
 
 const quadVertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        position: { buffer: quadVertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: quadVertexTexBuffer, numComponents: 2 },
+        position: { data: quadPositions, numComponents: 2 },
+        textureCoordinates: { data: quadTexcoords, numComponents: 2 },
     }
 };
 
@@ -122,9 +119,6 @@ const rp2: IGLRenderPass = {
 webgl.submit({ commandEncoders: [{ passEncoders: [renderPass, rp2] }] });
 
 // Clean up
-webgl.deleteBuffer(triVertexPosBuffer);
-webgl.deleteBuffer(quadVertexPosBuffer);
-webgl.deleteBuffer(quadVertexTexBuffer);
 webgl.deleteFramebuffer(frameBuffer);
 webgl.deleteTexture(depthTexture);
 webgl.deleteProgram(depthProgram);

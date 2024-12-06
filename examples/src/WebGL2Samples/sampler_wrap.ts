@@ -72,7 +72,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     -2.0, 2.0,
@@ -82,14 +81,13 @@ const texcoords = new Float32Array([
     -2.0, -2.0,
     -2.0, 2.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
 
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, numComponents: 2 },
+        textureCoordinates: { data: texcoords, numComponents: 2 },
     }
 };
 
@@ -167,8 +165,6 @@ function render()
 
     // -- Clean up
 
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     for (let j = 0; j < samplers.length; ++j)
     {
         webgl.deleteSampler(samplers[j]);

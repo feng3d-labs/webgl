@@ -25,7 +25,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texCoords = new Float32Array([
     0.0, 1.0,
@@ -35,13 +34,12 @@ const texCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
 // -- Init VertexArray
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, numComponents: 2 },
+        texcoord: { data: texCoords, numComponents: 2 },
     }
 };
 
@@ -81,8 +79,6 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // Delete WebGL resources
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 });

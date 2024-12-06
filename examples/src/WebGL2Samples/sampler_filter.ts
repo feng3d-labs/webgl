@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -72,7 +72,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     0.0, 1.0,
@@ -82,14 +81,13 @@ const texcoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, numComponents: 2 },
+        textureCoordinates: { data: texcoords, numComponents: 2 },
     }
 };
 
@@ -171,8 +169,6 @@ function render()
     webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // Clean up
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     for (let j = 0; j < samplers.length; ++j)
     {
         webgl.deleteSampler(samplers[(j + 1) % samplers.length]);

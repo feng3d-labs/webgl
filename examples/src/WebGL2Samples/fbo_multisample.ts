@@ -44,7 +44,6 @@ for (let i = 0; i < vertexCount; i++)
 }
 
 // -- Init buffers
-const vertexDataBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 const positions = new Float32Array([
     -1.0, -1.0,
@@ -54,7 +53,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texCoords = new Float32Array([
     0.0, 1.0,
@@ -64,7 +62,6 @@ const texCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -79,12 +76,6 @@ const texture: IGLTexture = {
 const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Init Frame Buffers
-const FRAMEBUFFER = {
-    RENDERBUFFER: 0,
-    COLORBUFFER: 1
-};
-const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
-
 const framebuffer: IGLRenderPassDescriptor = {
     colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     multisample: 4 // 多重采样
@@ -93,12 +84,12 @@ const framebuffer: IGLRenderPassDescriptor = {
 // -- Init VertexArray
 const vertexArrays: { vertices?: IGLVertexAttributes }[] = [
     {
-        vertices: { position: { buffer: vertexDataBuffer, numComponents: 2 } }
+        vertices: { position: { data: data, numComponents: 2 } }
     },
     {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, numComponents: 2 },
+            texcoord: { data: texCoords, numComponents: 2 },
         }
     },
 ];
@@ -146,12 +137,8 @@ webgl.submit({
 });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexDataBuffer);
-webgl.deleteBuffer(vertexPosBuffer);
-webgl.deleteBuffer(vertexTexBuffer);
 webgl.deleteTexture(texture);
 webgl.deleteSampler(sampler);
-webgl.deleteRenderbuffer(colorRenderbuffer);
 webgl.deleteFramebuffer(framebuffer);
 webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
 webgl.deleteProgram(programs[PROGRAM.SPLASH]);

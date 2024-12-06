@@ -1,5 +1,4 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
-import { getIGLIndexBuffer } from "../../../src/runs/runIndexBuffer";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -15,15 +14,12 @@ const webgl = new WebGL(renderingContext);
 // WebGL 2.0 behaves as though PRIMITIVE_RESTART_FIXED_INDEX were always enabled.
 const MAX_UNSIGNED_SHORT = 65535;
 
-const vertexPosBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([
-        -1.0, -1.0,
-        -1.0, 1.0,
-        1.0, -1.0,
-        1.0, 1.0,
-    ])
-};
+const vertexPosBuffer = new Float32Array([
+    -1.0, -1.0,
+    -1.0, 1.0,
+    1.0, -1.0,
+    1.0, 1.0,
+]);
 
 const program: IGLRenderPipeline = {
     primitive: { topology: "TRIANGLE_STRIP" },
@@ -42,7 +38,7 @@ const indices = new Uint16Array([
 
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        pos: { buffer: vertexPosBuffer, numComponents: 2 },
+        pos: { data: vertexPosBuffer, numComponents: 2 },
     },
 };
 
@@ -69,6 +65,4 @@ webgl.submit({
 })
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexPosBuffer);
-webgl.deleteBuffer(getIGLIndexBuffer(indices));
 webgl.deleteProgram(program);

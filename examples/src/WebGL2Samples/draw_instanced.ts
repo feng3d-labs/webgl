@@ -10,18 +10,12 @@ document.body.appendChild(canvas);
 const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const vertexPosBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([-0.3, -0.5,
-        0.3, -0.5,
-        0.0, 0.5])
-};
-const vertexColorBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([
-        1.0, 0.5, 0.0,
-        0.0, 0.5, 1.0])
-};
+const vertexPosBuffer = new Float32Array([-0.3, -0.5,
+    0.3, -0.5,
+    0.0, 0.5]);
+const vertexColorBuffer = new Float32Array([
+    1.0, 0.5, 0.0,
+    0.0, 0.5, 1.0]);
 
 const program: IGLRenderPipeline = {
     primitive: { topology: "TRIANGLES" },
@@ -31,8 +25,8 @@ const program: IGLRenderPipeline = {
 
 const vertexArray: { vertices?: IGLVertexAttributes } = {
     vertices: {
-        pos: { buffer: vertexPosBuffer, numComponents: 2 },
-        color: { buffer: vertexColorBuffer, numComponents: 3, divisor: 1 },
+        pos: { data: vertexPosBuffer, numComponents: 2 },
+        color: { data: vertexColorBuffer, numComponents: 3, divisor: 1 },
     },
 };
 
@@ -63,6 +57,4 @@ webgl.submit({
 });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexPosBuffer);
-webgl.deleteBuffer(vertexColorBuffer);
 webgl.deleteProgram(program);

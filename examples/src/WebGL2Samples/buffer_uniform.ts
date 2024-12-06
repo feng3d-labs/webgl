@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLUniformBuffer, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -32,7 +32,6 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
     ]);
-    const vertexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
     //mat4 P, mat4 MV, mat3 Mnormal
     const transforms = new Float32Array([
@@ -70,9 +69,9 @@ import { getShaderSource } from "./utility";
     // -- Init Vertex Array
     const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 0 },
-            normal: { buffer: vertexBuffer, numComponents: 3, vertexSize: 40, offset: 12 },
-            color: { buffer: vertexBuffer, numComponents: 4, vertexSize: 40, offset: 24 },
+            position: { data: vertices, numComponents: 3, vertexSize: 40, offset: 0 },
+            normal: { data: vertices, numComponents: 3, vertexSize: 40, offset: 12 },
+            color: { data: vertices, numComponents: 4, vertexSize: 40, offset: 24 },
         },
     };
 

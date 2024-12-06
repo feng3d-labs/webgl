@@ -78,9 +78,6 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
-
-const vertexDataBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -92,7 +89,6 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -102,7 +98,6 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -147,20 +142,20 @@ const framebuffers: IGLFramebuffer[] = [
 const vertexArrays: { vertices?: IGLVertexAttributes }[] = [
     {
         vertices: {
-            position: { buffer: vertexPositionBuffer, numComponents: 2 },
-            data: { buffer: vertexDataBuffer, numComponents: 1 },
+            position: { data: positions, numComponents: 2 },
+            data: { data: data, numComponents: 1 },
         }
     },
     {
         vertices: {
-            position: { buffer: vertexPositionBuffer, numComponents: 2 },
-            data: { buffer: vertexDataBuffer, numComponents: 1 },
+            position: { data: positions, numComponents: 2 },
+            data: { data: data, numComponents: 1 },
         }
     },
     {
         vertices: {
-            position: { buffer: texVertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: texVertexTexBuffer, numComponents: 2 },
+            position: { data: textureVertexPositions, numComponents: 2 },
+            texcoord: { data: textureVertexTexCoords, numComponents: 2 },
         }
     },
 ];
@@ -219,10 +214,6 @@ passEncoders.push(rp2);
 webgl.submit({ commandEncoders: [{ passEncoders }] });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(texVertexPosBuffer);
-webgl.deleteBuffer(texVertexTexBuffer);
-webgl.deleteBuffer(vertexPositionBuffer);
-webgl.deleteBuffer(vertexDataBuffer);
 
 webgl.deleteTexture(textures[PROGRAM.TEXTURE]);
 webgl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);

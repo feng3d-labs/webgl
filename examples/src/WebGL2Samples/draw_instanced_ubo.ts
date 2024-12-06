@@ -19,7 +19,6 @@ const vertices = new Float32Array([
     0.3, -0.5,
     0.0, 0.5
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 const transforms = new Float32Array([
     1.0, 0.0, 0.0, 0.0,
@@ -46,7 +45,7 @@ const rp: IGLRenderPass = {
     renderObjects: [{
         pipeline: program,
         vertices: {
-            pos: { buffer: vertexPosBuffer, numComponents: 2 },
+            pos: { data: vertices, numComponents: 2 },
         },
         uniforms: {
             Transform: uniformTransformBuffer,
@@ -59,7 +58,6 @@ const rp: IGLRenderPass = {
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteBuffer(uniformTransformBuffer);
 webgl.deleteBuffer(uniformMaterialBuffer);
 webgl.deleteProgram(program);

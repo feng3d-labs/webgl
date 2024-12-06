@@ -59,7 +59,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const normals = HalfFloat.Float16Array([
         // Front face
@@ -98,7 +97,6 @@ import { getShaderSource, loadImage } from "./utility";
         1, 0, 0,
         1, 0, 0
     ]);
-    const vertexNorBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: normals, usage: "STATIC_DRAW" };
 
     const texCoords = HalfFloat.Float16Array([
         // Front face
@@ -137,7 +135,6 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
 
@@ -155,9 +152,9 @@ import { getShaderSource, loadImage } from "./utility";
 
     const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices: {
-            a_position: { type: "FLOAT", buffer: vertexPosBuffer, numComponents: 3 },
-            a_normal: { type: "HALF_FLOAT", buffer: vertexNorBuffer, numComponents: 3 },
-            a_texCoord: { type: "HALF_FLOAT", buffer: vertexTexBuffer, numComponents: 2 },
+            a_position: { type: "FLOAT", data: positions, numComponents: 3 },
+            a_normal: { type: "HALF_FLOAT", data: normals, numComponents: 3 },
+            a_texCoord: { type: "HALF_FLOAT", data: texCoords, numComponents: 2 },
         },
     };
 
