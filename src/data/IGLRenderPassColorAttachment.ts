@@ -1,4 +1,5 @@
 import { IRenderPassColorAttachment } from "@feng3d/render-api";
+import { IGLRenderbuffer } from "./IGLRenderbuffer";
 import { IGLTextureView } from "./IGLTextureView";
 
 export interface IGLRenderPassColorAttachment extends IRenderPassColorAttachment
@@ -11,5 +12,8 @@ export interface IGLRenderPassColorAttachment extends IRenderPassColorAttachment
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
      */
-    readonly view?: IGLTextureView;
+    readonly view?: IGLColorAttachmentView;
 }
+
+export type IGLColorAttachmentView = IGLRenderbuffer | IGLTextureView;
+

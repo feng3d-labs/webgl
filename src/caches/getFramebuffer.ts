@@ -116,18 +116,17 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
 }
 
 /**
- *
- * @param gl
- * @param passDescriptor
+ * 
+ * @param gl 
+ * @param passDescriptor 
  * @param handleMultisample 处理存在多重采样的渲染通道描述。
- * @returns
+ * @returns 
  */
 export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor, handleMultisample = true)
 {
     if (handleMultisample && passDescriptor?.[_IGLRenderPassDescriptorWithMultisample])
     {
         deleteRenderPassDescriptorWithMultisample(gl, passDescriptor[_IGLRenderPassDescriptorWithMultisample]);
-
         return;
     }
 
@@ -145,5 +144,5 @@ function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, re
     renderPassDescriptorWithMultisample.renderbuffers.forEach((v) =>
     {
         deleteRenderbuffer(gl, v);
-    });
+    })
 }

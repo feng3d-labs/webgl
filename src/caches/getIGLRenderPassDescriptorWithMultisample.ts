@@ -7,11 +7,11 @@ import { IGLTextureView } from "../data/IGLTextureView";
 import { getIGLTextureSize } from "./getIGLTextureSize";
 
 /**
- *
+ * 
  * 当需要渲染到纹理并且开启多重采样时，就必须使用支持多重采样的渲染缓冲区来进行接受中间结果再拷贝到模板纹理上。
- *
+ * 
  * 当`passDescriptor.multisample`值存在时，引擎将会自动创建支持`multisample`的`IGLRenderbuffer`用于接收颜色附件的结果。在渲染通道执行结束后在由`IGLRenderbuffer`拷贝到对应纹理上。
- *
+ * 
  * @param sourcePassDescriptor 需要渲染到纹理并且开启多重采样的渲染通道描述。
  */
 export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: IGLRenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
@@ -34,9 +34,8 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 
             const colorAttachment: IGLRenderPassColorAttachment = {
                 ...v,
-                view: renderbuffer as any,
+                view: renderbuffer,
             };
-
             return colorAttachment;
         }),
         depthStencilAttachment: sourcePassDescriptor.depthStencilAttachment,
@@ -54,7 +53,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
     };
 
     sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as IGLRenderPassDescriptorWithMultisample;
-
+    
     return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 }
 
@@ -73,8 +72,8 @@ function getGLRenderbufferInternalformat(internalformat?: IGLTextureInternalForm
  * {@link IGLTextureInternalFormat} 到 {@link GLRenderbufferInternalformat} 映射关系。
  */
 const internalformatMap: { [key: string]: GLRenderbufferInternalformat } = {
-    RGBA: "RGBA8",
-    RGB: "RGB8",
+    "RGBA": "RGBA8",
+    "RGB": "RGB8",
 };
 
 export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptorWithMultisample";
