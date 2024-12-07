@@ -2,6 +2,7 @@ import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
+import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
 declare global
 {
@@ -50,6 +51,9 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     webGLTexture = gl.createTexture(); // Create a texture object
     gl._textures.set(texture, webGLTexture);
 
+    const { dimension } = texture;
+    const target = getIGLTextureTarget(dimension);
+
     //
     const internalformat = texture.internalformat || defaultTexture.internalformat;
     const storage = texture.storage;
@@ -57,7 +61,6 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     {
         if (storage)
         {
-            const { target } = { ...defaultTexture, ...texture };
             const { levels, width, height, depth } = storage;
 
             gl.bindTexture(gl[target], webGLTexture);
@@ -79,7 +82,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const updateTexture = () =>
     {
-        const { target, generateMipmap, format, type, sources, pixelStore } = { ...defaultTexture, ...texture };
+        const { generateMipmap, format, type, sources, pixelStore } = { ...defaultTexture, ...texture };
 
         setTexturePixelStore(gl, pixelStore);
         // 绑定纹理
@@ -162,7 +165,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         const { writeTextures } = texture;
         writeTextures?.forEach((v) =>
         {
-            const { target, format, type } = { ...defaultTexture, ...texture };
+            const { format, type } = { ...defaultTexture, ...texture };
             gl.bindTexture(gl[target], webGLTexture);
 
             const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset, cubeTarget } = v;

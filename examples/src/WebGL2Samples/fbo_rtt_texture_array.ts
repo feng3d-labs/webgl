@@ -102,7 +102,7 @@ const w = 16;
 const h = 16;
 
 const texture: IGLTexture = {
-    target: "TEXTURE_2D_ARRAY",
+    dimension:"2d-array",
     internalformat: "RGBA",
     format: "RGBA",
     type: "UNSIGNED_BYTE",

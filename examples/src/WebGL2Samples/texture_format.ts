@@ -157,7 +157,6 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {
-                target: "TEXTURE_2D",
                 pixelStore: {
                     unpackFlipY: false,
                 },

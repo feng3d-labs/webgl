@@ -123,7 +123,6 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
-            target: "TEXTURE_2D",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
@@ -136,7 +135,6 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.TOP_RIGHT] = {
-            target: "TEXTURE_2D",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
@@ -151,7 +149,6 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_LEFT] = {
-            target: "TEXTURE_2D",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",
@@ -166,7 +163,6 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_RIGHT] = {
-            target: "TEXTURE_2D",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",

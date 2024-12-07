@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -64,7 +64,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         texture = {
-            target: "TEXTURE_2D_ARRAY",
+            dimension: "2d-array",
             internalformat: "RGBA",
             format: "RGBA",
             type: "UNSIGNED_BYTE",

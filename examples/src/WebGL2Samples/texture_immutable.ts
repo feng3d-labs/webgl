@@ -82,7 +82,6 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init 2D Texture
         const texture2D: IGLTexture = {
-            target: "TEXTURE_2D",
             pixelStore: {
                 unpackFlipY: false,
             },
@@ -168,7 +167,7 @@ import { getShaderSource, loadImage } from "./utility";
         }
 
         const texture3D: IGLTexture = {
-            target: "TEXTURE_3D",
+            dimension:"3d",
             internalformat: "R8",
             format: "RED",
             type: "UNSIGNED_BYTE",

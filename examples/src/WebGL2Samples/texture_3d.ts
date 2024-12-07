@@ -79,7 +79,7 @@ import { getShaderSource } from "./utility";
     }
 
     const texture: IGLTexture = {
-        target: "TEXTURE_3D",
+        dimension: "3d",
         internalformat: "R8",
         format: "RED",
         type: "UNSIGNED_BYTE",

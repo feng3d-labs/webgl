@@ -102,7 +102,7 @@ const w = 16;
 const h = 16;
 
 const texture: IGLTexture = {
-    target: "TEXTURE_2D_ARRAY",
+    dimension:"2d-array",
     sources: [{ width: w, height: h, level: 0, depth: 3 }],
     internalformat: "RGB8",
     format: "RGB",

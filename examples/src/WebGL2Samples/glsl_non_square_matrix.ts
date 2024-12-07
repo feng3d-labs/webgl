@@ -47,7 +47,6 @@ loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
     const texture: IGLTexture = {
-        target: "TEXTURE_2D",
         pixelStore: {
             unpackFlipY: false,
         },

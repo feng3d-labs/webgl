@@ -14,13 +14,6 @@ export type IGLTextureLike = IGLCanvasTexture | IGLTexture;
 export interface IGLTexture extends ITexture
 {
     /**
-     * 纹理绑定点。
-     *
-     * 默认"TEXTURE_2D"。
-     */
-    readonly target?: GLTextureTarget;
-
-    /**
      * 纹理资源。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D

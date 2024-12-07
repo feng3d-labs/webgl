@@ -55,7 +55,6 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         texture = {
-            target: "TEXTURE_2D",
             internalformat: "SRGB8",
             format: "RGB",
             type: "UNSIGNED_BYTE",
