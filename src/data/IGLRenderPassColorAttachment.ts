@@ -15,4 +15,4 @@ export interface IGLRenderPassColorAttachment extends IRenderPassColorAttachment
     readonly view?: IGLAttachmentView;
 }
 
-export type IGLAttachmentView = IGLRenderbuffer | IGLTextureView;
+export type IGLAttachmentView = IGLTextureView;

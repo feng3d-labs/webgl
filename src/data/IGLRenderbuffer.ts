@@ -3,6 +3,27 @@
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
+ *
+ * 注：IGLRenderbuffer 不提供给用户使用。如需使用请使用 IGLTextureView 代替。
+ *
+ * ```
+ *     const colorRenderbuffer: IGLRenderbuffer = {
+        internalformat: "RGBA4",
+        width: FRAMEBUFFER_SIZE.x,
+        height: FRAMEBUFFER_SIZE.y,
+    };
+ * ```
+    例如上面的可用以下代替
+    ```
+    const colorRenderbuffer: IGLTextureView = {
+        texture: {
+            internalformat: "RGBA4",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
+        }
+    };
+    ```
  */
 export interface IGLRenderbuffer
 {

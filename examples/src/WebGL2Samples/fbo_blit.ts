@@ -1,4 +1,4 @@
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLRenderbuffer, IGLSampler, IGLTexture, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLTexture, IGLTextureView, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -75,10 +75,19 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         magFilter: "LINEAR",
     };
 
-    const colorRenderbuffer: IGLRenderbuffer = {
-        internalformat: "RGBA4",
-        width: FRAMEBUFFER_SIZE.x,
-        height: FRAMEBUFFER_SIZE.y,
+    // 此处 使用 IGLTextureView 替代 IGLRenderbuffer
+    // const colorRenderbuffer: IGLRenderbuffer = {
+    //     internalformat: "RGBA4",
+    //     width: FRAMEBUFFER_SIZE.x,
+    //     height: FRAMEBUFFER_SIZE.y,
+    // };
+    const colorRenderbuffer: IGLTextureView = {
+        texture: {
+            internalformat: "RGBA4",
+            format: "RGBA",
+            type: "UNSIGNED_BYTE",
+            sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
+        }
     };
 
     const vertexArray: { vertices?: IGLVertexAttributes } = {
@@ -194,7 +203,6 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     // Delete WebGL resources
     webgl.deleteFramebuffer(fboRenderPass.descriptor);
     webgl.deleteFramebuffer(framebufferResolve);
-    webgl.deleteRenderbuffer(colorRenderbuffer);
     webgl.deleteTexture(textureDiffuse);
     webgl.deleteTexture(textureColorBuffer);
     webgl.deleteProgram(program);

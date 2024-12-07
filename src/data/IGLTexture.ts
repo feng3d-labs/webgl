@@ -1,3 +1,4 @@
+import { ITextureView } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 import { IGLTextureStorage } from "./IGLTextureStorage";
@@ -10,22 +11,12 @@ export type IGLTextureLike = IGLCanvasTexture | IGLTexture;
 /**
  * 纹理视图。
  */
-export interface IGLTextureView
+export interface IGLTextureView extends ITextureView
 {
     /**
      * 纹理。
      */
     readonly texture: IGLTexture,
-
-    /**
-     * mipmap级别。
-     */
-    readonly baseMipLevel: number;
-
-    /**
-     * 纹理数组中的层次。
-     */
-    readonly baseArrayLayer?: number;
 }
 
 /**
