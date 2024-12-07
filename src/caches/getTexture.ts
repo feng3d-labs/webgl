@@ -108,7 +108,14 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     }
                     else
                     {
-                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                        if (gl instanceof WebGL2RenderingContext)
+                        {
+                            gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                        }
+                        else
+                        {
+                            gl.texImage2D(gl[bindTarget], level, gl[format], gl[format], gl[type], source);
+                        }
                     }
                 }
                 else
@@ -120,7 +127,14 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     }
                     else
                     {
-                        gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                        if (gl instanceof WebGL2RenderingContext)
+                        {
+                            gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                        }
+                        else
+                        {
+                            gl.texImage2D(gl[bindTarget], level, gl[format], width, height, border, gl[format], gl[type], pixels);
+                        }
                     }
                 }
             }
