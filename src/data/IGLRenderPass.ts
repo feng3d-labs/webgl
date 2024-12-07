@@ -1,3 +1,4 @@
+import { IRenderPass } from "@feng3d/render-api";
 import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 import { IGLRenderObject } from "./IGLRenderObject";
 import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
@@ -9,7 +10,7 @@ import { IGLViewport } from "./IGLViewport";
  *
  * 包含渲染通道描述以及需要渲染的对象列表。
  */
-export interface IGLRenderPass
+export interface IGLRenderPass extends IRenderPass
 {
     /**
      * 数据类型。

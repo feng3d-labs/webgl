@@ -1,3 +1,4 @@
+import { ICommandEncoder } from "@feng3d/render-api";
 import { IGLBlitFramebuffer } from "./IGLBlitFramebuffer";
 import { IGLCopyBufferToBuffer } from "./IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./IGLCopyTextureToTexture";
@@ -6,7 +7,7 @@ import { IGLRenderPass } from "./IGLRenderPass";
 /**
  * 命令编码器。
  */
-export interface IGLCommandEncoder
+export interface IGLCommandEncoder extends ICommandEncoder
 {
     /**
      * 通道编码器列表。
