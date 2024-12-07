@@ -34,6 +34,8 @@ export * from "./data/IGLUniforms";
 export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 
+export * from "./caches/getWebGLBuffer";
+
 export * from "./runs/getIGLBuffer";
 export * from "./runs/runColorTargetStates";
 export * from "./runs/runDrawCall";

@@ -21,7 +21,7 @@ export interface IGLPrimitiveState
     topology?: IGLDrawMode;
 
     /**
-     * 
+     *
      */
     cullFace?: IGLCullFace;
 }
