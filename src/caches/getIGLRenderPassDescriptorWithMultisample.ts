@@ -1,3 +1,4 @@
+import { ITextureFormat } from "@feng3d/render-api";
 import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
@@ -5,6 +6,7 @@ import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { IGLTextureInternalFormat } from "../data/IGLTexture";
 import { IGLTextureView } from "../data/IGLTextureView";
 import { getIGLTextureSize } from "./getIGLTextureSize";
+import { getIGLTextureFormats } from "./getIGLTextureFormats";
 
 /**
  * 
@@ -26,7 +28,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
             const renderbuffer: IGLRenderbuffer = {
-                internalformat: getGLRenderbufferInternalformat((v.view as IGLTextureView).texture.internalformat),
+                internalformat: getGLRenderbufferInternalformat((v.view as IGLTextureView).texture.format),
                 width: textureSize[0],
                 height: textureSize[1],
             };
@@ -53,28 +55,16 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
     };
 
     sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as IGLRenderPassDescriptorWithMultisample;
-    
+
     return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 }
 
-function getGLRenderbufferInternalformat(internalformat?: IGLTextureInternalFormat)
+function getGLRenderbufferInternalformat(format?: ITextureFormat)
 {
-    if (!internalformat) return "RGBA8";
+    const { internalformat } = getIGLTextureFormats(format);
 
-    const renderbufferInternalformat = internalformatMap[internalformat];
-
-    console.assert(!!renderbufferInternalformat, `没有找到 ${internalformat} 到 GLRenderbufferInternalformat 的映射值！`);
-
-    return renderbufferInternalformat;
+    return internalformat as GLRenderbufferInternalformat;
 }
-
-/**
- * {@link IGLTextureInternalFormat} 到 {@link GLRenderbufferInternalformat} 映射关系。
- */
-const internalformatMap: { [key: string]: GLRenderbufferInternalformat } = {
-    "RGBA": "RGBA8",
-    "RGB": "RGB8",
-};
 
 export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptorWithMultisample";
 

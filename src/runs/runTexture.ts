@@ -7,7 +7,7 @@ import { runSampler } from "./runSampler";
 export const defaultImageSource: IGLImageSource = { level: 0, source: new ImageData(1, 1) };
 export const defaultBufferSource: IGLBufferSource = { level: 0, width: 1, height: 1, depth: 1, border: 0 };
 export const defaultTextureSources: IGLTextureSource[] = [defaultBufferSource];
-export const defaultTexture: IGLTexture = { generateMipmap: false, internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" };
+export const defaultTexture: IGLTexture = { generateMipmap: false};
 
 Object.freeze(defaultImageSource);
 Object.freeze(defaultBufferSource);

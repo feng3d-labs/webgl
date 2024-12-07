@@ -51,9 +51,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureDiffuse: IGLTexture = {
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         pixelStore: {
             unpackFlipY: true,
         },
@@ -65,9 +63,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureColorBuffer: IGLTexture = {
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0 }],
     };
     const samplerColorBuffer: IGLSampler = {

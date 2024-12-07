@@ -17,9 +17,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         pixelStore: {
             unpackFlipY: false,
         },
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
     };
     const sampler: IGLSampler = {
         minFilter: "LINEAR",

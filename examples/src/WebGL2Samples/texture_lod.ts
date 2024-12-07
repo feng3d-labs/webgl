@@ -123,9 +123,7 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
         };
@@ -135,23 +133,19 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.TOP_RIGHT] = {
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
         };
         samplers[Corners.TOP_RIGHT] = {
             minFilter: "LINEAR_MIPMAP_LINEAR",
             magFilter: "LINEAR",
-            lodMinClamp: 0,
-            lodMaxClamp: 0,
+            lodMinClamp: 3.0,
+            lodMaxClamp: 3.0,
         };
 
         textures[Corners.BOTTOM_LEFT] = {
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
         };
@@ -163,9 +157,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_RIGHT] = {
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
         };

@@ -106,9 +106,7 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Init 2D Texture
             texture = {
-                internalformat: "RGB8",
-                format: "RGB",
-                type: "UNSIGNED_BYTE",
+                format: "rgba8unorm",
                 pixelStore: { unpackFlipY: false },
                 storage: { levels: 1, width: 256, height: 256 },
                 writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],

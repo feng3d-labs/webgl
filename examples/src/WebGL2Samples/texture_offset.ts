@@ -75,9 +75,7 @@ import { getShaderSource, loadImage } from "./utility";
             pixelStore: {
                 unpackFlipY: false,
             },
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             sources: [{ level: 0, source: image }],
         };
         const sampler: IGLSampler = {

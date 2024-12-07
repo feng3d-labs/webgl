@@ -75,17 +75,13 @@ const quadVertexArray: { vertices?: IGLVertexAttributes } = {
 // -- Initialize texture targets
 
 const color1Texture: IGLTexture = {
-    internalformat: "RGBA",
-    format: "RGBA",
-    type: "UNSIGNED_BYTE",
+    format: "rgba8unorm",
     sources: [{ width: windowSize.x, height: windowSize.y }],
 };
 const color1Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 const color2Texture: IGLTexture = {
-    internalformat: "RGBA",
-    format: "RGBA",
-    type: "UNSIGNED_BYTE",
+    format: "rgba8unorm",
     sources: [{ width: windowSize.x, height: windowSize.y }],
 };
 const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };

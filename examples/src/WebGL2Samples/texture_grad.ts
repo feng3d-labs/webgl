@@ -128,9 +128,7 @@ import { getShaderSource, loadImage } from "./utility";
             pixelStore: {
                 unpackFlipY: false,
             },
-            internalformat: "RGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             storage: { levels: 1, width: 512, height: 512 },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }]
         };

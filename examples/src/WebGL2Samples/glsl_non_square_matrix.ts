@@ -50,9 +50,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         pixelStore: {
             unpackFlipY: false,
         },
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         sources: [{ source: image, level: 0 }]
     };
     const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };

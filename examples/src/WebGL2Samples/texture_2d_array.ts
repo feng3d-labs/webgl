@@ -65,9 +65,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init Texture
         texture = {
             dimension: "2d-array",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm",
             sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, depth: NUM_IMAGES, border: 0, pixels }],
         };
         sampler = {

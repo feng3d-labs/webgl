@@ -55,9 +55,7 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         texture = {
-            internalformat: "SRGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE",
+            format: "rgba8unorm-srgb",
             sources: [{ level: 0, source: image }],
         };
         sampler = { minFilter: "NEAREST", magFilter: "NEAREST" };

@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITextureFormat } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -93,60 +94,42 @@ import { getShaderSource, loadImage } from "./utility";
             MAX: 9
         };
 
-        const textureFormats: { internalFormat: IGLTextureInternalFormat, format: IGLTextureFormat, type: IGLTextureDataType }[] = new Array(TextureTypes.MAX);
+        const textureFormats: { format: ITextureFormat }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
-            internalFormat: "RGB",
-            format: "RGB",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB8] = {
-            internalFormat: "RGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB16F] = {
-            internalFormat: "RGB16F",
-            format: "RGB",
-            type: "HALF_FLOAT"
+            format: "rgba16float",
         };
 
         textureFormats[TextureTypes.RGBA32F] = {
-            internalFormat: "RGBA32F",
-            format: "RGBA",
-            type: "FLOAT"
+            format: "rgba32float",
         };
 
         textureFormats[TextureTypes.R16F] = {
-            internalFormat: "R16F",
-            format: "RED",
-            type: "HALF_FLOAT"
+            format: "r16float",
         };
 
         textureFormats[TextureTypes.RG16F] = {
-            internalFormat: "RG16F",
-            format: "RG",
-            type: "HALF_FLOAT"
+            format: "rg16float",
         };
 
         textureFormats[TextureTypes.RGBA] = {
-            internalFormat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB8UI] = {
-            internalFormat: "RGB8UI",
-            format: "RGB_INTEGER",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8uint",
         };
 
         textureFormats[TextureTypes.RGBA8UI] = {
-            internalFormat: "RGBA8UI",
-            format: "RGBA_INTEGER",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8uint",
         };
 
         // -- Init Texture
@@ -160,9 +143,9 @@ import { getShaderSource, loadImage } from "./utility";
                 pixelStore: {
                     unpackFlipY: false,
                 },
-                internalformat: textureFormats[i].internalFormat,
+                // internalformat: textureFormats[i].internalformat,
                 format: textureFormats[i].format,
-                type: textureFormats[i].type,
+                // type: textureFormats[i].type,
                 sources: [{ level: 0, source: image }],
             };
             samplers[i] = {

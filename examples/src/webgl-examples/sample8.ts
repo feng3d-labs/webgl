@@ -326,7 +326,7 @@ function initBuffers()
 function initTexture(): IGLSamplerTexture
 {
     const texture: IGLTexture = {
-        internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         sources: [{ width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
     };
     const sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };

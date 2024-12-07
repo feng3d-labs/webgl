@@ -101,9 +101,7 @@ loadImage(imageUrl, function (image)
 {
     texture = {
         sources: [{ source: image, level: 0 }],
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         generateMipmap: true,
     };
 

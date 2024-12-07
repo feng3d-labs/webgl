@@ -66,8 +66,7 @@ import { getShaderSource, loadImage } from "./utility";
                 unpackSkipRows: image.width / 4,
                 unpackFlipY: false,
             },
-            internalformat: "RGBA",
-            format: "RGBA",
+            format: "rgba8unorm",
             sources: [{ level: 0, width: image.width / 2, height: image.height / 2, pixels }]
         };
         const sampler: IGLSampler = {

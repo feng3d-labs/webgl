@@ -104,9 +104,7 @@ const h = 16;
 const texture: IGLTexture = {
     dimension:"2d-array",
     sources: [{ width: w, height: h, level: 0, depth: 3 }],
-    internalformat: "RGB8",
-    format: "RGB",
-    type: "UNSIGNED_BYTE",
+    format: "rgba8unorm",
 };
 const sampler: IGLSampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" };
 

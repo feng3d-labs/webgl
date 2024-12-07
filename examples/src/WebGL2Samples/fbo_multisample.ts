@@ -70,7 +70,7 @@ const FRAMEBUFFER_SIZE = {
     y: canvas.height
 };
 const texture: IGLTexture = {
-    internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
+    format: "rgba8unorm",
     sources: [{ level: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0, pixels: null }],
 };
 const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };

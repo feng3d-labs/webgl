@@ -46,27 +46,6 @@ export interface IGLTexture extends ITexture
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
      */
     readonly pixelStore?: IGLTexturePixelStore;
-
-    /**
-     * 内部纹理格式。
-     *
-     * 默认 "RGBA"。
-     */
-    readonly internalformat?: IGLTextureInternalFormat,
-
-    /**
-     * 纹理格式。
-     *
-     * 默认 "RGBA"。
-     */
-    readonly format?: IGLTextureFormat;
-
-    /**
-     * 数据类型。
-     *
-     * 默认 "UNSIGNED_BYTE"。
-     */
-    readonly type?: IGLTextureDataType;
 }
 
 /**

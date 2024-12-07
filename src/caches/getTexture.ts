@@ -2,6 +2,7 @@ import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
+import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
 declare global
@@ -51,11 +52,12 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     webGLTexture = gl.createTexture(); // Create a texture object
     gl._textures.set(texture, webGLTexture);
 
-    const { dimension } = texture;
+    const { dimension, format: format0 } = texture;
     const target = getIGLTextureTarget(dimension);
+    const textureFormat = getIGLTextureFormats(format0);
+    const { internalformat, format, type } = textureFormat;
 
     //
-    const internalformat = texture.internalformat || defaultTexture.internalformat;
     const storage = texture.storage;
     if (gl instanceof WebGL2RenderingContext)
     {
@@ -82,7 +84,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const updateTexture = () =>
     {
-        const { generateMipmap, format, type, sources, pixelStore } = { ...defaultTexture, ...texture };
+        const { generateMipmap, sources, pixelStore } = { ...defaultTexture, ...texture };
 
         setTexturePixelStore(gl, pixelStore);
         // 绑定纹理
@@ -158,14 +160,13 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     };
     updateTexture();
     watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
-    watcher.watchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
+    watcher.watchs(texture, ["sources", "generateMipmap"], updateTexture);
 
     const writeTexture = () =>
     {
         const { writeTextures } = texture;
         writeTextures?.forEach((v) =>
         {
-            const { format, type } = { ...defaultTexture, ...texture };
             gl.bindTexture(gl[target], webGLTexture);
 
             const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset, cubeTarget } = v;
@@ -247,7 +248,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     webGLTexture.destroy = () =>
     {
         watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
-        watcher.unwatchs(texture, ["sources", "generateMipmap", "internalformat", "format", "type"], updateTexture);
+        watcher.unwatchs(texture, ["sources", "generateMipmap"], updateTexture);
         watcher.unwatch(texture, "writeTextures", writeTexture);
     };
 

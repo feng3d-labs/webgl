@@ -118,9 +118,7 @@ let texture: IGLTexture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        format: "rgba8unorm",
         sources: [{ source: image, level: 0 }],
         generateMipmap: true,
     };

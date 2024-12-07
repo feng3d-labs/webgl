@@ -77,9 +77,7 @@ const quadVertexArray: { vertices?: IGLVertexAttributes } = {
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
 const depthTexture: IGLTexture = {
     sources: [{ width: windowSize.x, height: windowSize.y, level: 0 }],
-    internalformat: "DEPTH_COMPONENT16",
-    format: "DEPTH_COMPONENT",
-    type: "UNSIGNED_SHORT",
+    format: "depth16unorm",
 };
 const depthSampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 

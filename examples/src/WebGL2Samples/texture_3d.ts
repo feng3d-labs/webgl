@@ -80,9 +80,7 @@ import { getShaderSource } from "./utility";
 
     const texture: IGLTexture = {
         dimension: "3d",
-        internalformat: "R8",
-        format: "RED",
-        type: "UNSIGNED_BYTE",
+        format: "r8unorm",
         generateMipmap: true,
         sources: [{ level: 0, width: SIZE, height: SIZE, depth: SIZE, border: 0, pixels: data }],
     };
