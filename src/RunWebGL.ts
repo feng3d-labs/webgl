@@ -126,7 +126,7 @@ export class RunWebGL
         {
             if (renderObject.__type === "Viewport")
             {
-                runViewPort(gl, renderObject)
+                runViewPort(gl, renderObject);
             }
             else if (renderObject.__type === "ScissorRect")
             {
@@ -178,7 +178,6 @@ export class RunWebGL
             });
         }
     }
-
 
     private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBufferToBuffer)
     {
