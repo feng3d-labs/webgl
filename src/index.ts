@@ -29,6 +29,7 @@ export * from "./data/IGLSubmit";
 export * from "./data/IGLTexture";
 export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTextureStorage";
+export * from "./data/IGLTextureView";
 export * from "./data/IGLTransformFeedback";
 export * from "./data/IGLUniforms";
 export * from "./data/IGLVertexAttributes";

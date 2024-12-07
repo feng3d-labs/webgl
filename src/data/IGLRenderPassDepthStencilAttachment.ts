@@ -1,4 +1,4 @@
-import { IGLAttachmentView } from "./IGLRenderPassColorAttachment";
+import { IGLTextureView } from "./IGLTextureView";
 
 /**
  * 深度模板附件。
@@ -13,7 +13,7 @@ export interface IGLRenderPassDepthStencilAttachment
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferRenderbuffer
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/framebufferTexture2D
      */
-    readonly view?: IGLAttachmentView;
+    readonly view?: IGLTextureView;
 
     /**
      * 清除后填充深度值。

@@ -1,4 +1,4 @@
-import { ITextureView } from "@feng3d/render-api";
+import { ITexture, ITextureView } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 import { IGLTextureStorage } from "./IGLTextureStorage";
@@ -9,20 +9,9 @@ import { IGLTextureStorage } from "./IGLTextureStorage";
 export type IGLTextureLike = IGLCanvasTexture | IGLTexture;
 
 /**
- * 纹理视图。
- */
-export interface IGLTextureView extends ITextureView
-{
-    /**
-     * 纹理。
-     */
-    readonly texture: IGLTexture,
-}
-
-/**
  * 纹理
  */
-export interface IGLTexture
+export interface IGLTexture extends ITexture
 {
     /**
      * 纹理绑定点。

@@ -13,7 +13,7 @@ import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachmen
 import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
 import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLSubmit } from "./data/IGLSubmit";
-import { IGLTextureView } from "./data/IGLTexture";
+import { IGLTextureView } from "./data/IGLTextureView";
 import { runFramebuffer } from "./runs/runFramebuffer";
 import { runOcclusionQuery } from "./runs/runOcclusionQuery";
 import { runRenderObject } from "./runs/runRenderObject";

@@ -2,13 +2,13 @@ import { IGLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/IGLBlitFrame
 import { IGLCopyTextureToTexture, IGLImageCopyTexture } from "../data/IGLCopyTextureToTexture";
 import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDepthStencilAttachment } from "../data/IGLRenderPassDepthStencilAttachment";
-import { IGLTextureView } from "../data/IGLTexture";
+import { IGLTextureView } from "../data/IGLTextureView";
 
 /**
  * 通过 IGLBlitFramebuffer 实现纹理之间拷贝并不靠谱。
- * 
+ *
  * @param copyTextureToTexture GL纹理之间拷贝。
- * @returns 
+ * @returns
  */
 export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToTexture)
 {
@@ -17,7 +17,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToText
     const sourceAspect = source.aspect || "all";
     const destinationAspect = destination.aspect || "all";
 
-    console.assert(sourceAspect === destinationAspect, `拷贝纹理时两个纹理的 aspect 必须相同！`)
+    console.assert(sourceAspect === destinationAspect, `拷贝纹理时两个纹理的 aspect 必须相同！`);
 
     const sourceColorAttachments: IGLRenderPassColorAttachment[] = [];
     let sourceDepthStencilAttachment: IGLRenderPassDepthStencilAttachment;
@@ -77,5 +77,6 @@ function getIGLTextureView(source: IGLImageCopyTexture)
         baseMipLevel: source.mipLevel,
         baseArrayLayer: source.origin?.[2],
     };
+
     return textureView;
 }
