@@ -49,6 +49,8 @@ export type IGLTextureSource = IGLImageSource | IGLBufferSource;
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texImage3D
+ * 
+ * 注：不再支持参数 `border`
  */
 export interface IGLImageSource
 {
@@ -85,11 +87,6 @@ export interface IGLImageSource
      * WebGL2 支持。
      */
     depthOrArrayLayers?: number;
-
-    /**
-     * WebGL2支持
-     */
-    border?: number;
 }
 
 /**

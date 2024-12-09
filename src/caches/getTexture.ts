@@ -128,10 +128,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
                 if ("source" in sourceItem)
                 {
-                    const { level, source, width, height, border } = sourceItem;
+                    const { level, source, width, height } = sourceItem;
                     if (width && height)
                     {
-                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], source);
+                        (gl as any as WebGL2RenderingContext).texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], source);
                     }
                     else
                     {
