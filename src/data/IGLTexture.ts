@@ -113,17 +113,13 @@ export interface IGLBufferSource
 
     /**
      * 纹理宽度。
-     *
-     * 默认为 1。
      */
-    width?: number,
+    width: number,
 
     /**
      * 纹理高度。
-     *
-     * 默认为 1。
      */
-    height?: number,
+    height: number,
 
     /**
      * 纹理深度，默认为 1。

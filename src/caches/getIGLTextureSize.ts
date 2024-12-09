@@ -1,4 +1,4 @@
-import { getTexImageSourceSize } from "@feng3d/render-api";
+import { getTexImageSourceSize, IImageSize, ITextureSize } from "@feng3d/render-api";
 import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "@feng3d/webgl";
 
 export function getIGLTextureSize(glTexture: IGLTexture)
@@ -6,59 +6,56 @@ export function getIGLTextureSize(glTexture: IGLTexture)
     if (glTexture.size) return glTexture.size;
 
     //
-    const sources = glTexture.sources;
-    if (sources)
-    {
-        const sourcesSize = getIGLTextureSourcesSize(glTexture.sources);
-        if (sourcesSize)
-        {
-            return sourcesSize;
-        }
-    }
-
-    return undefined;
+    const sourcesSize = getIGLTextureSourcesSize(glTexture.sources);
+    return sourcesSize;
 }
 
-export function getIGLTextureSourcesSize(sources: IGLTextureSource[])
+export function getIGLTextureSourcesSize(sources?: IGLTextureSource[]): ITextureSize
 {
+    if (!sources) return undefined;
+
+    let width: number;
+    let height: number;
+    let maxDepthOrArrayLayers: number = 0;
+    //
     for (let i = 0; i < sources.length; i++)
     {
         const element = sources[i];
         // 取mipmap为0位置的资源
         if (!element.level)
         {
-            const size = getIGLTextureSourceSize(sources[i]);
-            return size;
+            //
+            const sourceSize = getIGLTextureSourceSize(element);
+            if (width || height)
+            {
+                console.assert(width === sourceSize[0] && height === sourceSize[1], `纹理资源中提供的尺寸不正确！`);
+            }
+            else
+            {
+                width = sourceSize[0];
+                height = sourceSize[1];
+            }
+
+            if (element.depthOrArrayLayers)
+            {
+                maxDepthOrArrayLayers = Math.max(maxDepthOrArrayLayers, element.depthOrArrayLayers);
+            }
         }
     }
 
-    return undefined;
+    return [width, height, maxDepthOrArrayLayers + 1]; // 总深度比最大深度大1
 }
 
-function getIGLTextureSourceSize(glTextureSource: IGLTextureSource)
+function getIGLTextureSourceSize(glTextureSource: IGLTextureSource): IImageSize
 {
-    const size: [width: number, height?: number, depthOrArrayLayers?: number] = [] as any;
-
-    //
     const glImageSource = glTextureSource as IGLImageSource;
-    const glBufferSource = glTextureSource as IGLBufferSource;
     const source = glImageSource.source;
     if (source)
     {
         const texImageSourceSize = getTexImageSourceSize(source);
-        size[0] = texImageSourceSize[0];
-        size[1] = texImageSourceSize[1];
+        return texImageSourceSize;
     }
-    else 
-    {
-        size[0] = glBufferSource.width;
-        size[1] = glBufferSource.height;
-    }
+    const glBufferSource = glTextureSource as IGLBufferSource;
 
-    if (glTextureSource.depthOrArrayLayers)
-    {
-        size[2] = glTextureSource.depthOrArrayLayers;
-    }
-
-    return size;
+    return [glBufferSource.width, glBufferSource.height];
 }
