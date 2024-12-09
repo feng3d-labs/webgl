@@ -86,13 +86,15 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     {
         const { generateMipmap, sources, pixelStore } = { ...defaultTexture, ...texture };
 
-        setTexturePixelStore(gl, pixelStore);
         // 绑定纹理
         gl.bindTexture(gl[target], webGLTexture);
-
         webGLTexture.textureTarget = target;
 
-        sources?.forEach((sourceItem) =>
+        if (!sources || sources.length) return;
+
+        setTexturePixelStore(gl, pixelStore);
+
+        sources.forEach((sourceItem) =>
         {
             // 设置纹理图片
             if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
@@ -178,11 +180,16 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const writeTexture = () =>
     {
-        const { writeTextures } = texture;
-        writeTextures?.forEach((v) =>
-        {
-            gl.bindTexture(gl[target], webGLTexture);
+        const { generateMipmap, writeTextures, pixelStore } = texture;
 
+        if (!writeTextures || writeTextures.length === 0) return;
+
+        gl.bindTexture(gl[target], webGLTexture);
+
+        setTexturePixelStore(gl, pixelStore);
+
+        writeTextures.forEach((v) =>
+        {
             const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset, cubeTarget } = v;
 
             if (gl instanceof WebGL2RenderingContext)
@@ -252,6 +259,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 }
             }
         });
+        if (generateMipmap)
+        {
+            gl.generateMipmap(gl[target]);
+        }
     };
     writeTexture();
     watcher.watch(texture, "writeTextures", writeTexture);
