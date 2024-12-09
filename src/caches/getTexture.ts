@@ -3,6 +3,7 @@ import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLBufferSource, IGLImageSource, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getIGLTextureSize, getIGLTextureSourcesSize } from "../internal";
+import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
@@ -120,16 +121,16 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             const imageSource = v as IGLImageSource
             if (imageSource.source)
             {
-                const { cubeTarget, level, source, width, height, depthOrArrayLayers } = imageSource;
+                const { level, source, width, height, depthOrArrayLayers } = imageSource;
 
-                writeTextures.push({ cubeTarget, level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, source });
+                writeTextures.push({ level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, source });
             }
             else
             {
                 const imageSource = v as IGLBufferSource;
 
-                const { cubeTarget, level, width, height, depthOrArrayLayers, pixels, pixelsOffset } = imageSource;
-                writeTextures.push({ cubeTarget, level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, pixels, pixelsOffset });
+                const { level, width, height, depthOrArrayLayers, pixels, pixelsOffset } = imageSource;
+                writeTextures.push({ level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, pixels, pixelsOffset });
             }
         });
         texture.writeTextures = writeTextures;
@@ -150,7 +151,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
         writeTextures.forEach((v) =>
         {
-            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, source, pixels, pixelsOffset, cubeTarget } = v;
+            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, source, pixels, pixelsOffset } = v;
 
             if (gl instanceof WebGL2RenderingContext)
             {
@@ -158,7 +159,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 {
                     if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                     {
-                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
+                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                         if (width && height)
                         {
@@ -183,7 +184,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     // eslint-disable-next-line no-lonely-if
                     if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                     {
-                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
+                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                         gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels, pixelsOffset || 0);
                     }
@@ -203,7 +204,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 // eslint-disable-next-line no-lonely-if
                 if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                 {
-                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
+                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+
                     if (source)
                     {
                         gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], source);

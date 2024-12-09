@@ -23,6 +23,7 @@ export interface IGLTexture extends ITexture
      * 写入纹理。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage3D
      */
     writeTextures?: IGLWriteTexture[];
 
@@ -54,11 +55,6 @@ export type IGLTextureSource = IGLImageSource | IGLBufferSource;
  */
 export interface IGLImageSource
 {
-    /**
-     * 当上传CubeMap纹理数据时指定位置。
-     */
-    cubeTarget?: TextureCubeMapTarget;
-
     /**
      * mipmap级别。
      *
@@ -164,10 +160,6 @@ export type TextureCubeMapTarget =
 export interface IGLWriteTexture
 {
     /**
-     * 当上传CubeMap纹理数据时指定位置。
-     */
-    cubeTarget?: TextureCubeMapTarget;
-    /**
      * mipmap级别。
      */
     level: number,
@@ -192,7 +184,7 @@ export interface IGLWriteTexture
      */
     height?: number,
     /**
-     * 写入3D纹理深度。
+     * 写入3D纹理深度或者2D纹理数组的索引又或者CUBE_MAP的面索引。
      */
     depthOrArrayLayers?: number,
     /**
