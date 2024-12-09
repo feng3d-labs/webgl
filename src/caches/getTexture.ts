@@ -299,7 +299,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         {
             if (newValue[0] === oldValue[0]
                 && newValue[1] === oldValue[1]
-                && newValue[2] === oldValue[2]
+                && (newValue[2] || 1) === (oldValue[2] || 1)
             )
             {
                 return;
