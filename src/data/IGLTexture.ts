@@ -80,11 +80,11 @@ export interface IGLImageSource
     height?: number;
 
     /**
-     * 纹理深度，默认为 1。
+     * 纹理深度，默认为 0。
      *
      * WebGL2 支持。
      */
-    depth?: number;
+    depthOrArrayLayers?: number;
 
     /**
      * WebGL2支持
@@ -130,12 +130,10 @@ export interface IGLBufferSource
      *
      * WebGL2 支持。
      */
-    depth?: number;
+    depthOrArrayLayers?: number;
 
     /**
      * 像素数据。
-     *
-     * 默认为 undefined。
      */
     pixels: ArrayBufferView;
 

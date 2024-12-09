@@ -3,15 +3,7 @@ import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "@
 
 export function getIGLTextureSize(glTexture: IGLTexture)
 {
-    let size: [width: number, height?: number, depthOrArrayLayers?: number];
-    if (glTexture.size)
-    {
-        size = [glTexture.size[0], glTexture.size[1]];
-        if (glTexture.size[2])
-        {
-            size.push(glTexture.size[2]);
-        }
-    }
+    if (glTexture.size) return glTexture.size;
 
     //
     const sources = glTexture.sources;
@@ -20,14 +12,14 @@ export function getIGLTextureSize(glTexture: IGLTexture)
         const sourcesSize = getIGLTextureSourcesSize(glTexture.sources);
         if (sourcesSize)
         {
-            size = sourcesSize;
+            return sourcesSize;
         }
     }
 
-    return size;
+    return undefined;
 }
 
-function getIGLTextureSourcesSize(sources: IGLTextureSource[])
+export function getIGLTextureSourcesSize(sources: IGLTextureSource[])
 {
     for (let i = 0; i < sources.length; i++)
     {
@@ -63,9 +55,9 @@ function getIGLTextureSourceSize(glTextureSource: IGLTextureSource)
         size[1] = glBufferSource.height;
     }
 
-    if (glTextureSource.depth)
+    if (glTextureSource.depthOrArrayLayers)
     {
-        size[2] = glTextureSource.depth;
+        size[2] = glTextureSource.depthOrArrayLayers;
     }
 
     return size;

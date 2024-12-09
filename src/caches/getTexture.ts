@@ -1,7 +1,8 @@
+import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
-import { getIGLTextureSize } from "../internal";
+import { getIGLTextureSize, getIGLTextureSourcesSize } from "../internal";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
@@ -61,43 +62,40 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     const textureFormat = getIGLTextureFormats(format0);
     const { internalformat, format, type } = textureFormat;
 
-    // 获取纹理尺寸
-    const size = getIGLTextureSize(texture);
+    //
+    const size = texture.size = getIGLTextureSize(texture);
 
     // 设置纹理尺寸
-    if (size)
+    const [width, height, depth] = size;
+    const mipLevelCount = texture.mipLevelCount || 1;
+    if (gl instanceof WebGL2RenderingContext)
     {
-        const [width, height, depth] = size;
-        const mipLevelCount = texture.mipLevelCount || 1;
-        if (gl instanceof WebGL2RenderingContext)
-        {
 
-            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+        {
+            gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
+        }
+        else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+        {
+            gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
+        }
+        else
+        {
+            console.error(`未处理 ${target} 纹理初始化存储！`);
+        }
+    }
+    else
+    {
+        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+        {
+            for (let i = 0; i < mipLevelCount; i++)
             {
-                gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
-            }
-            else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
-            {
-                gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
-            }
-            else
-            {
-                console.error(`未处理 ${target} 纹理初始化存储！`);
+                gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
             }
         }
         else
         {
-            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
-            {
-                for (let i = 0; i < mipLevelCount; i++)
-                {
-                    gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
-                }
-            }
-            else
-            {
-                console.error(`未处理 ${target} 纹理初始化存储！`);
-            }
+            console.error(`未处理 ${target} 纹理初始化存储！`);
         }
     }
 
@@ -109,10 +107,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         if (!sources || sources.length === 0) return;
 
         // 处理纹理尺寸发生变化。
-        const currentSize = getIGLTextureSize(texture);
+        const currentSize = getIGLTextureSourcesSize(sources);
         if (currentSize[0] !== size[0] || currentSize[1] !== size[1] || currentSize[2] !== size[2])
         {
-            deleteTexture(gl, texture);
+            texture.size = currentSize;
             return;
         }
 
@@ -173,19 +171,19 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 {
                     if ("source" in sourceItem)
                     {
-                        const { level, width, height, depth, source } = sourceItem;
-                        gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], source);
+                        const { level, width, height, depthOrArrayLayers, source } = sourceItem;
+                        gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], source);
                     }
                     else
                     {
-                        const { level, width, height, depth, pixels, srcOffset } = sourceItem;
+                        const { level, width, height, depthOrArrayLayers, pixels, srcOffset } = sourceItem;
                         if (srcOffset)
                         {
-                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], pixels, srcOffset);
+                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], pixels, srcOffset);
                         }
                         else
                         {
-                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], pixels);
+                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], pixels);
                         }
                     }
                 }
@@ -294,14 +292,36 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     writeTexture();
     watcher.watch(texture, "writeTextures", writeTexture);
 
-    // watcher.watch(this as RenderTargetTexture2D, "width", this.invalidate, this);
-    // watcher.watch(this as RenderTargetTexture2D, "height", this.invalidate, this);
+    // 监听纹理尺寸发生变化
+    const resize = (newValue: ITextureSize, oldValue: ITextureSize) =>
+    {
+        if (!!newValue && !!oldValue)
+        {
+            if (newValue[0] === oldValue[0]
+                && newValue[1] === oldValue[1]
+                && newValue[2] === oldValue[2]
+            )
+            {
+                return;
+            }
+        }
+
+        webGLTexture.destroy();
+    };
+    watcher.watch(texture, "size", resize);
 
     webGLTexture.destroy = () =>
     {
+        //
+        gl.deleteTexture(webGLTexture);
+        gl._textures.delete(texture);
+        //
         watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
         watcher.unwatchs(texture, ["sources", "generateMipmap"], updateTexture);
         watcher.unwatch(texture, "writeTextures", writeTexture);
+        watcher.unwatch(texture, "size", resize);
+        //
+        delete webGLTexture.destroy;
     };
 
     return webGLTexture;
@@ -312,11 +332,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;
 
-    gl._textures.delete(texture);
     webGLTexture.destroy();
-    delete webGLTexture.destroy;
-    //
-    gl.deleteTexture(webGLTexture);
 }
 
 /**

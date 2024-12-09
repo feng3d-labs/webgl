@@ -3,10 +3,9 @@ import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
 import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
-import { IGLTextureInternalFormat } from "../data/IGLTexture";
 import { IGLTextureView } from "../data/IGLTextureView";
-import { getIGLTextureSize } from "./getIGLTextureSize";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
+import { getIGLTextureSize } from "./getIGLTextureSize";
 
 /**
  * 

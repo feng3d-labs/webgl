@@ -82,7 +82,7 @@ import { getShaderSource } from "./utility";
         dimension: "3d",
         format: "r8unorm",
         generateMipmap: true,
-        sources: [{ level: 0, width: SIZE, height: SIZE, depth: SIZE, border: 0, pixels: data }],
+        sources: [{ level: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, border: 0, pixels: data }],
     };
     const sampler: IGLSampler = {
         lodMinClamp: 0,
