@@ -171,7 +171,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
+            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
         };
         const sampler3D: IGLSampler = {
             lodMinClamp: 0,

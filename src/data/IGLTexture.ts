@@ -133,7 +133,7 @@ export interface IGLBufferSource
     /**
      * 默认为 0。
      */
-    srcOffset?: number;
+    pixelsOffset?: number;
 }
 
 /**
@@ -194,7 +194,7 @@ export interface IGLWriteTexture
     /**
      * 写入3D纹理深度。
      */
-    depth?: number,
+    depthOrArrayLayers?: number,
     /**
      * 纹理图源数据。
      */
@@ -202,11 +202,11 @@ export interface IGLWriteTexture
     /**
      * 写入像素数据。
      */
-    srcData?: ArrayBufferView,
+    pixels?: ArrayBufferView,
     /**
      * 写入像素数据偏移。
      */
-    srcOffset?: number
+    pixelsOffset?: number
 }
 
 /**

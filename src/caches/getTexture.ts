@@ -1,6 +1,6 @@
 import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
+import { GLTextureTarget, IGLBufferSource, IGLImageSource, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getIGLTextureSize, getIGLTextureSourcesSize } from "../internal";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -102,7 +102,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     // 更新纹理
     const updateTexture = () =>
     {
-        const { generateMipmap, sources, pixelStore } = texture;
+        const { sources } = texture;
 
         if (!sources || sources.length === 0) return;
 
@@ -114,90 +114,25 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             return;
         }
 
-        // 绑定纹理
-        gl.bindTexture(gl[target], webGLTexture);
-
-        setTexturePixelStore(gl, pixelStore);
-
-        sources.forEach((sourceItem) =>
+        const writeTextures = texture.writeTextures || [];
+        sources.forEach((v) =>
         {
-            // 设置纹理图片
-            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+            const imageSource = v as IGLImageSource
+            if (imageSource.source)
             {
-                const bindTarget = target === "TEXTURE_CUBE_MAP" ? sourceItem.cubeTarget : target;
+                const { cubeTarget, level, source, width, height, depthOrArrayLayers } = imageSource;
 
-                if ("source" in sourceItem)
-                {
-                    const { level, source, width, height } = sourceItem;
-                    if (width && height)
-                    {
-                        (gl as any as WebGL2RenderingContext).texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], source);
-                    }
-                    else
-                    {
-                        if (gl instanceof WebGL2RenderingContext)
-                        {
-                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, gl[format], gl[type], source);
-                        }
-                        else
-                        {
-                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, gl[format], gl[type], source);
-                        }
-                    }
-                }
-                else
-                {
-                    const { level, width, height, pixels, srcOffset } = sourceItem;
-                    if (srcOffset)
-                    {
-                        (gl as any as WebGL2RenderingContext).texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels, srcOffset);
-                    }
-                    else
-                    {
-                        if (gl instanceof WebGL2RenderingContext)
-                        {
-                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels);
-                        }
-                        else
-                        {
-                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels);
-                        }
-                    }
-                }
-            }
-            else if (target === "TEXTURE_2D_ARRAY" || target === "TEXTURE_3D")
-            {
-                if (gl instanceof WebGL2RenderingContext)
-                {
-                    if ("source" in sourceItem)
-                    {
-                        const { level, width, height, depthOrArrayLayers, source } = sourceItem;
-                        gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], source);
-                    }
-                    else
-                    {
-                        const { level, width, height, depthOrArrayLayers, pixels, srcOffset } = sourceItem;
-                        if (srcOffset)
-                        {
-                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], pixels, srcOffset);
-                        }
-                        else
-                        {
-                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depthOrArrayLayers, gl[format], gl[type], pixels);
-                        }
-                    }
-                }
+                writeTextures.push({ cubeTarget, level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, source });
             }
             else
             {
-                throw `未处理 ${target}`;
+                const imageSource = v as IGLBufferSource;
+
+                const { cubeTarget, level, width, height, depthOrArrayLayers, pixels, pixelsOffset } = imageSource;
+                writeTextures.push({ cubeTarget, level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, pixels, pixelsOffset });
             }
         });
-
-        if (generateMipmap)
-        {
-            gl.generateMipmap(gl[target]);
-        }
+        texture.writeTextures = writeTextures;
     };
     updateTexture();
     watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
@@ -215,7 +150,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
         writeTextures.forEach((v) =>
         {
-            const { level, xoffset, yoffset, zoffset, width, height, depth, source, srcData, srcOffset, cubeTarget } = v;
+            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, source, pixels, pixelsOffset, cubeTarget } = v;
 
             if (gl instanceof WebGL2RenderingContext)
             {
@@ -236,7 +171,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     }
                     else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                     {
-                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], source);
+                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], source);
                     }
                     else
                     {
@@ -250,11 +185,11 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     {
                         const bindTarget = target === "TEXTURE_CUBE_MAP" ? cubeTarget : target;
 
-                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData, srcOffset || 0);
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels, pixelsOffset || 0);
                     }
                     else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                     {
-                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depth, gl[format], gl[type], srcData, srcOffset || 0);
+                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], pixels, pixelsOffset || 0);
                     }
                     else
                     {
@@ -275,7 +210,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     }
                     else
                     {
-                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], srcData);
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels);
                     }
                 }
                 else
@@ -288,6 +223,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         {
             gl.generateMipmap(gl[target]);
         }
+        texture.writeTextures = null;
     };
     writeTexture();
     watcher.watch(texture, "writeTextures", writeTexture);
