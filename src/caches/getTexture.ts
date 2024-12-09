@@ -61,12 +61,12 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     webGLTexture.textureTarget = target;
 
     //
-    const storage = texture.storage;
+    const size = texture.size;
     if (gl instanceof WebGL2RenderingContext)
     {
-        if (storage)
+        if (size)
         {
-            const { width, height, depth } = storage;
+            const [width, height, depth] = size;
             const mipLevelCount = texture.mipLevelCount || 1;
 
             if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")

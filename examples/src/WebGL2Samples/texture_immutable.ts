@@ -87,7 +87,7 @@ import { getShaderSource, loadImage } from "./utility";
             },
             format: "rgba8unorm",
             mipLevelCount: 1,
-            storage: { width: 512, height: 512 },
+            size: [512, 512],
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
         };
         const sampler2D: IGLSampler = {
@@ -170,7 +170,7 @@ import { getShaderSource, loadImage } from "./utility";
             format: "r8uint",
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
-            storage: { width: SIZE, height: SIZE, depth: SIZE },
+            size: [SIZE, SIZE, SIZE],
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
         };
         const sampler3D: IGLSampler = {

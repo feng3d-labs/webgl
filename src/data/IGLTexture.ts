@@ -21,14 +21,6 @@ export interface IGLTexture extends ITexture
     sources?: IGLTextureSource[];
 
     /**
-     * 初始纹理时指定纹理存储的各个级别。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage2D
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texStorage3D
-     */
-    readonly storage?: IGLTextureStorage;
-
-    /**
      * 写入纹理。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D

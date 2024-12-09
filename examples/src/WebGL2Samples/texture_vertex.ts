@@ -109,7 +109,7 @@ import { getShaderSource, loadImage } from "./utility";
                 format: "rgba8unorm",
                 pixelStore: { unpackFlipY: false },
                 mipLevelCount: 1,
-                storage: { width: 256, height: 256 },
+                size: [256, 256],
                 writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
             };
             sampler = {
