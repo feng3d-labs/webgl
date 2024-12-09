@@ -54,22 +54,23 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const { dimension, format: format0 } = texture;
     const target = getIGLTextureTarget(dimension);
-    const textureFormat = getIGLTextureFormats(format0);
-    const { internalformat, format, type } = textureFormat;
 
     gl.bindTexture(gl[target], webGLTexture);
     webGLTexture.textureTarget = target;
 
+    const textureFormat = getIGLTextureFormats(format0);
+    const { internalformat, format, type } = textureFormat;
+
     // 获取纹理尺寸
     const size = getIGLTextureSize(texture);
 
-    //
-    if (gl instanceof WebGL2RenderingContext)
+    // 设置纹理尺寸
+    if (size)
     {
-        if (size)
+        const [width, height, depth] = size;
+        const mipLevelCount = texture.mipLevelCount || 1;
+        if (gl instanceof WebGL2RenderingContext)
         {
-            const [width, height, depth] = size;
-            const mipLevelCount = texture.mipLevelCount || 1;
 
             if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
@@ -84,13 +85,36 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 console.error(`未处理 ${target} 纹理初始化存储！`);
             }
         }
+        else
+        {
+            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+            {
+                for (let i = 0; i < mipLevelCount; i++)
+                {
+                    gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
+                }
+            }
+            else
+            {
+                console.error(`未处理 ${target} 纹理初始化存储！`);
+            }
+        }
     }
 
+    // 更新纹理
     const updateTexture = () =>
     {
         const { generateMipmap, sources, pixelStore } = texture;
 
         if (!sources || sources.length === 0) return;
+
+        // 处理纹理尺寸发生变化。
+        const currentSize = getIGLTextureSize(texture);
+        if (currentSize[0] !== size[0] || currentSize[1] !== size[1] || currentSize[2] !== size[2])
+        {
+            deleteTexture(gl, texture);
+            return;
+        }
 
         // 绑定纹理
         gl.bindTexture(gl[target], webGLTexture);
