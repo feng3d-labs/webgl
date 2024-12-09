@@ -57,6 +57,9 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     const textureFormat = getIGLTextureFormats(format0);
     const { internalformat, format, type } = textureFormat;
 
+    gl.bindTexture(gl[target], webGLTexture);
+    webGLTexture.textureTarget = target;
+
     //
     const storage = texture.storage;
     if (gl instanceof WebGL2RenderingContext)
@@ -65,8 +68,6 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         {
             const { width, height, depth } = storage;
             const mipLevelCount = texture.mipLevelCount || 1;
-
-            gl.bindTexture(gl[target], webGLTexture);
 
             if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
@@ -87,11 +88,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     {
         const { generateMipmap, sources, pixelStore } = { ...defaultTexture, ...texture };
 
+        if (!sources || sources.length === 0) return;
+
         // 绑定纹理
         gl.bindTexture(gl[target], webGLTexture);
-        webGLTexture.textureTarget = target;
-
-        if (!sources || sources.length) return;
 
         setTexturePixelStore(gl, pixelStore);
 
