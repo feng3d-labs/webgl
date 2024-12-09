@@ -71,7 +71,7 @@ const FRAMEBUFFER_SIZE = {
 };
 const texture: IGLTexture = {
     format: "rgba8unorm",
-    sources: [{ level: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, border: 0, pixels: null }],
+    size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
 };
 const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 

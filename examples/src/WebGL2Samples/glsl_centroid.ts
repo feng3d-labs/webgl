@@ -112,7 +112,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     textures[i] = {
         format: "rgba8unorm",
-        sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, level: 0 }]
+        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };
     samplers[i] = { minFilter: "NEAREST", magFilter: "NEAREST" };
 }

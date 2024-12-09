@@ -143,9 +143,7 @@ import { getShaderSource, loadImage } from "./utility";
                 pixelStore: {
                     unpackFlipY: false,
                 },
-                // internalformat: textureFormats[i].internalformat,
                 format: textureFormats[i].format,
-                // type: textureFormats[i].type,
                 sources: [{ level: 0, source: image }],
             };
             samplers[i] = {

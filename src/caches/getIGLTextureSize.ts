@@ -14,9 +14,19 @@ export function getIGLTextureSize(glTexture: IGLTexture)
     }
 
     //
-    if (glTexture.sources)
+    const sources = glTexture.sources;
+    if (sources)
     {
-        size = getIGLTextureSourceSize(glTexture.sources[0]);
+        for (let i = 0; i < sources.length; i++)
+        {
+            const element = sources[i];
+            // 取mipmap为0位置的资源
+            if (!element.level)
+            {
+                size = getIGLTextureSourceSize(sources[i]);
+                break;
+            }
+        }
     }
 
     return size;

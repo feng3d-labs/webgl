@@ -51,7 +51,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             unpackFlipY: false,
         },
         format: "rgba8unorm",
-        sources: [{ source: image, level: 0 }]
+        sources: [{ source: image }]
     };
     const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 

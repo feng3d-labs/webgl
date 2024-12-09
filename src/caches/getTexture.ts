@@ -1,7 +1,7 @@
 import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
-import { defaultBufferSource, defaultImageSource, defaultTexture } from "../runs/runTexture";
+import { getIGLTextureSize } from "../internal";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
@@ -60,8 +60,10 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     gl.bindTexture(gl[target], webGLTexture);
     webGLTexture.textureTarget = target;
 
+    // 获取纹理尺寸
+    const size = getIGLTextureSize(texture);
+
     //
-    const size = texture.size;
     if (gl instanceof WebGL2RenderingContext)
     {
         if (size)
@@ -86,7 +88,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const updateTexture = () =>
     {
-        const { generateMipmap, sources, pixelStore } = { ...defaultTexture, ...texture };
+        const { generateMipmap, sources, pixelStore } = texture;
 
         if (!sources || sources.length === 0) return;
 
@@ -104,7 +106,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
                 if ("source" in sourceItem)
                 {
-                    const { level, source, width, height, border } = { ...defaultImageSource, ...sourceItem };
+                    const { level, source, width, height, border } = sourceItem;
                     if (width && height)
                     {
                         (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], source);
@@ -113,30 +115,30 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     {
                         if (gl instanceof WebGL2RenderingContext)
                         {
-                            gl.texImage2D(gl[bindTarget], level, gl[internalformat], gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, gl[format], gl[type], source);
                         }
                         else
                         {
-                            gl.texImage2D(gl[bindTarget], level, gl[format], gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, gl[format], gl[type], source);
                         }
                     }
                 }
                 else
                 {
-                    const { level, width, height, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                    const { level, width, height, pixels, srcOffset } = sourceItem;
                     if (srcOffset)
                     {
-                        (gl as any as WebGL2RenderingContext).texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels, srcOffset);
+                        (gl as any as WebGL2RenderingContext).texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels, srcOffset);
                     }
                     else
                     {
                         if (gl instanceof WebGL2RenderingContext)
                         {
-                            gl.texImage2D(gl[bindTarget], level, gl[internalformat], width, height, border, gl[format], gl[type], pixels);
+                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels);
                         }
                         else
                         {
-                            gl.texImage2D(gl[bindTarget], level, gl[format], width, height, border, gl[format], gl[type], pixels);
+                            gl.texSubImage2D(gl[bindTarget], level, 0, 0, width, height, gl[format], gl[type], pixels);
                         }
                     }
                 }
@@ -147,19 +149,19 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 {
                     if ("source" in sourceItem)
                     {
-                        const { level, width, height, depth, border, source } = { ...defaultBufferSource, ...sourceItem };
-                        gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], source);
+                        const { level, width, height, depth, source } = sourceItem;
+                        gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], source);
                     }
                     else
                     {
-                        const { level, width, height, depth, border, pixels, srcOffset } = { ...defaultBufferSource, ...sourceItem };
+                        const { level, width, height, depth, pixels, srcOffset } = sourceItem;
                         if (srcOffset)
                         {
-                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels, srcOffset);
+                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], pixels, srcOffset);
                         }
                         else
                         {
-                            gl.texImage3D(gl[target], level, gl[internalformat], width, height, depth, border, gl[format], gl[type], pixels);
+                            gl.texSubImage3D(gl[target], level, 0, 0, 0, width, height, depth, gl[format], gl[type], pixels);
                         }
                     }
                 }

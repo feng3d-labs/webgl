@@ -13,7 +13,11 @@ const webgl = new WebGL(renderingContext);
 loadImage("../../assets/img/Di-3d.png", (img) =>
 {
     const texture: IGLTexture = {
-        sources: [{ source: img }],
+        // size: [img.width, img.height],
+        sources: [
+            // { width: img.width / 2, height: img.height/2 ,level:1}, 
+            { source: img }],
+        // writeTextures: [{ source: img }],
         pixelStore: {
             unpackFlipY: false,
         },

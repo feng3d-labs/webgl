@@ -76,13 +76,13 @@ const quadVertexArray: { vertices?: IGLVertexAttributes } = {
 
 const color1Texture: IGLTexture = {
     format: "rgba8unorm",
-    sources: [{ width: windowSize.x, height: windowSize.y }],
+    size: [windowSize.x, windowSize.y],
 };
 const color1Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 const color2Texture: IGLTexture = {
     format: "rgba8unorm",
-    sources: [{ width: windowSize.x, height: windowSize.y }],
+    size: [windowSize.x, windowSize.y],
 };
 const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 

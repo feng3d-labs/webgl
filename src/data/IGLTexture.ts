@@ -1,7 +1,6 @@
-import { ITexture, ITextureView } from "@feng3d/render-api";
+import { ITexture } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
-import { IGLTextureStorage } from "./IGLTextureStorage";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
@@ -134,16 +133,11 @@ export interface IGLBufferSource
     depth?: number;
 
     /**
-     * 默认为 0。
-     */
-    border?: number,
-
-    /**
      * 像素数据。
      *
      * 默认为 undefined。
      */
-    pixels?: ArrayBufferView;
+    pixels: ArrayBufferView;
 
     /**
      * 默认为 0。
