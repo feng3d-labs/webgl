@@ -48,74 +48,120 @@ export type IGLTextureSource = IGLImageSource | IGLBufferSource;
 /**
  * 纹理图片资源。
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texImage3D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  * 
  * 注：不再支持参数 `border`
  */
 export interface IGLImageSource
 {
     /**
-     * mipmap级别。
+     * 写入mipmap级别。
      *
      * 默认为 0。
      */
     level?: number,
 
     /**
-     * 纹理图片资源。
+     * 写入x轴偏移。
+     * 
+     * 默认为0。
      */
-    source: TexImageSource
+    xoffset?: number,
 
     /**
+     * 写入Y轴偏移。
+     * 
+     * 默认为0。
+     */
+    yoffset?: number,
+
+    /**
+     * 写入3D纹理时深度偏移。
+     * 
+     * 默认为0。
+     */
+    zoffset?: number;
+
+    /**
+     * 写入宽度。
+     * 
+     * 默认取图片宽度。
+     *
      * WebGL2支持
      */
     width?: number;
 
     /**
+     * 写入高度。
+     * 
+     * 默认取图片高度。
+     *
      * WebGL2支持
      */
     height?: number;
 
     /**
-     * 纹理深度，默认为 0。
+     * 写入纹理深度尺寸，默认为 1。
      *
      * WebGL2 支持。
      */
     depthOrArrayLayers?: number;
+
+    /**
+     * 写入纹理图片资源。
+     */
+    source: TexImageSource
 }
 
 /**
  * 纹理数据资源。
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
 export interface IGLBufferSource
 {
     /**
-     * 当上传CubeMap纹理数据时指定位置。
-     */
-    cubeTarget?: TextureCubeMapTarget;
-
-    /**
-     * mipmap级别
+     * 写入mipmap级别。
      *
      * 默认为 0。
      */
     level?: number,
 
     /**
-     * 纹理宽度。
+     * 写入x轴偏移。
+     * 
+     * 默认为0。
+     */
+    xoffset?: number,
+
+    /**
+     * 写入Y轴偏移。
+     * 
+     * 默认为0。
+     */
+    yoffset?: number,
+
+    /**
+     * 写入3D纹理时深度偏移。
+     * 
+     * 默认为0。
+     */
+    zoffset?: number;
+
+    /**
+     * 写入纹理宽度。
      */
     width: number,
 
     /**
-     * 纹理高度。
+     * 写入纹理高度。
      */
     height: number,
 
     /**
-     * 纹理深度，默认为 1。
+     * 写入纹理深度尺寸，默认为 1。
      *
      * WebGL2 支持。
      */
@@ -133,73 +179,12 @@ export interface IGLBufferSource
 }
 
 /**
- * A GLenum specifying the texture target.
- *
- * gl.TEXTURE_CUBE_MAP_POSITIVE_X: Positive X face for a cube-mapped texture.
- * gl.TEXTURE_CUBE_MAP_NEGATIVE_X: Negative X face for a cube-mapped texture.
- * gl.TEXTURE_CUBE_MAP_POSITIVE_Y: Positive Y face for a cube-mapped texture.
- * gl.TEXTURE_CUBE_MAP_NEGATIVE_Y: Negative Y face for a cube-mapped texture.
- * gl.TEXTURE_CUBE_MAP_POSITIVE_Z: Positive Z face for a cube-mapped texture.
- * gl.TEXTURE_CUBE_MAP_NEGATIVE_Z: Negative Z face for a cube-mapped texture.
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
- */
-export type TextureCubeMapTarget =
-    | "TEXTURE_CUBE_MAP_POSITIVE_X"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
-
-/**
  * 写入纹理。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export interface IGLWriteTexture
-{
-    /**
-     * mipmap级别。
-     */
-    level: number,
-    /**
-     * 写入x轴偏移。
-     */
-    xoffset: number,
-    /**
-     * 写入Y轴偏移。
-     */
-    yoffset: number,
-    /**
-     * 写入3D纹理时深度偏移。
-     */
-    zoffset?: number;
-    /**
-     * 写入宽度。
-     */
-    width?: number,
-    /**
-     * 写入高度。
-     */
-    height?: number,
-    /**
-     * 写入3D纹理深度或者2D纹理数组的索引又或者CUBE_MAP的面索引。
-     */
-    depthOrArrayLayers?: number,
-    /**
-     * 纹理图源数据。
-     */
-    source?: TexImageSource
-    /**
-     * 写入像素数据。
-     */
-    pixels?: ArrayBufferView,
-    /**
-     * 写入像素数据偏移。
-     */
-    pixelsOffset?: number
-}
+export type IGLWriteTexture = IGLImageSource | IGLBufferSource;
 
 /**
  * 纹理绑定点。

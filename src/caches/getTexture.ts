@@ -115,25 +115,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             return;
         }
 
-        const writeTextures = texture.writeTextures || [];
-        sources.forEach((v) =>
-        {
-            const imageSource = v as IGLImageSource
-            if (imageSource.source)
-            {
-                const { level, source, width, height, depthOrArrayLayers } = imageSource;
-
-                writeTextures.push({ level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, source });
-            }
-            else
-            {
-                const imageSource = v as IGLBufferSource;
-
-                const { level, width, height, depthOrArrayLayers, pixels, pixelsOffset } = imageSource;
-                writeTextures.push({ level, xoffset: 0, yoffset: 0, zoffset: 0, width, height, depthOrArrayLayers, pixels, pixelsOffset });
-            }
-        });
-        texture.writeTextures = writeTextures;
+        texture.writeTextures = sources.concat();
     };
     updateTexture();
     watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
@@ -151,7 +133,9 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
         writeTextures.forEach((v) =>
         {
-            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, source, pixels, pixelsOffset } = v;
+            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = v;
+            const { source } = v as IGLImageSource;
+            const { pixels, pixelsOffset } = v as IGLBufferSource;
 
             if (gl instanceof WebGL2RenderingContext)
             {

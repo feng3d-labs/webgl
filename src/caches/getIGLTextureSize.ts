@@ -1,5 +1,5 @@
 import { getTexImageSourceSize, IImageSize, ITextureSize } from "@feng3d/render-api";
-import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "@feng3d/webgl";
+import { IGLImageSource, IGLTexture, IGLTextureSource } from "@feng3d/webgl";
 
 export function getIGLTextureSize(glTexture: IGLTexture)
 {
@@ -16,11 +16,16 @@ export function getIGLTextureSourcesSize(sources?: IGLTextureSource[]): ITexture
 
     let width: number;
     let height: number;
-    let maxDepthOrArrayLayers: number = 0;
+    let maxDepthOrArrayLayers: number = 1;
     //
     for (let i = 0; i < sources.length; i++)
     {
         const element = sources[i];
+        element.level = element.level || 0;
+        element.xoffset = element.xoffset || 0;
+        element.yoffset = element.yoffset || 0;
+        element.zoffset = element.zoffset || 0;
+        element.depthOrArrayLayers = element.depthOrArrayLayers || 1;
         // 取mipmap为0位置的资源
         if (!element.level)
         {
@@ -36,26 +41,25 @@ export function getIGLTextureSourcesSize(sources?: IGLTextureSource[]): ITexture
                 height = sourceSize[1];
             }
 
-            if (element.depthOrArrayLayers)
-            {
-                maxDepthOrArrayLayers = Math.max(maxDepthOrArrayLayers, element.depthOrArrayLayers);
-            }
+            maxDepthOrArrayLayers = Math.max(maxDepthOrArrayLayers, element.zoffset + element.depthOrArrayLayers);
         }
     }
 
-    return [width, height, maxDepthOrArrayLayers + 1]; // 总深度比最大深度大1
+    return [width, height, maxDepthOrArrayLayers]; // 总深度比最大深度大1
 }
 
 function getIGLTextureSourceSize(glTextureSource: IGLTextureSource): IImageSize
 {
-    const glImageSource = glTextureSource as IGLImageSource;
-    const source = glImageSource.source;
-    if (source)
+    if (glTextureSource.width && glTextureSource.height)
     {
-        const texImageSourceSize = getTexImageSourceSize(source);
-        return texImageSourceSize;
+        return [glTextureSource.width, glTextureSource.height]
     }
-    const glBufferSource = glTextureSource as IGLBufferSource;
 
-    return [glBufferSource.width, glBufferSource.height];
+    const glImageSource = glTextureSource as IGLImageSource;
+    const texImageSourceSize = getTexImageSourceSize(glImageSource.source);
+
+    glTextureSource.width = glTextureSource.width || texImageSourceSize[0];
+    glTextureSource.height = glTextureSource.height || texImageSourceSize[1];
+
+    return [glTextureSource.width, glTextureSource.height];
 }
