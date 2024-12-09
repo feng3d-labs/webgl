@@ -86,7 +86,8 @@ import { getShaderSource, loadImage } from "./utility";
                 unpackFlipY: false,
             },
             format: "rgba8unorm",
-            storage: { levels: 1, width: 512, height: 512 },
+            mipLevelCount: 1,
+            storage: { width: 512, height: 512 },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
         };
         const sampler2D: IGLSampler = {
@@ -165,10 +166,11 @@ import { getShaderSource, loadImage } from "./utility";
         }
 
         const texture3D: IGLTexture = {
-            dimension:"3d",
+            dimension: "3d",
             format: "r8uint",
             generateMipmap: true,
-            storage: { levels: Math.log2(SIZE), width: SIZE, height: SIZE, depth: SIZE },
+            mipLevelCount: Math.log2(SIZE),
+            storage: { width: SIZE, height: SIZE, depth: SIZE },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
         };
         const sampler3D: IGLSampler = {

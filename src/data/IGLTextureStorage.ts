@@ -6,7 +6,7 @@
  */
 export interface IGLTextureStorage
 {
-    levels: number, width: number, height: number;
+    width: number, height: number;
     /**
      * 3D纹理深度。
      */

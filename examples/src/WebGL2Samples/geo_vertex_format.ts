@@ -1,4 +1,4 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLCanvasContext, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -169,7 +169,8 @@ import { getShaderSource, loadImage } from "./utility";
         texture = {
             format: "rgba8unorm",
             pixelStore: { unpackFlipY: false },
-            storage: { levels: 1, width: 512, height: 512 },
+            mipLevelCount: 1,
+            storage: { width: 512, height: 512 },
             writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
         };
         sampler = {

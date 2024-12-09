@@ -63,17 +63,18 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     {
         if (storage)
         {
-            const { levels, width, height, depth } = storage;
+            const { width, height, depth } = storage;
+            const mipLevelCount = texture.mipLevelCount || 1;
 
             gl.bindTexture(gl[target], webGLTexture);
 
             if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
-                gl.texStorage2D(gl[target], levels, gl[internalformat], width, height);
+                gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
             }
             else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
             {
-                gl.texStorage3D(gl[target], levels, gl[internalformat], width, height, depth);
+                gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
             }
             else
             {
