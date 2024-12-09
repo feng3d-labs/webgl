@@ -1,3 +1,4 @@
+import { getTexImageSourceSize } from "@feng3d/render-api";
 import { IGLBufferSource, IGLImageSource, IGLTexture, IGLTextureSource } from "@feng3d/webgl";
 
 export function getIGLTextureSize(glTexture: IGLTexture)
@@ -53,8 +54,8 @@ function getIGLTextureSourceSize(glTextureSource: IGLTextureSource)
     if (source)
     {
         const texImageSourceSize = getTexImageSourceSize(source);
-        size[0] = texImageSourceSize.width;
-        size[1] = texImageSourceSize.height;
+        size[0] = texImageSourceSize[0];
+        size[1] = texImageSourceSize[1];
     }
     else 
     {
@@ -68,26 +69,4 @@ function getIGLTextureSourceSize(glTextureSource: IGLTextureSource)
     }
 
     return size;
-}
-
-function getTexImageSourceSize(texImageSource: TexImageSource)
-{
-    let width: number;
-    let height: number;
-    if (texImageSource instanceof VideoFrame)
-    {
-        width = texImageSource.codedWidth;
-        height = texImageSource.codedHeight;
-    }
-    else if (texImageSource instanceof HTMLVideoElement)
-    {
-        width = texImageSource.videoWidth;
-        height = texImageSource.videoHeight;
-    }
-    else
-    {
-        width = texImageSource.width;
-        height = texImageSource.height;
-    }
-    return { width, height };
 }
