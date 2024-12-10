@@ -2,7 +2,6 @@ import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { GLTextureTarget, IGLBufferSource, IGLImageSource, IGLTexture } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
-import { getIGLTextureSize, getIGLTextureSourcesSize } from "../internal";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
@@ -51,54 +50,53 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
 
-    webGLTexture = gl.createTexture(); // Create a texture object
-    gl._textures.set(texture, webGLTexture);
-
-    const { dimension, format: format0 } = texture;
-    const target = getIGLTextureTarget(dimension);
-
-    gl.bindTexture(gl[target], webGLTexture);
-    webGLTexture.textureTarget = target;
-
-    const textureFormat = getIGLTextureFormats(format0);
-    const { internalformat, format, type } = textureFormat;
-
-    //
-    const size = texture.size = getIGLTextureSize(texture);
-
-    // 设置纹理尺寸
-    const [width, height, depth] = size;
-    const mipLevelCount = texture.mipLevelCount || 1;
-    if (gl instanceof WebGL2RenderingContext)
+    // 创建纹理
+    const createTexture = () =>
     {
+        const target = getIGLTextureTarget(texture.dimension);
+        const { internalformat, format, type } = getIGLTextureFormats(texture.format);
 
-        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+        webGLTexture = gl.createTexture(); // Create a texture object
+        gl._textures.set(texture, webGLTexture);
+
+        gl.bindTexture(gl[target], webGLTexture);
+
+        webGLTexture.textureTarget = target;
+
+        // 设置纹理尺寸
+        const [width, height, depth] = texture.size;
+        const mipLevelCount = texture.mipLevelCount || 1;
+        if (gl instanceof WebGL2RenderingContext)
         {
-            gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
-        }
-        else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
-        {
-            gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
-        }
-        else
-        {
-            console.error(`未处理 ${target} 纹理初始化存储！`);
-        }
-    }
-    else
-    {
-        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
-        {
-            for (let i = 0; i < mipLevelCount; i++)
+            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
             {
-                gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
+                gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
+            }
+            else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+            {
+                gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
+            }
+            else
+            {
+                console.error(`未处理 ${target} 纹理初始化存储！`);
             }
         }
         else
         {
-            console.error(`未处理 ${target} 纹理初始化存储！`);
+            if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+            {
+                for (let i = 0; i < mipLevelCount; i++)
+                {
+                    gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
+                }
+            }
+            else
+            {
+                console.error(`未处理 ${target} 纹理初始化存储！`);
+            }
         }
     }
+    createTexture();
 
     // 更新纹理
     const updateTexture = () =>
@@ -106,14 +104,6 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         const { sources } = texture;
 
         if (!sources || sources.length === 0) return;
-
-        // 处理纹理尺寸发生变化。
-        const currentSize = getIGLTextureSourcesSize(sources);
-        if (currentSize[0] !== size[0] || currentSize[1] !== size[1] || currentSize[2] !== size[2])
-        {
-            texture.size = currentSize;
-            return;
-        }
 
         texture.writeTextures = sources.concat();
     };
@@ -123,9 +113,13 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
     const writeTexture = () =>
     {
-        const { generateMipmap, writeTextures, pixelStore } = texture;
-
+        const { writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
+
+        const { generateMipmap, pixelStore } = texture;
+
+        const target = getIGLTextureTarget(texture.dimension);
+        const { format, type } = getIGLTextureFormats(texture.format);
 
         gl.bindTexture(gl[target], webGLTexture);
 
