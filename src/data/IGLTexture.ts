@@ -36,33 +36,6 @@ export type IGLTextureSource = IGLTextureImageSource | IGLTextureBufferSource;
  */
 export interface IGLTextureImageSource extends ITextureImageSource
 {
-    /**
-     * 像素解包打包时参数。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
-     */
-    readonly pixelStore?: IGLTexturePixelStore1;
-
-    /**
-     * 写入x轴偏移。
-     * 
-     * 默认为0。
-     */
-    xoffset?: number,
-
-    /**
-     * 写入Y轴偏移。
-     * 
-     * 默认为0。
-     */
-    yoffset?: number,
-
-    /**
-     * 写入3D纹理时深度偏移。
-     * 
-     * 默认为0。
-     */
-    zoffset?: number;
 }
 
 /**
