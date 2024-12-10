@@ -44,13 +44,6 @@ export interface IGLTextureImageSource extends ITextureImageSource
     readonly pixelStore?: IGLTexturePixelStore1;
 
     /**
-     * 写入mipmap级别。
-     *
-     * 默认为 0。
-     */
-    level?: number,
-
-    /**
      * 写入x轴偏移。
      * 
      * 默认为0。
@@ -92,7 +85,7 @@ export interface IGLTextureBufferSource
      *
      * 默认为 0。
      */
-    level?: number,
+    mipLevel?: number,
 
     /**
      * 写入x轴偏移。

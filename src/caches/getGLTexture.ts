@@ -117,7 +117,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             const imageSource = v as IGLTextureImageSource;
             if (imageSource.image)
             {
-                const { level, xoffset, yoffset, zoffset, pixelStore } = imageSource;
+                const { mipLevel: level, xoffset, yoffset, zoffset, pixelStore } = imageSource;
                 const { image, imageOrigin, size, flipY, premultipliedAlpha } = imageSource;
 
                 //
@@ -178,7 +178,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
             // 处理数据资源
             const bufferSource = v as IGLTextureBufferSource;
-            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = bufferSource;
+            const { mipLevel: level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = bufferSource;
             const { pixels, pixelsOffset, pixelStore } = bufferSource;
 
             setTexturePixelStore(gl, pixelStore);

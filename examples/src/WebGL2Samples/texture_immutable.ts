@@ -86,7 +86,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                level: 0, xoffset: 0, yoffset: 0, image: image, flipY: false,
+                mipLevel: 0, xoffset: 0, yoffset: 0, image: image, flipY: false,
             }],
         };
         const sampler2D: IGLSampler = {
@@ -170,7 +170,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            sources: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
+            sources: [{ mipLevel: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
         };
         const sampler3D: IGLSampler = {
             lodMinClamp: 0,

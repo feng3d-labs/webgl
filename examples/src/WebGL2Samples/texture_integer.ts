@@ -51,7 +51,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8uint",
             sources: [{
-                level: 0, image: image, flipY: false,
+                mipLevel: 0, image: image, flipY: false,
             }],
         };
         const sampler: IGLSampler = {

@@ -129,7 +129,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                level: 0, xoffset: 0, yoffset: 0, image: image, flipY: false,
+                mipLevel: 0, xoffset: 0, yoffset: 0, image: image, flipY: false,
             }]
         };
         sampler = {
