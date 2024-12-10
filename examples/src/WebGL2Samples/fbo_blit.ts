@@ -56,7 +56,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         pixelStore: {
             unpackFlipY: true,
         },
-        sources: [{ source: image }],
+        sources: [{ image: image }],
     };
     const samplerDiffuse: IGLSampler = {
         minFilter: "LINEAR",

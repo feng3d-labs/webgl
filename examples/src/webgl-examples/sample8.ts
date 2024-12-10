@@ -346,7 +346,7 @@ function updateTexture(texture: IGLTexture, video: HTMLVideoElement)
         texture.size = [video.videoWidth, video.videoHeight];
     }
 
-    texture.sources = [{ source: video }];
+    texture.sources = [{ image: video }];
 }
 
 //

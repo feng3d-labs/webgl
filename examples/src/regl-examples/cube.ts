@@ -138,7 +138,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     const diffuse: IGLSamplerTexture = {
         texture: {
             size: [img.width, img.height],
-            sources: [{ source: img }]
+            sources: [{ image: img }]
         }, sampler: { minFilter: "LINEAR" }
     };
 

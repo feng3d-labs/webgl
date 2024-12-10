@@ -145,7 +145,7 @@ import { getShaderSource, loadImage } from "./utility";
                     unpackFlipY: false,
                 },
                 format: textureFormats[i].format,
-                sources: [{ level: 0, source: image }],
+                sources: [{ level: 0, image: image }],
             };
             samplers[i] = {
                 minFilter: "NEAREST",

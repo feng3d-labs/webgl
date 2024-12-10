@@ -99,7 +99,7 @@ export interface IGLTextureImageSource
     /**
      * 写入纹理图片资源。
      */
-    source: TexImageSource
+    image: TexImageSource
 }
 
 /**

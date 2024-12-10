@@ -69,7 +69,7 @@ loadImage(imageUrl, function (image)
 {
     texture = {
         size: [image.width, image.height],
-        sources: [{ source: image, level: 0 }],
+        sources: [{ image: image, level: 0 }],
         format: "rgba8unorm",
         generateMipmap: true,
     };

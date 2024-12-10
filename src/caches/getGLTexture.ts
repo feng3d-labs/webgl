@@ -116,7 +116,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         writeTextures.forEach((v) =>
         {
             const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = v;
-            const { source } = v as IGLTextureImageSource;
+            const { image: source } = v as IGLTextureImageSource;
             const { pixels, pixelsOffset } = v as IGLTextureBufferSource;
 
             if (gl instanceof WebGL2RenderingContext)

@@ -57,7 +57,7 @@ import { getShaderSource, loadImage } from "./utility";
         texture = {
             size: [image.width, image.height],
             format: "rgba8unorm-srgb",
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         sampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 

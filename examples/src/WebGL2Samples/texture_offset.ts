@@ -77,7 +77,7 @@ import { getShaderSource, loadImage } from "./utility";
                 unpackFlipY: false,
             },
             format: "rgba8unorm",
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         const sampler: IGLSampler = {
             minFilter: "NEAREST",

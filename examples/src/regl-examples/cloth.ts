@@ -387,7 +387,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         texture: {
             size: [img.width, img.height],
             generateMipmap: true,
-            sources: [{ source: img }]
+            sources: [{ image: img }]
         }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" }
     };
 

@@ -47,7 +47,7 @@ function getIGLTextureSourceSize(glTextureSource: IGLTextureSource): IImageSize
     }
 
     const glImageSource = glTextureSource as IGLTextureImageSource;
-    const texImageSourceSize = getTexImageSourceSize(glImageSource.source);
+    const texImageSourceSize = getTexImageSourceSize(glImageSource.image);
 
     glTextureSource.width = glTextureSource.width || texImageSourceSize[0];
     glTextureSource.height = glTextureSource.height || texImageSourceSize[1];

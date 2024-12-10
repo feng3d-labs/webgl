@@ -110,7 +110,7 @@ import { getShaderSource, loadImage } from "./utility";
                 pixelStore: { unpackFlipY: false },
                 mipLevelCount: 1,
                 size: [256, 256],
-                sources: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+                sources: [{ level: 0, xoffset: 0, yoffset: 0, image: image }],
             };
             sampler = {
                 minFilter: "NEAREST",

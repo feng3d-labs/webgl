@@ -126,7 +126,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         samplers[Corners.TOP_LEFT] = {
             minFilter: "LINEAR_MIPMAP_LINEAR",
@@ -137,7 +137,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         samplers[Corners.TOP_RIGHT] = {
             minFilter: "LINEAR_MIPMAP_LINEAR",
@@ -150,7 +150,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         samplers[Corners.BOTTOM_LEFT] = {
             minFilter: "LINEAR_MIPMAP_LINEAR",
@@ -163,7 +163,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ level: 0, image: image }],
         };
         samplers[Corners.BOTTOM_RIGHT] = {
             minFilter: "LINEAR_MIPMAP_LINEAR",
