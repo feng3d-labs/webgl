@@ -1,6 +1,6 @@
 import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { GLTextureTarget, IGLBufferSource, IGLImageSource, IGLTexture } from "../data/IGLTexture";
+import { GLTextureTarget, IGLTexture, IGLTextureBufferSource, IGLTextureImageSource } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -116,8 +116,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         writeTextures.forEach((v) =>
         {
             const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = v;
-            const { source } = v as IGLImageSource;
-            const { pixels, pixelsOffset } = v as IGLBufferSource;
+            const { source } = v as IGLTextureImageSource;
+            const { pixels, pixelsOffset } = v as IGLTextureBufferSource;
 
             if (gl instanceof WebGL2RenderingContext)
             {

@@ -1,5 +1,5 @@
 import { getTexImageSourceSize, IImageSize, ITextureSize } from "@feng3d/render-api";
-import { IGLImageSource, IGLTexture, IGLTextureSource } from "@feng3d/webgl";
+import { IGLTexture, IGLTextureImageSource, IGLTextureSource } from "@feng3d/webgl";
 
 export function getIGLTextureSize(glTexture: IGLTexture)
 {
@@ -55,7 +55,7 @@ function getIGLTextureSourceSize(glTextureSource: IGLTextureSource): IImageSize
         return [glTextureSource.width, glTextureSource.height]
     }
 
-    const glImageSource = glTextureSource as IGLImageSource;
+    const glImageSource = glTextureSource as IGLTextureImageSource;
     const texImageSourceSize = getTexImageSourceSize(glImageSource.source);
 
     glTextureSource.width = glTextureSource.width || texImageSourceSize[0];

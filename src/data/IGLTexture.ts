@@ -31,7 +31,7 @@ export interface IGLTexture extends ITexture
 /**
  * 纹理资源。
  */
-export type IGLTextureSource = IGLImageSource | IGLBufferSource;
+export type IGLTextureSource = IGLTextureImageSource | IGLTextureBufferSource;
 
 /**
  * 纹理图片资源。
@@ -41,7 +41,7 @@ export type IGLTextureSource = IGLImageSource | IGLBufferSource;
  * 
  * 注：不再支持参数 `border`
  */
-export interface IGLImageSource
+export interface IGLTextureImageSource
 {
     /**
      * 写入mipmap级别。
@@ -103,12 +103,12 @@ export interface IGLImageSource
 }
 
 /**
- * 纹理数据资源。
+ * 纹理数据缓冲区资源。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export interface IGLBufferSource
+export interface IGLTextureBufferSource
 {
     /**
      * 写入mipmap级别。
@@ -172,7 +172,7 @@ export interface IGLBufferSource
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export type IGLWriteTexture = IGLImageSource | IGLBufferSource;
+export type IGLWriteTexture = IGLTextureImageSource | IGLTextureBufferSource;
 
 /**
  * 纹理绑定点。
