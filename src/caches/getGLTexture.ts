@@ -1,6 +1,6 @@
 import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLTextureTarget, IGLTexture, IGLTextureBufferSource, IGLTextureImageSource } from "../data/IGLTexture";
+import { IGLTexture, IGLTextureBufferSource, IGLTextureImageSource, IGLTextureTarget } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -116,12 +116,13 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         writeTextures.forEach((v) =>
         {
             const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = v;
-            const { image: source } = v as IGLTextureImageSource;
-            const { pixels, pixelsOffset } = v as IGLTextureBufferSource;
-
-            if (gl instanceof WebGL2RenderingContext)
+            // 处理图片资源
+            const imageSource = v as IGLTextureImageSource;
+            if (imageSource.image)
             {
-                if (source)
+                const { image } = imageSource;
+
+                if (gl instanceof WebGL2RenderingContext)
                 {
                     if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                     {
@@ -129,22 +130,23 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
                         if (width && height)
                         {
-                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], image);
                         }
                         else
                         {
-                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], source);
+                            gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], image);
                         }
                     }
                     else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                     {
-                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], source);
+                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], image);
                     }
                     else
                     {
                         console.error(`未处理 WebGL1 中 ${target} 纹理类型的图片资源上传！`);
                     }
                 }
+                // 处理 WebGL1
                 else
                 {
                     // eslint-disable-next-line no-lonely-if
@@ -152,16 +154,35 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     {
                         const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
-                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels, pixelsOffset || 0);
-                    }
-                    else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
-                    {
-                        gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], pixels, pixelsOffset || 0);
+                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], image);
                     }
                     else
                     {
-                        console.error(`未处理 WebGL1 中 ${target} 纹理类型的像素资源上传。`);
+                        console.error(`WebGL1 中 不支持 ${target} 纹理类型！`);
                     }
+                }
+                return;
+            }
+
+            // 处理数据资源
+            const bufferSource = v as IGLTextureBufferSource;
+            const { pixels, pixelsOffset } = bufferSource;
+            if (gl instanceof WebGL2RenderingContext)
+            {
+                // eslint-disable-next-line no-lonely-if
+                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                {
+                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+
+                    gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels, pixelsOffset || 0);
+                }
+                else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                {
+                    gl.texSubImage3D(gl[target], level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], pixels, pixelsOffset || 0);
+                }
+                else
+                {
+                    console.error(`未处理 WebGL1 中 ${target} 纹理类型的像素资源上传。`);
                 }
             }
             // 处理 WebGL1
@@ -172,14 +193,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 {
                     const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
-                    if (source)
-                    {
-                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, gl[format], gl[type], source);
-                    }
-                    else
-                    {
-                        gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels);
-                    }
+                    gl.texSubImage2D(gl[bindTarget], level, xoffset, yoffset, width, height, gl[format], gl[type], pixels);
                 }
                 else
                 {
