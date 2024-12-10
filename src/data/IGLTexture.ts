@@ -18,7 +18,7 @@ export interface IGLTexture extends ITexture
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage3D
      */
-    sources?: IGLTextureSource[];
+    sources?: readonly IGLTextureSource[];
 
     /**
      * 像素解包打包时参数。
@@ -103,7 +103,7 @@ export interface IGLTextureImageSource
 }
 
 /**
- * 纹理数据缓冲区资源。
+ * 纹理数据资源。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D

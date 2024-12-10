@@ -5,7 +5,6 @@ import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachme
 import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { IGLTextureView } from "../data/IGLTextureView";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
-import { getIGLTextureSize } from "./getIGLTextureSize";
 
 /**
  * 
@@ -19,7 +18,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 {
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
-    const textureSize = getIGLTextureSize((sourcePassDescriptor.colorAttachments[0].view as IGLTextureView).texture);
+    const textureSize = (sourcePassDescriptor.colorAttachments[0].view as IGLTextureView).texture.size;
 
     const renderbuffers: IGLRenderbuffer[] = [];
 
