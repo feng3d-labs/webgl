@@ -28,11 +28,6 @@ export interface IGLTexture extends ITexture
     writeTextures?: IGLWriteTexture[];
 
     /**
-     * 是否生成mipmap
-     */
-    readonly generateMipmap?: boolean;
-
-    /**
      * 像素解包打包时参数。
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
