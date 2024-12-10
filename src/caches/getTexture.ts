@@ -101,19 +101,7 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     // 更新纹理
     const updateTexture = () =>
     {
-        const { sources } = texture;
-
-        if (!sources || sources.length === 0) return;
-
-        texture.writeTextures = sources.concat();
-    };
-    updateTexture();
-    watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
-    watcher.watchs(texture, ["sources", "generateMipmap"], updateTexture);
-
-    const writeTexture = () =>
-    {
-        const { writeTextures } = texture;
+        const { sources: writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
         const { generateMipmap, pixelStore } = texture;
@@ -203,10 +191,12 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         {
             gl.generateMipmap(gl[target]);
         }
-        texture.writeTextures = null;
     };
-    writeTexture();
-    watcher.watch(texture, "writeTextures", writeTexture);
+    updateTexture();
+
+    watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
+    watcher.watchs(texture, ["generateMipmap"], updateTexture);
+    watcher.watch(texture, "sources", updateTexture);
 
     // 监听纹理尺寸发生变化
     const resize = (newValue: ITextureSize, oldValue: ITextureSize) =>
@@ -233,8 +223,8 @@ export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         gl._textures.delete(texture);
         //
         watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
-        watcher.unwatchs(texture, ["sources", "generateMipmap"], updateTexture);
-        watcher.unwatch(texture, "writeTextures", writeTexture);
+        watcher.unwatchs(texture, ["generateMipmap"], updateTexture);
+        watcher.unwatch(texture, "sources", updateTexture);
         watcher.unwatch(texture, "size", resize);
         //
         delete webGLTexture.destroy;
@@ -275,7 +265,7 @@ function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTextureP
         unpackSkipImages,
     } = { ...defaultTexturePixelStore, ...pixelStore };
 
-    // 设置图片y轴方向
+    //
     gl.pixelStorei(gl.PACK_ALIGNMENT, packAlignment);
     gl.pixelStorei(gl.UNPACK_ALIGNMENT, unpackAlignment);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, unpackFlipY);

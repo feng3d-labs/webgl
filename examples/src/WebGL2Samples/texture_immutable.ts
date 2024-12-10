@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
             format: "rgba8unorm",
             mipLevelCount: 1,
             size: [512, 512],
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+            sources: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
         };
         const sampler2D: IGLSampler = {
             minFilter: "NEAREST",
@@ -171,7 +171,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
+            sources: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
         };
         const sampler3D: IGLSampler = {
             lodMinClamp: 0,

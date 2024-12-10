@@ -15,17 +15,10 @@ export interface IGLTexture extends ITexture
     /**
      * 纹理资源。
      *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
-     */
-    sources?: IGLTextureSource[];
-
-    /**
-     * 写入纹理。
-     *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage3D
      */
-    writeTextures?: IGLWriteTexture[];
+    sources?: IGLTextureSource[];
 
     /**
      * 像素解包打包时参数。
