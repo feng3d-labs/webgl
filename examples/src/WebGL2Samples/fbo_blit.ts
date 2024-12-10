@@ -53,10 +53,11 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     const textureDiffuse: IGLTexture = {
         size: [image.width, image.height],
         format: "rgba8unorm",
-        pixelStore: {
-            unpackFlipY: true,
-        },
-        sources: [{ image: image }],
+        sources: [{
+            image: image, pixelStore: {
+                unpackFlipY: true,
+            },
+        }],
     };
     const samplerDiffuse: IGLSampler = {
         minFilter: "LINEAR",

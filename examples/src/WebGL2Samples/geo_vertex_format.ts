@@ -168,10 +168,9 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init 2D Texture
         texture = {
             format: "rgba8unorm",
-            pixelStore: { unpackFlipY: false },
             mipLevelCount: 1,
             size: [512, 512],
-            sources: [{ level: 0, xoffset: 0, yoffset: 0, image: image }],
+            sources: [{ level: 0, xoffset: 0, yoffset: 0, image: image, pixelStore: { unpackFlipY: false }, }],
         };
         sampler = {
             minFilter: "NEAREST",

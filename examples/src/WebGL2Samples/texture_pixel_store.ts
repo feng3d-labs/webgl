@@ -60,15 +60,17 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init Texture
         const texture: IGLTexture = {
             size: [image.width / 2, image.height / 2],
-            pixelStore: {
-                unpackAlignment: 1,
-                unpackRowLength: image.width,
-                unpackSkipPixels: image.width / 4,
-                unpackSkipRows: image.width / 4,
-                unpackFlipY: false,
-            },
             format: "rgba8unorm",
-            sources: [{ level: 0, width: image.width / 2, height: image.height / 2, pixels }]
+            sources: [{
+                level: 0, width: image.width / 2, height: image.height / 2, pixels,
+                pixelStore: {
+                    unpackAlignment: 1,
+                    unpackRowLength: image.width,
+                    unpackSkipPixels: image.width / 4,
+                    unpackSkipRows: image.width / 4,
+                    unpackFlipY: false,
+                },
+            }]
         };
         const sampler: IGLSampler = {
             minFilter: "NEAREST",

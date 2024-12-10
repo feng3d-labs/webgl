@@ -1,6 +1,6 @@
-import { ITexture } from "@feng3d/render-api";
+import { ITexture, ITextureImageSource } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
-import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
+import { IGLTexturePixelStore, IGLTexturePixelStore1 } from "./IGLTexturePixelStore";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
@@ -19,13 +19,6 @@ export interface IGLTexture extends ITexture
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage3D
      */
     sources?: readonly IGLTextureSource[];
-
-    /**
-     * 像素解包打包时参数。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
-     */
-    readonly pixelStore?: IGLTexturePixelStore;
 }
 
 /**
@@ -41,8 +34,15 @@ export type IGLTextureSource = IGLTextureImageSource | IGLTextureBufferSource;
  * 
  * 注：不再支持参数 `border`
  */
-export interface IGLTextureImageSource
+export interface IGLTextureImageSource extends ITextureImageSource
 {
+    /**
+     * 像素解包打包时参数。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
+     */
+    readonly pixelStore?: IGLTexturePixelStore1;
+
     /**
      * 写入mipmap级别。
      *
@@ -95,11 +95,6 @@ export interface IGLTextureImageSource
      * WebGL2 支持。
      */
     depthOrArrayLayers?: number;
-
-    /**
-     * 写入纹理图片资源。
-     */
-    image: TexImageSource
 }
 
 /**
@@ -110,6 +105,13 @@ export interface IGLTextureImageSource
  */
 export interface IGLTextureBufferSource
 {
+    /**
+     * 像素解包打包时参数。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
+     */
+    readonly pixelStore?: IGLTexturePixelStore;
+
     /**
      * 写入mipmap级别。
      *

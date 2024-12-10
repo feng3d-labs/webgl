@@ -48,11 +48,12 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     // -- Init Texture
     const texture: IGLTexture = {
         size: [image.width, image.height],
-        pixelStore: {
-            unpackFlipY: false,
-        },
         format: "rgba8unorm",
-        sources: [{ image: image }]
+        sources: [{
+            image: image, pixelStore: {
+                unpackFlipY: false,
+            },
+        }]
     };
     const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 

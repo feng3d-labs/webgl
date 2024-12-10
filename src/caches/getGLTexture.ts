@@ -104,14 +104,12 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         const { sources: writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
-        const { generateMipmap, pixelStore } = texture;
+        const { generateMipmap } = texture;
 
         const target = getIGLTextureTarget(texture.dimension);
         const { format, type } = getIGLTextureFormats(texture.format);
 
         gl.bindTexture(gl[target], webGLTexture);
-
-        setTexturePixelStore(gl, pixelStore);
 
         writeTextures.forEach((v) =>
         {
@@ -120,7 +118,16 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             const imageSource = v as IGLTextureImageSource;
             if (imageSource.image)
             {
-                const { image } = imageSource;
+                const { image, imageOrigin, pixelStore } = imageSource;
+
+                const pixelStore1: IGLTexturePixelStore = { ...pixelStore };
+                if (imageOrigin)
+                {
+                    pixelStore1.unpackSkipPixels = imageOrigin[0];
+                    pixelStore1.unpackSkipRows = imageOrigin[1];
+                }
+
+                setTexturePixelStore(gl, pixelStore1);
 
                 if (gl instanceof WebGL2RenderingContext)
                 {
@@ -166,7 +173,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
             // 处理数据资源
             const bufferSource = v as IGLTextureBufferSource;
-            const { pixels, pixelsOffset } = bufferSource;
+            const { pixels, pixelsOffset, pixelStore } = bufferSource;
+
+            setTexturePixelStore(gl, pixelStore);
+
             if (gl instanceof WebGL2RenderingContext)
             {
                 // eslint-disable-next-line no-lonely-if
@@ -208,7 +218,6 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     };
     updateTexture();
 
-    watcher.watchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
     watcher.watchs(texture, ["generateMipmap"], updateTexture);
     watcher.watch(texture, "sources", updateTexture);
 
@@ -236,7 +245,6 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
         gl.deleteTexture(webGLTexture);
         gl._textures.delete(texture);
         //
-        watcher.unwatchobject(texture, { pixelStore: { unpackFlipY: undefined, unpackPremulAlpha: undefined } }, updateTexture);
         watcher.unwatchs(texture, ["generateMipmap"], updateTexture);
         watcher.unwatch(texture, "sources", updateTexture);
         watcher.unwatch(texture, "size", resize);

@@ -73,11 +73,12 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init Texture
         const texture: IGLTexture = {
             size: [image.width, image.height],
-            pixelStore: {
-                unpackFlipY: false,
-            },
             format: "rgba8unorm",
-            sources: [{ level: 0, image: image }],
+            sources: [{
+                level: 0, image: image, pixelStore: {
+                    unpackFlipY: false,
+                },
+            }],
         };
         const sampler: IGLSampler = {
             minFilter: "NEAREST",

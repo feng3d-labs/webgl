@@ -141,11 +141,12 @@ import { getShaderSource, loadImage } from "./utility";
         {
             textures[i] = {
                 size: [image.width, image.height],
-                pixelStore: {
-                    unpackFlipY: false,
-                },
                 format: textureFormats[i].format,
-                sources: [{ level: 0, image: image }],
+                sources: [{
+                    level: 0, image: image, pixelStore: {
+                        unpackFlipY: false,
+                    },
+                }],
             };
             samplers[i] = {
                 minFilter: "NEAREST",
