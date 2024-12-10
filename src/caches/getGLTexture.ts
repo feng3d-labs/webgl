@@ -117,8 +117,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             const imageSource = v as IGLTextureImageSource;
             if (imageSource.image)
             {
-                const { level, xoffset, yoffset, zoffset } = imageSource;
-                const { image, imageOrigin, size, pixelStore } = imageSource;
+                const { level, xoffset, yoffset, zoffset, pixelStore } = imageSource;
+                const { image, imageOrigin, size, flipY, premultipliedAlpha } = imageSource;
 
                 //
                 const width = size?.[0];
@@ -127,11 +127,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
                 //
                 const pixelStore1: IGLTexturePixelStore = { ...pixelStore };
-                if (imageOrigin)
-                {
-                    pixelStore1.unpackSkipPixels = imageOrigin[0];
-                    pixelStore1.unpackSkipRows = imageOrigin[1];
-                }
+                pixelStore1.unpackSkipPixels = imageOrigin?.[0] || 0;
+                pixelStore1.unpackSkipRows = imageOrigin?.[1] || 0;
+                pixelStore1.unpackFlipY = flipY || false;
+                pixelStore1.unpackPremulAlpha = premultipliedAlpha || false;
 
                 setTexturePixelStore(gl, pixelStore1);
 

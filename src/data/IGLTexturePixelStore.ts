@@ -25,28 +25,6 @@ export interface IGLTexturePixelStore1
     unpackAlignment?: 1 | 2 | 4 | 8;
 
     /**
-     * 解包图像数据时进行Y轴反转。
-     *
-     * Flips the source data along its vertical axis if true.
-     *
-     * gl.UNPACK_FLIP_Y_WEBGL
-     *
-     * 默认为 false。
-     */
-    unpackFlipY?: boolean;
-
-    /**
-     * 将图像RGB颜色值得每一个分量乘以A。
-     *
-     * Multiplies the alpha channel into the other color channels
-     *
-     * gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
-     *
-     * 默认为 false。
-     */
-    unpackPremulAlpha?: boolean;
-
-    /**
      * Default color space conversion or no color space conversion.
      *
      * gl.UNPACK_COLORSPACE_CONVERSION_WEBGL
