@@ -123,6 +123,7 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
+            size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
@@ -133,6 +134,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.TOP_RIGHT] = {
+            size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
@@ -145,6 +147,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_LEFT] = {
+            size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],
@@ -157,6 +160,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_RIGHT] = {
+            size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
             sources: [{ level: 0, source: image }],

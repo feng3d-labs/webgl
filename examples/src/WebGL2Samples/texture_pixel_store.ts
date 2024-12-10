@@ -59,6 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         const texture: IGLTexture = {
+            size: [image.width / 2, image.height / 2],
             pixelStore: {
                 unpackAlignment: 1,
                 unpackRowLength: image.width,

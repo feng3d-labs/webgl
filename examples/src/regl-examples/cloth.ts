@@ -383,7 +383,13 @@ import * as vec3 from "./stackgl/gl-vec3";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = { texture: { generateMipmap: true, sources: [{ source: img }] }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
+    const diffuse: IGLSamplerTexture = {
+        texture: {
+            size: [img.width, img.height],
+            generateMipmap: true,
+            sources: [{ source: img }]
+        }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" }
+    };
 
     draw();
 })();

@@ -64,6 +64,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         texture = {
+            size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
             dimension: "2d-array",
             format: "rgba8unorm",
             sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, depthOrArrayLayers: NUM_IMAGES, pixels }],

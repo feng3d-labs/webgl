@@ -55,6 +55,7 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         texture = {
+            size: [image.width, image.height],
             format: "rgba8unorm-srgb",
             sources: [{ level: 0, source: image }],
         };

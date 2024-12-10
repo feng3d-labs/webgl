@@ -47,6 +47,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
     const texture: IGLTexture = {
+        size: [image.width, image.height],
         pixelStore: {
             unpackFlipY: false,
         },

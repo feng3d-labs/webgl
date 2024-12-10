@@ -140,6 +140,7 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {
+                size: [image.width, image.height],
                 pixelStore: {
                     unpackFlipY: false,
                 },

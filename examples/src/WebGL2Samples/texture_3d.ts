@@ -79,6 +79,7 @@ import { getShaderSource } from "./utility";
     }
 
     const texture: IGLTexture = {
+        size: [SIZE, SIZE, SIZE],
         dimension: "3d",
         format: "r8unorm",
         generateMipmap: true,

@@ -326,6 +326,7 @@ function initBuffers()
 function initTexture(): IGLSamplerTexture
 {
     const texture: IGLTexture = {
+        size: [1, 1],
         format: "rgba8unorm",
         sources: [{ width: 1, height: 1, pixels: new Uint8Array([0, 0, 255, 255]) }],
     };
@@ -339,6 +340,12 @@ function initTexture(): IGLSamplerTexture
 //
 function updateTexture(texture: IGLTexture, video: HTMLVideoElement)
 {
+    // 修改纹理尺寸
+    if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)
+    {
+        texture.size = [video.videoWidth, video.videoHeight];
+    }
+
     texture.sources = [{ source: video }];
 }
 

@@ -51,6 +51,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureDiffuse: IGLTexture = {
+        size: [image.width, image.height],
         format: "rgba8unorm",
         pixelStore: {
             unpackFlipY: true,
