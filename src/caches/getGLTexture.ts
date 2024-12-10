@@ -113,13 +113,19 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
         writeTextures.forEach((v) =>
         {
-            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = v;
             // 处理图片资源
             const imageSource = v as IGLTextureImageSource;
             if (imageSource.image)
             {
-                const { image, imageOrigin, pixelStore } = imageSource;
+                const { level, xoffset, yoffset, zoffset } = imageSource;
+                const { image, imageOrigin, size, pixelStore } = imageSource;
 
+                //
+                const width = size?.[0];
+                const height = size?.[1];
+                const depthOrArrayLayers = size?.[2];
+
+                //
                 const pixelStore1: IGLTexturePixelStore = { ...pixelStore };
                 if (imageOrigin)
                 {
@@ -173,6 +179,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
             // 处理数据资源
             const bufferSource = v as IGLTextureBufferSource;
+            const { level, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers } = bufferSource;
             const { pixels, pixelsOffset, pixelStore } = bufferSource;
 
             setTexturePixelStore(gl, pixelStore);

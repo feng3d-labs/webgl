@@ -70,31 +70,6 @@ export interface IGLTextureImageSource extends ITextureImageSource
      * 默认为0。
      */
     zoffset?: number;
-
-    /**
-     * 写入宽度。
-     * 
-     * 默认取图片宽度。
-     *
-     * WebGL2支持
-     */
-    width?: number;
-
-    /**
-     * 写入高度。
-     * 
-     * 默认取图片高度。
-     *
-     * WebGL2支持
-     */
-    height?: number;
-
-    /**
-     * 写入纹理深度尺寸，默认为 1。
-     *
-     * WebGL2 支持。
-     */
-    depthOrArrayLayers?: number;
 }
 
 /**
