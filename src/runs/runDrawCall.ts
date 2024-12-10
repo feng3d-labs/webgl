@@ -1,5 +1,5 @@
-import { getBufferType } from "../caches/getWebGLBuffer";
-import { ElementTypeMap } from "../const/WebGLUniformType";
+import { getBufferType } from "../caches/getGLBuffer";
+import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";

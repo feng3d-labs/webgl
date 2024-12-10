@@ -9,7 +9,7 @@ import { getCapabilities } from "./getCapabilities";
  * @param renderingContext
  * @returns
  */
-export function getRenderingContext(renderingContext: IGLCanvasContext)
+export function getGLCanvasContext(renderingContext: IGLCanvasContext)
 {
     const key = renderingContext.canvasId;
     let value = canvasContextMap.get(key);

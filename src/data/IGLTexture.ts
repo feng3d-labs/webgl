@@ -187,14 +187,14 @@ export type IGLWriteTexture = IGLTextureImageSource | IGLTextureBufferSource;
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindTexture
  */
-export type GLTextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
+export type IGLTextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
 
 /**
  * internalformat	format	type
  *
  * @see https://registry.khronos.org/webgl/specs/latest/2.0/#TEXTURE_TYPES_FORMATS_FROM_DOM_ELEMENTS_TABLE
  */
-export type GLTextureTypes =
+export type IGLTextureTypes =
     | { internalformat: "RGB", format: "RGB", type: "UNSIGNED_BYTE" | "UNSIGNED_SHORT_5_6_5" }
     | { internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" | "UNSIGNED_SHORT_4_4_4_4" | "UNSIGNED_SHORT_5_5_5_1" }
     | { internalformat: "LUMINANCE_ALPHA", format: "LUMINANCE_ALPHA", type: "UNSIGNED_BYTE" }
@@ -228,6 +228,6 @@ export type GLTextureTypes =
     | { internalformat: "DEPTH_COMPONENT16", format: "DEPTH_COMPONENT", type: "UNSIGNED_SHORT", }
     ;
 
-export type IGLTextureInternalFormat = GLTextureTypes["internalformat"];
-export type IGLTextureFormat = GLTextureTypes["format"];
-export type IGLTextureDataType = GLTextureTypes["type"];
+export type IGLTextureInternalFormat = IGLTextureTypes["internalformat"];
+export type IGLTextureFormat = IGLTextureTypes["format"];
+export type IGLTextureDataType = IGLTextureTypes["type"];

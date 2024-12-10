@@ -1,7 +1,7 @@
 /**
  * WebGL 属性类型。
  */
-export type IWebGLAttributeType = keyof typeof webglAttributeTypeValue;
+export type IGLAttributeType = keyof typeof webglAttributeTypeValue;
 
 /**
  * 获取顶点数据类型名称。
@@ -9,7 +9,7 @@ export type IWebGLAttributeType = keyof typeof webglAttributeTypeValue;
  * @param gl
  * @param value
  */
-export function getWebGLAttributeValueType(value: keyof typeof webglAttributeValueType)
+export function getIGLAttributeType(value: keyof typeof webglAttributeValueType): IGLAttributeType
 {
     return webglAttributeValueType[value];
 }

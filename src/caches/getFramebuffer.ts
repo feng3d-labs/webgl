@@ -2,8 +2,8 @@ import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLTextureView } from "../data/IGLTextureView";
 import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
-import { deleteRenderbuffer, getRenderbuffer } from "./getRenderbuffer";
-import { getTexture } from "./getTexture";
+import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
+import { getGLTexture } from "./getGLTexture";
 
 declare global
 {
@@ -43,7 +43,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         {
             const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
 
-            const webGLTexture = getTexture(gl, texture);
+            const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = webGLTexture.textureTarget;
 
             if (textureTarget === "TEXTURE_2D")
@@ -64,7 +64,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         }
         else
         {
-            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer, sampleCount);
+            const renderbuffer = getGLRenderbuffer(gl, view as IGLRenderbuffer, sampleCount);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
         }
     });
@@ -86,7 +86,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         {
             const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
 
-            const webGLTexture = getTexture(gl, texture);
+            const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = webGLTexture.textureTarget;
 
             if (textureTarget === "TEXTURE_2D")
@@ -107,7 +107,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         }
         else
         {
-            const renderbuffer = getRenderbuffer(gl, view as IGLRenderbuffer);
+            const renderbuffer = getGLRenderbuffer(gl, view as IGLRenderbuffer);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
         }
     }

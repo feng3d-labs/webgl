@@ -2,7 +2,7 @@ import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
-import { getWebGLBuffer } from "./caches/getWebGLBuffer";
+import { getGLBuffer } from "./caches/getGLBuffer";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
@@ -185,8 +185,8 @@ export class RunWebGL
         {
             const { source: read, destination: write, sourceOffset: readOffset, destinationOffset: writeOffset, size } = copyBuffer;
 
-            const rb = getWebGLBuffer(gl, read);
-            const wb = getWebGLBuffer(gl, write);
+            const rb = getGLBuffer(gl, read);
+            const wb = getGLBuffer(gl, write);
 
             gl.bindBuffer(gl.COPY_READ_BUFFER, rb);
             gl.bindBuffer(gl.COPY_WRITE_BUFFER, wb);

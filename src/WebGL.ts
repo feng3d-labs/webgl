@@ -1,12 +1,12 @@
 import { RunWebGL } from "./RunWebGL";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
-import { deleteProgram } from "./caches/getProgram";
-import { deleteRenderbuffer } from "./caches/getRenderbuffer";
-import { getRenderingContext } from "./caches/getRenderingContext";
-import { deleteSampler } from "./caches/getSampler";
-import { deleteTexture } from "./caches/getTexture";
-import { deleteBuffer } from "./caches/getWebGLBuffer";
-import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
+import { deleteProgram } from "./caches/getGLProgram";
+import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
+import { getGLCanvasContext } from "./caches/getGLCanvasContext";
+import { deleteSampler } from "./caches/getGLSampler";
+import { deleteTexture } from "./caches/getGLTexture";
+import { deleteBuffer } from "./caches/getGLBuffer";
+import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
 import { IGLReadPixels } from "./data/IGLReadPixels";
@@ -33,7 +33,7 @@ export class WebGL
     constructor(renderingContext?: IGLCanvasContext)
     {
         this._renderingContext = renderingContext;
-        this._gl = getRenderingContext(this._renderingContext);
+        this._gl = getGLCanvasContext(this._renderingContext);
     }
 
     /**

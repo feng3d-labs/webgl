@@ -1,4 +1,4 @@
-import { getProgram } from "../caches/getProgram";
+import { getGLProgram } from "../caches/getGLProgram";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
@@ -37,7 +37,7 @@ export function runVertexArray(gl: WebGLRenderingContext, pipeline: IGLRenderPip
         gl._vertexArrays.set([pipeline, vertices, indices], webGLVertexArrayObject);
     }
 
-    const shaderResult = getProgram(gl, pipeline);
+    const shaderResult = getGLProgram(gl, pipeline);
 
     //
     shaderResult.attributes.forEach((activeInfo) =>

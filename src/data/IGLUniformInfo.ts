@@ -1,4 +1,4 @@
-import { IGLUniformType } from "../const/WebGLUniformType";
+import { IGLUniformType } from "../const/IGLUniformType";
 
 /**
  * WebGL统一变量

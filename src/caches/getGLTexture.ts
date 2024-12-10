@@ -1,6 +1,6 @@
 import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { GLTextureTarget, IGLTexture, IGLTextureBufferSource, IGLTextureImageSource } from "../data/IGLTexture";
+import { IGLTextureTarget, IGLTexture, IGLTextureBufferSource, IGLTextureImageSource } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -20,7 +20,7 @@ declare global
          *
          * 默认"TEXTURE_2D"。
          */
-        textureTarget: GLTextureTarget;
+        textureTarget: IGLTextureTarget;
 
         /**
          * 销毁WebGL纹理。
@@ -45,7 +45,7 @@ export const defaultTexturePixelStore: IGLTexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getTexture(gl: WebGLRenderingContext, texture: IGLTexture)
+export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;

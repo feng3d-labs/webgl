@@ -1,4 +1,4 @@
-import { getWebGLTransformFeedback } from "../caches/getWebGLTransformFeedback";
+import { getGLTransformFeedback } from "../caches/getGLTransformFeedback";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
 
@@ -8,7 +8,7 @@ export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedbac
     {
         if (transformFeedback)
         {
-            const webGLTransformFeedback = getWebGLTransformFeedback(gl, transformFeedback);
+            const webGLTransformFeedback = getGLTransformFeedback(gl, transformFeedback);
 
             gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, webGLTransformFeedback);
 

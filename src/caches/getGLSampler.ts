@@ -9,7 +9,7 @@ declare global
     }
 }
 
-export function getSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
+export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
     if (webGLSampler) return webGLSampler;

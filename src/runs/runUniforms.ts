@@ -1,6 +1,6 @@
-import { getWebGLBuffer } from "../caches/getWebGLBuffer";
-import { getProgram } from "../caches/getProgram";
-import { IGLUniformBufferType } from "../const/WebGLUniformType";
+import { getGLBuffer } from "../caches/getGLBuffer";
+import { getGLProgram } from "../caches/getGLProgram";
+import { IGLUniformBufferType } from "../const/IGLUniformType";
 import { IGLBuffer } from "../data/IGLBuffer";
 import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
 import { IGLSamplerTexture } from "../data/IGLSamplerTexture";
@@ -14,7 +14,7 @@ import { runSamplerTexture } from "./runTexture";
  */
 export function runUniforms(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, uniforms: LazyObject<IGLUniforms>)
 {
-    const webGLProgram = getProgram(gl, pipeline);
+    const webGLProgram = getGLProgram(gl, pipeline);
 
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
@@ -54,7 +54,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: IGLRenderPipeli
             const uniformData = lazy.getValue(uniforms[name], uniforms);
 
             //
-            const webGLBuffer = getWebGLBuffer(gl, uniformData as IGLBuffer);
+            const webGLBuffer = getGLBuffer(gl, uniformData as IGLBuffer);
             gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
         });
     }

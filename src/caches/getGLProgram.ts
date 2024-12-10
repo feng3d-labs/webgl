@@ -1,8 +1,8 @@
-import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/WebGLUniformType";
+import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
 import { IGLRenderPipeline, ITransformFeedbackVaryings } from "../data/IGLRenderPipeline";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
-import { getWebGLAttributeValueType } from "./getWebGLAttributeType";
+import { getIGLAttributeType } from "./getIGLAttributeType";
 
 declare global
 {
@@ -37,7 +37,7 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
@@ -55,9 +55,6 @@ export function getProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipelin
 
 export function deleteProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
 {
-    const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment.code;
-
     const shaderKey = getKey(pipeline);
     const result = gl._programs[shaderKey];
     if (result)
@@ -95,7 +92,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const activeInfo = gl.getActiveAttrib(program, i);
         const { name, size, type } = activeInfo;
         const location = gl.getAttribLocation(program, name);
-        const typeString = getWebGLAttributeValueType(type as any);
+        const typeString = getIGLAttributeType(type as any);
         attributes.push({ name, size, type: typeString, location });
     }
     // 获取uniform信息

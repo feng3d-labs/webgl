@@ -1,4 +1,4 @@
-import { getWebGLBuffer } from "../caches/getWebGLBuffer";
+import { getGLBuffer } from "../caches/getGLBuffer";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { getIGLIndexBuffer } from "./getIGLBuffer";
 
@@ -8,7 +8,7 @@ export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IGLIndicesDa
 
     const indexBuffer = getIGLIndexBuffer(indices);
 
-    const buffer = getWebGLBuffer(gl, indexBuffer);
+    const buffer = getGLBuffer(gl, indexBuffer);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
 }
 

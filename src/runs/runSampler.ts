@@ -1,4 +1,4 @@
-import { getSampler } from "../caches/getSampler";
+import { getGLSampler } from "../caches/getGLSampler";
 import { IGLSampler, TextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../data/IGLSampler";
 
 declare global
@@ -34,7 +34,7 @@ export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture
 
     if (gl instanceof WebGL2RenderingContext)
     {
-        const webGLSampler = getSampler(gl, sampler);
+        const webGLSampler = getGLSampler(gl, sampler);
         gl.bindSampler(textureID, webGLSampler);
     }
     else
