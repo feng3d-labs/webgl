@@ -54,9 +54,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         size: [image.width, image.height],
         format: "rgba8unorm",
         sources: [{
-            image: image, pixelStore: {
-                unpackFlipY: true,
-            },
+            image: image, flipY: true
         }],
     };
     const samplerDiffuse: IGLSampler = {

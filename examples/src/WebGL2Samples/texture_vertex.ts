@@ -109,7 +109,7 @@ import { getShaderSource, loadImage } from "./utility";
                 format: "rgba8unorm",
                 mipLevelCount: 1,
                 size: [256, 256],
-                sources: [{ level: 0, xoffset: 0, yoffset: 0, image: image, pixelStore: { unpackFlipY: false }, }],
+                sources: [{ level: 0, xoffset: 0, yoffset: 0, image: image, flipY: false, }],
             };
             sampler = {
                 minFilter: "NEAREST",

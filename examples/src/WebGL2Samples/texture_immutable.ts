@@ -86,9 +86,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                level: 0, xoffset: 0, yoffset: 0, image: image, pixelStore: {
-                    unpackFlipY: false,
-                },
+                level: 0, xoffset: 0, yoffset: 0, image: image, flipY: false,
             }],
         };
         const sampler2D: IGLSampler = {

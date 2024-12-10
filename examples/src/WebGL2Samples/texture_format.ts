@@ -143,9 +143,7 @@ import { getShaderSource, loadImage } from "./utility";
                 size: [image.width, image.height],
                 format: textureFormats[i].format,
                 sources: [{
-                    level: 0, image: image, pixelStore: {
-                        unpackFlipY: false,
-                    },
+                    level: 0, image: image, flipY: false,
                 }],
             };
             samplers[i] = {
