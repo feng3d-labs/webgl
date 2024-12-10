@@ -14,11 +14,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
 {
     const texture: IGLTexture = {
         size: [img.width, img.height],
-        sources: [{
-            image: img, pixelStore: {
-                unpackFlipY: false,
-            },
-        }],
+        sources: [{ image: img, flipY: false }],
         format: "rgba8unorm",
     };
     const sampler: IGLSampler = {
