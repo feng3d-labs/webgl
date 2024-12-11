@@ -63,14 +63,11 @@ import { getShaderSource, loadImage } from "./utility";
             format: "rgba8unorm",
             sources: [{
                 __type: "TextureDataSource",
-                mipLevel: 0, size: [image.width / 2, image.height / 2], data: pixels,
-                pixelStore: {
-                    unpackAlignment: 1,
-                    unpackRowLength: image.width,
-                    unpackSkipPixels: image.width / 4,
-                    unpackSkipRows: image.width / 4,
-                    unpackFlipY: false,
-                },
+                mipLevel: 0,
+                size: [image.width / 2, image.height / 2],
+                data: pixels,
+                dataImageWidth: image.width,
+                dataImageOrigin: [image.width / 4, image.width / 4],
             }]
         };
         const sampler: IGLSampler = {

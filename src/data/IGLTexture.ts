@@ -46,22 +46,11 @@ export interface IGLTextureImageSource extends ITextureImageSource
  */
 export interface IGLTextureDataSource extends ITextureDataSource
 {
-    /**
-     * 像素解包打包时参数。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
-     */
-    readonly pixelStore?: IGLTexturePixelStore;
-
-    /**
-     * 图片数据。
-     */
-    data: ArrayBufferView;
 
     /**
      * 默认为 0。
      */
-    pixelsOffset?: number;
+    dataOffset?: number;
 }
 
 /**
