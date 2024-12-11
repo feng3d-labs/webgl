@@ -1,6 +1,6 @@
 import { ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLTexture, IGLTextureBufferSource, IGLTextureImageSource, IGLTextureTarget } from "../data/IGLTexture";
+import { IGLTexture, IGLTextureDataSource, IGLTextureImageSource, IGLTextureTarget } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -180,8 +180,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             }
 
             // 处理数据资源
-            const bufferSource = v as IGLTextureBufferSource;
-            const { pixels, pixelsOffset, pixelStore } = bufferSource;
+            const bufferSource = v as IGLTextureDataSource;
+            const { data: pixels, pixelsOffset, pixelStore } = bufferSource;
 
             setTexturePixelStore(gl, pixelStore);
 

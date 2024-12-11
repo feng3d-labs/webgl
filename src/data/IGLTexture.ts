@@ -1,4 +1,4 @@
-import { ITexture, ITextureBufferSource, ITextureImageSource } from "@feng3d/render-api";
+import { ITexture, ITextureDataSource, ITextureImageSource } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
 import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 
@@ -24,7 +24,7 @@ export interface IGLTexture extends ITexture
 /**
  * 纹理资源。
  */
-export type IGLTextureSource = IGLTextureImageSource | IGLTextureBufferSource;
+export type IGLTextureSource = IGLTextureImageSource | IGLTextureDataSource;
 
 /**
  * 纹理图片资源。
@@ -44,7 +44,7 @@ export interface IGLTextureImageSource extends ITextureImageSource
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export interface IGLTextureBufferSource extends ITextureBufferSource
+export interface IGLTextureDataSource extends ITextureDataSource
 {
     /**
      * 像素解包打包时参数。
@@ -54,9 +54,9 @@ export interface IGLTextureBufferSource extends ITextureBufferSource
     readonly pixelStore?: IGLTexturePixelStore;
 
     /**
-     * 像素数据。
+     * 图片数据。
      */
-    pixels: ArrayBufferView;
+    data: ArrayBufferView;
 
     /**
      * 默认为 0。
@@ -70,7 +70,7 @@ export interface IGLTextureBufferSource extends ITextureBufferSource
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export type IGLWriteTexture = IGLTextureImageSource | IGLTextureBufferSource;
+export type IGLWriteTexture = IGLTextureImageSource | IGLTextureDataSource;
 
 /**
  * 纹理绑定点。

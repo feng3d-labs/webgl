@@ -62,7 +62,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width / 2, image.height / 2],
             format: "rgba8unorm",
             sources: [{
-                mipLevel: 0, size: [image.width / 2, image.height / 2], pixels,
+                mipLevel: 0, size: [image.width / 2, image.height / 2], data: pixels,
                 pixelStore: {
                     unpackAlignment: 1,
                     unpackRowLength: image.width,
