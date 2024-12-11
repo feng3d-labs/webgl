@@ -1,9 +1,8 @@
 import { ITextureFormat } from "@feng3d/render-api";
 import { IGLTextureFormats } from "../data/IGLTextureFormats";
 
-export function getIGLTextureFormats(format: ITextureFormat)
+export function getIGLTextureFormats(format: ITextureFormat = "rgba8unorm")
 {
-    format = format || "rgba8unorm";
     const glTextureFormat: IGLTextureFormats = formatMap[format];
 
     console.assert(!!glTextureFormat, `未处理格式 ${format}；或者WebGL不支持纹理， 该格式只在WebGPU中支持！`);
