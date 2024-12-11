@@ -181,15 +181,18 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
 
             // 处理数据资源
             const bufferSource = v as IGLTextureDataSource;
-            const { data, dataImageWidth, dataImageHeight, dataImageOrigin, dataOffset: pixelsOffset } = bufferSource;
+            const { data, dataLayout, dataImageOrigin } = bufferSource;
+
+            //
+            const offset = dataLayout?.offset || 0;
 
             //
             const pixelStore: IGLTexturePixelStore = {};
             pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
             pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
             pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
-            pixelStore.unpackRowLength = dataImageWidth;
-            pixelStore.unpackImageHeight = dataImageHeight;
+            pixelStore.unpackRowLength = dataLayout?.width;
+            pixelStore.unpackImageHeight = dataLayout?.height;
 
             setTexturePixelStore(gl, pixelStore);
 
@@ -200,11 +203,11 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                 {
                     const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
-                    gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data, pixelsOffset || 0);
+                    gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data, offset);
                 }
                 else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
                 {
-                    gl.texSubImage3D(gl[target], mipLevel, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], data, pixelsOffset || 0);
+                    gl.texSubImage3D(gl[target], mipLevel, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], data, offset);
                 }
                 else
                 {
@@ -220,6 +223,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
                     const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                     gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data);
+
+                    console.assert(!offset, `WebGL1 不支持 IGLTextureDataSource.dataLayout.offset ！`)
                 }
                 else
                 {

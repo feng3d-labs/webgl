@@ -66,7 +66,7 @@ import { getShaderSource, loadImage } from "./utility";
                 mipLevel: 0,
                 size: [image.width / 2, image.height / 2],
                 data: pixels,
-                dataImageWidth: image.width,
+                dataLayout: { width: image.width },
                 dataImageOrigin: [image.width / 4, image.width / 4],
             }]
         };

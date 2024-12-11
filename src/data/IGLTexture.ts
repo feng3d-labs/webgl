@@ -47,10 +47,6 @@ export interface IGLTextureImageSource extends ITextureImageSource
 export interface IGLTextureDataSource extends ITextureDataSource
 {
 
-    /**
-     * 默认为 0。
-     */
-    dataOffset?: number;
 }
 
 /**
