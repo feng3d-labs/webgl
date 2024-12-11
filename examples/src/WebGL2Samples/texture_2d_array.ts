@@ -67,7 +67,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
             dimension: "2d-array",
             format: "rgba8unorm",
-            sources: [{ size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
+            sources: [{ __type: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
         };
         sampler = {
             minFilter: "LINEAR",

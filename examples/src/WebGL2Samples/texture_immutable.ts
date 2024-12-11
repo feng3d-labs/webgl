@@ -170,7 +170,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            sources: [{ size: [SIZE, SIZE, SIZE], data: data }],
+            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data: data }],
         };
         const sampler3D: IGLSampler = {
             lodMinClamp: 0,
