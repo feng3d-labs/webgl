@@ -1,6 +1,6 @@
-import { ITexture, ITextureImageSource } from "@feng3d/render-api";
+import { ITexture, ITextureBufferSource, ITextureImageSource } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
-import { IGLTexturePixelStore, IGLTexturePixelStore1 } from "./IGLTexturePixelStore";
+import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
@@ -44,7 +44,7 @@ export interface IGLTextureImageSource extends ITextureImageSource
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
  */
-export interface IGLTextureBufferSource
+export interface IGLTextureBufferSource extends ITextureBufferSource
 {
     /**
      * 像素解包打包时参数。
@@ -52,51 +52,6 @@ export interface IGLTextureBufferSource
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
      */
     readonly pixelStore?: IGLTexturePixelStore;
-
-    /**
-     * 写入mipmap级别。
-     *
-     * 默认为 0。
-     */
-    mipLevel?: number,
-
-    /**
-     * 写入x轴偏移。
-     * 
-     * 默认为0。
-     */
-    xoffset?: number,
-
-    /**
-     * 写入Y轴偏移。
-     * 
-     * 默认为0。
-     */
-    yoffset?: number,
-
-    /**
-     * 写入3D纹理时深度偏移。
-     * 
-     * 默认为0。
-     */
-    zoffset?: number;
-
-    /**
-     * 写入纹理宽度。
-     */
-    width: number,
-
-    /**
-     * 写入纹理高度。
-     */
-    height: number,
-
-    /**
-     * 写入纹理深度尺寸，默认为 1。
-     *
-     * WebGL2 支持。
-     */
-    depthOrArrayLayers?: number;
 
     /**
      * 像素数据。

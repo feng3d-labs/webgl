@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -83,7 +83,7 @@ import { getShaderSource } from "./utility";
         dimension: "3d",
         format: "r8unorm",
         generateMipmap: true,
-        sources: [{ mipLevel: 0, width: SIZE, height: SIZE, depthOrArrayLayers: SIZE, pixels: data }],
+        sources: [{ mipLevel: 0, size: [SIZE, SIZE, SIZE], pixels: data }],
     };
     const sampler: IGLSampler = {
         lodMinClamp: 0,
