@@ -1,12 +1,10 @@
-import { IRenderbuffer } from "@feng3d/render-api";
-
 /**
  * 渲染缓冲区。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
  */
-export interface IGLRenderbuffer extends IRenderbuffer
+export interface IGLRenderbuffer
 {
     /**
      * 渲染缓冲区内部格式。

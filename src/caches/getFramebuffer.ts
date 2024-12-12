@@ -1,9 +1,9 @@
 import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { IGLTextureView } from "../data/IGLTextureView";
-import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
 import { getGLTexture } from "./getGLTexture";
+import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
 
 declare global
 {
@@ -12,8 +12,6 @@ declare global
         _framebuffers: Map<IGLRenderPassDescriptor, WebGLFramebuffer>;
     }
 }
-
-const defaultTextureView: Partial<IGLTextureView> = { baseMipLevel: 0, baseArrayLayer: 0 };
 
 /**
  * 获取帧缓冲区
@@ -36,25 +34,27 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     const drawBuffers: number[] = [];
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
-        const { view } = item;
+        const view = item.view as (IGLTextureView | IGLRenderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
         if ("texture" in view)
         {
-            const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
+            const texture = view.texture;
+            const baseMipLevel = view.baseMipLevel || 0;
+            const baseArrayLayer = view.baseArrayLayer || 0;
 
             const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = webGLTexture.textureTarget;
 
             if (textureTarget === "TEXTURE_2D")
             {
-                gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment, gl[textureTarget], webGLTexture, level);
+                gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment, gl[textureTarget], webGLTexture, baseMipLevel);
             }
             else if (textureTarget === "TEXTURE_2D_ARRAY")
             {
                 if (gl instanceof WebGL2RenderingContext)
                 {
-                    gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, attachment, webGLTexture, level, layer);
+                    gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, attachment, webGLTexture, baseMipLevel, baseArrayLayer);
                 }
             }
             else
@@ -64,7 +64,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         }
         else
         {
-            const renderbuffer = getGLRenderbuffer(gl, view as IGLRenderbuffer, sampleCount);
+            const renderbuffer = getGLRenderbuffer(gl, view, sampleCount);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
         }
     });
@@ -79,23 +79,26 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     }
 
     // 处理深度模板附件
-    if (passDescriptor.depthStencilAttachment)
+    if (passDescriptor.depthStencilAttachment?.view)
     {
-        const { view } = passDescriptor.depthStencilAttachment;
-        const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
+        const view = passDescriptor.depthStencilAttachment.view;
+
+        const texture = view.texture;
+        const baseMipLevel = view.baseMipLevel || 0;
+        const baseArrayLayer = view.baseArrayLayer || 0;
 
         const webGLTexture = getGLTexture(gl, texture);
         const textureTarget = webGLTexture.textureTarget;
 
         if (textureTarget === "TEXTURE_2D")
         {
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, level);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
         }
         else if (textureTarget === "TEXTURE_2D_ARRAY")
         {
             if (gl instanceof WebGL2RenderingContext)
             {
-                gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, level, layer);
+                gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, baseMipLevel, baseArrayLayer);
             }
         }
         else

@@ -11,4 +11,3 @@ export interface IGLTextureView extends ITextureView
      */
     readonly texture: IGLTexture,
 }
-

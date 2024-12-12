@@ -22,6 +22,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 
     const renderbuffers: IGLRenderbuffer[] = [];
 
+    // 创建支持 多重采样的 渲染通道
     const passDescriptor: IGLRenderPassDescriptor = {
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
@@ -34,7 +35,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 
             const colorAttachment: IGLRenderPassColorAttachment = {
                 ...v,
-                view: renderbuffer,
+                view: renderbuffer as any,
             };
             return colorAttachment;
         }),

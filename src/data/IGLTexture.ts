@@ -1,6 +1,5 @@
 import { ITexture, ITextureDataSource, ITextureImageSource } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
-import { IGLTexturePixelStore } from "./IGLTexturePixelStore";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
