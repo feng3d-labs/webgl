@@ -82,33 +82,25 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     if (passDescriptor.depthStencilAttachment)
     {
         const { view } = passDescriptor.depthStencilAttachment;
-        if ("texture" in view)
+        const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
+
+        const webGLTexture = getGLTexture(gl, texture);
+        const textureTarget = webGLTexture.textureTarget;
+
+        if (textureTarget === "TEXTURE_2D")
         {
-            const { texture, baseMipLevel: level, baseArrayLayer: layer } = { ...defaultTextureView, ...view };
-
-            const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = webGLTexture.textureTarget;
-
-            if (textureTarget === "TEXTURE_2D")
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, level);
+        }
+        else if (textureTarget === "TEXTURE_2D_ARRAY")
+        {
+            if (gl instanceof WebGL2RenderingContext)
             {
-                gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, level);
-            }
-            else if (textureTarget === "TEXTURE_2D_ARRAY")
-            {
-                if (gl instanceof WebGL2RenderingContext)
-                {
-                    gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, level, layer);
-                }
-            }
-            else
-            {
-                console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
+                gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, level, layer);
             }
         }
         else
         {
-            const renderbuffer = getGLRenderbuffer(gl, view as IGLRenderbuffer);
-            gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
+            console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
         }
     }
 
