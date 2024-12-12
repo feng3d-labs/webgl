@@ -1,5 +1,4 @@
-import { IPrimitiveTopology } from "@feng3d/render-api";
-import { IGLCullFace } from "./IGLCullFace";
+import { ICullFace, IFrontFace, IPrimitiveTopology } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
@@ -28,9 +27,16 @@ declare module "@feng3d/render-api"
         readonly topology?: IPrimitiveTopology;
 
         /**
+         * * `FRONT_AND_BACK` 剔除正面与背面，仅在WebGL中生效！
          * 
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
          */
-        cullFace?: IGLCullFace;
+        readonly cullFace?: ICullFace;
+
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
+         */
+        readonly frontFace?: IFrontFace;
     }
 }
 

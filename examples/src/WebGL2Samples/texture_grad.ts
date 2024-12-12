@@ -19,7 +19,7 @@ import { getShaderSource, loadImage } from "./utility";
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depth: { depthtest: true } },
-        primitive: { cullFace: { enableCullFace: true, cullMode: "BACK" } },
+        primitive: { cullFace: "back" },
     };
 
     // -- Init buffers

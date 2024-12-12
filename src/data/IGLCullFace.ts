@@ -1,38 +1,11 @@
-/**
- * 面剔除。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
- */
-export interface IGLCullFace
+import { ICullFace } from "@feng3d/render-api";
+
+declare module "@feng3d/render-api"
 {
-    /**
-     * 是否开启面剔除。
-     *
-     * 默认为 false。
-     */
-    enableCullFace?: boolean;
-
-    /**
-     * 剔除面，默认 BACK，剔除背面。
-     *
-     * 默认情况下，逆时针的顶点连接顺序被定义为三角形的正面。
-     * 使用gl.frontFace(gl.CW);调整顺时针为正面
-     *
-     * * NONE 关闭裁剪面
-     * * FRONT 正面
-     * * BACK 背面
-     * * FRONT_AND_BACK 正面与背面
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
-     */
-    cullMode?: GLCullFace;
-
-    /**
-     * 正向方向，默认 CCW。三角形逆时针方向为正面。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
-     */
-    frontFace?: GLFrontFace;
+    export interface ICullFaceMap
+    {
+        "FRONT_AND_BACK": "FRONT_AND_BACK";
+    }
 }
 
 /**
@@ -43,7 +16,7 @@ export interface IGLCullFace
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
  */
-export type GLFrontFace = "CW" | "CCW";
+export type IGLFrontFace = "CW" | "CCW";
 
 /**
  * 剔除面，默认 BACK，剔除背面。
@@ -58,4 +31,4 @@ export type GLFrontFace = "CW" | "CCW";
  * @see http://www.jianshu.com/p/ee04165f2a02
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/cullFace
  */
-export type GLCullFace = "FRONT" | "BACK" | "FRONT_AND_BACK";
+export type IGLCullFace = "FRONT" | "BACK" | "FRONT_AND_BACK";
