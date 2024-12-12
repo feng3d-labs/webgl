@@ -1,5 +1,5 @@
-import { IRenderObject } from "@feng3d/render-api";
-import { IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
+import { IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: IGLRenderPipeline = {
+const pipeline: IRenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;

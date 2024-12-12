@@ -1,5 +1,5 @@
-import { IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLCopyBufferToBuffer, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLCopyBufferToBuffer, IGLVertexAttributes, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -16,7 +16,7 @@ import { getShaderSource } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IGLRenderPipeline = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         primitive: { topology: "TRIANGLES" },
     };

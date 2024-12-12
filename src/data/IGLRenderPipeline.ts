@@ -1,45 +1,50 @@
+import { IRenderPipeline } from "@feng3d/render-api";
 import { IGLColorTargetState } from "./IGLColorTargetState";
 import { IGLDepthStencilState } from "./IGLDepthStencilState";
 import { IGLPrimitiveState } from "./IGLPrimitiveState";
 
-/**
- * 渲染管线。
- */
-export interface IGLRenderPipeline
+declare module "@feng3d/render-api"
 {
     /**
-     * 顶点着色器代码
+     * 渲染管线。
      */
-    vertex: IVertexState;
+    export interface IRenderPipeline
+    {
+        /**
+         * 顶点着色器代码
+         */
+        vertex: IVertexState;
 
-    /**
-     * 片段着色器代码
-     */
-    fragment: IFragmentState;
+        /**
+         * 片段着色器代码
+         */
+        fragment: IFragmentState;
 
-    /**
-     * 图元拓扑结构。
-     */
-    primitive?: IGLPrimitiveState;
+        /**
+         * 图元拓扑结构。
+         */
+        primitive?: IGLPrimitiveState;
 
-    /**
-     * 描述可选的深度模板的测试、运算以及偏差。
-     */
-    depthStencil?: IGLDepthStencilState;
+        /**
+         * 描述可选的深度模板的测试、运算以及偏差。
+         */
+        depthStencil?: IGLDepthStencilState;
 
-    /**
-     * 回写变量。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
-     */
-    transformFeedbackVaryings?: ITransformFeedbackVaryings;
+        /**
+         * 回写变量。
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
+         */
+        transformFeedbackVaryings?: ITransformFeedbackVaryings;
 
-    /**
-     * 是否丢弃后续光栅化阶段。
-     *
-     * gl.RASTERIZER_DISCARD
-     */
-    rasterizerDiscard?: boolean;
+        /**
+         * 是否丢弃后续光栅化阶段。
+         *
+         * gl.RASTERIZER_DISCARD
+         */
+        rasterizerDiscard?: boolean;
+    }
+
 }
 
 export interface ITransformFeedbackVaryings

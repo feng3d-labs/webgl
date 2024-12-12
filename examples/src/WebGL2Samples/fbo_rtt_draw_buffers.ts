@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -19,14 +19,14 @@ const windowSize = {
 // -- Initialize program
 
 // Draw buffer shaders
-const drawBufferProgram: IGLRenderPipeline = {
+const drawBufferProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
     primitive: { topology: "TRIANGLES" },
 };
 
 // Draw shaders
-const drawProgram: IGLRenderPipeline = {
+const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
     primitive: { topology: "TRIANGLES" },

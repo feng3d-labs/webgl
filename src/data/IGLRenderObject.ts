@@ -3,7 +3,6 @@ import { LazyObject } from "../types";
 import { IGLDrawIndexed } from "./IGLDrawIndexed";
 import { IGLDrawVertex } from "./IGLDrawVertex";
 import { IGLIndicesDataTypes } from "./IGLIndexBuffer";
-import { IGLRenderPipeline } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 import { IGLVertexAttributes } from "./IGLVertexAttributes";
@@ -15,11 +14,6 @@ declare module "@feng3d/render-api"
      */
     export interface IRenderObject
     {
-        /**
-         * 渲染程序
-         */
-        pipeline: IGLRenderPipeline;
-
         /**
          * 顶点属性数据列表
          */

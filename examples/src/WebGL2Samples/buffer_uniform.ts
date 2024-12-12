@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -16,7 +16,7 @@ import { getShaderSource } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IGLRenderPipeline = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 

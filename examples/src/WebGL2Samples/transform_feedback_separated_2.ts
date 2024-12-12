@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -103,7 +103,7 @@ import { getShaderSource } from "./utility";
 
     function initProgram()
     {
-        const program: IGLRenderPipeline = {
+        const program: IRenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") },
             fragment: {
                 code: getShaderSource("fs-draw"),

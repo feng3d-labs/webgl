@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -11,7 +11,7 @@ document.body.appendChild(canvas);
 const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const program: IGLRenderPipeline = {
+const program: IRenderPipeline = {
     primitive: { topology: "TRIANGLES" },
     vertex: {
         code: getShaderSource("vs")

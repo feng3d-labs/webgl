@@ -1,5 +1,5 @@
-import { IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLUniformBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLUniformBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -12,7 +12,7 @@ const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program
-const program: IGLRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
 // -- Init Buffer
 const vertices = new Float32Array([

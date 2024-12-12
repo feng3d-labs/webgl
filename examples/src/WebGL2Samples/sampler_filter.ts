@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -58,7 +58,7 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IGLRenderPipeline = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     primitive: { topology: "TRIANGLES" },
 };

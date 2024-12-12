@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -40,7 +40,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IGLRenderPipeline = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };

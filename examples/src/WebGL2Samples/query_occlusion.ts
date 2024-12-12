@@ -1,6 +1,8 @@
-import { IRenderObject, IRenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLOcclusionQuery, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+
 import { watcher } from "@feng3d/watcher";
-import { IGLCanvasContext, IGLOcclusionQuery, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -15,7 +17,7 @@ const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: IGLRenderPipeline = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: { depth: { depthtest: true } },
     primitive: { topology: "TRIANGLES" },

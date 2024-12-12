@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -44,7 +44,7 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs: IGLRenderPipeline[] = [
+const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
         primitive: { topology: "TRIANGLES" },

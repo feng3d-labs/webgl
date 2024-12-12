@@ -1,5 +1,5 @@
-import { IRenderObject } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -22,7 +22,7 @@ const vertexPosBuffer = new Float32Array([
     1.0, 1.0,
 ]);
 
-const program: IGLRenderPipeline = {
+const program: IRenderPipeline = {
     primitive: { topology: "TRIANGLE_STRIP" },
     vertex: {
         code: getShaderSource("vs")

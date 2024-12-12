@@ -1,8 +1,8 @@
+import { IRenderPipeline } from "@feng3d/render-api";
 import { getGLBuffer } from "../caches/getGLBuffer";
 import { getGLProgram } from "../caches/getGLProgram";
 import { IGLUniformBufferType } from "../const/IGLUniformType";
 import { IGLBuffer } from "../data/IGLBuffer";
-import { IGLRenderPipeline } from "../data/IGLRenderPipeline";
 import { IGLSamplerTexture } from "../data/IGLSamplerTexture";
 import { IUniformItemInfo } from "../data/IGLUniformInfo";
 import { IGLUniforms } from "../data/IGLUniforms";
@@ -12,7 +12,7 @@ import { runSamplerTexture } from "./runTexture";
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline, uniforms: LazyObject<IGLUniforms>)
+export function runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: LazyObject<IGLUniforms>)
 {
     const webGLProgram = getGLProgram(gl, pipeline);
 

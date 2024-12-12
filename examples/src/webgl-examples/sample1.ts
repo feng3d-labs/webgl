@@ -9,7 +9,6 @@ async function main()
     const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl" };
 
     const webgl = new WebGL(renderingContext);
-    // const webgl = await new WebGPU().init();
 
     const submit: ISubmit = {
         commandEncoders: [{

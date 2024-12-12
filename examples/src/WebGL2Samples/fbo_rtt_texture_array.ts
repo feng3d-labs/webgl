@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -51,13 +51,13 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: IGLRenderPipeline = {
+const multipleOutputProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
     primitive: { topology: "TRIANGLES" },
 };
 
 // Layer shaders
-const layerProgram: IGLRenderPipeline = {
+const layerProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
     primitive: { topology: "TRIANGLES" },
 };

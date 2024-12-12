@@ -1,5 +1,5 @@
-import { IRenderObject } from "@feng3d/render-api";
-import { IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
+import { IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -43,7 +43,7 @@ const vertexArray: { vertices?: IGLVertexAttributes } = {
     }
 };
 
-const pipeline: IGLRenderPipeline = {
+const pipeline: IRenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;

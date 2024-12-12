@@ -1,8 +1,9 @@
+import { IRenderPipeline } from "@feng3d/render-api";
 import { getGLProgram } from "../caches/getGLProgram";
-import { IFragmentState, IGLRenderPipeline, IVertexState } from "../data/IGLRenderPipeline";
+import { IFragmentState, IVertexState } from "../data/IGLRenderPipeline";
 import { defaultColorTargetStates, runColorTargetStates } from "./runColorTargetStates";
 
-export function runProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
+export function runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const program = getGLProgram(gl, pipeline);
     gl.useProgram(program);

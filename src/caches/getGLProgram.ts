@@ -1,6 +1,7 @@
+import { IRenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
-import { IGLRenderPipeline, ITransformFeedbackVaryings } from "../data/IGLRenderPipeline";
+import { ITransformFeedbackVaryings } from "../data/IGLRenderPipeline";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getIGLAttributeType } from "./getIGLAttributeType";
 
@@ -37,7 +38,7 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
@@ -53,7 +54,7 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipel
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipeline)
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const shaderKey = getKey(pipeline);
     const result = gl._programs[shaderKey];
@@ -64,7 +65,7 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IGLRenderPipe
     }
 }
 
-function getKey(pipeline: IGLRenderPipeline)
+function getKey(pipeline: IRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
     const fragment = pipeline.fragment.code;
