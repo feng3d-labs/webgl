@@ -1,9 +1,8 @@
 import { ITextureDimension } from "@feng3d/render-api";
 import { IGLTextureTarget } from "../data/IGLTexture";
 
-export function getIGLTextureTarget(dimension: ITextureDimension)
+export function getIGLTextureTarget(dimension: ITextureDimension = "2d")
 {
-    dimension = dimension || "2d";
     const target: IGLTextureTarget = dimensionMap[dimension];
 
     console.assert(!!target, `WebGL 不支持纹理维度 ${dimension} , 该维度只在WebGPU中支持！`);

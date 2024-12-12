@@ -16,13 +16,6 @@ declare global
     interface WebGLTexture
     {
         /**
-         * 纹理绑定点。
-         *
-         * 默认"TEXTURE_2D"。
-         */
-        textureTarget: IGLTextureTarget;
-
-        /**
          * 销毁WebGL纹理。
          */
         destroy: () => void;
@@ -60,8 +53,6 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
         gl._textures.set(texture, webGLTexture);
 
         gl.bindTexture(gl[target], webGLTexture);
-
-        webGLTexture.textureTarget = target;
 
         // 设置纹理尺寸
         const [width, height, depth] = texture.size;

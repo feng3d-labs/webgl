@@ -4,6 +4,7 @@ import { IGLTextureView } from "../data/IGLTextureView";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
 import { getGLTexture } from "./getGLTexture";
 import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
+import { getIGLTextureTarget } from "./getIGLTextureTarget";
 
 declare global
 {
@@ -44,7 +45,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
             const baseArrayLayer = view.baseArrayLayer || 0;
 
             const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = webGLTexture.textureTarget;
+            const textureTarget = getIGLTextureTarget(texture.dimension);
 
             if (textureTarget === "TEXTURE_2D")
             {
@@ -88,7 +89,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         const baseArrayLayer = view.baseArrayLayer || 0;
 
         const webGLTexture = getGLTexture(gl, texture);
-        const textureTarget = webGLTexture.textureTarget;
+        const textureTarget = getIGLTextureTarget(texture.dimension);
 
         if (textureTarget === "TEXTURE_2D")
         {

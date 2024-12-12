@@ -1,5 +1,6 @@
 import { getGLSampler } from "../caches/getGLSampler";
 import { IGLSampler, TextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../data/IGLSampler";
+import { IGLTextureTarget } from "../data/IGLTexture";
 
 declare global
 {
@@ -28,10 +29,8 @@ export const defaultGLSampler: IGLSampler = {
 /**
  * 设置采样参数
  */
-export function runSampler(gl: WebGLRenderingContext, webGLTexture: WebGLTexture, sampler: IGLSampler, textureID: number)
+export function runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: IGLSampler, textureID: number)
 {
-    const textureTarget = webGLTexture.textureTarget;
-
     if (gl instanceof WebGL2RenderingContext)
     {
         const webGLSampler = getGLSampler(gl, sampler);
