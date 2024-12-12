@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -156,7 +156,7 @@ import { getShaderSource } from "./utility";
         ];
     }
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
         uniforms: {
             diffuse: { texture, sampler },
@@ -166,7 +166,7 @@ import { getShaderSource } from "./utility";
     };
 
     const renderPassObjects: IRenderPassObject[] = [];
-    const renderObjects: IGLRenderObject[] = [];
+    const renderObjects: IRenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
         renderPassObjects.push(

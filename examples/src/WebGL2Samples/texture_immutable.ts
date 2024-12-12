@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
@@ -99,7 +99,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         // -- Render
-        const ro: IGLRenderObject = {
+        const ro: IRenderObject = {
             pipeline: program,
             vertices: vertexArray.vertices,
             uniforms: {

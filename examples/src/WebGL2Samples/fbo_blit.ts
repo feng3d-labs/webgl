@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -80,7 +80,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         pipeline: program,
         vertices: vertexArray.vertices,
         uniforms: {
@@ -149,7 +149,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const viewport2: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height };
-    const renderObject2: IGLRenderObject = {
+    const renderObject2: IRenderObject = {
         vertices: vertexArray.vertices,
         uniforms: {
             MVP: new Float32Array([

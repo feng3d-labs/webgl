@@ -1,5 +1,5 @@
-import { IRenderPass, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -202,7 +202,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const lightPosition = [0.0, 0.0, 5.0];
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
         vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),

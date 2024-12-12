@@ -1,5 +1,5 @@
-import { IRenderPass, ITexture } from "@feng3d/render-api";
-import { IGLRenderObject, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ITexture } from "@feng3d/render-api";
+import { IGLSampler, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -21,7 +21,7 @@ async function main()
 
   const texture = await loadTexture("../../cubetexture.png");
 
-  const renderObject: IGLRenderObject = {
+  const renderObject: IRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLES" },
       vertex: {

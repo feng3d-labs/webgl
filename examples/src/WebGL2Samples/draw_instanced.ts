@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -30,7 +31,7 @@ const vertexArray: { vertices?: IGLVertexAttributes } = {
     },
 };
 
-const renderObject: IGLRenderObject = {
+const renderObject: IRenderObject = {
     vertices: vertexArray.vertices,
     uniforms: {},
     drawVertex: { instanceCount: 2 },

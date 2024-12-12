@@ -1,4 +1,5 @@
-import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
@@ -29,7 +30,7 @@ let tick = 0;
 let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
-const renderObject: IGLRenderObject = {
+const renderObject: IRenderObject = {
     vertices: {
         position: { data: new Float32Array(positions), numComponents: 3 },
     },

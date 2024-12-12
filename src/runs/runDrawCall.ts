@@ -1,14 +1,14 @@
+import { IRenderObject } from "@feng3d/render-api";
 import { getBufferType } from "../caches/getGLBuffer";
 import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
-import { IGLRenderObject } from "../data/IGLRenderObject";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 import { defaultPrimitiveState } from "./runPrimitiveState";
 
-export function runDrawCall(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
+export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     const { pipeline, vertices, indices, drawIndexed, drawVertex } = renderObject;
 

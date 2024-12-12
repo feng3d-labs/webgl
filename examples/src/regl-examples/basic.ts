@@ -1,4 +1,5 @@
-import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -15,7 +16,7 @@ document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
-const renderObject: IGLRenderObject = {
+const renderObject: IRenderObject = {
     vertices: {
         position: {
             data: new Float32Array([

@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -34,7 +34,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         }
     };
 
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         uniforms: {
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],

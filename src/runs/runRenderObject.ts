@@ -1,4 +1,4 @@
-import { IGLRenderObject } from "../data/IGLRenderObject";
+import { IRenderObject } from "@feng3d/render-api";
 import { runDrawCall } from "./runDrawCall";
 import { defaultPrimitiveState } from "./runPrimitiveState";
 import { runRenderPipeline } from "./runRenderPipeline";
@@ -6,7 +6,7 @@ import { endTransformFeedback, runTransformFeedback } from "./runTransformFeedba
 import { runUniforms } from "./runUniforms";
 import { runVertexArray } from "./runVertexArray";
 
-export function runRenderObject(gl: WebGLRenderingContext, renderObject: IGLRenderObject)
+export function runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
 {
     const { pipeline, vertices, indices, uniforms, transformFeedback } = renderObject;
 

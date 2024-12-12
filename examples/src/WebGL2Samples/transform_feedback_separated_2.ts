@@ -1,5 +1,5 @@
-import { IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLRenderObject, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -122,7 +122,7 @@ import { getShaderSource } from "./utility";
     }
 
     const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],

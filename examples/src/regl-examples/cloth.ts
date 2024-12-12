@@ -1,4 +1,5 @@
-import { getIGLVertexBuffer, IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { getIGLVertexBuffer, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -163,7 +164,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         vertices: {
             position: { data: new Float32Array(positions), numComponents: 3 },
             normal: { data: new Float32Array(normals), numComponents: 3 },

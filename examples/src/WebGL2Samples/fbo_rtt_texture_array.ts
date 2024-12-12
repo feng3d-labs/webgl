@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -151,7 +151,7 @@ const renderPass: IRenderPass = {
     renderObjects: renderObjects,
 };
 
-const renderObject: IGLRenderObject = {
+const renderObject: IRenderObject = {
     pipeline: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     vertices: layerVertexArray.vertices,

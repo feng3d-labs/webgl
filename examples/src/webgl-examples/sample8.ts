@@ -1,5 +1,5 @@
-import { IRenderPass, ITexture } from "@feng3d/render-api";
-import { IGLRenderObject, IGLSampler, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ITexture } from "@feng3d/render-api";
+import { IGLSampler, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -25,7 +25,7 @@ function main()
 
     const video = setupVideo("../../Firefox.mp4");
 
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         pipeline: {
             primitive: { topology: "TRIANGLES" },
             vertex: {

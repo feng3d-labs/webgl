@@ -1,5 +1,5 @@
-import { IPassEncoder, IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -179,7 +179,7 @@ const renderObjects: IRenderPassObject[] = [];
 const rp2: IRenderPass = {
     renderObjects: renderObjects,
 };
-const ro: IGLRenderObject = {
+const ro: IRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
     vertices: vertexArrays[PROGRAM.SPLASH].vertices,
 };

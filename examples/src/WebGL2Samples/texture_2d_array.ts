@@ -1,5 +1,5 @@
-import { IRenderPass, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -82,7 +82,7 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IGLRenderObject = {
+        const ro: IRenderObject = {
             pipeline: program,
             vertices: vertexArray.vertices,
             uniforms: {

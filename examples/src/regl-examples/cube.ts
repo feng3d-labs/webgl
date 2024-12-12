@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -63,7 +64,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         vertices: {
             position: { data: new Float32Array(positions), numComponents: 3 },
             uv: { data: new Float32Array(uvs), numComponents: 2 },

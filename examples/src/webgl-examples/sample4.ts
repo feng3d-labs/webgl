@@ -1,5 +1,5 @@
-import { IRenderPass } from "@feng3d/render-api";
-import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let squareRotation = 0.0;
@@ -15,7 +15,7 @@ function main()
 
   const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
-  const renderObject: IGLRenderObject = {
+  const renderObject: IRenderObject = {
     pipeline: {
       primitive: { topology: "TRIANGLE_STRIP" },
       vertex: {

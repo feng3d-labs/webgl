@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -55,7 +56,7 @@ const vertexArray: { vertices?: IGLVertexAttributes } = {
 
 function getRenderObject(tick: number, batchId: number)
 {
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         vertices: vertexArray.vertices,
         uniforms: {
             color: () => [
@@ -78,7 +79,7 @@ function draw()
     canvas.height = canvas.clientHeight;
 
     tick++;
-    const renderObjects: IGLRenderObject[] = [];
+    const renderObjects: IRenderObject[] = [];
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;

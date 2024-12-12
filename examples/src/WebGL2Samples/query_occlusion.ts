@@ -1,6 +1,6 @@
-import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPassObject } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLCanvasContext, IGLOcclusionQuery, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLOcclusionQuery, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -49,7 +49,7 @@ const rp: IRenderPass = {
     renderObjects: renderObjects,
 };
 
-const ro: IGLRenderObject = {
+const ro: IRenderObject = {
     vertices: vertexArray.vertices,
     pipeline: program,
     drawVertex: { firstVertex: 0, vertexCount: 3 },

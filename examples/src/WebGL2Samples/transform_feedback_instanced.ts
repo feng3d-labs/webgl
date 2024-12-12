@@ -1,5 +1,5 @@
-import { IRenderPass } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderObject, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -105,7 +105,7 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    const transformRO: IGLRenderObject = {
+    const transformRO: IRenderObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
         vertices: null,
         indices: null,
@@ -115,7 +115,7 @@ import { getShaderSource } from "./utility";
     };
 
     const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
-    const renderRO: IGLRenderObject = {
+    const renderRO: IRenderObject = {
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
         drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
