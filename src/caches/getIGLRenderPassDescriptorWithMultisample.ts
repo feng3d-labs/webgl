@@ -16,11 +16,6 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
     const texture = (sourcePassDescriptor.colorAttachments[0].view as ITextureView).texture;
-    if ("context" in texture)
-    {
-        console.error(`WebGL不支持 ICanvasTexture！`, texture);
-        return;
-    }
 
     const textureSize = texture.size;
 
@@ -31,11 +26,6 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
             const texture = v.view.texture;
-            if ("context" in texture)
-            {
-                console.error(`WebGL不支持 ICanvasTexture！`, texture);
-                return;
-            }
 
             const renderbuffer: IGLRenderbuffer = {
                 internalformat: getGLRenderbufferInternalformat(texture.format),

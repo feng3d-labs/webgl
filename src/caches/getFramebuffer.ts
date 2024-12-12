@@ -43,12 +43,6 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRende
             const baseMipLevel = view.baseMipLevel || 0;
             const baseArrayLayer = view.baseArrayLayer || 0;
 
-            if ("context" in texture)
-            {
-                console.error(`WebGL中不支持 ICanvasTexture!`, texture);
-                return;
-            }
-
             const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = getIGLTextureTarget(texture.dimension);
 
@@ -92,12 +86,6 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRende
         const texture = view.texture;
         const baseMipLevel = view.baseMipLevel || 0;
         const baseArrayLayer = view.baseArrayLayer || 0;
-
-        if ("context" in texture)
-        {
-            console.error(`WebGL中不支持 ICanvasTexture!`, texture);
-            return;
-        }
 
         const webGLTexture = getGLTexture(gl, texture);
         const textureTarget = getIGLTextureTarget(texture.dimension);
