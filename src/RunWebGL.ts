@@ -1,4 +1,4 @@
-import { IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, ITextureView } from "@feng3d/render-api";
+import { ICommandEncoder, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, ISubmit, ITextureView } from "@feng3d/render-api";
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
@@ -6,11 +6,8 @@ import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
-import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
-import { IGLRenderPass, IGLRenderPassObject } from "./data/IGLRenderPass";
-import { IGLSubmit } from "./data/IGLSubmit";
 import { runFramebuffer } from "./runs/runFramebuffer";
 import { runOcclusionQuery } from "./runs/runOcclusionQuery";
 import { runRenderObject } from "./runs/runRenderObject";
@@ -19,7 +16,7 @@ import { runViewPort } from "./runs/runViewPort";
 
 export class RunWebGL
 {
-    runSubmit(gl: WebGLRenderingContext, submit: IGLSubmit)
+    runSubmit(gl: WebGLRenderingContext, submit: ISubmit)
     {
         const commandBuffers = submit.commandEncoders.map((v) =>
         {
@@ -32,13 +29,13 @@ export class RunWebGL
         gl[_GL_Submit_Times] = ~~gl[_GL_Submit_Times] + 1;
     }
 
-    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: IGLCommandEncoder)
+    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: ICommandEncoder)
     {
         commandEncoder.passEncoders.forEach((passEncoder) =>
         {
             if (!passEncoder.__type)
             {
-                this.runRenderPass(gl, passEncoder as IGLRenderPass);
+                this.runRenderPass(gl, passEncoder as IRenderPass);
             }
             else if (passEncoder.__type === "RenderPass")
             {
@@ -63,7 +60,7 @@ export class RunWebGL
         });
     }
 
-    protected runRenderPass(gl: WebGLRenderingContext, renderPass: IGLRenderPass)
+    protected runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
     {
         // 处理不被遮挡查询
         const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderObjects);
@@ -108,8 +105,8 @@ export class RunWebGL
         const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
         const { depthClearValue, depthLoadOp, stencilClearValue, stencilLoadOp } = depthStencilAttachment;
 
-        
-        
+
+
         gl.clearDepth(depthClearValue);
         gl.clearStencil(stencilClearValue);
 
@@ -120,7 +117,7 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: readonly IGLRenderPassObject[])
+    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {

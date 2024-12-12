@@ -1,5 +1,5 @@
-import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -130,7 +130,7 @@ const matrix = new Float32Array([
     0.0, 0.0, 0.0, 1.0
 ]);
 
-const renderPass1: IGLRenderPass = {
+const renderPass1: IRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [
         { __type: "Viewport", x: 0, y: 0, width: w, height: h },
@@ -143,8 +143,8 @@ const renderPass1: IGLRenderPass = {
 };
 
 // Pass 2
-const renderObjects: IGLRenderPassObject[] = [];
-const renderPass: IGLRenderPass = {
+const renderObjects: IRenderPassObject[] = [];
+const renderPass: IRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },

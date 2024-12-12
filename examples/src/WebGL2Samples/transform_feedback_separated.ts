@@ -1,4 +1,6 @@
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -17,7 +19,7 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: IGLProgram = {
+        const programTransform: IGLRenderPipeline = {
             vertex: { code: vertexShaderSourceTransform },
             fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
@@ -27,7 +29,7 @@ import { getShaderSource } from "./utility";
         return programTransform;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: IGLProgram = {
+    const programFeedback: IGLRenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
@@ -87,10 +89,10 @@ import { getShaderSource } from "./utility";
         ]
     };
 
-    const renderObjects: IGLRenderPassObject[] = [];
+    const renderObjects: IRenderPassObject[] = [];
     
     // -- Render
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderObjects,
     };

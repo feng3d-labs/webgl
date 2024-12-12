@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { IGLRenderObject, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -64,7 +65,7 @@ function main()
     drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPass: IGLRenderPass = {
+  const renderPass: IRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],

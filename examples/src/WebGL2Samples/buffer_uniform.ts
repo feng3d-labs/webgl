@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -15,7 +16,7 @@ import { getShaderSource } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IGLProgram = {
+    const program: IGLRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -87,7 +88,7 @@ import { getShaderSource } from "./utility";
         drawIndexed: { indexCount: 6, firstIndex: 0 }
     };
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };

@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -94,7 +94,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Initialize program
-    const program: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: IGLRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -165,7 +165,7 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: 6 }
     };
 
-    const renderPassObjects: IGLRenderPassObject[] = [];
+    const renderPassObjects: IRenderPassObject[] = [];
     const renderObjects: IGLRenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
@@ -176,7 +176,7 @@ import { getShaderSource } from "./utility";
         renderObjects.push(ro);
     }
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderPassObjects,
     };

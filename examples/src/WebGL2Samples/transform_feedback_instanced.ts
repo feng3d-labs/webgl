@@ -1,4 +1,5 @@
-import { IGLVertexDataTypes, IGLIndicesDataTypes, IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLTransformFeedback, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderObject, IGLRenderPipeline, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -120,7 +121,7 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [transformRO, viewport, renderRO],
     };
@@ -129,7 +130,7 @@ import { getShaderSource } from "./utility";
 
     function initPrograms()
     {
-        const programTransform: IGLProgram = {
+        const programTransform: IGLRenderPipeline = {
             vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
             rasterizerDiscard: true,
@@ -137,7 +138,7 @@ import { getShaderSource } from "./utility";
         };
 
         // Setup program for draw shader
-        const programDraw: IGLProgram = {
+        const programDraw: IGLRenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") }, fragment: {
                 code: getShaderSource("fs-draw"),
                 targets: [{

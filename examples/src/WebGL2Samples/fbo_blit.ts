@@ -1,5 +1,5 @@
-import { IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -96,7 +96,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // Render FBO
-    const fboRenderPass: IGLRenderPass = {
+    const fboRenderPass: IRenderPass = {
         descriptor: {
             colorAttachments: [{
                 view: colorRenderbuffer,
@@ -114,7 +114,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     //
-    const renderPassResolve: IGLRenderPass = {
+    const renderPassResolve: IRenderPass = {
         descriptor: framebufferResolve,
     };
 
@@ -164,7 +164,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         pipeline: program,
     };
 
-    const renderPass2: IGLRenderPass = {
+    const renderPass2: IRenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],

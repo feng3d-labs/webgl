@@ -1,5 +1,6 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -39,7 +40,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IGLProgram = {
+    const program: IGLRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
     };
@@ -184,9 +185,9 @@ import { getShaderSource, loadImage } from "./utility";
     const localMV = mat4.create();
     function render()
     {
-        const renderObjects: IGLRenderPassObject[] = [];
+        const renderObjects: IRenderPassObject[] = [];
         // -- Render
-        const rp: IGLRenderPass = {
+        const rp: IRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }

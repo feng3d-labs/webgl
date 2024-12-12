@@ -1,7 +1,8 @@
 // see https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample1/webgl-demo.js
 // https://mdn.github.io/dom-examples/webgl-examples/tutorial/sample1/
 
-import { IGLCanvasContext, IGLSubmit, WebGL } from "@feng3d/webgl";
+import { ISubmit } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 async function main()
 {
@@ -10,7 +11,7 @@ async function main()
     const webgl = new WebGL(renderingContext);
     // const webgl = await new WebGPU().init();
 
-    const submit: IGLSubmit = {
+    const submit: ISubmit = {
         commandEncoders: [{
             passEncoders: [
                 {

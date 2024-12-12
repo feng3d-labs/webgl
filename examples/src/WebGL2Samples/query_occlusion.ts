@@ -1,5 +1,6 @@
+import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLCanvasContext, IGLOcclusionQuery, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLOcclusionQuery, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -14,7 +15,7 @@ const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: IGLProgram = {
+const program: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: { depth: { depthtest: true } },
     primitive: { topology: "TRIANGLES" },
@@ -38,9 +39,9 @@ const vertexArray: { vertices?: IGLVertexAttributes } = {
     }
 };
 
-const renderObjects: IGLRenderPassObject[] = [];
+const renderObjects: IRenderPassObject[] = [];
 // -- Render
-const rp: IGLRenderPass = {
+const rp: IRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },

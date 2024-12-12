@@ -1,11 +1,13 @@
+import { IRenderPassDescriptor, ISubmit, ITexture } from "@feng3d/render-api";
+
 import { RunWebGL } from "./RunWebGL";
 import { deleteFramebuffer } from "./caches/getFramebuffer";
+import { deleteBuffer } from "./caches/getGLBuffer";
+import { getGLCanvasContext } from "./caches/getGLCanvasContext";
 import { deleteProgram } from "./caches/getGLProgram";
 import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
-import { getGLCanvasContext } from "./caches/getGLCanvasContext";
 import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
-import { deleteBuffer } from "./caches/getGLBuffer";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
@@ -13,10 +15,8 @@ import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
-import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { runReadPixels } from "./runs/runReadPixels";
-import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
 
 /**
  * WEBGL 对象。
@@ -41,7 +41,7 @@ export class WebGL
      * @param submit 一次 GPU 提交内容。
      *
      */
-    submit(submit: IGLSubmit)
+    submit(submit: ISubmit)
     {
         this._runWebGL.runSubmit(this._gl, submit);
     }

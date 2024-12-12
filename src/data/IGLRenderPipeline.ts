@@ -3,11 +3,6 @@ import { IGLDepthStencilState } from "./IGLDepthStencilState";
 import { IGLPrimitiveState } from "./IGLPrimitiveState";
 
 /**
- * @deprecated 请使用 `IRenderPipeline` 。
- */
-export type IGLProgram = IGLRenderPipeline;
-
-/**
  * 渲染管线。
  */
 export interface IGLRenderPipeline

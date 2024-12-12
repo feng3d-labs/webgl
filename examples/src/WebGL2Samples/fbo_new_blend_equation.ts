@@ -1,6 +1,6 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 
-import { ITexture } from "@feng3d/render-api";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -126,8 +126,8 @@ function render()
         drawVertex: { vertexCount: 6 },
     };
 
-    const renderObjects: IGLRenderPassObject[] = [];
-    const renderPass: IGLRenderPass = {
+    const renderObjects: IRenderPassObject[] = [];
+    const renderPass: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderObjects,
     };

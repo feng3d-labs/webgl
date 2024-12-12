@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -48,7 +49,7 @@ const renderObject: IGLRenderObject = {
     pipeline,
 };
 
-const rp: IGLRenderPass = {
+const rp: IRenderPass = {
     descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],

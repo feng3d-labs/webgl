@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -36,9 +36,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const programBicubic: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
+    const programBicubic: IGLRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
 
-    const programOffsetBicubic: IGLProgram = {
+    const programOffsetBicubic: IGLRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-offset-bicubic") },
     };
 
@@ -84,9 +84,9 @@ import { getShaderSource, loadImage } from "./utility";
             wrapT: "CLAMP_TO_EDGE",
         };
 
-        const renderObjects: IGLRenderPassObject[] = [];
+        const renderObjects: IRenderPassObject[] = [];
         // -- Render
-        const rp: IGLRenderPass = {
+        const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects: renderObjects
         };

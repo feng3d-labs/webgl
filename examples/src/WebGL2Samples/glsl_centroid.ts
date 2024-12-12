@@ -1,5 +1,5 @@
-import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IPassEncoder, IRenderPass, IRenderPassDescriptor, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -50,7 +50,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IGLProgram[] = [
+const programs: IGLRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
         primitive: { topology: "TRIANGLES" },
@@ -155,14 +155,14 @@ const vertexArrays: { vertices?: IGLVertexAttributes }[] = [
 ];
 
 // -- Render
-const passEncoders: IGLPassEncoder[] = [];
+const passEncoders: IPassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
@@ -174,9 +174,9 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     passEncoders.push(rp);
 }
 
-const renderObjects: IGLRenderPassObject[] = [];
+const renderObjects: IRenderPassObject[] = [];
 // Pass 2
-const rp2: IGLRenderPass = {
+const rp2: IRenderPass = {
     renderObjects: renderObjects,
 };
 const ro: IGLRenderObject = {

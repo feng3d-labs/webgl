@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -58,7 +58,7 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IGLProgram = {
+const program: IGLRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     primitive: { topology: "TRIANGLES" },
 };
@@ -138,8 +138,8 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const renderObjects: IGLRenderPassObject[] = [];
-    const rp: IGLRenderPass = {
+    const renderObjects: IRenderPassObject[] = [];
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderObjects
     };

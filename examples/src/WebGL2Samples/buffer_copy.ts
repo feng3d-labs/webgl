@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLCopyBufferToBuffer, IGLRenderPass, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLCopyBufferToBuffer, IGLRenderPipeline, IGLVertexAttributes, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -48,7 +49,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Render
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,

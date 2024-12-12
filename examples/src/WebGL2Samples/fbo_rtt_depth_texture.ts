@@ -1,5 +1,5 @@
-import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -92,7 +92,7 @@ const frameBuffer: IRenderPassDescriptor = {
 // -- Render
 
 // Pass 1: Depth
-const renderPass: IGLRenderPass = {
+const renderPass: IRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
@@ -103,7 +103,7 @@ const renderPass: IGLRenderPass = {
 };
 
 // Pass 2: Draw
-const rp2: IGLRenderPass = {
+const rp2: IRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },

@@ -1,27 +1,31 @@
-import { IRenderPass } from "@feng3d/render-api";
+import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
 import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 import { IGLRenderObject } from "./IGLRenderObject";
 import { IGLScissorRect } from "./IGLScissorRect";
 import { IGLViewport } from "./IGLViewport";
 
-/**
- * WebGL渲染通道
- *
- * 包含渲染通道描述以及需要渲染的对象列表。
- */
-export interface IGLRenderPass extends IRenderPass
+declare module "@feng3d/render-api"
 {
     /**
-     * 渲染对象列表，默认为 []。
-     */
-    readonly renderObjects?: readonly IGLRenderPassObject[];
-
-    /**
-     * 渲染不被遮挡查询结果。具体数据保存在各子项的"result"属性中。
+     * WebGL渲染通道
      *
-     * 当提交WebGL后自动获取结果后填充该属性。
+     * 包含渲染通道描述以及需要渲染的对象列表。
      */
-    occlusionQueryResults?: IGLOcclusionQuery[];
-}
+    export interface IRenderPass
+    {
+        /**
+         * 渲染不被遮挡查询结果。具体数据保存在各子项的"result"属性中。
+         *
+         * 当提交WebGL后自动获取结果后填充该属性。
+         */
+        occlusionQueryResults?: IGLOcclusionQuery[];
+    }
 
-export type IGLRenderPassObject = IGLRenderObject | IGLViewport | IGLScissorRect | IGLOcclusionQuery;
+    export interface IRenderPassObjectMap
+    {
+        IGLRenderObject:IGLRenderObject,
+        IGLViewport:IGLViewport
+        IGLScissorRect:IGLScissorRect
+        IGLOcclusionQuery:IGLOcclusionQuery
+    }
+}

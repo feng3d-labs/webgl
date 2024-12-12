@@ -1,7 +1,7 @@
-import { IGLCanvasContext, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
-import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -100,7 +100,7 @@ const IDENTITY = mat4.create();
 // -- Render
 
 // Pass 1
-const renderPass1: IGLRenderPass = {
+const renderPass1: IRenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
@@ -117,7 +117,7 @@ vec3.set(scaleVector3, 8.0, 8.0, 8.0);
 const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
-const renderPass2: IGLRenderPass = {
+const renderPass2: IRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [
         {
