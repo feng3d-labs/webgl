@@ -6,7 +6,7 @@ export function getIGLBuffer(data: BufferSource, target?: GLBufferTarget, usage:
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
-    console.assert(target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
+    console.assert(!!target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
 
     const indexBuffer: IGLBuffer = data[_IGLBuffer] = {
         target: target, usage: usage,

@@ -53,3 +53,4 @@ export * from "./WebGL";
 
 export * as internal from "./internal";
 
+export * from "./caches/getGLBuffer";
