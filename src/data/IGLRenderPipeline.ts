@@ -1,7 +1,6 @@
 import { IRenderPipeline } from "@feng3d/render-api";
 import { IGLColorTargetState } from "./IGLColorTargetState";
 import { IGLDepthStencilState } from "./IGLDepthStencilState";
-import { IGLPrimitiveState } from "./IGLPrimitiveState";
 
 declare module "@feng3d/render-api"
 {
@@ -19,11 +18,6 @@ declare module "@feng3d/render-api"
          * 片段着色器代码
          */
         fragment: IFragmentState;
-
-        /**
-         * 图元拓扑结构。
-         */
-        primitive?: IGLPrimitiveState;
 
         /**
          * 描述可选的深度模板的测试、运算以及偏差。

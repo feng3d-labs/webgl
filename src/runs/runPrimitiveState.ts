@@ -1,5 +1,5 @@
+import { IPrimitiveState } from "@feng3d/render-api";
 import { IGLCullFace } from "../data/IGLCullFace";
-import { IGLPrimitiveState } from "../data/IGLPrimitiveState";
 
 export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: IGLCullFace)
 {
@@ -18,7 +18,7 @@ export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: IGLCullF
 }
 
 const defaultCullFace: IGLCullFace = { enableCullFace: false, cullMode: "BACK", frontFace: "CCW" };
-export const defaultPrimitiveState: IGLPrimitiveState = { topology: "TRIANGLES", cullFace: defaultCullFace };
+export const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullFace: defaultCullFace };
 
 Object.freeze(defaultCullFace);
 Object.freeze(defaultPrimitiveState);
