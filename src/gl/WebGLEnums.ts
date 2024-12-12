@@ -1,4 +1,4 @@
-import { TextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../data/IGLSampler";
+import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 
 /**
  * A GLenum specifying which WebGL capability to enable. Possible values:
@@ -95,22 +95,22 @@ export interface TexParameteri extends TexParameteri_WebGL2
     /**
      * Texture magnification filter
      */
-    TEXTURE_MAG_FILTER: TextureMagFilter;
+    TEXTURE_MAG_FILTER: IGLTextureMagFilter;
 
     /**
      * Texture minification filter
      */
-    TEXTURE_MIN_FILTER: GLTextureMinFilter;
+    TEXTURE_MIN_FILTER: IGLTextureMinFilter;
 
     /**
      * Wrapping function for texture coordinate s
      */
-    TEXTURE_WRAP_S: GLTextureWrap;
+    TEXTURE_WRAP_S: IGLTextureWrap;
 
     /**
      * Wrapping function for texture coordinate t
      */
-    TEXTURE_WRAP_T: GLTextureWrap;
+    TEXTURE_WRAP_T: IGLTextureWrap;
 }
 
 /**
@@ -163,7 +163,7 @@ export interface TexParameteri_WebGL2
     /**
      * Wrapping function for texture coordinate r
      */
-    TEXTURE_WRAP_R: GLTextureWrap;
+    TEXTURE_WRAP_R: IGLTextureWrap;
 }
 
 /**

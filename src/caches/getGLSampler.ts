@@ -1,5 +1,5 @@
-import { IGLSampler } from "../data/IGLSampler";
-import { defaultGLSampler } from "../runs/runSampler";
+import { IGLCompareFunction } from "../data/IGLDepthStencilState";
+import { IGLSampler, IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 
 declare global
 {
@@ -19,8 +19,17 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
         webGLSampler = gl.createSampler();
         gl._samplers.set(sampler, webGLSampler);
 
-        const { minFilter, magFilter, wrapS, wrapT, wrapR, lodMinClamp, lodMaxClamp, compareMode, compare } = { ...defaultGLSampler, ...sampler };
+        const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
+        const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
+        const wrapS: IGLTextureWrap = sampler.wrapS || "REPEAT";
+        const wrapT: IGLTextureWrap = sampler.wrapT || "REPEAT";
+        const wrapR: IGLTextureWrap = sampler.wrapR || "REPEAT";
+        const lodMinClamp = sampler.lodMinClamp || 0;
+        const lodMaxClamp = sampler.lodMaxClamp || 16;
+        const compareMode: IGLSamplerCompareMode = sampler.compareMode || "NONE";
+        const compare: IGLCompareFunction = sampler.compare || "LEQUAL";
 
+        //
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MAG_FILTER, gl[magFilter]);
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_WRAP_S, gl[wrapS]);

@@ -1,30 +1,21 @@
 import { getGLSampler } from "../caches/getGLSampler";
-import { IGLSampler, TextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../data/IGLSampler";
+import { IGLTextureMinFilter, IGLTextureWrap, IGLSampler, IGLTextureMagFilter } from "../data/IGLSampler";
 import { IGLTextureTarget } from "../data/IGLTexture";
 
 declare global
 {
     interface WebGLTexture
     {
-        minFilter?: GLTextureMinFilter,
-        magFilter?: TextureMagFilter,
-        wrapS?: GLTextureWrap,
-        wrapT?: GLTextureWrap,
-        wrapR?: GLTextureWrap,
+        minFilter?: IGLTextureMinFilter,
+        magFilter?: IGLTextureMagFilter,
+        wrapS?: IGLTextureWrap,
+        wrapT?: IGLTextureWrap,
+        wrapR?: IGLTextureWrap,
         anisotropy?: number,
         lodMinClamp?: number;
         lodMaxClamp?: number;
     }
 }
-
-export const defaultGLSampler: IGLSampler = {
-    minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR",
-    wrapS: "REPEAT", wrapT: "REPEAT", wrapR: "REPEAT",
-    lodMinClamp: 0, lodMaxClamp: 16,
-    compareMode: "NONE",
-    compare: "LEQUAL",
-    anisotropy: 1,
-};
 
 /**
  * 设置采样参数
@@ -38,7 +29,10 @@ export function runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureT
     }
     else
     {
-        const { minFilter, magFilter, wrapS, wrapT } = { ...defaultGLSampler, ...sampler };
+        const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
+        const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
+        const wrapS: IGLTextureWrap = sampler.wrapS || "REPEAT";
+        const wrapT: IGLTextureWrap = sampler.wrapT || "REPEAT";
 
         // 设置纹理参数
         if (webGLTexture.minFilter !== minFilter)
@@ -64,7 +58,7 @@ export function runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureT
     }
 
     //
-    const anisotropy = sampler?.anisotropy || defaultGLSampler.anisotropy;
+    const anisotropy = sampler?.anisotropy || 1;
     if (webGLTexture.anisotropy !== anisotropy)
     {
         const extension = gl.getExtension("EXT_texture_filter_anisotropic");
