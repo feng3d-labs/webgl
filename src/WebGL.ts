@@ -10,14 +10,13 @@ import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
 import { IGLReadPixels } from "./data/IGLReadPixels";
-import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLSubmit } from "./data/IGLSubmit";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { runReadPixels } from "./runs/runReadPixels";
-import { ITexture } from "@feng3d/render-api";
+import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
 
 /**
  * WEBGL 对象。
@@ -52,7 +51,7 @@ export class WebGL
         runReadPixels(this._gl, readPixels);
     }
 
-    deleteFramebuffer(passDescriptor: IGLRenderPassDescriptor)
+    deleteFramebuffer(passDescriptor: IRenderPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }

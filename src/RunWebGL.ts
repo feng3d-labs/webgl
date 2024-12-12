@@ -1,19 +1,16 @@
+import { IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, ITextureView } from "@feng3d/render-api";
 import { getFramebuffer } from "./caches/getFramebuffer";
+import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
-import { getGLBuffer } from "./caches/getGLBuffer";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLCommandEncoder } from "./data/IGLCommandEncoder";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
 import { IGLRenderPass, IGLRenderPassObject } from "./data/IGLRenderPass";
-import { IGLRenderPassColorAttachment } from "./data/IGLRenderPassColorAttachment";
-import { IGLRenderPassDepthStencilAttachment } from "./data/IGLRenderPassDepthStencilAttachment";
-import { IGLRenderPassDescriptor } from "./data/IGLRenderPassDescriptor";
 import { IGLSubmit } from "./data/IGLSubmit";
-import { IGLTextureView } from "./data/IGLTextureView";
 import { runFramebuffer } from "./runs/runFramebuffer";
 import { runOcclusionQuery } from "./runs/runOcclusionQuery";
 import { runRenderObject } from "./runs/runRenderObject";
@@ -73,7 +70,7 @@ export class RunWebGL
         //
         occlusionQuery.init();
 
-        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as IGLTextureView).texture)
+        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as ITextureView).texture)
         {
             const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
@@ -93,7 +90,7 @@ export class RunWebGL
         occlusionQuery.resolve(renderPass);
     }
 
-    private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
+    private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
 
@@ -110,6 +107,9 @@ export class RunWebGL
         //
         const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
         const { depthClearValue, depthLoadOp, stencilClearValue, stencilLoadOp } = depthStencilAttachment;
+
+        
+        
         gl.clearDepth(depthClearValue);
         gl.clearStencil(stencilClearValue);
 
@@ -199,5 +199,5 @@ export class RunWebGL
     }
 }
 
-export const defaultRenderPassColorAttachment: IGLRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-export const defaultDepthStencilAttachment: IGLRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+export const defaultRenderPassColorAttachment: IRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
+export const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };

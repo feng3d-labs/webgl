@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -127,7 +127,7 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IGLFramebuffer[] = [
+const framebuffers: IRenderPassDescriptor[] = [
     { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
     { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
 ];

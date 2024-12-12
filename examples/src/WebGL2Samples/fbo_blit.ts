@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLTextureView, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderPassDescriptor, ITexture, ITextureView } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -73,7 +73,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // 此处 Renderbuffer 直接使用 IGLTextureView 替代。
-    const colorRenderbuffer: IGLTextureView = { texture: { format: "rgba8unorm", size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y] } };
+    const colorRenderbuffer: ITextureView = { texture: { format: "rgba8unorm", size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y] } };
 
     const vertexArray: { vertices?: IGLVertexAttributes } = {
         vertices,
@@ -106,7 +106,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         renderObjects: [viewport, renderObject],
     };
 
-    const framebufferResolve: IGLRenderPassDescriptor = {
+    const framebufferResolve: IRenderPassDescriptor = {
         colorAttachments: [{
             view: { texture: textureColorBuffer, baseMipLevel: 0 },
             clearValue: [0.7, 0.0, 0.0, 1.0]

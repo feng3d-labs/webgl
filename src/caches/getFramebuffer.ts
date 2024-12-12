@@ -1,6 +1,5 @@
-import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
+import { IRenderPassDescriptor, ITextureView } from "@feng3d/render-api";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
-import { IGLTextureView } from "../data/IGLTextureView";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
 import { getGLTexture } from "./getGLTexture";
 import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
@@ -10,14 +9,14 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers: Map<IGLRenderPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: Map<IRenderPassDescriptor, WebGLFramebuffer>;
     }
 }
 
 /**
  * 获取帧缓冲区
  */
-export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor)
+export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
@@ -35,7 +34,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
     const drawBuffers: number[] = [];
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
-        const view = item.view as (IGLTextureView | IGLRenderbuffer);
+        const view = item.view as (ITextureView | IGLRenderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
         if ("texture" in view)
@@ -43,6 +42,12 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
             const texture = view.texture;
             const baseMipLevel = view.baseMipLevel || 0;
             const baseArrayLayer = view.baseArrayLayer || 0;
+
+            if ("context" in texture)
+            {
+                console.error(`WebGL中不支持 ICanvasTexture!`, texture);
+                return;
+            }
 
             const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = getIGLTextureTarget(texture.dimension);
@@ -88,6 +93,12 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
         const baseMipLevel = view.baseMipLevel || 0;
         const baseArrayLayer = view.baseArrayLayer || 0;
 
+        if ("context" in texture)
+        {
+            console.error(`WebGL中不支持 ICanvasTexture!`, texture);
+            return;
+        }
+
         const webGLTexture = getGLTexture(gl, texture);
         const textureTarget = getIGLTextureTarget(texture.dimension);
 
@@ -118,7 +129,7 @@ export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRen
  * @param handleMultisample 处理存在多重采样的渲染通道描述。
  * @returns 
  */
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IGLRenderPassDescriptor, handleMultisample = true)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor, handleMultisample = true)
 {
     if (handleMultisample && passDescriptor?.[_IGLRenderPassDescriptorWithMultisample])
     {

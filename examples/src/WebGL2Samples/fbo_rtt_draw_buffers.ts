@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -89,7 +89,7 @@ const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDG
 
 // -- Initialize frame buffer
 
-const frameBuffer: IGLFramebuffer = {
+const frameBuffer: IRenderPassDescriptor = {
     colorAttachments: [
         { view: { texture: color1Texture, baseMipLevel: 0 } },
         { view: { texture: color2Texture, baseMipLevel: 0 } },

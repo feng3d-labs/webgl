@@ -1,7 +1,7 @@
-import { IGLCanvasContext, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
-import { ITexture } from "@feng3d/render-api";
+import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -77,7 +77,7 @@ const texture: ITexture = {
 const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Init Frame Buffers
-const framebuffer: IGLRenderPassDescriptor = {
+const framebuffer: IRenderPassDescriptor = {
     colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     sampleCount: 4 // 多重采样
 };

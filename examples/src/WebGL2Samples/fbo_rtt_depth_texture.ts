@@ -1,5 +1,5 @@
-import { ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPassDescriptor, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -84,7 +84,7 @@ const depthSampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE
 
 // -- Initialize frame buffer
 
-const frameBuffer: IGLFramebuffer = {
+const frameBuffer: IRenderPassDescriptor = {
     colorAttachments: [],
     depthStencilAttachment: { view: { texture: depthTexture, baseMipLevel: 0 }, depthLoadOp: "clear" },
 };

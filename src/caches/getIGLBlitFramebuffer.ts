@@ -1,8 +1,6 @@
+import { IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, ITextureView } from "@feng3d/render-api";
 import { IGLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/IGLBlitFramebuffer";
 import { IGLCopyTextureToTexture, IGLImageCopyTexture } from "../data/IGLCopyTextureToTexture";
-import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
-import { IGLRenderPassDepthStencilAttachment } from "../data/IGLRenderPassDepthStencilAttachment";
-import { IGLTextureView } from "../data/IGLTextureView";
 
 /**
  * 通过 IGLBlitFramebuffer 实现纹理之间拷贝并不靠谱。
@@ -19,10 +17,10 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToText
 
     console.assert(sourceAspect === destinationAspect, `拷贝纹理时两个纹理的 aspect 必须相同！`);
 
-    const sourceColorAttachments: IGLRenderPassColorAttachment[] = [];
-    let sourceDepthStencilAttachment: IGLRenderPassDepthStencilAttachment;
-    const destinationColorAttachments: IGLRenderPassColorAttachment[] = [];
-    let destinationDepthStencilAttachment: IGLRenderPassDepthStencilAttachment;
+    const sourceColorAttachments: IRenderPassColorAttachment[] = [];
+    let sourceDepthStencilAttachment: IRenderPassDepthStencilAttachment;
+    const destinationColorAttachments: IRenderPassColorAttachment[] = [];
+    let destinationDepthStencilAttachment: IRenderPassDepthStencilAttachment;
 
     //
     let mask: "COLOR_BUFFER_BIT" | "DEPTH_BUFFER_BIT" | "STENCIL_BUFFER_BIT";
@@ -72,7 +70,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: IGLCopyTextureToText
 
 function getIGLTextureView(source: IGLImageCopyTexture)
 {
-    const textureView: IGLTextureView = {
+    const textureView: ITextureView = {
         texture: source.texture,
         baseMipLevel: source.mipLevel,
         baseArrayLayer: source.origin?.[2],

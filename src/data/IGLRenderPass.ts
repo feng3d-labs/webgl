@@ -1,7 +1,6 @@
 import { IRenderPass } from "@feng3d/render-api";
 import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 import { IGLRenderObject } from "./IGLRenderObject";
-import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
 import { IGLScissorRect } from "./IGLScissorRect";
 import { IGLViewport } from "./IGLViewport";
 
@@ -12,11 +11,6 @@ import { IGLViewport } from "./IGLViewport";
  */
 export interface IGLRenderPass extends IRenderPass
 {
-    /**
-     * WebGL渲染通道描述
-     */
-    readonly descriptor?: IGLRenderPassDescriptor;
-
     /**
      * 渲染对象列表，默认为 []。
      */

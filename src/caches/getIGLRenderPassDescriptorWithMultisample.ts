@@ -1,9 +1,6 @@
-import { ITextureFormat } from "@feng3d/render-api";
+import { IRenderPassColorAttachment, IRenderPassDescriptor, ITextureFormat, ITextureView } from "@feng3d/render-api";
 import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
-import { IGLRenderPassColorAttachment } from "../data/IGLRenderPassColorAttachment";
-import { IGLRenderPassDescriptor } from "../data/IGLRenderPassDescriptor";
-import { IGLTextureView } from "../data/IGLTextureView";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 
 /**
@@ -14,26 +11,40 @@ import { getIGLTextureFormats } from "./getIGLTextureFormats";
  * 
  * @param sourcePassDescriptor 需要渲染到纹理并且开启多重采样的渲染通道描述。
  */
-export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: IGLRenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
+export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: IRenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
 {
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
-    const textureSize = (sourcePassDescriptor.colorAttachments[0].view as IGLTextureView).texture.size;
+    const texture = (sourcePassDescriptor.colorAttachments[0].view as ITextureView).texture;
+    if ("context" in texture)
+    {
+        console.error(`WebGL不支持 ICanvasTexture！`, texture);
+        return;
+    }
+
+    const textureSize = texture.size;
 
     const renderbuffers: IGLRenderbuffer[] = [];
 
     // 创建支持 多重采样的 渲染通道
-    const passDescriptor: IGLRenderPassDescriptor = {
+    const passDescriptor: IRenderPassDescriptor = {
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
+            const texture = v.view.texture;
+            if ("context" in texture)
+            {
+                console.error(`WebGL不支持 ICanvasTexture！`, texture);
+                return;
+            }
+
             const renderbuffer: IGLRenderbuffer = {
-                internalformat: getGLRenderbufferInternalformat((v.view as IGLTextureView).texture.format),
+                internalformat: getGLRenderbufferInternalformat(texture.format),
                 width: textureSize[0],
                 height: textureSize[1],
             };
             renderbuffers.push(renderbuffer);
 
-            const colorAttachment: IGLRenderPassColorAttachment = {
+            const colorAttachment: IRenderPassColorAttachment = {
                 ...v,
                 view: renderbuffer as any,
             };
@@ -75,7 +86,7 @@ export interface IGLRenderPassDescriptorWithMultisample
     /**
      * 渲染到渲染缓冲区上。
      */
-    passDescriptor: IGLRenderPassDescriptor;
+    passDescriptor: IRenderPassDescriptor;
     /**
      * 拷贝渲染缓冲区到目标纹理中。
      */

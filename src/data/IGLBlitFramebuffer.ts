@@ -1,4 +1,4 @@
-import { IGLRenderPassDescriptor } from "./IGLRenderPassDescriptor";
+import { IRenderPassDescriptor } from "@feng3d/render-api";
 
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
@@ -10,8 +10,8 @@ export interface IGLBlitFramebuffer
      */
     readonly __type: "BlitFramebuffer";
 
-    read: IGLRenderPassDescriptor;
-    draw: IGLRenderPassDescriptor;
+    read: IRenderPassDescriptor;
+    draw: IRenderPassDescriptor;
     blitFramebuffers: IGLBlitFramebufferItem[];
 }
 
