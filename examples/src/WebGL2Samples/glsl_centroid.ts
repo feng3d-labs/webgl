@@ -1,4 +1,4 @@
-import { IGLCanvasContext, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderbuffer, IGLSampler, IGLTexture, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLFramebuffer, IGLPassEncoder, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLTextureView, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -119,11 +119,6 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 
 // -- Init Frame Buffers
 
-// non-centroid
-const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
-// centroid
-const colorRenderbufferCentroid: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
-
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
     RENDERBUFFER_CENTROID: 1,
@@ -219,9 +214,6 @@ webgl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);
 
 webgl.deleteSampler(samplers[PROGRAM.TEXTURE]);
 webgl.deleteSampler(samplers[PROGRAM.TEXTURE_CENTROID]);
-
-webgl.deleteRenderbuffer(colorRenderbuffer);
-webgl.deleteRenderbuffer(colorRenderbufferCentroid);
 
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
