@@ -16,7 +16,7 @@ const webgl = new WebGL(rc);
 
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer

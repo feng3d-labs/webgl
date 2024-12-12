@@ -53,15 +53,15 @@ const PROGRAM = {
 const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     }
 ];
 

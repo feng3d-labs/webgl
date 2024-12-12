@@ -12,7 +12,7 @@ const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 const program: IRenderPipeline = {
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
     vertex: {
         code: getShaderSource("vs")
     },

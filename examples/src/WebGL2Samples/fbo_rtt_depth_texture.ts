@@ -22,13 +22,13 @@ const windowSize = {
 const depthProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
     depthStencil: { depth: { depthtest: true } },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer

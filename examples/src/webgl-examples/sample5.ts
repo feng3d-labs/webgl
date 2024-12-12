@@ -21,7 +21,7 @@ function main()
 
   const renderObject: IRenderObject = {
     pipeline: {
-      primitive: { topology: "TRIANGLES" },
+      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;

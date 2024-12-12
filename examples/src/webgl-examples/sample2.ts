@@ -25,7 +25,7 @@ function main()
         },
         renderObjects: [{
             pipeline: {
-                primitive: { topology: "TRIANGLE_STRIP" },
+                primitive: { topology: "triangle-strip" },
                 vertex: {
                     code: `
             attribute vec4 aVertexPosition;

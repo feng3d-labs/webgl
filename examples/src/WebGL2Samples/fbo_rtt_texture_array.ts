@@ -53,13 +53,13 @@ viewport[Textures.BLUE] = {
 // Multiple out shaders
 const multipleOutputProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // Layer shaders
 const layerProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer

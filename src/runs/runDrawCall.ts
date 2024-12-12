@@ -1,4 +1,5 @@
 import { IRenderObject } from "@feng3d/render-api";
+
 import { getBufferType } from "../caches/getGLBuffer";
 import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
@@ -6,29 +7,26 @@ import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
-import { defaultPrimitiveState } from "./runPrimitiveState";
 
-export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject)
+export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject, drawMode: IGLDrawMode)
 {
-    const { pipeline, vertices, indices, drawIndexed, drawVertex } = renderObject;
-
-    const topology = pipeline.primitive?.topology || defaultPrimitiveState.topology;
+    const { vertices, indices, drawIndexed, drawVertex } = renderObject;
 
     if (drawVertex)
     {
-        _runDrawVertex(gl, topology, vertices, drawVertex);
+        _runDrawVertex(gl, drawMode, vertices, drawVertex);
     }
     else if (drawIndexed)
     {
-        _runDrawIndexed(gl, topology, indices, drawIndexed);
+        _runDrawIndexed(gl, drawMode, indices, drawIndexed);
     }
     else if (indices)
     {
-        _runDrawIndexed(gl, topology, indices, drawIndexed);
+        _runDrawIndexed(gl, drawMode, indices, drawIndexed);
     }
     else
     {
-        _runDrawVertex(gl, topology, vertices, drawVertex);
+        _runDrawVertex(gl, drawMode, vertices, drawVertex);
     }
 }
 

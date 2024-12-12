@@ -22,14 +22,14 @@ const windowSize = {
 const drawBufferProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer

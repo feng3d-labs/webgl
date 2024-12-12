@@ -23,7 +23,7 @@ import { getShaderSource, loadImage } from "./utility";
             }]
         },
         depthStencil: { depth: { depthtest: true } },
-        primitive: { topology: "TRIANGLES", cullFace: { enableCullFace: true, cullMode: "BACK" } }
+        primitive: { topology: "triangle-list", cullFace: { enableCullFace: true, cullMode: "BACK" } }
     };
 
     // -- Init buffers

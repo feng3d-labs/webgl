@@ -134,7 +134,7 @@ import { getShaderSource } from "./utility";
             vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
             rasterizerDiscard: true,
-            primitive: { topology: "POINTS" },
+            primitive: { topology: "point-list" },
         };
 
         // Setup program for draw shader
@@ -148,7 +148,7 @@ import { getShaderSource } from "./utility";
                     }
                 }]
             },
-            primitive: { topology: "TRIANGLES" },
+            primitive: { topology: "triangle-list" },
         };
 
         const programs = [programTransform, programDraw];

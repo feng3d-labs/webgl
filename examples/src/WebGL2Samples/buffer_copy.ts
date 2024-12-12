@@ -18,7 +18,7 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     };
 
     // -- Init Buffer

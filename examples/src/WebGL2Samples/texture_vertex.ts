@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
+import { IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -7,14 +7,14 @@ import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
-    const IDrawMode2Name = {
-        0: "POINTS",
-        3: "LINE_STRIP",
+    const IDrawMode2Name: { [key: string]: IPrimitiveTopology } = {
+        0: "point-list",
+        3: "line-strip",
         2: "LINE_LOOP",
-        1: "LINES",
-        5: "TRIANGLE_STRIP",
+        1: "line-list",
+        5: "triangle-strip",
         6: "TRIANGLE_FAN",
-        4: "TRIANGLES",
+        4: "triangle-list",
     };
 
     const VertexAttributeType2Name = {

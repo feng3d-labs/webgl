@@ -28,7 +28,7 @@ const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-splash") },
         fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     },
 ];
 

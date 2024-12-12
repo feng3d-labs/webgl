@@ -60,7 +60,7 @@ viewport[Corners.TOP_LEFT] = {
 
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer

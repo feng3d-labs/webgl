@@ -18,7 +18,7 @@ export function runPrimitiveState(gl: WebGLRenderingContext, cullFace?: IGLCullF
 }
 
 const defaultCullFace: IGLCullFace = { enableCullFace: false, cullMode: "BACK", frontFace: "CCW" };
-export const defaultPrimitiveState: IPrimitiveState = { topology: "TRIANGLES", cullFace: defaultCullFace };
+export const defaultPrimitiveState: IPrimitiveState = { topology: "triangle-list", cullFace: defaultCullFace };
 
 Object.freeze(defaultCullFace);
 Object.freeze(defaultPrimitiveState);

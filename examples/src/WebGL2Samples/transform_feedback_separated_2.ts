@@ -115,7 +115,7 @@ import { getShaderSource } from "./utility";
                 }]
             },
             transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
-            primitive: { topology: "POINTS" },
+            primitive: { topology: "point-list" },
         };
 
         return program;

@@ -27,7 +27,7 @@ const vertexPosBuffer = new Float32Array([
 ]);
 
 const pipeline: IRenderPipeline = {
-    primitive: { topology: "TRIANGLE_STRIP" },
+    primitive: { topology: "triangle-strip" },
     vertex: {
         code: getShaderSource("vs")
     },

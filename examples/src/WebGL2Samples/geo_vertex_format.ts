@@ -18,7 +18,7 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "TRIANGLES", cullFace: { enableCullFace: true, cullMode: "BACK" } },
+        primitive: { topology: "triangle-list", cullFace: { enableCullFace: true, cullMode: "BACK" } },
         depthStencil: { depth: { depthtest: true } },
     };
 
