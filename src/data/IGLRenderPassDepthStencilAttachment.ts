@@ -1,9 +1,10 @@
+import { IRenderPassDepthStencilAttachment } from "@feng3d/render-api";
 import { IGLTextureView } from "./IGLTextureView";
 
 /**
  * 深度模板附件。
  */
-export interface IGLRenderPassDepthStencilAttachment
+export interface IGLRenderPassDepthStencilAttachment extends IRenderPassDepthStencilAttachment
 {
     /**
      * 深度附件视图。

@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
@@ -51,7 +52,7 @@ import { getShaderSource, loadImage } from "./utility";
     let vertexBuffer: IGLVertexDataTypes;
     let indicesBuffer: IGLIndicesDataTypes;
 
-    let texture: IGLTexture;
+    let texture: ITexture;
     let sampler: IGLSampler;
 
     const ro: IGLRenderObject = {

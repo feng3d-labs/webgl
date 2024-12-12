@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, IGLTexture, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -293,7 +294,7 @@ async function loadTexture(url: string)
 
     const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-    const texture: IGLTexture = {
+    const texture: ITexture = {
         size: [img.width, img.height],
         format: "rgba8unorm",
         sources: [{ image: img }],

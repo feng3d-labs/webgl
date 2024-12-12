@@ -1,6 +1,7 @@
-import { IGLCanvasContext, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
+import { ITexture } from "@feng3d/render-api";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -69,7 +70,7 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const texture: IGLTexture = {
+const texture: ITexture = {
     format: "rgba8unorm",
     size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
 };

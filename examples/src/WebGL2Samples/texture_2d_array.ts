@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -44,7 +45,7 @@ import { getShaderSource, loadImage } from "./utility";
         }
     };
 
-    let texture: IGLTexture;
+    let texture: ITexture;
     let sampler: IGLSampler;
     loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {

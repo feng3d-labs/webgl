@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, IGLTexture, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -325,7 +326,7 @@ function initBuffers()
 //
 function initTexture(): IGLSamplerTexture
 {
-    const texture: IGLTexture = {
+    const texture: ITexture = {
         size: [1, 1],
         format: "rgba8unorm",
         sources: [{ __type: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
@@ -338,7 +339,7 @@ function initTexture(): IGLSamplerTexture
 //
 // copy the video texture
 //
-function updateTexture(texture: IGLTexture, video: HTMLVideoElement)
+function updateTexture(texture: ITexture, video: HTMLVideoElement)
 {
     // 修改纹理尺寸
     if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)

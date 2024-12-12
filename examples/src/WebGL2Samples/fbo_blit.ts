@@ -1,4 +1,5 @@
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLTexture, IGLTextureView, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLRenderObject, IGLRenderPass, IGLRenderPassDescriptor, IGLRenderPipeline, IGLSampler, IGLTextureView, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -50,7 +51,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         y: image.height
     };
 
-    const textureDiffuse: IGLTexture = {
+    const textureDiffuse: ITexture = {
         size: [image.width, image.height],
         format: "rgba8unorm",
         sources: [{
@@ -62,7 +63,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         magFilter: "LINEAR",
     };
 
-    const textureColorBuffer: IGLTexture = {
+    const textureColorBuffer: ITexture = {
         format: "rgba8unorm",
         size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };

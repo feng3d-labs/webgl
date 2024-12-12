@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -81,7 +82,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // -- Init 2D Texture
-        const texture2D: IGLTexture = {
+        const texture2D: ITexture = {
             format: "rgba8unorm",
             mipLevelCount: 1,
             size: [512, 512],
@@ -164,7 +165,7 @@ import { getShaderSource, loadImage } from "./utility";
             }
         }
 
-        const texture3D: IGLTexture = {
+        const texture3D: ITexture = {
             dimension: "3d",
             format: "r8uint",
             generateMipmap: true,

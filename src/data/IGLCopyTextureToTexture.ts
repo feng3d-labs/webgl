@@ -1,4 +1,4 @@
-import { IGLTexture } from "./IGLTexture";
+import { ITexture } from "@feng3d/render-api";
 
 /**
  * GL中纹理之间拷贝。
@@ -31,7 +31,7 @@ export interface IGLImageCopyTexture
     /**
      * Texture to copy to/from.
      */
-    texture: IGLTexture;
+    texture: ITexture;
 
     /**
      * Mip-map level of the {@link GPUImageCopyTexture#texture} to copy to/from.

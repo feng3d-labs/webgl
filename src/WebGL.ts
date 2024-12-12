@@ -15,9 +15,9 @@ import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLSubmit } from "./data/IGLSubmit";
-import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { runReadPixels } from "./runs/runReadPixels";
+import { ITexture } from "@feng3d/render-api";
 
 /**
  * WEBGL 对象。
@@ -67,7 +67,7 @@ export class WebGL
         deleteBuffer(this._gl, buffer);
     }
 
-    deleteTexture(texture: IGLTexture)
+    deleteTexture(texture: ITexture)
     {
         deleteTexture(this._gl, texture);
     }

@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -74,13 +75,13 @@ const quadVertexArray: { vertices?: IGLVertexAttributes } = {
 
 // -- Initialize texture targets
 
-const color1Texture: IGLTexture = {
+const color1Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
 const color1Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
-const color2Texture: IGLTexture = {
+const color2Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };

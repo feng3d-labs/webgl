@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLFramebuffer, IGLRenderObject, IGLRenderPass, IGLRenderPassObject, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -101,7 +102,7 @@ const layerVertexArray: { vertices?: IGLVertexAttributes } = {
 const w = 16;
 const h = 16;
 
-const texture: IGLTexture = {
+const texture: ITexture = {
     dimension: "2d-array",
     format: "rgba8unorm",
     size: [w, h, 3],

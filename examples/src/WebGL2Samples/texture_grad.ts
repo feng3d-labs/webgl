@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLProgram, IGLRenderObject, IGLRenderPass, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -119,7 +120,7 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: IGLTexture;
+    let texture: ITexture;
     let sampler: IGLSampler;
     loadImage(imageUrl, function (image)
     {

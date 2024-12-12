@@ -1,5 +1,5 @@
+import { ITexture } from "@feng3d/render-api";
 import { IGLSampler } from "./IGLSampler";
-import { IGLTexture } from "./IGLTexture";
 
 /**
  * 采样纹理。
@@ -8,7 +8,10 @@ import { IGLTexture } from "./IGLTexture";
  */
 export interface IGLSamplerTexture
 {
-    texture: IGLTexture;
+    /**
+     * 纹理。
+     */
+    texture: ITexture;
 
     /**
      * 采样器。

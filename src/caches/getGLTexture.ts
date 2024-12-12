@@ -1,6 +1,6 @@
-import { ITextureSize } from "@feng3d/render-api";
+import { ITexture, ITextureDataSource, ITextureImageSource, ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLTexture, IGLTextureDataSource, IGLTextureImageSource, IGLTextureTarget } from "../data/IGLTexture";
+import { IGLTextureTarget } from "../data/IGLTexture";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -10,7 +10,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _textures: Map<IGLTexture, WebGLTexture>
+        _textures: Map<ITexture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -45,7 +45,7 @@ export const defaultTexturePixelStore: IGLTexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
+export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
@@ -123,7 +123,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             const zoffset = textureOrigin?.[2];
 
             // 处理图片资源
-            const imageSource = v as IGLTextureImageSource;
+            const imageSource = v as ITextureImageSource;
             if (imageSource.image)
             {
                 const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
@@ -180,7 +180,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
             }
 
             // 处理数据资源
-            const bufferSource = v as IGLTextureDataSource;
+            const bufferSource = v as ITextureDataSource;
             const { data, dataLayout, dataImageOrigin } = bufferSource;
 
             //
@@ -276,7 +276,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: IGLTexture)
     return webGLTexture;
 }
 
-export function deleteTexture(gl: WebGLRenderingContext, texture: IGLTexture)
+export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
 {
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;

@@ -1,4 +1,5 @@
-import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLTexture, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLSampler, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -75,7 +76,7 @@ const quadVertexArray: { vertices?: IGLVertexAttributes } = {
 
 // the proper texture format combination can be found here
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
-const depthTexture: IGLTexture = {
+const depthTexture: ITexture = {
     size: [windowSize.x, windowSize.y],
     format: "depth16unorm",
 };

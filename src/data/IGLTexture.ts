@@ -1,60 +1,10 @@
-import { ITexture, ITextureDataSource, ITextureImageSource } from "@feng3d/render-api";
+import { ITexture } from "@feng3d/render-api";
 import { IGLCanvasTexture } from "./IGLCanvasTexture";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
  */
-export type IGLTextureLike = IGLCanvasTexture | IGLTexture;
-
-/**
- * 纹理
- */
-export interface IGLTexture extends ITexture
-{
-    /**
-     * 纹理资源。
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage3D
-     */
-    sources?: readonly IGLTextureSource[];
-}
-
-/**
- * 纹理资源。
- */
-export type IGLTextureSource = IGLTextureImageSource | IGLTextureDataSource;
-
-/**
- * 纹理图片资源。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
- * 
- * 注：不再支持参数 `border`
- */
-export interface IGLTextureImageSource extends ITextureImageSource
-{
-}
-
-/**
- * 纹理数据资源。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
- */
-export interface IGLTextureDataSource extends ITextureDataSource
-{
-
-}
-
-/**
- * 写入纹理。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/texSubImage3D
- */
-export type IGLWriteTexture = IGLTextureImageSource | IGLTextureDataSource;
+export type IGLTextureLike = IGLCanvasTexture | ITexture;
 
 /**
  * 纹理绑定点。

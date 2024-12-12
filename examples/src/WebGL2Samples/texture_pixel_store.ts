@@ -1,4 +1,5 @@
-import { getIGLBuffer, IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLTexture, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { ITexture } from "@feng3d/render-api";
+import { getIGLBuffer, IGLCanvasContext, IGLIndicesDataTypes, IGLProgram, IGLRenderPass, IGLRenderPassObject, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -58,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
         const pixels = new Uint8Array(imageData.data.buffer);
 
         // -- Init Texture
-        const texture: IGLTexture = {
+        const texture: ITexture = {
             size: [image.width / 2, image.height / 2],
             format: "rgba8unorm",
             sources: [{
