@@ -1,22 +1,20 @@
 import { ICullFace } from "@feng3d/render-api";
 
-declare module "@feng3d/render-api"
+export function getIGLCullFace(cullFace: ICullFace)
 {
-    export interface ICullFaceMap
-    {
-        "FRONT_AND_BACK": "FRONT_AND_BACK";
-    }
+    const glCullMode: IGLCullFace = cullFaceMap[cullFace];
+
+    console.assert(!!glCullMode, `接收到错误值，请从 ${Object.keys(cullFaceMap).toString()} 中取值！`);
+
+    return glCullMode;
 }
 
-/**
- * 正面方向枚举
- *
- * * CW 顺时钟方向
- * * CCW 逆时钟方向
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/frontFace
- */
-export type IGLFrontFace = "CW" | "CCW";
+const cullFaceMap: { [key: string]: IGLCullFace } = {
+    "FRONT_AND_BACK": "FRONT_AND_BACK",
+    "none": "BACK", // 不会开启剔除面功能，什么值无所谓。
+    "front": "FRONT",
+    "back": "BACK",
+};
 
 /**
  * 剔除面，默认 BACK，剔除背面。

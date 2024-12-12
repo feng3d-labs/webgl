@@ -1,5 +1,5 @@
 import { getGLTransformFeedback } from "../caches/getGLTransformFeedback";
-import { IGLDrawMode } from "../data/IGLPrimitiveState";
+import { IGLDrawMode } from "../caches/getIGLDrawMode";
 import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
 
 export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback, topology: IGLDrawMode)

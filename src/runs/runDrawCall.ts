@@ -1,11 +1,11 @@
 import { IRenderObject } from "@feng3d/render-api";
 
 import { getBufferType } from "../caches/getGLBuffer";
+import { IGLDrawMode } from "../caches/getIGLDrawMode";
 import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
-import { IGLDrawMode } from "../data/IGLPrimitiveState";
 import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject, drawMode: IGLDrawMode)

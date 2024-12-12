@@ -6,7 +6,6 @@ export * from "./data/IGLCapabilities";
 export * from "./data/IGLColorTargetState";
 export * from "./data/IGLCommandEncoder";
 export * from "./data/IGLCopyBufferToBuffer";
-export * from "./data/IGLCullFace";
 export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLDrawIndexed";
 export * from "./data/IGLDrawVertex";
