@@ -4,6 +4,16 @@ import { IGLCopyBufferToBuffer } from "./IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./IGLCopyTextureToTexture";
 import { IGLRenderPass } from "./IGLRenderPass";
 
+declare module "@feng3d/render-api"
+{
+    export interface IPassEncoderMap
+    {
+        IGLBlitFramebuffer: IGLBlitFramebuffer;
+        IGLCopyTextureToTexture: IGLCopyTextureToTexture;
+        IGLCopyBufferToBuffer: IGLCopyBufferToBuffer;
+    }
+}
+
 /**
  * 命令编码器。
  */
