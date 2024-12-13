@@ -1,18 +1,3 @@
-/**
- * 深度模板状态。
- */
-export interface IGLDepthStencilState
-{
-    /**
-     * 深度状态。
-     */
-    depth?: IGLDepthState;
-
-    /**
-     * 模板状态。
-     */
-    stencil?: IGLStencilState;
-}
 
 /**
  * 深度状态。
