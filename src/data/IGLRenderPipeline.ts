@@ -10,11 +10,6 @@ declare module "@feng3d/render-api"
     export interface IRenderPipeline
     {
         /**
-         * 顶点着色器代码
-         */
-        vertex: IVertexState;
-
-        /**
          * 片段着色器代码
          */
         fragment: IFragmentState;
@@ -52,14 +47,6 @@ export interface ITransformFeedbackVaryings
      * 交叉或者分离。
      */
     bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
-}
-
-/**
- * 顶点程序阶段。
- */
-export interface IVertexState
-{
-    code: string;
 }
 
 /**

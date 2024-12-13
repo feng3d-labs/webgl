@@ -1,6 +1,6 @@
 import { IRenderPipeline } from "@feng3d/render-api";
 import { getGLProgram } from "../caches/getGLProgram";
-import { IFragmentState, IVertexState } from "../data/IGLRenderPipeline";
+import { IFragmentState } from "../data/IGLRenderPipeline";
 import { defaultColorTargetStates, runColorTargetStates } from "./runColorTargetStates";
 
 export function runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
@@ -25,5 +25,4 @@ export function runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
     runColorTargetStates(gl, pipeline.fragment.targets);
 }
 
-export const defaultVertexState: IVertexState = Object.freeze({ code: "" });
 export const defaultFragmentState: IFragmentState = Object.freeze({ code: "", targets: defaultColorTargetStates });
