@@ -6,6 +6,6 @@ export const defaultDepthStencilState: IDepthStencilState = Object.freeze({ dept
 
 export function runDepthStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
 {
-    runDepthState(gl, depthStencil?.depth || defaultDepthStencilState.depth);
+    runDepthState(gl, depthStencil?.depth);
     runStencilState(gl, depthStencil?.stencil || defaultDepthStencilState.stencil);
 }

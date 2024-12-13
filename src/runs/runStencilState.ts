@@ -1,6 +1,6 @@
 import { IStencilFaceState, IGLStencilState } from "../data/IGLDepthStencilState";
 
-const defaultStencilFaceState: IStencilFaceState = { stencilFunc: "ALWAYS", stencilFuncRef: 0, stencilFuncMask: 0b11111111, stencilOpFail: "KEEP", stencilOpZFail: "KEEP", stencilOpZPass: "KEEP", stencilMask: 0b11111111 };
+const defaultStencilFaceState: IStencilFaceState = { stencilFunc: "ALWAYS", stencilFuncRef: 0, stencilFuncMask: 0xFFFFFFFF, stencilOpFail: "KEEP", stencilOpZFail: "KEEP", stencilOpZPass: "KEEP", stencilMask: 0xFFFFFFFF };
 export const defaultStencilState: IGLStencilState = { useStencil: false, stencilFront: defaultStencilFaceState, stencilBack: defaultStencilFaceState };
 
 export function runStencilState(gl: WebGLRenderingContext, stencil: IGLStencilState)

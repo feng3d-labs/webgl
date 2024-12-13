@@ -95,15 +95,6 @@ export interface IGLStencilState
 export interface IStencilFaceState
 {
     /**
-     * 描述模板测试的方法。默认ALWAYS，总是通过。
-     *
-     * A GLenum specifying the test function. The default function is gl.ALWAYS.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
-     */
-    stencilFunc?: IGLStencilFunc;
-
-    /**
      * 一个为模板测试指定参考值。这个值被限制在0到2^n -1的范围内，其中n是模板缓冲区中的位数。默认0。
      *
      * A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n -1 where n is the number of bitplanes in the stencil buffer. The default value is 0.
@@ -113,13 +104,31 @@ export interface IStencilFaceState
     stencilFuncRef?: number;
 
     /**
-     * 模板测试时使用的mask值，默认全为1（0b11111111）。
+     * 模板测试时使用的mask值，默认全为1（0xFFFFFFFF）。
      *
      * A GLuint specifying a bit-wise mask that is used to AND the reference value and the stored stencil value when the test is done. The default value is all 1.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
      */
     stencilFuncMask?: number;
+
+    /**
+     * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认全为1（0xFFFFFFFF）。
+     *
+     * A GLuint specifying a bit mask to enable or disable writing of individual bits in the stencil planes. By default, the mask is all 1.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
+     */
+    stencilMask?: number;
+
+    /**
+     * 描述模板测试的方法。默认ALWAYS，总是通过。
+     *
+     * A GLenum specifying the test function. The default function is gl.ALWAYS.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
+     */
+    stencilFunc?: IGLStencilFunc;
 
     /**
      * 指定模板测试失败时使用的函数的枚举。默认KEEP，保持当前值。
@@ -147,15 +156,6 @@ export interface IStencilFaceState
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
      */
     stencilOpZPass?: IGLStencilOp;
-
-    /**
-     * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认全为1（0b11111111）。
-     *
-     * A GLuint specifying a bit mask to enable or disable writing of individual bits in the stencil planes. By default, the mask is all 1.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
-     */
-    stencilMask?: number;
 }
 
 /**
