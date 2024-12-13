@@ -143,8 +143,8 @@ import { getShaderSource } from "./utility";
                 code: getShaderSource("fs-draw"),
                 targets: [{
                     blend: {
-                        color: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
-                        alpha: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                        color: { srcFactor: "src-alpha", dstFactor: "one" },
+                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
                     }
                 }]
             },

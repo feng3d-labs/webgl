@@ -161,8 +161,8 @@ function render()
                                 ...program.fragment.targets[0],
                                 blend: {
                                     ...program.fragment.targets[0].blend,
-                                    color: { ...program.fragment.targets[0].blend.color, operation: "MIN" },
-                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MIN" },
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "min" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "min" },
                                 },
                             }]
                         }
@@ -182,8 +182,8 @@ function render()
                                 ...program.fragment.targets[0],
                                 blend: {
                                     ...program.fragment.targets[0].blend,
-                                    color: { ...program.fragment.targets[0].blend.color, operation: "MAX" },
-                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MAX" },
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "max" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "max" },
                                 },
                             }]
                         }
