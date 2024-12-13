@@ -48,7 +48,7 @@ async function main()
           gl_FragColor = texture2D(uSampler, vTextureCoord);
         }
       ` },
-      depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+      depthStencil: { depthCompare: "less-equal" }
     },
     vertices: {
       aVertexPosition: {

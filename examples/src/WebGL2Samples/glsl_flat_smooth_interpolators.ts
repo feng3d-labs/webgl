@@ -48,12 +48,12 @@ const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
         primitive: { topology: "triangle-list" },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+        depthStencil: { depthCompare: "less-equal" },
     },
     {
         vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
         primitive: { topology: "triangle-list" },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+        depthStencil: { depthCompare: "less-equal" },
     }
 ];
 // -- Load gltf then render

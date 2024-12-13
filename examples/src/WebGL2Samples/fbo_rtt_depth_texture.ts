@@ -21,7 +21,7 @@ const windowSize = {
 // Depth shaders
 const depthProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
-    depthStencil: { depth: { depthtest: true } },
+    depthStencil: {},
     primitive: { topology: "triangle-list" },
 };
 

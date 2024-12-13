@@ -38,7 +38,7 @@ const pipeline: IRenderPipeline = {
     void main() {
       gl_FragColor = color;
     }` },
-    depthStencil: { depth: { depthtest: true } },
+    depthStencil: {},
 };
 
 const vertexArray: { vertices?: IGLVertexAttributes } = {

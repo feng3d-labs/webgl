@@ -44,7 +44,7 @@ function main()
           gl_FragColor = vColor;
         }
       ` },
-      depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+      depthStencil: { depthCompare: "less-equal" }
     },
     vertices: {
       aVertexPosition: {

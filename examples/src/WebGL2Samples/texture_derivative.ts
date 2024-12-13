@@ -22,7 +22,7 @@ import { getShaderSource, loadImage } from "./utility";
 
             }]
         },
-        depthStencil: { depth: { depthtest: true } },
+        depthStencil: {},
         primitive: { topology: "triangle-list", cullFace: "back" }
     };
 

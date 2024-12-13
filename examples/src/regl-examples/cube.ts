@@ -108,7 +108,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         }`,
                 targets: [{ blend: {} }],
             },
-            depthStencil: { depth: { depthtest: true } },
+            depthStencil: {},
         }
     };
 

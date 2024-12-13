@@ -225,7 +225,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         }`,
                 targets: [{ blend: {} }],
             },
-            depthStencil: { depth: { depthtest: true } },
+            depthStencil: {},
         }
     };
 

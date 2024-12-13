@@ -62,7 +62,7 @@ const pipeline: IRenderPipeline = {
     }`,
         targets: [{ blend: {} }],
     },
-    depthStencil: { depth: { depthtest: true } },
+    depthStencil: {},
 };
 
 function getRenderObject(tick: number, batchId: number)

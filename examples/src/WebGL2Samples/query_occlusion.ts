@@ -19,7 +19,7 @@ const webgl = new WebGL(rc);
 // -- Init Program
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    depthStencil: { depth: { depthtest: true } },
+    depthStencil: {},
     primitive: { topology: "triangle-list" },
 };
 

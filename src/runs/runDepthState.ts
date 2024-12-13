@@ -1,21 +1,24 @@
-import { IGLDepthState } from "../data/IGLDepthStencilState";
+import { ICompareFunction, IDepthStencilState } from "@feng3d/render-api";
+import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 
-export function runDepthState(gl: WebGLRenderingContext, depth: IGLDepthState)
+export function runDepthState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
 {
-    const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthState, ...depth };
-
-    if (depthtest)
+    if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
     {
+        const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? 'less');
+        const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
+        //
         gl.enable(gl.DEPTH_TEST);
         //
         gl.depthFunc(gl[depthCompare]);
         gl.depthMask(depthWriteEnabled);
 
         //
-        if (depthBias)
+        if (depthStencil.depthBias || depthStencil.depthBiasSlopeScale)
         {
-            const { factor, units } = depthBias;
-
+            const factor = depthStencil.depthBiasSlopeScale ?? 0;
+            const units = depthStencil.depthBias ?? 0;
+            //
             gl.enable(gl.POLYGON_OFFSET_FILL);
             gl.polygonOffset(factor, units);
         }
@@ -30,5 +33,20 @@ export function runDepthState(gl: WebGLRenderingContext, depth: IGLDepthState)
     }
 }
 
-export const defaultDepthState: IGLDepthState = { depthtest: false, depthWriteEnabled: true, depthCompare: "LESS" };
-Object.freeze(defaultDepthState);
+function getIGLCompareFunction(depthCompare: ICompareFunction)
+{
+    const glDepthCompare: IGLCompareFunction = depthCompareMap[depthCompare];
+
+    return glDepthCompare;
+}
+
+const depthCompareMap: { [key: string]: IGLCompareFunction } = {
+    "never": "NEVER",
+    "less": "LESS",
+    "equal": "EQUAL",
+    "less-equal": "LEQUAL",
+    "greater": "GREATER",
+    "not-equal": "NOTEQUAL",
+    "greater-equal": "GEQUAL",
+    "always": "ALWAYS",
+};

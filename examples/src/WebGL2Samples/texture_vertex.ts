@@ -42,7 +42,7 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
+        depthStencil: { depthCompare:"less" },
     };
 
     const vertexArrayMaps: { [key: string]: { vertices?: IGLVertexAttributes, indices: IGLIndicesDataTypes }[] } = {};

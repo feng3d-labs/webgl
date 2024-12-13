@@ -65,7 +65,7 @@ async function main()
           gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
         }
       ` },
-            depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+            depthStencil: { depthCompare: "less-equal" }
         },
         vertices: {
             aVertexPosition: {
