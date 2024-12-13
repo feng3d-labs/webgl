@@ -1,10 +1,10 @@
 import { IColorTargetState } from "@feng3d/render-api";
-import { IGLBlendEquation, IGLBlendFactor } from "../data/IGLRenderPipeline";
+import { IGLBlendEquation, IGLBlendFactor, IGLWriteMask } from "../data/IGLRenderPipeline";
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly IColorTargetState[])
 {
     //
-    const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
+    const colorMask: IGLWriteMask = targets?.[0]?.writeMask || [true, true, true, true];
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
     //
