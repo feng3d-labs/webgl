@@ -79,23 +79,23 @@ declare module "@feng3d/render-api"
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
          */
-        operation?: GLBlendEquation;
+        operation?: IGLBlendEquation;
 
         /**
          * 源混合因子，默认 SRC_ALPHA，将所有颜色乘以源alpha值。
          *
-         * @see GLBlendFactor
+         * @see IGLBlendFactor
          * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
          */
-        srcFactor?: GLBlendFactor;
+        srcFactor?: IGLBlendFactor;
 
         /**
          * 目标混合因子，默认 ONE_MINUS_SRC_ALPHA，将所有颜色乘以1减去源alpha值。
          *
-         * @see GLBlendFactor
+         * @see IGLBlendFactor
          * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
          */
-        dstFactor?: GLBlendFactor;
+        dstFactor?: IGLBlendFactor;
     }
 
 }
@@ -141,7 +141,7 @@ export type IGLWriteMask = [red: boolean, green: boolean, blue: boolean, alpha: 
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
  */
-export type GLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST_COLOR" | "ONE_MINUS_DST_COLOR" | "SRC_ALPHA" | "ONE_MINUS_SRC_ALPHA" | "DST_ALPHA" | "ONE_MINUS_DST_ALPHA" | "SRC_ALPHA_SATURATE" | "CONSTANT_COLOR" | "ONE_MINUS_CONSTANT_COLOR" | "CONSTANT_ALPHA" | "ONE_MINUS_CONSTANT_ALPHA";
+export type IGLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST_COLOR" | "ONE_MINUS_DST_COLOR" | "SRC_ALPHA" | "ONE_MINUS_SRC_ALPHA" | "DST_ALPHA" | "ONE_MINUS_DST_ALPHA" | "SRC_ALPHA_SATURATE" | "CONSTANT_COLOR" | "ONE_MINUS_CONSTANT_COLOR" | "CONSTANT_ALPHA" | "ONE_MINUS_CONSTANT_ALPHA";
 
 /**
  * 混合方法
@@ -170,4 +170,4 @@ export type GLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR"
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
  */
-export type GLBlendEquation = "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT" | "MIN" | "MAX";
+export type IGLBlendEquation = "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT" | "MIN" | "MAX";

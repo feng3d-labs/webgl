@@ -1,33 +1,31 @@
-import { IBlendComponent, IBlendState, IColorTargetState } from "@feng3d/render-api";
-import { IGLWriteMask } from "../data/IGLRenderPipeline";
+import { IColorTargetState } from "@feng3d/render-api";
+import { IGLBlendEquation, IGLBlendFactor } from "../data/IGLRenderPipeline";
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly IColorTargetState[])
 {
     //
-    const colorMask = targets?.[0]?.writeMask || defaultWriteMask;
+    const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
     //
     let blend = targets?.[0]?.blend;
     if (blend)
     {
-        blend = {
-            color: { ...defaultBlendState.color, ...blend?.color },
-            alpha: { ...defaultBlendState.alpha, ...blend?.color, ...blend?.alpha },
-        };
+        const colorOperation: IGLBlendEquation = blend?.color?.operation || "FUNC_ADD";
+        const colorSrcFactor: IGLBlendFactor = blend?.color?.srcFactor || "SRC_ALPHA";
+        const colorDstFactor: IGLBlendFactor = blend?.color?.dstFactor || "ONE_MINUS_SRC_ALPHA";
+        //
+        const alphaOperation: IGLBlendEquation = blend?.alpha?.operation || colorOperation || "FUNC_ADD";
+        const alphaSrcFactor: IGLBlendFactor = blend?.alpha?.srcFactor || colorSrcFactor || "SRC_ALPHA";
+        const alphaDstFactor: IGLBlendFactor = blend?.alpha?.dstFactor || colorDstFactor || "ONE_MINUS_SRC_ALPHA";
+
         //
         gl.enable(gl.BLEND);
-        gl.blendEquationSeparate(gl[blend.color.operation], gl[blend.alpha.operation]);
-        gl.blendFuncSeparate(gl[blend.color.srcFactor], gl[blend.color.dstFactor], gl[blend.alpha.srcFactor], gl[blend.alpha.dstFactor]);
+        gl.blendEquationSeparate(gl[colorOperation], gl[alphaOperation]);
+        gl.blendFuncSeparate(gl[colorSrcFactor], gl[colorDstFactor], gl[alphaSrcFactor], gl[alphaDstFactor]);
     }
     else
     {
         gl.disable(gl.BLEND);
     }
 }
-
-const defaultWriteMask: IGLWriteMask = Object.freeze([true, true, true, true]) as any;
-const defaultBlendComponent: IBlendComponent = Object.freeze({ operation: "FUNC_ADD", srcFactor: "SRC_ALPHA", dstFactor: "ONE_MINUS_SRC_ALPHA" });
-export const defaultBlendState: IBlendState = Object.freeze({ color: defaultBlendComponent, alpha: defaultBlendComponent });
-const defaultColorTargetState: IColorTargetState = Object.freeze({ writeMask: defaultWriteMask, blend: defaultBlendState });
-export const defaultColorTargetStates: IColorTargetState[] = Object.freeze([defaultColorTargetState]) as any;
