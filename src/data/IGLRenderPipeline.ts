@@ -10,11 +10,6 @@ declare module "@feng3d/render-api"
     export interface IRenderPipeline
     {
         /**
-         * 片段着色器代码
-         */
-        fragment: IFragmentState;
-
-        /**
          * 描述可选的深度模板的测试、运算以及偏差。
          */
         depthStencil?: IGLDepthStencilState;
@@ -34,6 +29,13 @@ declare module "@feng3d/render-api"
         rasterizerDiscard?: boolean;
     }
 
+    export interface IFragmentState
+    {
+        /**
+         * 定义了该管道写入的颜色目标的格式和行为。
+         */
+        targets?: IGLColorTargetState[]
+    }
 }
 
 export interface ITransformFeedbackVaryings
@@ -47,20 +49,4 @@ export interface ITransformFeedbackVaryings
      * 交叉或者分离。
      */
     bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
-}
-
-/**
- * GPU片元程序阶段。
- */
-export interface IFragmentState
-{
-    /**
-     * 着色器源码。
-     */
-    code: string,
-
-    /**
-     * 定义了该管道写入的颜色目标的格式和行为。
-     */
-    targets?: IGLColorTargetState[]
 }
