@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -62,14 +62,14 @@ const quadTexcoords = new Float32Array([
 
 const triVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: triPositions, numComponents: 3 }
+        position: { data: triPositions, format: "float32x3" }
     }
 };
 
 const quadVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: quadPositions, numComponents: 2 },
-        textureCoordinates: { data: quadTexcoords, numComponents: 2 },
+        position: { data: quadPositions, format: "float32x2" },
+        textureCoordinates: { data: quadTexcoords, format: "float32x2" },
     }
 };
 

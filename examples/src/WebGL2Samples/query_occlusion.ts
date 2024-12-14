@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLOcclusionQuery, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLOcclusionQuery, WebGL } from "@feng3d/webgl";
 
 import { watcher } from "@feng3d/watcher";
 
@@ -37,7 +37,7 @@ const vertices = new Float32Array([
 // -- Init Vertex Array
 const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        pos: { data: vertices, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
+        pos: { data: vertices, format: "float32x3", arrayStride: 0, offset: 0 },
     }
 };
 

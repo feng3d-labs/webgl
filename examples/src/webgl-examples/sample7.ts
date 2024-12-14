@@ -69,22 +69,16 @@ async function main()
         },
         vertices: {
             aVertexPosition: {
-                type: "FLOAT",
+                format: "float32x3",
                 data: buffers.position,
-                numComponents: 3,
-                normalized: false,
             },
             aVertexNormal: {
-                type: "FLOAT",
+                format: "float32x3",
                 data: buffers.normal,
-                numComponents: 3,
-                normalized: false,
             },
             aTextureCoord: {
-                type: "FLOAT",
+                format: "float32x2",
                 data: buffers.textureCoord,
-                numComponents: 2,
-                normalized: false,
             },
         },
         indices: buffers.indices,

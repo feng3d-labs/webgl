@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -14,7 +14,7 @@ const webgl = new WebGL(rc);
 // -- Init program
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology:"triangle-list" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Init buffers: vec2 Position, vec2 Texcoord
@@ -39,8 +39,8 @@ const texCoords = new Float32Array([
 // -- Init VertexArray
 const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: positions, numComponents: 2 },
-        texcoord: { data: texCoords, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        texcoord: { data: texCoords, format: "float32x2" },
     }
 };
 

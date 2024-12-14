@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -19,7 +19,7 @@ import { getShaderSource, loadImage } from "./utility";
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         primitive: { topology: "triangle-list", cullFace: "back" },
-        depthStencil: { },
+        depthStencil: {},
     };
 
     // -- Init geometries
@@ -153,9 +153,9 @@ import { getShaderSource, loadImage } from "./utility";
 
     const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            a_position: { type: "FLOAT", data: positions, numComponents: 3 },
-            a_normal: { type: "HALF_FLOAT", data: normals, numComponents: 3 },
-            a_texCoord: { type: "HALF_FLOAT", data: texCoords, numComponents: 2 },
+            a_position: { data: positions, format: "float32x3" },
+            a_normal: { data: normals, format: "float16x4", arrayStride: 6 }, // 由于不支持类型 "float16x3"，则需要设置 arrayStride 为6，表示每次间隔3个半浮点数。
+            a_texCoord: { data: texCoords, format: "float16x2" },
         },
     };
 

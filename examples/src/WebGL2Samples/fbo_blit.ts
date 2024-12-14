@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, IVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView, IVertexAttributes } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -40,8 +40,8 @@ const vertexTexBuffer = new Float32Array([
 ]);
 
 const vertices: IVertexAttributes = {
-    position: { data: vertexPosBuffer, numComponents: 2 },
-    texcoord: { data: vertexTexBuffer, numComponents: 2 },
+    position: { data: vertexPosBuffer, format: "float32x2" },
+    texcoord: { data: vertexTexBuffer, format: "float32x2" },
 };
 
 loadImage("../../assets/img/Di-3d.png", (image) =>

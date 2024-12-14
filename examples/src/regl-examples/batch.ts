@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
-import { IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -49,7 +49,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
                 0, 0.5,
                 1, 1
             ]),
-            numComponents: 2
+            format: "float32x2",
         },
     }
 };

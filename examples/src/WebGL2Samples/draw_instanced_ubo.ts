@@ -46,7 +46,7 @@ const rp: IRenderPass = {
     renderObjects: [{
         pipeline: program,
         vertices: {
-            pos: { data: vertices, numComponents: 2 },
+            pos: { data: vertices, format: "float32x2" },
         },
         uniforms: {
             Transform: uniformTransformBuffer,

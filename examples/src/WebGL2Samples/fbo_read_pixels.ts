@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -86,14 +86,14 @@ const texcoords = new Float32Array([
 
 const multipleOutputVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: positions, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
     }
 };
 
 const layerVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: positions, numComponents: 2 },
-        textureCoordinates: { data: texcoords, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     }
 };
 

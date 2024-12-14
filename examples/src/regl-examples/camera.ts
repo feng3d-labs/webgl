@@ -40,8 +40,8 @@ const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[],
 
 const renderObject: IRenderObject = {
     vertices: {
-        position: { data: new Float32Array(positions), numComponents: 3 },
-        normal: { data: new Float32Array(normals), numComponents: 3 },
+        position: { data: new Float32Array(positions), format: "float32x3" },
+        normal: { data: new Float32Array(normals), format: "float32x3" },
     },
     indices: new Uint16Array(indices),
     uniforms: {},

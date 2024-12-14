@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -43,8 +43,8 @@ const texcoords = new Float32Array([
 
 const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: positions, numComponents: 2 },
-        textureCoordinates: { data: texcoords, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     },
 };
 

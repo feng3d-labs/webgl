@@ -48,16 +48,12 @@ function main()
     },
     vertices: {
       aVertexPosition: {
-        type: "FLOAT",
+        format: "float32x3",
         data: buffers.position,
-        numComponents: 3,
-        normalized: false,
       },
       aVertexColor: {
-        type: "FLOAT",
+        format: "float32x4",
         data: buffers.color,
-        numComponents: 4,
-        normalized: false,
       },
     },
     indices: buffers.indices,

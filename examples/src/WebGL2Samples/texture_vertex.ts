@@ -1,5 +1,5 @@
-import { IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, IVertexAttributes, IVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIVertexFormat, IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -17,7 +17,7 @@ import { getShaderSource, loadImage } from "./utility";
         4: "triangle-list",
     };
 
-    const VertexAttributeType2Name = {
+    const VertexAttributeType2Name = Object.freeze({
         5126: "FLOAT",
         5120: "BYTE",
         5122: "SHORT",
@@ -28,7 +28,7 @@ import { getShaderSource, loadImage } from "./utility";
         5125: "UNSIGNED_INT",
         36255: "INT_2_10_10_10_REV",
         33640: "UNSIGNED_INT_2_10_10_10_REV"
-    };
+    });
 
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
@@ -42,7 +42,7 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        depthStencil: { depthCompare:"less" },
+        depthStencil: { depthCompare: "less" },
     };
 
     const vertexArrayMaps: { [key: string]: { vertices?: IVertexAttributes, indices: IGLIndicesDataTypes }[] } = {};
@@ -94,9 +94,9 @@ import { getShaderSource, loadImage } from "./utility";
                 //
                 vertexArrayMaps[mid].push({
                     vertices: {
-                        position: { data: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
-                        normal: { data: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
-                        texcoord: { data: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
+                        position: { data: vertexBuffer, format: getIVertexFormat(positionInfo.size, VertexAttributeType2Name[positionInfo.type]), arrayStride: positionInfo.stride, offset: positionInfo.offset },
+                        normal: { data: vertexBuffer, format: getIVertexFormat(normalInfo.size, VertexAttributeType2Name[normalInfo.type]), arrayStride: normalInfo.stride, offset: normalInfo.offset },
+                        texcoord: { data: vertexBuffer, format: getIVertexFormat(texcoordInfo.size, VertexAttributeType2Name[texcoordInfo.type]), arrayStride: texcoordInfo.stride, offset: texcoordInfo.offset },
                     }, indices: indicesBuffer
                 });
             }

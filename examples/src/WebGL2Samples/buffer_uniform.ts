@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLUniformBuffer, IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLUniformBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -70,9 +70,9 @@ import { getShaderSource } from "./utility";
     // -- Init Vertex Array
     const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { data: vertices, numComponents: 3, vertexSize: 40, offset: 0 },
-            normal: { data: vertices, numComponents: 3, vertexSize: 40, offset: 12 },
-            color: { data: vertices, numComponents: 4, vertexSize: 40, offset: 24 },
+            position: { data: vertices, format: "float32x3", arrayStride: 40, offset: 0 },
+            normal: { data: vertices, format: "float32x3", arrayStride: 40, offset: 12 },
+            color: { data: vertices, format: "float32x4", arrayStride: 40, offset: 24 },
         },
     };
 

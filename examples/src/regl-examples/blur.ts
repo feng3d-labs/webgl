@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
-import { IVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -34,11 +34,12 @@ const offsets = [{ offset: [-1, -1] },
 const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
         position: {
+            format: "float32x2",
             data: new Float32Array([
                 0.5, 0,
                 0, 0.5,
                 1, 1
-            ]), numComponents: 2
+            ]),
         },
     }
 };

@@ -1,4 +1,4 @@
-import { IGLVertexAttributeTypes } from "../runs/runVertexAttribute";
+import { IGLVertexAttributeTypes } from "../utils/getIVertexFormat";
 
 export interface IGLAttributeInfo
 {

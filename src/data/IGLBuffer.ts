@@ -1,3 +1,5 @@
+import { IVertexDataTypes } from "@feng3d/render-api";
+
 /**
  * WebGL缓冲区
  *
@@ -35,6 +37,16 @@ export interface IGLBuffer
      * 写缓冲区。
      */
     writeBuffers?: IGLWriteBuffer[];
+}
+
+export interface IGLVertexBuffer extends IGLBuffer
+{
+    target: "ARRAY_BUFFER";
+
+    /**
+     * 缓冲区数据。
+     */
+    data?: IVertexDataTypes;
 }
 
 export interface IGLWriteBuffer

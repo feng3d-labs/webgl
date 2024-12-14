@@ -1,7 +1,6 @@
 import { IVertexDataTypes } from "@feng3d/render-api";
-import { GLBufferTarget, GLBufferUsage, IGLBuffer } from "../data/IGLBuffer";
+import { GLBufferTarget, GLBufferUsage, IGLBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
 import { IGLIndexBuffer, IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
-import { IGLVertexBuffer } from "../data/IGLVertexAttributes";
 
 export function getIGLBuffer(data: BufferSource, target?: GLBufferTarget, usage: GLBufferUsage = "STATIC_DRAW")
 {
