@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
-import { getIGLVertexBuffer, IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIGLVertexBuffer, IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -49,7 +49,7 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: IGLVertexDataTypes[] = [
+    const buffers: IVertexDataTypes[] = [
         // Transform buffer
         vertices,
         // Feedback empty buffer
@@ -57,16 +57,16 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes }[] = [
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[] = [
         {
             vertices: {
-                position: { data: buffers[PROGRAM_TRANSFORM], numComponents: 4 },
+                position: { data: buffers[PROGRAM_TRANSFORM], format: "float32x4" },
             }
         },
         {
             vertices: {
-                position: { data: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: 0 },
-                color: { data: buffers[PROGRAM_FEEDBACK], numComponents: 4, vertexSize: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
+                position: { data: buffers[PROGRAM_FEEDBACK], format: "float32x4", arrayStride: SIZE_V4C4, offset: 0 },
+                color: { data: buffers[PROGRAM_FEEDBACK], format: "float32x4", arrayStride: SIZE_V4C4, offset: SIZE_V4C4 / 2 },
             }
         },
     ];

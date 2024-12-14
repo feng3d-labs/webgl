@@ -1,5 +1,5 @@
 import { IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLSampler, IVertexAttributes, IVertexDataTypes, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -45,12 +45,12 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depthCompare:"less" },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertices?: IGLVertexAttributes, indices: IGLIndicesDataTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: IVertexAttributes, indices: IGLIndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IGLVertexDataTypes;
+    let vertexBuffer: IVertexDataTypes;
     let indicesBuffer: IGLIndicesDataTypes;
 
     let texture: ITexture;

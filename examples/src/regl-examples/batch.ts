@@ -1,5 +1,5 @@
 import { IRenderObject, IRenderPipeline } from "@feng3d/render-api";
-import { IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IVertexAttributes, WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -41,7 +41,7 @@ const pipeline: IRenderPipeline = {
     depthStencil: {},
 };
 
-const vertexArray: { vertices?: IGLVertexAttributes } = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
         position: {
             data: new Float32Array([

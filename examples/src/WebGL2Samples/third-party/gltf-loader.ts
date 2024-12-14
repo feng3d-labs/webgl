@@ -1,6 +1,6 @@
 import { mat4, quat, vec3 } from "gl-matrix";
 
-type IGLVertexDataTypes =
+type IVertexDataTypes =
     | Float32Array
     | Uint32Array
     | Int32Array
@@ -43,7 +43,7 @@ export class Primitive
     mode: number;
     indices: IGLIndicesDataTypes;
     indicesComponentType: number;
-    vertexBuffer: IGLVertexDataTypes;
+    vertexBuffer: IVertexDataTypes;
     matrix: mat4;
     attributes: {
         [key: string]: { size: 1 | 2 | 3 | 4, type?: number, stride: number, offset: number },

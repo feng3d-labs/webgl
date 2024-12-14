@@ -22,7 +22,6 @@ export * from "./data/IGLTexture";
 export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTransformFeedback";
 export * from "./data/IGLUniforms";
-export * from "./data/IGLVertexAttributes";
 export * from "./data/IGLViewport";
 
 export * from "./runs/getIGLBuffer";

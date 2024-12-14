@@ -5,7 +5,6 @@ import { IGLDrawVertex } from "./IGLDrawVertex";
 import { IGLIndicesDataTypes } from "./IGLIndexBuffer";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
-import { IGLVertexAttributes } from "./IGLVertexAttributes";
 
 declare module "@feng3d/render-api"
 {
@@ -14,11 +13,6 @@ declare module "@feng3d/render-api"
      */
     export interface IRenderObject
     {
-        /**
-         * 顶点属性数据列表
-         */
-        vertices?: IGLVertexAttributes;
-
         /**
          * 顶点索引数据
          */

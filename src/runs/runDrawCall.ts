@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { IRenderObject, IVertexAttributes } from "@feng3d/render-api";
 
 import { getBufferType } from "../caches/getGLBuffer";
 import { IGLDrawMode } from "../caches/getIGLDrawMode";
@@ -6,7 +6,6 @@ import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 import { IGLDrawVertex } from "../data/IGLDrawVertex";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
-import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject, drawMode: IGLDrawMode)
 {
@@ -63,7 +62,7 @@ function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indic
 
 export const defaultDrawVertex: IGLDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
 
-function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IGLVertexAttributes, drawArrays: IGLDrawVertex)
+function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IVertexAttributes, drawArrays: IGLDrawVertex)
 {
     //
     let { firstVertex, vertexCount, instanceCount } = drawArrays || {};
@@ -93,7 +92,7 @@ function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertic
 /**
  * 获取属性顶点属性。
  */
-export function getAttributeVertexNum(vertices: IGLVertexAttributes)
+export function getAttributeVertexNum(vertices: IVertexAttributes)
 {
     const vertexNum = ((vertices) =>
     {

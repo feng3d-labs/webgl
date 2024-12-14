@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -65,12 +65,12 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes }[][] = [];
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
 
-    const vertexBuffers: IGLVertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
 
     for (let va = 0; va < 2; ++va)
     {
@@ -84,16 +84,16 @@ import { getShaderSource } from "./utility";
         vertexArrays[va] = [];
         vertexArrays[va][0] = {
             vertices: {
-                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
-                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
+                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], format: "float32x2" },
+                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], format: "float32" },
             }
         };
         vertexArrays[va][1] = {
             vertices: {
-                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2, divisor: 1 },
-                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1, divisor: 1 },
-                a_position: { data: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
-                a_color: { data: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
+                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], format: "float32x2", stepMode: "instance" },
+                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], format: "float32", stepMode: "instance" },
+                a_position: { data: vertexBuffers[va][POSITION_LOCATION], format: "float32x2" },
+                a_color: { data: vertexBuffers[va][COLOR_LOCATION], format: "float32x3", stepMode: "instance" },
             }
         };
 

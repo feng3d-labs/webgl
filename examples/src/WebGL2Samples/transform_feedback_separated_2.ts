@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -58,12 +58,12 @@ import { getShaderSource } from "./utility";
     }
 
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes }[] = [];
+    const particleVAOs: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[] = [];
 
     // Transform feedback objects track output buffer state
     const particleTransformFeedbacks: IGLTransformFeedback[] = [];
 
-    const particleVBOs: IGLVertexDataTypes[][] = new Array(particleVAOs.length);
+    const particleVBOs: IVertexDataTypes[][] = new Array(particleVAOs.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -82,11 +82,11 @@ import { getShaderSource } from "./utility";
 
         particleVAOs[i] = {
             vertices: {
-                a_position: { data: particleVBOs[i][POSITION_LOCATION], numComponents: 2 },
-                a_velocity: { data: particleVBOs[i][VELOCITY_LOCATION], numComponents: 2 },
-                a_spawntime: { data: particleVBOs[i][SPAWNTIME_LOCATION], numComponents: 1 },
-                a_lifetime: { data: particleVBOs[i][LIFETIME_LOCATION], numComponents: 1 },
-                a_ID: { data: particleVBOs[i][ID_LOCATION], numComponents: 1 },
+                a_position: { data: particleVBOs[i][POSITION_LOCATION], format:"float32x2" },
+                a_velocity: { data: particleVBOs[i][VELOCITY_LOCATION], format:"float32x2" },
+                a_spawntime: { data: particleVBOs[i][SPAWNTIME_LOCATION], format:"float32" },
+                a_lifetime: { data: particleVBOs[i][LIFETIME_LOCATION], format:"float32" },
+                a_ID: { data: particleVBOs[i][ID_LOCATION], format:"float32" },
             }
         };
 

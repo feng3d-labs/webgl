@@ -1,5 +1,5 @@
 import { IRenderObject, IRenderPass, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLUniformBuffer, IGLVertexAttributes, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLUniformBuffer, IVertexAttributes, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -68,7 +68,7 @@ import { getShaderSource } from "./utility";
     const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
-    const vertexArray: { vertices?: IGLVertexAttributes } = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
             position: { data: vertices, numComponents: 3, vertexSize: 40, offset: 0 },
             normal: { data: vertices, numComponents: 3, vertexSize: 40, offset: 12 },

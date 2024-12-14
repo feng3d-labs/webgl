@@ -1,5 +1,5 @@
 import { IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLIndicesDataTypes, IVertexAttributes, IGLViewport, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -66,7 +66,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: { vertexArray: { vertices?: IGLVertexAttributes }, indices: IGLIndicesDataTypes }[]
+        [key: string]: { vertexArray: { vertices?: IVertexAttributes }, indices: IGLIndicesDataTypes }[]
     } = {};
 
     // var in loop
@@ -75,7 +75,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexArray: { vertices?: IGLVertexAttributes };
+    let vertexArray: { vertices?: IVertexAttributes };
 
     let i: number; let len: number;
 

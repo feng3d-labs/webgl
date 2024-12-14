@@ -1,5 +1,5 @@
 import { IRenderPass, IRenderPassObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { getIGLBuffer, IGLCanvasContext, IGLSampler, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IGLCanvasContext, IGLSampler, IVertexAttributes, IVertexDataTypes, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -30,7 +30,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexDataTypes = positions;
+    const vertexPosBuffer: IVertexDataTypes = positions;
 
     const texcoords = new Float32Array([
         0.0, 1.0,
@@ -40,11 +40,11 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexDataTypes = texcoords;
+    const vertexTexBuffer: IVertexDataTypes = texcoords;
 
     // -- Initialize vertex array
 
-    const vertices: IGLVertexAttributes = {
+    const vertices: IVertexAttributes = {
         position: { data: vertexPosBuffer, numComponents: 2 },
         textureCoordinates: { data: vertexTexBuffer, numComponents: 2 },
     }

@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLVertexAttributes, IGLVertexDataTypes, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -56,7 +56,7 @@ import { getShaderSource } from "./utility";
         MAX: 3
     };
 
-    const buffers: IGLVertexDataTypes[] = [
+    const buffers: IVertexDataTypes[] = [
         // Transform buffer
         positions,
         // Feedback empty buffers
@@ -67,16 +67,16 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Transform Vertex Array
-    const vertexArrays: { vertices?: IGLVertexAttributes, indices?: IGLIndicesDataTypes }[] = [
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[] = [
         {
             vertices: {
-                position: { data: buffers[BufferType.VERTEX], numComponents: 4 },
+                position: { data: buffers[BufferType.VERTEX], format: "float32x4" },
             }
         },
         {
             vertices: {
-                position: { data: buffers[BufferType.POSITION], numComponents: 4 },
-                color: { data: buffers[BufferType.COLOR], numComponents: 4 },
+                position: { data: buffers[BufferType.POSITION], format: "float32x4" },
+                color: { data: buffers[BufferType.COLOR], format: "float32x4" },
             }
         },
     ];
@@ -90,7 +90,7 @@ import { getShaderSource } from "./utility";
     };
 
     const renderObjects: IRenderPassObject[] = [];
-    
+
     // -- Render
     const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },

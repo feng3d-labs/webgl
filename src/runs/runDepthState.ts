@@ -37,6 +37,8 @@ function getIGLCompareFunction(depthCompare: ICompareFunction)
 {
     const glDepthCompare: IGLCompareFunction = depthCompareMap[depthCompare];
 
+    console.assert(!!glDepthCompare, `接收到错误值，请从 ${Object.keys(depthCompareMap).toString()} 中取值！`);
+    
     return glDepthCompare;
 }
 

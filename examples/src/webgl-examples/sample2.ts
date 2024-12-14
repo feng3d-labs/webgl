@@ -44,14 +44,13 @@ function main()
             },
             vertices: {
                 aVertexPosition: {
-                    type: "FLOAT",
+                    format:"float32x2",
                     data: new Float32Array([
                         1.0, 1.0,
                         -1.0, 1.0,
                         1.0, -1.0,
                         -1.0, -1.0,
                     ]),
-                    numComponents: 2,
                 }
             },
             uniforms: {

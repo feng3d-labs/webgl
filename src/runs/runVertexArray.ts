@@ -1,7 +1,6 @@
-import { IRenderPipeline } from "@feng3d/render-api";
+import { IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
 import { getGLProgram } from "../caches/getGLProgram";
 import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
-import { IGLVertexAttributes } from "../data/IGLVertexAttributes";
 import { ChainMap } from "../utils/ChainMap";
 import { runIndexBuffer } from "./runIndexBuffer";
 import { runVertexAttribute } from "./runVertexAttribute";
@@ -10,14 +9,14 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: ChainMap<[IRenderPipeline, IGLVertexAttributes, IGLIndicesDataTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[IRenderPipeline, IVertexAttributes, IGLIndicesDataTypes], WebGLVertexArrayObject>;
     }
 }
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。
  */
-export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: IGLVertexAttributes, indices: IGLIndicesDataTypes)
+export function runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: IVertexAttributes, indices: IGLIndicesDataTypes)
 {
     if (!vertices && !indices) return;
 
