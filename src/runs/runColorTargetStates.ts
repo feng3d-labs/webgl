@@ -21,6 +21,18 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
         const alphaSrcFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.srcFactor) || colorSrcFactor;
         const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor) || colorDstFactor;
 
+        // 当混合系数用到了混合常量值时设置混合常量值。
+        if (0
+            || colorSrcFactor === "CONSTANT_COLOR"
+            || colorSrcFactor === "ONE_MINUS_CONSTANT_COLOR"
+            || alphaSrcFactor === "CONSTANT_COLOR"
+            || alphaSrcFactor === "ONE_MINUS_CONSTANT_COLOR"
+        )
+        {
+            const blendColor = blend.constantColor ?? [0, 0, 0, 0];
+            gl.blendColor(blendColor[0], blendColor[1], blendColor[2], blendColor[3]);
+        }
+
         //
         gl.enable(gl.BLEND);
         gl.blendEquationSeparate(gl[colorOperation], gl[alphaOperation]);
