@@ -1,4 +1,4 @@
-import { IBlendComponent, IBlendFactor, IBlendOperation, IColorTargetState } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBlendFactor, IBlendOperation, IColorTargetState } from "@feng3d/render-api";
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly IColorTargetState[])
 {
@@ -22,15 +22,11 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
         const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor) || colorDstFactor;
 
         // 当混合系数用到了混合常量值时设置混合常量值。
-        if (0
-            || colorSrcFactor === "CONSTANT_COLOR"
-            || colorSrcFactor === "ONE_MINUS_CONSTANT_COLOR"
-            || alphaSrcFactor === "CONSTANT_COLOR"
-            || alphaSrcFactor === "ONE_MINUS_CONSTANT_COLOR"
-        )
+        const constantColor = getBlendConstantColor(blend);
+        if (constantColor)
         {
-            const blendColor = blend.constantColor ?? [0, 0, 0, 0];
-            gl.blendColor(blendColor[0], blendColor[1], blendColor[2], blendColor[3]);
+            const constantColor = blend.constantColor ?? [0, 0, 0, 0];
+            gl.blendColor(constantColor[0], constantColor[1], constantColor[2], constantColor[3]);
         }
 
         //
