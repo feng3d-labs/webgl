@@ -14,12 +14,12 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
         const alpha: IBlendComponent = blend.alpha;
 
         const colorOperation: IGLBlendEquation = getIGLBlendEquation(color?.operation) || "FUNC_ADD";
-        const colorSrcFactor: IGLBlendFactor = getIGLBlendFactor(color?.srcFactor) || "SRC_ALPHA";
-        const colorDstFactor: IGLBlendFactor = getIGLBlendFactor(color?.dstFactor) || "ONE_MINUS_SRC_ALPHA";
+        const colorSrcFactor: IGLBlendFactor = getIGLBlendFactor(color?.srcFactor, color?.operation) || "SRC_ALPHA";
+        const colorDstFactor: IGLBlendFactor = getIGLBlendFactor(color?.dstFactor, color?.operation) || "ONE_MINUS_SRC_ALPHA";
         //
         const alphaOperation: IGLBlendEquation = getIGLBlendEquation(alpha?.operation) || colorOperation;
-        const alphaSrcFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.srcFactor) || colorSrcFactor;
-        const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor) || colorDstFactor;
+        const alphaSrcFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.srcFactor, color?.operation) || colorSrcFactor;
+        const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor, color?.operation) || colorDstFactor;
 
         // 当混合系数用到了混合常量值时设置混合常量值。
         const constantColor = getBlendConstantColor(blend);
@@ -59,9 +59,11 @@ const operationMap: { [key: string]: IGLBlendEquation } = {
     "max": "MAX",
 };
 
-function getIGLBlendFactor(blendFactor?: IBlendFactor)
+function getIGLBlendFactor(blendFactor: IBlendFactor, operation: IBlendOperation)
 {
     if (!blendFactor) return undefined;
+
+    if (operation === "max" || operation === "min") blendFactor = "one";
 
     const glBlendFactor: IGLBlendFactor = blendFactorMap[blendFactor];
 
