@@ -1,3 +1,4 @@
+import { IIndicesDataTypes } from "@feng3d/render-api";
 import { IGLBuffer } from "./IGLBuffer";
 
 /**
@@ -15,13 +16,8 @@ export interface IGLIndexBuffer extends IGLBuffer
     /**
      * 顶点索引数据。
      */
-    data: IGLIndicesDataTypes;
+    data: IIndicesDataTypes;
 }
-
-/**
- * 顶点索引数据类型
- */
-export type IGLIndicesDataTypes = Uint16Array | Uint32Array | Uint8Array;
 
 /**
  * 元素缓冲数据类型。

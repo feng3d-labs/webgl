@@ -1,8 +1,8 @@
+import { IIndicesDataTypes } from "@feng3d/render-api";
 import { getGLBuffer } from "../caches/getGLBuffer";
-import { IGLIndicesDataTypes } from "../data/IGLIndexBuffer";
 import { getIGLIndexBuffer } from "./getIGLBuffer";
 
-export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IGLIndicesDataTypes)
+export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IIndicesDataTypes)
 {
     if (!indices) return;
 

@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -58,7 +58,7 @@ import { getShaderSource } from "./utility";
     }
 
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[] = [];
+    const particleVAOs: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[] = [];
 
     // Transform feedback objects track output buffer state
     const particleTransformFeedbacks: IGLTransformFeedback[] = [];

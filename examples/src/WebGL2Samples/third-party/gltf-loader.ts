@@ -9,7 +9,7 @@ type IVertexDataTypes =
     | Uint8Array
     | Int8Array;
 
-type IGLIndicesDataTypes = Uint16Array | Uint32Array | Uint8Array;
+type IIndicesDataTypes = Uint16Array | Uint32Array;
 
 // Data classes
 class Scene
@@ -41,7 +41,7 @@ class Mesh
 export class Primitive
 {
     mode: number;
-    indices: IGLIndicesDataTypes;
+    indices: IIndicesDataTypes;
     indicesComponentType: number;
     vertexBuffer: IVertexDataTypes;
     matrix: mat4;

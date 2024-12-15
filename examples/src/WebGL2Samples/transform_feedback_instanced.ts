@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLIndicesDataTypes, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -65,7 +65,7 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: { vertices?: IVertexAttributes, indices?: IGLIndicesDataTypes }[][] = [];
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
