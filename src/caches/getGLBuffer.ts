@@ -1,6 +1,7 @@
+import { IVertexDataTypes } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IGLBuffer } from "../data/IGLBuffer";
-import { IVertexDataTypes } from "@feng3d/render-api";
+import { IGLVertexAttributeTypes } from "../utils/getIVertexFormat";
 
 declare global
 {
@@ -111,7 +112,7 @@ export function getBufferType(data?: IVertexDataTypes)
     return bufferTypeMap[data?.constructor.name];
 }
 
-const bufferTypeMap = {
+const bufferTypeMap: { [key: string]: IGLVertexAttributeTypes } = {
     Float32Array: "FLOAT",
     Uint32Array: "UNSIGNED_INT",
     Int32Array: "INT",
@@ -119,5 +120,5 @@ const bufferTypeMap = {
     Int16Array: "SHORT",
     Uint8Array: "UNSIGNED_BYTE",
     Int8Array: "BYTE",
-    Uint8ClampedArray: "BYTE",
+    Uint8ClampedArray: "UNSIGNED_BYTE",
 };

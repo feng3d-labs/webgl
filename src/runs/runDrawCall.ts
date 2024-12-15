@@ -1,10 +1,9 @@
-import { IIndicesDataTypes, IRenderObject, IVertexAttributes } from "@feng3d/render-api";
+import { IDrawVertex, IIndicesDataTypes, IRenderObject, IVertexAttributes } from "@feng3d/render-api";
 
 import { getBufferType } from "../caches/getGLBuffer";
 import { IGLDrawMode } from "../caches/getIGLDrawMode";
 import { ElementTypeMap } from "../const/IGLUniformType";
 import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
-import { IGLDrawVertex } from "../data/IGLDrawVertex";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject, drawMode: IGLDrawMode)
 {
@@ -28,16 +27,14 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObje
     }
 }
 
-export const defaultDrawIndexed: IGLDrawIndexed = Object.freeze({ firstIndex: 0, instanceCount: 1 });
-
 function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IGLDrawIndexed)
 {
     const type = getBufferType(indices);
     const dataLength = indices.length;
     //
     let { indexCount, instanceCount, firstIndex } = drawIndexed || {};
-    firstIndex = firstIndex || defaultDrawIndexed.firstIndex;
-    instanceCount = instanceCount || defaultDrawIndexed.instanceCount;
+    firstIndex = firstIndex || 0;
+    instanceCount = instanceCount || 1;
     indexCount = indexCount || (dataLength - firstIndex);
 
     //
@@ -59,16 +56,13 @@ function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indic
     }
 }
 
-export const defaultDrawVertex: IGLDrawVertex = Object.freeze({ vertexCount: 6, instanceCount: 1, firstVertex: 0 });
-
-function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IVertexAttributes, drawArrays: IGLDrawVertex)
+function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertices: IVertexAttributes, drawArrays: IDrawVertex)
 {
     //
     let { firstVertex, vertexCount, instanceCount } = drawArrays || {};
     //
-    firstVertex = firstVertex || defaultDrawVertex.firstVertex;
-    vertexCount = vertexCount || getAttributeVertexNum(vertices) || defaultDrawVertex.vertexCount;
-    instanceCount = instanceCount || defaultDrawVertex.instanceCount;
+    firstVertex = firstVertex || 0;
+    instanceCount = instanceCount || 1;
 
     if (instanceCount > 1)
     {
@@ -86,25 +80,4 @@ function _runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, vertic
     {
         gl.drawArrays(gl[drawMode], firstVertex, vertexCount);
     }
-}
-
-/**
- * 获取属性顶点属性。
- */
-export function getAttributeVertexNum(vertices: IVertexAttributes)
-{
-    const vertexNum = ((vertices) =>
-    {
-        for (const attr in vertices)
-        {
-            if (vertices.hasOwnProperty(attr))
-            {
-                return vertices[attr].data.length;
-            }
-        }
-
-        return 0;
-    })(vertices);
-
-    return vertexNum;
 }

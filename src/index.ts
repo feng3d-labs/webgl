@@ -6,7 +6,6 @@ export * from "./data/IGLCommandEncoder";
 export * from "./data/IGLCopyBufferToBuffer";
 export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLDrawIndexed";
-export * from "./data/IGLDrawVertex";
 export * from "./data/IGLIndexBuffer";
 export * from "./data/IGLOcclusionQuery";
 export * from "./data/IGLPrimitiveState";
@@ -45,3 +44,4 @@ export * as internal from "./internal";
 export * from "./caches/getGLBuffer";
 
 export * from "./utils/getIVertexFormat";
+

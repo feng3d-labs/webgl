@@ -1,7 +1,6 @@
 import { IRenderObject } from "@feng3d/render-api";
 import { LazyObject } from "../types";
 import { IGLDrawIndexed } from "./IGLDrawIndexed";
-import { IGLDrawVertex } from "./IGLDrawVertex";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 
@@ -16,13 +15,6 @@ declare module "@feng3d/render-api"
          * Uniform渲染数据
          */
         uniforms?: LazyObject<IGLUniforms>;
-
-        /**
-         * 绘制一定数量顶点。
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
-         */
-        drawVertex?: IGLDrawVertex;
 
         /**
          * 根据索引数据绘制图元。
