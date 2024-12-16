@@ -6,7 +6,7 @@ export function runDepthState(gl: WebGLRenderingContext, depthStencil?: IDepthSt
     if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
     {
         const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? 'less');
-        const depthWriteEnabled = depthStencil.depthWriteEnabled ?? false;
+        const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
         //
         gl.enable(gl.DEPTH_TEST);
         //
