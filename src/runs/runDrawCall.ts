@@ -1,9 +1,8 @@
-import { IDrawVertex, IIndicesDataTypes, IRenderObject, IVertexAttributes } from "@feng3d/render-api";
+import { IDrawIndexed, IDrawVertex, IIndicesDataTypes, IRenderObject, IVertexAttributes } from "@feng3d/render-api";
 
 import { getBufferType } from "../caches/getGLBuffer";
 import { IGLDrawMode } from "../caches/getIGLDrawMode";
 import { ElementTypeMap } from "../const/IGLUniformType";
-import { IGLDrawIndexed } from "../data/IGLDrawIndexed";
 
 export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObject, drawMode: IGLDrawMode)
 {
@@ -27,7 +26,7 @@ export function runDrawCall(gl: WebGLRenderingContext, renderObject: IRenderObje
     }
 }
 
-function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IGLDrawIndexed)
+function _runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IDrawIndexed)
 {
     const type = getBufferType(indices);
     const dataLength = indices.length;
