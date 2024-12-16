@@ -1,13 +1,13 @@
 export function getTextureCubeMapTarget(depthOrArrayLayers: number)
 {
-    const textureCubeMapTarget: TextureCubeMapTarget = textureCubeMapTargetMap[depthOrArrayLayers];
+    const textureCubeMapTarget: IGLTextureCubeMapTarget = textureCubeMapTargetMap[depthOrArrayLayers];
 
     console.assert(!!textureCubeMapTarget, `CubeMap的depthOrArrayLayers值应在[0-5]之间！`);
 
     return textureCubeMapTarget;
 }
 
-const textureCubeMapTargetMap: TextureCubeMapTarget[] = [
+const textureCubeMapTargetMap: IGLTextureCubeMapTarget[] = [
     "TEXTURE_CUBE_MAP_POSITIVE_X",
     "TEXTURE_CUBE_MAP_NEGATIVE_X",
     "TEXTURE_CUBE_MAP_POSITIVE_Y",
@@ -28,7 +28,7 @@ const textureCubeMapTargetMap: TextureCubeMapTarget[] = [
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TextureCubeMapTarget =
+export type IGLTextureCubeMapTarget =
     | "TEXTURE_CUBE_MAP_POSITIVE_X"
     | "TEXTURE_CUBE_MAP_NEGATIVE_X"
     | "TEXTURE_CUBE_MAP_POSITIVE_Y"

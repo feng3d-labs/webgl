@@ -15,7 +15,7 @@ import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { readPixels } from "./runs/runReadPixels";
+import { readPixels } from "./utils/readPixels";
 
 /**
  * WEBGL 对象。
