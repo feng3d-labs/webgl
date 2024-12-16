@@ -80,12 +80,3 @@ const webGLUniformValueType = Object.keys(webGLUniformTypeValue).reduce((pv, cv)
 
     return pv;
 }, {});
-
-/**
- * 顶点索引数据类型对应的字节数量。
- */
-export const ElementTypeMap = {
-    UNSIGNED_BYTE: 1,
-    UNSIGNED_SHORT: 2,
-    UNSIGNED_INT: 4,
-};
