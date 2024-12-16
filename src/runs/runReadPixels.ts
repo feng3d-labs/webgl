@@ -1,7 +1,7 @@
 import { getFramebuffer } from "../caches/getFramebuffer";
 import { IGLReadPixels } from "../data/IGLReadPixels";
 
-export function runReadPixels(gl: WebGLRenderingContext, readPixels: IGLReadPixels)
+export function readPixels(gl: WebGLRenderingContext, readPixels: IGLReadPixels)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

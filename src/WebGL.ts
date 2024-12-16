@@ -15,7 +15,7 @@ import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLSampler } from "./data/IGLSampler";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { runReadPixels } from "./runs/runReadPixels";
+import { readPixels } from "./runs/runReadPixels";
 
 /**
  * WEBGL 对象。
@@ -45,9 +45,9 @@ export class WebGL
         this._runWebGL.runSubmit(this._gl, submit);
     }
 
-    runReadPixels(readPixels: IGLReadPixels)
+    runReadPixels(glReadPixels: IGLReadPixels)
     {
-        runReadPixels(this._gl, readPixels);
+        readPixels(this._gl, glReadPixels);
     }
 
     deleteFramebuffer(passDescriptor: IRenderPassDescriptor)

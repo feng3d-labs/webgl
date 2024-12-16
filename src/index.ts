@@ -24,8 +24,6 @@ export * from "./data/IGLViewport";
 
 export * from "./runs/getIGLBuffer";
 export * from "./runs/runColorTargetStates";
-export * from "./runs/runDrawCall";
-export * from "./runs/runVertexAttribute";
 export * from "./RunWebGL";
 
 export * from "./defaults/defaults";
