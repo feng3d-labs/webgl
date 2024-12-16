@@ -38,7 +38,7 @@ const pipeline: IRenderPipeline = {
     void main() {
       gl_FragColor = color;
     }` },
-    depthStencil: {},
+    depthStencil: { depthWriteEnabled: false },
 };
 
 const vertexArray: { vertices?: IVertexAttributes } = {
@@ -68,6 +68,7 @@ function getRenderObject(tick: number, batchId: number)
             offset: () => offsets[batchId].offset,
         },
         pipeline,
+        drawVertex: { vertexCount: 3 }
     };
 
     return renderObject;
@@ -90,6 +91,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
                     renderObjects
                 }
             ]

@@ -17,26 +17,9 @@ const camera = createCamera({
     center: [0, 2.5, 0]
 });
 
-const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
-{
-    cv.forEach((v) => { pv.push(v); });
-
-    return pv;
-}, []);
-
-const indices = bunny.cells.reduce((pv: number[], cv: number[]) =>
-{
-    cv.forEach((v) => { pv.push(v); });
-
-    return pv;
-}, []);
-
-const normals = angleNormals(bunny.cells, bunny.positions).reduce((pv: number[], cv: number[]) =>
-{
-    cv.forEach((v) => { pv.push(v); });
-
-    return pv;
-}, []);
+const positions = bunny.positions.flat();
+const indices = bunny.cells.flat();
+const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
 const renderObject: IRenderObject = {
     vertices: {
@@ -44,6 +27,7 @@ const renderObject: IRenderObject = {
         normal: { data: new Float32Array(normals), format: "float32x3" },
     },
     indices: new Uint16Array(indices),
+    drawIndexed: { indexCount: indices.length },
     uniforms: {},
     pipeline: {
         vertex: {
@@ -63,7 +47,7 @@ const renderObject: IRenderObject = {
         }`,
             targets: [{ blend: {} }],
         },
-        depthStencil: {},
+        depthStencil: { depthWriteEnabled: true },
     }
 };
 
@@ -78,6 +62,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
                     renderObjects: [renderObject]
                 }
             ]

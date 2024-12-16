@@ -32,9 +32,10 @@ let viewportHeight = canvas.clientHeight;
 
 const renderObject: IRenderObject = {
     vertices: {
-        position: { data: new Float32Array(positions),format:"float32x3" },
+        position: { data: new Float32Array(positions), format: "float32x3" },
     },
     indices: new Uint16Array(indices),
+    drawIndexed: { indexCount: indices.length },
     uniforms: {
         model: mat4.identity([]),
         view: () =>
@@ -82,6 +83,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
                     renderObjects: [renderObject]
                 }
             ]

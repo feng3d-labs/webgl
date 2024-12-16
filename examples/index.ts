@@ -12,7 +12,6 @@ const files = {
     "regl-examples": [
         "basic",
         "batch",
-        "blur",
         "bunny",
         "camera",
         "cloth",

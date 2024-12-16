@@ -70,6 +70,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
         indices: new Uint16Array(indices),
+        drawIndexed: { indexCount: indices.length },
         uniforms: {
             view: () =>
             {
@@ -108,7 +109,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         }`,
                 targets: [{ blend: {} }],
             },
-            depthStencil: {},
+            depthStencil: { depthWriteEnabled: true },
         }
     };
 

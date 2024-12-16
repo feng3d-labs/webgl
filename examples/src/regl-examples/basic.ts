@@ -48,7 +48,8 @@ const renderObject: IRenderObject = {
             targets: [{ blend: {} }],
         },
         depthStencil: {},
-    }
+    },
+    drawVertex: { vertexCount: 3 },
 };
 
 function draw()
@@ -60,6 +61,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
                     renderObjects: [renderObject]
                 }
             ]
