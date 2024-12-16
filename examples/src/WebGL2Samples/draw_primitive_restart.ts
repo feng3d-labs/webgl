@@ -47,7 +47,7 @@ const renderObject: IRenderObject = {
     vertices: vertexArray.vertices,
     indices: indices,
     uniforms: {},
-    drawIndexed: { instanceCount: 2 },
+    drawIndexed: { indexCount: 7, instanceCount: 2 },
     pipeline: program,
 };
 
