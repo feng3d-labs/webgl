@@ -1,6 +1,6 @@
 import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes } from "@feng3d/render-api";
 import { getFramebuffer } from "./caches/getFramebuffer";
-import { getBufferType, getGLBuffer } from "./caches/getGLBuffer";
+import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getGLSampler } from "./caches/getGLSampler";
@@ -16,6 +16,7 @@ import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
+import { IGLDrawElementType } from "./data/IGLIndexBuffer";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLSampler, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
@@ -226,7 +227,7 @@ export class RunWebGL
 
     private runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IDrawIndexed)
     {
-        const type = getBufferType(indices);
+        const type: IGLDrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
         const indexCount = drawIndexed.indexCount;
         const firstIndex = drawIndexed.firstIndex || 0;
