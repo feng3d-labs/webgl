@@ -23,4 +23,18 @@ declare module "@feng3d/render-api"
         transformFeedback?: IGLTransformFeedback;
     }
 
+    /**
+     * 剪刀盒。
+     *
+     * 设置了一个剪刀盒，它将绘图限制为一个指定的矩形。
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/scissor
+     */
+    export interface IScissorRect
+    {
+        /**
+         * 数据类型。
+         */
+        readonly __type: "ScissorRect";
+    }
 }

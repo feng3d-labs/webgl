@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
 
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -21,7 +21,6 @@ import { IGLDrawElementType } from "./data/IGLIndexBuffer";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLSampler, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
-import { IGLScissorRect } from "./data/IGLScissorRect";
 import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
@@ -166,11 +165,7 @@ export class RunWebGL
     {
         renderObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type === "ScissorRect")
-            {
-                this.runScissor(gl, renderObject);
-            }
-            else if (renderObject.__type === "OcclusionQuery")
+            if (renderObject.__type === "OcclusionQuery")
             {
                 this.runOcclusionQuery(gl, renderObject);
             }
@@ -183,12 +178,14 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
     {
-        const { viewport, pipeline, vertices, indices, uniforms, transformFeedback, drawIndexed, drawVertex } = renderObject;
+        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, transformFeedback, drawIndexed, drawVertex } = renderObject;
 
         const topology = pipeline.primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
 
         this.runViewPort(gl, viewport);
+
+        this.runScissor(gl, scissorRect);
 
         this.runRenderPipeline(gl, pipeline);
 
@@ -809,7 +806,7 @@ export class RunWebGL
         }
     }
 
-    private runScissor(gl: WebGLRenderingContext, scissor?: IGLScissorRect)
+    private runScissor(gl: WebGLRenderingContext, scissor?: IScissorRect)
     {
         if (scissor)
         {
