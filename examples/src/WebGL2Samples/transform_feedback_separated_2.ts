@@ -153,13 +153,16 @@ import { getShaderSource } from "./utility";
 
     const submit: ISubmit = {
         commandEncoders: [{
-            passEncoders: [{
-                __type: "TransformFeedbackPass",
-                transformFeedbackObjects: [transformRO],
-            }, {
-                descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-                renderObjects: [renderRO],
-            }]
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [transformRO],
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [renderRO],
+                }
+            ]
         }]
     }
 
