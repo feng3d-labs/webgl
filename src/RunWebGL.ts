@@ -798,7 +798,18 @@ export class RunWebGL
     {
         if (viewport)
         {
-            gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+            const isYup = viewport.isYup ?? true;
+            const x = viewport.x ?? 0;
+            let y = viewport.y ?? 0;
+            const width = viewport.width ?? gl.canvas.width;
+            const height = viewport.height ?? gl.canvas.height;
+
+            if (!isYup)
+            {
+                y = gl.canvas.height - y - height;
+            }
+
+            gl.viewport(x, y, width, height);
         }
         else
         {
