@@ -204,7 +204,7 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
     {
-        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, transformFeedback, drawIndexed, drawVertex } = renderObject;
+        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, drawIndexed, drawVertex } = renderObject;
 
         const topology = pipeline.primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
@@ -214,8 +214,6 @@ export class RunWebGL
         this.runScissor(gl, attachmentSize, scissorRect);
 
         this.runRenderPipeline(gl, pipeline);
-
-        this.runTransformFeedback(gl, transformFeedback, drawMode);
 
         this.runVertexArray(gl, pipeline, vertices, indices);
 
@@ -229,8 +227,6 @@ export class RunWebGL
         {
             this.runDrawIndexed(gl, drawMode, indices, drawIndexed);
         }
-
-        this.endTransformFeedback(gl, transformFeedback);
     }
 
     private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
@@ -772,20 +768,6 @@ export class RunWebGL
     {
         const program = getGLProgram(gl, pipeline);
         gl.useProgram(program);
-
-        //
-        if (gl instanceof WebGL2RenderingContext)
-        {
-            if (pipeline.rasterizerDiscard)
-            {
-                gl.enable(gl.RASTERIZER_DISCARD);
-                return;
-            }
-            else
-            {
-                gl.disable(gl.RASTERIZER_DISCARD);
-            }
-        }
 
         //
         this.runColorTargetStates(gl, pipeline.fragment.targets);

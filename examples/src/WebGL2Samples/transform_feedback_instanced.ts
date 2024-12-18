@@ -72,35 +72,35 @@ import { getShaderSource } from "./utility";
 
     const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
 
-    for (let va = 0; va < 2; ++va)
+    for (let i = 0; i < 2; ++i)
     {
-        vertexBuffers[va] = new Array(NUM_LOCATIONS);
+        vertexBuffers[i] = new Array(NUM_LOCATIONS);
 
-        vertexBuffers[va][OFFSET_LOCATION] = instanceOffsets.slice();
-        vertexBuffers[va][ROTATION_LOCATION] = instanceRotations.slice();
-        vertexBuffers[va][POSITION_LOCATION] = trianglePositions.slice();
-        vertexBuffers[va][COLOR_LOCATION] = instanceColors.slice();
+        vertexBuffers[i][OFFSET_LOCATION] = instanceOffsets.slice();
+        vertexBuffers[i][ROTATION_LOCATION] = instanceRotations.slice();
+        vertexBuffers[i][POSITION_LOCATION] = trianglePositions.slice();
+        vertexBuffers[i][COLOR_LOCATION] = instanceColors.slice();
 
-        vertexArrays[va] = [];
-        vertexArrays[va][0] = {
+        vertexArrays[i] = [];
+        vertexArrays[i][0] = {
             vertices: {
-                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], format: "float32x2" },
-                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], format: "float32" },
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2" },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32" },
             }
         };
-        vertexArrays[va][1] = {
+        vertexArrays[i][1] = {
             vertices: {
-                a_offset: { data: vertexBuffers[va][OFFSET_LOCATION], format: "float32x2", stepMode: "instance" },
-                a_rotation: { data: vertexBuffers[va][ROTATION_LOCATION], format: "float32", stepMode: "instance" },
-                a_position: { data: vertexBuffers[va][POSITION_LOCATION], format: "float32x2" },
-                a_color: { data: vertexBuffers[va][COLOR_LOCATION], format: "float32x3", stepMode: "instance" },
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2", stepMode: "instance" },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32", stepMode: "instance" },
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
+                a_color: { data: vertexBuffers[i][COLOR_LOCATION], format: "float32x3", stepMode: "instance" },
             }
         };
 
-        transformFeedbacks[va] = {
+        transformFeedbacks[i] = {
             bindBuffers: [
-                { index: 0, data: vertexBuffers[va][OFFSET_LOCATION] },
-                { index: 1, data: vertexBuffers[va][ROTATION_LOCATION] },
+                { index: 0, data: vertexBuffers[i][OFFSET_LOCATION] },
+                { index: 1, data: vertexBuffers[i][ROTATION_LOCATION] },
             ]
         };
     }

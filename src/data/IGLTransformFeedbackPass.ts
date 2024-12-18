@@ -1,6 +1,5 @@
 import { IDrawVertex, IVertexAttributes, IVertexState } from "@feng3d/render-api";
 import { LazyObject } from "../types";
-import { IGLTransformFeedbackVaryings } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 
@@ -70,4 +69,17 @@ export interface IGLTransformFeedbackPipeline
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
      */
     transformFeedbackVaryings: IGLTransformFeedbackVaryings;
+}
+
+export interface IGLTransformFeedbackVaryings
+{
+    /**
+     * 回写变量列表。
+    */
+    varyings: string[];
+
+    /**
+     * 交叉或者分离。
+     */
+    bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
 }

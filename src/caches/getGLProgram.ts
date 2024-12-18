@@ -1,7 +1,7 @@
 import { IRenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
-import { IGLTransformFeedbackVaryings } from "../data/IGLRenderPipeline";
+import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getIGLAttributeType } from "./getIGLAttributeType";
 
@@ -38,14 +38,14 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline | IGLTransformFeedbackPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
     if (result) return result;
 
     const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment?.code || `#version 300 es
+    const fragment = (pipeline as IRenderPipeline).fragment?.code || `#version 300 es
         precision highp float;
         precision highp int;
 
@@ -53,7 +53,7 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipelin
         {
         }
     `;
-    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
+    const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
     gl._programs[shaderKey] = result;
@@ -72,11 +72,11 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function getKey(pipeline: IRenderPipeline)
+function getKey(pipeline: IRenderPipeline | IGLTransformFeedbackPipeline)
 {
     const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment?.code;
-    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
+    const fragment = (pipeline as IRenderPipeline).fragment?.code;
+    const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
 }
