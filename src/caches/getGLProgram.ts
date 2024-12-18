@@ -1,8 +1,7 @@
 import { IRenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
-import { ITransformFeedbackVaryings } from "../data/IGLRenderPipeline";
-import { ITransformFeedbackPipeline } from "../data/IGLTransformFeedbackPass";
+import { IGLTransformFeedbackVaryings } from "../data/IGLRenderPipeline";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getIGLAttributeType } from "./getIGLAttributeType";
 
@@ -39,33 +38,6 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLTransformFeedbackProgram(gl: WebGLRenderingContext, pipeline: ITransformFeedbackPipeline)
-{
-    const shaderKey = getTransformFeedbackKey(pipeline);
-    let result = gl._programs[shaderKey];
-    if (result) return result;
-
-    const vertex = pipeline.vertex.code;
-    const fragment = `
-        #version 300 es
-        precision highp float;
-        precision highp int;
-
-        void main()
-        {
-        }
-    `;
-    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
-
-    result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
-    gl._programs[shaderKey] = result;
-
-    return result;
-}
-
-/**
- * 激活渲染程序
- */
 export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
 {
     const shaderKey = getKey(pipeline);
@@ -73,7 +45,14 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipelin
     if (result) return result;
 
     const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment.code;
+    const fragment = pipeline.fragment?.code || `#version 300 es
+        precision highp float;
+        precision highp int;
+
+        void main()
+        {
+        }
+    `;
     const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
 
     result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
@@ -93,24 +72,16 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function getTransformFeedbackKey(pipeline: ITransformFeedbackPipeline)
-{
-    const vertex = pipeline.vertex.code;
-    const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
-
-    return `---vertexShader---\n${vertex}\n---fragment---\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
-}
-
 function getKey(pipeline: IRenderPipeline)
 {
     const vertex = pipeline.vertex.code;
-    const fragment = pipeline.fragment.code;
+    const fragment = pipeline.fragment?.code;
     const transformFeedbackVaryings = pipeline.transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
 }
 
-function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: ITransformFeedbackVaryings)
+function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: IGLTransformFeedbackVaryings)
 {
     // 编译顶点着色器
     const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
@@ -276,7 +247,7 @@ function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: strin
     return shader;
 }
 
-function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: ITransformFeedbackVaryings)
+function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: IGLTransformFeedbackVaryings)
 {
     // 创建程序对象
     const program = gl.createProgram();

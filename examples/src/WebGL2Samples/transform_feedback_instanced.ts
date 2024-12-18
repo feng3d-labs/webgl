@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -105,10 +105,9 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    const transformRO: IRenderObject = {
+    const transformRO: IGLTransformFeedbackObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
         vertices: null,
-        indices: null,
         transformFeedback: null,
         uniforms: {},
         drawVertex: { vertexCount: NUM_INSTANCES },
@@ -121,20 +120,25 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
-    const rp: IRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [transformRO, renderRO],
-    };
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [{
+                __type: "TransformFeedbackPass",
+                transformFeedbackObjects: [transformRO],
+            }, {
+                descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                renderObjects: [renderRO],
+            }]
+        }]
+    }
 
     render();
 
     function initPrograms()
     {
-        const programTransform: IRenderPipeline = {
-            vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
+        const programTransform: IGLTransformFeedbackPipeline = {
+            vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
-            rasterizerDiscard: true,
-            primitive: { topology: "point-list" },
         };
 
         // Setup program for draw shader
@@ -151,7 +155,7 @@ import { getShaderSource } from "./utility";
             primitive: { topology: "triangle-list" },
         };
 
-        const programs = [programTransform, programDraw];
+        const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
 
         return programs;
     }
@@ -167,7 +171,6 @@ import { getShaderSource } from "./utility";
         const destinationTransformFeedback = transformFeedbacks[destinationIdx];
 
         transformRO.vertices = sourceVAO.vertices;
-        transformRO.indices = sourceVAO.indices;
         transformRO.transformFeedback = destinationTransformFeedback;
 
         transformRO.uniforms.u_time = time;
@@ -184,7 +187,7 @@ import { getShaderSource } from "./utility";
         renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
         renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
 
-        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
+        webgl.submit(submit);
 
         requestAnimationFrame(render);
     }

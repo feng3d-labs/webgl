@@ -18,6 +18,7 @@ export * from "./data/IGLSamplerTexture";
 export * from "./data/IGLTexture";
 export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTransformFeedback";
+export * from "./data/IGLTransformFeedbackPass";
 export * from "./data/IGLUniforms";
 
 export * from "./runs/getIGLBuffer";

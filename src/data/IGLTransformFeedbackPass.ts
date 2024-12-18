@@ -1,6 +1,6 @@
 import { IDrawVertex, IVertexAttributes, IVertexState } from "@feng3d/render-api";
 import { LazyObject } from "../types";
-import { ITransformFeedbackVaryings } from "./IGLRenderPipeline";
+import { IGLTransformFeedbackVaryings } from "./IGLRenderPipeline";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 
@@ -30,12 +30,12 @@ export interface IGLTransformFeedbackObject
     /**
      * 渲染管线描述。
      */
-    readonly pipeline: ITransformFeedbackPipeline;
+    readonly pipeline: IGLTransformFeedbackPipeline;
 
     /**
      * 顶点属性数据映射。
      */
-    vertices?: IVertexAttributes;
+    vertices: IVertexAttributes;
 
     /**
      * 根据顶点数据绘制图元。
@@ -54,10 +54,10 @@ export interface IGLTransformFeedbackObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/bindTransformFeedback
      */
-    transformFeedback?: IGLTransformFeedback;
+    transformFeedback: IGLTransformFeedback;
 }
 
-export interface ITransformFeedbackPipeline
+export interface IGLTransformFeedbackPipeline
 {
     /**
      * 顶点着色器阶段描述。
@@ -69,12 +69,5 @@ export interface ITransformFeedbackPipeline
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
      */
-    transformFeedbackVaryings?: ITransformFeedbackVaryings;
-
-    /**
-     * 是否丢弃后续光栅化阶段。
-     *
-     * gl.RASTERIZER_DISCARD
-     */
-    rasterizerDiscard?: boolean;
+    transformFeedbackVaryings: IGLTransformFeedbackVaryings;
 }

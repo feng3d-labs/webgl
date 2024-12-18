@@ -12,7 +12,7 @@ declare module "@feng3d/render-api"
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
          */
-        transformFeedbackVaryings?: ITransformFeedbackVaryings;
+        transformFeedbackVaryings?: IGLTransformFeedbackVaryings;
 
         /**
          * 是否丢弃后续光栅化阶段。
@@ -23,7 +23,7 @@ declare module "@feng3d/render-api"
     }
 }
 
-export interface ITransformFeedbackVaryings
+export interface IGLTransformFeedbackVaryings
 {
     /**
      * 回写变量列表。

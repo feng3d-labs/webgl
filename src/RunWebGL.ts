@@ -2,7 +2,7 @@ import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEnco
 
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
-import { getGLProgram, getGLTransformFeedbackProgram } from "./caches/getGLProgram";
+import { getGLProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getGLSampler } from "./caches/getGLSampler";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
@@ -23,7 +23,7 @@ import { IGLSampler, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } 
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
 import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, ITransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
+import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
 import { IGLUniforms } from "./data/IGLUniforms";
 import { getGLTexture } from "./internal";
@@ -113,10 +113,19 @@ export class RunWebGL
 
     protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: IGLTransformFeedbackPass)
     {
+        // 执行变换反馈通道时关闭光栅化功能
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.enable(gl.RASTERIZER_DISCARD);
+        }
         transformFeedbackPass.transformFeedbackObjects.forEach((transformFeedbackObject) =>
         {
             this.runTransformFeedbackObject(gl, transformFeedbackObject);
         });
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.disable(gl.RASTERIZER_DISCARD);
+        }
     }
 
     protected runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
@@ -649,17 +658,10 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: ITransformFeedbackPipeline)
+    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: IGLTransformFeedbackPipeline)
     {
-        const program = getGLTransformFeedbackProgram(gl, renderPipeline);
+        const program = getGLProgram(gl, renderPipeline);
         gl.useProgram(program);
-
-        //
-        if (gl instanceof WebGL2RenderingContext)
-        {
-            gl.enable(gl.RASTERIZER_DISCARD);
-            return;
-        }
     }
 
     private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IRenderPipeline)
