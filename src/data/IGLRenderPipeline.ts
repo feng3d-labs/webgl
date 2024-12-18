@@ -32,7 +32,7 @@ export interface ITransformFeedbackVaryings
 
     /**
      * 交叉或者分离。
-    */
+     */
     bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
 }
 

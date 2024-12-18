@@ -32,10 +32,10 @@ import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
 import { lazy, LazyObject } from "./types";
 import { ChainMap } from "./utils/ChainMap";
+import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
 import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
 import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
-import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
 
 declare global
 {
@@ -732,6 +732,7 @@ export class RunWebGL
             if (pipeline.rasterizerDiscard)
             {
                 gl.enable(gl.RASTERIZER_DISCARD);
+                return;
             }
             else
             {
