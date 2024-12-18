@@ -78,8 +78,8 @@ import { getShaderSource } from "./utility";
 
         vertexBuffers[i][OFFSET_LOCATION] = instanceOffsets.slice();
         vertexBuffers[i][ROTATION_LOCATION] = instanceRotations.slice();
-        vertexBuffers[i][POSITION_LOCATION] = trianglePositions.slice();
-        vertexBuffers[i][COLOR_LOCATION] = instanceColors.slice();
+        vertexBuffers[i][POSITION_LOCATION] = trianglePositions;
+        vertexBuffers[i][COLOR_LOCATION] = instanceColors;
 
         vertexArrays[i] = [];
         vertexArrays[i][0] = {

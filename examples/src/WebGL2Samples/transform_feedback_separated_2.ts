@@ -58,7 +58,7 @@ import { getShaderSource } from "./utility";
     }
 
     // -- Init Vertex Arrays and Buffers
-    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[] = [];
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
@@ -80,13 +80,20 @@ import { getShaderSource } from "./utility";
 
         vertexBuffers[i][ID_LOCATION] = particleIDs;
 
-        vertexArrays[i] = {
+        vertexArrays[i] = [];
+        vertexArrays[i][0] = {
             vertices: {
                 a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
                 a_velocity: { data: vertexBuffers[i][VELOCITY_LOCATION], format: "float32x2" },
                 a_spawntime: { data: vertexBuffers[i][SPAWNTIME_LOCATION], format: "float32" },
                 a_lifetime: { data: vertexBuffers[i][LIFETIME_LOCATION], format: "float32" },
                 a_ID: { data: vertexBuffers[i][ID_LOCATION], format: "float32" },
+            }
+        };
+
+        vertexArrays[i][1] = {
+            vertices: {
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
             }
         };
 
@@ -125,7 +132,7 @@ import { getShaderSource } from "./utility";
         return [transformFeedbackPipeline, program];
     }
 
-    const transformFeedbackObject: IGLTransformFeedbackObject = {
+    const transformRO: IGLTransformFeedbackObject = {
         vertices: undefined,
         transformFeedback: undefined,
         pipeline: transformFeedbackPipeline,
@@ -136,7 +143,7 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: NUM_PARTICLES },
     };
 
-    const ro: IRenderObject = {
+    const renderRO: IRenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         uniforms: {
@@ -151,11 +158,11 @@ import { getShaderSource } from "./utility";
             passEncoders: [
                 {
                     __type: "TransformFeedbackPass",
-                    transformFeedbackObjects: [transformFeedbackObject],
+                    transformFeedbackObjects: [transformRO],
                 },
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-                    renderObjects: [ro],
+                    renderObjects: [renderRO],
                 }
             ]
         }]
@@ -167,14 +174,14 @@ import { getShaderSource } from "./utility";
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
-        const sourceVAO = vertexArrays[currentSourceIdx];
+        const sourceVAO = vertexArrays[currentSourceIdx][0];
         const destinationTransformFeedback = transformFeedbacks[destinationIdx];
 
         //
-        transformFeedbackObject.vertices = sourceVAO.vertices;
-        transformFeedbackObject.transformFeedback = destinationTransformFeedback;
+        transformRO.vertices = sourceVAO.vertices;
+        transformRO.transformFeedback = destinationTransformFeedback;
 
-        transformFeedbackObject.uniforms.u_time = time;
+        transformRO.uniforms.u_time = time;
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;
@@ -185,8 +192,8 @@ import { getShaderSource } from "./utility";
         transform();
 
         //
-        ro.vertices = vertexArrays[currentSourceIdx].vertices;
-        ro.indices = vertexArrays[currentSourceIdx].indices;
+        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit(submit);
 
