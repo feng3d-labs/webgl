@@ -39,13 +39,6 @@ import { getShaderSource } from "./utility";
     const particleLifetime = new Float32Array(NUM_PARTICLES);
     const particleIDs = new Float32Array(NUM_PARTICLES);
 
-    const POSITION_LOCATION = 0;
-    const VELOCITY_LOCATION = 1;
-    const SPAWNTIME_LOCATION = 2;
-    const LIFETIME_LOCATION = 3;
-    const ID_LOCATION = 4;
-    const NUM_LOCATIONS = 5;
-
     for (let p = 0; p < NUM_PARTICLES; ++p)
     {
         particlePositions[p * 2] = 0.0;
@@ -56,6 +49,13 @@ import { getShaderSource } from "./utility";
         particleLifetime[p] = 0.0;
         particleIDs[p] = p;
     }
+
+    const POSITION_LOCATION = 0;
+    const VELOCITY_LOCATION = 1;
+    const SPAWNTIME_LOCATION = 2;
+    const LIFETIME_LOCATION = 3;
+    const ID_LOCATION = 4;
+    const NUM_LOCATIONS = 5;
 
     // -- Init Vertex Arrays and Buffers
     const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
@@ -133,11 +133,10 @@ import { getShaderSource } from "./utility";
     }
 
     const transformRO: IGLTransformFeedbackObject = {
-        vertices: undefined,
-        transformFeedback: undefined,
         pipeline: transformFeedbackPipeline,
+        vertices: null,
+        transformFeedback: null,
         uniforms: {
-            u_color: [0.0, 1.0, 1.0, 1.0],
             u_acceleration: [0.0, ACCELERATION],
         },
         drawVertex: { vertexCount: NUM_PARTICLES },
@@ -148,25 +147,21 @@ import { getShaderSource } from "./utility";
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
-            u_acceleration: [0.0, ACCELERATION],
         },
         drawVertex: { vertexCount: NUM_PARTICLES },
     };
 
     const submit: ISubmit = {
         commandEncoders: [{
-            passEncoders: [
-                {
-                    __type: "TransformFeedbackPass",
-                    transformFeedbackObjects: [transformRO],
-                },
-                {
-                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-                    renderObjects: [renderRO],
-                }
-            ]
+            passEncoders: [{
+                __type: "TransformFeedbackPass",
+                transformFeedbackObjects: [transformRO],
+            }, {
+                descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                renderObjects: [renderRO],
+            }]
         }]
-    };
+    }
 
     function transform()
     {

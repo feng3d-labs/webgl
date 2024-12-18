@@ -105,6 +105,32 @@ import { getShaderSource } from "./utility";
         };
     }
 
+    function initPrograms()
+    {
+        const programTransform: IGLTransformFeedbackPipeline = {
+            vertex: { code: getShaderSource("vs-emit") },
+            transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
+        };
+
+        // Setup program for draw shader
+        const programDraw: IRenderPipeline = {
+            vertex: { code: getShaderSource("vs-draw") }, fragment: {
+                code: getShaderSource("fs-draw"),
+                targets: [{
+                    blend: {
+                        color: { srcFactor: "src-alpha", dstFactor: "one" },
+                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
+                    }
+                }]
+            },
+            primitive: { topology: "triangle-list" },
+        };
+
+        const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
+
+        return programs;
+    }
+
     const transformRO: IGLTransformFeedbackObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
         vertices: null,
@@ -130,34 +156,6 @@ import { getShaderSource } from "./utility";
                 renderObjects: [renderRO],
             }]
         }]
-    }
-
-    render();
-
-    function initPrograms()
-    {
-        const programTransform: IGLTransformFeedbackPipeline = {
-            vertex: { code: getShaderSource("vs-emit") },
-            transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
-        };
-
-        // Setup program for draw shader
-        const programDraw: IRenderPipeline = {
-            vertex: { code: getShaderSource("vs-draw") }, fragment: {
-                code: getShaderSource("fs-draw"),
-                targets: [{
-                    blend: {
-                        color: { srcFactor: "src-alpha", dstFactor: "one" },
-                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
-                    }
-                }]
-            },
-            primitive: { topology: "triangle-list" },
-        };
-
-        const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
-
-        return programs;
     }
 
     function transform()
@@ -191,6 +189,8 @@ import { getShaderSource } from "./utility";
 
         requestAnimationFrame(render);
     }
+
+    requestAnimationFrame(render);
 
     // If you have a long-running page, and need to delete WebGL resources, use:
     //
