@@ -172,12 +172,8 @@ import { getShaderSource } from "./utility";
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
-        const sourceVAO = vertexArrays[currentSourceIdx][0];
-        const destinationTransformFeedback = transformFeedbacks[destinationIdx];
-
-        //
-        transformRO.vertices = sourceVAO.vertices;
-        transformRO.transformFeedback = destinationTransformFeedback;
+        transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
+        transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
         transformRO.uniforms.u_time = time;
 
