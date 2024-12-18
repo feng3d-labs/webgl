@@ -20,9 +20,9 @@ export interface IGLTransformFeedbackPass
     readonly __type: "TransformFeedbackPass";
 
     /**
-     * 计算对象列表。
+     * 变换反馈对象列表。
      */
-    computeObjects: IGLTransformFeedbackObject[];
+    transformFeedbackObjects: IGLTransformFeedbackObject[];
 }
 
 export interface IGLTransformFeedbackObject
@@ -42,7 +42,7 @@ export interface IGLTransformFeedbackObject
      * 
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
-    readonly drawVertex?: IDrawVertex;
+    readonly drawVertex: IDrawVertex;
 
     /**
      * Uniform渲染数据

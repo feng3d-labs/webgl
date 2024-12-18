@@ -2,7 +2,7 @@ import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEnco
 
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
-import { getGLProgram } from "./caches/getGLProgram";
+import { getGLProgram, getGLTransformFeedbackProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
 import { getGLSampler } from "./caches/getGLSampler";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
@@ -23,6 +23,7 @@ import { IGLSampler, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } 
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
 import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
+import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, ITransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
 import { IGLUniforms } from "./data/IGLUniforms";
 import { getGLTexture } from "./internal";
@@ -87,6 +88,10 @@ export class RunWebGL
             {
                 this.runRenderPass(gl, passEncoder);
             }
+            else if (passEncoder.__type === "TransformFeedbackPass")
+            {
+                this.runTransformFeedbackPass(gl, passEncoder);
+            }
             else if (passEncoder.__type === "BlitFramebuffer")
             {
                 this.runBlitFramebuffer(gl, passEncoder);
@@ -103,6 +108,14 @@ export class RunWebGL
             {
                 console.error(`未处理 passEncoder ${passEncoder}`);
             }
+        });
+    }
+
+    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: IGLTransformFeedbackPass)
+    {
+        transformFeedbackPass.transformFeedbackObjects.forEach((transformFeedbackObject) =>
+        {
+            this.runTransformFeedbackObject(gl, transformFeedbackObject);
         });
     }
 
@@ -207,6 +220,25 @@ export class RunWebGL
         {
             this.runDrawIndexed(gl, drawMode, indices, drawIndexed);
         }
+
+        this.endTransformFeedback(gl, transformFeedback);
+    }
+
+    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
+    {
+        const { pipeline, vertices, uniforms, transformFeedback, drawVertex } = renderObject;
+
+        const drawMode = getIGLDrawMode("point-list");
+
+        this.runTransformFeedbackPipeline(gl, pipeline);
+
+        this.runTransformFeedback(gl, transformFeedback, drawMode);
+
+        this.runVertexArray(gl, pipeline, vertices, undefined);
+
+        this.runUniforms(gl, pipeline, uniforms);
+
+        this.runDrawVertex(gl, drawMode, drawVertex);
 
         this.endTransformFeedback(gl, transformFeedback);
     }
@@ -614,6 +646,19 @@ export class RunWebGL
         else if (transformFeedback)
         {
             console.log(`WebGL1 不支持顶点着色器回写数据功能！`);
+        }
+    }
+
+    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: ITransformFeedbackPipeline)
+    {
+        const program = getGLTransformFeedbackProgram(gl, renderPipeline);
+        gl.useProgram(program);
+
+        //
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.enable(gl.RASTERIZER_DISCARD);
+            return;
         }
     }
 
