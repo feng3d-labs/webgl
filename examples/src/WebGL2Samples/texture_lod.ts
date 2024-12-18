@@ -208,8 +208,8 @@ import { getShaderSource, loadImage } from "./utility";
         for (let i = 0; i < Corners.MAX; ++i)
         {
             renderObjects.push(
-                { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     ...ro,
                     uniforms: {
                         mvp: matrix,

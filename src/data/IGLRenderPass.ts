@@ -1,7 +1,6 @@
 import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
 import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 import { IGLScissorRect } from "./IGLScissorRect";
-import { IGLViewport } from "./IGLViewport";
 
 declare module "@feng3d/render-api"
 {
@@ -23,7 +22,6 @@ declare module "@feng3d/render-api"
     export interface IRenderPassObjectMap
     {
         IGLRenderObject: IRenderObject,
-        IGLViewport: IGLViewport
         IGLScissorRect: IGLScissorRect
         IGLOcclusionQuery: IGLOcclusionQuery
     }

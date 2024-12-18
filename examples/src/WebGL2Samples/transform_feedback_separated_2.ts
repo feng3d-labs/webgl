@@ -1,5 +1,5 @@
 import { IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -82,11 +82,11 @@ import { getShaderSource } from "./utility";
 
         particleVAOs[i] = {
             vertices: {
-                a_position: { data: particleVBOs[i][POSITION_LOCATION], format:"float32x2" },
-                a_velocity: { data: particleVBOs[i][VELOCITY_LOCATION], format:"float32x2" },
-                a_spawntime: { data: particleVBOs[i][SPAWNTIME_LOCATION], format:"float32" },
-                a_lifetime: { data: particleVBOs[i][LIFETIME_LOCATION], format:"float32" },
-                a_ID: { data: particleVBOs[i][ID_LOCATION], format:"float32" },
+                a_position: { data: particleVBOs[i][POSITION_LOCATION], format: "float32x2" },
+                a_velocity: { data: particleVBOs[i][VELOCITY_LOCATION], format: "float32x2" },
+                a_spawntime: { data: particleVBOs[i][SPAWNTIME_LOCATION], format: "float32" },
+                a_lifetime: { data: particleVBOs[i][LIFETIME_LOCATION], format: "float32" },
+                a_ID: { data: particleVBOs[i][ID_LOCATION], format: "float32" },
             }
         };
 
@@ -121,8 +121,8 @@ import { getShaderSource } from "./utility";
         return program;
     }
 
-    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const ro: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
@@ -133,7 +133,7 @@ import { getShaderSource } from "./utility";
 
     const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [viewport, ro],
+        renderObjects: [ro],
     };
 
     function render()

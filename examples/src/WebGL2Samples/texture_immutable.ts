@@ -115,8 +115,8 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         renderObjects.push(
-            { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
+                viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 ...ro,
                 pipeline: program,
                 uniforms: {
@@ -127,8 +127,8 @@ import { getShaderSource, loadImage } from "./utility";
 
         // Immutable 3D texture
         renderObjects.push(
-            { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
+                viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 ...ro,
                 pipeline: program3D,
                 uniforms: {

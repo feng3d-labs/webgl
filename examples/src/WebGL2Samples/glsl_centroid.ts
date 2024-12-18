@@ -1,5 +1,5 @@
-import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -24,10 +24,9 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: IGLViewport[] = new Array(VIEWPORTS.MAX);
+const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
-    __type: "Viewport",
     x: 0,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -35,7 +34,6 @@ viewport[VIEWPORTS.LEFT] = {
 };
 
 viewport[VIEWPORTS.RIGHT] = {
-    __type: "Viewport",
     x: canvasSize.x / 2,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
@@ -193,9 +191,9 @@ mat4.scale(mvp, IDENTITY, scaleVector3);
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     renderObjects.push(
-        viewport[i],
         {
             ...ro,
+            viewport: viewport[i],
             uniforms: {
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },

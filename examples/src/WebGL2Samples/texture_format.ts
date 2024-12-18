@@ -75,8 +75,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init VertexArray
     const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { data: positions, format:"float32x2" },
-            texcoord: { data: texCoords, format:"float32x2" },
+            position: { data: positions, format: "float32x2" },
+            texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
@@ -172,8 +172,8 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
             renderObjects.push(
-                { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     vertices: vertexArray.vertices,
                     pipeline: programNormalized,
                     uniforms: {
@@ -188,8 +188,8 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
             renderObjects.push(
-                { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     vertices: vertexArray.vertices,
                     pipeline: programUint,
                     uniforms: {

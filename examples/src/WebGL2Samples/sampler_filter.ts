@@ -87,8 +87,8 @@ const texcoords = new Float32Array([
 
 const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { data: positions, format:"float32x2" },
-        textureCoordinates: { data: texcoords, format:"float32x2" },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     }
 };
 
@@ -155,9 +155,9 @@ function render()
     for (let i = 0; i < Corners.MAX; ++i)
     {
         renderObjects.push(
-            { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             {
                 ...ro,
+                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                 uniforms: {
                     ...ro.uniforms,
                     diffuse: {

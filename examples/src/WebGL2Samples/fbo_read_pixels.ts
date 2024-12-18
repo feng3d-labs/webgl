@@ -131,8 +131,8 @@ const matrix = new Float32Array([
 const rp1: IRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [
-        { __type: "Viewport", x: 0, y: 0, width: w, height: h },
         {
+            viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             vertices: multipleOutputVertexArray.vertices,
@@ -161,9 +161,9 @@ const ro: IRenderObject = {
 for (let i = 0; i < Textures.MAX; ++i)
 {
     renderObjects.push(
-        { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
         {
             ...ro,
+            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             uniforms: { ...ro.uniforms, layer: i },
         });
 }

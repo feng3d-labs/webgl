@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView, IVertexAttributes } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -79,8 +79,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         vertices,
     };
 
-    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
     const renderObject: IRenderObject = {
+        viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         pipeline: program,
         vertices: vertexArray.vertices,
         uniforms: {
@@ -103,7 +103,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 clearValue: [0.3, 0.3, 0.3, 1.0]
             }]
         },
-        renderObjects: [viewport, renderObject],
+        renderObjects: [renderObject],
     };
 
     const framebufferResolve: IRenderPassDescriptor = {
@@ -148,8 +148,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         blitFramebuffers,
     };
 
-    const viewport2: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height };
     const renderObject2: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
         vertices: vertexArray.vertices,
         uniforms: {
             MVP: new Float32Array([
@@ -171,7 +171,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 loadOp: "clear",
             }],
         },
-        renderObjects: [viewport2, renderObject2]
+        renderObjects: [renderObject2]
     };
 
     // 执行

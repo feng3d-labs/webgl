@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -134,7 +134,7 @@ function render()
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        const viewport0: IGLViewport = { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
+        const viewport0: IViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
         if (i === Corners.TOP_LEFT)
         {
@@ -143,17 +143,17 @@ function render()
         else if (i === Corners.TOP_RIGHT)
         {
             renderObjects.push(
-                viewport0,
                 {
                     ...renderObject,
+                    viewport: viewport0,
                 });
         }
         else if (i === Corners.BOTTOM_RIGHT)
         {
             renderObjects.push(
-                viewport0,
                 {
                     ...renderObject,
+                    viewport: viewport0,
                     pipeline: {
                         ...program, fragment: {
                             ...program.fragment,
@@ -172,9 +172,9 @@ function render()
         else if (i === Corners.BOTTOM_LEFT)
         {
             renderObjects.push(
-                viewport0,
                 {
                     ...renderObject,
+                    viewport: viewport0,
                     pipeline: {
                         ...program, fragment: {
                             ...program.fragment,

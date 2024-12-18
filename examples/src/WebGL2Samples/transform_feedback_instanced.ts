@@ -1,5 +1,5 @@
 import { IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLTransformFeedback, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -114,8 +114,8 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: NUM_INSTANCES },
     };
 
-    const viewport: IGLViewport = { __type: "Viewport", x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
     const renderRO: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
         drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
@@ -123,7 +123,7 @@ import { getShaderSource } from "./utility";
 
     const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [transformRO, viewport, renderRO],
+        renderObjects: [transformRO, renderRO],
     };
 
     render();

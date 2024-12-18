@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
@@ -165,15 +165,13 @@ import { getShaderSource } from "./utility";
         drawVertex: { vertexCount: 6 }
     };
 
-    const renderPassObjects: IRenderPassObject[] = [];
-    const renderObjects: IRenderObject[] = [];
+    const renderPassObjects: IRenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        renderPassObjects.push(
-            { __type: "Viewport", x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-            ro,
-        );
-        renderObjects.push(ro);
+        renderPassObjects.push({
+            ...ro,
+            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+        });
     }
 
     const rp: IRenderPass = {
@@ -195,7 +193,7 @@ import { getShaderSource } from "./utility";
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            renderObjects[i].uniforms.orientation = matrices[i];
+            renderPassObjects[i].uniforms.orientation = matrices[i];
         }
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

@@ -100,8 +100,8 @@ import { getShaderSource, loadImage } from "./utility";
 
         // No offset
         renderObjects.push(
-            { __type: "Viewport", x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
             {
+                viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 vertices: vertexArray.vertices,
                 pipeline: programBicubic,
                 uniforms: {
@@ -115,8 +115,8 @@ import { getShaderSource, loadImage } from "./utility";
         const offset = new Int32Array([100, -80]);
 
         renderObjects.push(
-            { __type: "Viewport", x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
             {
+                viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 vertices: vertexArray.vertices,
                 pipeline: programOffsetBicubic,
                 uniforms: {
