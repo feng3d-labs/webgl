@@ -35,6 +35,7 @@ import { ChainMap } from "./utils/ChainMap";
 import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
 import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
+import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
 
 declare global
 {
@@ -107,6 +108,9 @@ export class RunWebGL
 
     protected runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
     {
+        // 获取附件尺寸
+        const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
+
         // 处理不被遮挡查询
         const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderObjects);
         //
@@ -118,7 +122,7 @@ export class RunWebGL
 
             this.runPassDescriptor(gl, passDescriptor);
 
-            this.runRenderObjects(gl, renderPass.renderObjects);
+            this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
 
             this.runBlitFramebuffer(gl, blitFramebuffer);
         }
@@ -126,7 +130,7 @@ export class RunWebGL
         {
             this.runPassDescriptor(gl, renderPass.descriptor);
 
-            this.runRenderObjects(gl, renderPass.renderObjects);
+            this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
         }
 
         occlusionQuery.resolve(renderPass);
@@ -161,31 +165,31 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
+    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly IRenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {
             if (renderObject.__type === "OcclusionQuery")
             {
-                this.runOcclusionQuery(gl, renderObject);
+                this.runOcclusionQuery(gl, attachmentSize, renderObject);
             }
             else
             {
-                this.runRenderObject(gl, renderObject);
+                this.runRenderObject(gl, attachmentSize, renderObject);
             }
         });
     }
 
-    private runRenderObject(gl: WebGLRenderingContext, renderObject: IRenderObject)
+    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
     {
         const { viewport, scissorRect, pipeline, vertices, indices, uniforms, transformFeedback, drawIndexed, drawVertex } = renderObject;
 
         const topology = pipeline.primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
 
-        this.runViewPort(gl, viewport);
+        this.runViewPort(gl, attachmentSize, viewport);
 
-        this.runScissor(gl, scissorRect);
+        this.runScissor(gl, attachmentSize, scissorRect);
 
         this.runRenderPipeline(gl, pipeline);
 
@@ -779,7 +783,7 @@ export class RunWebGL
         }
     }
 
-    private runOcclusionQuery(gl: WebGLRenderingContext, occlusionQuery: IGLOcclusionQuery)
+    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: IGLOcclusionQuery)
     {
         // 开始查询
         occlusionQuery._step.begin();
@@ -787,42 +791,53 @@ export class RunWebGL
         // 正常渲染对象列表
         occlusionQuery.renderObjects.forEach((renderObject) =>
         {
-            this.runRenderObject(gl, renderObject);
+            this.runRenderObject(gl, attachmentSize, renderObject);
         });
 
         // 结束查询
         occlusionQuery._step.end();
     }
 
-    private runViewPort(gl: WebGLRenderingContext, viewport?: IViewport)
+    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: IViewport)
     {
         if (viewport)
         {
             const isYup = viewport.isYup ?? true;
             const x = viewport.x ?? 0;
             let y = viewport.y ?? 0;
-            const width = viewport.width ?? gl.canvas.width;
-            const height = viewport.height ?? gl.canvas.height;
+            const width = viewport.width ?? attachmentSize.width;
+            const height = viewport.height ?? attachmentSize.height;
 
             if (!isYup)
             {
-                y = gl.canvas.height - y - height;
+                y = attachmentSize.height - y - height;
             }
 
             gl.viewport(x, y, width, height);
         }
         else
         {
-            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+            gl.viewport(0, 0, attachmentSize.width, attachmentSize.height);
         }
     }
 
-    private runScissor(gl: WebGLRenderingContext, scissor?: IScissorRect)
+    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: IScissorRect)
     {
         if (scissor)
         {
+            const isYup = scissor.isYup ?? true;
+            const x = scissor.x ?? 0;
+            let y = scissor.y ?? 0;
+            const width = scissor.width ?? attachmentSize.width;
+            const height = scissor.height ?? attachmentSize.height;
+
+            if (!isYup)
+            {
+                y = attachmentSize.height - y - height;
+            }
+
             gl.enable(gl.SCISSOR_TEST);
-            gl.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
+            gl.scissor(x, y, width, height);
         }
         else
         {
