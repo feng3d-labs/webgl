@@ -6,7 +6,7 @@ import { IRenderPassDescriptor } from "@feng3d/render-api";
  * @param gl 
  * @param descriptor 
  */
-export function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: IRenderPassDescriptor): { width: number; height: number; }
+export function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: IRenderPassDescriptor): { readonly width: number; readonly height: number; }
 {
     if (!descriptor) return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
 
