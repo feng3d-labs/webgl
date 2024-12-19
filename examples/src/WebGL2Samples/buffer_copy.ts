@@ -30,7 +30,7 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 

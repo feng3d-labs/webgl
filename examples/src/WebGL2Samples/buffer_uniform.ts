@@ -52,12 +52,12 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const uniformPerDrawBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
+    const uniformPerDrawBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: transforms.byteLength, data: transforms, usage: "DYNAMIC_DRAW" };
 
     const lightPos = new Float32Array([
         0.0, 0.0, 0.0, 0.0,
     ]);
-    const uniformPerPassBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: lightPos, usage: "DYNAMIC_DRAW" };
+    const uniformPerPassBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: lightPos.byteLength, data: lightPos, usage: "DYNAMIC_DRAW" };
 
     //vec3 ambient, diffuse, specular, float shininess
     const material = new Float32Array([
@@ -65,7 +65,7 @@ import { getShaderSource } from "./utility";
         0.5, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 4.0,
     ]);
-    const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: material, usage: "STATIC_DRAW" };
+    const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: material.byteLength, data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
     const vertexArray: { vertices?: IVertexAttributes } = {

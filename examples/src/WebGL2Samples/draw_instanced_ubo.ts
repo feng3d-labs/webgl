@@ -32,13 +32,13 @@ const transforms = new Float32Array([
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.0, 0.0, 1.0
 ]);
-const uniformTransformBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: transforms, usage: "DYNAMIC_DRAW" };
+const uniformTransformBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: transforms.byteLength, data: transforms, usage: "DYNAMIC_DRAW" };
 
 const materials = new Float32Array([
     1.0, 0.5, 0.0, 1.0,
     0.0, 0.5, 1.0, 1.0
 ]);
-const uniformMaterialBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", data: materials, usage: "STATIC_DRAW" };
+const uniformMaterialBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: materials.byteLength, data: materials, usage: "STATIC_DRAW" };
 
 // -- Render
 const rp: IRenderPass = {
