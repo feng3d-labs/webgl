@@ -27,66 +27,59 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
 
     const target = buffer.target;
 
-    const updateBuffer = () =>
-    {
-        // 获取
-        const data = buffer.data;
-        const size = buffer.size;
-        const usage = buffer.usage || "STATIC_DRAW";
+    const size = buffer.size;
+    const usage = buffer.usage || "STATIC_DRAW";
 
-        // 上传数据到WebGL
-        gl.bindBuffer(gl[target], webGLBuffer);
-
-        if (data)
-        {
-            gl.bufferData(gl[target], data, gl[usage]);
-        }
-        else if (size)
-        {
-            gl.bufferData(gl[target], size, gl[usage]);
-        }
-        else
-        {
-            console.log(`初始化缓冲区时必须提供数据或者尺寸！`);
-        }
-    };
+    // 上传数据到WebGL
+    gl.bindBuffer(gl[target], webGLBuffer);
+    gl.bufferData(gl[target], size, gl[usage]);
 
     const writeBuffer = () =>
     {
         const writeBuffers = buffer.writeBuffers;
 
-        if (writeBuffers)
+        if (!writeBuffers) return;
+
+        gl.bindBuffer(gl[target], webGLBuffer);
+        writeBuffers.forEach((writeBuffer) =>
         {
-            gl.bindBuffer(gl[target], webGLBuffer);
-            writeBuffers.forEach((writeBuffer) =>
+            const bufferOffset = writeBuffer.bufferOffset ?? 0;
+            const data = writeBuffer.data;
+            const dataOffset = writeBuffer.dataOffset ?? 0;
+            //
+            let arrayBufferView: Uint8Array;
+            if ("buffer" in data)
             {
-                const bufferOffset = writeBuffer.bufferOffset || 0;
-                const data = writeBuffer.data;
-                const dataOffset = writeBuffer.dataOffset ?? 0;
-                //
-                let arrayBufferView: Uint8Array;
-                if ("buffer" in data)
-                {
-                    arrayBufferView = new Uint8Array(data.buffer, data.byteOffset + dataOffset * data.BYTES_PER_ELEMENT, (data.length - dataOffset) * data.BYTES_PER_ELEMENT);
-                }
-                else
-                {
-                    arrayBufferView = new Uint8Array(data, dataOffset, data.byteLength - dataOffset);
-                }
-                gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
-            });
-            buffer.writeBuffers = null;
-        }
+                arrayBufferView = new Uint8Array(
+                    data.buffer,
+                    data.byteOffset + dataOffset * data.BYTES_PER_ELEMENT,
+                    (data.length - dataOffset) * data.BYTES_PER_ELEMENT
+                );
+            }
+            else
+            {
+                arrayBufferView = new Uint8Array(
+                    data,
+                    dataOffset,
+                    data.byteLength - dataOffset
+                );
+            }
+            gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
+        });
+        buffer.writeBuffers = null;
     };
 
     const dataChange = () =>
     {
+        if (!buffer.data) return;
+
         const writeBuffers = buffer.writeBuffers || [];
         writeBuffers.push({ data: buffer.data });
         buffer.writeBuffers = writeBuffers;
     };
 
-    updateBuffer();
+    dataChange();
+    writeBuffer();
 
     //
     watcher.watch(buffer, "data", dataChange);
