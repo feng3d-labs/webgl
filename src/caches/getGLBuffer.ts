@@ -62,8 +62,17 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
             {
                 const bufferOffset = writeBuffer.bufferOffset || 0;
                 const data = writeBuffer.data;
+                const dataOffset = writeBuffer.dataOffset || 0;
+                const size = writeBuffer.size || 0;
 
-                gl.bufferSubData(gl[target], bufferOffset, data);
+                if (gl instanceof WebGL2RenderingContext)
+                {
+                    gl.bufferSubData(gl[target], bufferOffset, data, dataOffset, size);
+                }
+                else
+                {
+                    gl.bufferSubData(gl[target], bufferOffset, data);
+                }
             });
             buffer.writeBuffers = null;
         }

@@ -1,18 +1,18 @@
-import { IVertexDataTypes } from "@feng3d/render-api";
+import { IBuffer, IVertexDataTypes } from "@feng3d/render-api";
 
 /**
  * WebGL缓冲区
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export interface IGLBuffer
+export interface IGLBuffer extends IBuffer
 {
     target: GLBufferTarget;
 
     /**
      * 缓冲区数据。
      */
-    data?: BufferSource;
+    data?: ArrayBufferView;
 
     /**
      * 创建指定尺寸的空缓冲区。
@@ -49,7 +49,7 @@ export interface IGLWriteBuffer
     /**
      * 写入缓冲区数据。
      */
-    data: BufferSource;
+    data: ArrayBufferView;
 
     dataOffset?: number
 
