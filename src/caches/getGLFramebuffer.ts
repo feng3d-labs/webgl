@@ -19,7 +19,7 @@ declare global
 export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
-    if (!view || !view.texture) return null;
+    if (!view) return null;
 
     let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     if (webGLFramebuffer) return webGLFramebuffer;

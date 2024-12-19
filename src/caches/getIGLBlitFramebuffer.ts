@@ -69,6 +69,8 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: ICopyTextureToTextur
 
 function getIGLTextureView(source: IImageCopyTexture)
 {
+    if (!source.texture) return undefined;
+
     const textureView: ITextureView = {
         texture: source.texture,
         baseMipLevel: source.mipLevel,
