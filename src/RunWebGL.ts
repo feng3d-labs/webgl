@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
 
 import { getFramebuffer } from "./caches/getFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -15,7 +15,6 @@ import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLBuffer } from "./data/IGLBuffer";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
-import { IGLCopyTextureToTexture } from "./data/IGLCopyTextureToTexture";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLDrawElementType } from "./data/IGLIndexBuffer";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
@@ -876,7 +875,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: IGLCopyTextureToTexture)
+    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: ICopyTextureToTexture)
     {
         const blitFramebuffer = getIGLBlitFramebuffer(copyTextureToTexture);
         this.runBlitFramebuffer(gl, blitFramebuffer);
