@@ -7,33 +7,14 @@ import { IBuffer, IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api
  */
 export interface IGLBuffer extends IBuffer
 {
-    target: GLBufferTarget;
+    target: IGLBufferTarget;
 
     /**
      * 为优化目的指定数据存储的预期使用模式的GLenum。
      *
      * 默认为 "STATIC_DRAW"。
      */
-    usage?: GLBufferUsage;
-
-    /**
-     * 写缓冲区。
-     */
-    writeBuffers?: IGLWriteBuffer[];
-}
-
-export interface IGLWriteBuffer
-{
-    bufferOffset?: number;
-
-    /**
-     * 写入缓冲区数据。
-     */
-    data: ArrayBufferView;
-
-    dataOffset?: number
-
-    size?: number
+    usage?: IGLBufferUsage;
 }
 
 export interface IGLVertexBuffer extends IGLBuffer
@@ -103,7 +84,7 @@ export type IGLDrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export type GLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
+export type IGLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
     | "STATIC_READ" | "DYNAMIC_READ" | "STREAM_READ" | "STATIC_COPY" | "DYNAMIC_COPY" | "STREAM_COPY" // WebGL2
     ;
 
@@ -122,7 +103,6 @@ export type GLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // We
  * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
  *
  */
-export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
+export type IGLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
     | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
     | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
-// export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER"; 

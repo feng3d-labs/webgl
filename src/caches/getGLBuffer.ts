@@ -62,17 +62,18 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
             {
                 const bufferOffset = writeBuffer.bufferOffset || 0;
                 const data = writeBuffer.data;
-                const dataOffset = writeBuffer.dataOffset || 0;
-                const size = writeBuffer.size || 0;
-
-                if (gl instanceof WebGL2RenderingContext)
+                const dataOffset = writeBuffer.dataOffset ?? 0;
+                //
+                let arrayBufferView: Uint8Array;
+                if ("buffer" in data)
                 {
-                    gl.bufferSubData(gl[target], bufferOffset, data, dataOffset, size);
+                    arrayBufferView = new Uint8Array(data.buffer, data.byteOffset + dataOffset * data.BYTES_PER_ELEMENT, (data.length - dataOffset) * data.BYTES_PER_ELEMENT);
                 }
                 else
                 {
-                    gl.bufferSubData(gl[target], bufferOffset, data);
+                    arrayBufferView = new Uint8Array(data, dataOffset, data.byteLength - dataOffset);
                 }
+                gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
             });
             buffer.writeBuffers = null;
         }
