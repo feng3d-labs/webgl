@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -19,14 +19,12 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: IRenderPipeline = {
+        const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
-            fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
-            rasterizerDiscard: true,
         };
 
-        return programTransform;
+        return transformFeedbackPipeline;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
     const programFeedback: IRenderPipeline = {
@@ -60,8 +58,6 @@ import { getShaderSource } from "./utility";
         // Transform buffer
         positions,
         // Feedback empty buffers
-        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
         positions.slice(),
         positions.slice(),
     ];
@@ -89,14 +85,6 @@ import { getShaderSource } from "./utility";
         ]
     };
 
-    const renderObjects: IRenderPassObject[] = [];
-
-    // -- Render
-    const rp: IRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderObjects,
-    };
-
     // First draw, capture the attributes
     // Disable rasterization, vertices processing only
 
@@ -107,24 +95,38 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    renderObjects.push({
-        pipeline: programs[PROGRAM_TRANSFORM],
-        vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
-        indices: vertexArrays[PROGRAM_TRANSFORM].indices,
-        uniforms: { MVP: matrix },
-        transformFeedback,
-        drawVertex: { vertexCount: VERTEX_COUNT },
-    });
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [
+                        {
+                            pipeline: programTransform,
+                            vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
+                            uniforms: { MVP: matrix },
+                            transformFeedback,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ]
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [
+                        // Second draw, reuse captured attributes
+                        {
+                            pipeline: programs[PROGRAM_FEEDBACK],
+                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ],
+                }
+            ]
+        }]
+    };
 
-    // Second draw, reuse captured attributes
-    renderObjects.push({
-        pipeline: programs[PROGRAM_FEEDBACK],
-        vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-        indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-        drawVertex: { vertexCount: VERTEX_COUNT },
-    });
-
-    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
+    webgl.submit(submit);
 
     // -- Delete WebGL resources
     // gl.deleteTransformFeedback(transformFeedback);
