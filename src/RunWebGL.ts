@@ -237,11 +237,11 @@ export class RunWebGL
 
         this.runTransformFeedbackPipeline(gl, pipeline);
 
-        this.runTransformFeedback(gl, transformFeedback, drawMode);
-
         this.runVertexArray(gl, pipeline, vertices, undefined);
 
         this.runUniforms(gl, pipeline, uniforms);
+
+        this.runTransformFeedback(gl, transformFeedback, drawMode);
 
         this.runDrawVertex(gl, drawMode, drawVertex);
 
