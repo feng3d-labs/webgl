@@ -1,6 +1,6 @@
 import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
 
-import { getFramebuffer } from "./caches/getFramebuffer";
+import { getGLFramebuffer } from "./caches/getGLFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
@@ -164,7 +164,7 @@ export class RunWebGL
         const colorAttachment = Object.assign({}, defaultRenderPassColorAttachment, passDescriptor.colorAttachments?.[0]);
 
         //
-        const framebuffer = getFramebuffer(gl, passDescriptor);
+        const framebuffer = getGLFramebuffer(gl, passDescriptor);
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
         //
@@ -884,8 +884,8 @@ export class RunWebGL
     {
         const { read, draw, blitFramebuffers } = blitFramebuffer;
 
-        const readFramebuffer = getFramebuffer(gl, read);
-        const drawFramebuffer = getFramebuffer(gl, draw);
+        const readFramebuffer = getGLFramebuffer(gl, read);
+        const drawFramebuffer = getGLFramebuffer(gl, draw);
 
         if (gl instanceof WebGL2RenderingContext)
         {

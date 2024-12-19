@@ -16,7 +16,7 @@ declare global
 /**
  * 获取帧缓冲区
  */
-export function getFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view || !view.texture) return null;

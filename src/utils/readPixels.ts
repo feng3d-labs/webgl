@@ -1,4 +1,4 @@
-import { getFramebuffer } from "../caches/getFramebuffer";
+import { getGLFramebuffer } from "../caches/getGLFramebuffer";
 import { IGLReadPixels } from "../data/IGLReadPixels";
 
 export function readPixels(gl: WebGLRenderingContext, readPixels: IGLReadPixels)
@@ -7,7 +7,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: IGLReadPixels)
     {
         const { frameBuffer, attachmentPoint, x, y, width, height, format, type, dstData, dstOffset } = readPixels;
 
-        const webGLFramebuffer = getFramebuffer(gl, frameBuffer);
+        const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
         gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
 
         gl.readBuffer(gl[attachmentPoint]);
