@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -21,11 +21,9 @@ import { getShaderSource } from "./utility";
 
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: IRenderPipeline = {
+        const programTransform: IGLTransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
-            fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "INTERLEAVED_ATTRIBS" },
-            rasterizerDiscard: true,
         };
 
         return programTransform;
@@ -34,8 +32,6 @@ import { getShaderSource } from "./utility";
     const programFeedback: IRenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
-
-    const programs = [programTransform, programFeedback];
 
     // -- Init Buffer
     const SIZE_V4C4 = 32;
@@ -78,14 +74,6 @@ import { getShaderSource } from "./utility";
         ]
     };
 
-    const renderObjects: IRenderPassObject[] = [];
-
-    // -- Render
-    const rp: IRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderObjects,
-    };
-
     // First draw, capture the attributes
     // Disable rasterization, vertices processing only
 
@@ -96,29 +84,40 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    renderObjects.push({
-        pipeline: programs[PROGRAM_TRANSFORM],
-        vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
-        indices: vertexArrays[PROGRAM_TRANSFORM].indices,
-        uniforms: { MVP: matrix },
-        transformFeedback,
-        drawVertex: { vertexCount: VERTEX_COUNT },
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [
+                        {
+                            pipeline: programTransform,
+                            vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
+                            uniforms: { MVP: matrix },
+                            transformFeedback,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ],
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [
+                        // Second draw, reuse captured attributes
+                        {
+                            pipeline: programFeedback,
+                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ],
+                }]
+        }]
     });
-
-    // Second draw, reuse captured attributes
-    renderObjects.push({
-        pipeline: programs[PROGRAM_FEEDBACK],
-        vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-        indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-        drawVertex: { vertexCount: VERTEX_COUNT },
-    });
-
-    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
     webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_TRANSFORM]));
     webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_FEEDBACK]));
-    webgl.deleteProgram(programs[PROGRAM_TRANSFORM]);
-    webgl.deleteProgram(programs[PROGRAM_FEEDBACK]);
+    webgl.deleteProgram(programTransform);
+    webgl.deleteProgram(programFeedback);
 })();
