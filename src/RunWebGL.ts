@@ -141,7 +141,7 @@ export class RunWebGL
         {
             const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
-            this.runPassDescriptor(gl, passDescriptor);
+            this.runRenderPassDescriptor(gl, passDescriptor);
 
             this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
 
@@ -149,7 +149,7 @@ export class RunWebGL
         }
         else
         {
-            this.runPassDescriptor(gl, renderPass.descriptor);
+            this.runRenderPassDescriptor(gl, renderPass.descriptor);
 
             this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
         }
@@ -157,7 +157,7 @@ export class RunWebGL
         occlusionQuery.resolve(renderPass);
     }
 
-    private runPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
 

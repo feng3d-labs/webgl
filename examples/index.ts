@@ -9,6 +9,9 @@ const files = {
         "sample7",
         "sample8",
     ],
+    "test":[
+        "fractalCube"
+    ],
     "regl-examples": [
         "basic",
         "batch",
