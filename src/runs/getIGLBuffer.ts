@@ -1,16 +1,19 @@
-import { IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLBufferTarget, IGLBufferUsage, IGLBuffer, IGLIndexBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
+import { IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
+import { IGLBuffer, IGLBufferTarget, IGLBufferUsage, IGLIndexBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
 
-export function getIGLBuffer(data: BufferSource, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW")
+export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW")
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
     console.assert(!!target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
 
-    const indexBuffer: IGLBuffer = data[_IGLBuffer] = {
-        target: target, usage: usage,
+    const indexBuffer: IGLBuffer = {
+        size: data.byteLength,
+        target: target,
+        usage: usage,
         data: data,
-    } as IGLBuffer;
+    };
+    data[_IGLBuffer] = indexBuffer;
 
     return indexBuffer;
 }
