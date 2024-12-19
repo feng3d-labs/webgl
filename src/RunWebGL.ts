@@ -535,7 +535,6 @@ export class RunWebGL
         }
     }
 
-
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
@@ -925,6 +924,10 @@ export class RunWebGL
             gl.bindBuffer(gl.COPY_READ_BUFFER, rb);
             gl.bindBuffer(gl.COPY_WRITE_BUFFER, wb);
             gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.COPY_WRITE_BUFFER, readOffset, writeOffset, size);
+
+            //
+            gl.bindBuffer(gl.COPY_READ_BUFFER, null);
+            gl.bindBuffer(gl.COPY_WRITE_BUFFER, null);
         }
         else
         {
