@@ -1,4 +1,4 @@
-import { IGLBuffer } from "./IGLBuffer";
+import { IBuffer } from "@feng3d/render-api";
 
 /**
  * GL缓冲区之间拷贝。
@@ -14,7 +14,7 @@ export interface IGLCopyBufferToBuffer
     /**
      * 源缓冲区。
      */
-    source: IGLBuffer,
+    source: IBuffer,
     /**
      * 默认为0。
      */
@@ -22,7 +22,7 @@ export interface IGLCopyBufferToBuffer
     /**
      * 目标缓冲区。
      */
-    destination: IGLBuffer,
+    destination: IBuffer,
     /**
      * 默认为0。
      */

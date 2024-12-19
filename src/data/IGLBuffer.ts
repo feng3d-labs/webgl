@@ -1,23 +1,26 @@
 import { IBuffer, IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api";
 
-/**
- * WebGL缓冲区
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
- */
-export interface IGLBuffer extends IBuffer
+declare module "@feng3d/render-api"
 {
-    target: IGLBufferTarget;
-
     /**
-     * 为优化目的指定数据存储的预期使用模式的GLenum。
+     * WebGL缓冲区
      *
-     * 默认为 "STATIC_DRAW"。
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    usage?: IGLBufferUsage;
+    export interface IBuffer
+    {
+        target: IGLBufferTarget;
+
+        /**
+         * 为优化目的指定数据存储的预期使用模式的GLenum。
+         *
+         * 默认为 "STATIC_DRAW"。
+         */
+        usage?: IGLBufferUsage;
+    }
 }
 
-export interface IGLVertexBuffer extends IGLBuffer
+export interface IGLVertexBuffer extends IBuffer
 {
     target: "ARRAY_BUFFER";
 
@@ -35,7 +38,7 @@ export interface IGLVertexBuffer extends IGLBuffer
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export interface IGLIndexBuffer extends IGLBuffer
+export interface IGLIndexBuffer extends IBuffer
 {
     target: "ELEMENT_ARRAY_BUFFER";
 
@@ -45,7 +48,7 @@ export interface IGLIndexBuffer extends IGLBuffer
     data: IIndicesDataTypes;
 }
 
-export interface IGLUniformBuffer extends IGLBuffer
+export interface IGLUniformBuffer extends IBuffer
 {
     target: "UNIFORM_BUFFER";
 }

@@ -1,11 +1,11 @@
+import { IBuffer } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLBuffer } from "../data/IGLBuffer";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _buffers: Map<IGLBuffer, WebGLBuffer>
+        _buffers: Map<IBuffer, WebGLBuffer>
     }
 
     interface WebGLBuffer
@@ -17,7 +17,7 @@ declare global
     }
 }
 
-export function getGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
+export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 {
     let webGLBuffer = gl._buffers.get(buffer);
     if (webGLBuffer) return webGLBuffer;
@@ -95,7 +95,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
     return webGLBuffer;
 }
 
-export function deleteBuffer(gl: WebGLRenderingContext, buffer: IGLBuffer)
+export function deleteBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 {
     const webGLBuffer = gl._buffers.get(buffer);
     if (webGLBuffer)
