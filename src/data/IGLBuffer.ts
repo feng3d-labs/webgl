@@ -10,16 +10,6 @@ export interface IGLBuffer extends IBuffer
     target: GLBufferTarget;
 
     /**
-     * 缓冲区数据。
-     */
-    data?: ArrayBufferView;
-
-    /**
-     * 创建指定尺寸的空缓冲区。
-     */
-    size?: number;
-
-    /**
      * 为优化目的指定数据存储的预期使用模式的GLenum。
      *
      * 默认为 "STATIC_DRAW"。
