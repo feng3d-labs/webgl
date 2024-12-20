@@ -7,15 +7,15 @@ export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: 
 
     console.assert(!!target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
 
-    const indexBuffer: IBuffer = {
-        size: data.byteLength,
+    const buffer: IBuffer = {
+        size: Math.ceil(data.byteLength / 4) * 4,
         target: target,
         usage: usage,
         data: data,
     };
-    data[_IGLBuffer] = indexBuffer;
+    data[_IGLBuffer] = buffer;
 
-    return indexBuffer;
+    return buffer;
 }
 
 export function getIGLVertexBuffer(data: IVertexDataTypes, usage?: "STREAM_COPY")
