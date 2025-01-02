@@ -55,7 +55,7 @@ export function deleteSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
     }
 }
 
-export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
+export function getIGLTextureWrap(addressMode: IAddressMode = "clamp-to-edge")
 {
     const textureWrap: IGLTextureWrap = addressModeMap[addressMode];
 
