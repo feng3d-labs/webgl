@@ -162,7 +162,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
                             const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
-                            gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], gl[format], gl[type], image);
+                            gl.texImage2D(gl[bindTarget], mipLevel, gl[format], gl[format], gl[type], image);
                         }
                         else
                         {
@@ -191,7 +191,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                         {
                             const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
                             console.assert(offset === 0, `WebGL1中ITextureDataLayout.offset必须为0`);
-                            gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], data);
+                            gl.texImage2D(gl[bindTarget], mipLevel, gl[format], width, height, 0, gl[format], gl[type], data);
                         }
                         else
                         {
@@ -241,6 +241,13 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
         }
     }
     createTexture();
+
+    const updateSources = () =>
+    {
+        webGLTexture.destroy();
+    };
+
+    watcher.watch(texture, "sources", updateSources);
 
     // 更新纹理
     const updateTexture = () =>
@@ -378,7 +385,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
     updateTexture();
 
     watcher.watchs(texture, ["generateMipmap"], updateTexture);
-    watcher.watch(texture, "sources", updateTexture);
+    watcher.watch(texture, "writeTextures", updateTexture);
 
     // 监听纹理尺寸发生变化
     const resize = (newValue: ITextureSize, oldValue: ITextureSize) =>
@@ -405,7 +412,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
         gl._textures.delete(texture);
         //
         watcher.unwatchs(texture, ["generateMipmap"], updateTexture);
-        watcher.unwatch(texture, "sources", updateTexture);
+        watcher.unwatch(texture, "sources", updateSources);
+        watcher.unwatch(texture, "writeTextures", updateTexture);
         watcher.unwatch(texture, "size", resize);
         //
         delete webGLTexture.destroy;
