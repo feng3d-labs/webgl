@@ -80,7 +80,7 @@ const depthTexture: ITexture = {
     size: [windowSize.x, windowSize.y],
     format: "depth16unorm",
 };
-const depthSampler: IGLSampler = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const depthSampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 

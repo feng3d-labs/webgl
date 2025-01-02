@@ -97,7 +97,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 const samplers: IGLSampler[] = new Array(Corners.MAX);
 for (let i = 0; i < Corners.MAX; ++i)
 {
-    samplers[i] = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", wrapW: "CLAMP_TO_EDGE" };
+    samplers[i] = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge" };
 }
 
 // Min filter

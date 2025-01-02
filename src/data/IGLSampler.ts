@@ -14,33 +14,6 @@ export interface IGLSampler extends ISampler
     magFilter?: IGLTextureMagFilter;
 
     /**
-     * 用于指定纹理在S轴（即水平方向或U坐标轴）上的环绕方式。
-     * 
-     * 默认 "REPEAT"。
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_s
-     */
-    wrapU?: IGLTextureWrap;
-
-    /**
-     * 用于指定纹理在T轴（即垂直方向或V坐标轴）上的环绕方式。
-     * 
-     * 默认 "REPEAT"。
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_t
-     */
-    wrapV?: IGLTextureWrap;
-
-    /**
-     * 用于指定纹理在R轴（即深度方向或W坐标轴）上的环绕方式。用于3D纹理或者纹理数组。
-     * 
-     * 默认 "REPEAT"。
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_r
-     */
-    wrapW?: IGLTextureWrap;
-
-    /**
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
      * 
      * 默认 1。
@@ -112,4 +85,4 @@ export type IGLTextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type IGLTextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
+export type IGLTextureWrap = "repeat" | "clamp-to-edge" | "mirror-repeat";

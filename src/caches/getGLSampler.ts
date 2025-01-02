@@ -1,3 +1,4 @@
+import { IAddressMode } from "@feng3d/render-api";
 import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 import { IGLSampler, IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 
@@ -21,9 +22,9 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 
         const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
         const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
-        const wrapS: IGLTextureWrap = sampler.wrapU || "REPEAT";
-        const wrapT: IGLTextureWrap = sampler.wrapV || "REPEAT";
-        const wrapR: IGLTextureWrap = sampler.wrapW || "REPEAT";
+        const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
+        const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
+        const wrapR: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
         const compareMode: IGLSamplerCompareMode = sampler.compareMode || "NONE";
@@ -53,3 +54,18 @@ export function deleteSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
         gl.deleteSampler(webGLSampler);
     }
 }
+
+export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
+{
+    const textureWrap: IGLTextureWrap = addressModeMap[addressMode];
+
+    console.assert(!!textureWrap, `接收到错误值，请从 ${Object.keys(addressModeMap).toString()} 中取值！`);
+
+    return textureWrap;
+}
+
+const addressModeMap: { [key: string]: IGLTextureWrap } = {
+    "clamp-to-edge": "clamp-to-edge",
+    "repeat": "repeat",
+    "mirror-repeat": "mirror-repeat",
+};

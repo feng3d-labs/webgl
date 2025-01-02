@@ -4,7 +4,7 @@ import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
 import { getGLProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
-import { getGLSampler } from "./caches/getGLSampler";
+import { getGLSampler, getIGLTextureWrap } from "./caches/getGLSampler";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLDrawMode, IGLDrawMode } from "./caches/getIGLDrawMode";
@@ -402,8 +402,8 @@ export class RunWebGL
         {
             const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
             const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
-            const wrapS: IGLTextureWrap = sampler.wrapU || "REPEAT";
-            const wrapT: IGLTextureWrap = sampler.wrapV || "REPEAT";
+            const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
+            const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
 
             // 设置纹理参数
             if (webGLTexture.minFilter !== minFilter)

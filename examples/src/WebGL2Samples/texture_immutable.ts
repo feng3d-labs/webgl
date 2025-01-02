@@ -94,8 +94,8 @@ import { getShaderSource, loadImage } from "./utility";
         const sampler2D: IGLSampler = {
             minFilter: "NEAREST",
             magFilter: "LINEAR",
-            wrapU: "CLAMP_TO_EDGE",
-            wrapV: "CLAMP_TO_EDGE",
+            addressModeU: "clamp-to-edge",
+            addressModeV: "clamp-to-edge",
         };
 
         // -- Render
