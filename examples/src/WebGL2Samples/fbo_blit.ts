@@ -59,8 +59,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         }],
     };
     const samplerDiffuse: IGLSampler = {
-        minFilter: "LINEAR",
-        magFilter: "LINEAR",
+        minFilter: "linear",
+        magFilter: "linear",
     };
 
     const textureColorBuffer: ITexture = {
@@ -68,8 +68,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };
     const samplerColorBuffer: IGLSampler = {
-        minFilter: "LINEAR",
-        magFilter: "LINEAR",
+        minFilter: "linear",
+        magFilter: "linear",
     };
 
     // 此处 Renderbuffer 直接使用 IGLTextureView 替代。

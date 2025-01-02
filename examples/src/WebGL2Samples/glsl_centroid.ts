@@ -113,7 +113,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         format: "rgba8unorm",
         size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };
-    samplers[i] = { minFilter: "NEAREST", magFilter: "NEAREST" };
+    samplers[i] = { minFilter: "nearest", magFilter: "nearest" };
 }
 
 // -- Init Frame Buffers

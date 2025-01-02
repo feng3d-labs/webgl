@@ -4,7 +4,7 @@ import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
 import { getGLProgram } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
-import { getGLSampler, getIGLTextureWrap } from "./caches/getGLSampler";
+import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap } from "./caches/getGLSampler";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLDrawMode, IGLDrawMode } from "./caches/getIGLDrawMode";
@@ -400,8 +400,8 @@ export class RunWebGL
         }
         else
         {
-            const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
-            const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
+            const minFilter: IGLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
+            const magFilter: IGLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
             const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
             const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
 

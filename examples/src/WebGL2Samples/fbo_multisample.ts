@@ -74,7 +74,7 @@ const texture: ITexture = {
     format: "rgba8unorm",
     size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
 };
-const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
+const sampler: IGLSampler = { minFilter: "nearest", magFilter: "nearest" };
 
 // -- Init Frame Buffers
 const framebuffer: IRenderPassDescriptor = {

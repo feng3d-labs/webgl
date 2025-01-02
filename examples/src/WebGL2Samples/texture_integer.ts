@@ -57,8 +57,8 @@ import { getShaderSource, loadImage } from "./utility";
             }],
         };
         const sampler: IGLSampler = {
-            minFilter: "NEAREST",
-            magFilter: "NEAREST",
+            minFilter: "nearest",
+            magFilter: "nearest",
         };
 
         // -- Render

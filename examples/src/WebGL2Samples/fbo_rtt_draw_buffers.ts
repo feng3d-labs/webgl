@@ -79,13 +79,13 @@ const color1Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color1Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color1Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 const color2Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color2Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color2Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 

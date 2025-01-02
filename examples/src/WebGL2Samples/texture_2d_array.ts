@@ -71,8 +71,8 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ __type: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
         };
         sampler = {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
         };
 
         const matrix = new Float32Array([

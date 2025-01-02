@@ -131,8 +131,9 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.TOP_LEFT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
         };
 
         textures[Corners.TOP_RIGHT] = {
@@ -142,8 +143,9 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.TOP_RIGHT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
             lodMinClamp: 3.0,
             lodMaxClamp: 3.0,
         };
@@ -155,8 +157,9 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.BOTTOM_LEFT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
             lodMinClamp: 0.0,
             lodMaxClamp: 10.0,
         };
@@ -168,8 +171,9 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.BOTTOM_RIGHT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
             lodMinClamp: 0.0,
             lodMaxClamp: 10.0,
         };

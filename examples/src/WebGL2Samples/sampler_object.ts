@@ -51,13 +51,13 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 // -- Initialize samplers
 
 const samplerA: IGLSampler = {
-    minFilter: "NEAREST_MIPMAP_NEAREST", magFilter: "NEAREST",
+    minFilter: "nearest", magFilter: "nearest", mipmapFilter: "nearest",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
     compareMode: "NONE", compare: "LEQUAL",
 };
 const samplerB: IGLSampler = {
-    minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR",
+    minFilter: "linear", magFilter: "linear", mipmapFilter: "linear",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
     compareMode: "NONE", compare: "LEQUAL",

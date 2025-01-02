@@ -1,4 +1,4 @@
-import { IAddressMode } from "@feng3d/render-api";
+import { IAddressMode, IFilterMode } from "@feng3d/render-api";
 import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 import { IGLSampler, IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 
@@ -20,8 +20,8 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
         webGLSampler = gl.createSampler();
         gl._samplers.set(sampler, webGLSampler);
 
-        const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
-        const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
+        const minFilter: IGLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
+        const magFilter: IGLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
         const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
         const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
         const wrapR: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
@@ -65,7 +65,50 @@ export function getIGLTextureWrap(addressMode: IAddressMode = "clamp-to-edge")
 }
 
 const addressModeMap: { [key: string]: IGLTextureWrap } = {
-    "clamp-to-edge": "clamp-to-edge",
-    "repeat": "repeat",
-    "mirror-repeat": "mirror-repeat",
+    "clamp-to-edge": "CLAMP_TO_EDGE",
+    "repeat": "REPEAT",
+    "mirror-repeat": "MIRRORED_REPEAT",
+};
+
+export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter: IFilterMode = "nearest"): IGLTextureMinFilter
+{
+    let glMinFilter: IGLTextureMinFilter;
+    if (minFilter === "linear")
+    {
+        if (mipmapFilter === "linear")
+        {
+            glMinFilter = "LINEAR_MIPMAP_LINEAR";
+        }
+        else
+        {
+            glMinFilter = "LINEAR_MIPMAP_NEAREST";
+        }
+    }
+    else
+    {
+        if (mipmapFilter === "linear")
+        {
+            glMinFilter = "NEAREST_MIPMAP_LINEAR";
+        }
+        else
+        {
+            glMinFilter = "NEAREST_MIPMAP_NEAREST";
+        }
+    }
+
+    return glMinFilter;
+}
+
+export function getIGLTextureMagFilter(magFilter: IFilterMode = "nearest")
+{
+    const glMagFilter: IGLTextureMagFilter = magFilterMap[magFilter];
+
+    console.assert(!!glMagFilter, `接收到错误值，请从 ${Object.keys(magFilterMap).toString()} 中取值！`);
+
+    return glMagFilter;
+}
+
+const magFilterMap: { [key: string]: IGLTextureMagFilter } = {
+    "nearest": "NEAREST",
+    "linear": "LINEAR",
 };

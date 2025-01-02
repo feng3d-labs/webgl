@@ -89,8 +89,9 @@ import { getShaderSource } from "./utility";
     const sampler: IGLSampler = {
         lodMinClamp: 0,
         lodMaxClamp: Math.log2(SIZE),
-        minFilter: "LINEAR_MIPMAP_LINEAR",
-        magFilter: "LINEAR",
+        minFilter: "linear",
+        magFilter: "linear",
+        mipmapFilter: "linear",
     };
 
     // -- Initialize program

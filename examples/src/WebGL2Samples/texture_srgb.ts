@@ -61,7 +61,7 @@ import { getShaderSource, loadImage } from "./utility";
             format: "rgba8unorm-srgb",
             sources: [{ mipLevel: 0, image: image }],
         };
-        sampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
+        sampler = { minFilter: "nearest", magFilter: "nearest" };
 
         render();
     });

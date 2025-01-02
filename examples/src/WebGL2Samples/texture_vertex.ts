@@ -114,8 +114,8 @@ import { getShaderSource, loadImage } from "./utility";
                 sources: [{ image: image, flipY: false, }],
             };
             sampler = {
-                minFilter: "NEAREST",
-                magFilter: "NEAREST",
+                minFilter: "nearest",
+                magFilter: "nearest",
                 addressModeU: "clamp-to-edge",
                 addressModeV: "clamp-to-edge",
             };

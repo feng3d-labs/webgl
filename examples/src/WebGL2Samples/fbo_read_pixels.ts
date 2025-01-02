@@ -107,7 +107,7 @@ const texture: ITexture = {
     size: [w, h, 3],
     format: "rgba8unorm",
 };
-const sampler: IGLSampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "NEAREST", magFilter: "NEAREST" };
+const sampler: IGLSampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 

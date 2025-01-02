@@ -299,7 +299,7 @@ async function loadTexture(url: string)
 
     if (!generateMipmap)
     {
-        sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "LINEAR" };
+        sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
     }
 
     return { texture, sampler } as IGLSamplerTexture;

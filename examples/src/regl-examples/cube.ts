@@ -141,7 +141,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         texture: {
             size: [img.width, img.height],
             sources: [{ image: img }]
-        }, sampler: { minFilter: "LINEAR" }
+        }, sampler: { minFilter: "linear" }
     };
 
     draw();

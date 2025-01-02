@@ -54,7 +54,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             image: image, flipY: false,
         }]
     };
-    const sampler: IGLSampler = { minFilter: "NEAREST", magFilter: "NEAREST" };
+    const sampler: IGLSampler = { minFilter: "nearest", magFilter: "nearest" };
 
     // -- Render
     const matrix = new Float32Array([

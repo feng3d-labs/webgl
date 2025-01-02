@@ -78,8 +78,8 @@ import { getShaderSource, loadImage } from "./utility";
             sources: [{ mipLevel: 0, image: image, flipY: false, }],
         };
         const sampler: IGLSampler = {
-            minFilter: "NEAREST",
-            magFilter: "NEAREST",
+            minFilter: "nearest",
+            magFilter: "nearest",
             addressModeU: "clamp-to-edge",
             addressModeV: "clamp-to-edge",
         };

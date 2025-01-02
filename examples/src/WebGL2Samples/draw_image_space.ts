@@ -19,8 +19,8 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         format: "rgba8unorm",
     };
     const sampler: IGLSampler = {
-        minFilter: "LINEAR",
-        magFilter: "LINEAR",
+        minFilter: "linear",
+        magFilter: "linear",
     };
 
     const program: IRenderPipeline = {

@@ -4,16 +4,6 @@ import { IGLCompareFunction } from "./IGLDepthStencilState";
 export interface IGLSampler extends ISampler
 {
     /**
-     * 默认 "LINEAR_MIPMAP_LINEAR" 。
-     */
-    minFilter?: IGLTextureMinFilter;
-
-    /**
-     * 默认 "LINEAR"。
-     */
-    magFilter?: IGLTextureMagFilter;
-
-    /**
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。
      * 
      * 默认 1。
@@ -85,4 +75,4 @@ export type IGLTextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type IGLTextureWrap = "repeat" | "clamp-to-edge" | "mirror-repeat";
+export type IGLTextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";

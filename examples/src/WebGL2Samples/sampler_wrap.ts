@@ -98,7 +98,11 @@ const samplers: IGLSampler[] = new Array(Corners.MAX);
 
 for (let i = 0; i < Corners.MAX; ++i)
 {
-    samplers[i] = { minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR" };
+    samplers[i] = {
+        minFilter: "linear",
+        magFilter: "linear",
+        mipmapFilter:"linear",
+    };
 }
 
 samplers[Corners.TOP_LEFT].addressModeU = "mirror-repeat";

@@ -148,8 +148,8 @@ import { getShaderSource, loadImage } from "./utility";
                 }],
             };
             samplers[i] = {
-                minFilter: "NEAREST",
-                magFilter: "NEAREST",
+                minFilter: "nearest",
+                magFilter: "nearest",
                 lodMinClamp: 0,
                 lodMaxClamp: 0,
             };

@@ -92,8 +92,8 @@ import { getShaderSource, loadImage } from "./utility";
             }],
         };
         const sampler2D: IGLSampler = {
-            minFilter: "NEAREST",
-            magFilter: "LINEAR",
+            minFilter: "nearest",
+            magFilter: "linear",
             addressModeU: "clamp-to-edge",
             addressModeV: "clamp-to-edge",
         };
@@ -177,8 +177,9 @@ import { getShaderSource, loadImage } from "./utility";
         const sampler3D: IGLSampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
         };
 
         return { texture3D, sampler3D };

@@ -93,8 +93,8 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 // -- Load texture then render
 const sampler: IGLSampler = {
-    minFilter: "LINEAR",
-    magFilter: "LINEAR"
+    minFilter: "linear",
+    magFilter: "linear"
 };
 const imageUrl = "../../assets/img/Di-3d.png";
 let texture: ITexture;

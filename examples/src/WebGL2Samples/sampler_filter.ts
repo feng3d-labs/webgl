@@ -101,16 +101,21 @@ for (let i = 0; i < Corners.MAX; ++i)
 }
 
 // Min filter
-samplers[Corners.TOP_LEFT].minFilter = "NEAREST";
-samplers[Corners.TOP_RIGHT].minFilter = "LINEAR";
-samplers[Corners.BOTTOM_RIGHT].minFilter = "LINEAR_MIPMAP_NEAREST";
-samplers[Corners.BOTTOM_LEFT].minFilter = "LINEAR_MIPMAP_LINEAR";
+samplers[Corners.TOP_LEFT].minFilter = "nearest";
+samplers[Corners.TOP_RIGHT].minFilter = "linear";
+samplers[Corners.BOTTOM_RIGHT].minFilter = "linear";
+samplers[Corners.BOTTOM_LEFT].minFilter = "linear";
+
 
 // Mag filter
-samplers[Corners.TOP_LEFT].magFilter = "NEAREST";
-samplers[Corners.TOP_RIGHT].magFilter = "LINEAR";
-samplers[Corners.BOTTOM_RIGHT].magFilter = "LINEAR";
-samplers[Corners.BOTTOM_LEFT].magFilter = "LINEAR";
+samplers[Corners.TOP_LEFT].magFilter = "nearest";
+samplers[Corners.TOP_RIGHT].magFilter = "linear";
+samplers[Corners.BOTTOM_RIGHT].magFilter = "linear";
+samplers[Corners.BOTTOM_LEFT].magFilter = "linear";
+
+//
+samplers[Corners.BOTTOM_RIGHT].mipmapFilter = "nearest";
+samplers[Corners.BOTTOM_LEFT].mipmapFilter = "linear";
 
 // -- Load texture then render
 
