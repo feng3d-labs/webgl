@@ -70,7 +70,7 @@ const addressModeMap: { [key: string]: IGLTextureWrap } = {
     "mirror-repeat": "MIRRORED_REPEAT",
 };
 
-export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter: IFilterMode = "nearest"): IGLTextureMinFilter
+export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter?: IFilterMode): IGLTextureMinFilter
 {
     let glMinFilter: IGLTextureMinFilter;
     if (minFilter === "linear")
@@ -79,9 +79,13 @@ export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipma
         {
             glMinFilter = "LINEAR_MIPMAP_LINEAR";
         }
-        else
+        else if (mipmapFilter === "nearest")
         {
             glMinFilter = "LINEAR_MIPMAP_NEAREST";
+        }
+        else
+        {
+            glMinFilter = "LINEAR";
         }
     }
     else
@@ -90,9 +94,13 @@ export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipma
         {
             glMinFilter = "NEAREST_MIPMAP_LINEAR";
         }
-        else
+        else if (mipmapFilter === "nearest")
         {
             glMinFilter = "NEAREST_MIPMAP_NEAREST";
+        }
+        else
+        {
+            glMinFilter = "NEAREST";
         }
     }
 
