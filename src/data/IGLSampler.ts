@@ -20,21 +20,25 @@ export interface IGLSampler extends ISampler
      * 
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_s
      */
-    wrapS?: IGLTextureWrap;
+    wrapU?: IGLTextureWrap;
 
     /**
      * 用于指定纹理在T轴（即垂直方向或V坐标轴）上的环绕方式。
      * 
      * 默认 "REPEAT"。
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_t
      */
-    wrapT?: IGLTextureWrap;
+    wrapV?: IGLTextureWrap;
 
     /**
      * 用于指定纹理在R轴（即深度方向或W坐标轴）上的环绕方式。用于3D纹理或者纹理数组。
      * 
      * 默认 "REPEAT"。
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_r
      */
-    wrapR?: IGLTextureWrap;
+    wrapW?: IGLTextureWrap;
 
     /**
      * 各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。默认为1。

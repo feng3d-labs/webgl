@@ -80,8 +80,8 @@ import { getShaderSource, loadImage } from "./utility";
         const sampler: IGLSampler = {
             minFilter: "NEAREST",
             magFilter: "NEAREST",
-            wrapS: "CLAMP_TO_EDGE",
-            wrapT: "CLAMP_TO_EDGE",
+            wrapU: "CLAMP_TO_EDGE",
+            wrapV: "CLAMP_TO_EDGE",
         };
 
         const renderObjects: IRenderPassObject[] = [];

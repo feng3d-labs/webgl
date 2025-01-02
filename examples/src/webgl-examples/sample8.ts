@@ -325,7 +325,7 @@ function initTexture(): IGLSamplerTexture
         format: "rgba8unorm",
         sources: [{ __type: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
-    const sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
+    const sampler: IGLSampler = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
 
     return { texture, sampler };
 }

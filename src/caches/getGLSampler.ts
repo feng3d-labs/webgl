@@ -21,9 +21,9 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
 
         const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
         const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
-        const wrapS: IGLTextureWrap = sampler.wrapS || "REPEAT";
-        const wrapT: IGLTextureWrap = sampler.wrapT || "REPEAT";
-        const wrapR: IGLTextureWrap = sampler.wrapR || "REPEAT";
+        const wrapS: IGLTextureWrap = sampler.wrapU || "REPEAT";
+        const wrapT: IGLTextureWrap = sampler.wrapV || "REPEAT";
+        const wrapR: IGLTextureWrap = sampler.wrapW || "REPEAT";
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
         const compareMode: IGLSamplerCompareMode = sampler.compareMode || "NONE";

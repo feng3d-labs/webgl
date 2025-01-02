@@ -79,13 +79,13 @@ const color1Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color1Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color1Sampler: IGLSampler = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 const color2Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color2Sampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const color2Sampler: IGLSampler = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
 
 // -- Initialize frame buffer
 

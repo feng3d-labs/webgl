@@ -402,8 +402,8 @@ export class RunWebGL
         {
             const minFilter: IGLTextureMinFilter = sampler.minFilter || "LINEAR_MIPMAP_LINEAR";
             const magFilter: IGLTextureMagFilter = sampler.magFilter || "LINEAR";
-            const wrapS: IGLTextureWrap = sampler.wrapS || "REPEAT";
-            const wrapT: IGLTextureWrap = sampler.wrapT || "REPEAT";
+            const wrapS: IGLTextureWrap = sampler.wrapU || "REPEAT";
+            const wrapT: IGLTextureWrap = sampler.wrapV || "REPEAT";
 
             // 设置纹理参数
             if (webGLTexture.minFilter !== minFilter)

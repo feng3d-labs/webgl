@@ -97,7 +97,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 const samplers: IGLSampler[] = new Array(Corners.MAX);
 for (let i = 0; i < Corners.MAX; ++i)
 {
-    samplers[i] = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", wrapR: "CLAMP_TO_EDGE" };
+    samplers[i] = { wrapU: "CLAMP_TO_EDGE", wrapV: "CLAMP_TO_EDGE", wrapW: "CLAMP_TO_EDGE" };
 }
 
 // Min filter

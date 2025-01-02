@@ -390,7 +390,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             size: [img.width, img.height],
             generateMipmap: true,
             sources: [{ image: img }]
-        }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" }
+        }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapU: "REPEAT", wrapV: "REPEAT" }
     };
 
     draw();

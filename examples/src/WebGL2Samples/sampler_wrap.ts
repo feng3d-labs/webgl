@@ -101,15 +101,15 @@ for (let i = 0; i < Corners.MAX; ++i)
     samplers[i] = { minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR" };
 }
 
-samplers[Corners.TOP_LEFT].wrapS = "MIRRORED_REPEAT";
-samplers[Corners.TOP_RIGHT].wrapS = "CLAMP_TO_EDGE";
-samplers[Corners.BOTTOM_RIGHT].wrapS = "REPEAT";
-samplers[Corners.BOTTOM_LEFT].wrapS = "CLAMP_TO_EDGE";
+samplers[Corners.TOP_LEFT].wrapU = "MIRRORED_REPEAT";
+samplers[Corners.TOP_RIGHT].wrapU = "CLAMP_TO_EDGE";
+samplers[Corners.BOTTOM_RIGHT].wrapU = "REPEAT";
+samplers[Corners.BOTTOM_LEFT].wrapU = "CLAMP_TO_EDGE";
 
-samplers[Corners.TOP_LEFT].wrapT = "MIRRORED_REPEAT";
-samplers[Corners.TOP_RIGHT].wrapT = "MIRRORED_REPEAT";
-samplers[Corners.BOTTOM_RIGHT].wrapT = "REPEAT";
-samplers[Corners.BOTTOM_LEFT].wrapT = "CLAMP_TO_EDGE";
+samplers[Corners.TOP_LEFT].wrapV = "MIRRORED_REPEAT";
+samplers[Corners.TOP_RIGHT].wrapV = "MIRRORED_REPEAT";
+samplers[Corners.BOTTOM_RIGHT].wrapV = "REPEAT";
+samplers[Corners.BOTTOM_LEFT].wrapV = "CLAMP_TO_EDGE";
 
 // -- Load texture then render
 
