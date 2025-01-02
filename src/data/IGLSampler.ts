@@ -1,6 +1,7 @@
+import { ISampler } from "@feng3d/render-api";
 import { IGLCompareFunction } from "./IGLDepthStencilState";
 
-export interface IGLSampler
+export interface IGLSampler extends ISampler
 {
     /**
      * 默认 "LINEAR_MIPMAP_LINEAR" 。
@@ -13,21 +14,23 @@ export interface IGLSampler
     magFilter?: IGLTextureMagFilter;
 
     /**
-     * 表示x轴的纹理的回环方式，就是当纹理的宽度小于需要贴图的平面的宽度的时候，平面剩下的部分应该p以何种方式贴图的问题。
+     * 用于指定纹理在S轴（即水平方向或U坐标轴）上的环绕方式。
      * 
      * 默认 "REPEAT"。
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/samplerParameter#gl.texture_wrap_s
      */
     wrapS?: IGLTextureWrap;
 
     /**
-     * 表示y轴的纹理回环方式。 magFilter和minFilter表示过滤的方式。
+     * 用于指定纹理在T轴（即垂直方向或V坐标轴）上的环绕方式。
      * 
      * 默认 "REPEAT"。
      */
     wrapT?: IGLTextureWrap;
 
     /**
-     * 表示y轴的纹理回环方式。 magFilter和minFilter表示过滤的方式。
+     * 用于指定纹理在R轴（即深度方向或W坐标轴）上的环绕方式。用于3D纹理或者纹理数组。
      * 
      * 默认 "REPEAT"。
      */
@@ -58,6 +61,7 @@ export interface IGLSampler
      * 默认 "NONE"。
      */
     compareMode?: IGLSamplerCompareMode;
+
     /**
      * 比较函数。
      * 
