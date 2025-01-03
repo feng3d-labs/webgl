@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -17,7 +17,7 @@ import { IGLDrawElementType } from "./data/IGLBuffer";
 import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
-import { IGLSampler, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
+import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
 import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
@@ -53,7 +53,7 @@ declare global
         wrapS?: IGLTextureWrap,
         wrapT?: IGLTextureWrap,
         wrapR?: IGLTextureWrap,
-        anisotropy?: number,
+        maxAnisotropy?: number,
         lodMinClamp?: number;
         lodMaxClamp?: number;
     }
@@ -391,7 +391,7 @@ export class RunWebGL
     /**
      * 设置采样参数
      */
-    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: IGLSampler, textureID: number)
+    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: ISampler, textureID: number)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -429,15 +429,15 @@ export class RunWebGL
         }
 
         //
-        const anisotropy = sampler?.anisotropy || 1;
-        if (webGLTexture.anisotropy !== anisotropy)
+        const maxAnisotropy = sampler?.maxAnisotropy || 1;
+        if (webGLTexture.maxAnisotropy !== maxAnisotropy)
         {
             const extension = gl.getExtension("EXT_texture_filter_anisotropic");
             if (extension)
             {
-                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(anisotropy, gl._capabilities.maxAnisotropy));
+                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, gl._capabilities.maxAnisotropy));
             }
-            webGLTexture.anisotropy = anisotropy;
+            webGLTexture.maxAnisotropy = maxAnisotropy;
         }
     }
 

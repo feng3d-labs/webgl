@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -46,7 +46,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     let texture: ITexture;
-    let sampler: IGLSampler;
+    let sampler: ISampler;
     loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {
         const NUM_IMAGES = 3;

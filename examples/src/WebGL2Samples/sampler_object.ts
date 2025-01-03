@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -50,17 +50,15 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 // -- Initialize samplers
 
-const samplerA: IGLSampler = {
+const samplerA: ISampler = {
     minFilter: "nearest", magFilter: "nearest", mipmapFilter: "nearest",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
-    compareMode: "NONE", compare: "LEQUAL",
 };
-const samplerB: IGLSampler = {
+const samplerB: ISampler = {
     minFilter: "linear", magFilter: "linear", mipmapFilter: "linear",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
-    compareMode: "NONE", compare: "LEQUAL",
 };
 
 // -- Load texture then render

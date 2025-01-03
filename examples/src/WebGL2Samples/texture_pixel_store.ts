@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLBuffer, IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -71,7 +71,7 @@ import { getShaderSource, loadImage } from "./utility";
                 dataImageOrigin: [image.width / 4, image.width / 4],
             }]
         };
-        const sampler: IGLSampler = {
+        const sampler: ISampler = {
             minFilter: "nearest",
             magFilter: "nearest",
         };

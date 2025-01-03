@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -54,7 +54,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             image: image, flipY: false,
         }]
     };
-    const sampler: IGLSampler = { minFilter: "nearest", magFilter: "nearest" };
+    const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest" };
 
     // -- Render
     const matrix = new Float32Array([

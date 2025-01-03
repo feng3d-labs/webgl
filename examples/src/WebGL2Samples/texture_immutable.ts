@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
@@ -91,7 +91,7 @@ import { getShaderSource, loadImage } from "./utility";
                 image: image, flipY: false,
             }],
         };
-        const sampler2D: IGLSampler = {
+        const sampler2D: ISampler = {
             minFilter: "nearest",
             magFilter: "linear",
             addressModeU: "clamp-to-edge",
@@ -174,7 +174,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [SIZE, SIZE, SIZE],
             sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data: data }],
         };
-        const sampler3D: IGLSampler = {
+        const sampler3D: ISampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
             minFilter: "linear",

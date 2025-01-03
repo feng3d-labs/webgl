@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -92,7 +92,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 };
 
 // -- Load texture then render
-const sampler: IGLSampler = {
+const sampler: ISampler = {
     minFilter: "linear",
     magFilter: "linear"
 };

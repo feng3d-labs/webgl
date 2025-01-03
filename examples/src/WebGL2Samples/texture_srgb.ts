@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLBuffer, IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -53,7 +53,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const imageUrl = "../../assets/img/Di-3d.png";
     let texture: ITexture;
-    let sampler: IGLSampler;
+    let sampler: ISampler;
     loadImage(imageUrl, function (image)
     {
         texture = {

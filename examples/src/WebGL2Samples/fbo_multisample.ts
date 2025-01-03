@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -74,7 +74,7 @@ const texture: ITexture = {
     format: "rgba8unorm",
     size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
 };
-const sampler: IGLSampler = { minFilter: "nearest", magFilter: "nearest" };
+const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest" };
 
 // -- Init Frame Buffers
 const framebuffer: IRenderPassDescriptor = {

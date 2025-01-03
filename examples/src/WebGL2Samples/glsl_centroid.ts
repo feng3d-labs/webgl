@@ -1,5 +1,5 @@
-import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -105,7 +105,7 @@ const FRAMEBUFFER_SIZE = {
     y: canvas.height
 };
 const textures: ITexture[] = [];
-const samplers: IGLSampler[] = [];
+const samplers: ISampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {

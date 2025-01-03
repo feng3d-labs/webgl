@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPipeline, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline, ISampler, ITexture } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -18,7 +18,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         sources: [{ image: img, flipY: false }],
         format: "rgba8unorm",
     };
-    const sampler: IGLSampler = {
+    const sampler: ISampler = {
         minFilter: "linear",
         magFilter: "linear",
     };

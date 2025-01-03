@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -86,7 +86,7 @@ import { getShaderSource } from "./utility";
         generateMipmap: true,
         sources: [{ __type: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data: data }],
     };
-    const sampler: IGLSampler = {
+    const sampler: ISampler = {
         lodMinClamp: 0,
         lodMaxClamp: Math.log2(SIZE),
         minFilter: "linear",

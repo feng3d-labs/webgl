@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIVertexFormat, IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -54,7 +54,7 @@ import { getShaderSource, loadImage } from "./utility";
     let indicesBuffer: IIndicesDataTypes;
 
     let texture: ITexture;
-    let sampler: IGLSampler;
+    let sampler: ISampler;
 
     const ro: IRenderObject = {
         pipeline: program,

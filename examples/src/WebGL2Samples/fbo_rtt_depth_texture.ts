@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -80,7 +80,7 @@ const depthTexture: ITexture = {
     size: [windowSize.x, windowSize.y],
     format: "depth16unorm",
 };
-const depthSampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const depthSampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 

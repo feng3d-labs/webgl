@@ -1,4 +1,4 @@
-import { IBuffer, IRenderPassDescriptor, IRenderPipeline, ISubmit, ITexture } from "@feng3d/render-api";
+import { IBuffer, IRenderPassDescriptor, IRenderPipeline, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -12,7 +12,6 @@ import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { IGLCanvasContext } from "./data/IGLCanvasContext";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
-import { IGLSampler } from "./data/IGLSampler";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { readPixels } from "./utils/readPixels";
 
@@ -69,7 +68,7 @@ export class WebGL
         deleteTexture(this._gl, texture);
     }
 
-    deleteSampler(sampler: IGLSampler)
+    deleteSampler(sampler: ISampler)
     {
         deleteSampler(this._gl, sampler);
     }

@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -54,7 +54,7 @@ import { getShaderSource, loadImage } from "./utility";
                 mipLevel: 0, image: image, flipY: false,
             }],
         };
-        const sampler: IGLSampler = {
+        const sampler: ISampler = {
             minFilter: "nearest",
             magFilter: "nearest",
         };

@@ -1,5 +1,5 @@
 import { IRenderObject, ISubmit, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IGLCanvasContext, ISampler, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -23,7 +23,7 @@ async function main()
 
     const texture: {
         texture: ITexture;
-        sampler: IGLSampler;
+        sampler: ISampler;
     } = { texture: { size: [canvas.width, canvas.height] }, sampler: {} };
 
     const renderObject: IRenderObject = {

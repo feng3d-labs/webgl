@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, ITextureView, IVertexAttributes, IViewport } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, ITextureView, IVertexAttributes } from "@feng3d/render-api";
+import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -58,7 +58,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             image: image, flipY: true
         }],
     };
-    const samplerDiffuse: IGLSampler = {
+    const samplerDiffuse: ISampler = {
         minFilter: "linear",
         magFilter: "linear",
     };
@@ -67,7 +67,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         format: "rgba8unorm",
         size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };
-    const samplerColorBuffer: IGLSampler = {
+    const samplerColorBuffer: ISampler = {
         minFilter: "linear",
         magFilter: "linear",
     };

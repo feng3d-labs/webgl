@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -94,7 +94,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 // -- Initialize samplers
 
-const samplers: IGLSampler[] = new Array(Corners.MAX);
+const samplers: ISampler[] = new Array(Corners.MAX);
 for (let i = 0; i < Corners.MAX; ++i)
 {
     samplers[i] = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge" };

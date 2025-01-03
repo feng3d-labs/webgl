@@ -1,16 +1,17 @@
-import { IAddressMode, IFilterMode } from "@feng3d/render-api";
+import { IAddressMode, IFilterMode, ISampler } from "@feng3d/render-api";
 import { IGLCompareFunction } from "../data/IGLDepthStencilState";
-import { IGLSampler, IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
+import { IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
+import { getIGLCompareFunction } from "../runs/runDepthState";
 
 declare global
 {
     interface WebGLRenderingContext
     {
-        _samplers: Map<IGLSampler, WebGLSampler>;
+        _samplers: Map<ISampler, WebGLSampler>;
     }
 }
 
-export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
+export function getGLSampler(gl: WebGLRenderingContext, sampler?: ISampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
     if (webGLSampler) return webGLSampler;
@@ -27,8 +28,8 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
         const wrapR: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
-        const compareMode: IGLSamplerCompareMode = sampler.compareMode || "NONE";
-        const compare: IGLCompareFunction = sampler.compare || "LEQUAL";
+        const compareMode: IGLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
+        const compare: IGLCompareFunction = getIGLCompareFunction(sampler.compare ?? "less-equal");
 
         //
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
@@ -45,7 +46,7 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
     return webGLSampler;
 }
 
-export function deleteSampler(gl: WebGLRenderingContext, sampler?: IGLSampler)
+export function deleteSampler(gl: WebGLRenderingContext, sampler?: ISampler)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

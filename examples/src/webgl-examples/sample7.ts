@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, ITexture } from "@feng3d/render-api";
-import { IGLSampler, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
+import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -295,7 +295,7 @@ async function loadTexture(url: string)
         generateMipmap,
     };
 
-    let sampler: IGLSampler = {};
+    let sampler: ISampler = {};
 
     if (!generateMipmap)
     {

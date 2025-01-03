@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline, ITexture, ITextureFormat, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, ITextureFormat, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -136,7 +136,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init Texture
 
         const textures: ITexture[] = new Array(TextureTypes.MAX);
-        const samplers: IGLSampler[] = new Array(TextureTypes.MAX);
+        const samplers: ISampler[] = new Array(TextureTypes.MAX);
         let i = 0;
         for (i = 0; i < TextureTypes.MAX; ++i)
         {

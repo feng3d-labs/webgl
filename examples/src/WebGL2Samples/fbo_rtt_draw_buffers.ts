@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLSampler, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -79,13 +79,13 @@ const color1Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color1Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const color1Sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 const color2Texture: ITexture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color2Sampler: IGLSampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const color2Sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 
