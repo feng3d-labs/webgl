@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport, lazy } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, lazy } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -23,7 +23,6 @@ import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
-import { IGLUniforms } from "./data/IGLUniforms";
 import { getGLTexture } from "./internal";
 import { getIGLIndexBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
@@ -318,7 +317,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: IGLUniforms)
+    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: IUniforms)
     {
         const webGLProgram = getGLProgram(gl, pipeline);
 

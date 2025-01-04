@@ -1,6 +1,5 @@
-import { IDrawVertex, IVertexAttributes, IVertexState } from "@feng3d/render-api";
+import { IDrawVertex, IUniforms, IVertexAttributes, IVertexState } from "@feng3d/render-api";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
-import { IGLUniforms } from "./IGLUniforms";
 
 declare module "@feng3d/render-api"
 {
@@ -45,7 +44,7 @@ export interface IGLTransformFeedbackObject
     /**
      * Uniform渲染数据
      */
-    uniforms?: IGLUniforms;
+    uniforms?: IUniforms;
 
     /**
      * 回写顶点着色器中输出到缓冲区。

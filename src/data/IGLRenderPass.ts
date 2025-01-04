@@ -20,7 +20,6 @@ declare module "@feng3d/render-api"
 
     export interface IRenderPassObjectMap
     {
-        IGLRenderObject: IRenderObject,
         IGLOcclusionQuery: IGLOcclusionQuery
     }
 }

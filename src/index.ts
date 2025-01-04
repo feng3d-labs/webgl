@@ -9,7 +9,6 @@ export * from "./data/IGLOcclusionQuery";
 export * from "./data/IGLPrimitiveState";
 export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";
-export * from "./data/IGLRenderObject";
 export * from "./data/IGLRenderPass";
 export * from "./data/IGLSampler";
 export * from "./data/IGLSamplerTexture";
