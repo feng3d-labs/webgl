@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IVertexAttribute, IVertexAttributes, IViewport, lazy } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -29,7 +29,6 @@ import { getIGLIndexBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
-import { lazy, LazyObject } from "./types";
 import { ChainMap } from "./utils/ChainMap";
 import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
 import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
@@ -319,7 +318,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: LazyObject<IGLUniforms>)
+    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: IGLUniforms)
     {
         const webGLProgram = getGLProgram(gl, pipeline);
 

@@ -1,5 +1,4 @@
 import { IDrawVertex, IVertexAttributes, IVertexState } from "@feng3d/render-api";
-import { LazyObject } from "../types";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 import { IGLUniforms } from "./IGLUniforms";
 
@@ -46,7 +45,7 @@ export interface IGLTransformFeedbackObject
     /**
      * Uniform渲染数据
      */
-    uniforms?: LazyObject<IGLUniforms>;
+    uniforms?: IGLUniforms;
 
     /**
      * 回写顶点着色器中输出到缓冲区。
