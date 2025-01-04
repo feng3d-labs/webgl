@@ -86,7 +86,7 @@ import { getShaderSource, loadImage } from "./utility";
             vertices,
             uniforms: {
                 mvp: matrix,
-                material: { diffuse: { texture, sampler } },
+                materialDiffuse: { texture, sampler },
             },
             drawVertex: { vertexCount: 6 },
         });

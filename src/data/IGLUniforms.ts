@@ -4,7 +4,7 @@ import { IGLSamplerTexture } from "./IGLSamplerTexture";
 /**
  * Uniform 类型
  */
-export type IGLUniformType = IGLSamplerTexture | number | number[] | Float32Array | (number[] | Float32Array)[] | Int32Array | IGLUniformBuffer | IGLUniforms;
+export type IGLUniformType = IGLSamplerTexture | number | number[] | Float32Array | (number[] | Float32Array)[] | Int32Array | IGLUniformBuffer;
 
 /**
  * Uniform 数据

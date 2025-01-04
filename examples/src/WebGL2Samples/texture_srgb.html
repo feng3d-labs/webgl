@@ -82,12 +82,7 @@
         precision highp float;
         precision highp int;
 
-        struct Material
-        {
-            sampler2D diffuse;
-        };
-
-        uniform Material material;
+        uniform sampler2D materialDiffuse;
 
         in vec2 v_blurTexCoords[14];
         in vec2 h_blurTexCoords[14];
@@ -127,36 +122,36 @@
             // This is useful since then we could work with the filtering math in linear space,
             // then convert back to sRGB space for the color output.
             // In this example, we will use a Gaussian filter for blurring.
-            vec4 colorRgb = vec4(texture(material.diffuse, v_st).rgb, 1.0);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 0]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 1]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 2]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 3]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 4]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 5]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 6]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 7]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 8]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[ 9]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[10]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[11]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[12]), sampleCoord.y);
-            colorRgb = mix(colorRgb, texture(material.diffuse, v_blurTexCoords[13]), sampleCoord.y);
+            vec4 colorRgb = vec4(texture(materialDiffuse, v_st).rgb, 1.0);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 0]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 1]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 2]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 3]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 4]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 5]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 6]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 7]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 8]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[ 9]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[10]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[11]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[12]), sampleCoord.y);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, v_blurTexCoords[13]), sampleCoord.y);
 
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 0]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 1]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 2]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 3]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 4]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 5]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 6]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 7]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 8]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[ 9]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[10]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[11]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[12]), sampleCoord.x);
-            colorRgb = mix(colorRgb, texture(material.diffuse, h_blurTexCoords[13]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 0]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 1]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 2]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 3]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 4]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 5]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 6]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 7]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 8]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[ 9]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[10]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[11]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[12]), sampleCoord.x);
+            colorRgb = mix(colorRgb, texture(materialDiffuse, h_blurTexCoords[13]), sampleCoord.x);
 
             float brightness = 1.0;
             float saturation = 0.5;
