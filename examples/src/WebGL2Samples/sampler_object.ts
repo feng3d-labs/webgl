@@ -93,12 +93,8 @@ function render()
             vertices: vertexArray.vertices,
             uniforms: {
                 mvp: matrix,
-                material: {
-                    diffuse: [
-                        { texture, sampler: samplerA },
-                        { texture, sampler: samplerB },
-                    ]
-                },
+                materialDiffuse0: { texture, sampler: samplerA },
+                materialDiffuse1: { texture, sampler: samplerB },
             },
             drawVertex: { vertexCount: 6, instanceCount: 1 },
         }],
