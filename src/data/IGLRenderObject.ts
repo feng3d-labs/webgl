@@ -1,5 +1,4 @@
 import { IRenderObject } from "@feng3d/render-api";
-import { LazyObject } from "../types";
 import { IGLUniforms } from "./IGLUniforms";
 
 declare module "@feng3d/render-api"
@@ -12,6 +11,6 @@ declare module "@feng3d/render-api"
         /**
          * Uniform渲染数据
          */
-        uniforms?: LazyObject<IGLUniforms>;
+        uniforms?: IGLUniforms;
     }
 }
