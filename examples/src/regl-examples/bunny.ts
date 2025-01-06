@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
@@ -38,21 +38,6 @@ const renderObject: IRenderObject = {
     drawIndexed: { indexCount: indices.length },
     uniforms: {
         model: mat4.identity([]),
-        view: () =>
-        {
-            const t = 0.01 * tick;
-
-            return mat4.lookAt([],
-                [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
-                [0, 2.5, 0],
-                [0, 1, 0]);
-        },
-        projection: () =>
-            mat4.perspective([],
-                Math.PI / 4,
-                viewportWidth / viewportHeight,
-                0.01,
-                1000),
     },
     pipeline: {
         vertex: {
@@ -73,22 +58,38 @@ const renderObject: IRenderObject = {
     }
 };
 
+const submit: ISubmit = {
+    commandEncoders: [{
+        passEncoders: [
+            {
+                descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
+                renderObjects: [renderObject]
+            }
+        ]
+    }]
+};
+
 function draw()
 {
     viewportWidth = canvas.width = canvas.clientWidth;
     viewportHeight = canvas.height = canvas.clientHeight;
 
     tick++;
-    webgl.submit({
-        commandEncoders: [{
-            passEncoders: [
-                {
-                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
-                    renderObjects: [renderObject]
-                }
-            ]
-        }]
-    });
+    const t = 0.01 * tick;
+
+    renderObject.uniforms.view = mat4.lookAt([],
+        [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
+        [0, 2.5, 0],
+        [0, 1, 0]);
+
+    renderObject.uniforms.projection =
+        mat4.perspective([],
+            Math.PI / 4,
+            viewportWidth / viewportHeight,
+            0.01,
+            1000);
+
+    webgl.submit(submit);
 
     requestAnimationFrame(draw);
 }

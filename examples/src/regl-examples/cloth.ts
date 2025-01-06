@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
 import { getIGLVertexBuffer, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
@@ -172,16 +172,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         },
         indices: new Uint16Array(indices),
         drawIndexed: { indexCount: indices.length },
-        uniforms: {
-            view: () => camera.view(),
-            projection: () =>
-                mat4.perspective([],
-                    Math.PI / 4,
-                    viewportWidth / viewportHeight,
-                    0.01,
-                    1000),
-            texture: () => diffuse,
-        },
+        uniforms: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -228,6 +219,16 @@ import * as vec3 from "./stackgl/gl-vec3";
             },
             depthStencil: {},
         }
+    };
+
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
     };
 
     function draw()
@@ -368,15 +369,15 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        webgl.submit({
-            commandEncoders: [{
-                passEncoders: [
-                    {
-                        renderObjects: [renderObject]
-                    }
-                ]
-            }]
-        });
+        renderObject.uniforms.view = camera.view();
+        renderObject.uniforms.projection =
+            mat4.perspective([],
+                Math.PI / 4,
+                viewportWidth / viewportHeight,
+                0.01,
+                1000);
+
+        webgl.submit(submit);
 
         requestAnimationFrame(draw);
     }
@@ -392,6 +393,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
     };
+    renderObject.uniforms.texture = diffuse;
 
     draw();
 })();

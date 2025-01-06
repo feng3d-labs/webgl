@@ -1,4 +1,4 @@
-import { Lazy } from "@feng3d/render-api";
+import { } from "@feng3d/render-api";
 import { IGLSamplerTexture } from "./IGLSamplerTexture";
 
 declare module "@feng3d/render-api"

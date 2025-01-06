@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
@@ -54,18 +54,12 @@ const vertexArray: { vertices?: IVertexAttributes } = {
     }
 };
 
-function getRenderObject(tick: number, batchId: number)
+function getRenderObject(batchId: number)
 {
     const renderObject: IRenderObject = {
         vertices: vertexArray.vertices,
         uniforms: {
-            color: () => [
-                Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
-                Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
-                Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
-                1],
-            angle: () => 0.01 * tick,
-            offset: () => offsets[batchId].offset,
+            offset: offsets[batchId].offset,
         },
         pipeline,
         drawVertex: { vertexCount: 3 }
@@ -74,29 +68,44 @@ function getRenderObject(tick: number, batchId: number)
     return renderObject;
 }
 
+const renderObjects: IRenderObject[] = [];
+for (let i = 0; i < offsets.length; i++)
+{
+    renderObjects.push(getRenderObject(i));
+}
+
+const submit: ISubmit = {
+    commandEncoders: [{
+        passEncoders: [
+            {
+                descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
+                renderObjects
+            }
+        ]
+    }]
+};
+
 function draw()
 {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
     tick++;
-    const renderObjects: IRenderObject[] = [];
+
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        renderObjects.push(getRenderObject(tick, batchId));
+        //
+        const ro = renderObjects[i];
+        ro.uniforms.color = [
+            Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
+            Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
+            Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
+            1];
+        ro.uniforms.angle = 0.01 * tick;
     }
 
-    webgl.submit({
-        commandEncoders: [{
-            passEncoders: [
-                {
-                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
-                    renderObjects
-                }
-            ]
-        }]
-    });
+    webgl.submit(submit);
 
     requestAnimationFrame(draw);
 }

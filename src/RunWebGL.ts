@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, lazy, TypedArray } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -329,7 +329,7 @@ export class RunWebGL
             {
                 const { paths } = v;
 
-                let uniformData = lazy.getValue(uniforms[paths[0]], uniforms);
+                let uniformData = uniforms[paths[0]];
                 for (let i = 1; i < paths.length; i++)
                 {
                     uniformData = uniformData[paths[i]];
@@ -355,7 +355,7 @@ export class RunWebGL
             webGLProgram.uniformBlocks.forEach((uniformBlock) =>
             {
                 const { name, index } = uniformBlock;
-                const uniformData = lazy.getValue(uniforms[name], uniforms);
+                const uniformData = uniforms[name];
 
                 const buffer = getIGLUniformBuffer(uniformData as TypedArray);
 

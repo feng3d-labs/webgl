@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
 import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -71,24 +71,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         },
         indices: new Uint16Array(indices),
         drawIndexed: { indexCount: indices.length },
-        uniforms: {
-            view: () =>
-            {
-                const t = 0.01 * tick;
-
-                return mat4.lookAt([],
-                    [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-                    [0, 0.0, 0],
-                    [0, 1, 0]);
-            },
-            projection: () =>
-                mat4.perspective([],
-                    Math.PI / 4,
-                    viewportWidth / viewportHeight,
-                    0.01,
-                    10),
-            tex: () => diffuse,
-        },
+        uniforms: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -113,6 +96,16 @@ import * as mat4 from "./stackgl/gl-mat4";
         }
     };
 
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
+    };
+
     function draw()
     {
         tick++;
@@ -120,15 +113,19 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportWidth = canvas.width = canvas.clientWidth;
         viewportHeight = canvas.height = canvas.clientHeight;
 
-        webgl.submit({
-            commandEncoders: [{
-                passEncoders: [
-                    {
-                        renderObjects: [renderObject]
-                    }
-                ]
-            }]
-        });
+        const t = 0.01 * tick;
+        renderObject.uniforms.view = mat4.lookAt([],
+            [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
+            [0, 0.0, 0],
+            [0, 1, 0]);
+        renderObject.uniforms.projection =
+            mat4.perspective([],
+                Math.PI / 4,
+                viewportWidth / viewportHeight,
+                0.01,
+                10);
+
+        webgl.submit(submit);
 
         requestAnimationFrame(draw);
     }
@@ -143,6 +140,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear" }
     };
+    renderObject.uniforms.tex = diffuse;
 
     draw();
 })();
