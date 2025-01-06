@@ -1,5 +1,5 @@
 import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLUniformBuffer, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -52,12 +52,9 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const uniformPerDrawBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: transforms.byteLength, data: transforms, usage: "DYNAMIC_DRAW" };
-
     const lightPos = new Float32Array([
         0.0, 0.0, 0.0, 0.0,
     ]);
-    const uniformPerPassBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: lightPos.byteLength, data: lightPos, usage: "DYNAMIC_DRAW" };
 
     //vec3 ambient, diffuse, specular, float shininess
     const material = new Float32Array([
@@ -65,7 +62,6 @@ import { getShaderSource } from "./utility";
         0.5, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 4.0,
     ]);
-    const uniformPerSceneBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: material.byteLength, data: material, usage: "STATIC_DRAW" };
 
     // -- Init Vertex Array
     const vertexArray: { vertices?: IVertexAttributes } = {
@@ -81,9 +77,9 @@ import { getShaderSource } from "./utility";
         vertices: vertexArray.vertices,
         indices: elementData,
         uniforms: {
-            PerDraw: uniformPerDrawBuffer,
-            PerPass: uniformPerPassBuffer,
-            PerScene: uniformPerSceneBuffer,
+            PerDraw: transforms,
+            PerPass: lightPos,
+            PerScene: material,
         },
         drawIndexed: { indexCount: 6, firstIndex: 0 }
     };
@@ -100,11 +96,11 @@ import { getShaderSource } from "./utility";
 
         // -- update uniform buffer
         transforms[16] = 0.1 * Math.cos(uTime) + 0.4;
-        uniformPerDrawBuffer.writeBuffers = [{ bufferOffset: 0, data: transforms }];
+        getIGLBuffer(transforms).writeBuffers = [{ bufferOffset: 0, data: transforms }];
 
         lightPos[0] = Math.cos(3 * uTime);
         lightPos[1] = Math.sin(6 * uTime);
-        uniformPerPassBuffer.writeBuffers = [{ bufferOffset: 0, data: lightPos }];
+        getIGLBuffer(lightPos).writeBuffers = [{ bufferOffset: 0, data: lightPos }];
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

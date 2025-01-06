@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBuffer, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, lazy } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, lazy, TypedArray } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -24,7 +24,7 @@ import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
 import { getGLTexture } from "./internal";
-import { getIGLIndexBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
+import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
@@ -313,7 +313,6 @@ export class RunWebGL
         }
     }
 
-
     /**
      * 激活常量
      */
@@ -358,8 +357,10 @@ export class RunWebGL
                 const { name, index } = uniformBlock;
                 const uniformData = lazy.getValue(uniforms[name], uniforms);
 
+                const buffer = getIGLUniformBuffer(uniformData as TypedArray);
+
                 //
-                const webGLBuffer = getGLBuffer(gl, uniformData as IBuffer);
+                const webGLBuffer = getGLBuffer(gl, buffer);
                 gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
             });
         }

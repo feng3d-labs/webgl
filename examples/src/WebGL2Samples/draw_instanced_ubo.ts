@@ -1,5 +1,5 @@
 import { IRenderPass, IRenderPipeline } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLUniformBuffer, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -32,13 +32,11 @@ const transforms = new Float32Array([
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.0, 0.0, 1.0
 ]);
-const uniformTransformBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: transforms.byteLength, data: transforms, usage: "DYNAMIC_DRAW" };
 
 const materials = new Float32Array([
     1.0, 0.5, 0.0, 1.0,
     0.0, 0.5, 1.0, 1.0
 ]);
-const uniformMaterialBuffer: IGLUniformBuffer = { target: "UNIFORM_BUFFER", size: materials.byteLength, data: materials, usage: "STATIC_DRAW" };
 
 // -- Render
 const rp: IRenderPass = {
@@ -49,8 +47,8 @@ const rp: IRenderPass = {
             pos: { data: vertices, format: "float32x2" },
         },
         uniforms: {
-            Transform: uniformTransformBuffer,
-            Material: uniformMaterialBuffer,
+            Transform: transforms,
+            Material: materials,
         },
         drawVertex: { vertexCount: 3, instanceCount: 2 },
     }]
@@ -59,6 +57,6 @@ const rp: IRenderPass = {
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(uniformTransformBuffer);
-webgl.deleteBuffer(uniformMaterialBuffer);
+webgl.deleteBuffer(getIGLBuffer(transforms));
+webgl.deleteBuffer(getIGLBuffer(materials));
 webgl.deleteProgram(program);

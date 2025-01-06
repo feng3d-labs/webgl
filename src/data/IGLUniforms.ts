@@ -1,5 +1,4 @@
 import { Lazy } from "@feng3d/render-api";
-import { IGLUniformBuffer } from "./IGLBuffer";
 import { IGLSamplerTexture } from "./IGLSamplerTexture";
 
 declare module "@feng3d/render-api"
@@ -8,7 +7,6 @@ declare module "@feng3d/render-api"
     {
         IGLSamplerTexture: IGLSamplerTexture;
         IGLUniformDataItem: IGLUniformDataItem;
-        IGLUniformBuffer: IGLUniformBuffer;
     }
 }
 

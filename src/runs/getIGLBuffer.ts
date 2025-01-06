@@ -1,11 +1,9 @@
 import { IBuffer, IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
-import { IGLBufferTarget, IGLBufferUsage, IGLIndexBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
+import { IGLBufferTarget, IGLBufferUsage, IGLIndexBuffer, IGLUniformBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
 
-export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW")
+export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW"): IBuffer
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
-
-    console.assert(!!target, `初始化时不能为空，可能该数据的渲染对象还未被渲染！`);
 
     const buffer: IBuffer = {
         size: Math.ceil(data.byteLength / 4) * 4,
@@ -16,6 +14,14 @@ export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: 
     data[_IGLBuffer] = buffer;
 
     return buffer;
+}
+
+export function getIGLUniformBuffer(data: TypedArray, usage?: "DYNAMIC_DRAW")
+{
+    const vertexBuffer: IGLUniformBuffer = data[_IGLBuffer] = data[_IGLBuffer] || getIGLBuffer(data, "UNIFORM_BUFFER", usage);
+    vertexBuffer.target = vertexBuffer.target || "UNIFORM_BUFFER";
+
+    return vertexBuffer;
 }
 
 export function getIGLVertexBuffer(data: IVertexDataTypes, usage?: "STREAM_COPY")
