@@ -1,7 +1,5 @@
-import { UnReadonly } from "@feng3d/render-api";
+import { TypedArray, UnReadonly } from "@feng3d/render-api";
 import { IUniformBlockInfo } from "../caches/getGLProgram";
-import { getGLBuffer } from "../caches/getGLBuffer";
-import { getIGLBuffer } from "../runs/getIGLBuffer";
 
 export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData: IBufferBinding)
 {
@@ -16,7 +14,7 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
     // const buffer = getIGLBuffer(uniformData.bufferView);
     // (buffer as any).label = buffer.label || (`BufferBinding ${variableInfo.name}`);
     // const offset = uniformData.bufferView.byteOffset;
-    
+
 
 }
 
@@ -25,10 +23,10 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
  */
 export interface IBufferBinding
 {
-    [name: string]: ArrayBufferView | ArrayLike<number> | number;
+    [name: string]: TypedArray | ArrayLike<number> | number;
 
     /**
      * 如果未设置引擎将自动生成。
      */
-    readonly bufferView?: ArrayBufferView;
+    readonly bufferView?: TypedArray;
 }
