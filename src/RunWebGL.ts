@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -14,7 +14,6 @@ import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
 import { IGLDrawElementType } from "./data/IGLBuffer";
-import { IGLCopyBufferToBuffer } from "./data/IGLCopyBufferToBuffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
@@ -911,7 +910,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: IGLCopyBufferToBuffer)
+    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: ICopyBufferToBuffer)
     {
         if (gl instanceof WebGL2RenderingContext)
         {

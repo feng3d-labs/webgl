@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLCopyBufferToBuffer, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
+import { ICopyBufferToBuffer, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -34,7 +34,7 @@ import { getShaderSource } from "./utility";
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
-    const cb: IGLCopyBufferToBuffer = {
+    const cb: ICopyBufferToBuffer = {
         __type: "CopyBufferToBuffer",
         source: vertexPosBufferSrc,
         destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),

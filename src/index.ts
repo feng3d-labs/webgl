@@ -3,7 +3,6 @@ export * from "./data/IGLBuffer";
 export * from "./data/IGLCanvasContext";
 export * from "./data/IGLCapabilities";
 export * from "./data/IGLCommandEncoder";
-export * from "./data/IGLCopyBufferToBuffer";
 export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLOcclusionQuery";
 export * from "./data/IGLPrimitiveState";
