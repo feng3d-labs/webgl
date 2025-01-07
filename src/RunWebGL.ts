@@ -33,6 +33,7 @@ import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachment
 import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
 import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
+import { updateBufferBinding } from "./utils/updateBufferBinding";
 
 declare global
 {
@@ -355,9 +356,10 @@ export class RunWebGL
             webGLProgram.uniformBlocks.forEach((uniformBlock) =>
             {
                 const { name, index } = uniformBlock;
-                const uniformData = uniforms[name];
+                const uniformData = uniforms[name] as TypedArray;
 
-                const buffer = getIGLUniformBuffer(uniformData as TypedArray);
+                const buffer = getIGLUniformBuffer(uniformData);
+                updateBufferBinding(uniformBlock, { bufferView: uniformData });
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
