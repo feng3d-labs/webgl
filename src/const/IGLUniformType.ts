@@ -67,7 +67,7 @@ const webGLUniformTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL1Unifor
 const webGLUniformTextureTypeValue = { ...webGL1UniformTextureTypeValue, ...webGL2OnlyUniformTextureTypeValue };
 
 /**
- * WebGL Uniform 纹理类型与值的映射。
+ * WebGL Uniform 缓冲区数据与值的映射。
  */
 const webGLUniformBufferTypeValue = { ...webGL1UniformBufferTypeValue, ...webGL2OnlyUniformBufferTypeValue };
 
