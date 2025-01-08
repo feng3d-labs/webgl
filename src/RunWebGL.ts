@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray, UnReadonly } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -371,6 +371,7 @@ export class RunWebGL
                     updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                     buffer = getIGLUniformBuffer(bufferBinding.bufferView);
                 }
+                (buffer as UnReadonly<IGLUniformBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);

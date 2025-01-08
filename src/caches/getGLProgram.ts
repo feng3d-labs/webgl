@@ -306,7 +306,6 @@ export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
  */
 export interface IBufferBindingInfo
 {
-    name: string;
     size: number;
     items: {
         paths: string[];
@@ -359,7 +358,6 @@ function getBufferBindingInfo(uniformBlock: IUniformBlockInfo): IBufferBindingIn
 
     const bufferBindingInfo: IBufferBindingInfo = {
         size: uniformBlock.dataSize,
-        name: uniformBlock.name,
         items,
     };
 
