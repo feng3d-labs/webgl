@@ -74,7 +74,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
         if (!buffer.data) return;
 
         const writeBuffers = buffer.writeBuffers || [];
-        writeBuffers.push({ data: buffer.data });
+        writeBuffers.unshift({ data: buffer.data });
         buffer.writeBuffers = writeBuffers;
     };
 

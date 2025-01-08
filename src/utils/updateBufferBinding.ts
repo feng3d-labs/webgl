@@ -1,7 +1,8 @@
-import { TypedArray, UnReadonly } from "@feng3d/render-api";
+import { UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IUniformBlockInfo } from "../caches/getGLProgram";
 import { IGLUniformBufferType } from "../const/IGLUniformType";
+import { IBufferBinding } from "../data/IGLUniforms";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
 /**
@@ -13,12 +14,31 @@ import { getIGLBuffer } from "../runs/getIGLBuffer";
  */
 export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData: IBufferBinding)
 {
+    if (uniformData["_uniformBlock"] !== undefined)
+    {
+        const preVariableInfo = uniformData["_uniformBlock"] as any as IUniformBlockInfo;
+        if (preVariableInfo.name !== uniformBlock.name
+            || preVariableInfo.dataSize !== uniformBlock.dataSize
+        )
+        {
+            console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, uniformBlock, preVariableInfo });
+        }
+
+        return;
+    }
+
+    uniformData["_uniformBlock"] = uniformBlock as any;
+
     const size = uniformBlock.dataSize;
     // 是否存在默认值。
     const hasDefautValue = !!uniformData.bufferView;
     if (!hasDefautValue)
     {
         (uniformData as UnReadonly<IBufferBinding>).bufferView = new Uint8Array(size);
+    }
+    else
+    {
+        console.assert(uniformData.bufferView.byteLength === size, `uniformData.bufferView 统一块数据提供数据尺寸不对！`);
     }
 
     const buffer = getIGLBuffer(uniformData.bufferView);
@@ -41,14 +61,21 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
             currentSize += alignSize.size;
             const Cls = alignSize.clsType;
             //
-            const paths = itemInfo.paths;
+            const paths = itemInfo.paths.slice(1);
             const update = () =>
             {
                 let value: any = uniformData;
                 for (let i = 0; i < paths.length; i++)
                 {
                     value = value[paths[i]];
-                    if (value === undefined) return;
+                    if (value === undefined)
+                    {
+                        if (!hasDefautValue)
+                        {
+                            console.warn(`没有找到 统一块变量属性 ${paths.join(".")} 的值！`);
+                        }
+                        return;
+                    }
                 }
 
                 let data: Float32Array | Int32Array | Uint32Array;
@@ -71,7 +98,7 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
             }
 
             update();
-            watcher.watchchain(uniformData, itemInfo.paths.join("."), update, undefined, false);
+            watcher.watchchain(uniformData, paths.join("."), update, undefined, false);
         });
     });
     currentSize = roundUp(16, currentSize); // 整个数据对齐
@@ -82,19 +109,6 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
 function roundUp(k: number, n: number): number
 {
     return Math.ceil(n / k) * k;
-}
-
-/**
- * 缓冲区绑定。
- */
-export interface IBufferBinding
-{
-    [name: string]: TypedArray | ArrayLike<number> | number;
-
-    /**
-     * 如果未设置引擎将自动生成。
-     */
-    readonly bufferView?: TypedArray;
 }
 
 /**

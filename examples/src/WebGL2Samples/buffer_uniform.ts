@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
-import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -35,33 +35,42 @@ import { getShaderSource } from "./utility";
     ]);
 
     //mat4 P, mat4 MV, mat3 Mnormal
-    const transforms = new Float32Array([
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+    const transforms = {
+        transform: {
+            P: [1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0,
+            ],
+            MV: [0.5, 0.0, 0.0, 0.0,
+                0.0, 0.5, 0.0, 0.0,
+                0.0, 0.0, 0.5, 0.0,
+                0.0, 0.0, 0.0, 1.0,
+            ],
+            Mnormal: [
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0,
+            ],
+        }
+    };
 
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.0, 0.0, 0.0, 1.0,
-
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    ]);
-
-    const lightPos = new Float32Array([
-        0.0, 0.0, 0.0, 0.0,
-    ]);
+    const lightPos = {
+        light: {
+            position: [0.0, 0.0, 0.0]
+        }
+    };
 
     //vec3 ambient, diffuse, specular, float shininess
-    const material = new Float32Array([
-        0.1, 0.0, 0.0, 0.0,
-        0.5, 0.0, 0.0, 0.0,
-        1.0, 1.0, 1.0, 4.0,
-    ]);
+    const material = {
+        material: {
+            ambient: [0.1, 0.0, 0.0],
+            diffuse: [0.5, 0.0, 0.0],
+            specular: [1.0, 1.0, 1.0],
+            shininess: 4.0,
+        }
+    };
 
     // -- Init Vertex Array
     const vertexArray: { vertices?: IVertexAttributes } = {
@@ -89,20 +98,22 @@ import { getShaderSource } from "./utility";
         renderObjects: [ro],
     };
 
+    const submit: ISubmit = { commandEncoders: [{ passEncoders: [rp] }] };
+
     let uTime = 0;
     function render()
     {
         uTime += 0.01;
 
         // -- update uniform buffer
-        transforms[16] = 0.1 * Math.cos(uTime) + 0.4;
-        getIGLBuffer(transforms).writeBuffers = [{ bufferOffset: 0, data: transforms }];
+        transforms.transform.MV[0] = 0.1 * Math.cos(uTime) + 0.4;
+        transforms.transform.MV = transforms.transform.MV;
 
-        lightPos[0] = Math.cos(3 * uTime);
-        lightPos[1] = Math.sin(6 * uTime);
-        getIGLBuffer(lightPos).writeBuffers = [{ bufferOffset: 0, data: lightPos }];
+        lightPos.light.position[0] = Math.cos(3 * uTime);
+        lightPos.light.position[1] = Math.sin(6 * uTime);
+        lightPos.light.position = lightPos.light.position;
 
-        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
+        webgl.submit(submit);
 
         requestAnimationFrame(render);
     }

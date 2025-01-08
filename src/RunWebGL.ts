@@ -13,7 +13,7 @@ import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
-import { IGLDrawElementType } from "./data/IGLBuffer";
+import { IGLDrawElementType, IGLUniformBuffer } from "./data/IGLBuffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
@@ -22,6 +22,7 @@ import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
+import { IBufferBinding } from "./data/IGLUniforms";
 import { getGLTexture } from "./internal";
 import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
@@ -355,10 +356,21 @@ export class RunWebGL
             webGLProgram.uniformBlocks.forEach((uniformBlock) =>
             {
                 const { name, index } = uniformBlock;
-                const uniformData = uniforms[name] as TypedArray;
+                const uniformData = uniforms[name] as TypedArray | IBufferBinding;
 
-                const buffer = getIGLUniformBuffer(uniformData);
-                updateBufferBinding(uniformBlock, { bufferView: uniformData });
+                //
+                let buffer: IGLUniformBuffer;
+                const typedArray = uniformData as TypedArray;
+                if (typedArray.buffer && typedArray.BYTES_PER_ELEMENT)
+                {
+                    buffer = getIGLUniformBuffer(typedArray);
+                }
+                else
+                {
+                    const bufferBinding = uniforms[name] as IBufferBinding;
+                    updateBufferBinding(uniformBlock, bufferBinding);
+                    buffer = getIGLUniformBuffer(bufferBinding.bufferView);
+                }
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
@@ -446,43 +458,39 @@ export class RunWebGL
      */
     private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
     {
+        if (typeof data === 'number')
+        {
+            data = [data];
+        }
         const location = uniformInfo.location;
         switch (type)
         {
             case "BOOL":
             case "INT":
-                // gl.uniform1i(location, data);
-                gl.uniform1iv(location, [data]);
+                gl.uniform1iv(location, data);
                 break;
             case "BOOL_VEC2":
             case "INT_VEC2":
-                // gl.uniform2i(location, data[0], data[1]);
                 gl.uniform2iv(location, data);
                 break;
             case "BOOL_VEC3":
             case "INT_VEC3":
-                // gl.uniform3i(location, data[0], data[1], data[2]);
                 gl.uniform3iv(location, data);
                 break;
             case "BOOL_VEC4":
             case "INT_VEC4":
-                // gl.uniform4i(location, data[0], data[1], data[2], data[3]);
                 gl.uniform4iv(location, data);
                 break;
             case "FLOAT":
-                // gl.uniform1f(location, data);
                 gl.uniform1fv(location, [data]);
                 break;
             case "FLOAT_VEC2":
-                // gl.uniform2f(location, data[0], data[1]);
                 gl.uniform2fv(location, data);
                 break;
             case "FLOAT_VEC3":
-                // gl.uniform3f(location, data[0], data[1], data[2]);
                 gl.uniform3fv(location, data);
                 break;
             case "FLOAT_VEC4":
-                // gl.uniform4f(location, data[0], data[1], data[2], data[3]);
                 gl.uniform4fv(location, data);
                 break;
             case "FLOAT_MAT2":
@@ -495,19 +503,15 @@ export class RunWebGL
                 gl.uniformMatrix4fv(location, false, data);
                 break;
             case "UNSIGNED_INT":
-                (gl as any as WebGL2RenderingContext).uniform1ui(location, data);
-                (gl as any as WebGL2RenderingContext).uniform1uiv(location, [data]);
+                (gl as any as WebGL2RenderingContext).uniform1uiv(location, data);
                 break;
             case "UNSIGNED_INT_VEC2":
-                // (gl as any as WebGL2RenderingContext).uniform2ui(location, data[0], data[1]);
                 (gl as any as WebGL2RenderingContext).uniform2uiv(location, data);
                 break;
             case "UNSIGNED_INT_VEC3":
-                // (gl as any as WebGL2RenderingContext).uniform3ui(location, data[0], data[1], data[2]);
                 (gl as any as WebGL2RenderingContext).uniform3uiv(location, data);
                 break;
             case "UNSIGNED_INT_VEC4":
-                // (gl as any as WebGL2RenderingContext).uniform4ui(location, data[0], data[1], data[2], data[3]);
                 (gl as any as WebGL2RenderingContext).uniform4uiv(location, data);
                 break;
             case "FLOAT_MAT2x3":
