@@ -1,5 +1,5 @@
 import { IRenderPipeline } from "@feng3d/render-api";
-import { getWebGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
+import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
 import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
@@ -175,7 +175,11 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
                 index: i,
                 dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
                 uniforms: uniformList,
+                bufferBindingInfo: undefined,
             };
+
+            //
+            info.bufferBindingInfo = getBufferBindingInfo(info);
 
             return info;
         });
@@ -215,6 +219,11 @@ export interface IUniformBlockInfo
      * 包含的统一变量列表。
      */
     uniforms: IGLUniformInfo[];
+
+    /**
+     * 缓冲区绑定信息。
+     */
+    bufferBindingInfo: IBufferBindingInfo;
 }
 
 /**
@@ -291,3 +300,112 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
  * Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
  */
 export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
+
+/**
+ * 缓冲区绑定信息。
+ */
+export interface IBufferBindingInfo
+{
+    name: string;
+    size: number;
+    items: {
+        paths: string[];
+        offset: number;
+        size: number;
+        Cls: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor;
+    }[]
+}
+
+function getBufferBindingInfo(uniformBlock: IUniformBlockInfo): IBufferBindingInfo
+{
+    const size = uniformBlock.dataSize;
+    //
+    let currentSize = 0;
+    let structName: string;
+
+    const items: { paths: string[], offset: number, size: number, Cls: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor }[] = [];
+    uniformBlock.uniforms.forEach((uniformInfo) =>
+    {
+        const uniformBufferType = uniformInfo.type as IGLUniformBufferType;
+        const alignSize = uniformBufferTypeAlignSizeMap[uniformBufferType];
+        console.assert(alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
+
+        //
+        const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf("."));
+        if (structName !== currentstructName)
+        {
+            currentSize = roundUp(16, currentSize); // 结构体之间对齐
+            structName = currentstructName;
+        }
+
+        //
+        uniformInfo.items.forEach((itemInfo) =>
+        {
+            currentSize = roundUp(alignSize.align, currentSize); // 结构体成员对齐
+            const itemInfoOffset = currentSize;
+            const itemInfoSize = alignSize.size;
+            //
+            currentSize += alignSize.size;
+            const Cls = alignSize.clsType;
+            //
+            const paths = itemInfo.paths.slice(1);
+            //
+            items.push({ paths, offset: itemInfoOffset, size: itemInfoSize, Cls: Cls });
+        });
+    });
+    currentSize = roundUp(16, currentSize); // 整个统一块数据对齐
+
+    console.assert(size === currentSize, `uniformBlock映射尺寸出现错误( ${size}  ${currentSize} )！`);
+
+    const bufferBindingInfo: IBufferBindingInfo = {
+        size: uniformBlock.dataSize,
+        name: uniformBlock.name,
+        items,
+    };
+
+    return bufferBindingInfo;
+}
+
+function roundUp(k: number, n: number): number
+{
+    return Math.ceil(n / k) * k;
+}
+
+/**
+ * 
+ * @see https://github.com/brendan-duncan/wgsl_reflect/blob/main/src/wgsl_reflect.ts#L1206
+ * @see https://www.orillusion.com/zh/wgsl.html#memory-layouts
+ */
+const uniformBufferTypeAlignSizeMap: {
+    [key: string]: {
+        align: number,
+        size: number,
+        clsType: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor,
+    }
+} = {
+    "FLOAT": { align: 4, size: 4, clsType: Float32Array },
+    "FLOAT_VEC2": { align: 8, size: 8, clsType: Float32Array },
+    "FLOAT_VEC3": { align: 16, size: 12, clsType: Float32Array },
+    "FLOAT_VEC4": { align: 16, size: 16, clsType: Float32Array },
+    "INT": { align: 4, size: 4, clsType: Int32Array },
+    "INT_VEC2": { align: 8, size: 8, clsType: Int32Array },
+    "INT_VEC3": { align: 16, size: 12, clsType: Int32Array },
+    "INT_VEC4": { align: 16, size: 16, clsType: Int32Array },
+    "BOOL": { align: 4, size: 4, clsType: Int32Array },
+    "BOOL_VEC2": { align: 8, size: 8, clsType: Int32Array },
+    "BOOL_VEC3": { align: 16, size: 12, clsType: Int32Array },
+    "BOOL_VEC4": { align: 16, size: 16, clsType: Int32Array },
+    "FLOAT_MAT2": { align: 8, size: 16, clsType: Float32Array },
+    "FLOAT_MAT3": { align: 16, size: 48, clsType: Float32Array },
+    "FLOAT_MAT4": { align: 16, size: 64, clsType: Float32Array },
+    "UNSIGNED_INT": { align: 4, size: 4, clsType: Uint32Array },
+    "UNSIGNED_INT_VEC2": { align: 8, size: 8, clsType: Uint32Array },
+    "UNSIGNED_INT_VEC3": { align: 16, size: 12, clsType: Uint32Array },
+    "UNSIGNED_INT_VEC4": { align: 16, size: 16, clsType: Uint32Array },
+    "FLOAT_MAT2x3": { align: 16, size: 32, clsType: Float32Array },
+    "FLOAT_MAT2x4": { align: 16, size: 32, clsType: Float32Array },
+    "FLOAT_MAT3x2": { align: 8, size: 24, clsType: Float32Array },
+    "FLOAT_MAT3x4": { align: 16, size: 48, clsType: Float32Array },
+    "FLOAT_MAT4x2": { align: 8, size: 32, clsType: Float32Array },
+    "FLOAT_MAT4x3": { align: 16, size: 64, clsType: Float32Array },
+};

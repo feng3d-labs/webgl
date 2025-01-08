@@ -368,7 +368,7 @@ export class RunWebGL
                 else
                 {
                     const bufferBinding = uniforms[name] as IBufferBinding;
-                    updateBufferBinding(uniformBlock, bufferBinding);
+                    updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                     buffer = getIGLUniformBuffer(bufferBinding.bufferView);
                 }
 
