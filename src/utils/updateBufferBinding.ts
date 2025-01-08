@@ -45,6 +45,7 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
     (buffer as any).label = buffer.label || (`BufferBinding ${uniformBlock.name}`);
     const offset = uniformData.bufferView.byteOffset;
     let currentSize = 0;
+    let structName: string;
 
     uniformBlock.uniforms.forEach((uniformInfo) =>
     {
@@ -52,9 +53,18 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
         const alignSize = uniformBufferTypeAlignSizeMap[uniformBufferType];
         console.assert(alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
 
+        //
+        const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf("."));
+        if (structName !== currentstructName)
+        {
+            currentSize = roundUp(16, currentSize); // 结构体之间对齐
+            structName = currentstructName;
+        }
+
+        //
         uniformInfo.items.forEach((itemInfo) =>
         {
-            currentSize = roundUp(alignSize.align, currentSize); // 单项对齐
+            currentSize = roundUp(alignSize.align, currentSize); // 结构体成员对齐
             const itemInfoOffset = currentSize;
             const itemInfoSize = alignSize.size;
             //
@@ -101,7 +111,7 @@ export function updateBufferBinding(uniformBlock: IUniformBlockInfo, uniformData
             watcher.watchchain(uniformData, paths.join("."), update, undefined, false);
         });
     });
-    currentSize = roundUp(16, currentSize); // 整个数据对齐
+    currentSize = roundUp(16, currentSize); // 整个统一块数据对齐
 
     console.assert(size === currentSize, `uniformBlock映射尺寸出现错误( ${size}  ${currentSize} )！`);
 }
