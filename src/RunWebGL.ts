@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray, UnReadonly } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray, UnReadonly } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -22,7 +22,6 @@ import { IGLTextureTarget } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
 import { IUniformItemInfo } from "./data/IGLUniformInfo";
-import { IBufferBinding } from "./data/IGLUniforms";
 import { getGLTexture } from "./internal";
 import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";

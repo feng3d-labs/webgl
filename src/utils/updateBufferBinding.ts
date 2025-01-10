@@ -1,7 +1,6 @@
-import { UnReadonly } from "@feng3d/render-api";
+import { IBufferBinding, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IBufferBindingInfo } from "../caches/getGLProgram";
-import { IBufferBinding } from "../data/IGLUniforms";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
 /**
