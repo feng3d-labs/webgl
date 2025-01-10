@@ -16,8 +16,7 @@ export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, unifo
     if (uniformData["_bufferBindingInfo"] !== undefined)
     {
         const preVariableInfo = uniformData["_bufferBindingInfo"] as any as IBufferBindingInfo;
-        if (preVariableInfo.size !== bufferBindingInfo.size
-        )
+        if (preVariableInfo.size !== bufferBindingInfo.size)
         {
             console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, bufferBindingInfo, preVariableInfo });
         }
