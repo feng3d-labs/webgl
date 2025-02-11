@@ -1,4 +1,8 @@
-import { IGLProgram, IGLQuery, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLOcclusionQuery, WebGL } from "@feng3d/webgl";
+
+import { watcher } from "@feng3d/watcher";
+
 import { getShaderSource } from "./utility";
 
 // -- Init Canvas
@@ -9,14 +13,14 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // -- Init WebGL Context
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: IGLProgram = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    depthStencil: { depth: { depthtest: true } },
-    primitive: { topology: "TRIANGLES" },
+    depthStencil: {},
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Init Buffer
@@ -29,50 +33,47 @@ const vertices = new Float32Array([
     0.3, -0.5, 0.5,
     0.0, 0.5, 0.5
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
 // -- Init Vertex Array
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        pos: { buffer: vertexPosBuffer, numComponents: 3, normalized: false, vertexSize: 0, offset: 0 },
+        pos: { data: vertices, format: "float32x3", arrayStride: 0, offset: 0 },
     }
 };
-// -- Init Query
-const query: IGLQuery = {};
 
+const renderObjects: IRenderPassObject[] = [];
 // -- Render
-const rp: IGLRenderPass = {
+const rp: IRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },
-    renderObjects: [],
+    renderObjects: renderObjects,
 };
 
-const ro: IGLRenderObject = {
-    vertexArray,
+const ro: IRenderObject = {
+    vertices: vertexArray.vertices,
     pipeline: program,
-    drawArrays: { firstVertex: 0, vertexCount: 3 },
+    drawVertex: { firstVertex: 0, vertexCount: 3 },
 };
-rp.renderObjects.push(ro);
+renderObjects.push(ro);
 
-rp.renderObjects.push({ action: "beginQuery", target: "ANY_SAMPLES_PASSED", query });
+const occlusionQuery: IGLOcclusionQuery = {
+    __type: "OcclusionQuery",
+    renderObjects: [{
+        ...ro,
+        drawVertex: { firstVertex: 3, vertexCount: 3 },
+    }]
+};
 
-rp.renderObjects.push({
-    ...ro,
-    drawArrays: { firstVertex: 3, vertexCount: 3 },
-});
+renderObjects.push(occlusionQuery);
 
-rp.renderObjects.push({ action: "endQuery", target: "ANY_SAMPLES_PASSED", query });
+webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
-webgl.runRenderPass(rp);
-
-webgl.getQueryResult(query).then((samplesPassed) =>
+watcher.watch(occlusionQuery, "result", () =>
 {
-    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(samplesPassed)}`;
+    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(occlusionQuery.result.result)}`;
 });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(program);
-webgl.deleteVertexArray(vertexArray);

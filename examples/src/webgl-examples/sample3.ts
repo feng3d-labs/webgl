@@ -1,4 +1,5 @@
-import { IGLRenderPass, WebGL } from "@feng3d/webgl";
+import { IRenderPass } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 main();
@@ -15,7 +16,7 @@ function main()
 
   const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
-  const renderPasss: IGLRenderPass = {
+  const renderPass: IRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -28,7 +29,7 @@ function main()
     },
     renderObjects: [{
       pipeline: {
-        primitive: { topology: "TRIANGLE_STRIP" },
+        primitive: { topology: "triangle-strip" },
         vertex: {
           code: `
           attribute vec4 aVertexPosition;
@@ -51,50 +52,37 @@ function main()
             gl_FragColor = vColor;
           }
         ` },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+        depthStencil: { depthCompare: "less-equal" }
       },
-      vertexArray: {
-        vertices: {
-          aVertexPosition: {
-            type: "FLOAT",
-            buffer: {
-              target: "ARRAY_BUFFER",
-              data: new Float32Array([
-                1.0, 1.0,
-                -1.0, 1.0,
-                1.0, -1.0,
-                -1.0, -1.0,
-              ]), usage: "STATIC_DRAW",
-            },
-            numComponents: 2,
-            normalized: false,
-          },
-          aVertexColor: {
-            type: "FLOAT",
-            buffer: {
-              target: "ARRAY_BUFFER",
-              data: new Float32Array([
-                1.0, 1.0, 1.0, 1.0, // white
-                1.0, 0.0, 0.0, 1.0, // red
-                0.0, 1.0, 0.0, 1.0, // green
-                0.0, 0.0, 1.0, 1.0, // blue
-              ]),
-              usage: "STATIC_DRAW",
-            },
-            numComponents: 4,
-            normalized: false,
-          },
+      vertices: {
+        aVertexPosition: {
+          format: "float32x2",
+          data: new Float32Array([
+            1.0, 1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            -1.0, -1.0,
+          ]),
+        },
+        aVertexColor: {
+          format: "float32x4",
+          data: new Float32Array([
+            1.0, 1.0, 1.0, 1.0, // white
+            1.0, 0.0, 0.0, 1.0, // red
+            0.0, 1.0, 0.0, 1.0, // green
+            0.0, 0.0, 1.0, 1.0, // blue
+          ]),
         },
       },
       uniforms: {
         uProjectionMatrix: projectionMatrix,
         uModelViewMatrix: modelViewMatrix,
       },
-      drawArrays: { firstVertex: 0, vertexCount: 4 },
+      drawVertex: { firstVertex: 0, vertexCount: 4 },
     }],
   };
 
-  webgl.runRenderPass(renderPasss);
+  webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 }
 
 //

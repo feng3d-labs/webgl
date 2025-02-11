@@ -1,13 +1,11 @@
-import { IGLRenderObject, IGLRenderPipeline, IGLVertexArrayObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
-const webglcanvas = document.createElement("canvas");
-webglcanvas.id = "glcanvas";
-webglcanvas.style.position = "fixed";
-webglcanvas.style.left = "0px";
-webglcanvas.style.top = "0px";
-webglcanvas.style.width = "100%";
-webglcanvas.style.height = "100%";
-document.body.appendChild(webglcanvas);
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
@@ -23,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: IGLRenderPipeline = {
+const pipeline: IRenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;
@@ -40,57 +38,74 @@ const pipeline: IGLRenderPipeline = {
     void main() {
       gl_FragColor = color;
     }` },
-    depthStencil: { depth: { depthtest: true } },
+    depthStencil: { depthWriteEnabled: false },
 };
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
         position: {
-            buffer: {
-                target: "ARRAY_BUFFER",
-                data: new Float32Array([
-                    0.5, 0,
-                    0, 0.5,
-                    1, 1
-                ])
-            }, numComponents: 2
+            data: new Float32Array([
+                0.5, 0,
+                0, 0.5,
+                1, 1
+            ]),
+            format: "float32x2",
         },
     }
 };
 
-function getRenderObject(tick: number, batchId: number)
+function getRenderObject(batchId: number)
 {
-    const renderObject: IGLRenderObject = {
-        vertexArray,
+    const renderObject: IRenderObject = {
+        vertices: vertexArray.vertices,
         uniforms: {
-            color: () => [
-                Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
-                Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
-                Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
-                1],
-            angle: () => 0.01 * tick,
-            offset: () => offsets[batchId].offset,
+            offset: offsets[batchId].offset,
         },
         pipeline,
+        drawVertex: { vertexCount: 3 }
     };
 
     return renderObject;
 }
 
+const renderObjects: IRenderObject[] = [];
+for (let i = 0; i < offsets.length; i++)
+{
+    renderObjects.push(getRenderObject(i));
+}
+
+const submit: ISubmit = {
+    commandEncoders: [{
+        passEncoders: [
+            {
+                descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
+                renderObjects
+            }
+        ]
+    }]
+};
+
 function draw()
 {
-    webglcanvas.width = webglcanvas.clientWidth;
-    webglcanvas.height = webglcanvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
     tick++;
-    const renderObjects: IGLRenderObject[] = [];
+
     for (let i = 0; i < offsets.length; i++)
     {
         batchId = i;
-        renderObjects.push(getRenderObject(tick, batchId));
+        //
+        const ro = renderObjects[i];
+        ro.uniforms.color = [
+            Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
+            Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
+            Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
+            1];
+        ro.uniforms.angle = 0.01 * tick;
     }
 
-    webgl.runRenderPass({ renderObjects });
+    webgl.submit(submit);
 
     requestAnimationFrame(draw);
 }

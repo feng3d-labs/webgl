@@ -1,4 +1,4 @@
-import { VertexAttributeTypes } from "./IGLVertexAttribute";
+import { IGLVertexAttributeTypes } from "../utils/getIVertexFormat";
 
 export interface IGLAttributeInfo
 {
@@ -15,7 +15,7 @@ export interface IGLAttributeInfo
     /**
      * 属性缓冲数据类型
      */
-    type?: VertexAttributeTypes;
+    type?: IGLVertexAttributeTypes;
 
     /**
      * 属性地址

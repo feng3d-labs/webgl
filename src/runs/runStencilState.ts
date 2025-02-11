@@ -1,33 +1,36 @@
-import { IStencilFaceState, IGLStencilState } from "../data/IGLDepthStencilState";
+import { ICompareFunction, IDepthStencilState, IStencilOperation } from "@feng3d/render-api";
+import { IGLStencilFunc, IGLStencilOp } from "../data/IGLDepthStencilState";
 
-const defaultStencilFaceState: IStencilFaceState = { stencilFunc: "ALWAYS", stencilFuncRef: 0, stencilFuncMask: 0b11111111, stencilOpFail: "KEEP", stencilOpZFail: "KEEP", stencilOpZPass: "KEEP", stencilMask: 0b11111111 };
-export const defaultStencilState: IGLStencilState = { useStencil: false, stencilFront: defaultStencilFaceState, stencilBack: defaultStencilFaceState };
-
-export function runStencilState(gl: WebGLRenderingContext, stencil: IGLStencilState)
+export function getIGLStencilFunc(compare: ICompareFunction)
 {
-    //
-    const {
-        useStencil, stencilFront, stencilBack,
-    } = { ...defaultStencilState, ...stencil };
+    const stencilFunc: IGLStencilFunc = compareMap[compare];
 
-    if (useStencil)
-    {
-        gl.enable(gl.STENCIL_TEST);
-        {
-            const { stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask } = { ...defaultStencilFaceState, ...stencilFront };
-            gl.stencilFuncSeparate(gl.FRONT, gl[stencilFunc], stencilFuncRef, stencilFuncMask);
-            gl.stencilOpSeparate(gl.FRONT, gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
-            gl.stencilMaskSeparate(gl.FRONT, stencilMask);
-        }
-        {
-            const { stencilFunc, stencilFuncRef, stencilFuncMask, stencilOpFail, stencilOpZFail, stencilOpZPass, stencilMask } = { ...defaultStencilFaceState, ...stencilBack };
-            gl.stencilFuncSeparate(gl.BACK, gl[stencilFunc], stencilFuncRef, stencilFuncMask);
-            gl.stencilOpSeparate(gl.BACK, gl[stencilOpFail], gl[stencilOpZFail], gl[stencilOpZPass]);
-            gl.stencilMaskSeparate(gl.BACK, stencilMask);
-        }
-    }
-    else
-    {
-        gl.disable(gl.STENCIL_TEST);
-    }
+    return stencilFunc;
 }
+const compareMap: { [key: string]: IGLStencilFunc } = {
+    "never": "NEVER",
+    "less": "LESS",
+    "equal": "EQUAL",
+    "less-equal": "LEQUAL",
+    "greater": "GREATER",
+    "not-equal": "NOTEQUAL",
+    "greater-equal": "GEQUAL",
+    "always": "ALWAYS",
+};
+
+export function getIGLStencilOp(stencilOperation?: IStencilOperation)
+{
+    const glStencilOp: IGLStencilOp = stencilOperationMap[stencilOperation];
+
+    return glStencilOp;
+}
+const stencilOperationMap: { [key: string]: IGLStencilOp } = {
+    "keep": "KEEP",
+    "zero": "ZERO",
+    "replace": "REPLACE",
+    "invert": "INVERT",
+    "increment-clamp": "INCR",
+    "decrement-clamp": "DECR",
+    "increment-wrap": "INCR_WRAP",
+    "decrement-wrap": "DECR_WRAP",
+};

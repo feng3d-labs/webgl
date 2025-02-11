@@ -1,4 +1,5 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,7 +12,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
@@ -64,93 +65,100 @@ import { getShaderSource } from "./utility";
     const COLOR_LOCATION = 3;
     const NUM_LOCATIONS = 4;
 
-    const vertexArrays: IGLVertexArrayObject[][] = [];
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: IGLTransformFeedback[] = [];
 
-    const vertexBuffers: IGLVertexBuffer[][] = new Array(vertexArrays.length);
+    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
 
-    for (let va = 0; va < 2; ++va)
+    for (let i = 0; i < 2; ++i)
     {
-        vertexBuffers[va] = new Array(NUM_LOCATIONS);
+        vertexBuffers[i] = new Array(NUM_LOCATIONS);
 
-        vertexBuffers[va][OFFSET_LOCATION] = { target: "ARRAY_BUFFER", data: instanceOffsets, usage: "STREAM_COPY" };
-        vertexBuffers[va][ROTATION_LOCATION] = { target: "ARRAY_BUFFER", data: instanceRotations, usage: "STREAM_COPY" };
-        vertexBuffers[va][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: trianglePositions, usage: "STATIC_DRAW" };
-        vertexBuffers[va][COLOR_LOCATION] = { target: "ARRAY_BUFFER", data: instanceColors, usage: "STATIC_DRAW" };
+        vertexBuffers[i][OFFSET_LOCATION] = instanceOffsets.slice();
+        vertexBuffers[i][ROTATION_LOCATION] = instanceRotations.slice();
+        vertexBuffers[i][POSITION_LOCATION] = trianglePositions;
+        vertexBuffers[i][COLOR_LOCATION] = instanceColors;
 
-        vertexArrays[va] = [];
-        vertexArrays[va][0] = {
+        vertexArrays[i] = [];
+        vertexArrays[i][0] = {
             vertices: {
-                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2 },
-                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1 },
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2" },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32" },
             }
         };
-        vertexArrays[va][1] = {
+        vertexArrays[i][1] = {
             vertices: {
-                a_offset: { buffer: vertexBuffers[va][OFFSET_LOCATION], numComponents: 2, divisor: 1 },
-                a_rotation: { buffer: vertexBuffers[va][ROTATION_LOCATION], numComponents: 1, divisor: 1 },
-                a_position: { buffer: vertexBuffers[va][POSITION_LOCATION], numComponents: 2 },
-                a_color: { buffer: vertexBuffers[va][COLOR_LOCATION], numComponents: 3, divisor: 1 },
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2", stepMode: "instance" },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32", stepMode: "instance" },
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
+                a_color: { data: vertexBuffers[i][COLOR_LOCATION], format: "float32x3", stepMode: "instance" },
             }
         };
 
-        transformFeedbacks[va] = {
+        transformFeedbacks[i] = {
             bindBuffers: [
-                { index: 0, buffer: vertexBuffers[va][OFFSET_LOCATION] },
-                { index: 1, buffer: vertexBuffers[va][ROTATION_LOCATION] },
+                { index: 0, data: vertexBuffers[i][OFFSET_LOCATION] },
+                { index: 1, data: vertexBuffers[i][ROTATION_LOCATION] },
             ]
         };
     }
 
-    const transformRO: IGLRenderObject = {
-        pipeline: programs[PROGRAM_TRANSFORM],
-        vertexArray: null,
-        transformFeedback: null,
-        uniforms: {},
-        drawArrays: { vertexCount: NUM_INSTANCES },
-    };
-
-    const renderRO: IGLRenderObject = {
-        pipeline: programs[PROGRAM_DRAW],
-        uniforms: {},
-        drawArrays: { vertexCount: 3, instanceCount: NUM_INSTANCES },
-    };
-
-    const rp: IGLRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [transformRO, renderRO],
-    };
-
-    render();
-
     function initPrograms()
     {
-        const programTransform: IGLProgram = {
-            vertex: { code: getShaderSource("vs-emit") }, fragment: { code: getShaderSource("fs-emit") },
+        const programTransform: IGLTransformFeedbackPipeline = {
+            vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
-            rasterizerDiscard: true,
-            primitive: { topology: "POINTS" },
         };
 
         // Setup program for draw shader
-        const programDraw: IGLProgram = {
+        const programDraw: IRenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") }, fragment: {
                 code: getShaderSource("fs-draw"),
                 targets: [{
                     blend: {
-                        color: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
-                        alpha: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                        color: { srcFactor: "src-alpha", dstFactor: "one" },
+                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
                     }
                 }]
             },
-            primitive: { topology: "TRIANGLES" },
+            primitive: { topology: "triangle-list" },
         };
 
-        const programs = [programTransform, programDraw];
+        const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
 
         return programs;
+    }
+
+    const transformRO: IGLTransformFeedbackObject = {
+        pipeline: programs[PROGRAM_TRANSFORM],
+        vertices: null,
+        transformFeedback: null,
+        uniforms: {},
+        drawVertex: { vertexCount: NUM_INSTANCES },
+    };
+
+    const renderRO: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
+        pipeline: programs[PROGRAM_DRAW],
+        uniforms: {},
+        drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
+    };
+
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [transformRO],
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [renderRO],
+                }
+            ]
+        }]
     }
 
     function transform()
@@ -159,12 +167,8 @@ import { getShaderSource } from "./utility";
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
-        const sourceVAO = vertexArrays[currentSourceIdx][0];
-
-        const destinationTransformFeedback = transformFeedbacks[destinationIdx];
-
-        transformRO.vertexArray = sourceVAO;
-        transformRO.transformFeedback = destinationTransformFeedback;
+        transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
+        transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
         transformRO.uniforms.u_time = time;
 
@@ -177,13 +181,15 @@ import { getShaderSource } from "./utility";
         // Rotate triangles
         transform();
 
-        renderRO.viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 };
-        renderRO.vertexArray = vertexArrays[currentSourceIdx][1];
+        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
 
-        webgl.runRenderPass(rp);
+        webgl.submit(submit);
 
         requestAnimationFrame(render);
     }
+
+    requestAnimationFrame(render);
 
     // If you have a long-running page, and need to delete WebGL resources, use:
     //

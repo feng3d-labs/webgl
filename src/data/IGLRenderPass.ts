@@ -1,21 +1,25 @@
-import { IGLRenderPassDescriptor } from "./IGLPassDescriptor";
-import { IGLQueryAction } from "./IGLQueryAction";
-import { IGLRenderObject } from "./IGLRenderObject";
+import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 
-/**
- * WebGL渲染通道
- *
- * 包含渲染通道描述以及需要渲染的对象列表。
- */
-export interface IGLRenderPass
+declare module "@feng3d/render-api"
 {
     /**
-     * WebGL渲染通道描述
+     * WebGL渲染通道
+     *
+     * 包含渲染通道描述以及需要渲染的对象列表。
      */
-    descriptor?: IGLRenderPassDescriptor;
+    export interface IRenderPass
+    {
+        /**
+         * 渲染不被遮挡查询结果。具体数据保存在各子项的"result"属性中。
+         *
+         * 当提交WebGL后自动获取结果后填充该属性。
+         */
+        occlusionQueryResults?: IGLOcclusionQuery[];
+    }
 
-    /**
-     * 渲染对象列表，默认为 []。
-     */
-    renderObjects?: (IGLRenderObject | IGLQueryAction)[];
+    export interface IRenderPassObjectMap
+    {
+        IGLOcclusionQuery: IGLOcclusionQuery
+    }
 }

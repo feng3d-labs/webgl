@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, IGLViewport, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -8,7 +9,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
@@ -58,7 +59,7 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IGLRenderPipeline = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] },
 };
@@ -72,7 +73,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     0.0, 1.0,
@@ -82,30 +82,28 @@ const texcoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     }
 };
 
 // -- Load texture then render
-const sampler: IGLSampler = {
-    minFilter: "LINEAR",
-    magFilter: "LINEAR"
+const sampler: ISampler = {
+    minFilter: "linear",
+    magFilter: "linear"
 };
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: IGLTexture;
+let texture: ITexture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        sources: [{ source: image, level: 0 }],
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        size: [image.width, image.height],
+        sources: [{ image: image, mipLevel: 0 }],
+        format: "rgba8unorm",
         generateMipmap: true,
     };
 
@@ -121,21 +119,22 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const renderObject: IGLRenderObject = {
+    const renderObject: IRenderObject = {
         pipeline: program,
-        vertexArray,
+        vertices: vertexArray.vertices,
         uniforms: { mvp: matrix, diffuse: { texture, sampler } },
-        drawArrays: { vertexCount: 6 },
+        drawVertex: { vertexCount: 6 },
     };
 
-    const renderPass: IGLRenderPass = {
+    const renderObjects: IRenderPassObject[] = [];
+    const renderPass: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [],
+        renderObjects: renderObjects,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        const viewport0: IGLViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
+        const viewport0: IViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
         if (i === Corners.TOP_LEFT)
         {
@@ -143,59 +142,60 @@ function render()
         }
         else if (i === Corners.TOP_RIGHT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-            });
+            renderObjects.push(
+                {
+                    ...renderObject,
+                    viewport: viewport0,
+                });
         }
         else if (i === Corners.BOTTOM_RIGHT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-                pipeline: {
-                    ...program, fragment: {
-                        ...program.fragment,
-                        targets: [{
-                            ...program.fragment.targets[0],
-                            blend: {
-                                ...program.fragment.targets[0].blend,
-                                color: { ...program.fragment.targets[0].blend.color, operation: "MIN" },
-                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MIN" },
-                            },
-                        }]
-                    }
-                },
-            });
+            renderObjects.push(
+                {
+                    ...renderObject,
+                    viewport: viewport0,
+                    pipeline: {
+                        ...program, fragment: {
+                            ...program.fragment,
+                            targets: [{
+                                ...program.fragment.targets[0],
+                                blend: {
+                                    ...program.fragment.targets[0].blend,
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "min" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "min" },
+                                },
+                            }]
+                        }
+                    },
+                });
         }
         else if (i === Corners.BOTTOM_LEFT)
         {
-            renderPass.renderObjects.push({
-                ...renderObject,
-                viewport: viewport0,
-                pipeline: {
-                    ...program, fragment: {
-                        ...program.fragment,
-                        targets: [{
-                            ...program.fragment.targets[0],
-                            blend: {
-                                ...program.fragment.targets[0].blend,
-                                color: { ...program.fragment.targets[0].blend.color, operation: "MAX" },
-                                alpha: { ...program.fragment.targets[0].blend.alpha, operation: "MAX" },
-                            },
-                        }]
-                    }
-                },
-            });
+            renderObjects.push(
+                {
+                    ...renderObject,
+                    viewport: viewport0,
+                    pipeline: {
+                        ...program, fragment: {
+                            ...program.fragment,
+                            targets: [{
+                                ...program.fragment.targets[0],
+                                blend: {
+                                    ...program.fragment.targets[0].blend,
+                                    color: { ...program.fragment.targets[0].blend.color, operation: "max" },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "max" },
+                                },
+                            }]
+                        }
+                    },
+                });
         }
     }
 
-    webgl.runRenderPass(renderPass);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
+
 
     // -- Clean up
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

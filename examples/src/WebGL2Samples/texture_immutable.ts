@@ -1,4 +1,6 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -10,7 +12,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     const Corners = {
@@ -36,9 +38,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const program: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D: IGLProgram = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
+    const program3D: IRenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -49,7 +51,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -59,14 +60,13 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x2" },
+            in_texcoord: { data: texCoords, format: "float32x2" },
+            texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
@@ -83,70 +83,67 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // -- Init 2D Texture
-        const texture2D: IGLTexture = {
-            target: "TEXTURE_2D",
-            pixelStore: {
-                unpackFlipY: false,
-            },
-            internalformat: "RGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE",
-            storage: { levels: 1, width: 512, height: 512 },
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+        const texture2D: ITexture = {
+            format: "rgba8unorm",
+            mipLevelCount: 1,
+            size: [512, 512],
+            sources: [{
+                image: image, flipY: false,
+            }],
         };
-        const sampler2D: IGLSampler = {
-            minFilter: "NEAREST",
-            magFilter: "LINEAR",
-            wrapS: "CLAMP_TO_EDGE",
-            wrapT: "CLAMP_TO_EDGE",
+        const sampler2D: ISampler = {
+            minFilter: "nearest",
+            magFilter: "linear",
+            addressModeU: "clamp-to-edge",
+            addressModeV: "clamp-to-edge",
         };
 
         // -- Render
-        const ro: IGLRenderObject = {
+        const ro: IRenderObject = {
             pipeline: program,
-            vertexArray,
+            vertices: vertexArray.vertices,
             uniforms: {
                 MVP: matrix,
             },
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         };
 
-        const rp: IGLRenderPass = {
+        const renderObjects: IRenderPassObject[] = [];
+        const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: []
+            renderObjects: renderObjects
         };
 
-        rp.renderObjects.push({
-            ...ro,
-            pipeline: program,
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture: texture2D, sampler: sampler2D },
-            },
-            viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w }
-        });
+        renderObjects.push(
+            {
+                viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
+                ...ro,
+                pipeline: program,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture: texture2D, sampler: sampler2D },
+                },
+            });
 
         // Immutable 3D texture
-        rp.renderObjects.push({
-            ...ro,
-            pipeline: program3D,
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture: texture3D, sampler: sampler3D },
-            },
-            viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w }
-        });
+        renderObjects.push(
+            {
+                viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
+                ...ro,
+                pipeline: program3D,
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture: texture3D, sampler: sampler3D },
+                },
+            });
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(vertexPosBuffer);
-        webgl.deleteBuffer(vertexTexBuffer);
         webgl.deleteTexture(texture2D);
         webgl.deleteTexture(texture3D);
         webgl.deleteProgram(program);
         webgl.deleteProgram(program3D);
-        webgl.deleteVertexArray(vertexArray);
     });
 
     function create3DTexture()
@@ -169,20 +166,20 @@ import { getShaderSource, loadImage } from "./utility";
             }
         }
 
-        const texture3D: IGLTexture = {
-            target: "TEXTURE_3D",
-            internalformat: "R8",
-            format: "RED",
-            type: "UNSIGNED_BYTE",
+        const texture3D: ITexture = {
+            dimension: "3d",
+            format: "r8uint",
             generateMipmap: true,
-            storage: { levels: Math.log2(SIZE), width: SIZE, height: SIZE, depth: SIZE },
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, zoffset: 0, width: SIZE, height: SIZE, depth: SIZE, srcData: data }],
+            mipLevelCount: Math.log2(SIZE),
+            size: [SIZE, SIZE, SIZE],
+            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data: data }],
         };
-        const sampler3D: IGLSampler = {
+        const sampler3D: ISampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
         };
 
         return { texture3D, sampler3D };

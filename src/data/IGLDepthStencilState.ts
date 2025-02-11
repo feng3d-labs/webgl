@@ -1,18 +1,3 @@
-/**
- * 深度模板状态。
- */
-export interface IGLDepthStencilState
-{
-    /**
-     * 深度状态。
-     */
-    depth?: IGLDepthState;
-
-    /**
-     * 模板状态。
-     */
-    stencil?: IGLStencilState;
-}
 
 /**
  * 深度状态。
@@ -40,10 +25,10 @@ export interface IGLDepthState
      *
      * A GLenum specifying the depth comparison function, which sets the conditions under which the pixel will be drawn. The default value is gl.LESS.
      *
-     * @see GLCompareFunction
+     * @see IGLCompareFunction
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
      */
-    depthCompare?: GLCompareFunction;
+    depthCompare?: IGLCompareFunction;
 
     /**
      * 深度偏移。
@@ -110,15 +95,6 @@ export interface IGLStencilState
 export interface IStencilFaceState
 {
     /**
-     * 描述模板测试的方法。默认ALWAYS，总是通过。
-     *
-     * A GLenum specifying the test function. The default function is gl.ALWAYS.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
-     */
-    stencilFunc?: GLStencilFunc;
-
-    /**
      * 一个为模板测试指定参考值。这个值被限制在0到2^n -1的范围内，其中n是模板缓冲区中的位数。默认0。
      *
      * A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n -1 where n is the number of bitplanes in the stencil buffer. The default value is 0.
@@ -128,7 +104,7 @@ export interface IStencilFaceState
     stencilFuncRef?: number;
 
     /**
-     * 模板测试时使用的mask值，默认全为1（0b11111111）。
+     * 模板测试时使用的mask值，默认全为1（0xFFFFFFFF）。
      *
      * A GLuint specifying a bit-wise mask that is used to AND the reference value and the stored stencil value when the test is done. The default value is all 1.
      *
@@ -137,13 +113,31 @@ export interface IStencilFaceState
     stencilFuncMask?: number;
 
     /**
+     * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认全为1（0xFFFFFFFF）。
+     *
+     * A GLuint specifying a bit mask to enable or disable writing of individual bits in the stencil planes. By default, the mask is all 1.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
+     */
+    stencilMask?: number;
+
+    /**
+     * 描述模板测试的方法。默认ALWAYS，总是通过。
+     *
+     * A GLenum specifying the test function. The default function is gl.ALWAYS.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
+     */
+    stencilFunc?: IGLStencilFunc;
+
+    /**
      * 指定模板测试失败时使用的函数的枚举。默认KEEP，保持当前值。
      *
      * A GLenum specifying the function to use when the stencil test fails. The default value is gl.KEEP.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
      */
-    stencilOpFail?: GLStencilOp;
+    stencilOpFail?: IGLStencilOp;
 
     /**
      * 指定在模板测试通过但深度测试失败时使用的函数枚举。默认KEEP，保持当前值。
@@ -152,7 +146,7 @@ export interface IStencilFaceState
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
      */
-    stencilOpZFail?: GLStencilOp;
+    stencilOpZFail?: IGLStencilOp;
 
     /**
      * 指定在模板测试和深度测试通过时使用的函数枚举，或在模板测试通过且没有深度缓冲或禁用深度测试时使用的函数枚举。默认KEEP，保持当前值。
@@ -161,16 +155,7 @@ export interface IStencilFaceState
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
      */
-    stencilOpZPass?: GLStencilOp;
-
-    /**
-     * 指定位掩码以启用或禁用在模板平面中写入单个位的正整数。默认全为1（0b11111111）。
-     *
-     * A GLuint specifying a bit mask to enable or disable writing of individual bits in the stencil planes. By default, the mask is all 1.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilMask
-     */
-    stencilMask?: number;
+    stencilOpZPass?: IGLStencilOp;
 }
 
 /**
@@ -189,7 +174,7 @@ export interface IStencilFaceState
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
  */
-export type GLCompareFunction = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
+export type IGLCompareFunction = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
 /**
  * A GLenum specifying the test function. The default function is gl.ALWAYS.
@@ -205,7 +190,7 @@ export type GLCompareFunction = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
  */
-export type GLStencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
+export type IGLStencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
 /**
  * The WebGLRenderingContext.stencilOp() method of the WebGL API sets both the front and back-facing stencil test actions.
@@ -221,4 +206,4 @@ export type GLStencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | 
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
  */
-export type GLStencilOp = "KEEP" | "ZERO" | "REPLACE" | "INCR" | "INCR_WRAP" | "DECR" | "DECR_WRAP" | "INVERT";
+export type IGLStencilOp = "KEEP" | "ZERO" | "REPLACE" | "INCR" | "INCR_WRAP" | "DECR" | "DECR_WRAP" | "INVERT";

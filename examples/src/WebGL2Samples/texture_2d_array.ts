@@ -1,4 +1,5 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -9,11 +10,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.width = canvas.height * 960 / 540;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IGLProgram = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -26,7 +27,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -36,18 +36,17 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x2" },
+            texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
-    let texture: IGLTexture;
-    let sampler: IGLSampler;
+    let texture: ITexture;
+    let sampler: ISampler;
     loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {
         const NUM_IMAGES = 3;
@@ -66,15 +65,14 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         texture = {
-            target: "TEXTURE_2D_ARRAY",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
-            sources: [{ width: IMAGE_SIZE.width, height: IMAGE_SIZE.height, depth: NUM_IMAGES, border: 0, pixels }],
+            size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
+            dimension: "2d-array",
+            format: "rgba8unorm",
+            sources: [{ __type: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
         };
         sampler = {
-            minFilter: "LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
         };
 
         const matrix = new Float32Array([
@@ -84,17 +82,17 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IGLRenderObject = {
+        const ro: IRenderObject = {
             pipeline: program,
-            vertexArray,
+            vertices: vertexArray.vertices,
             uniforms: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         };
 
-        const rp: IGLRenderPass = {
+        const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
             renderObjects: [ro],
         };
@@ -104,7 +102,8 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Render
             ro.uniforms.layer = frame;
-            webgl.runRenderPass(rp);
+
+            webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
             frame = (frame + 1) % NUM_IMAGES;
 

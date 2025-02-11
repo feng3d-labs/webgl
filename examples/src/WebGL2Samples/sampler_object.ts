@@ -1,4 +1,6 @@
-import { IGLProgram, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,14 +9,14 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Initialize program
 
-const program: IGLProgram = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -27,7 +29,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     0.0, 1.0,
@@ -37,43 +38,39 @@ const texcoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     },
 };
 
 // -- Initialize samplers
 
-const samplerA: IGLSampler = {
-    minFilter: "NEAREST_MIPMAP_NEAREST", magFilter: "NEAREST",
-    wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", wrapR: "CLAMP_TO_EDGE",
+const samplerA: ISampler = {
+    minFilter: "nearest", magFilter: "nearest", mipmapFilter: "nearest",
+    addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
-    compareMode: "NONE", compare: "LEQUAL",
 };
-const samplerB: IGLSampler = {
-    minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR",
-    wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", wrapR: "CLAMP_TO_EDGE",
+const samplerB: ISampler = {
+    minFilter: "linear", magFilter: "linear", mipmapFilter: "linear",
+    addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
-    compareMode: "NONE", compare: "LEQUAL",
 };
 
 // -- Load texture then render
 
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: IGLTexture;
+let texture: ITexture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        sources: [{ source: image, level: 0 }],
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        size: [image.width, image.height],
+        sources: [{ image: image, mipLevel: 0 }],
+        format: "rgba8unorm",
         generateMipmap: true,
     };
 
@@ -89,31 +86,25 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertexArray,
+            vertices: vertexArray.vertices,
             uniforms: {
                 mvp: matrix,
-                material: {
-                    diffuse: [
-                        { texture, sampler: samplerA },
-                        { texture, sampler: samplerB },
-                    ]
-                },
+                materialDiffuse0: { texture, sampler: samplerA },
+                materialDiffuse1: { texture, sampler: samplerB },
             },
-            drawArrays: { vertexCount: 6, instanceCount: 1 },
+            drawVertex: { vertexCount: 6, instanceCount: 1 },
         }],
     };
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // Cleanup
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     webgl.deleteSampler(samplerA);
     webgl.deleteSampler(samplerB);
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

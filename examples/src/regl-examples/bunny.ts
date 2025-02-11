@@ -1,16 +1,14 @@
-import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
 
-const webglcanvas = document.createElement("canvas");
-webglcanvas.id = "glcanvas";
-webglcanvas.style.position = "fixed";
-webglcanvas.style.left = "0px";
-webglcanvas.style.top = "0px";
-webglcanvas.style.width = "100%";
-webglcanvas.style.height = "100%";
-document.body.appendChild(webglcanvas);
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
 
@@ -29,33 +27,17 @@ const indices = bunny.cells.reduce((pv: number[], cv: number[]) =>
 }, []);
 
 let tick = 0;
-let viewportWidth = webglcanvas.clientWidth;
-let viewportHeight = webglcanvas.clientHeight;
+let viewportWidth = canvas.clientWidth;
+let viewportHeight = canvas.clientHeight;
 
-const renderObject: IGLRenderObject = {
-    vertexArray: {
-        vertices: {
-            position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-        },
-        index: { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(indices) }
+const renderObject: IRenderObject = {
+    vertices: {
+        position: { data: new Float32Array(positions), format: "float32x3" },
     },
+    indices: new Uint16Array(indices),
+    drawIndexed: { indexCount: indices.length },
     uniforms: {
         model: mat4.identity([]),
-        view: () =>
-        {
-            const t = 0.01 * tick;
-
-            return mat4.lookAt([],
-                [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
-                [0, 2.5, 0],
-                [0, 1, 0]);
-        },
-        projection: () =>
-            mat4.perspective([],
-                Math.PI / 4,
-                viewportWidth / viewportHeight,
-                0.01,
-                1000),
     },
     pipeline: {
         vertex: {
@@ -72,17 +54,42 @@ const renderObject: IGLRenderObject = {
         }`,
             targets: [{ blend: {} }],
         },
-        depthStencil: { depth: { depthtest: true } },
+        depthStencil: {},
     }
+};
+
+const submit: ISubmit = {
+    commandEncoders: [{
+        passEncoders: [
+            {
+                descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
+                renderObjects: [renderObject]
+            }
+        ]
+    }]
 };
 
 function draw()
 {
-    viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
-    viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
+    viewportWidth = canvas.width = canvas.clientWidth;
+    viewportHeight = canvas.height = canvas.clientHeight;
 
     tick++;
-    webgl.runRenderPass({ renderObjects: [renderObject] });
+    const t = 0.01 * tick;
+
+    renderObject.uniforms.view = mat4.lookAt([],
+        [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
+        [0, 2.5, 0],
+        [0, 1, 0]);
+
+    renderObject.uniforms.projection =
+        mat4.perspective([],
+            Math.PI / 4,
+            viewportWidth / viewportHeight,
+            0.01,
+            1000);
+
+    webgl.submit(submit);
 
     requestAnimationFrame(draw);
 }

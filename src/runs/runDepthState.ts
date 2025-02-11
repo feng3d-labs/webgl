@@ -1,34 +1,22 @@
-import { IGLDepthState } from "../data/IGLDepthStencilState";
+import { ICompareFunction, IDepthStencilState } from "@feng3d/render-api";
+import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 
-export function runDepthState(gl: WebGLRenderingContext, depth: IGLDepthState)
+export function getIGLCompareFunction(depthCompare: ICompareFunction)
 {
-    const { depthtest, depthCompare, depthWriteEnabled, depthBias } = { ...defaultDepthState, ...depth };
+    const glDepthCompare: IGLCompareFunction = depthCompareMap[depthCompare];
 
-    if (depthtest)
-    {
-        gl.enable(gl.DEPTH_TEST);
-        //
-        gl.depthFunc(gl[depthCompare]);
-        gl.depthMask(depthWriteEnabled);
-
-        //
-        if (depthBias)
-        {
-            const { factor, units } = depthBias;
-
-            gl.enable(gl.POLYGON_OFFSET_FILL);
-            gl.polygonOffset(factor, units);
-        }
-        else
-        {
-            gl.disable(gl.POLYGON_OFFSET_FILL);
-        }
-    }
-    else
-    {
-        gl.disable(gl.DEPTH_TEST);
-    }
+    console.assert(!!glDepthCompare, `接收到错误值，请从 ${Object.keys(depthCompareMap).toString()} 中取值！`);
+    
+    return glDepthCompare;
 }
 
-export const defaultDepthState: IGLDepthState = { depthtest: false, depthWriteEnabled: true, depthCompare: "LESS" };
-Object.freeze(defaultDepthState);
+const depthCompareMap: { [key: string]: IGLCompareFunction } = {
+    "never": "NEVER",
+    "less": "LESS",
+    "equal": "EQUAL",
+    "less-equal": "LEQUAL",
+    "greater": "GREATER",
+    "not-equal": "NOTEQUAL",
+    "greater-equal": "GEQUAL",
+    "always": "ALWAYS",
+};

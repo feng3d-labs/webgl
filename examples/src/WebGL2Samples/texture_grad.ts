@@ -1,4 +1,6 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -10,14 +12,14 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IGLProgram = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        depthStencil: { depth: { depthtest: true } },
-        primitive: { cullFace: { enableCullFace: true, cullMode: "BACK" } },
+        depthStencil: {},
+        primitive: { cullFace: "back" },
     };
 
     // -- Init buffers
@@ -59,7 +61,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0, 1.0,
         -1.0, 1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         // Front face
@@ -98,7 +99,6 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 0.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // Element buffer
     const cubeVertexIndices = [
@@ -109,41 +109,36 @@ import { getShaderSource, loadImage } from "./utility";
         16, 17, 18, 16, 18, 19, // right
         20, 21, 22, 20, 22, 23 // left
     ];
-    const indexBuffer: IGLIndexBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(cubeVertexIndices), usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 3 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x3" },
+            texcoord: { data: texCoords, format: "float32x2" },
         },
-        index: indexBuffer,
     };
 
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: IGLTexture;
-    let sampler: IGLSampler;
+    let texture: ITexture;
+    let sampler: ISampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
         texture = {
-            target: "TEXTURE_2D",
-            pixelStore: {
-                unpackFlipY: false,
-            },
-            internalformat: "RGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE",
-            storage: { levels: 1, width: 512, height: 512 },
-            writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }]
+            format: "rgba8unorm",
+            mipLevelCount: 1,
+            size: [512, 512],
+            sources: [{
+                image: image, flipY: false,
+            }]
         };
         sampler = {
-            minFilter: "NEAREST",
-            magFilter: "NEAREST",
-            wrapS: "CLAMP_TO_EDGE",
-            wrapT: "CLAMP_TO_EDGE",
+            minFilter: "nearest",
+            magFilter: "nearest",
+            addressModeU: "clamp-to-edge",
+            addressModeV: "clamp-to-edge",
         };
 
         requestAnimationFrame(render);
@@ -202,14 +197,15 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
-        vertexArray,
+        vertices: vertexArray.vertices,
+        indices: new Uint16Array(cubeVertexIndices),
         uniforms: {},
-        drawElements: { indexCount: 36 },
+        drawIndexed: { indexCount: 36 },
     };
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
@@ -228,7 +224,7 @@ import { getShaderSource, loadImage } from "./utility";
         ro.uniforms.pMatrix = perspectiveMatrix;
         ro.uniforms.diffuse = { texture, sampler };
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }
