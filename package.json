@@ -1,7 +1,8 @@
 {
   "name": "@feng3d/webgl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "渲染库",
+  "homepage": "https://feng3d.com/webgl/",
   "author": "feng",
   "type": "module",
   "main": "./src/index.ts",
@@ -30,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/feng3d/webgl-renderer.git"
+    "url": "https://gitee.com/feng3d/webgl.git"
   },
   "publishConfig": {
     "access": "public"
@@ -60,7 +61,7 @@
     "vitest": "^0.32.2"
   },
   "dependencies": {
-    "@feng3d/render-api": "0.0.1",
+    "@feng3d/render-api": "0.0.2",
     "@feng3d/serialization": "^0.8.1",
     "@feng3d/watcher": "^0.8.7"
   }

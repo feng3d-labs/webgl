@@ -97,7 +97,7 @@ async function main()
                 },
             ]
         }]
-    }
+    };
 
     let then = 0;
 

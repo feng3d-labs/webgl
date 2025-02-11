@@ -80,7 +80,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects,
+            renderObjects,
         };
 
         const matrix = new Float32Array([

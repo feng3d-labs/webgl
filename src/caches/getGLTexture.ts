@@ -230,7 +230,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                 {
                     for (let i = 0; i < mipLevelCount; i++)
                     {
-                        gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null)
+                        gl.texImage2D(gl[target], i, gl[format], width, height, 0, gl[format], gl[type], null);
                     }
                 }
                 else
@@ -239,7 +239,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                 }
             }
         }
-    }
+    };
     createTexture();
 
     const updateSources = () =>
@@ -325,7 +325,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                         console.error(`WebGL1 中 不支持 ${target} 纹理类型！`);
                     }
                 }
-                return;
+
+return;
             }
 
             // 处理数据资源
@@ -373,7 +374,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                     gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data);
 
-                    console.assert(!offset, `WebGL1 不支持 IGLTextureDataSource.dataLayout.offset ！`)
+                    console.assert(!offset, `WebGL1 不支持 IGLTextureDataSource.dataLayout.offset ！`);
                 }
                 else
                 {

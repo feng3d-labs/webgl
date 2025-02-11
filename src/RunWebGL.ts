@@ -458,7 +458,7 @@ export class RunWebGL
      */
     private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
     {
-        if (typeof data === 'number')
+        if (typeof data === "number")
         {
             data = [data];
         }
@@ -718,7 +718,7 @@ export class RunWebGL
     {
         if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
         {
-            const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? 'less');
+            const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
             const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
             //
             gl.enable(gl.DEPTH_TEST);
@@ -783,7 +783,7 @@ export class RunWebGL
         gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
         //
-        let blend = targets?.[0]?.blend;
+        const blend = targets?.[0]?.blend;
         if (blend)
         {
             const color: IBlendComponent = blend.color;

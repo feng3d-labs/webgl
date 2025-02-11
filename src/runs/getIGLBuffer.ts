@@ -7,9 +7,9 @@ export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: 
 
     const buffer: IBuffer = {
         size: Math.ceil(data.byteLength / 4) * 4,
-        target: target,
-        usage: usage,
-        data: data,
+        target,
+        usage,
+        data,
     };
     data[_IGLBuffer] = buffer;
 

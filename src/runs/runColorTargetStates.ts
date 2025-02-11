@@ -12,11 +12,11 @@ export function getIGLBlendEquation(operation?: IBlendOperation)
 }
 
 const operationMap: { [key: string]: IGLBlendEquation } = {
-    "add": "FUNC_ADD",
-    "subtract": "FUNC_SUBTRACT",
+    add: "FUNC_ADD",
+    subtract: "FUNC_SUBTRACT",
     "reverse-subtract": "FUNC_REVERSE_SUBTRACT",
-    "min": "MIN",
-    "max": "MAX",
+    min: "MIN",
+    max: "MAX",
 };
 
 export function getIGLBlendFactor(blendFactor: IBlendFactor, operation: IBlendOperation)
@@ -33,18 +33,18 @@ export function getIGLBlendFactor(blendFactor: IBlendFactor, operation: IBlendOp
 }
 
 const blendFactorMap: { [key: string]: IGLBlendFactor } = {
-    "zero": "ZERO",
-    "one": "ONE",
-    "src": "SRC_COLOR",
+    zero: "ZERO",
+    one: "ONE",
+    src: "SRC_COLOR",
     "one-minus-src": "ONE_MINUS_SRC_COLOR",
     "src-alpha": "SRC_ALPHA",
     "one-minus-src-alpha": "ONE_MINUS_SRC_ALPHA",
-    "dst": "DST_COLOR",
+    dst: "DST_COLOR",
     "one-minus-dst": "ONE_MINUS_DST_COLOR",
     "dst-alpha": "DST_ALPHA",
     "one-minus-dst-alpha": "ONE_MINUS_DST_ALPHA",
     "src-alpha-saturated": "SRC_ALPHA_SATURATE",
-    "constant": "CONSTANT_COLOR",
+    constant: "CONSTANT_COLOR",
     "one-minus-constant": "ONE_MINUS_CONSTANT_COLOR",
 };
 

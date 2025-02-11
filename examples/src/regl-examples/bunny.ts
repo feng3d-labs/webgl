@@ -82,8 +82,8 @@ function draw()
         [0, 2.5, 0],
         [0, 1, 0]);
 
-    renderObject.uniforms.projection =
-        mat4.perspective([],
+    renderObject.uniforms.projection
+        = mat4.perspective([],
             Math.PI / 4,
             viewportWidth / viewportHeight,
             0.01,

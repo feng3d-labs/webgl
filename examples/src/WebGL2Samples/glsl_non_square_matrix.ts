@@ -51,7 +51,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         size: [image.width, image.height],
         format: "rgba8unorm",
         sources: [{
-            image: image, flipY: false,
+            image, flipY: false,
         }]
     };
     const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest" };

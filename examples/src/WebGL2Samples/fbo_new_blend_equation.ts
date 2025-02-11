@@ -102,7 +102,7 @@ loadImage(imageUrl, function (image)
 {
     texture = {
         size: [image.width, image.height],
-        sources: [{ image: image, mipLevel: 0 }],
+        sources: [{ image, mipLevel: 0 }],
         format: "rgba8unorm",
         generateMipmap: true,
     };
@@ -129,7 +129,7 @@ function render()
     const renderObjects: IRenderPassObject[] = [];
     const renderPass: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderObjects,
+        renderObjects,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -193,7 +193,6 @@ function render()
     }
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
-
 
     // -- Clean up
     webgl.deleteTexture(texture);

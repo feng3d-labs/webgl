@@ -13,7 +13,7 @@ const dimensionMap: { [key: string]: IGLTextureTarget } = {
     "1d": undefined,
     "2d": "TEXTURE_2D",
     "2d-array": "TEXTURE_2D_ARRAY",
-    "cube": "TEXTURE_CUBE_MAP",
+    cube: "TEXTURE_CUBE_MAP",
     "cube-array": undefined,
     "3d": "TEXTURE_3D",
 };

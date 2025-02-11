@@ -48,7 +48,7 @@ const rp: IRenderPass = {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },
-    renderObjects: renderObjects,
+    renderObjects,
 };
 
 const ro: IRenderObject = {

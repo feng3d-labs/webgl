@@ -370,8 +370,8 @@ import * as vec3 from "./stackgl/gl-vec3";
         camera.tick();
 
         renderObject.uniforms.view = camera.view();
-        renderObject.uniforms.projection =
-            mat4.perspective([],
+        renderObject.uniforms.projection
+            = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,
