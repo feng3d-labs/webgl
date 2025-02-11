@@ -3,7 +3,7 @@ name: GitHub Workflow
 on:
   push:
     branches:
-      - main # 可根据实际情况修改分支名
+      - master
 
 jobs:
   build-and-deploy:
