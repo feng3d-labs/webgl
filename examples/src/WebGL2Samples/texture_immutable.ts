@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                image: image, flipY: false,
+                image, flipY: false,
             }],
         };
         const sampler2D: ISampler = {
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
         const renderObjects: IRenderPassObject[] = [];
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects
+            renderObjects
         };
 
         renderObjects.push(
@@ -172,7 +172,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data: data }],
+            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
         };
         const sampler3D: ISampler = {
             lodMinClamp: 0,

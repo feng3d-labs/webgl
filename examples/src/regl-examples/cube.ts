@@ -118,8 +118,8 @@ import * as mat4 from "./stackgl/gl-mat4";
             [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
             [0, 0.0, 0],
             [0, 1, 0]);
-        renderObject.uniforms.projection =
-            mat4.perspective([],
+        renderObject.uniforms.projection
+            = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,

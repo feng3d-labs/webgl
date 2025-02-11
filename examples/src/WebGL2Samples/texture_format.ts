@@ -144,7 +144,7 @@ import { getShaderSource, loadImage } from "./utility";
                 size: [image.width, image.height],
                 format: textureFormats[i].format,
                 sources: [{
-                    mipLevel: 0, image: image, flipY: false,
+                    mipLevel: 0, image, flipY: false,
                 }],
             };
             samplers[i] = {
@@ -166,7 +166,7 @@ import { getShaderSource, loadImage } from "./utility";
         const renderObjects: IRenderPassObject[] = [];
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects
+            renderObjects
         };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)

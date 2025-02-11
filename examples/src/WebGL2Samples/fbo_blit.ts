@@ -55,7 +55,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         size: [image.width, image.height],
         format: "rgba8unorm",
         sources: [{
-            image: image, flipY: true
+            image, flipY: true
         }],
     };
     const samplerDiffuse: ISampler = {

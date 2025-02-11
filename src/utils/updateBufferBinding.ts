@@ -4,10 +4,10 @@ import { IBufferBindingInfo } from "../caches/getGLProgram";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
 /**
- * 
- * @param uniformBlock 
- * @param uniformData 
- * 
+ *
+ * @param uniformBlock
+ * @param uniformData
+ *
  * @see https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/08%20Advanced%20GLSL/#uniform_1
  */
 export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, uniformData: IBufferBinding)
@@ -57,6 +57,7 @@ export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, unifo
                     {
                         console.warn(`没有找到 统一块变量属性 ${paths.join(".")} 的值！`);
                     }
+
                     return;
                 }
             }
@@ -78,7 +79,7 @@ export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, unifo
             const writeBuffers = buffer.writeBuffers ?? [];
             writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
             buffer.writeBuffers = writeBuffers;
-        }
+        };
 
         update();
         watcher.watchchain(uniformData, paths.join("."), update, undefined, false);

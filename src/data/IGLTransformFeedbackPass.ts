@@ -36,7 +36,7 @@ export interface IGLTransformFeedbackObject
 
     /**
      * 根据顶点数据绘制图元。
-     * 
+     *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
     readonly drawVertex: IDrawVertex;

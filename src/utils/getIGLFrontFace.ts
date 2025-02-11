@@ -9,8 +9,8 @@ export function getIGLFrontFace(frontFace: IFrontFace)
     return glFrontFace;
 }
 const frontFaceMap: { [key: string]: IGLFrontFace } = {
-    "ccw": "CCW",
-    "cw": "CW",
+    ccw: "CCW",
+    cw: "CW",
 };
 
 /**

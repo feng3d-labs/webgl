@@ -75,7 +75,7 @@ import { getShaderSource, loadImage } from "./utility";
         const texture: ITexture = {
             size: [image.width, image.height],
             format: "rgba8unorm",
-            sources: [{ mipLevel: 0, image: image, flipY: false, }],
+            sources: [{ mipLevel: 0, image, flipY: false }],
         };
         const sampler: ISampler = {
             minFilter: "nearest",
@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects
+            renderObjects
         };
 
         const matrix = new Float32Array([

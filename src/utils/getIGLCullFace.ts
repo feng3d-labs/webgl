@@ -10,10 +10,10 @@ export function getIGLCullFace(cullFace: ICullFace)
 }
 
 const cullFaceMap: { [key: string]: IGLCullFace } = {
-    "FRONT_AND_BACK": "FRONT_AND_BACK",
-    "none": "BACK", // 不会开启剔除面功能，什么值无所谓。
-    "front": "FRONT",
-    "back": "BACK",
+    FRONT_AND_BACK: "FRONT_AND_BACK",
+    none: "BACK", // 不会开启剔除面功能，什么值无所谓。
+    front: "FRONT",
+    back: "BACK",
 };
 
 /**

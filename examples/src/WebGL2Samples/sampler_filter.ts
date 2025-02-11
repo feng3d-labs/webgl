@@ -106,7 +106,6 @@ samplers[Corners.TOP_RIGHT].minFilter = "linear";
 samplers[Corners.BOTTOM_RIGHT].minFilter = "linear";
 samplers[Corners.BOTTOM_LEFT].minFilter = "linear";
 
-
 // Mag filter
 samplers[Corners.TOP_LEFT].magFilter = "nearest";
 samplers[Corners.TOP_RIGHT].magFilter = "linear";
@@ -126,7 +125,7 @@ loadImage(imageUrl, function (image)
     texture = {
         size: [image.width, image.height],
         format: "rgba8unorm",
-        sources: [{ image: image, mipLevel: 0 }],
+        sources: [{ image, mipLevel: 0 }],
         generateMipmap: true,
     };
 
@@ -146,7 +145,7 @@ function render()
     const renderObjects: IRenderPassObject[] = [];
     const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderObjects
+        renderObjects
     };
 
     const ro: IRenderObject = {

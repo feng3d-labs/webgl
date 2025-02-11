@@ -111,7 +111,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                     },
                 },
             };
-            vertexArrayMaps[mid].push({ vertexArray, indices: indices });
+            vertexArrayMaps[mid].push({ vertexArray, indices });
         }
     }
 
@@ -143,7 +143,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: renderObjects,
+            renderObjects,
         };
 
         mat4.rotateY(modelView, modelView, rotatationSpeedY);

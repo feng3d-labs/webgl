@@ -6,9 +6,9 @@ export function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: IGLVertexAt
     {
         const element = formatMap[key];
         if (
-            element.numComponents === numComponents &&
-            element.type === type &&
-            !element.normalized === !normalized
+            element.numComponents === numComponents
+            && element.type === type
+            && !element.normalized === !normalized
         )
         {
             return key as IVertexFormat;
@@ -31,39 +31,38 @@ export function getIGLVertexFormat(format: IVertexFormat): IGLVertexFormat
 
 export const formatMap: { [key: string]: IGLVertexFormat } = {
 
-    "uint8x2": { numComponents: 2, type: "UNSIGNED_BYTE", normalized: false },
-    "uint8x4": { numComponents: 4, type: "UNSIGNED_BYTE", normalized: false },
-    "sint8x2": { numComponents: 2, type: "BYTE", normalized: false },
-    "sint8x4": { numComponents: 4, type: "BYTE", normalized: false },
-    "unorm8x2": { numComponents: 2, type: "UNSIGNED_BYTE", normalized: true },
-    "unorm8x4": { numComponents: 4, type: "UNSIGNED_BYTE", normalized: true },
-    "snorm8x2": { numComponents: 2, type: "BYTE", normalized: true },
-    "snorm8x4": { numComponents: 4, type: "BYTE", normalized: true },
-    "uint16x2": { numComponents: 2, type: "UNSIGNED_SHORT", normalized: false },
-    "uint16x4": { numComponents: 4, type: "UNSIGNED_SHORT", normalized: false },
-    "sint16x2": { numComponents: 2, type: "SHORT", normalized: false },
-    "sint16x4": { numComponents: 4, type: "SHORT", normalized: false },
-    "unorm16x2": { numComponents: 2, type: "UNSIGNED_SHORT", normalized: true },
-    "unorm16x4": { numComponents: 4, type: "UNSIGNED_SHORT", normalized: true },
-    "snorm16x2": { numComponents: 2, type: "SHORT", normalized: true },
-    "snorm16x4": { numComponents: 4, type: "SHORT", normalized: true },
-    "float16x2": { numComponents: 2, type: "HALF_FLOAT", normalized: false },
-    "float16x4": { numComponents: 4, type: "HALF_FLOAT", normalized: false },
-    "float32": { numComponents: 1, type: "FLOAT", normalized: false },
-    "float32x2": { numComponents: 2, type: "FLOAT", normalized: false },
-    "float32x3": { numComponents: 3, type: "FLOAT", normalized: false },
-    "float32x4": { numComponents: 4, type: "FLOAT", normalized: false },
-    "uint32": { numComponents: 1, type: "UNSIGNED_INT", normalized: false },
-    "uint32x2": { numComponents: 2, type: "UNSIGNED_INT", normalized: false },
-    "uint32x3": { numComponents: 3, type: "UNSIGNED_INT", normalized: false },
-    "uint32x4": { numComponents: 4, type: "UNSIGNED_INT", normalized: false },
-    "sint32": { numComponents: 1, type: "INT", normalized: false },
-    "sint32x2": { numComponents: 2, type: "INT", normalized: false },
-    "sint32x3": { numComponents: 3, type: "INT", normalized: false },
-    "sint32x4": { numComponents: 4, type: "INT", normalized: false },
+    uint8x2: { numComponents: 2, type: "UNSIGNED_BYTE", normalized: false },
+    uint8x4: { numComponents: 4, type: "UNSIGNED_BYTE", normalized: false },
+    sint8x2: { numComponents: 2, type: "BYTE", normalized: false },
+    sint8x4: { numComponents: 4, type: "BYTE", normalized: false },
+    unorm8x2: { numComponents: 2, type: "UNSIGNED_BYTE", normalized: true },
+    unorm8x4: { numComponents: 4, type: "UNSIGNED_BYTE", normalized: true },
+    snorm8x2: { numComponents: 2, type: "BYTE", normalized: true },
+    snorm8x4: { numComponents: 4, type: "BYTE", normalized: true },
+    uint16x2: { numComponents: 2, type: "UNSIGNED_SHORT", normalized: false },
+    uint16x4: { numComponents: 4, type: "UNSIGNED_SHORT", normalized: false },
+    sint16x2: { numComponents: 2, type: "SHORT", normalized: false },
+    sint16x4: { numComponents: 4, type: "SHORT", normalized: false },
+    unorm16x2: { numComponents: 2, type: "UNSIGNED_SHORT", normalized: true },
+    unorm16x4: { numComponents: 4, type: "UNSIGNED_SHORT", normalized: true },
+    snorm16x2: { numComponents: 2, type: "SHORT", normalized: true },
+    snorm16x4: { numComponents: 4, type: "SHORT", normalized: true },
+    float16x2: { numComponents: 2, type: "HALF_FLOAT", normalized: false },
+    float16x4: { numComponents: 4, type: "HALF_FLOAT", normalized: false },
+    float32: { numComponents: 1, type: "FLOAT", normalized: false },
+    float32x2: { numComponents: 2, type: "FLOAT", normalized: false },
+    float32x3: { numComponents: 3, type: "FLOAT", normalized: false },
+    float32x4: { numComponents: 4, type: "FLOAT", normalized: false },
+    uint32: { numComponents: 1, type: "UNSIGNED_INT", normalized: false },
+    uint32x2: { numComponents: 2, type: "UNSIGNED_INT", normalized: false },
+    uint32x3: { numComponents: 3, type: "UNSIGNED_INT", normalized: false },
+    uint32x4: { numComponents: 4, type: "UNSIGNED_INT", normalized: false },
+    sint32: { numComponents: 1, type: "INT", normalized: false },
+    sint32x2: { numComponents: 2, type: "INT", normalized: false },
+    sint32x3: { numComponents: 3, type: "INT", normalized: false },
+    sint32x4: { numComponents: 4, type: "INT", normalized: false },
     "unorm10-10-10-2": { numComponents: 4, type: "UNSIGNED_INT_2_10_10_10_REV", normalized: true },
 };
-
 
 interface IGLVertexFormat
 {

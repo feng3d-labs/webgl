@@ -47,7 +47,7 @@ import { getShaderSource, loadImage } from "./utility";
     const vertices: IVertexAttributes = {
         position: { data: vertexPosBuffer, format: "float32x2" },
         textureCoordinates: { data: vertexTexBuffer, format: "float32x2" },
-    }
+    };
 
     // -- Load texture then render
 
@@ -59,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
         texture = {
             size: [image.width, image.height],
             format: "rgba8unorm-srgb",
-            sources: [{ mipLevel: 0, image: image }],
+            sources: [{ mipLevel: 0, image }],
         };
         sampler = { minFilter: "nearest", magFilter: "nearest" };
 
@@ -72,7 +72,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Clear color buffer
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects,
+            renderObjects,
         };
 
         const matrix = new Float32Array([

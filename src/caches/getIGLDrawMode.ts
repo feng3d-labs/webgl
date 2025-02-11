@@ -17,8 +17,8 @@ const drawModeMap: { [key: string]: IGLDrawMode } = {
     "line-strip": "LINE_STRIP",
     "triangle-list": "TRIANGLES",
     "triangle-strip": "TRIANGLE_STRIP",
-    "LINE_LOOP": "LINE_LOOP",
-    "TRIANGLE_FAN": "TRIANGLE_FAN",
+    LINE_LOOP: "LINE_LOOP",
+    TRIANGLE_FAN: "TRIANGLE_FAN",
 };
 
 /**

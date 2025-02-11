@@ -108,7 +108,7 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
         }
 
         return undefined;
-    }
+    };
 
     return { begin, end, resolve } as IGLOcclusionQueryStep;
 }

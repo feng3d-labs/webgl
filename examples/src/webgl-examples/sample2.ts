@@ -44,7 +44,7 @@ function main()
             },
             vertices: {
                 aVertexPosition: {
-                    format:"float32x2",
+                    format: "float32x2",
                     data: new Float32Array([
                         1.0, 1.0,
                         -1.0, 1.0,
