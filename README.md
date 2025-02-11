@@ -10,7 +10,7 @@ feng3d引擎的WebGL渲染器，可以让用户无需直接接触WebGL的API，�
 
 ## 安装
 ```
-npm install @feng3d/webgl
+npm i @feng3d/webgl@0.0.3
 ```
 
 ## 如何使用
