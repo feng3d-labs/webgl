@@ -10,20 +10,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Clean pnpm cache
-        run: pnpm cache clean
-      - uses: pnpm/action-setup@v2.2.1 # 尝试更换版本
+        run: npm cache clean
+      - uses: npm/action-setup@v2.2.1 # 尝试更换版本
         with:
           version: latest
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: latest
-          cache: 'pnpm'
+          cache: 'npm'
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile
+        run: npm i --no-frozen-lockfile
       - name: Lint
-        run: pnpm run lint
+        run: npm run lint
       - name: Build
-        run: pnpm run build
+        run: npm run build
       - name: Test
-        run: pnpm run test
+        run: npm run test
