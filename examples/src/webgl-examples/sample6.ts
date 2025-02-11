@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, IGLSampler, IGLTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -20,9 +21,9 @@ async function main()
 
   const texture = await loadTexture("../../cubetexture.png");
 
-  const renderObject: IGLRenderObject = {
+  const renderObject: IRenderObject = {
     pipeline: {
-      primitive: { topology: "TRIANGLES" },
+      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;
@@ -47,38 +48,24 @@ async function main()
           gl_FragColor = texture2D(uSampler, vTextureCoord);
         }
       ` },
-      depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+      depthStencil: { depthCompare: "less-equal" }
     },
-    vertexArray: {
-      vertices: {
-        aVertexPosition: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.position,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 3,
-          normalized: false,
-        },
-        aTextureCoord: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.textureCoord,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 2,
-          normalized: false,
-        },
+    vertices: {
+      aVertexPosition: {
+        format: "float32x3",
+        data: buffers.position,
       },
-      index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
+      aTextureCoord: {
+        format: "float32x2",
+        data: buffers.textureCoord,
+      },
     },
+    indices: buffers.indices,
     uniforms: { uSampler: texture },
-    drawElements: { firstIndex: 0, indexCount: 36 },
+    drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IGLRenderPass = {
+  const renderPass: IRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -106,7 +93,7 @@ async function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    webgl.runRenderPass(renderPasss);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
     requestAnimationFrame(render);
   }
@@ -233,19 +220,17 @@ async function loadTexture(url: string)
 
   const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-  const texture: IGLTexture = {
-    target: "TEXTURE_2D", internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE",
-    sources: [{ source: img }],
+  const texture: ITexture = {
+    size: [img.width, img.height],
+    format: "rgba8unorm",
+    sources: [{ image: img }],
+    generateMipmap,
   };
 
-  let sampler: IGLSampler = {};
+  let sampler: ISampler = {};
   if (generateMipmap)
   {
-    texture.generateMipmap = generateMipmap;
-  }
-  else
-  {
-    sampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "LINEAR" };
+    sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
   }
 
   return { texture, sampler };

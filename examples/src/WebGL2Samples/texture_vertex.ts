@@ -1,21 +1,23 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
-    const IDrawMode2Name = {
-        0: "POINTS",
-        3: "LINE_STRIP",
+    const IDrawMode2Name: { [key: string]: IPrimitiveTopology } = {
+        0: "point-list",
+        3: "line-strip",
         2: "LINE_LOOP",
-        1: "LINES",
-        5: "TRIANGLE_STRIP",
+        1: "line-list",
+        5: "triangle-strip",
         6: "TRIANGLE_FAN",
-        4: "TRIANGLES",
+        4: "triangle-list",
     };
 
-    const VertexAttributeType2Name = {
+    const VertexAttributeType2Name = Object.freeze({
         5126: "FLOAT",
         5120: "BYTE",
         5122: "SHORT",
@@ -26,7 +28,7 @@ import { getShaderSource, loadImage } from "./utility";
         5125: "UNSIGNED_INT",
         36255: "INT_2_10_10_10_REV",
         33640: "UNSIGNED_INT_2_10_10_10_REV"
-    };
+    });
 
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
@@ -34,28 +36,27 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IGLProgram = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LESS" } },
+        depthStencil: { depthCompare: "less" },
     };
 
-    const vertexArrayMaps = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: IVertexAttributes, indices: IIndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IGLVertexBuffer;
-    let indicesBuffer: IGLIndexBuffer;
-    let vertexArray: IGLVertexArrayObject;
+    let vertexBuffer: IVertexDataTypes;
+    let indicesBuffer: IIndicesDataTypes;
 
-    let texture: IGLTexture;
-    let sampler: IGLSampler;
+    let texture: ITexture;
+    let sampler: ISampler;
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
     };
 
@@ -80,10 +81,10 @@ import { getShaderSource, loadImage } from "./utility";
 
                 // -- Initialize buffer
                 const vertices = primitive.vertexBuffer;
-                vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+                vertexBuffer = vertices;
 
                 const indices = primitive.indices;
-                indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
+                indicesBuffer = indices;
 
                 // -- VertexAttribPointer
                 const positionInfo = primitive.attributes.POSITION;
@@ -91,15 +92,13 @@ import { getShaderSource, loadImage } from "./utility";
                 const texcoordInfo = primitive.attributes.TEXCOORD_0;
 
                 //
-                vertexArray = {
+                vertexArrayMaps[mid].push({
                     vertices: {
-                        position: { buffer: vertexBuffer, numComponents: positionInfo.size, type: VertexAttributeType2Name[positionInfo.type], vertexSize: positionInfo.stride, offset: positionInfo.offset },
-                        normal: { buffer: vertexBuffer, numComponents: normalInfo.size, type: VertexAttributeType2Name[normalInfo.type], vertexSize: normalInfo.stride, offset: normalInfo.offset },
-                        texcoord: { buffer: vertexBuffer, numComponents: texcoordInfo.size, type: VertexAttributeType2Name[texcoordInfo.type], vertexSize: texcoordInfo.stride, offset: texcoordInfo.offset },
-                    },
-                    index: indicesBuffer,
-                };
-                vertexArrayMaps[mid].push(vertexArray);
+                        position: { data: vertexBuffer, format: getIVertexFormat(positionInfo.size, VertexAttributeType2Name[positionInfo.type]), arrayStride: positionInfo.stride, offset: positionInfo.offset },
+                        normal: { data: vertexBuffer, format: getIVertexFormat(normalInfo.size, VertexAttributeType2Name[normalInfo.type]), arrayStride: normalInfo.stride, offset: normalInfo.offset },
+                        texcoord: { data: vertexBuffer, format: getIVertexFormat(texcoordInfo.size, VertexAttributeType2Name[texcoordInfo.type]), arrayStride: texcoordInfo.stride, offset: texcoordInfo.offset },
+                    }, indices: indicesBuffer
+                });
             }
         }
 
@@ -109,19 +108,16 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Init 2D Texture
             texture = {
-                target: "TEXTURE_2D",
-                internalformat: "RGB8",
-                format: "RGB",
-                type: "UNSIGNED_BYTE",
-                pixelStore: { unpackFlipY: false },
-                storage: { levels: 1, width: 256, height: 256 },
-                writeTextures: [{ level: 0, xoffset: 0, yoffset: 0, source: image }],
+                format: "rgba8unorm",
+                mipLevelCount: 1,
+                size: [256, 256],
+                sources: [{ image: image, flipY: false, }],
             };
             sampler = {
-                minFilter: "NEAREST",
-                magFilter: "NEAREST",
-                wrapS: "CLAMP_TO_EDGE",
-                wrapT: "CLAMP_TO_EDGE",
+                minFilter: "nearest",
+                magFilter: "nearest",
+                addressModeU: "clamp-to-edge",
+                addressModeV: "clamp-to-edge",
             };
 
             requestAnimationFrame(render);
@@ -189,13 +185,14 @@ import { getShaderSource, loadImage } from "./utility";
     const localMV = mat4.create();
     function render()
     {
+        const renderObjects: IRenderPassObject[] = [];
         // -- Render
-        const rp: IGLRenderPass = {
+        const rp: IRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         orientation[0] = 0.00020; // yaw
@@ -217,23 +214,25 @@ import { getShaderSource, loadImage } from "./utility";
 
                 mat4.multiply(localMV, mvMatrix, primitive.matrix);
 
-                rp.renderObjects.push({
+                renderObjects.push({
                     pipeline: {
                         ...program,
                         primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
-                    vertexArray: vertexArrayMaps[mid][i],
+                    vertices: vertexArrayMaps[mid][i].vertices,
+                    indices: vertexArrayMaps[mid][i].indices,
                     uniforms: {
                         mvMatrix: localMV,
                         pMatrix: perspectiveMatrix,
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    drawElements: { indexCount: primitive.indices.length }
+                    drawIndexed: { indexCount: primitive.indices.length }
                 });
             }
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

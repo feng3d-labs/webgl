@@ -1,4 +1,4 @@
-import { IGLBuffer } from "./IGLBuffer";
+import { IVertexDataTypes } from "@feng3d/render-api";
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/createTransformFeedback
@@ -15,5 +15,5 @@ export interface IGLTransformFeedbacBindBuffer
 {
     index: number;
 
-    buffer: IGLBuffer;
+    data: IVertexDataTypes;
 }

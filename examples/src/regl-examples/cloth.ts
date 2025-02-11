@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { getIGLVertexBuffer, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -9,11 +10,8 @@ import * as vec3 from "./stackgl/gl-vec3";
 {
     const canvas = document.createElement("canvas");
     canvas.id = "glcanvas";
-    canvas.style.position = "fixed";
-    canvas.style.left = "0px";
-    canvas.style.top = "0px";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
     const webgl = new WebGL({ canvasId: "glcanvas" });
@@ -166,25 +164,15 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IGLRenderObject = {
-        vertexArray: {
-            vertices: {
-                position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-                normal: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(normals) }, numComponents: 3 },
-                uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
-            },
-            index: { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(indices) }
+    const renderObject: IRenderObject = {
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+            normal: { data: new Float32Array(normals), format: "float32x3" },
+            uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
-        uniforms: {
-            view: () => camera.view(),
-            projection: () =>
-                mat4.perspective([],
-                    Math.PI / 4,
-                    viewportWidth / viewportHeight,
-                    0.01,
-                    1000),
-            texture: () => diffuse,
-        },
+        indices: new Uint16Array(indices),
+        drawIndexed: { indexCount: indices.length },
+        uniforms: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -229,8 +217,18 @@ import * as vec3 from "./stackgl/gl-vec3";
         }`,
                 targets: [{ blend: {} }],
             },
-            depthStencil: { depth: { depthtest: true } },
+            depthStencil: {},
         }
+    };
+
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
     };
 
     function draw()
@@ -361,8 +359,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        renderObject.vertexArray.vertices.position.buffer.data = new Float32Array(positions);
-        renderObject.vertexArray.vertices.normal.buffer.data = new Float32Array(normals);
+        getIGLVertexBuffer(renderObject.vertices.position.data).data = new Float32Array(positions);
+        getIGLVertexBuffer(renderObject.vertices.normal.data).data = new Float32Array(normals);
 
         tick++;
 
@@ -371,7 +369,15 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        webgl.runRenderPass({ renderObjects: [renderObject] });
+        renderObject.uniforms.view = camera.view();
+        renderObject.uniforms.projection =
+            mat4.perspective([],
+                Math.PI / 4,
+                viewportWidth / viewportHeight,
+                0.01,
+                1000);
+
+        webgl.submit(submit);
 
         requestAnimationFrame(draw);
     }
@@ -380,7 +386,14 @@ import * as vec3 from "./stackgl/gl-vec3";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = { texture: { generateMipmap: true, sources: [{ source: img }] }, sampler: { minFilter: "LINEAR_MIPMAP_LINEAR", wrapS: "REPEAT", wrapT: "REPEAT" } };
+    const diffuse: IGLSamplerTexture = {
+        texture: {
+            size: [img.width, img.height],
+            generateMipmap: true,
+            sources: [{ image: img }]
+        }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
+    };
+    renderObject.uniforms.texture = diffuse;
 
     draw();
 })();

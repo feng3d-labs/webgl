@@ -3,7 +3,6 @@
   "version": "0.0.2",
   "description": "渲染库",
   "author": "feng",
-  "license": "MIT",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -61,7 +60,8 @@
     "vitest": "^0.32.2"
   },
   "dependencies": {
+    "@feng3d/render-api": "0.0.1",
     "@feng3d/serialization": "^0.8.1",
-    "@feng3d/watcher": "^0.8.3"
+    "@feng3d/watcher": "^0.8.7"
   }
 }

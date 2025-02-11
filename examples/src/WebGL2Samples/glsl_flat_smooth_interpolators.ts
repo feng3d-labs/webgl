@@ -1,4 +1,5 @@
-import { IGLIndexBuffer, IGLProgram, IGLRenderPass, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -9,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -24,7 +25,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
+const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -41,16 +42,16 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs: IGLProgram[] = [
+const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
-        primitive: { topology: "TRIANGLES" },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+        primitive: { topology: "triangle-list" },
+        depthStencil: { depthCompare: "less-equal" },
     },
     {
         vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
-        primitive: { topology: "TRIANGLES" },
-        depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } },
+        primitive: { topology: "triangle-list" },
+        depthStencil: { depthCompare: "less-equal" },
     }
 ];
 // -- Load gltf then render
@@ -63,7 +64,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: IGLVertexArrayObject[]
+        [key: string]: { vertexArray: { vertices?: IVertexAttributes }, indices: IIndicesDataTypes }[]
     } = {};
 
     // var in loop
@@ -72,9 +73,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexBuffer: IGLVertexBuffer;
-    let indicesBuffer: IGLIndexBuffer;
-    let vertexArray: IGLVertexArrayObject;
+    let vertexArray: { vertices?: IVertexAttributes };
 
     let i: number; let len: number;
 
@@ -93,10 +92,8 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
             // -- Initialize buffer
             const vertices = primitive.vertexBuffer;
-            vertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
 
             const indices = primitive.indices;
-            indicesBuffer = { target: "ELEMENT_ARRAY_BUFFER", data: indices, usage: "STATIC_DRAW" };
 
             // -- VertexAttribPointer
             const positionInfo = primitive.attributes.POSITION;
@@ -105,17 +102,16 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             vertexArray = {
                 vertices: {
                     position: {
-                        buffer: vertexBuffer, numComponents: positionInfo.size, normalized: false,
-                        vertexSize: positionInfo.stride, offset: positionInfo.offset
+                        data: vertices, format: getIVertexFormat(positionInfo.size),
+                        arrayStride: positionInfo.stride, offset: positionInfo.offset
                     },
                     normal: {
-                        buffer: vertexBuffer, numComponents: normalInfo.size, normalized: false,
-                        vertexSize: normalInfo.stride, offset: normalInfo.offset
+                        data: vertices, format: getIVertexFormat(normalInfo.size),
+                        arrayStride: normalInfo.stride, offset: normalInfo.offset
                     },
                 },
-                index: indicesBuffer,
             };
-            vertexArrayMaps[mid].push(vertexArray);
+            vertexArrayMaps[mid].push({ vertexArray, indices: indices });
         }
     }
 
@@ -141,12 +137,13 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
-        const rp: IGLRenderPass = {
+        const renderObjects: IRenderPassObject[] = [];
+        const rp: IRenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         mat4.rotateY(modelView, modelView, rotatationSpeedY);
@@ -165,24 +162,28 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 mat4.invert(localMVNormal, localMV);
                 mat4.transpose(localMVNormal, localMVNormal);
 
-                const vertexArray = vertexArrayMaps[mid][i];
+                const vertexArray = vertexArrayMaps[mid][i].vertexArray;
+                const indices = vertexArrayMaps[mid][i].indices;
 
                 for (i = 0; i < VIEWPORTS.MAX; ++i)
                 {
-                    rp.renderObjects.push({
-                        pipeline: programs[i],
-                        vertexArray,
-                        uniforms: {
-                            mvp: localMVP,
-                            mvNormal: localMVNormal,
-                        },
-                        viewport: viewport[i],
-                        drawElements: { indexCount: primitive.indices.length, firstIndex: 0 },
-                    });
+                    renderObjects.push(
+                        {
+                            viewport: viewport[i],
+                            pipeline: programs[i],
+                            vertices: vertexArray.vertices,
+                            indices,
+                            uniforms: {
+                                mvp: localMVP,
+                                mvNormal: localMVNormal,
+                            },
+                            drawIndexed: { indexCount: primitive.indices.length, firstIndex: 0 },
+                        });
                 }
             }
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     })();

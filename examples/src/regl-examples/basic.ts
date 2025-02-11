@@ -1,4 +1,5 @@
-import { IGLRenderObject, WebGL } from "@feng3d/webgl";
+import { IRenderObject } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -7,31 +8,24 @@ export type gPartial<T> = {
     [P in keyof T]?: T[P] | gPartial<T[P]>;
 };
 
-const webglcanvas = document.createElement("canvas");
-webglcanvas.id = "glcanvas";
-webglcanvas.style.position = "fixed";
-webglcanvas.style.left = "0px";
-webglcanvas.style.top = "0px";
-webglcanvas.style.width = "100%";
-webglcanvas.style.height = "100%";
-document.body.appendChild(webglcanvas);
+const canvas = document.createElement("canvas");
+canvas.id = "glcanvas";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
-const renderObject: IGLRenderObject = {
-    vertexArray: {
-        vertices: {
-            position: {
-                buffer: {
-                    target: "ARRAY_BUFFER",
-                    data: new Float32Array([
-                        -1, 0,
-                        0, -1,
-                        1, 1
-                    ])
-                }, numComponents: 2
-            },
-        }
+const renderObject: IRenderObject = {
+    vertices: {
+        position: {
+            data: new Float32Array([
+                -1, 0,
+                0, -1,
+                1, 1
+            ]),
+            format: "float32x2",
+        },
     },
     uniforms: { color: [1, 0, 0, 1] },
     pipeline: {
@@ -53,17 +47,25 @@ const renderObject: IGLRenderObject = {
             `,
             targets: [{ blend: {} }],
         },
-        depthStencil: { depth: { depthtest: true } },
-    }
+        depthStencil: {},
+    },
+    drawVertex: { vertexCount: 3 },
 };
 
 function draw()
 {
-    webglcanvas.width = webglcanvas.clientWidth;
-    webglcanvas.height = webglcanvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
-    webgl.runRenderPass({
-        renderObjects: [renderObject]
+    webgl.submit({
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
     });
 
     requestAnimationFrame(draw);

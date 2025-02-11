@@ -1,8 +1,15 @@
-import { defaultCanvasContext } from "./defaultWebGLCanvasContext";
+import { IGLCanvasContext } from "../data/IGLCanvasContext";
 
 /**
- * 默认值
+ * 默认WebGL上下文信息。
  */
-export const defaults = Object.freeze({
-    webGLCanvasContext: defaultCanvasContext,
+export const defaultCanvasContext: IGLCanvasContext = Object.freeze({
+    contextId: "webgl2",
+    depth: true,
+    stencil: true,
+    antialias: false,
+    premultipliedAlpha: true,
+    preserveDrawingBuffer: false,
+    powerPreference: "default",
+    failIfMajorPerformanceCaveat: false,
 });

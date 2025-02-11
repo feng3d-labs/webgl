@@ -1,67 +1,73 @@
-/**
- * WebGL缓冲区
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
- */
-export interface IGLBuffer
-{
-    target: GLBufferTarget;
+import { IBuffer, IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api";
 
-    /** 
-     * 被bindBuffer多次绑定到不同位置时，需要填入多个值。
-     * 
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/bindBuffer) 
+declare module "@feng3d/render-api"
+{
+    /**
+     * WebGL缓冲区
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    targets?: GLBufferTarget[];
+    export interface IBuffer
+    {
+        target: IGLBufferTarget;
+
+        /**
+         * 为优化目的指定数据存储的预期使用模式的GLenum。
+         *
+         * 默认为 "STATIC_DRAW"。
+         */
+        usage?: IGLBufferUsage;
+    }
+}
+
+export interface IGLVertexBuffer extends IBuffer
+{
+    target: "ARRAY_BUFFER";
 
     /**
      * 缓冲区数据。
      */
-    data?: BufferSource;
-
-    /**
-     * 创建指定尺寸的空缓冲区。
-     */
-    size?: number;
-
-    /**
-     * 为优化目的指定数据存储的预期使用模式的GLenum。
-     *
-     * 默认为 "STATIC_DRAW"。
-     */
-    usage?: GLBufferUsage;
-
-    /**
-     * 写缓冲区。
-     */
-    writeBuffers?: IGLWriteBuffer[];
-}
-
-export interface IGLWriteBuffer
-{
-    bufferOffset?: number;
-
-    /**
-     * 写入缓冲区数据。
-     */
-    data: BufferSource;
-
-    dataOffset?: number
-
-    size?: number
+    data?: IVertexDataTypes;
 }
 
 /**
- * 属性缓冲数据类型。
+ * WebGL元素缓冲，顶点索引缓冲。
+ *
+ * 使用 gl.ELEMENT_ARRAY_BUFFER 进行绑定数据。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
+ *
  */
-export type IAttributeBufferSourceTypes =
-    | Float32Array
-    | Uint32Array
-    | Int32Array
-    | Uint16Array
-    | Int16Array | Uint8ClampedArray
-    | Uint8Array
-    | Int8Array;
+export interface IGLIndexBuffer extends IBuffer
+{
+    target: "ELEMENT_ARRAY_BUFFER";
+
+    /**
+     * 顶点索引数据。
+     */
+    data: IIndicesDataTypes;
+}
+
+export interface IGLUniformBuffer extends IBuffer
+{
+    target: "UNIFORM_BUFFER";
+}
+
+/**
+ * 元素缓冲数据类型。
+ *
+ * A GLenum specifying the type of the values in the element array buffer. Possible values are:
+ *
+ * * gl.UNSIGNED_BYTE
+ * * gl.UNSIGNED_SHORT
+ *
+ * When using the OES_element_index_uint extension:
+ *
+ * * gl.UNSIGNED_INT
+ *
+ * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
+ */
+export type IGLDrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT";
 
 /**
  * A GLenum specifying the intended usage pattern of the data store for optimization purposes. Possible values:
@@ -81,7 +87,7 @@ export type IAttributeBufferSourceTypes =
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export type GLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
+export type IGLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
     | "STATIC_READ" | "DYNAMIC_READ" | "STREAM_READ" | "STATIC_COPY" | "DYNAMIC_COPY" | "STREAM_COPY" // WebGL2
     ;
 
@@ -100,7 +106,6 @@ export type GLBufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // We
  * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
  *
  */
-export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
+export type IGLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
     | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
     | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
-// export type GLBufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" | "UNIFORM_BUFFER"; 

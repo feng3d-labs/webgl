@@ -1,4 +1,5 @@
-import { IGLCopyBuffer, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { ICopyBufferToBuffer, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,13 +12,13 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IGLRenderPipeline = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     };
 
     // -- Init Buffer
@@ -29,38 +30,37 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
 
-    const vertexPosBufferDst: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: new Float32Array(vertices.length), usage: "STATIC_DRAW" };
+    const vertexPosBufferDst = new Float32Array(vertices.length);
 
-    const cb: IGLCopyBuffer = {
-        read: vertexPosBufferSrc,
-        write: vertexPosBufferDst,
-        readOffset: 0, writeOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
+    const cb: ICopyBufferToBuffer = {
+        __type: "CopyBufferToBuffer",
+        source: vertexPosBufferSrc,
+        destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),
+        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
     };
-    webgl.runCopyBuffer(cb);
 
     // -- Init Vertex Array
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            pos: { buffer: vertexPosBufferDst, numComponents: 2 },
+            pos: { data: vertexPosBufferDst, format: "float32x2" },
         }
     };
 
     // -- Render
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertexArray,
-            drawArrays: { vertexCount: 6 },
+            vertices: vertexArray.vertices,
+            drawVertex: { vertexCount: 6 },
         }]
     };
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [cb, rp] }] });
 
     // -- Delete WebGL resources
     webgl.deleteBuffer(vertexPosBufferSrc);
-    webgl.deleteBuffer(vertexPosBufferDst);
     webgl.deleteProgram(program);
-    webgl.deleteVertexArray(vertexArray);
 })();

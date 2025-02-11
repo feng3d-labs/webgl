@@ -30,7 +30,6 @@ export interface ShaderConfig
 
 /**
  * 渲染代码库
-
  */
 export class ShaderLib
 {

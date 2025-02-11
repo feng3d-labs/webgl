@@ -1,4 +1,6 @@
-import { IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,23 +13,21 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: IGLProgram = {
+        const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
-            fragment: { code: fragmentShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
-            rasterizerDiscard: true,
         };
 
-        return programTransform;
+        return transformFeedbackPipeline;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: IGLProgram = {
+    const programFeedback: IRenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
@@ -54,27 +54,25 @@ import { getShaderSource } from "./utility";
         MAX: 3
     };
 
-    const buffers: IGLVertexBuffer[] = [
+    const buffers: IVertexDataTypes[] = [
         // Transform buffer
-        { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
+        positions,
         // Feedback empty buffers
-        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        // { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" },
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
-        { target: "ARRAY_BUFFER", size: positions.length * Float32Array.BYTES_PER_ELEMENT, usage: "STATIC_COPY" },
+        positions.slice(),
+        positions.slice(),
     ];
 
     // -- Init Transform Vertex Array
-    const vertexArrays: IGLVertexArrayObject[] = [
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[] = [
         {
             vertices: {
-                position: { buffer: buffers[BufferType.VERTEX], numComponents: 4 },
+                position: { data: buffers[BufferType.VERTEX], format: "float32x4" },
             }
         },
         {
             vertices: {
-                position: { buffer: buffers[BufferType.POSITION], numComponents: 4 },
-                color: { buffer: buffers[BufferType.COLOR], numComponents: 4 },
+                position: { data: buffers[BufferType.POSITION], format: "float32x4" },
+                color: { data: buffers[BufferType.COLOR], format: "float32x4" },
             }
         },
     ];
@@ -82,15 +80,9 @@ import { getShaderSource } from "./utility";
     // -- Init TransformFeedback
     const transformFeedback: IGLTransformFeedback = {
         bindBuffers: [
-            { index: 0, buffer: buffers[BufferType.POSITION] },
-            { index: 1, buffer: buffers[BufferType.COLOR] },
+            { index: 0, data: buffers[BufferType.POSITION] },
+            { index: 1, data: buffers[BufferType.COLOR] },
         ]
-    };
-
-    // -- Render
-    const rp: IGLRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [],
     };
 
     // First draw, capture the attributes
@@ -103,22 +95,38 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    rp.renderObjects.push({
-        pipeline: programs[PROGRAM_TRANSFORM],
-        vertexArray: vertexArrays[PROGRAM_TRANSFORM],
-        uniforms: { MVP: matrix },
-        transformFeedback,
-        drawArrays: { vertexCount: VERTEX_COUNT },
-    });
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [
+                        {
+                            pipeline: programTransform,
+                            vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
+                            uniforms: { MVP: matrix },
+                            transformFeedback,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ]
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [
+                        // Second draw, reuse captured attributes
+                        {
+                            pipeline: programs[PROGRAM_FEEDBACK],
+                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                            drawVertex: { vertexCount: VERTEX_COUNT },
+                        }
+                    ],
+                }
+            ]
+        }]
+    };
 
-    // Second draw, reuse captured attributes
-    rp.renderObjects.push({
-        pipeline: programs[PROGRAM_FEEDBACK],
-        vertexArray: vertexArrays[PROGRAM_FEEDBACK],
-        drawArrays: { vertexCount: VERTEX_COUNT },
-    });
-
-    webgl.runRenderPass(rp);
+    webgl.submit(submit);
 
     // -- Delete WebGL resources
     // gl.deleteTransformFeedback(transformFeedback);

@@ -1,4 +1,5 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -10,7 +11,7 @@ import { getShaderSource } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Divide viewport
@@ -78,23 +79,23 @@ import { getShaderSource } from "./utility";
         }
     }
 
-    const texture: IGLTexture = {
-        target: "TEXTURE_3D",
-        internalformat: "R8",
-        format: "RED",
-        type: "UNSIGNED_BYTE",
+    const texture: ITexture = {
+        size: [SIZE, SIZE, SIZE],
+        dimension: "3d",
+        format: "r8unorm",
         generateMipmap: true,
-        sources: [{ level: 0, width: SIZE, height: SIZE, depth: SIZE, border: 0, pixels: data }],
+        sources: [{ __type: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data: data }],
     };
-    const sampler: IGLSampler = {
+    const sampler: ISampler = {
         lodMinClamp: 0,
         lodMaxClamp: Math.log2(SIZE),
-        minFilter: "LINEAR_MIPMAP_LINEAR",
-        magFilter: "LINEAR",
+        minFilter: "linear",
+        magFilter: "linear",
+        mipmapFilter: "linear",
     };
 
     // -- Initialize program
-    const program: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -105,7 +106,6 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -115,14 +115,13 @@ import { getShaderSource } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Initilize vertex array
 
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            in_texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x2" },
+            in_texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
@@ -158,27 +157,27 @@ import { getShaderSource } from "./utility";
         ];
     }
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
         uniforms: {
             diffuse: { texture, sampler },
         },
-        vertexArray,
-        drawArrays: { vertexCount: 6 }
+        vertices: vertexArray.vertices,
+        drawVertex: { vertexCount: 6 }
     };
 
-    const renderObjects: IGLRenderObject[] = [];
+    const renderPassObjects: IRenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        renderObjects.push({
+        renderPassObjects.push({
             ...ro,
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
         });
     }
 
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects,
+        renderObjects: renderPassObjects,
     };
 
     function render()
@@ -195,10 +194,10 @@ import { getShaderSource } from "./utility";
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            renderObjects[i].uniforms.orientation = matrices[i];
+            renderPassObjects[i].uniforms.orientation = matrices[i];
         }
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

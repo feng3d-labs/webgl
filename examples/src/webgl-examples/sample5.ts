@@ -1,4 +1,5 @@
-import { IGLRenderObject, IGLRenderPass, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -18,9 +19,9 @@ function main()
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const renderObject: IGLRenderObject = {
+  const renderObject: IRenderObject = {
     pipeline: {
-      primitive: { topology: "TRIANGLES" },
+      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;
@@ -43,38 +44,24 @@ function main()
           gl_FragColor = vColor;
         }
       ` },
-      depthStencil: { depth: { depthtest: true, depthCompare: "LEQUAL" } }
+      depthStencil: { depthCompare: "less-equal" }
     },
-    vertexArray: {
-      vertices: {
-        aVertexPosition: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.position,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 3,
-          normalized: false,
-        },
-        aVertexColor: {
-          type: "FLOAT",
-          buffer: {
-            target: "ARRAY_BUFFER",
-            data: buffers.color,
-            usage: "STATIC_DRAW",
-          },
-          numComponents: 4,
-          normalized: false,
-        },
+    vertices: {
+      aVertexPosition: {
+        format: "float32x3",
+        data: buffers.position,
       },
-      index: { target: "ELEMENT_ARRAY_BUFFER", data: buffers.indices }
+      aVertexColor: {
+        format: "float32x4",
+        data: buffers.color,
+      },
     },
+    indices: buffers.indices,
     uniforms: {},
-    drawElements: { firstIndex: 0, indexCount: 36 },
+    drawIndexed: { firstIndex: 0, indexCount: 36 },
   };
 
-  const renderPasss: IGLRenderPass = {
+  const renderPass: IRenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -102,7 +89,7 @@ function main()
     renderObject.uniforms.uProjectionMatrix = projectionMatrix;
     renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
 
-    webgl.runRenderPass(renderPasss);
+    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
     requestAnimationFrame(render);
   }

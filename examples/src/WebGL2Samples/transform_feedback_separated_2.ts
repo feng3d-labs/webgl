@@ -1,4 +1,6 @@
-import { IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLTransformFeedback, IGLVertexArrayObject, IGLProgram, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -11,7 +13,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
@@ -27,7 +29,7 @@ import { getShaderSource } from "./utility";
     const appStartTime = Date.now();
     let currentSourceIdx = 0;
 
-    const program = initProgram();
+    const [transformFeedbackPipeline, program] = initProgram();
 
     // -- Initialize particle data
 
@@ -36,13 +38,6 @@ import { getShaderSource } from "./utility";
     const particleSpawntime = new Float32Array(NUM_PARTICLES);
     const particleLifetime = new Float32Array(NUM_PARTICLES);
     const particleIDs = new Float32Array(NUM_PARTICLES);
-
-    const POSITION_LOCATION = 0;
-    const VELOCITY_LOCATION = 1;
-    const SPAWNTIME_LOCATION = 2;
-    const LIFETIME_LOCATION = 3;
-    const ID_LOCATION = 4;
-    const NUM_LOCATIONS = 5;
 
     for (let p = 0; p < NUM_PARTICLES; ++p)
     {
@@ -55,103 +50,146 @@ import { getShaderSource } from "./utility";
         particleIDs[p] = p;
     }
 
+    const POSITION_LOCATION = 0;
+    const VELOCITY_LOCATION = 1;
+    const SPAWNTIME_LOCATION = 2;
+    const LIFETIME_LOCATION = 3;
+    const ID_LOCATION = 4;
+    const NUM_LOCATIONS = 5;
+
     // -- Init Vertex Arrays and Buffers
-    const particleVAOs: IGLVertexArrayObject[] = [];
+    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
-    const particleTransformFeedbacks: IGLTransformFeedback[] = [];
+    const transformFeedbacks: IGLTransformFeedback[] = [];
 
-    const particleVBOs: IGLVertexBuffer[][] = new Array(particleVAOs.length);
+    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
-        particleVBOs[i] = new Array(NUM_LOCATIONS);
+        vertexBuffers[i] = new Array(NUM_LOCATIONS);
 
         // Set up input
-        particleVBOs[i][POSITION_LOCATION] = { target: "ARRAY_BUFFER", data: particlePositions, usage: "STREAM_COPY" };
+        vertexBuffers[i][POSITION_LOCATION] = particlePositions.slice();
 
-        particleVBOs[i][VELOCITY_LOCATION] = { target: "ARRAY_BUFFER", data: particleVelocities, usage: "STREAM_COPY" };
+        vertexBuffers[i][VELOCITY_LOCATION] = particleVelocities.slice();
 
-        particleVBOs[i][SPAWNTIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleSpawntime, usage: "STREAM_COPY" };
+        vertexBuffers[i][SPAWNTIME_LOCATION] = particleSpawntime.slice();
 
-        particleVBOs[i][LIFETIME_LOCATION] = { target: "ARRAY_BUFFER", data: particleLifetime, usage: "STREAM_COPY" };
+        vertexBuffers[i][LIFETIME_LOCATION] = particleLifetime.slice();
 
-        particleVBOs[i][ID_LOCATION] = { target: "ARRAY_BUFFER", data: particleIDs, usage: "STREAM_COPY" };
+        vertexBuffers[i][ID_LOCATION] = particleIDs;
 
-        particleVAOs[i] = {
+        vertexArrays[i] = [];
+        vertexArrays[i][0] = {
             vertices: {
-                a_position: { buffer: particleVBOs[i][POSITION_LOCATION], numComponents: 2 },
-                a_velocity: { buffer: particleVBOs[i][VELOCITY_LOCATION], numComponents: 2 },
-                a_spawntime: { buffer: particleVBOs[i][SPAWNTIME_LOCATION], numComponents: 1 },
-                a_lifetime: { buffer: particleVBOs[i][LIFETIME_LOCATION], numComponents: 1 },
-                a_ID: { buffer: particleVBOs[i][ID_LOCATION], numComponents: 1 },
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
+                a_velocity: { data: vertexBuffers[i][VELOCITY_LOCATION], format: "float32x2" },
+                a_spawntime: { data: vertexBuffers[i][SPAWNTIME_LOCATION], format: "float32" },
+                a_lifetime: { data: vertexBuffers[i][LIFETIME_LOCATION], format: "float32" },
+                a_ID: { data: vertexBuffers[i][ID_LOCATION], format: "float32" },
+            }
+        };
+
+        vertexArrays[i][1] = {
+            vertices: {
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
             }
         };
 
         // Set up output
-        particleTransformFeedbacks[i] = {
+        transformFeedbacks[i] = {
             bindBuffers: [
-                { index: 0, buffer: particleVBOs[i][POSITION_LOCATION] },
-                { index: 1, buffer: particleVBOs[i][VELOCITY_LOCATION] },
-                { index: 2, buffer: particleVBOs[i][SPAWNTIME_LOCATION] },
-                { index: 3, buffer: particleVBOs[i][LIFETIME_LOCATION] },
+                { index: 0, data: vertexBuffers[i][POSITION_LOCATION] },
+                { index: 1, data: vertexBuffers[i][VELOCITY_LOCATION] },
+                { index: 2, data: vertexBuffers[i][SPAWNTIME_LOCATION] },
+                { index: 3, data: vertexBuffers[i][LIFETIME_LOCATION] },
             ]
         };
     }
 
-    function initProgram()
+    function initProgram(): [IGLTransformFeedbackPipeline, IRenderPipeline]
     {
-        const program: IGLProgram = {
+        const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
+            vertex: { code: getShaderSource("vs-emit") },
+            transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
+        };
+
+        const program: IRenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") },
             fragment: {
                 code: getShaderSource("fs-draw"),
                 targets: [{
                     blend: {
-                        color: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
-                        alpha: { srcFactor: "SRC_ALPHA", dstFactor: "ONE" },
+                        color: { srcFactor: "src-alpha", dstFactor: "one" },
+                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
                     }
                 }]
             },
-            transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
-            primitive: { topology: "POINTS" },
+            primitive: { topology: "point-list" },
         };
 
-        return program;
+        return [transformFeedbackPipeline, program];
     }
 
-    const ro: IGLRenderObject = {
+    const transformRO: IGLTransformFeedbackObject = {
+        pipeline: transformFeedbackPipeline,
+        vertices: null,
+        transformFeedback: null,
+        uniforms: {
+            u_acceleration: [0.0, ACCELERATION],
+        },
+        drawVertex: { vertexCount: NUM_PARTICLES },
+    };
+
+    const renderRO: IRenderObject = {
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
-            u_acceleration: [0.0, ACCELERATION],
         },
-        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
-        drawArrays: { vertexCount: NUM_PARTICLES },
+        drawVertex: { vertexCount: NUM_PARTICLES },
     };
 
-    const rp: IGLRenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [ro],
-    };
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    __type: "TransformFeedbackPass",
+                    transformFeedbackObjects: [transformRO],
+                },
+                {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    renderObjects: [renderRO],
+                }
+            ]
+        }]
+    }
 
-    function render()
+    function transform()
     {
         const time = Date.now() - appStartTime;
         const destinationIdx = (currentSourceIdx + 1) % 2;
 
         // Toggle source and destination VBO
-        const sourceVAO = particleVAOs[currentSourceIdx];
-        const destinationTransformFeedback = particleTransformFeedbacks[destinationIdx];
+        transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
+        transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        ro.vertexArray = sourceVAO;
-        ro.transformFeedback = destinationTransformFeedback;
-
-        ro.uniforms.u_time = time;
-
-        webgl.runRenderPass(rp);
+        transformRO.uniforms.u_time = time;
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;
+    }
+
+    function render()
+    {
+        transform();
+
+        //
+        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
+
+        webgl.submit(submit);
 
         requestAnimationFrame(render);
     }

@@ -1,16 +1,14 @@
-import { IGLRenderObject, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
 {
-    const webglcanvas = document.createElement("canvas");
-    webglcanvas.id = "glcanvas";
-    webglcanvas.style.position = "fixed";
-    webglcanvas.style.left = "0px";
-    webglcanvas.style.top = "0px";
-    webglcanvas.style.width = "100%";
-    webglcanvas.style.height = "100%";
-    document.body.appendChild(webglcanvas);
+    const canvas = document.createElement("canvas");
+    canvas.id = "glcanvas";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
 
     const webgl = new WebGL({ canvasId: "glcanvas" });
 
@@ -66,32 +64,14 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IGLRenderObject = {
-        vertexArray: {
-            vertices: {
-                position: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(positions) }, numComponents: 3 },
-                uv: { buffer: { target: "ARRAY_BUFFER", data: new Float32Array(uvs) }, numComponents: 2 },
-            },
-            index: { target: "ELEMENT_ARRAY_BUFFER", data: new Uint16Array(indices) }
+    const renderObject: IRenderObject = {
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+            uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
-        uniforms: {
-            view: () =>
-            {
-                const t = 0.01 * tick;
-
-                return mat4.lookAt([],
-                    [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-                    [0, 0.0, 0],
-                    [0, 1, 0]);
-            },
-            projection: () =>
-                mat4.perspective([],
-                    Math.PI / 4,
-                    viewportWidth / viewportHeight,
-                    0.01,
-                    10),
-            tex: () => diffuse,
-        },
+        indices: new Uint16Array(indices),
+        drawIndexed: { indexCount: indices.length },
+        uniforms: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -112,18 +92,41 @@ import * as mat4 from "./stackgl/gl-mat4";
         }`,
                 targets: [{ blend: {} }],
             },
-            depthStencil: { depth: { depthtest: true } },
+            depthStencil: { depthWriteEnabled: true },
         }
+    };
+
+    const submit: ISubmit = {
+        commandEncoders: [{
+            passEncoders: [
+                {
+                    renderObjects: [renderObject]
+                }
+            ]
+        }]
     };
 
     function draw()
     {
         tick++;
 
-        viewportWidth = webglcanvas.width = webglcanvas.clientWidth;
-        viewportHeight = webglcanvas.height = webglcanvas.clientHeight;
+        viewportWidth = canvas.width = canvas.clientWidth;
+        viewportHeight = canvas.height = canvas.clientHeight;
 
-        webgl.runRenderPass({ renderObjects: [renderObject] });
+        const t = 0.01 * tick;
+        renderObject.uniforms.view = mat4.lookAt([],
+            [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
+            [0, 0.0, 0],
+            [0, 1, 0]);
+        renderObject.uniforms.projection =
+            mat4.perspective([],
+                Math.PI / 4,
+                viewportWidth / viewportHeight,
+                0.01,
+                10);
+
+        webgl.submit(submit);
+
         requestAnimationFrame(draw);
     }
 
@@ -131,7 +134,13 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = { texture: { sources: [{ source: img }] }, sampler: { minFilter: "LINEAR" } };
+    const diffuse: IGLSamplerTexture = {
+        texture: {
+            size: [img.width, img.height],
+            sources: [{ image: img }]
+        }, sampler: { minFilter: "linear" }
+    };
+    renderObject.uniforms.tex = diffuse;
 
     draw();
 })();

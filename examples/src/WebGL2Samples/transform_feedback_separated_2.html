@@ -15,7 +15,7 @@
     <p id="description">Using transform feedback in a simple particle system</p>
 
     <!-- WebGL 2 shaders -->
-    <script id="vs-draw" type="x-shader/x-vertex">
+    <script id="vs-emit" type="x-shader/x-vertex">
         #version 300 es
         #define POSITION_LOCATION 0
         #define VELOCITY_LOCATION 1
@@ -61,6 +61,22 @@
             }
 
             gl_Position = vec4(v_position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="vs-draw" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+
+        precision highp float;
+        precision highp int;
+        precision highp sampler3D;
+
+        layout(location = POSITION_LOCATION) in vec2 a_position;
+
+        void main()
+        {
+            gl_Position = vec4(a_position, 0.0, 1.0);
             gl_PointSize = 2.0;
         }
     </script>

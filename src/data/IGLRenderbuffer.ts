@@ -9,17 +9,17 @@ export interface IGLRenderbuffer
     /**
      * 渲染缓冲区内部格式。
      */
-    internalformat: GLRenderbufferInternalformat,
+    readonly internalformat: GLRenderbufferInternalformat,
 
     /**
      * 宽度。
      */
-    width: number,
+    readonly width: number,
 
     /**
      * 高度。
      */
-    height: number
+    readonly height: number
 }
 
 /**

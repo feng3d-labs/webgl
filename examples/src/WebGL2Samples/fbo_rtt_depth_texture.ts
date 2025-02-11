@@ -1,4 +1,5 @@
-import { IGLFramebuffer, IGLRenderPass, IGLRenderPipeline, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 const webgl = new WebGL(renderingContext);
 
 const windowSize = {
@@ -18,16 +19,16 @@ const windowSize = {
 // -- Initialize program
 
 // Depth shaders
-const depthProgram: IGLRenderPipeline = {
+const depthProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
-    depthStencil: { depth: { depthtest: true } },
-    primitive: { topology: "TRIANGLES" },
+    depthStencil: {},
+    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
-const drawProgram: IGLRenderPipeline = {
+const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -37,7 +38,6 @@ const triPositions = new Float32Array([
     0.5, -0.5, -1.0,
     0.0, 0.5, 1.0
 ]);
-const triVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: triPositions, usage: "STATIC_DRAW" };
 
 const quadPositions = new Float32Array([
     -1.0, -1.0,
@@ -47,7 +47,6 @@ const quadPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const quadVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadPositions, usage: "STATIC_DRAW" };
 
 const quadTexcoords = new Float32Array([
     0.0, 0.0,
@@ -57,20 +56,19 @@ const quadTexcoords = new Float32Array([
     0.0, 1.0,
     0.0, 0.0
 ]);
-const quadVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: quadTexcoords, usage: "STATIC_DRAW" };
 
 // -- Initialize vertex array
 
-const triVertexArray: IGLVertexArrayObject = {
+const triVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: triVertexPosBuffer, numComponents: 3 },
+        position: { data: triPositions, format: "float32x3" },
     }
 };
 
-const quadVertexArray: IGLVertexArrayObject = {
+const quadVertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: quadVertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: quadVertexTexBuffer, numComponents: 2 },
+        position: { data: quadPositions, format: "float32x2" },
+        textureCoordinates: { data: quadTexcoords, format: "float32x2" },
     }
 };
 
@@ -78,55 +76,48 @@ const quadVertexArray: IGLVertexArrayObject = {
 
 // the proper texture format combination can be found here
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
-const depthTexture: IGLTexture = {
-    sources: [{ width: windowSize.x, height: windowSize.y, level: 0 }],
-    internalformat: "DEPTH_COMPONENT16",
-    format: "DEPTH_COMPONENT",
-    type: "UNSIGNED_SHORT",
+const depthTexture: ITexture = {
+    size: [windowSize.x, windowSize.y],
+    format: "depth16unorm",
 };
-const depthSampler: IGLSampler = { wrapS: "CLAMP_TO_EDGE", wrapT: "CLAMP_TO_EDGE", minFilter: "NEAREST", magFilter: "NEAREST" };
+const depthSampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IGLFramebuffer = {
+const frameBuffer: IRenderPassDescriptor = {
     colorAttachments: [],
-    depthStencilAttachment: { view: { texture: depthTexture, level: 0 }, depthLoadOp: "clear" },
+    depthStencilAttachment: { view: { texture: depthTexture, baseMipLevel: 0 }, depthLoadOp: "clear" },
 };
 
 // -- Render
 
 // Pass 1: Depth
-const renderPass: IGLRenderPass = {
+const renderPass: IRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
-        vertexArray: triVertexArray,
-        drawArrays: { vertexCount: 3 },
+        vertices: triVertexArray.vertices,
+        drawVertex: { vertexCount: 3 },
     }],
 
 };
-webgl.runRenderPass(renderPass);
 
 // Pass 2: Draw
-const rp2: IGLRenderPass = {
+const rp2: IRenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects: [{
         pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
-        vertexArray: quadVertexArray,
-        drawArrays: { vertexCount: 6 },
+        vertices: quadVertexArray.vertices,
+        drawVertex: { vertexCount: 6 },
     }],
 };
-webgl.runRenderPass(rp2);
+
+webgl.submit({ commandEncoders: [{ passEncoders: [renderPass, rp2] }] });
 
 // Clean up
-webgl.deleteBuffer(triVertexPosBuffer);
-webgl.deleteBuffer(quadVertexPosBuffer);
-webgl.deleteBuffer(quadVertexTexBuffer);
-webgl.deleteVertexArray(triVertexArray);
-webgl.deleteVertexArray(quadVertexArray);
 webgl.deleteFramebuffer(frameBuffer);
 webgl.deleteTexture(depthTexture);
 webgl.deleteProgram(depthProgram);

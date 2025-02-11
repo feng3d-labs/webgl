@@ -1,4 +1,5 @@
-import { IGLBlitFramebuffer, IGLFramebuffer, IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderbuffer, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -8,7 +9,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -23,7 +24,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: { x: number, y: number, width: number, height: number }[] = new Array(VIEWPORTS.MAX);
+const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -47,18 +48,18 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IGLProgram[] = [
+const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "TRIANGLES" },
+        primitive: { topology: "triangle-list" },
     }
 ];
 
@@ -76,9 +77,6 @@ const data = new Float32Array([
 ]);
 
 // -- Init buffers
-const vertexPositionBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
-
-const vertexDataBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data, usage: "STATIC_DRAW" };
 
 // Draw the rect texture
 // This can be discarded when gl_VertexID is available
@@ -90,7 +88,6 @@ const textureVertexPositions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const texVertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexPositions, usage: "STATIC_DRAW" };
 
 const textureVertexTexCoords = new Float32Array([
     0.0, 1.0,
@@ -100,7 +97,6 @@ const textureVertexTexCoords = new Float32Array([
     0.0, 0.0,
     0.0, 1.0
 ]);
-const texVertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: textureVertexTexCoords, usage: "STATIC_DRAW" };
 
 // -- Init Texture
 // used for draw framebuffer storage
@@ -108,26 +104,19 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures: IGLTexture[] = [];
-const samplers: IGLSampler[] = [];
+const textures: ITexture[] = [];
+const samplers: ISampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     textures[i] = {
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
-        sources: [{ width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y, level: 0 }]
+        format: "rgba8unorm",
+        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     };
-    samplers[i] = { minFilter: "NEAREST", magFilter: "NEAREST" };
+    samplers[i] = { minFilter: "nearest", magFilter: "nearest" };
 }
 
 // -- Init Frame Buffers
-
-// non-centroid
-const colorRenderbuffer: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
-// centroid
-const colorRenderbufferCentroid: IGLRenderbuffer = { internalformat: "RGBA8", width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y };
 
 const FRAMEBUFFER = {
     RENDERBUFFER: 0,
@@ -136,74 +125,61 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IGLFramebuffer[] = [
-    { colorAttachments: [{ view: colorRenderbuffer, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
-    { colorAttachments: [{ view: colorRenderbufferCentroid, clearValue: [0, 0, 0, 1], loadOp: "clear" }], multisample: 4 },
-    { colorAttachments: [{ view: { texture: textures[0], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    { colorAttachments: [{ view: { texture: textures[1], level: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+const framebuffers: IRenderPassDescriptor[] = [
+    { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
+    { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
 ];
 
 // -- Init VertexArray
-const vertexArrays: IGLVertexArrayObject[] = [
+const vertexArrays: { vertices?: IVertexAttributes }[] = [
     {
         vertices: {
-            position: { buffer: vertexPositionBuffer, numComponents: 2 },
-            data: { buffer: vertexDataBuffer, numComponents: 1 },
+            position: { data: positions, format: "float32x2" },
+            data: { data: data, format: "float32" },
         }
     },
     {
         vertices: {
-            position: { buffer: vertexPositionBuffer, numComponents: 2 },
-            data: { buffer: vertexDataBuffer, numComponents: 1 },
+            position: { data: positions, format: "float32x2" },
+            data: { data: data, format: "float32" },
         }
     },
     {
         vertices: {
-            position: { buffer: texVertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: texVertexTexBuffer, numComponents: 2 },
+            position: { data: textureVertexPositions, format: "float32x2" },
+            texcoord: { data: textureVertexTexCoords, format: "float32x2" },
         }
     },
 ];
 
 // -- Render
+const passEncoders: IPassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
-            vertexArray: vertexArrays[i],
+            vertices: vertexArrays[i].vertices,
             uniforms: { MVP: IDENTITY },
-            drawArrays: { vertexCount },
+            drawVertex: { vertexCount },
         }]
     };
-    webgl.runRenderPass(rp);
-
-    // Blit framebuffers, no Multisample texture 2d in WebGL 2
-    // centroid will only work with multisample
-    const blit: IGLBlitFramebuffer = {
-        read: framebuffers[i],
-        draw: framebuffers[i + 2],
-        blitFramebuffers: [[
-            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-            0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
-            "COLOR_BUFFER_BIT", "NEAREST"
-        ]],
-    };
-    webgl.runBlitFramebuffer(blit);
+    passEncoders.push(rp);
 }
 
+const renderObjects: IRenderPassObject[] = [];
 // Pass 2
-const rp2: IGLRenderPass = {
-    renderObjects: [],
+const rp2: IRenderPass = {
+    renderObjects: renderObjects,
 };
-const ro: IGLRenderObject = {
+const ro: IRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
-    vertexArray: vertexArrays[PROGRAM.SPLASH],
+    vertices: vertexArrays[PROGRAM.SPLASH].vertices,
 };
 
 const scaleVector3 = vec3.create();
@@ -214,25 +190,23 @@ mat4.scale(mvp, IDENTITY, scaleVector3);
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
-    rp2.renderObjects.push(
+    renderObjects.push(
         {
             ...ro,
+            viewport: viewport[i],
             uniforms: {
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            viewport: viewport[i],
-            drawArrays: { vertexCount: 6 },
+            drawVertex: { vertexCount: 6 },
         }
     );
 }
-webgl.runRenderPass(rp2);
+passEncoders.push(rp2);
+
+webgl.submit({ commandEncoders: [{ passEncoders }] });
 
 // -- Delete WebGL resources
-webgl.deleteBuffer(texVertexPosBuffer);
-webgl.deleteBuffer(texVertexTexBuffer);
-webgl.deleteBuffer(vertexPositionBuffer);
-webgl.deleteBuffer(vertexDataBuffer);
 
 webgl.deleteTexture(textures[PROGRAM.TEXTURE]);
 webgl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);
@@ -240,18 +214,11 @@ webgl.deleteTexture(textures[PROGRAM.TEXTURE_CENTROID]);
 webgl.deleteSampler(samplers[PROGRAM.TEXTURE]);
 webgl.deleteSampler(samplers[PROGRAM.TEXTURE_CENTROID]);
 
-webgl.deleteRenderbuffer(colorRenderbuffer);
-webgl.deleteRenderbuffer(colorRenderbufferCentroid);
-
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER]);
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER]);
 
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.RENDERBUFFER_CENTROID]);
 webgl.deleteFramebuffer(framebuffers[FRAMEBUFFER.COLORBUFFER_CENTROID]);
-
-webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE]);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.TEXTURE_CENTROID]);
-webgl.deleteVertexArray(vertexArrays[PROGRAM.SPLASH]);
 
 webgl.deleteProgram(programs[PROGRAM.TEXTURE]);
 webgl.deleteProgram(programs[PROGRAM.TEXTURE_CENTROID]);

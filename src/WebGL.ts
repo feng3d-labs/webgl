@@ -1,88 +1,54 @@
-import { deleteFramebuffer } from "./caches/getFramebuffer";
-import { deleteProgram } from "./caches/getProgram";
-import { deleteRenderbuffer } from "./caches/getRenderbuffer";
-import { getRenderingContext } from "./caches/getRenderingContext";
-import { deleteSampler } from "./caches/getSampler";
-import { deleteTexture } from "./caches/getTexture";
-import { deleteBuffer } from "./caches/getWebGLBuffer";
-import { deleteTransformFeedback } from "./caches/getWebGLTransformFeedback";
-import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
-import { IGLBuffer } from "./data/IGLBuffer";
-import { IGLCopyBuffer } from "./data/IGLCopyBuffer";
-import { IGLRenderPassDescriptor } from "./data/IGLPassDescriptor";
-import { IGLQuery } from "./data/IGLQueryAction";
+import { IBuffer, IRenderPassDescriptor, IRenderPipeline, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
+
+import { RunWebGL } from "./RunWebGL";
+import { deleteBuffer } from "./caches/getGLBuffer";
+import { getGLCanvasContext } from "./caches/getGLCanvasContext";
+import { deleteFramebuffer } from "./caches/getGLFramebuffer";
+import { deleteProgram } from "./caches/getGLProgram";
+import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
+import { deleteSampler } from "./caches/getGLSampler";
+import { deleteTexture } from "./caches/getGLTexture";
+import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
+import { IGLCanvasContext } from "./data/IGLCanvasContext";
 import { IGLReadPixels } from "./data/IGLReadPixels";
-import { IGLRenderObject } from "./data/IGLRenderObject";
-import { IGLRenderPass } from "./data/IGLRenderPass";
-import { IGLRenderPipeline } from "./data/IGLRenderPipeline";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
-import { IGLRenderingContext } from "./data/IGLRenderingContext";
-import { IGLSampler } from "./data/IGLSampler";
-import { IGLTexture } from "./data/IGLTexture";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { IGLVertexArrayObject } from "./data/IGLVertexArrayObject";
-import { runBlitFramebuffer } from "./runs/runBlitFramebuffer";
-import { runCopyBuffer } from "./runs/runCopyBuffer";
-import { getQueryResult } from "./runs/runQueryAction";
-import { runReadPixels } from "./runs/runReadPixels";
-import { runRenderObject } from "./runs/runRenderObject";
-import { runRenderPass } from "./runs/runRenderPass";
-import { deleteVertexArray } from "./runs/runVertexArray";
+import { readPixels } from "./utils/readPixels";
 
 /**
- * WEBGL 渲染器
+ * WEBGL 对象。
  *
  * 所有渲染都由该渲染器执行。與2D、3D場景無關，屬於更加底層的API。針對每一個 RenderObject 渲染數據進行渲染。
  */
 export class WebGL
 {
-    private _renderingContext: IGLRenderingContext;
+    private _runWebGL: RunWebGL = new RunWebGL();
+    private _renderingContext: IGLCanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext: IGLRenderingContext)
+    constructor(renderingContext?: IGLCanvasContext)
     {
         this._renderingContext = renderingContext;
-        this._gl = getRenderingContext(this._renderingContext);
+        this._gl = getGLCanvasContext(this._renderingContext);
     }
 
     /**
-     * 提交一次渲染通道数据。
+     * 提交 GPU 。
      *
-     * @param renderingContext 渲染画布上下文描述。
-     * @param renderPass 渲染通道数据。
-     * @returns
-     */
-    runRenderPass(renderPass: IGLRenderPass)
-    {
-        runRenderPass(this._gl, renderPass);
-    }
-
-    /**
-     * 渲染一次。
+     * @param submit 一次 GPU 提交内容。
      *
-     * @param renderObject 渲染原子，包含渲染所需的所有数据。
      */
-    runRenderObject(renderObject: IGLRenderObject)
+    submit(submit: ISubmit)
     {
-        runRenderObject(this._gl, renderObject);
+        this._runWebGL.runSubmit(this._gl, submit);
     }
 
-    runBlitFramebuffer(blitFramebuffer: IGLBlitFramebuffer)
+    runReadPixels(glReadPixels: IGLReadPixels)
     {
-        runBlitFramebuffer(this._gl, blitFramebuffer);
+        readPixels(this._gl, glReadPixels);
     }
 
-    runCopyBuffer(copyBuffer: IGLCopyBuffer)
-    {
-        runCopyBuffer(this._gl, copyBuffer);
-    }
-
-    runReadPixels(readPixels: IGLReadPixels)
-    {
-        runReadPixels(this._gl, readPixels);
-    }
-
-    deleteFramebuffer(passDescriptor: IGLRenderPassDescriptor)
+    deleteFramebuffer(passDescriptor: IRenderPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }
@@ -92,38 +58,28 @@ export class WebGL
         deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    deleteBuffer(buffer: IGLBuffer)
+    deleteBuffer(buffer: IBuffer)
     {
         deleteBuffer(this._gl, buffer);
     }
 
-    deleteTexture(texture: IGLTexture)
+    deleteTexture(texture: ITexture)
     {
         deleteTexture(this._gl, texture);
     }
 
-    deleteSampler(sampler: IGLSampler)
+    deleteSampler(sampler: ISampler)
     {
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(pipeline: IGLRenderPipeline)
+    deleteProgram(pipeline: IRenderPipeline)
     {
         deleteProgram(this._gl, pipeline);
-    }
-
-    deleteVertexArray(vertexArray: IGLVertexArrayObject)
-    {
-        deleteVertexArray(this._gl, vertexArray);
     }
 
     deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
     {
         deleteTransformFeedback(this._gl, transformFeedback);
-    }
-
-    getQueryResult(query: IGLQuery)
-    {
-        return getQueryResult(this._gl, query);
     }
 }

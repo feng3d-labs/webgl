@@ -1,4 +1,5 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,7 +8,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -57,9 +58,9 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IGLProgram = {
+const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "TRIANGLES" },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -72,7 +73,6 @@ const positions = new Float32Array([
     -1.0, 1.0,
     -1.0, -1.0
 ]);
-const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
 const texcoords = new Float32Array([
     -2.0, 2.0,
@@ -82,47 +82,49 @@ const texcoords = new Float32Array([
     -2.0, -2.0,
     -2.0, 2.0
 ]);
-const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
 // -- Initilize vertex array
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
-        textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+        position: { data: positions, format: "float32x2" },
+        textureCoordinates: { data: texcoords, format: "float32x2" },
     }
 };
 
 // -- Initialize samplers
 
-const samplers: IGLSampler[] = new Array(Corners.MAX);
+const samplers: ISampler[] = new Array(Corners.MAX);
 
 for (let i = 0; i < Corners.MAX; ++i)
 {
-    samplers[i] = { minFilter: "LINEAR_MIPMAP_LINEAR", magFilter: "LINEAR" };
+    samplers[i] = {
+        minFilter: "linear",
+        magFilter: "linear",
+        mipmapFilter:"linear",
+    };
 }
 
-samplers[Corners.TOP_LEFT].wrapS = "MIRRORED_REPEAT";
-samplers[Corners.TOP_RIGHT].wrapS = "CLAMP_TO_EDGE";
-samplers[Corners.BOTTOM_RIGHT].wrapS = "REPEAT";
-samplers[Corners.BOTTOM_LEFT].wrapS = "CLAMP_TO_EDGE";
+samplers[Corners.TOP_LEFT].addressModeU = "mirror-repeat";
+samplers[Corners.TOP_RIGHT].addressModeU = "clamp-to-edge";
+samplers[Corners.BOTTOM_RIGHT].addressModeU = "repeat";
+samplers[Corners.BOTTOM_LEFT].addressModeU = "clamp-to-edge";
 
-samplers[Corners.TOP_LEFT].wrapT = "MIRRORED_REPEAT";
-samplers[Corners.TOP_RIGHT].wrapT = "MIRRORED_REPEAT";
-samplers[Corners.BOTTOM_RIGHT].wrapT = "REPEAT";
-samplers[Corners.BOTTOM_LEFT].wrapT = "CLAMP_TO_EDGE";
+samplers[Corners.TOP_LEFT].addressModeV = "mirror-repeat";
+samplers[Corners.TOP_RIGHT].addressModeV = "mirror-repeat";
+samplers[Corners.BOTTOM_RIGHT].addressModeV = "repeat";
+samplers[Corners.BOTTOM_LEFT].addressModeV = "clamp-to-edge";
 
 // -- Load texture then render
 
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: IGLTexture;
+let texture: ITexture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        sources: [{ source: image, level: 0 }],
-        internalformat: "RGBA",
-        format: "RGBA",
-        type: "UNSIGNED_BYTE",
+        size: [image.width, image.height],
+        sources: [{ image: image, mipLevel: 0 }],
+        format: "rgba8unorm",
         generateMipmap: true,
     };
     render();
@@ -130,10 +132,11 @@ loadImage(imageUrl, function (image)
 
 function render()
 {
+    const renderObjects: IRenderPassObject[] = [];
     // Clear color buffer
-    const rp: IGLRenderPass = {
+    const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [],
+        renderObjects: renderObjects,
     };
 
     const matrix = new Float32Array([
@@ -143,35 +146,34 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const ro: IGLRenderObject = {
+    const ro: IRenderObject = {
         pipeline: program,
         uniforms: { mvp: matrix },
-        vertexArray,
+        vertices: vertexArray.vertices,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        rp.renderObjects.push({
-            ...ro,
-            viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-            uniforms: {
-                ...ro.uniforms,
-                diffuse: { texture, sampler: samplers[i] },
-            },
-            drawArrays: { vertexCount: 6, instanceCount: 1 },
-        });
+        renderObjects.push(
+            {
+                ...ro,
+                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                uniforms: {
+                    ...ro.uniforms,
+                    diffuse: { texture, sampler: samplers[i] },
+                },
+                drawVertex: { vertexCount: 6, instanceCount: 1 },
+            });
     }
-    webgl.runRenderPass(rp);
+
+    webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
     // -- Clean up
 
-    webgl.deleteBuffer(vertexPosBuffer);
-    webgl.deleteBuffer(vertexTexBuffer);
     for (let j = 0; j < samplers.length; ++j)
     {
         webgl.deleteSampler(samplers[j]);
     }
-    webgl.deleteVertexArray(vertexArray);
     webgl.deleteTexture(texture);
     webgl.deleteProgram(program);
 }

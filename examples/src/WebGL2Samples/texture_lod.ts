@@ -1,4 +1,6 @@
-import { IGLProgram, IGLRenderObject, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -9,7 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     // -- Mouse Behaviour
@@ -85,7 +87,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Initialize program
-    const program: IGLProgram = {
+    const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -98,7 +100,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texcoords = new Float32Array([
         0.0, 1.0,
@@ -108,76 +109,71 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texcoords, usage: "STATIC_DRAW" };
 
     // -- Initialize vertex array
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            textureCoordinates: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x2" },
+            textureCoordinates: { data: texcoords, format: "float32x2" },
         }
     };
 
     // -- Load texture then render
     const imageUrl = "../../assets/img/Di-3d.png";
-    const textures: IGLTexture[] = new Array(Corners.MAX);
-    const samplers: IGLSampler[] = new Array(Corners.MAX);
+    const textures: ITexture[] = new Array(Corners.MAX);
+    const samplers: ISampler[] = new Array(Corners.MAX);
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
-            target: "TEXTURE_2D",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            size: [image.width, image.height],
+            format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.TOP_LEFT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
         };
 
         textures[Corners.TOP_RIGHT] = {
-            target: "TEXTURE_2D",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            size: [image.width, image.height],
+            format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.TOP_RIGHT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
-            lodMinClamp: 0,
-            lodMaxClamp: 0,
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
+            lodMinClamp: 3.0,
+            lodMaxClamp: 3.0,
         };
 
         textures[Corners.BOTTOM_LEFT] = {
-            target: "TEXTURE_2D",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            size: [image.width, image.height],
+            format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.BOTTOM_LEFT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
             lodMinClamp: 0.0,
             lodMaxClamp: 10.0,
         };
 
         textures[Corners.BOTTOM_RIGHT] = {
-            target: "TEXTURE_2D",
-            internalformat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE",
+            size: [image.width, image.height],
+            format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ level: 0, source: image }],
+            sources: [{ mipLevel: 0, image: image }],
         };
         samplers[Corners.BOTTOM_RIGHT] = {
-            minFilter: "LINEAR_MIPMAP_LINEAR",
-            magFilter: "LINEAR",
+            minFilter: "linear",
+            magFilter: "linear",
+            mipmapFilter: "linear",
             lodMinClamp: 0.0,
             lodMaxClamp: 10.0,
         };
@@ -187,10 +183,11 @@ import { getShaderSource, loadImage } from "./utility";
 
     function render()
     {
+        const renderObjects: IRenderPassObject[] = [];
         // Clear color buffer
-        const rp: IGLRenderPass = {
+        const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: [],
+            renderObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -200,13 +197,13 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IGLRenderObject = {
+        const ro: IRenderObject = {
             pipeline: program,
             uniforms: {
                 mvp: matrix,
             },
-            vertexArray,
-            drawArrays: { vertexCount: 6 },
+            vertices: vertexArray.vertices,
+            drawVertex: { vertexCount: 6 },
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];
@@ -214,18 +211,19 @@ import { getShaderSource, loadImage } from "./utility";
         lodBiasArray[Corners.BOTTOM_RIGHT] = 4.0;
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            rp.renderObjects.push({
-                ...ro,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    mvp: matrix,
-                    lodBias: lodBiasArray[i],
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-            });
+            renderObjects.push(
+                {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                    ...ro,
+                    uniforms: {
+                        mvp: matrix,
+                        lodBias: lodBiasArray[i],
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                });
         }
 
-        webgl.runRenderPass(rp);
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         requestAnimationFrame(render);
     }

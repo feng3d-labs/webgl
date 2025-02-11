@@ -1,4 +1,6 @@
-import { IGLProgram, IGLRenderPass, IGLRenderingContext, IGLSampler, IGLTexture, IGLTextureDataType, IGLTextureFormat, IGLTextureInternalFormat, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, ITextureFormat, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -9,7 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLRenderingContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Viewport
@@ -47,9 +49,9 @@ import { getShaderSource, loadImage } from "./utility";
     }
 
     // -- Init program
-    const programUint: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
+    const programUint: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
 
-    const programNormalized: IGLProgram = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
+    const programNormalized: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -60,7 +62,6 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: positions, usage: "STATIC_DRAW" };
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -70,13 +71,12 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IGLVertexBuffer = { target: "ARRAY_BUFFER", data: texCoords, usage: "STATIC_DRAW" };
 
     // -- Init VertexArray
-    const vertexArray: IGLVertexArrayObject = {
+    const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
-            position: { buffer: vertexPosBuffer, numComponents: 2 },
-            texcoord: { buffer: vertexTexBuffer, numComponents: 2 },
+            position: { data: positions, format: "float32x2" },
+            texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
@@ -95,82 +95,61 @@ import { getShaderSource, loadImage } from "./utility";
             MAX: 9
         };
 
-        const textureFormats: { internalFormat: IGLTextureInternalFormat, format: IGLTextureFormat, type: IGLTextureDataType }[] = new Array(TextureTypes.MAX);
+        const textureFormats: { format: ITextureFormat }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
-            internalFormat: "RGB",
-            format: "RGB",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB8] = {
-            internalFormat: "RGB8",
-            format: "RGB",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB16F] = {
-            internalFormat: "RGB16F",
-            format: "RGB",
-            type: "HALF_FLOAT"
+            format: "rgba16float",
         };
 
         textureFormats[TextureTypes.RGBA32F] = {
-            internalFormat: "RGBA32F",
-            format: "RGBA",
-            type: "FLOAT"
+            format: "rgba32float",
         };
 
         textureFormats[TextureTypes.R16F] = {
-            internalFormat: "R16F",
-            format: "RED",
-            type: "HALF_FLOAT"
+            format: "r16float",
         };
 
         textureFormats[TextureTypes.RG16F] = {
-            internalFormat: "RG16F",
-            format: "RG",
-            type: "HALF_FLOAT"
+            format: "rg16float",
         };
 
         textureFormats[TextureTypes.RGBA] = {
-            internalFormat: "RGBA",
-            format: "RGBA",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8unorm",
         };
 
         textureFormats[TextureTypes.RGB8UI] = {
-            internalFormat: "RGB8UI",
-            format: "RGB_INTEGER",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8uint",
         };
 
         textureFormats[TextureTypes.RGBA8UI] = {
-            internalFormat: "RGBA8UI",
-            format: "RGBA_INTEGER",
-            type: "UNSIGNED_BYTE"
+            format: "rgba8uint",
         };
 
         // -- Init Texture
 
-        const textures: IGLTexture[] = new Array(TextureTypes.MAX);
-        const samplers: IGLSampler[] = new Array(TextureTypes.MAX);
+        const textures: ITexture[] = new Array(TextureTypes.MAX);
+        const samplers: ISampler[] = new Array(TextureTypes.MAX);
         let i = 0;
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {
-                target: "TEXTURE_2D",
-                pixelStore: {
-                    unpackFlipY: false,
-                },
-                internalformat: textureFormats[i].internalFormat,
+                size: [image.width, image.height],
                 format: textureFormats[i].format,
-                type: textureFormats[i].type,
-                sources: [{ level: 0, source: image }],
+                sources: [{
+                    mipLevel: 0, image: image, flipY: false,
+                }],
             };
             samplers[i] = {
-                minFilter: "NEAREST",
-                magFilter: "NEAREST",
+                minFilter: "nearest",
+                magFilter: "nearest",
                 lodMinClamp: 0,
                 lodMaxClamp: 0,
             };
@@ -184,50 +163,51 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const rp: IGLRenderPass = {
+        const renderObjects: IRenderPassObject[] = [];
+        const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: []
+            renderObjects: renderObjects
         };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
         {
-            rp.renderObjects.push({
-                vertexArray,
-                pipeline: programNormalized,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    MVP: matrix,
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-                drawArrays: { vertexCount: 6 },
-            });
+            renderObjects.push(
+                {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                    vertices: vertexArray.vertices,
+                    pipeline: programNormalized,
+                    uniforms: {
+                        MVP: matrix,
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                    drawVertex: { vertexCount: 6 },
+                });
         }
 
         // Unsigned int textures
         for (i = TextureTypes.RGB8UI; i < TextureTypes.MAX; ++i)
         {
-            rp.renderObjects.push({
-                vertexArray,
-                pipeline: programUint,
-                viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    MVP: matrix,
-                    diffuse: { texture: textures[i], sampler: samplers[i] },
-                },
-                drawArrays: { vertexCount: 6 },
-            });
+            renderObjects.push(
+                {
+                    viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
+                    vertices: vertexArray.vertices,
+                    pipeline: programUint,
+                    uniforms: {
+                        MVP: matrix,
+                        diffuse: { texture: textures[i], sampler: samplers[i] },
+                    },
+                    drawVertex: { vertexCount: 6 },
+                });
         }
-        webgl.runRenderPass(rp);
+
+        webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(vertexPosBuffer);
-        webgl.deleteBuffer(vertexTexBuffer);
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             webgl.deleteTexture(textures[i]);
         }
         webgl.deleteProgram(programUint);
         webgl.deleteProgram(programNormalized);
-        webgl.deleteVertexArray(vertexArray);
     });
 })();

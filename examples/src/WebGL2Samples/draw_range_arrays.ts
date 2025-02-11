@@ -1,4 +1,5 @@
-import { IGLRenderingContext, IGLRenderObject, IGLRenderPass, IGLRenderPipeline, IGLVertexArrayObject, IGLVertexBuffer, WebGL } from "@feng3d/webgl";
+import { IRenderObject, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -7,29 +8,26 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLRenderingContext = { canvasId: "glcanvas" };
+const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const vertexPosBuffer: IGLVertexBuffer = {
-    target: "ARRAY_BUFFER",
-    data: new Float32Array([
-        -0.8, -0.8,
-        0.8, -0.8,
-        0.8, 0.8,
-        0.8, 0.8,
-        -0.8, 0.8,
-        -0.8, -0.8,
-        -0.5, -0.5,
-        0.5, -0.5,
-        0.5, 0.5,
-        0.5, 0.5,
-        -0.5, 0.5,
-        -0.5, -0.5,
-    ])
-};
+const vertexPosBuffer = new Float32Array([
+    -0.8, -0.8,
+    0.8, -0.8,
+    0.8, 0.8,
+    0.8, 0.8,
+    -0.8, 0.8,
+    -0.8, -0.8,
+    -0.5, -0.5,
+    0.5, -0.5,
+    0.5, 0.5,
+    0.5, 0.5,
+    -0.5, 0.5,
+    -0.5, -0.5,
+]);
 
-const pipeline: IGLRenderPipeline = {
-    primitive: { topology: "TRIANGLE_STRIP" },
+const pipeline: IRenderPipeline = {
+    primitive: { topology: "triangle-strip" },
     vertex: {
         code: getShaderSource("vs")
     },
@@ -39,19 +37,19 @@ const pipeline: IGLRenderPipeline = {
     }
 };
 
-const vertexArray: IGLVertexArrayObject = {
+const vertexArray: { vertices?: IVertexAttributes } = {
     vertices: {
-        position: { buffer: vertexPosBuffer, numComponents: 2 },
+        position: { data: vertexPosBuffer, format: "float32x2" },
     }
 };
 
 const vertexCount = 12;
-const renderObject: IGLRenderObject = {
-    vertexArray,
+const renderObject: IRenderObject = {
+    vertices: vertexArray.vertices,
     pipeline,
 };
 
-const data: IGLRenderPass = {
+const rp: IRenderPass = {
     descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -61,19 +59,17 @@ const data: IGLRenderPass = {
     renderObjects: [
         {
             ...renderObject,
-            drawArrays: { firstVertex: 0, vertexCount: vertexCount / 2 },
             viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
+            drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
         },
         {
             ...renderObject,
-            drawArrays: { firstVertex: 6, vertexCount: vertexCount / 2 },
             viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
+            drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
         },
     ],
 };
 
-webgl.runRenderPass(data);
+webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
-webgl.deleteBuffer(vertexPosBuffer);
 webgl.deleteProgram(pipeline);
-webgl.deleteVertexArray(vertexArray);
