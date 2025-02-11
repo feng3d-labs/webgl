@@ -1,0 +1,34 @@
+name: GitHub Workflow
+
+on:
+  push:
+    branches:
+      - main # 可根据实际情况修改分支名
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14' # 可根据项目需求修改Node.js版本
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Build website content
+        run: npm run docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
