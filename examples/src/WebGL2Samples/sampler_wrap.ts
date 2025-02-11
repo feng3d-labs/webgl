@@ -101,7 +101,7 @@ for (let i = 0; i < Corners.MAX; ++i)
     samplers[i] = {
         minFilter: "linear",
         magFilter: "linear",
-        mipmapFilter:"linear",
+        mipmapFilter: "linear",
     };
 }
 
@@ -123,7 +123,7 @@ loadImage(imageUrl, function (image)
 {
     texture = {
         size: [image.width, image.height],
-        sources: [{ image: image, mipLevel: 0 }],
+        sources: [{ image, mipLevel: 0 }],
         format: "rgba8unorm",
         generateMipmap: true,
     };
@@ -136,7 +136,7 @@ function render()
     // Clear color buffer
     const rp: IRenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderObjects,
+        renderObjects,
     };
 
     const matrix = new Float32Array([

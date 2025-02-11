@@ -148,7 +148,6 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-
     // -- Init VertexArray
 
     const vertexArray: { vertices?: IVertexAttributes } = {
@@ -171,7 +170,7 @@ import { getShaderSource, loadImage } from "./utility";
             format: "rgba8unorm",
             mipLevelCount: 1,
             size: [512, 512],
-            sources: [{ image: image, flipY: false }],
+            sources: [{ image, flipY: false }],
         };
         sampler = {
             minFilter: "nearest",

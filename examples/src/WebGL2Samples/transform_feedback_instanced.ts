@@ -159,7 +159,7 @@ import { getShaderSource } from "./utility";
                 }
             ]
         }]
-    }
+    };
 
     function transform()
     {

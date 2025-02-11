@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
                 format: "rgba8unorm",
                 mipLevelCount: 1,
                 size: [256, 256],
-                sources: [{ image: image, flipY: false, }],
+                sources: [{ image, flipY: false }],
             };
             sampler = {
                 minFilter: "nearest",
@@ -192,7 +192,7 @@ import { getShaderSource, loadImage } from "./utility";
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects: renderObjects,
+            renderObjects,
         };
 
         orientation[0] = 0.00020; // yaw

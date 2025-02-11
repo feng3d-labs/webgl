@@ -135,13 +135,13 @@ const vertexArrays: { vertices?: IVertexAttributes }[] = [
     {
         vertices: {
             position: { data: positions, format: "float32x2" },
-            data: { data: data, format: "float32" },
+            data: { data, format: "float32" },
         }
     },
     {
         vertices: {
             position: { data: positions, format: "float32x2" },
-            data: { data: data, format: "float32" },
+            data: { data, format: "float32" },
         }
     },
     {
@@ -175,7 +175,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 const renderObjects: IRenderPassObject[] = [];
 // Pass 2
 const rp2: IRenderPass = {
-    renderObjects: renderObjects,
+    renderObjects,
 };
 const ro: IRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],

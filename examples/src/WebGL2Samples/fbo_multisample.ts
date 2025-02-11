@@ -85,7 +85,7 @@ const framebuffer: IRenderPassDescriptor = {
 // -- Init VertexArray
 const vertexArrays: { vertices?: IVertexAttributes }[] = [
     {
-        vertices: { position: { data: data, format: "float32x2" } }
+        vertices: { position: { data, format: "float32x2" } }
     },
     {
         vertices: {

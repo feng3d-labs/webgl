@@ -67,7 +67,7 @@ export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
 
 const addressModeMap: { [key: string]: IGLTextureWrap } = {
     "clamp-to-edge": "CLAMP_TO_EDGE",
-    "repeat": "REPEAT",
+    repeat: "REPEAT",
     "mirror-repeat": "MIRRORED_REPEAT",
 };
 
@@ -118,6 +118,6 @@ export function getIGLTextureMagFilter(magFilter: IFilterMode = "nearest")
 }
 
 const magFilterMap: { [key: string]: IGLTextureMagFilter } = {
-    "nearest": "NEAREST",
-    "linear": "LINEAR",
+    nearest: "NEAREST",
+    linear: "LINEAR",
 };

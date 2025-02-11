@@ -128,7 +128,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ mipLevel: 0, image: image }],
+            sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.TOP_LEFT] = {
             minFilter: "linear",
@@ -140,7 +140,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ mipLevel: 0, image: image }],
+            sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.TOP_RIGHT] = {
             minFilter: "linear",
@@ -154,7 +154,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ mipLevel: 0, image: image }],
+            sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.BOTTOM_LEFT] = {
             minFilter: "linear",
@@ -168,7 +168,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width, image.height],
             format: "rgba8unorm",
             generateMipmap: true,
-            sources: [{ mipLevel: 0, image: image }],
+            sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.BOTTOM_RIGHT] = {
             minFilter: "linear",
@@ -187,7 +187,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Clear color buffer
         const rp: IRenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: renderObjects,
+            renderObjects,
         };
 
         const matrix = new Float32Array([

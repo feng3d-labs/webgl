@@ -115,7 +115,6 @@ import { getShaderSource, loadImage } from "./utility";
         20, 21, 22, 20, 22, 23 // left
     ];
 
-
     // -- Init VertexArray
     const vertexArray: { vertices?: IVertexAttributes } = {
         vertices: {
@@ -137,7 +136,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                image: image, flipY: false,
+                image, flipY: false,
             }]
         };
         sampler = {

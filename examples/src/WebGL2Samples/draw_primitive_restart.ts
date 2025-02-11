@@ -45,7 +45,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 const renderObject: IRenderObject = {
     vertices: vertexArray.vertices,
-    indices: indices,
+    indices,
     uniforms: {},
     drawIndexed: { indexCount: 7, instanceCount: 2 },
     pipeline: program,
@@ -63,7 +63,7 @@ webgl.submit({
             renderObjects: [renderObject]
         }]
     }]
-})
+});
 
 // -- Delete WebGL resources
 webgl.deleteProgram(program);

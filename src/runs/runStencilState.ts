@@ -8,14 +8,14 @@ export function getIGLStencilFunc(compare: ICompareFunction)
     return stencilFunc;
 }
 const compareMap: { [key: string]: IGLStencilFunc } = {
-    "never": "NEVER",
-    "less": "LESS",
-    "equal": "EQUAL",
+    never: "NEVER",
+    less: "LESS",
+    equal: "EQUAL",
     "less-equal": "LEQUAL",
-    "greater": "GREATER",
+    greater: "GREATER",
     "not-equal": "NOTEQUAL",
     "greater-equal": "GEQUAL",
-    "always": "ALWAYS",
+    always: "ALWAYS",
 };
 
 export function getIGLStencilOp(stencilOperation?: IStencilOperation)
@@ -25,10 +25,10 @@ export function getIGLStencilOp(stencilOperation?: IStencilOperation)
     return glStencilOp;
 }
 const stencilOperationMap: { [key: string]: IGLStencilOp } = {
-    "keep": "KEEP",
-    "zero": "ZERO",
-    "replace": "REPLACE",
-    "invert": "INVERT",
+    keep: "KEEP",
+    zero: "ZERO",
+    replace: "REPLACE",
+    invert: "INVERT",
     "increment-clamp": "INCR",
     "decrement-clamp": "DECR",
     "increment-wrap": "INCR_WRAP",

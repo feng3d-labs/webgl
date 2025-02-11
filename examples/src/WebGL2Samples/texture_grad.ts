@@ -131,7 +131,7 @@ import { getShaderSource, loadImage } from "./utility";
             mipLevelCount: 1,
             size: [512, 512],
             sources: [{
-                image: image, flipY: false,
+                image, flipY: false,
             }]
         };
         sampler = {

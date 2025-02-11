@@ -17,7 +17,7 @@ declare module "@feng3d/render-api"
     export interface IImageCopyTexture
     {
         /**
-         * 
+         *
          * 注：当值设置为 null或者undefined时表示当前画布。
          */
         texture: ITextureLike;

@@ -349,7 +349,7 @@ function getBufferBindingInfo(uniformBlock: IUniformBlockInfo): IBufferBindingIn
             //
             const paths = itemInfo.paths.slice(1);
             //
-            items.push({ paths, offset: itemInfoOffset, size: itemInfoSize, Cls: Cls });
+            items.push({ paths, offset: itemInfoOffset, size: itemInfoSize, Cls });
         });
     });
     currentSize = roundUp(16, currentSize); // 整个统一块数据对齐
@@ -370,7 +370,7 @@ function roundUp(k: number, n: number): number
 }
 
 /**
- * 
+ *
  * @see https://github.com/brendan-duncan/wgsl_reflect/blob/main/src/wgsl_reflect.ts#L1206
  * @see https://www.orillusion.com/zh/wgsl.html#memory-layouts
  */
@@ -381,29 +381,29 @@ const uniformBufferTypeAlignSizeMap: {
         clsType: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor,
     }
 } = {
-    "FLOAT": { align: 4, size: 4, clsType: Float32Array },
-    "FLOAT_VEC2": { align: 8, size: 8, clsType: Float32Array },
-    "FLOAT_VEC3": { align: 16, size: 12, clsType: Float32Array },
-    "FLOAT_VEC4": { align: 16, size: 16, clsType: Float32Array },
-    "INT": { align: 4, size: 4, clsType: Int32Array },
-    "INT_VEC2": { align: 8, size: 8, clsType: Int32Array },
-    "INT_VEC3": { align: 16, size: 12, clsType: Int32Array },
-    "INT_VEC4": { align: 16, size: 16, clsType: Int32Array },
-    "BOOL": { align: 4, size: 4, clsType: Int32Array },
-    "BOOL_VEC2": { align: 8, size: 8, clsType: Int32Array },
-    "BOOL_VEC3": { align: 16, size: 12, clsType: Int32Array },
-    "BOOL_VEC4": { align: 16, size: 16, clsType: Int32Array },
-    "FLOAT_MAT2": { align: 8, size: 16, clsType: Float32Array },
-    "FLOAT_MAT3": { align: 16, size: 48, clsType: Float32Array },
-    "FLOAT_MAT4": { align: 16, size: 64, clsType: Float32Array },
-    "UNSIGNED_INT": { align: 4, size: 4, clsType: Uint32Array },
-    "UNSIGNED_INT_VEC2": { align: 8, size: 8, clsType: Uint32Array },
-    "UNSIGNED_INT_VEC3": { align: 16, size: 12, clsType: Uint32Array },
-    "UNSIGNED_INT_VEC4": { align: 16, size: 16, clsType: Uint32Array },
-    "FLOAT_MAT2x3": { align: 16, size: 32, clsType: Float32Array },
-    "FLOAT_MAT2x4": { align: 16, size: 32, clsType: Float32Array },
-    "FLOAT_MAT3x2": { align: 8, size: 24, clsType: Float32Array },
-    "FLOAT_MAT3x4": { align: 16, size: 48, clsType: Float32Array },
-    "FLOAT_MAT4x2": { align: 8, size: 32, clsType: Float32Array },
-    "FLOAT_MAT4x3": { align: 16, size: 64, clsType: Float32Array },
+    FLOAT: { align: 4, size: 4, clsType: Float32Array },
+    FLOAT_VEC2: { align: 8, size: 8, clsType: Float32Array },
+    FLOAT_VEC3: { align: 16, size: 12, clsType: Float32Array },
+    FLOAT_VEC4: { align: 16, size: 16, clsType: Float32Array },
+    INT: { align: 4, size: 4, clsType: Int32Array },
+    INT_VEC2: { align: 8, size: 8, clsType: Int32Array },
+    INT_VEC3: { align: 16, size: 12, clsType: Int32Array },
+    INT_VEC4: { align: 16, size: 16, clsType: Int32Array },
+    BOOL: { align: 4, size: 4, clsType: Int32Array },
+    BOOL_VEC2: { align: 8, size: 8, clsType: Int32Array },
+    BOOL_VEC3: { align: 16, size: 12, clsType: Int32Array },
+    BOOL_VEC4: { align: 16, size: 16, clsType: Int32Array },
+    FLOAT_MAT2: { align: 8, size: 16, clsType: Float32Array },
+    FLOAT_MAT3: { align: 16, size: 48, clsType: Float32Array },
+    FLOAT_MAT4: { align: 16, size: 64, clsType: Float32Array },
+    UNSIGNED_INT: { align: 4, size: 4, clsType: Uint32Array },
+    UNSIGNED_INT_VEC2: { align: 8, size: 8, clsType: Uint32Array },
+    UNSIGNED_INT_VEC3: { align: 16, size: 12, clsType: Uint32Array },
+    UNSIGNED_INT_VEC4: { align: 16, size: 16, clsType: Uint32Array },
+    FLOAT_MAT2x3: { align: 16, size: 32, clsType: Float32Array },
+    FLOAT_MAT2x4: { align: 16, size: 32, clsType: Float32Array },
+    FLOAT_MAT3x2: { align: 8, size: 24, clsType: Float32Array },
+    FLOAT_MAT3x4: { align: 16, size: 48, clsType: Float32Array },
+    FLOAT_MAT4x2: { align: 8, size: 32, clsType: Float32Array },
+    FLOAT_MAT4x3: { align: 16, size: 64, clsType: Float32Array },
 };
