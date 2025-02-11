@@ -105,7 +105,7 @@ button.id = "button";
 button.textContent = "View source";
 button.addEventListener("click", function (event)
 {
-    window.open(`https://gitlab.com/feng3d/renderer/tree/master/examples/src/${selected}.ts`);
+    window.open(`https://gitee.com/feng3d/webgl/tree/master/examples/src/${selected}.ts`);
 }, false);
 button.style.display = "none";
 document.body.appendChild(button);
