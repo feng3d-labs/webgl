@@ -62,7 +62,6 @@
   },
   "dependencies": {
     "@feng3d/render-api": "0.0.2",
-    "@feng3d/serialization": "^0.8.1",
     "@feng3d/watcher": "^0.8.7"
   }
 }
