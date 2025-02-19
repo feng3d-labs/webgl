@@ -10,7 +10,8 @@ const files = {
         "sample8",
     ],
     "test":[
-        "fractalCube"
+        "fractalCube",
+        "RenderObjectChanges",
     ],
     "regl-examples": [
         "basic",
