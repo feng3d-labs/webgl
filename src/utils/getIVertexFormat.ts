@@ -1,4 +1,4 @@
-import { IGLVertexAttributeTypes, IVertexFormat, IVertexFormatInfo, vertexFormatMap } from "@feng3d/render-api";
+import { IGLVertexAttributeTypes, IVertexFormat, IVertexAttributeFormatInfo, vertexFormatMap } from "@feng3d/render-api";
 
 export function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: IGLVertexAttributeTypes = "FLOAT", normalized = false): IVertexFormat
 {
@@ -20,7 +20,7 @@ export function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: IGLVertexAt
     return undefined;
 }
 
-export function getIGLVertexFormat(format: IVertexFormat): IVertexFormatInfo
+export function getIGLVertexFormat(format: IVertexFormat): IVertexAttributeFormatInfo
 {
     const glVertexFormat = vertexFormatMap[format];
 
