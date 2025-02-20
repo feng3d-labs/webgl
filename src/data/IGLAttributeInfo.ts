@@ -1,4 +1,4 @@
-import { IGLVertexAttributeTypes } from "../utils/getIVertexFormat";
+import { IGLVertexAttributeTypes } from "@feng3d/render-api";
 
 export interface IGLAttributeInfo
 {
