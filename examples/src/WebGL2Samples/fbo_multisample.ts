@@ -23,12 +23,10 @@ const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") },
         fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "LINE_LOOP" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") },
         fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "triangle-list" },
     },
 ];
 
@@ -106,6 +104,7 @@ const renderPass1: IRenderPass = {
         pipeline: programs[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
         geometry: {
+            primitive: { topology: "LINE_LOOP" },
             vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
             draw: { __type: "DrawVertex", vertexCount },
         }
@@ -126,6 +125,7 @@ const renderPass2: IRenderPass = {
             pipeline: programs[PROGRAM.SPLASH],
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
             geometry: {
+                primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[PROGRAM.SPLASH].vertices,
                 draw: { __type: "DrawVertex", vertexCount: 6 },
             }

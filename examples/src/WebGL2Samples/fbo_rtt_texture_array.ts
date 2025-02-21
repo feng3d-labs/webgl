@@ -53,13 +53,11 @@ viewport[Textures.BLUE] = {
 // Multiple out shaders
 const multipleOutputProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
-    primitive: { topology: "triangle-list" },
 };
 
 // Layer shaders
 const layerProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -138,6 +136,7 @@ const renderPass1: IRenderPass = {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             geometry:{
+                primitive: { topology: "triangle-list" },
                 vertices: multipleOutputVertexArray.vertices,
                 draw: { __type: "DrawVertex", vertexCount: 6 },
             }
@@ -157,6 +156,7 @@ const renderObject: IRenderObject = {
     pipeline: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     geometry: {
+        primitive: { topology: "triangle-list" },
         vertices: layerVertexArray.vertices,
         draw: { __type: "DrawVertex", vertexCount: 6 },
     }

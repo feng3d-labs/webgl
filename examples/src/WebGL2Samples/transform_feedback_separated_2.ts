@@ -126,7 +126,6 @@ import { getShaderSource } from "./utility";
                     }
                 }]
             },
-            primitive: { topology: "point-list" },
         };
 
         return [transformFeedbackPipeline, program];
@@ -150,6 +149,7 @@ import { getShaderSource } from "./utility";
         },
         geometry:{
             draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
+            primitive: { topology: "point-list" },
         }
     };
 

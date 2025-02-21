@@ -16,7 +16,6 @@ const webgl = new WebGL(rc);
 
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -96,6 +95,7 @@ function render()
                 materialDiffuse1: { texture, sampler: samplerB },
             },
             geometry:{
+                primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
                 draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
             }

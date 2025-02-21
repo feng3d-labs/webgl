@@ -14,7 +14,6 @@ const webgl = new WebGL(rc);
 // -- Init program
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Init buffers: vec2 Position, vec2 Texcoord
@@ -70,6 +69,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },
             geometry:{
+                primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
                 draw: { __type: "DrawVertex", vertexCount: 6 },
             }

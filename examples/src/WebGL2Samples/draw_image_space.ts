@@ -24,7 +24,6 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     };
 
     const program: IRenderPipeline = {
-        primitive: { topology: "triangle-list" },
         vertex: {
             code: getShaderSource("vs")
         },
@@ -40,6 +39,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
         geometry: {
+            primitive: { topology: "triangle-list" },
             draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         },
         pipeline: program

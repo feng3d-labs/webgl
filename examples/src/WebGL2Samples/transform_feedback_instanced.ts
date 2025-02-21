@@ -123,7 +123,6 @@ import { getShaderSource } from "./utility";
                     }
                 }]
             },
-            primitive: { topology: "triangle-list" },
         };
 
         const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
@@ -144,6 +143,7 @@ import { getShaderSource } from "./utility";
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
         geometry:{
+            primitive: { topology: "triangle-list" },
             draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
         }
     };

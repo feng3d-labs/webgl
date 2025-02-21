@@ -22,13 +22,11 @@ const windowSize = {
 const depthProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
     depthStencil: {},
-    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -97,6 +95,7 @@ const renderPass: IRenderPass = {
     renderObjects: [{
         pipeline: depthProgram,
         geometry:{
+            primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
             draw: { __type: "DrawVertex", vertexCount: 3 },
         }
@@ -113,6 +112,7 @@ const rp2: IRenderPass = {
         pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         geometry:{
+            primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,
             draw: { __type: "DrawVertex", vertexCount: 6 },
         }

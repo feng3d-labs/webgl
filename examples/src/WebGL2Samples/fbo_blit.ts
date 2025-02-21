@@ -12,7 +12,6 @@ const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 const program: IRenderPipeline = {
-    primitive: { topology: "triangle-list" },
     vertex: {
         code: getShaderSource("vs")
     },
@@ -92,6 +91,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             diffuse: { texture: textureDiffuse, sampler: samplerDiffuse },
         },
         geometry: {
+            primitive: { topology: "triangle-list" },
             vertices: vertexArray.vertices,
             draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 }
         }

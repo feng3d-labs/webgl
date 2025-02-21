@@ -45,12 +45,10 @@ viewport[VIEWPORTS.RIGHT] = {
 const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
-        primitive: { topology: "triangle-list" },
         depthStencil: { depthCompare: "less-equal" },
     },
     {
         vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
-        primitive: { topology: "triangle-list" },
         depthStencil: { depthCompare: "less-equal" },
     }
 ];
@@ -176,6 +174,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                                 mvNormal: localMVNormal,
                             },
                             geometry: {
+                                primitive: { topology: "triangle-list" },
                                 vertices: vertexArray.vertices,
                                 indices,
                                 draw: { __type: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },

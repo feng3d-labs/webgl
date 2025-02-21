@@ -23,7 +23,6 @@ async function main()
 
   const renderObject: IRenderObject = {
     pipeline: {
-      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;
@@ -51,6 +50,7 @@ async function main()
       depthStencil: { depthCompare: "less-equal" }
     },
     geometry: {
+      primitive: { topology: "triangle-list" },
       vertices: {
         aVertexPosition: {
           format: "float32x3",

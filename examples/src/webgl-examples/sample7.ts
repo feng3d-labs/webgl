@@ -23,7 +23,6 @@ async function main()
 
     const renderObject: IRenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -69,6 +68,7 @@ async function main()
         },
         uniforms: { uSampler: texture },
         geometry: {
+            primitive: { topology: "triangle-list" },
             vertices: {
                 aVertexPosition: {
                     format: "float32x3",

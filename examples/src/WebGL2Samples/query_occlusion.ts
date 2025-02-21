@@ -20,7 +20,6 @@ const webgl = new WebGL(rc);
 const program: IRenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: {},
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Init Buffer
@@ -54,6 +53,7 @@ const rp: IRenderPass = {
 const ro: IRenderObject = {
     pipeline: program,
     geometry: {
+        primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,
         draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
     }

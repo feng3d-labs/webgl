@@ -19,7 +19,6 @@ import { getShaderSource, loadImage } from "./utility";
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: {},
-        primitive: { cullFace: "back" },
     };
 
     // -- Init buffers
@@ -201,6 +200,7 @@ import { getShaderSource, loadImage } from "./utility";
         pipeline: program,
         uniforms: {},
         geometry:{
+            primitive: { cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),
             draw: { __type: "DrawIndexed", indexCount: 36 },

@@ -202,9 +202,6 @@ export class RunWebGL
     {
         const { viewport, scissorRect, pipeline, geometry, uniforms } = renderObject;
 
-        const topology = pipeline.primitive?.topology || "triangle-list";
-        const drawMode = getIGLDrawMode(topology);
-
         this.runViewPort(gl, attachmentSize, viewport);
 
         this.runScissor(gl, attachmentSize, scissorRect);
@@ -213,9 +210,14 @@ export class RunWebGL
 
         this.runUniforms(gl, pipeline, uniforms);
 
-        const { vertices, indices, draw, } = geometry;
+        const { vertices, indices, draw, primitive } = geometry;
 
         this.runVertexArray(gl, pipeline, vertices, indices);
+
+        this.runPrimitiveState(gl, primitive);
+
+        const topology = primitive?.topology || "triangle-list";
+        const drawMode = getIGLDrawMode(topology);
 
         if (draw.__type === 'DrawVertex')
         {
@@ -668,8 +670,6 @@ export class RunWebGL
     private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IRenderPipeline)
     {
         this.runProgram(gl, renderPipeline);
-
-        this.runPrimitiveState(gl, renderPipeline?.primitive);
 
         this.runDepthState(gl, renderPipeline.depthStencil);
         this.runStencilState(gl, renderPipeline.depthStencil);

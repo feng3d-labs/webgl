@@ -18,7 +18,6 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "triangle-list", cullFace: "back" },
         depthStencil: {},
     };
 
@@ -210,6 +209,7 @@ import { getShaderSource, loadImage } from "./utility";
             u_ambient: 0.1,
         },
         geometry:{
+            primitive: { topology: "triangle-list", cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),
             draw: { __type: "DrawIndexed", indexCount: 36 },

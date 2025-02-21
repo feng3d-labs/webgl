@@ -19,7 +19,6 @@ const vertexColorBuffer = new Float32Array([
     0.0, 0.5, 1.0]);
 
 const program: IRenderPipeline = {
-    primitive: { topology: "triangle-list" },
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };
@@ -34,6 +33,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 const renderObject: IRenderObject = {
     uniforms: {},
     geometry:{
+        primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,
         draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     },

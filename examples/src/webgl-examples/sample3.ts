@@ -29,7 +29,6 @@ function main()
     },
     renderObjects: [{
       pipeline: {
-        primitive: { topology: "triangle-strip" },
         vertex: {
           code: `
           attribute vec4 aVertexPosition;
@@ -55,7 +54,7 @@ function main()
         depthStencil: { depthCompare: "less-equal" }
       },
       geometry: {
-
+        primitive: { topology: "triangle-strip" },
         vertices: {
           aVertexPosition: {
             format: "float32x2",

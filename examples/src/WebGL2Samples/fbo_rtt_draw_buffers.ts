@@ -22,14 +22,12 @@ const windowSize = {
 const drawBufferProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
-    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: IRenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -103,6 +101,7 @@ const renderPass: IRenderPass = {
     renderObjects: [{
         pipeline: drawBufferProgram,
         geometry:{
+            primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
             draw: { __type: "DrawVertex", vertexCount: 3 },
         }
@@ -119,6 +118,7 @@ const renderPass2: IRenderPass = {
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
         geometry:{
+            primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,
             draw: { __type: "DrawVertex", vertexCount: 6 },
         }

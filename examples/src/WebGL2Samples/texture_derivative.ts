@@ -23,7 +23,6 @@ import { getShaderSource, loadImage } from "./utility";
             }]
         },
         depthStencil: {},
-        primitive: { topology: "triangle-list", cullFace: "back" }
     };
 
     // -- Init buffers
@@ -210,6 +209,7 @@ import { getShaderSource, loadImage } from "./utility";
         pipeline: program,
         uniforms: {},
         geometry:{
+            primitive: { topology: "triangle-list", cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),
             draw: { __type: "DrawIndexed", indexCount: 36 },

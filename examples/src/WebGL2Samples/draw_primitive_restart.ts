@@ -23,7 +23,6 @@ const vertexPosBuffer = new Float32Array([
 ]);
 
 const program: IRenderPipeline = {
-    primitive: { topology: "triangle-strip" },
     vertex: {
         code: getShaderSource("vs")
     },
@@ -46,6 +45,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 const renderObject: IRenderObject = {
     uniforms: {},
     geometry: {
+        primitive: { topology: "triangle-strip" },
         vertices: vertexArray.vertices,
         indices,
         draw: { __type: "DrawIndexed", indexCount: 7, instanceCount: 2 },

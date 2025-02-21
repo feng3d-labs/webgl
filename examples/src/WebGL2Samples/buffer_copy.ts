@@ -18,7 +18,6 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const program: IRenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "triangle-list" },
     };
 
     // -- Init Buffer
@@ -54,6 +53,7 @@ import { getShaderSource } from "./utility";
         renderObjects: [{
             pipeline: program,
             geometry:{
+                primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
                 draw: { __type: "DrawVertex", vertexCount: 6 },
             },

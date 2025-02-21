@@ -213,7 +213,6 @@ import { getShaderSource, loadImage } from "./utility";
                 renderObjects.push({
                     pipeline: {
                         ...program,
-                        primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
                     uniforms: {
                         mvMatrix: localMV,
@@ -222,6 +221,7 @@ import { getShaderSource, loadImage } from "./utility";
                         diffuse: { texture, sampler },
                     },
                     geometry:{
+                        primitive: { topology: IDrawMode2Name[primitive.mode] },
                         vertices: vertexArrayMaps[mid][i].vertices,
                         indices: vertexArrayMaps[mid][i].indices,
                         draw: { __type: "DrawIndexed", indexCount: primitive.indices.length }

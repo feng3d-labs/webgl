@@ -51,15 +51,12 @@ const PROGRAM = {
 const programs: IRenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
-        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "triangle-list" },
     }
 ];
 
@@ -166,6 +163,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             pipeline: programs[i],
             uniforms: { MVP: IDENTITY },
             geometry: {
+                primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[i].vertices,
                 draw: { __type: "DrawVertex", vertexCount },
             }
@@ -182,6 +180,7 @@ const rp2: IRenderPass = {
 const ro: IRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
     geometry: {
+        primitive: { topology: "triangle-list" },
         vertices: vertexArrays[PROGRAM.SPLASH].vertices,
         draw: { __type: "DrawVertex", vertexCount: 6 },
     },
