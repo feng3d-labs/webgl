@@ -9,7 +9,7 @@ import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
 import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { IGLCanvasContext } from "./data/IGLCanvasContext";
+import { GLCanvasContext } from "./data/GLCanvasContext";
 import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
@@ -23,10 +23,10 @@ import { readPixels } from "./utils/readPixels";
 export class WebGL
 {
     private _runWebGL: RunWebGL = new RunWebGL();
-    private _renderingContext: IGLCanvasContext;
+    private _renderingContext: GLCanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext?: IGLCanvasContext)
+    constructor(renderingContext?: GLCanvasContext)
     {
         this._renderingContext = renderingContext;
         this._gl = getGLCanvasContext(this._renderingContext);

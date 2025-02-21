@@ -1,5 +1,5 @@
 import { IIndicesDataTypes, Material, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { getIGLVertexBuffer, GLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,7 +12,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     // -- Init Program

@@ -1,5 +1,5 @@
 import { RenderPass, IRenderPassObject, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,7 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
     const webgl = new WebGL(rc);
 
     const Corners = {

@@ -1,5 +1,5 @@
 import { RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const renderingContext: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
 const webgl = new WebGL(renderingContext);
 
 const windowSize = {

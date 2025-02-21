@@ -1,5 +1,4 @@
-import { IGLCanvasContext } from "../data/IGLCanvasContext";
-import { defaultCanvasContext } from "../defaults/defaults";
+import { GLCanvasContext } from "../data/GLCanvasContext";
 import { ChainMap } from "../utils/ChainMap";
 import { getCapabilities } from "./getCapabilities";
 
@@ -9,7 +8,7 @@ import { getCapabilities } from "./getCapabilities";
  * @param renderingContext
  * @returns
  */
-export function getGLCanvasContext(renderingContext: IGLCanvasContext)
+export function getGLCanvasContext(renderingContext: GLCanvasContext)
 {
     const key = renderingContext.canvasId;
     let value = canvasContextMap.get(key);
@@ -72,7 +71,7 @@ function autoCreateCanvas(canvasId: string)
     return canvas;
 }
 
-export function getCanvas(canvasContext: IGLCanvasContext)
+export function getCanvas(canvasContext: GLCanvasContext)
 {
     let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
@@ -83,9 +82,9 @@ export function getCanvas(canvasContext: IGLCanvasContext)
     return canvas;
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IGLCanvasContext)
+function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: GLCanvasContext)
 {
-    const contextAttributes = Object.assign({}, defaultCanvasContext, canvasContext);
+    const contextAttributes = GLCanvasContext.getInstance(canvasContext);
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;

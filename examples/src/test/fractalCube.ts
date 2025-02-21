@@ -1,5 +1,5 @@
 import { Sampler, Submit, Texture, RenderObject } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -13,7 +13,7 @@ async function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const renderingContext: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 
     const webgl = new WebGL(renderingContext);
 
