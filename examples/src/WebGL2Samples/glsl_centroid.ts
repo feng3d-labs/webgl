@@ -1,4 +1,4 @@
-import { IPassEncoder, RenderPass, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, Texture, IViewport, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -24,7 +24,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
+const viewport: Viewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,

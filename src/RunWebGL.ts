@@ -1,4 +1,4 @@
-import { BlendComponent, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, Viewport, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -800,7 +800,7 @@ export class RunWebGL
             const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor, color?.operation) || colorDstFactor;
 
             // 当混合系数用到了混合常量值时设置混合常量值。
-            const constantColor = getBlendConstantColor(blend);
+            const constantColor = BlendState.getInstance(blend)?.getBlendConstantColor();
             if (constantColor)
             {
                 const constantColor = blend.constantColor ?? [0, 0, 0, 0];

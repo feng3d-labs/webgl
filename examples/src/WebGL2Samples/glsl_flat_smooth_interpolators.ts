@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, RenderPass, IRenderPassObject, RenderPipeline, VertexAttributes, IViewport } from "@feng3d/render-api";
+import { IIndicesDataTypes, RenderPass, IRenderPassObject, RenderPipeline, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -25,7 +25,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
+const viewport: Viewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,

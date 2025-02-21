@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, IViewport, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { IRenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -136,7 +136,7 @@ function render()
 
     for (let i = 0; i < Corners.MAX; ++i)
     {
-        const viewport0: IViewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
+        const viewport0: Viewport = { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w };
 
         if (i === Corners.TOP_LEFT)
         {
