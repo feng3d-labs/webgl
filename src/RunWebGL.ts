@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Material, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, Material, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -12,7 +12,7 @@ import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRender
 import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
-import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
+import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
 import { IGLDrawElementType, IGLUniformBuffer } from "./data/IGLBuffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
@@ -886,7 +886,7 @@ export class RunWebGL
         this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IGLBlitFramebuffer)
+    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: GLBlitFramebuffer)
     {
         const { read, draw, blitFramebuffers } = blitFramebuffer;
 

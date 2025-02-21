@@ -1,5 +1,5 @@
 import { RenderPassColorAttachment, RenderPassDescriptor, ITextureFormat, TextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
+import { GLBlitFramebuffer } from "../data/GLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 
@@ -46,7 +46,7 @@ return colorAttachment;
     };
 
     // 拷贝 渲染缓冲区到 IGLTexture
-    const blitFramebuffer: IGLBlitFramebuffer = {
+    const blitFramebuffer: GLBlitFramebuffer = {
         __type: "BlitFramebuffer",
         read: passDescriptor,
         draw: sourcePassDescriptor,
@@ -81,7 +81,7 @@ export interface IGLRenderPassDescriptorWithMultisample
     /**
      * 拷贝渲染缓冲区到目标纹理中。
      */
-    blitFramebuffer: IGLBlitFramebuffer;
+    blitFramebuffer: GLBlitFramebuffer;
     /**
      * 需要销毁的临时渲染缓冲区。
      */

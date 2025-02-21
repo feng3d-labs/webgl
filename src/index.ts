@@ -1,4 +1,4 @@
-export * from "./data/IGLBlitFramebuffer";
+export * from "./data/GLBlitFramebuffer";
 export * from "./data/IGLBuffer";
 export * from "./data/GLCanvasContext";
 export * from "./data/IGLCapabilities";

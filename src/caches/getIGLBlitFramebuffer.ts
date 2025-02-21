@@ -1,5 +1,5 @@
 import { CopyTextureToTexture, ImageCopyTexture, RenderPassColorAttachment, RenderPassDepthStencilAttachment, TextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/IGLBlitFramebuffer";
+import { GLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/GLBlitFramebuffer";
 
 /**
  * 通过 IGLBlitFramebuffer 实现纹理之间拷贝并不靠谱。
@@ -51,7 +51,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture
         mask, "NEAREST",
     ];
 
-    const blitFramebuffer: IGLBlitFramebuffer = {
+    const blitFramebuffer: GLBlitFramebuffer = {
         __type: "BlitFramebuffer",
         read: {
             colorAttachments: sourceColorAttachments,

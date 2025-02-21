@@ -1,6 +1,6 @@
 import { Material } from "@feng3d/render-api";
 import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
-import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
+import { IGLAttributeInfo } from "../internal/IGLAttributeInfo";
 import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getIGLAttributeType } from "./getIGLAttributeType";
