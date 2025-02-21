@@ -1,4 +1,4 @@
-import { getBlendConstantColor, BlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { getBlendConstantColor, BlendComponent, IBufferBinding, ColorTargetState, CommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -72,7 +72,7 @@ export class RunWebGL
         gl[_GL_Submit_Times] = ~~gl[_GL_Submit_Times] + 1;
     }
 
-    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: ICommandEncoder)
+    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
     {
         commandEncoder.passEncoders.forEach((passEncoder) =>
         {
@@ -778,7 +778,7 @@ export class RunWebGL
         this.runColorTargetStates(gl, pipeline.fragment.targets);
     }
 
-    private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly IColorTargetState[])
+    private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
     {
         //
         const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
