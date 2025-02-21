@@ -1,4 +1,4 @@
-import { ICompareFunction, IDepthStencilState } from "@feng3d/render-api";
+import { ICompareFunction, DepthStencilState } from "@feng3d/render-api";
 import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 
 export function getIGLCompareFunction(depthCompare: ICompareFunction)

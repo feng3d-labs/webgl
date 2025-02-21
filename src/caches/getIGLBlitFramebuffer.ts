@@ -1,4 +1,4 @@
-import { ICopyTextureToTexture, IImageCopyTexture, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, ITextureView } from "@feng3d/render-api";
+import { CopyTextureToTexture, ImageCopyTexture, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, ITextureView } from "@feng3d/render-api";
 import { IGLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/IGLBlitFramebuffer";
 
 /**
@@ -7,7 +7,7 @@ import { IGLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/IGLBlitFrame
  * @param copyTextureToTexture GL纹理之间拷贝。
  * @returns
  */
-export function getIGLBlitFramebuffer(copyTextureToTexture: ICopyTextureToTexture)
+export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture)
 {
     const { source, destination, copySize } = copyTextureToTexture;
 
@@ -67,7 +67,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: ICopyTextureToTextur
     return blitFramebuffer;
 }
 
-function getIGLTextureView(source: IImageCopyTexture)
+function getIGLTextureView(source: ImageCopyTexture)
 {
     if (!source.texture) return undefined;
 

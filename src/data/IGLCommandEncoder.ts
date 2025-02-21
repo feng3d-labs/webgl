@@ -14,7 +14,7 @@ declare module "@feng3d/render-api"
      * {@link GPUCommandEncoder.copyTextureToTexture}
      * {@link GPUImageCopyTexture}
      */
-    export interface IImageCopyTexture
+    export interface ImageCopyTexture
     {
         /**
          *

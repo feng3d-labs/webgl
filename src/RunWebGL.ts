@@ -1,4 +1,4 @@
-import { getBlendConstantColor, BlendComponent, IBufferBinding, ColorTargetState, CommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { BlendComponent, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, IBufferBinding, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -675,7 +675,7 @@ export class RunWebGL
         this.runStencilState(gl, renderPipeline.depthStencil);
     }
 
-    private runStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
+    private runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         const { stencilFront, stencilBack } = { ...depthStencil };
         //
@@ -716,7 +716,7 @@ export class RunWebGL
         }
     }
 
-    private runDepthState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
+    private runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
         {
@@ -880,7 +880,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: ICopyTextureToTexture)
+    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: CopyTextureToTexture)
     {
         const blitFramebuffer = getIGLBlitFramebuffer(copyTextureToTexture);
         this.runBlitFramebuffer(gl, blitFramebuffer);
@@ -916,7 +916,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: ICopyBufferToBuffer)
+    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferToBuffer)
     {
         if (gl instanceof WebGL2RenderingContext)
         {

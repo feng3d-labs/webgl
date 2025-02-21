@@ -1,4 +1,4 @@
-import { ICopyBufferToBuffer, IRenderPass, IRenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { CopyBufferToBuffer, IRenderPass, IRenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -33,7 +33,7 @@ import { getShaderSource } from "./utility";
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
-    const cb: ICopyBufferToBuffer = {
+    const cb: CopyBufferToBuffer = {
         __type: "CopyBufferToBuffer",
         source: vertexPosBufferSrc,
         destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),
