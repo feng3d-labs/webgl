@@ -62,7 +62,7 @@ function getRenderObject(batchId: number)
             offset: offsets[batchId].offset,
         },
         pipeline,
-        drawVertex: { vertexCount: 3 }
+        draw: { __type: "DrawVertex", vertexCount: 3 }
     };
 
     return renderObject;

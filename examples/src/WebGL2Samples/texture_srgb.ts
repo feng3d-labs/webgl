@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
                 mvp: matrix,
                 materialDiffuse: { texture, sampler },
             },
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

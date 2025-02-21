@@ -105,7 +105,7 @@ import { getShaderSource, loadImage } from "./utility";
             uniforms: {
                 MVP: matrix,
             },
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         };
 
         const renderObjects: IRenderPassObject[] = [];

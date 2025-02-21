@@ -49,7 +49,7 @@ const renderObject: IRenderObject = {
         },
         depthStencil: {},
     },
-    drawVertex: { vertexCount: 3 },
+    draw: { __type: "DrawVertex", vertexCount: 3 },
 };
 
 function draw()

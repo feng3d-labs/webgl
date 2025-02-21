@@ -96,7 +96,7 @@ function render()
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },
-            drawVertex: { vertexCount: 6, instanceCount: 1 },
+            draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
         }],
     };
 

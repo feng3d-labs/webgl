@@ -150,6 +150,7 @@ function render()
         pipeline: program,
         uniforms: { mvp: matrix },
         vertices: vertexArray.vertices,
+        draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -162,7 +163,7 @@ function render()
                     ...ro.uniforms,
                     diffuse: { texture, sampler: samplers[i] },
                 },
-                drawVertex: { vertexCount: 6, instanceCount: 1 },
+                draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
             });
     }
 

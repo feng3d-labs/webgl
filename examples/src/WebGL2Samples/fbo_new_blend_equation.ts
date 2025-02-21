@@ -123,7 +123,7 @@ function render()
         pipeline: program,
         vertices: vertexArray.vertices,
         uniforms: { mvp: matrix, diffuse: { texture, sampler } },
-        drawVertex: { vertexCount: 6 },
+        draw: { __type: "DrawVertex", vertexCount: 6 },
     };
 
     const renderObjects: IRenderPassObject[] = [];

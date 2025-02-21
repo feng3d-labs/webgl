@@ -63,7 +63,7 @@ function main()
       },
     },
     uniforms: {},
-    drawVertex: { firstVertex: 0, vertexCount: 4 },
+    draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
   };
 
   const renderPass: IRenderPass = {

@@ -54,7 +54,7 @@ const rp: IRenderPass = {
 const ro: IRenderObject = {
     vertices: vertexArray.vertices,
     pipeline: program,
-    drawVertex: { firstVertex: 0, vertexCount: 3 },
+    draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
 };
 renderObjects.push(ro);
 
@@ -62,7 +62,7 @@ const occlusionQuery: IGLOcclusionQuery = {
     __type: "OcclusionQuery",
     renderObjects: [{
         ...ro,
-        drawVertex: { firstVertex: 3, vertexCount: 3 },
+        draw: { __type: "DrawVertex", firstVertex: 3, vertexCount: 3 },
     }]
 };
 

@@ -70,7 +70,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
         indices: new Uint16Array(indices),
-        drawIndexed: { indexCount: indices.length },
+        draw: { __type: "DrawIndexed", indexCount: indices.length },
         uniforms: {},
         pipeline: {
             vertex: {

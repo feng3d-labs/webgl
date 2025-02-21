@@ -34,7 +34,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 const renderObject: IRenderObject = {
     vertices: vertexArray.vertices,
     uniforms: {},
-    drawVertex: { vertexCount: 3, instanceCount: 2 },
+    draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     pipeline: program
 };
 

@@ -57,7 +57,7 @@ function main()
                 uProjectionMatrix: projectionMatrix,
                 uModelViewMatrix: modelViewMatrix,
             },
-            drawVertex: { firstVertex: 0, vertexCount: 4 },
+            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
         }],
     };
 

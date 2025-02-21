@@ -138,7 +138,7 @@ const renderPass1: IRenderPass = {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             vertices: multipleOutputVertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         }]
 };
 
@@ -155,7 +155,7 @@ const renderObject: IRenderObject = {
     pipeline: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     vertices: layerVertexArray.vertices,
-
+    draw: { __type: "DrawVertex", vertexCount: 6 },
 };
 
 //
@@ -166,7 +166,7 @@ for (let i = 0; i < Textures.MAX; ++i)
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             ...renderObject,
             uniforms: { ...renderObject.uniforms, layer: i },
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         }
     );
 }

@@ -95,7 +95,7 @@ import { getShaderSource } from "./utility";
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,
-                            drawVertex: { vertexCount: VERTEX_COUNT },
+                            draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
                         }
                     ],
                 },
@@ -107,7 +107,7 @@ import { getShaderSource } from "./utility";
                             pipeline: programFeedback,
                             vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                             indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                            drawVertex: { vertexCount: VERTEX_COUNT },
+                            draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
                         }
                     ],
                 }]

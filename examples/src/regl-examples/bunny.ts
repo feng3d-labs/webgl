@@ -35,7 +35,7 @@ const renderObject: IRenderObject = {
         position: { data: new Float32Array(positions), format: "float32x3" },
     },
     indices: new Uint16Array(indices),
-    drawIndexed: { indexCount: indices.length },
+    draw: { __type: "DrawIndexed", indexCount: indices.length },
     uniforms: {
         model: mat4.identity([]),
     },

@@ -98,7 +98,7 @@ import { getShaderSource, loadImage } from "./utility";
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

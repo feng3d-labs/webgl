@@ -39,7 +39,7 @@ export interface IGLTransformFeedbackObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
-    readonly drawVertex: IDrawVertex;
+    readonly draw: IDrawVertex;
 
     /**
      * Uniform渲染数据

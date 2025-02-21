@@ -200,7 +200,7 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
     {
-        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, drawIndexed, drawVertex } = renderObject;
+        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, draw } = renderObject;
 
         const topology = pipeline.primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
@@ -215,19 +215,19 @@ export class RunWebGL
 
         this.runUniforms(gl, pipeline, uniforms);
 
-        if (drawVertex)
+        if (draw.__type === 'DrawVertex')
         {
-            this.runDrawVertex(gl, drawMode, drawVertex);
+            this.runDrawVertex(gl, drawMode, draw);
         }
-        if (drawIndexed)
+        else
         {
-            this.runDrawIndexed(gl, drawMode, indices, drawIndexed);
+            this.runDrawIndexed(gl, drawMode, indices, draw);
         }
     }
 
     private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
     {
-        const { pipeline, vertices, uniforms, transformFeedback, drawVertex } = renderObject;
+        const { pipeline, vertices, uniforms, transformFeedback, draw } = renderObject;
 
         const drawMode = getIGLDrawMode("point-list");
 
@@ -239,7 +239,7 @@ export class RunWebGL
 
         this.runTransformFeedback(gl, transformFeedback, drawMode);
 
-        this.runDrawVertex(gl, drawMode, drawVertex);
+        this.runDrawVertex(gl, drawMode, draw);
 
         this.endTransformFeedback(gl, transformFeedback);
     }

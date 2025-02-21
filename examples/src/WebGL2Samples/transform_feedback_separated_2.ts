@@ -139,7 +139,7 @@ import { getShaderSource } from "./utility";
         uniforms: {
             u_acceleration: [0.0, ACCELERATION],
         },
-        drawVertex: { vertexCount: NUM_PARTICLES },
+        draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
     const renderRO: IRenderObject = {
@@ -148,7 +148,7 @@ import { getShaderSource } from "./utility";
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
-        drawVertex: { vertexCount: NUM_PARTICLES },
+        draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
     const submit: ISubmit = {

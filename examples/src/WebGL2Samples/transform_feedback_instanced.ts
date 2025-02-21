@@ -136,14 +136,14 @@ import { getShaderSource } from "./utility";
         vertices: null,
         transformFeedback: null,
         uniforms: {},
-        drawVertex: { vertexCount: NUM_INSTANCES },
+        draw: { __type: "DrawVertex", vertexCount: NUM_INSTANCES },
     };
 
     const renderRO: IRenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
-        drawVertex: { vertexCount: 3, instanceCount: NUM_INSTANCES },
+        draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
     const submit: ISubmit = {

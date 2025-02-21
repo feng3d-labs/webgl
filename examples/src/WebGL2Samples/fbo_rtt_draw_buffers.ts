@@ -103,7 +103,7 @@ const renderPass: IRenderPass = {
     renderObjects: [{
         pipeline: drawBufferProgram,
         vertices: triVertexArray.vertices,
-        drawVertex: { vertexCount: 3 },
+        draw: { __type: "DrawVertex", vertexCount: 3 },
     }],
 };
 
@@ -117,7 +117,7 @@ const renderPass2: IRenderPass = {
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
         vertices: quadVertexArray.vertices,
-        drawVertex: { vertexCount: 6 },
+        draw: { __type: "DrawVertex", vertexCount: 6 },
     }],
 };
 

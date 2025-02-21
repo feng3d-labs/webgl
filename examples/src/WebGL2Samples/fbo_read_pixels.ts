@@ -136,7 +136,7 @@ const rp1: IRenderPass = {
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             vertices: multipleOutputVertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            draw: { __type: "DrawVertex", vertexCount: 6 },
         }],
 };
 
@@ -155,7 +155,7 @@ const ro: IRenderObject = {
         layer: 0,
     },
     vertices: layerVertexArray.vertices,
-    drawVertex: { vertexCount: 6 },
+    draw: { __type: "DrawVertex", vertexCount: 6 },
 };
 
 for (let i = 0; i < Textures.MAX; ++i)

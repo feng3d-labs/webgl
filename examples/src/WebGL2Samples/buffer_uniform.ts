@@ -90,7 +90,7 @@ import { getShaderSource } from "./utility";
             PerPass: lightPos,
             PerScene: material,
         },
-        drawIndexed: { indexCount: 6, firstIndex: 0 }
+        draw: { __type: "DrawIndexed", indexCount: 6, firstIndex: 0 }
     };
 
     const rp: IRenderPass = {

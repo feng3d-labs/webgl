@@ -56,10 +56,6 @@ import { getShaderSource, loadImage } from "./utility";
     let texture: ITexture;
     let sampler: ISampler;
 
-    const ro: IRenderObject = {
-        pipeline: program,
-    };
-
     // -- Load model then render
     const glTFLoader = new GlTFLoader();
     let curScene;
@@ -227,7 +223,7 @@ import { getShaderSource, loadImage } from "./utility";
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    drawIndexed: { indexCount: primitive.indices.length }
+                    draw: { __type: "DrawIndexed", indexCount: primitive.indices.length }
                 });
             }
         }

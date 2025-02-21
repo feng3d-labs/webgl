@@ -47,6 +47,7 @@ const vertexCount = 12;
 const renderObject: IRenderObject = {
     vertices: vertexArray.vertices,
     pipeline,
+    draw: undefined,
 };
 
 const rp: IRenderPass = {
@@ -60,12 +61,12 @@ const rp: IRenderPass = {
         {
             ...renderObject,
             viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
-            drawVertex: { firstVertex: 0, vertexCount: vertexCount / 2 },
+            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: vertexCount / 2 },
         },
         {
             ...renderObject,
             viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
-            drawVertex: { firstVertex: 6, vertexCount: vertexCount / 2 },
+            draw: { __type: "DrawVertex", firstVertex: 6, vertexCount: vertexCount / 2 },
         },
     ],
 };

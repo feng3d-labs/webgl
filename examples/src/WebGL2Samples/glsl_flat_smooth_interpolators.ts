@@ -177,7 +177,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },
-                            drawIndexed: { indexCount: primitive.indices.length, firstIndex: 0 },
+                            draw: { __type: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
                         });
                 }
             }

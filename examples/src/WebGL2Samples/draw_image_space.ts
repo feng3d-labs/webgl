@@ -39,7 +39,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
-        drawVertex: { firstVertex: 0, vertexCount: 3 },
+        draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         pipeline: program
     };
 

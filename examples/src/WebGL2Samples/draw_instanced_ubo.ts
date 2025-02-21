@@ -57,7 +57,7 @@ const rp: IRenderPass = {
             Transform: transforms,
             Material: materials,
         },
-        drawVertex: { vertexCount: 3, instanceCount: 2 },
+        draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     }]
 };
 

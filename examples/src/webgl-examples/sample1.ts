@@ -44,7 +44,7 @@ const init = async (canvas: HTMLCanvasElement) =>
                             },
                             indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
                             uniforms: { color: [1, 0, 0, 1] }, // Uniform 颜色值。
-                            drawIndexed: { indexCount: 3 }, // 绘制命令
+                            draw: { __type: "DrawIndexed", indexCount: 3 }, // 绘制命令
                         }]
                     },
                 ]

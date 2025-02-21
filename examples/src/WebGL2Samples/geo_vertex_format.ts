@@ -211,7 +211,7 @@ import { getShaderSource, loadImage } from "./utility";
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
-        drawIndexed: { indexCount: 36 },
+        draw: { __type: "DrawIndexed", indexCount: 36 },
     };
 
     const rp: IRenderPass = {
