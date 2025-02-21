@@ -53,8 +53,10 @@ import { getShaderSource } from "./utility";
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            },
         }]
     };
 

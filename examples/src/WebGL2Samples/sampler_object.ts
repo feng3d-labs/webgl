@@ -90,13 +90,15 @@ function render()
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertices: vertexArray.vertices,
             uniforms: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },
-            draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+            }
         }],
     };
 

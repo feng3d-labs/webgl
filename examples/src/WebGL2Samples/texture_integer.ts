@@ -75,8 +75,10 @@ import { getShaderSource, loadImage } from "./utility";
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         };
 
         const rp: IRenderPass = {

@@ -174,13 +174,15 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    vertices: vertexArray.vertices,
                     pipeline: programNormalized,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type: "DrawVertex", vertexCount: 6 },
+                    }
                 });
         }
 
@@ -190,13 +192,15 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    vertices: vertexArray.vertices,
                     pipeline: programUint,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type: "DrawVertex", vertexCount: 6 },
+                    }
                 });
         }
 

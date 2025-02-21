@@ -17,15 +17,18 @@ document.body.appendChild(canvas);
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
 const renderObject: IRenderObject = {
-    vertices: {
-        position: {
-            data: new Float32Array([
-                -1, 0,
-                0, -1,
-                1, 1
-            ]),
-            format: "float32x2",
+    geometry: {
+        vertices: {
+            position: {
+                data: new Float32Array([
+                    -1, 0,
+                    0, -1,
+                    1, 1
+                ]),
+                format: "float32x2",
+            },
         },
+        draw: { __type: "DrawVertex", vertexCount: 3 },
     },
     uniforms: { color: [1, 0, 0, 1] },
     pipeline: {
@@ -49,7 +52,6 @@ const renderObject: IRenderObject = {
         },
         depthStencil: {},
     },
-    draw: { __type: "DrawVertex", vertexCount: 3 },
 };
 
 function draw()

@@ -143,7 +143,9 @@ import { getShaderSource } from "./utility";
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
-        draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
+        geometry:{
+            draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
+        }
     };
 
     const submit: ISubmit = {
@@ -181,8 +183,8 @@ import { getShaderSource } from "./utility";
         // Rotate triangles
         transform();
 
-        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
-        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
+        renderRO.geometry.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.geometry.indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit(submit);
 

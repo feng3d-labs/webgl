@@ -104,9 +104,11 @@ const renderPass1: IRenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
-        vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
         uniforms: { MVP: IDENTITY },
-        draw: { __type: "DrawVertex", vertexCount },
+        geometry: {
+            vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
+            draw: { __type: "DrawVertex", vertexCount },
+        }
     }]
 };
 
@@ -122,9 +124,11 @@ const renderPass2: IRenderPass = {
     renderObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
-            vertices: vertexArrays[PROGRAM.SPLASH].vertices,
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry: {
+                vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         }
     ],
 };

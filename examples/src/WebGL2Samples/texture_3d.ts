@@ -162,8 +162,10 @@ import { getShaderSource } from "./utility";
         uniforms: {
             diffuse: { texture, sampler },
         },
-        vertices: vertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6 }
+        geometry:{
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 6 }
+        }
     };
 
     const renderPassObjects: IRenderObject[] = [];

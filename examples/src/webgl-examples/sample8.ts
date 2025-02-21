@@ -71,23 +71,25 @@ function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        vertices: {
-            aVertexPosition: {
-                format: "float32x3",
-                data: buffers.position,
+        geometry: {
+            vertices: {
+                aVertexPosition: {
+                    format: "float32x3",
+                    data: buffers.position,
+                },
+                aVertexNormal: {
+                    format: "float32x3",
+                    data: buffers.normal,
+                },
+                aTextureCoord: {
+                    format: "float32x2",
+                    data: buffers.textureCoord,
+                },
             },
-            aVertexNormal: {
-                format: "float32x3",
-                data: buffers.normal,
-            },
-            aTextureCoord: {
-                format: "float32x2",
-                data: buffers.textureCoord,
-            },
+            indices: buffers.indices,
+            draw: { __type: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
-        indices: buffers.indices,
         uniforms: { uSampler: texture },
-        draw: { __type: "DrawIndexed", firstIndex: 0, indexCount: 36 },
     };
 
     const renderPass: IRenderPass = {

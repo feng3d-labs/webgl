@@ -105,9 +105,11 @@ import { getShaderSource } from "./utility";
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programFeedback,
-                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                            draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            geometry:{
+                                vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                                indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                                draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            },
                         }
                     ],
                 }]

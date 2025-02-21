@@ -65,12 +65,14 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderObject: IRenderObject = {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+        geometry:{
+            vertices: {
+                position: { data: new Float32Array(positions), format: "float32x3" },
+                uv: { data: new Float32Array(uvs), format: "float32x2" },
+            },
+            indices: new Uint16Array(indices),
+            draw: { __type: "DrawIndexed", indexCount: indices.length },
         },
-        indices: new Uint16Array(indices),
-        draw: { __type: "DrawIndexed", indexCount: indices.length },
         uniforms: {},
         pipeline: {
             vertex: {

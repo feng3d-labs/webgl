@@ -42,22 +42,24 @@ function main()
             }` },
                 depthStencil: { depthCompare: "less-equal" }
             },
-            vertices: {
-                aVertexPosition: {
-                    format: "float32x2",
-                    data: new Float32Array([
-                        1.0, 1.0,
-                        -1.0, 1.0,
-                        1.0, -1.0,
-                        -1.0, -1.0,
-                    ]),
-                }
+            geometry: {
+                vertices: {
+                    aVertexPosition: {
+                        format: "float32x2",
+                        data: new Float32Array([
+                            1.0, 1.0,
+                            -1.0, 1.0,
+                            1.0, -1.0,
+                            -1.0, -1.0,
+                        ]),
+                    }
+                },
+                draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
             },
             uniforms: {
                 uProjectionMatrix: projectionMatrix,
                 uModelViewMatrix: modelViewMatrix,
             },
-            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
         }],
     };
 

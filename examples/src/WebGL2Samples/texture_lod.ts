@@ -202,8 +202,10 @@ import { getShaderSource, loadImage } from "./utility";
             uniforms: {
                 mvp: matrix,
             },
-            vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];

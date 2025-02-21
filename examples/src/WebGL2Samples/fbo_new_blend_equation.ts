@@ -121,9 +121,11 @@ function render()
 
     const renderObject: IRenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
         uniforms: { mvp: matrix, diffuse: { texture, sampler } },
-        draw: { __type: "DrawVertex", vertexCount: 6 },
+        geometry:{
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 6 },
+        }
     };
 
     const renderObjects: IRenderPassObject[] = [];

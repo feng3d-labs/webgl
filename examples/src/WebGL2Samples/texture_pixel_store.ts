@@ -92,13 +92,15 @@ import { getShaderSource, loadImage } from "./utility";
 
         renderObjects.push({
             pipeline: program,
-            vertices: vertexArray.vertices,
-            indices: vertexArray.indices,
             uniforms: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                indices: vertexArray.indices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

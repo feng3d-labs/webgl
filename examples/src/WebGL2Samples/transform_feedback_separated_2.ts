@@ -148,7 +148,9 @@ import { getShaderSource } from "./utility";
         uniforms: {
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
-        draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
+        geometry:{
+            draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
+        }
     };
 
     const submit: ISubmit = {
@@ -186,8 +188,8 @@ import { getShaderSource } from "./utility";
         transform();
 
         //
-        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
-        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
+        renderRO.geometry.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.geometry.indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit(submit);
 

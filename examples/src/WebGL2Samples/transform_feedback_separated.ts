@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
@@ -116,9 +116,11 @@ import { getShaderSource } from "./utility";
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programs[PROGRAM_FEEDBACK],
-                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                            draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            geometry: {
+                                vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                                indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                                draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            }
                         }
                     ],
                 }

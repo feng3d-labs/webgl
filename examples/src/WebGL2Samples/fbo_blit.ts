@@ -82,7 +82,6 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     const renderObject: IRenderObject = {
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         pipeline: program,
-        vertices: vertexArray.vertices,
         uniforms: {
             MVP: new Float32Array([
                 0.8, 0.0, 0.0, 0.0,
@@ -92,7 +91,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: { texture: textureDiffuse, sampler: samplerDiffuse },
         },
-        draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 }
+        geometry: {
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 }
+        }
     };
 
     // Render FBO
@@ -150,7 +152,6 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     const renderObject2: IRenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
-        vertices: vertexArray.vertices,
         uniforms: {
             MVP: new Float32Array([
                 1.0, 0.0, 0.0, 0.0,
@@ -160,7 +161,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: { texture: textureColorBuffer, sampler: samplerColorBuffer },
         },
-        draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 },
+        geometry: {
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 },
+        },
         pipeline: program,
     };
 

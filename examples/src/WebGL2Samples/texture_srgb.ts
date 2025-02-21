@@ -83,12 +83,14 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
         renderObjects.push({
             pipeline: program,
-            vertices,
             uniforms: {
                 mvp: matrix,
                 materialDiffuse: { texture, sampler },
             },
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

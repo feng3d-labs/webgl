@@ -69,8 +69,10 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         renderObjects: [{
             pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },
-            vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         }]
     };
 

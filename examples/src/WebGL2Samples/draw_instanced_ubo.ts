@@ -50,14 +50,16 @@ const rp: IRenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: program,
-        vertices: {
-            pos: { data: vertices, format: "float32x2" },
-        },
         uniforms: {
             Transform: transforms,
             Material: materials,
         },
-        draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
+        geometry: {
+            vertices: {
+                pos: { data: vertices, format: "float32x2" },
+            },
+            draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
+        }
     }]
 };
 

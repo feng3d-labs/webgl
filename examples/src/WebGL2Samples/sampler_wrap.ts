@@ -149,8 +149,10 @@ function render()
     const ro: IRenderObject = {
         pipeline: program,
         uniforms: { mvp: matrix },
-        vertices: vertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+        geometry: {
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+        }
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -163,7 +165,10 @@ function render()
                     ...ro.uniforms,
                     diffuse: { texture, sampler: samplers[i] },
                 },
-                draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+                geometry: {
+                    ...ro.geometry,
+                    draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+                }
             });
     }
 

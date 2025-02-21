@@ -96,8 +96,10 @@ const renderPass: IRenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
-        vertices: triVertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 3 },
+        geometry:{
+            vertices: triVertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 3 },
+        }
     }],
 
 };
@@ -110,8 +112,10 @@ const rp2: IRenderPass = {
     renderObjects: [{
         pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
-        vertices: quadVertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6 },
+        geometry:{
+            vertices: quadVertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 6 },
+        }
     }],
 };
 

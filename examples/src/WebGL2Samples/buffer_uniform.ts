@@ -83,14 +83,16 @@ import { getShaderSource } from "./utility";
 
     const ro: IRenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
-        indices: elementData,
         uniforms: {
             PerDraw: transforms,
             PerPass: lightPos,
             PerScene: material,
         },
-        draw: { __type: "DrawIndexed", indexCount: 6, firstIndex: 0 }
+        geometry:{
+            vertices: vertexArray.vertices,
+            indices: elementData,
+            draw: { __type: "DrawIndexed", indexCount: 6, firstIndex: 0 }
+        },
     };
 
     const rp: IRenderPass = {

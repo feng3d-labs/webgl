@@ -57,12 +57,14 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 function getRenderObject(batchId: number)
 {
     const renderObject: IRenderObject = {
-        vertices: vertexArray.vertices,
+        geometry: {
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 3 }
+        },
         uniforms: {
             offset: offsets[batchId].offset,
         },
         pipeline,
-        draw: { __type: "DrawVertex", vertexCount: 3 }
     };
 
     return renderObject;

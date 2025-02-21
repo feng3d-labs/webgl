@@ -164,9 +164,11 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
-            vertices: vertexArrays[i].vertices,
             uniforms: { MVP: IDENTITY },
-            draw: { __type: "DrawVertex", vertexCount },
+            geometry: {
+                vertices: vertexArrays[i].vertices,
+                draw: { __type: "DrawVertex", vertexCount },
+            }
         }]
     };
     passEncoders.push(rp);
@@ -179,8 +181,10 @@ const rp2: IRenderPass = {
 };
 const ro: IRenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
-    vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-    draw: { __type: "DrawVertex", vertexCount: 6 },
+    geometry: {
+        vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+        draw: { __type: "DrawVertex", vertexCount: 6 },
+    },
 };
 
 const scaleVector3 = vec3.create();
@@ -199,7 +203,9 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry: {
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         }
     );
 }

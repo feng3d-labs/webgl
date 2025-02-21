@@ -200,7 +200,7 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
     {
-        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, draw } = renderObject;
+        const { viewport, scissorRect, pipeline, geometry, uniforms } = renderObject;
 
         const topology = pipeline.primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
@@ -211,9 +211,11 @@ export class RunWebGL
 
         this.runRenderPipeline(gl, pipeline);
 
-        this.runVertexArray(gl, pipeline, vertices, indices);
-
         this.runUniforms(gl, pipeline, uniforms);
+
+        const { vertices, indices, draw, } = geometry;
+
+        this.runVertexArray(gl, pipeline, vertices, indices);
 
         if (draw.__type === 'DrawVertex')
         {

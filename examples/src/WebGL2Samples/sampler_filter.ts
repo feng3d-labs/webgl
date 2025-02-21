@@ -151,8 +151,10 @@ function render()
     const ro: IRenderObject = {
         pipeline: program,
         uniforms: { mvp: matrix },
-        vertices: vertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+        geometry:{
+            vertices: vertexArray.vertices,
+            draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+        }
     };
 
     // Bind samplers

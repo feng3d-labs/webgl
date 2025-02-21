@@ -101,11 +101,13 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const ro: IRenderObject = {
             pipeline: program,
-            vertices: vertexArray.vertices,
             uniforms: {
                 MVP: matrix,
             },
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type: "DrawVertex", vertexCount: 6 },
+            }
         };
 
         const renderObjects: IRenderPassObject[] = [];

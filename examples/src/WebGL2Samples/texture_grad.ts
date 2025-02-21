@@ -199,10 +199,12 @@ import { getShaderSource, loadImage } from "./utility";
 
     const ro: IRenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
-        indices: new Uint16Array(cubeVertexIndices),
         uniforms: {},
-        draw: { __type: "DrawIndexed", indexCount: 36 },
+        geometry:{
+            vertices: vertexArray.vertices,
+            indices: new Uint16Array(cubeVertexIndices),
+            draw: { __type: "DrawIndexed", indexCount: 36 },
+        }
     };
 
     const rp: IRenderPass = {

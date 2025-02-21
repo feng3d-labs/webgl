@@ -171,13 +171,15 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                         {
                             viewport: viewport[i],
                             pipeline: programs[i],
-                            vertices: vertexArray.vertices,
-                            indices,
                             uniforms: {
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },
-                            draw: { __type: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
+                            geometry: {
+                                vertices: vertexArray.vertices,
+                                indices,
+                                draw: { __type: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
+                            },
                         });
                 }
             }

@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IPrimitiveTopology, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -215,15 +215,17 @@ import { getShaderSource, loadImage } from "./utility";
                         ...program,
                         primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
-                    vertices: vertexArrayMaps[mid][i].vertices,
-                    indices: vertexArrayMaps[mid][i].indices,
                     uniforms: {
                         mvMatrix: localMV,
                         pMatrix: perspectiveMatrix,
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    draw: { __type: "DrawIndexed", indexCount: primitive.indices.length }
+                    geometry:{
+                        vertices: vertexArrayMaps[mid][i].vertices,
+                        indices: vertexArrayMaps[mid][i].indices,
+                        draw: { __type: "DrawIndexed", indexCount: primitive.indices.length }
+                    }
                 });
             }
         }

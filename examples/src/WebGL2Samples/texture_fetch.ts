@@ -73,12 +73,14 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects: [
                 {
                     pipeline: program,
-                    vertices: vertexArray.vertices,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture, sampler },
                     },
-                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type: "DrawVertex", vertexCount: 6 },
+                    }
                 }
             ],
         };

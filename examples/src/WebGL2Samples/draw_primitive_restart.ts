@@ -44,10 +44,12 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 };
 
 const renderObject: IRenderObject = {
-    vertices: vertexArray.vertices,
-    indices,
     uniforms: {},
-    draw: { __type: "DrawIndexed", indexCount: 7, instanceCount: 2 },
+    geometry: {
+        vertices: vertexArray.vertices,
+        indices,
+        draw: { __type: "DrawIndexed", indexCount: 7, instanceCount: 2 },
+    },
     pipeline: program,
 };
 

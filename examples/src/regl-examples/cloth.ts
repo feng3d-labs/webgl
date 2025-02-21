@@ -165,13 +165,15 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportHeight = 1;
 
     const renderObject: IRenderObject = {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            normal: { data: new Float32Array(normals), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+        geometry:{
+            vertices: {
+                position: { data: new Float32Array(positions), format: "float32x3" },
+                normal: { data: new Float32Array(normals), format: "float32x3" },
+                uv: { data: new Float32Array(uvs), format: "float32x2" },
+            },
+            indices: new Uint16Array(indices),
+            draw: { __type: "DrawIndexed", indexCount: indices.length },
         },
-        indices: new Uint16Array(indices),
-        draw: { __type: "DrawIndexed", indexCount: indices.length },
         uniforms: {},
         pipeline: {
             vertex: {
@@ -359,8 +361,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        getIGLVertexBuffer(renderObject.vertices.position.data).data = new Float32Array(positions);
-        getIGLVertexBuffer(renderObject.vertices.normal.data).data = new Float32Array(normals);
+        getIGLVertexBuffer(renderObject.geometry.vertices.position.data).data = new Float32Array(positions);
+        getIGLVertexBuffer(renderObject.geometry.vertices.normal.data).data = new Float32Array(normals);
 
         tick++;
 

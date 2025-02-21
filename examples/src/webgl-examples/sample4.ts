@@ -42,28 +42,30 @@ function main()
       ` },
       depthStencil: { depthCompare: "less-equal" }
     },
-    vertices: {
-      aVertexPosition: {
-        format: "float32x2",
-        data: new Float32Array([
-          1.0, 1.0,
-          -1.0, 1.0,
-          1.0, -1.0,
-          -1.0, -1.0,
-        ]),
+    geometry:{
+      vertices: {
+        aVertexPosition: {
+          format: "float32x2",
+          data: new Float32Array([
+            1.0, 1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            -1.0, -1.0,
+          ]),
+        },
+        aVertexColor: {
+          format: "float32x4",
+          data: new Float32Array([
+            1.0, 1.0, 1.0, 1.0, // white
+            1.0, 0.0, 0.0, 1.0, // red
+            0.0, 1.0, 0.0, 1.0, // green
+            0.0, 0.0, 1.0, 1.0, // blue
+          ]),
+        },
       },
-      aVertexColor: {
-        format: "float32x4",
-        data: new Float32Array([
-          1.0, 1.0, 1.0, 1.0, // white
-          1.0, 0.0, 0.0, 1.0, // red
-          0.0, 1.0, 0.0, 1.0, // green
-          0.0, 0.0, 1.0, 1.0, // blue
-        ]),
-      },
+      draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
     },
     uniforms: {},
-    draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 4 },
   };
 
   const renderPass: IRenderPass = {

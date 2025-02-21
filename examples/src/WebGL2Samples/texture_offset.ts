@@ -102,13 +102,15 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
-                vertices: vertexArray.vertices,
                 pipeline: programBicubic,
                 uniforms: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                 },
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                geometry: {
+                    vertices: vertexArray.vertices,
+                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                }
             });
 
         // Offset
@@ -117,14 +119,16 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
-                vertices: vertexArray.vertices,
                 pipeline: programOffsetBicubic,
                 uniforms: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                     offset,
                 },
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                geometry: {
+                    vertices: vertexArray.vertices,
+                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                }
             });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
