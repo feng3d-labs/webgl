@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray, UnReadonly } from "@feng3d/render-api";
+import { getBlendConstantColor, IBlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -38,7 +38,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: ChainMap<[IRenderPipeline, IVertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[IRenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
     }
 }
 
@@ -544,7 +544,7 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: IVertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
@@ -595,7 +595,7 @@ export class RunWebGL
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 
-    private runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
+    private runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
     {
         const { stepMode, format } = attribute;
         let { arrayStride, offset } = attribute;
@@ -748,7 +748,7 @@ export class RunWebGL
         }
     }
 
-    private runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveState)
+    private runPrimitiveState(gl: WebGLRenderingContext, primitive?: PrimitiveState)
     {
         const cullFace: ICullFace = primitive?.cullFace || "none";
         const frontFace: IFrontFace = primitive?.frontFace || "ccw";

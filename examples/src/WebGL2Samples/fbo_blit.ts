@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, ITextureView, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, ITextureView, VertexAttributes } from "@feng3d/render-api";
 import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -38,7 +38,7 @@ const vertexTexBuffer = new Float32Array([
     0.0, 1.0
 ]);
 
-const vertices: IVertexAttributes = {
+const vertices: VertexAttributes = {
     position: { data: vertexPosBuffer, format: "float32x2" },
     texcoord: { data: vertexTexBuffer, format: "float32x2" },
 };
@@ -74,7 +74,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     // 此处 Renderbuffer 直接使用 IGLTextureView 替代。
     const colorRenderbuffer: ITextureView = { texture: { format: "rgba8unorm", size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y] } };
 
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices,
     };
 

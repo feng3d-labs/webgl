@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISubmit, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -73,7 +73,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Init Vertex Array
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: vertices, format: "float32x3", arrayStride: 40, offset: 0 },
             normal: { data: vertices, format: "float32x3", arrayStride: 40, offset: 12 },

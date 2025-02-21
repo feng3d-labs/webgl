@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
@@ -149,7 +149,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Init VertexArray
 
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             a_position: { data: positions, format: "float32x3" },
             a_normal: { data: normals, format: "float16x4", arrayStride: 6 }, // 由于不支持类型 "float16x3"，则需要设置 arrayStride 为6，表示每次间隔3个半浮点数。

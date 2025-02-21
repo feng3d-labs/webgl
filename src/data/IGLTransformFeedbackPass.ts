@@ -1,4 +1,4 @@
-import { IDrawVertex, IUniforms, IVertexAttributes, IVertexState } from "@feng3d/render-api";
+import { IDrawVertex, IUniforms, VertexAttributes, IVertexState } from "@feng3d/render-api";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 
 declare module "@feng3d/render-api"
@@ -32,7 +32,7 @@ export interface IGLTransformFeedbackObject
     /**
      * 顶点属性数据映射。
      */
-    vertices: IVertexAttributes;
+    vertices: VertexAttributes;
 
     /**
      * 根据顶点数据绘制图元。

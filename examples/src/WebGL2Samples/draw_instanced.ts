@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -23,7 +23,7 @@ const program: IRenderPipeline = {
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         pos: { data: vertexPosBuffer, format: "float32x2" },
         color: { data: vertexColorBuffer, format: "float32x3", stepMode: "instance" },

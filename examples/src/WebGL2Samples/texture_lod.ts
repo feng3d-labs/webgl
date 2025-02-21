@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Initialize vertex array
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             textureCoordinates: { data: texcoords, format: "float32x2" },

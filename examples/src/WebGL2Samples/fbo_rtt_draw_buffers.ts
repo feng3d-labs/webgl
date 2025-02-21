@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -58,13 +58,13 @@ const quadTexcoords = new Float32Array([
 
 // -- Initialize vertex array
 
-const triVertexArray: { vertices?: IVertexAttributes } = {
+const triVertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: triPositions, format: "float32x3" }
     }
 };
 
-const quadVertexArray: { vertices?: IVertexAttributes } = {
+const quadVertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: quadPositions, format: "float32x2" },
         textureCoordinates: { data: quadTexcoords, format: "float32x2" },

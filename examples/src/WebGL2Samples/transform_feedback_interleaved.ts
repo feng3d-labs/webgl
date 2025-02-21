@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IRenderPipeline, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -53,7 +53,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[] = [
+    const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[] = [
         {
             vertices: {
                 position: { data: buffers[PROGRAM_TRANSFORM], format: "float32x4" },

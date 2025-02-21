@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IPrimitiveTopology, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -45,7 +45,7 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depthCompare: "less" },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertices?: IVertexAttributes, indices: IIndicesDataTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: VertexAttributes, indices: IIndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;

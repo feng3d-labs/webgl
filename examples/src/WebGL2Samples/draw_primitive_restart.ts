@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderObject, IRenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -36,7 +36,7 @@ const indices = new Uint16Array([
     0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
 ]);
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         pos: { data: vertexPosBuffer, format: "float32x2" },
     },

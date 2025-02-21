@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
+import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -81,7 +81,7 @@ const framebuffer: IRenderPassDescriptor = {
 };
 
 // -- Init VertexArray
-const vertexArrays: { vertices?: IVertexAttributes }[] = [
+const vertexArrays: { vertices?: VertexAttributes }[] = [
     {
         vertices: { position: { data, format: "float32x2" } }
     },
