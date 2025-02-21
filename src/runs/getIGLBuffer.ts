@@ -1,11 +1,11 @@
-import { IBuffer, IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
+import { Buffer, IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
 import { IGLBufferTarget, IGLBufferUsage, IGLIndexBuffer, IGLUniformBuffer, IGLVertexBuffer } from "../data/IGLBuffer";
 
-export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW"): IBuffer
+export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW"): Buffer
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
-    const buffer: IBuffer = {
+    const buffer: Buffer = {
         size: Math.ceil(data.byteLength / 4) * 4,
         target,
         usage,

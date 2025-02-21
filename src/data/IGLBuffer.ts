@@ -1,4 +1,4 @@
-import { IBuffer, IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api";
+import { Buffer, IIndicesDataTypes, IVertexDataTypes } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
@@ -7,7 +7,7 @@ declare module "@feng3d/render-api"
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    export interface IBuffer
+    export interface Buffer
     {
         target: IGLBufferTarget;
 
@@ -20,7 +20,7 @@ declare module "@feng3d/render-api"
     }
 }
 
-export interface IGLVertexBuffer extends IBuffer
+export interface IGLVertexBuffer extends Buffer
 {
     target: "ARRAY_BUFFER";
 
@@ -38,7 +38,7 @@ export interface IGLVertexBuffer extends IBuffer
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export interface IGLIndexBuffer extends IBuffer
+export interface IGLIndexBuffer extends Buffer
 {
     target: "ELEMENT_ARRAY_BUFFER";
 
@@ -48,7 +48,7 @@ export interface IGLIndexBuffer extends IBuffer
     data: IIndicesDataTypes;
 }
 
-export interface IGLUniformBuffer extends IBuffer
+export interface IGLUniformBuffer extends Buffer
 {
     target: "UNIFORM_BUFFER";
 }

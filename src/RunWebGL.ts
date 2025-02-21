@@ -1,4 +1,4 @@
-import { getBlendConstantColor, IBlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { getBlendConstantColor, BlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -788,8 +788,8 @@ export class RunWebGL
         const blend = targets?.[0]?.blend;
         if (blend)
         {
-            const color: IBlendComponent = blend.color;
-            const alpha: IBlendComponent = blend.alpha;
+            const color: BlendComponent = blend.color;
+            const alpha: BlendComponent = blend.alpha;
 
             const colorOperation: IGLBlendEquation = getIGLBlendEquation(color?.operation) || "FUNC_ADD";
             const colorSrcFactor: IGLBlendFactor = getIGLBlendFactor(color?.srcFactor, color?.operation) || "SRC_ALPHA";
