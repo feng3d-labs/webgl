@@ -1,4 +1,4 @@
-import { RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderObject, RenderPass, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
@@ -16,7 +16,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: RenderPipeline = {
+    const program: Material = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: {},
     };

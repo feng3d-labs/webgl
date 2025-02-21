@@ -1,4 +1,4 @@
-import { IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -48,7 +48,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: RenderPipeline[] = [
+const programs: Material[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
     },

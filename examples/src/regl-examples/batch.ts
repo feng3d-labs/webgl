@@ -1,4 +1,4 @@
-import { RenderPipeline, Submit, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { Material, Submit, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: RenderPipeline = {
+const pipeline: Material = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;

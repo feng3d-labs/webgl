@@ -1,4 +1,4 @@
-import { IRenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { IRenderPassObject, RenderObject, RenderPass, Material, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -59,7 +59,7 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: RenderPipeline = {
+const program: Material = {
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] },
 };

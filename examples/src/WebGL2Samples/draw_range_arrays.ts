@@ -1,4 +1,4 @@
-import { RenderPass, RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -26,7 +26,7 @@ const vertexPosBuffer = new Float32Array([
     -0.5, -0.5,
 ]);
 
-const pipeline: RenderPipeline = {
+const pipeline: Material = {
     vertex: {
         code: getShaderSource("vs")
     },

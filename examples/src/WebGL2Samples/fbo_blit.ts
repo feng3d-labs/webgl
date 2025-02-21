@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, TextureView, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, Material, Sampler, Texture, TextureView, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLBlitFramebuffer, IGLBlitFramebufferItem, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -11,7 +11,7 @@ document.body.appendChild(canvas);
 const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
-const program: RenderPipeline = {
+const program: Material = {
     vertex: {
         code: getShaderSource("vs")
     },

@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -36,9 +36,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const programBicubic: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
+    const programBicubic: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
 
-    const programOffsetBicubic: RenderPipeline = {
+    const programOffsetBicubic: Material = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-offset-bicubic") },
     };
 

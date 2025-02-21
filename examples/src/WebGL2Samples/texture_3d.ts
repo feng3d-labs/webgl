@@ -1,4 +1,4 @@
-import { RenderPass, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, Material, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
@@ -95,7 +95,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Initialize program
-    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([

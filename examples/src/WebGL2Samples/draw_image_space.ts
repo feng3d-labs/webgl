@@ -1,4 +1,4 @@
-import { RenderPipeline, Sampler, Texture, RenderObject } from "@feng3d/render-api";
+import { Material, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -23,7 +23,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         magFilter: "linear",
     };
 
-    const program: RenderPipeline = {
+    const program: Material = {
         vertex: {
             code: getShaderSource("vs")
         },

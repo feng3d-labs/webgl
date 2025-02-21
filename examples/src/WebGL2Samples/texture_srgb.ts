@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, Material, Sampler, Texture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -16,7 +16,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Initialize program
 
-    const program: RenderPipeline = {
+    const program: Material = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 

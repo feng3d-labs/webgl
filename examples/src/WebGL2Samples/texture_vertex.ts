@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IPrimitiveTopology, RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IPrimitiveTopology, RenderPass, IRenderPassObject, Material, Sampler, Texture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -40,7 +40,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: RenderPipeline = {
+    const program: Material = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depthCompare: "less" },
     };

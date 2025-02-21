@@ -1,4 +1,4 @@
-import { RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -18,7 +18,7 @@ const vertexColorBuffer = new Float32Array([
     1.0, 0.5, 0.0,
     0.0, 0.5, 1.0]);
 
-const program: RenderPipeline = {
+const program: Material = {
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };

@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, RenderPipeline, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, Material, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -29,7 +29,7 @@ import { getShaderSource } from "./utility";
         return programTransform;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: RenderPipeline = {
+    const programFeedback: Material = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 

@@ -1,4 +1,4 @@
-import { RenderPipeline } from "@feng3d/render-api";
+import { Material } from "@feng3d/render-api";
 import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
 import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
@@ -38,14 +38,14 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline | IGLTransformFeedbackPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, pipeline: Material | IGLTransformFeedbackPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
     if (result) return result;
 
     const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as RenderPipeline).fragment?.code || `#version 300 es
+    const fragment = (pipeline as Material).fragment?.code || `#version 300 es
         precision highp float;
         precision highp int;
 
@@ -61,7 +61,7 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline)
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: Material)
 {
     const shaderKey = getKey(pipeline);
     const result = gl._programs[shaderKey];
@@ -72,10 +72,10 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: RenderPipelin
     }
 }
 
-function getKey(pipeline: RenderPipeline | IGLTransformFeedbackPipeline)
+function getKey(pipeline: Material | IGLTransformFeedbackPipeline)
 {
     const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as RenderPipeline).fragment?.code;
+    const fragment = (pipeline as Material).fragment?.code;
     const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
