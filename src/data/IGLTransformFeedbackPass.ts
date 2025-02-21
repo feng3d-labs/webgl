@@ -1,4 +1,4 @@
-import { IDrawVertex, Uniforms, VertexAttributes, IVertexState } from "@feng3d/render-api";
+import { IDrawVertex, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 
 declare module "@feng3d/render-api"
@@ -59,7 +59,7 @@ export interface IGLTransformFeedbackPipeline
     /**
      * 顶点着色器阶段描述。
      */
-    readonly vertex: IVertexState;
+    readonly vertex: VertexState;
 
     /**
      * 回写变量。

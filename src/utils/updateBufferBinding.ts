@@ -1,4 +1,4 @@
-import { IBufferBinding, UnReadonly } from "@feng3d/render-api";
+import { BufferBinding, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IBufferBindingInfo } from "../caches/getGLProgram";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
@@ -10,7 +10,7 @@ import { getIGLBuffer } from "../runs/getIGLBuffer";
  *
  * @see https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/08%20Advanced%20GLSL/#uniform_1
  */
-export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, uniformData: IBufferBinding)
+export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, uniformData: BufferBinding)
 {
     if (uniformData["_bufferBindingInfo"] !== undefined)
     {
@@ -30,7 +30,7 @@ export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, unifo
     const hasDefautValue = !!uniformData.bufferView;
     if (!hasDefautValue)
     {
-        (uniformData as UnReadonly<IBufferBinding>).bufferView = new Uint8Array(size);
+        (uniformData as UnReadonly<BufferBinding>).bufferView = new Uint8Array(size);
     }
     else
     {

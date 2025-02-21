@@ -1,4 +1,4 @@
-import { BlendComponent, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, IBufferBinding, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, Uniforms, IViewport, PrimitiveState, RenderObject, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { BlendComponent, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, Viewport, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -359,7 +359,7 @@ export class RunWebGL
             webGLProgram.uniformBlocks.forEach((uniformBlock) =>
             {
                 const { name, index } = uniformBlock;
-                const uniformData = uniforms[name] as TypedArray | IBufferBinding;
+                const uniformData = uniforms[name] as TypedArray | BufferBinding;
 
                 //
                 let buffer: IGLUniformBuffer;
@@ -370,7 +370,7 @@ export class RunWebGL
                 }
                 else
                 {
-                    const bufferBinding = uniforms[name] as IBufferBinding;
+                    const bufferBinding = uniforms[name] as BufferBinding;
                     updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                     buffer = getIGLUniformBuffer(bufferBinding.bufferView);
                 }
@@ -833,7 +833,7 @@ export class RunWebGL
         occlusionQuery._step.end();
     }
 
-    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: IViewport)
+    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: Viewport)
     {
         if (viewport)
         {
