@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
@@ -108,14 +108,14 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    function initProgram(): [IGLTransformFeedbackPipeline, IRenderPipeline]
+    function initProgram(): [IGLTransformFeedbackPipeline, RenderPipeline]
     {
         const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
             vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
         };
 
-        const program: IRenderPipeline = {
+        const program: RenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") },
             fragment: {
                 code: getShaderSource("fs-draw"),
@@ -141,7 +141,7 @@ import { getShaderSource } from "./utility";
         draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
-    const renderRO: IRenderObject = {
+    const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         uniforms: {
@@ -153,7 +153,7 @@ import { getShaderSource } from "./utility";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {

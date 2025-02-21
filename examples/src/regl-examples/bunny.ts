@@ -1,4 +1,4 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { Submit, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
@@ -30,7 +30,7 @@ let tick = 0;
 let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     geometry:{
         vertices: {
             position: { data: new Float32Array(positions), format: "float32x3" },
@@ -60,7 +60,7 @@ const renderObject: IRenderObject = {
     }
 };
 
-const submit: ISubmit = {
+const submit: Submit = {
     commandEncoders: [{
         passEncoders: [
             {

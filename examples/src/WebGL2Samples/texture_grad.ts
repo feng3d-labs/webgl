@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -16,7 +16,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: {},
     };
@@ -120,8 +120,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: Texture;
+    let sampler: Sampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -196,7 +196,7 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
         uniforms: {},
         geometry:{
@@ -207,7 +207,7 @@ import { getShaderSource, loadImage } from "./utility";
         }
     };
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };

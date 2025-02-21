@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISubmit, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Submit, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -16,7 +16,7 @@ import { getShaderSource } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -81,7 +81,7 @@ import { getShaderSource } from "./utility";
         },
     };
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
         uniforms: {
             PerDraw: transforms,
@@ -95,12 +95,12 @@ import { getShaderSource } from "./utility";
         },
     };
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
 
-    const submit: ISubmit = { commandEncoders: [{ passEncoders: [rp] }] };
+    const submit: Submit = { commandEncoders: [{ passEncoders: [rp] }] };
 
     let uTime = 0;
     function render()

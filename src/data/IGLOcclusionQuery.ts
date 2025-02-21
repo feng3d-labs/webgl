@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 import { IGLOcclusionQueryStep } from "../caches/getGLRenderOcclusionQuery";
 
 export interface IGLOcclusionQuery
@@ -10,7 +10,7 @@ export interface IGLOcclusionQuery
     /**
      * 渲染对象列表。
      */
-    renderObjects: IRenderObject[];
+    renderObjects: RenderObject[];
 
     /**
      * 临时变量, 执行过程中由引擎自动填充。

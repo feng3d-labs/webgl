@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -19,13 +19,13 @@ const windowSize = {
 // -- Initialize program
 
 // Depth shaders
-const depthProgram: IRenderPipeline = {
+const depthProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
     depthStencil: {},
 };
 
 // Draw shaders
-const drawProgram: IRenderPipeline = {
+const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
 };
 
@@ -74,15 +74,15 @@ const quadVertexArray: { vertices?: VertexAttributes } = {
 
 // the proper texture format combination can be found here
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
-const depthTexture: ITexture = {
+const depthTexture: Texture = {
     size: [windowSize.x, windowSize.y],
     format: "depth16unorm",
 };
-const depthSampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const depthSampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IRenderPassDescriptor = {
+const frameBuffer: RenderPassDescriptor = {
     colorAttachments: [],
     depthStencilAttachment: { view: { texture: depthTexture, baseMipLevel: 0 }, depthLoadOp: "clear" },
 };
@@ -90,7 +90,7 @@ const frameBuffer: IRenderPassDescriptor = {
 // -- Render
 
 // Pass 1: Depth
-const renderPass: IRenderPass = {
+const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
@@ -104,7 +104,7 @@ const renderPass: IRenderPass = {
 };
 
 // Pass 2: Draw
-const rp2: IRenderPass = {
+const rp2: RenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },

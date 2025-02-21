@@ -1,4 +1,4 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { Submit, RenderObject } from "@feng3d/render-api";
 import { getIGLVertexBuffer, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
@@ -164,7 +164,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         geometry:{
             vertices: {
                 position: { data: new Float32Array(positions), format: "float32x3" },
@@ -223,7 +223,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {

@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, ISubmit, VertexAttributes } from "@feng3d/render-api";
+import { RenderPipeline, Submit, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: IRenderPipeline = {
+const pipeline: RenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;
@@ -56,7 +56,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 function getRenderObject(batchId: number)
 {
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         geometry: {
             vertices: vertexArray.vertices,
             draw: { __type: "DrawVertex", vertexCount: 3 }
@@ -70,13 +70,13 @@ function getRenderObject(batchId: number)
     return renderObject;
 }
 
-const renderObjects: IRenderObject[] = [];
+const renderObjects: RenderObject[] = [];
 for (let i = 0; i < offsets.length; i++)
 {
     renderObjects.push(getRenderObject(i));
 }
 
-const submit: ISubmit = {
+const submit: Submit = {
     commandEncoders: [{
         passEncoders: [
             {

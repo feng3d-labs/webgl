@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IPrimitiveTopology, RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -40,7 +40,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depthCompare: "less" },
     };
@@ -53,8 +53,8 @@ import { getShaderSource, loadImage } from "./utility";
     let vertexBuffer: IVertexDataTypes;
     let indicesBuffer: IIndicesDataTypes;
 
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: Texture;
+    let sampler: Sampler;
 
     // -- Load model then render
     const glTFLoader = new GlTFLoader();
@@ -183,7 +183,7 @@ import { getShaderSource, loadImage } from "./utility";
     {
         const renderObjects: IRenderPassObject[] = [];
         // -- Render
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }

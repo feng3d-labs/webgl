@@ -1,4 +1,4 @@
-import { IRenderObject, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
+import { Sampler, Submit, Texture, RenderObject } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -22,11 +22,11 @@ async function main()
     const buffers = initBuffers();
 
     const texture: {
-        texture: ITexture;
-        sampler: ISampler;
+        texture: Texture;
+        sampler: Sampler;
     } = { texture: { size: [canvas.width, canvas.height] }, sampler: {} };
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
             vertex: {
                 code: `
@@ -79,7 +79,7 @@ async function main()
         uniforms: { uSampler: texture },
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 // 绘制

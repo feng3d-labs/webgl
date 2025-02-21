@@ -1,4 +1,4 @@
-import { IRenderPassColorAttachment, IRenderPassDescriptor, ITextureFormat, ITextureView } from "@feng3d/render-api";
+import { RenderPassColorAttachment, RenderPassDescriptor, ITextureFormat, TextureView } from "@feng3d/render-api";
 import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -11,18 +11,18 @@ import { getIGLTextureFormats } from "./getIGLTextureFormats";
  *
  * @param sourcePassDescriptor 需要渲染到纹理并且开启多重采样的渲染通道描述。
  */
-export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: IRenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
+export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: RenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
 {
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
-    const texture = (sourcePassDescriptor.colorAttachments[0].view as ITextureView).texture;
+    const texture = (sourcePassDescriptor.colorAttachments[0].view as TextureView).texture;
 
     const textureSize = texture.size;
 
     const renderbuffers: IGLRenderbuffer[] = [];
 
     // 创建支持 多重采样的 渲染通道
-    const passDescriptor: IRenderPassDescriptor = {
+    const passDescriptor: RenderPassDescriptor = {
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
             const texture = v.view.texture;
@@ -34,7 +34,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
             };
             renderbuffers.push(renderbuffer);
 
-            const colorAttachment: IRenderPassColorAttachment = {
+            const colorAttachment: RenderPassColorAttachment = {
                 ...v,
                 view: renderbuffer as any,
             };
@@ -77,7 +77,7 @@ export interface IGLRenderPassDescriptorWithMultisample
     /**
      * 渲染到渲染缓冲区上。
      */
-    passDescriptor: IRenderPassDescriptor;
+    passDescriptor: RenderPassDescriptor;
     /**
      * 拷贝渲染缓冲区到目标纹理中。
      */

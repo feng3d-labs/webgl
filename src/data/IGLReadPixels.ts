@@ -1,4 +1,4 @@
-import { IRenderPassDescriptor } from "@feng3d/render-api";
+import { RenderPassDescriptor } from "@feng3d/render-api";
 import { GLAttachmentPoint } from "../gl/WebGLEnums";
 import { IGLTextureDataType, IGLTextureFormat } from "./IGLTexture";
 
@@ -9,7 +9,7 @@ import { IGLTextureDataType, IGLTextureFormat } from "./IGLTexture";
  */
 export interface IGLReadPixels
 {
-    frameBuffer: IRenderPassDescriptor;
+    frameBuffer: RenderPassDescriptor;
 
     /**
      * 读取那个附件。

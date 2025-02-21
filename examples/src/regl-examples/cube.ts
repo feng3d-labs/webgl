@@ -1,4 +1,4 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { Submit, RenderObject } from "@feng3d/render-api";
 import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
@@ -64,7 +64,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         geometry:{
             vertices: {
                 position: { data: new Float32Array(positions), format: "float32x3" },
@@ -98,7 +98,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {

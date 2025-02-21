@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -26,7 +26,7 @@ const vertexPosBuffer = new Float32Array([
     -0.5, -0.5,
 ]);
 
-const pipeline: IRenderPipeline = {
+const pipeline: RenderPipeline = {
     vertex: {
         code: getShaderSource("vs")
     },
@@ -43,7 +43,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 };
 
 const vertexCount = 12;
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     pipeline,
     geometry: {
         primitive: { topology: "triangle-strip" },
@@ -52,7 +52,7 @@ const renderObject: IRenderObject = {
     }
 };
 
-const rp: IRenderPass = {
+const rp: RenderPass = {
     descriptor: {
         colorAttachments: [{
             clearValue: [0.0, 0.0, 0.0, 1.0],

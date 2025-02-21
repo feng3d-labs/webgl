@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPipeline } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -12,7 +12,7 @@ const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program
-const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
 // -- Init Buffer
 const vertices = new Float32Array([
@@ -46,7 +46,7 @@ const materials = {
 };
 
 // -- Render
-const rp: IRenderPass = {
+const rp: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: program,

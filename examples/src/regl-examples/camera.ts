@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { angleNormals } from "./mikolalysenko/angle-normals";
@@ -21,7 +21,7 @@ const positions = bunny.positions.flat();
 const indices = bunny.cells.flat();
 const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     geometry:{
         vertices: {
             position: { data: new Float32Array(positions), format: "float32x3" },

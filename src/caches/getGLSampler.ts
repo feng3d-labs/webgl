@@ -1,4 +1,4 @@
-import { IAddressMode, IFilterMode, ISampler } from "@feng3d/render-api";
+import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
 import { IGLCompareFunction } from "../data/IGLDepthStencilState";
 import { IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 import { getIGLCompareFunction } from "../runs/runDepthState";
@@ -7,11 +7,11 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _samplers: Map<ISampler, WebGLSampler>;
+        _samplers: Map<Sampler, WebGLSampler>;
     }
 }
 
-export function getGLSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
     if (webGLSampler) return webGLSampler;
@@ -46,7 +46,7 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: ISampler)
     return webGLSampler;
 }
 
-export function deleteSampler(gl: WebGLRenderingContext, sampler?: ISampler)
+export function deleteSampler(gl: WebGLRenderingContext, sampler?: Sampler)
 {
     if (gl instanceof WebGL2RenderingContext)
     {

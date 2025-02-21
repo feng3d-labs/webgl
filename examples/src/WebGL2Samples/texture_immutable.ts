@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
@@ -38,9 +38,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D: IRenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
+    const program3D: RenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // -- Init 2D Texture
-        const texture2D: ITexture = {
+        const texture2D: Texture = {
             format: "rgba8unorm",
             mipLevelCount: 1,
             size: [512, 512],
@@ -91,7 +91,7 @@ import { getShaderSource, loadImage } from "./utility";
                 image, flipY: false,
             }],
         };
-        const sampler2D: ISampler = {
+        const sampler2D: Sampler = {
             minFilter: "nearest",
             magFilter: "linear",
             addressModeU: "clamp-to-edge",
@@ -99,7 +99,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         // -- Render
-        const ro: IRenderObject = {
+        const ro: RenderObject = {
             pipeline: program,
             uniforms: {
                 MVP: matrix,
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         const renderObjects: IRenderPassObject[] = [];
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects
         };
@@ -168,7 +168,7 @@ import { getShaderSource, loadImage } from "./utility";
             }
         }
 
-        const texture3D: ITexture = {
+        const texture3D: Texture = {
             dimension: "3d",
             format: "r8uint",
             generateMipmap: true,
@@ -176,7 +176,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [SIZE, SIZE, SIZE],
             sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
         };
-        const sampler3D: ISampler = {
+        const sampler3D: Sampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
             minFilter: "linear",

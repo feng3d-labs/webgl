@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, ISampler, ITexture } from "@feng3d/render-api";
+import { RenderPipeline, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -13,17 +13,17 @@ const webgl = new WebGL(renderingContext);
 
 loadImage("../../assets/img/Di-3d.png", (img) =>
 {
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [img.width, img.height],
         sources: [{ image: img, flipY: false }],
         format: "rgba8unorm",
     };
-    const sampler: ISampler = {
+    const sampler: Sampler = {
         minFilter: "linear",
         magFilter: "linear",
     };
 
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: {
             code: getShaderSource("vs")
         },
@@ -33,7 +33,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         }
     };
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         uniforms: {
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],

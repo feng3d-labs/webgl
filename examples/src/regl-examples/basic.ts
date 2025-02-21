@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 /**
@@ -16,7 +16,7 @@ document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     geometry: {
         vertices: {
             position: {

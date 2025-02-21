@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IRenderPipeline, ISubmit, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, RenderPipeline, Submit, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
@@ -27,7 +27,7 @@ import { getShaderSource } from "./utility";
         return transformFeedbackPipeline;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: IRenderPipeline = {
+    const programFeedback: RenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
@@ -95,7 +95,7 @@ import { getShaderSource } from "./utility";
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {

@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
+import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -21,7 +21,7 @@ async function main()
 
     const texture = await loadTexture("../../cubetexture.png");
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
             vertex: {
                 code: `
@@ -88,7 +88,7 @@ async function main()
         }
     };
 
-    const renderPass: IRenderPass = {
+    const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -290,14 +290,14 @@ async function loadTexture(url: string)
 
     const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [img.width, img.height],
         format: "rgba8unorm",
         sources: [{ image: img }],
         generateMipmap,
     };
 
-    let sampler: ISampler = {};
+    let sampler: Sampler = {};
 
     if (!generateMipmap)
     {

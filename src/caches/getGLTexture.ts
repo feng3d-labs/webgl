@@ -1,4 +1,4 @@
-import { ITexture, ITextureDataSource, ITextureImageSource, ITextureSize } from "@feng3d/render-api";
+import { Texture, ITextureDataSource, ITextureImageSource, ITextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
@@ -9,7 +9,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _textures: Map<ITexture, WebGLTexture>
+        _textures: Map<Texture, WebGLTexture>
     }
 
     interface WebGLTexture
@@ -37,7 +37,7 @@ export const defaultTexturePixelStore: IGLTexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
@@ -423,7 +423,7 @@ return;
     return webGLTexture;
 }
 
-export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function deleteTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;

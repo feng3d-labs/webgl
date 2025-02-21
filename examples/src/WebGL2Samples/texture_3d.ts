@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
@@ -79,14 +79,14 @@ import { getShaderSource } from "./utility";
         }
     }
 
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [SIZE, SIZE, SIZE],
         dimension: "3d",
         format: "r8unorm",
         generateMipmap: true,
         sources: [{ __type: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data }],
     };
-    const sampler: ISampler = {
+    const sampler: Sampler = {
         lodMinClamp: 0,
         lodMaxClamp: Math.log2(SIZE),
         minFilter: "linear",
@@ -95,7 +95,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Initialize program
-    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -157,7 +157,7 @@ import { getShaderSource } from "./utility";
         ];
     }
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
         uniforms: {
             diffuse: { texture, sampler },
@@ -168,7 +168,7 @@ import { getShaderSource } from "./utility";
         }
     };
 
-    const renderPassObjects: IRenderObject[] = [];
+    const renderPassObjects: RenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
         renderPassObjects.push({
@@ -177,7 +177,7 @@ import { getShaderSource } from "./utility";
         });
     }
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderPassObjects,
     };

@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, RenderPipeline, Submit, IVertexDataTypes, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -113,7 +113,7 @@ import { getShaderSource } from "./utility";
         };
 
         // Setup program for draw shader
-        const programDraw: IRenderPipeline = {
+        const programDraw: RenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") }, fragment: {
                 code: getShaderSource("fs-draw"),
                 targets: [{
@@ -125,7 +125,7 @@ import { getShaderSource } from "./utility";
             },
         };
 
-        const programs: [IGLTransformFeedbackPipeline, IRenderPipeline] = [programTransform, programDraw];
+        const programs: [IGLTransformFeedbackPipeline, RenderPipeline] = [programTransform, programDraw];
 
         return programs;
     }
@@ -138,7 +138,7 @@ import { getShaderSource } from "./utility";
         draw: { __type: "DrawVertex", vertexCount: NUM_INSTANCES },
     };
 
-    const renderRO: IRenderObject = {
+    const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
         uniforms: {},
@@ -148,7 +148,7 @@ import { getShaderSource } from "./utility";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {

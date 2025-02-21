@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
+import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -25,7 +25,7 @@ function main()
 
     const video = setupVideo("../../Firefox.mp4");
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
             vertex: {
                 code: `
@@ -92,7 +92,7 @@ function main()
         uniforms: { uSampler: texture },
     };
 
-    const renderPass: IRenderPass = {
+    const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -322,12 +322,12 @@ function initBuffers()
 //
 function initTexture(): IGLSamplerTexture
 {
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [1, 1],
         format: "rgba8unorm",
         sources: [{ __type: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
-    const sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
+    const sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
 
     return { texture, sampler };
 }
@@ -335,7 +335,7 @@ function initTexture(): IGLSamplerTexture
 //
 // copy the video texture
 //
-function updateTexture(texture: ITexture, video: HTMLVideoElement)
+function updateTexture(texture: Texture, video: HTMLVideoElement)
 {
     // 修改纹理尺寸
     if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)

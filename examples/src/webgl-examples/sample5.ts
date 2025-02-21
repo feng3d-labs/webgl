@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { RenderPass, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -19,7 +19,7 @@ function main()
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const renderObject: IRenderObject = {
+  const renderObject: RenderObject = {
     pipeline: {
       vertex: {
         code: `
@@ -63,7 +63,7 @@ function main()
     uniforms: {},
   };
 
-  const renderPass: IRenderPass = {
+  const renderPass: RenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],

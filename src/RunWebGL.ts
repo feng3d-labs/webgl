@@ -1,4 +1,4 @@
-import { BlendComponent, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, IBufferBinding, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IViewport, PrimitiveState, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
+import { BlendComponent, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, getBlendConstantColor, IBufferBinding, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, Uniforms, IViewport, PrimitiveState, RenderObject, TypedArray, UnReadonly, VertexAttribute, VertexAttributes } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -38,7 +38,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: ChainMap<[IRenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
     }
 }
 
@@ -59,7 +59,7 @@ declare global
 
 export class RunWebGL
 {
-    runSubmit(gl: WebGLRenderingContext, submit: ISubmit)
+    runSubmit(gl: WebGLRenderingContext, submit: Submit)
     {
         const commandBuffers = submit.commandEncoders.map((v) =>
         {
@@ -78,7 +78,7 @@ export class RunWebGL
         {
             if (!passEncoder.__type)
             {
-                this.runRenderPass(gl, passEncoder as IRenderPass);
+                this.runRenderPass(gl, passEncoder as RenderPass);
             }
             else if (passEncoder.__type === "RenderPass")
             {
@@ -124,7 +124,7 @@ export class RunWebGL
         }
     }
 
-    protected runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
+    protected runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     {
         // 获取附件尺寸
         const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
@@ -134,7 +134,7 @@ export class RunWebGL
         //
         occlusionQuery.init();
 
-        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as ITextureView).texture)
+        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as TextureView).texture)
         {
             const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
@@ -154,7 +154,7 @@ export class RunWebGL
         occlusionQuery.resolve(renderPass);
     }
 
-    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
 
@@ -198,7 +198,7 @@ export class RunWebGL
         });
     }
 
-    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
+    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
         const { viewport, scissorRect, pipeline, geometry, uniforms } = renderObject;
 
@@ -320,7 +320,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: IUniforms)
+    private runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline, uniforms: Uniforms)
     {
         const webGLProgram = getGLProgram(gl, pipeline);
 
@@ -407,7 +407,7 @@ export class RunWebGL
     /**
      * 设置采样参数
      */
-    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: ISampler, textureID: number)
+    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -544,7 +544,7 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, pipeline: RenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
@@ -667,7 +667,7 @@ export class RunWebGL
         gl.useProgram(program);
     }
 
-    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IRenderPipeline)
+    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
     {
         this.runProgram(gl, renderPipeline);
 
@@ -769,7 +769,7 @@ export class RunWebGL
         }
     }
 
-    private runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+    private runProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline)
     {
         const program = getGLProgram(gl, pipeline);
         gl.useProgram(program);
@@ -856,7 +856,7 @@ export class RunWebGL
         }
     }
 
-    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: IScissorRect)
+    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: ScissorRect)
     {
         if (scissor)
         {
@@ -940,5 +940,5 @@ export class RunWebGL
     }
 }
 
-export const defaultRenderPassColorAttachment: IRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-export const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+export const defaultRenderPassColorAttachment: RenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
+export const defaultDepthStencilAttachment: RenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };

@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject } from "@feng3d/render-api";
 import { IGLOcclusionQuery, IGLQuery } from "../data/IGLOcclusionQuery";
 
 export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
@@ -30,7 +30,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
     /**
      * 查询结果。
      */
-    const resolve = (renderPass: IRenderPass) =>
+    const resolve = (renderPass: RenderPass) =>
     {
         const results = occlusionQueryObjects.map((v) => v._step.resolve());
 
@@ -48,7 +48,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
 interface GLRenderOcclusionQuery
 {
     init: () => void
-    resolve: (renderPass: IRenderPass) => void
+    resolve: (renderPass: RenderPass) => void
 }
 
 const defautRenderOcclusionQuery = { init: () => { }, resolve: () => { } };

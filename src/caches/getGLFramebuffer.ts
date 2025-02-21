@@ -1,4 +1,4 @@
-import { IRenderPassDescriptor, ITextureView } from "@feng3d/render-api";
+import { RenderPassDescriptor, TextureView } from "@feng3d/render-api";
 import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
 import { getGLTexture } from "./getGLTexture";
@@ -9,14 +9,14 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _framebuffers: Map<IRenderPassDescriptor, WebGLFramebuffer>;
+        _framebuffers: Map<RenderPassDescriptor, WebGLFramebuffer>;
     }
 }
 
 /**
  * 获取帧缓冲区
  */
-export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
@@ -34,7 +34,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
     const drawBuffers: number[] = [];
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
-        const view = item.view as (ITextureView | IGLRenderbuffer);
+        const view = item.view as (TextureView | IGLRenderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
         if ("texture" in view)
@@ -117,7 +117,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
  * @param handleMultisample 处理存在多重采样的渲染通道描述。
  * @returns
  */
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor, handleMultisample = true)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor, handleMultisample = true)
 {
     if (handleMultisample && passDescriptor?.[_IGLRenderPassDescriptorWithMultisample])
     {

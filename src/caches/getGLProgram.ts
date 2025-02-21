@@ -1,4 +1,4 @@
-import { IRenderPipeline } from "@feng3d/render-api";
+import { RenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { IGLAttributeInfo } from "../data/IGLAttributeInfo";
 import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
@@ -38,14 +38,14 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline | IGLTransformFeedbackPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline | IGLTransformFeedbackPipeline)
 {
     const shaderKey = getKey(pipeline);
     let result = gl._programs[shaderKey];
     if (result) return result;
 
     const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as IRenderPipeline).fragment?.code || `#version 300 es
+    const fragment = (pipeline as RenderPipeline).fragment?.code || `#version 300 es
         precision highp float;
         precision highp int;
 
@@ -61,7 +61,7 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: IRenderPipelin
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+export function deleteProgram(gl: WebGLRenderingContext, pipeline: RenderPipeline)
 {
     const shaderKey = getKey(pipeline);
     const result = gl._programs[shaderKey];
@@ -72,10 +72,10 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeli
     }
 }
 
-function getKey(pipeline: IRenderPipeline | IGLTransformFeedbackPipeline)
+function getKey(pipeline: RenderPipeline | IGLTransformFeedbackPipeline)
 {
     const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as IRenderPipeline).fragment?.code;
+    const fragment = (pipeline as RenderPipeline).fragment?.code;
     const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;

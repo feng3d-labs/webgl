@@ -1,4 +1,4 @@
-import { Buffer, IRenderPassDescriptor, IRenderPipeline, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
+import { Buffer, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -38,7 +38,7 @@ export class WebGL
      * @param submit 一次 GPU 提交内容。
      *
      */
-    submit(submit: ISubmit)
+    submit(submit: Submit)
     {
         this._runWebGL.runSubmit(this._gl, submit);
     }
@@ -48,7 +48,7 @@ export class WebGL
         readPixels(this._gl, glReadPixels);
     }
 
-    deleteFramebuffer(passDescriptor: IRenderPassDescriptor)
+    deleteFramebuffer(passDescriptor: RenderPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }
@@ -63,17 +63,17 @@ export class WebGL
         deleteBuffer(this._gl, buffer);
     }
 
-    deleteTexture(texture: ITexture)
+    deleteTexture(texture: Texture)
     {
         deleteTexture(this._gl, texture);
     }
 
-    deleteSampler(sampler: ISampler)
+    deleteSampler(sampler: Sampler)
     {
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(pipeline: IRenderPipeline)
+    deleteProgram(pipeline: RenderPipeline)
     {
         deleteProgram(this._gl, pipeline);
     }

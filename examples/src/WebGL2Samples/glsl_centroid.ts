@@ -1,4 +1,4 @@
-import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes, IViewport } from "@feng3d/render-api";
+import { IPassEncoder, RenderPass, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, Texture, IViewport, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -48,7 +48,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IRenderPipeline[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
     },
@@ -101,8 +101,8 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures: ITexture[] = [];
-const samplers: ISampler[] = [];
+const textures: Texture[] = [];
+const samplers: Sampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
@@ -122,7 +122,7 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IRenderPassDescriptor[] = [
+const framebuffers: RenderPassDescriptor[] = [
     { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
     { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
 ];
@@ -157,7 +157,7 @@ const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
@@ -174,10 +174,10 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 
 const renderObjects: IRenderPassObject[] = [];
 // Pass 2
-const rp2: IRenderPass = {
+const rp2: RenderPass = {
     renderObjects,
 };
-const ro: IRenderObject = {
+const ro: RenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
     geometry: {
         primitive: { topology: "triangle-list" },

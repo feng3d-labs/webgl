@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -19,13 +19,13 @@ const windowSize = {
 // -- Initialize program
 
 // Draw buffer shaders
-const drawBufferProgram: IRenderPipeline = {
+const drawBufferProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
 };
 
 // Draw shaders
-const drawProgram: IRenderPipeline = {
+const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
 };
@@ -73,21 +73,21 @@ const quadVertexArray: { vertices?: VertexAttributes } = {
 
 // -- Initialize texture targets
 
-const color1Texture: ITexture = {
+const color1Texture: Texture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color1Sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const color1Sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
-const color2Texture: ITexture = {
+const color2Texture: Texture = {
     format: "rgba8unorm",
     size: [windowSize.x, windowSize.y],
 };
-const color2Sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
+const color2Sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IRenderPassDescriptor = {
+const frameBuffer: RenderPassDescriptor = {
     colorAttachments: [
         { view: { texture: color1Texture, baseMipLevel: 0 } },
         { view: { texture: color2Texture, baseMipLevel: 0 } },
@@ -96,7 +96,7 @@ const frameBuffer: IRenderPassDescriptor = {
 
 // -- Render
 
-const renderPass: IRenderPass = {
+const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: drawBufferProgram,
@@ -109,7 +109,7 @@ const renderPass: IRenderPass = {
 };
 
 // Pass 2: Draw to screen
-const renderPass2: IRenderPass = {
+const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: drawProgram,

@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -15,7 +15,7 @@ import { getShaderSource, loadImage } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -49,14 +49,14 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage("../../assets/img/Di-3d.png", function (image)
     {
         // -- Init Texture
-        const texture: ITexture = {
+        const texture: Texture = {
             size: [image.width, image.height],
             format: "rgba8uint",
             sources: [{
                 mipLevel: 0, image, flipY: false,
             }],
         };
-        const sampler: ISampler = {
+        const sampler: Sampler = {
             minFilter: "nearest",
             magFilter: "nearest",
         };
@@ -69,7 +69,7 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IRenderObject = {
+        const ro: RenderObject = {
             pipeline: program,
             uniforms: {
                 MVP: matrix,
@@ -81,7 +81,7 @@ import { getShaderSource, loadImage } from "./utility";
             }
         };
 
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects: [ro],
         };

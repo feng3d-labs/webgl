@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassDescriptor, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -19,7 +19,7 @@ const PROGRAM = {
     MAX: 2
 };
 
-const programs: IRenderPipeline[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") },
         fragment: { code: getShaderSource("fs-render") },
@@ -68,14 +68,14 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const texture: ITexture = {
+const texture: Texture = {
     format: "rgba8unorm",
     size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
 };
-const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest" };
+const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest" };
 
 // -- Init Frame Buffers
-const framebuffer: IRenderPassDescriptor = {
+const framebuffer: RenderPassDescriptor = {
     colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
     sampleCount: 4 // 多重采样
 };
@@ -98,7 +98,7 @@ const IDENTITY = mat4.create();
 // -- Render
 
 // Pass 1
-const renderPass1: IRenderPass = {
+const renderPass1: RenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
@@ -118,7 +118,7 @@ vec3.set(scaleVector3, 8.0, 8.0, 8.0);
 const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
-const renderPass2: IRenderPass = {
+const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [
         {

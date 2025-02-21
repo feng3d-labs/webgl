@@ -1,4 +1,4 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, ITextureFormat, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, ITextureFormat, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -49,9 +49,9 @@ import { getShaderSource, loadImage } from "./utility";
     }
 
     // -- Init program
-    const programUint: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
+    const programUint: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
 
-    const programNormalized: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
+    const programNormalized: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -135,8 +135,8 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
 
-        const textures: ITexture[] = new Array(TextureTypes.MAX);
-        const samplers: ISampler[] = new Array(TextureTypes.MAX);
+        const textures: Texture[] = new Array(TextureTypes.MAX);
+        const samplers: Sampler[] = new Array(TextureTypes.MAX);
         let i = 0;
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
@@ -164,7 +164,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         const renderObjects: IRenderPassObject[] = [];
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects
         };

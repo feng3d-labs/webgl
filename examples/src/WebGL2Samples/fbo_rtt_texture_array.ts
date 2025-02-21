@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -51,12 +51,12 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: IRenderPipeline = {
+const multipleOutputProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
 };
 
 // Layer shaders
-const layerProgram: IRenderPipeline = {
+const layerProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
 };
 
@@ -100,16 +100,16 @@ const layerVertexArray: { vertices?: VertexAttributes } = {
 const w = 16;
 const h = 16;
 
-const texture: ITexture = {
+const texture: Texture = {
     dimension: "2d-array",
     format: "rgba8unorm",
     size: [w, h, 3],
 };
-const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest", lodMinClamp: 0, lodMaxClamp: 0 };
+const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest", lodMinClamp: 0, lodMaxClamp: 0 };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IRenderPassDescriptor = {
+const frameBuffer: RenderPassDescriptor = {
     colorAttachments: [
         { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.RED } },
         { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.GREEN } },
@@ -128,7 +128,7 @@ const matrix = new Float32Array([
     0.0, 0.0, 0.0, 1.0
 ]);
 
-const renderPass1: IRenderPass = {
+const renderPass1: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [
         {
@@ -145,14 +145,14 @@ const renderPass1: IRenderPass = {
 
 // Pass 2
 const renderObjects: IRenderPassObject[] = [];
-const renderPass: IRenderPass = {
+const renderPass: RenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects,
 };
 
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     pipeline: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     geometry: {
