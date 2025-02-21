@@ -800,7 +800,7 @@ export class RunWebGL
             const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor, color?.operation) || colorDstFactor;
 
             // 当混合系数用到了混合常量值时设置混合常量值。
-            const constantColor = BlendState.getInstance(blend)?.getBlendConstantColor();
+            const constantColor = BlendState.getBlendConstantColor(blend);
             if (constantColor)
             {
                 const constantColor = blend.constantColor ?? [0, 0, 0, 0];
