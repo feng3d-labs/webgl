@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, ICullFace, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, Material, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, ICullFace, IDrawIndexed, DrawVertex, IFrontFace, IIndicesDataTypes, IRenderPassObject, Material, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -13,7 +13,7 @@ import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
-import { IGLDrawElementType, IGLUniformBuffer } from "./data/IGLBuffer";
+import { IGLDrawElementType } from "./data/IGLBuffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
@@ -33,6 +33,7 @@ import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
 import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
+import { IGLUniformBuffer } from "./data/IGLUniformBuffer";
 
 declare global
 {
@@ -265,6 +266,7 @@ export class RunWebGL
 
     private runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IDrawIndexed)
     {
+
         const type: IGLDrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
         const indexCount = drawIndexed.indexCount;
@@ -292,7 +294,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, drawArrays: IDrawVertex)
+    private runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, drawArrays: DrawVertex)
     {
         //
         const vertexCount = drawArrays.vertexCount;

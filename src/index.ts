@@ -1,6 +1,8 @@
 export * from "./data/GLBlitFramebuffer";
-export * from "./data/IGLBuffer";
 export * from "./data/GLCanvasContext";
+export * from "./data/GLIndexBuffer";
+export * from "./data/GLVertexBuffer";
+export * from "./data/IGLBuffer";
 export * from "./data/IGLCapabilities";
 export * from "./data/IGLCommandEncoder";
 export * from "./data/IGLDepthStencilState";
@@ -15,6 +17,7 @@ export * from "./data/IGLTexture";
 export * from "./data/IGLTexturePixelStore";
 export * from "./data/IGLTransformFeedback";
 export * from "./data/IGLTransformFeedbackPass";
+export * from "./data/IGLUniformBuffer";
 export * from "./data/IGLUniforms";
 
 export * from "./runs/getIGLBuffer";

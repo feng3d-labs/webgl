@@ -20,39 +20,6 @@ declare module "@feng3d/render-api"
     }
 }
 
-export class GLVertexBuffer extends Buffer
-{
-    target: "ARRAY_BUFFER" = "ARRAY_BUFFER";
-
-    /**
-     * 缓冲区数据。
-     */
-    declare data?: IVertexDataTypes;
-}
-
-/**
- * WebGL元素缓冲，顶点索引缓冲。
- *
- * 使用 gl.ELEMENT_ARRAY_BUFFER 进行绑定数据。
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
- *
- */
-export interface IGLIndexBuffer extends Buffer
-{
-    target: "ELEMENT_ARRAY_BUFFER";
-
-    /**
-     * 顶点索引数据。
-     */
-    data: IIndicesDataTypes;
-}
-
-export interface IGLUniformBuffer extends Buffer
-{
-    target: "UNIFORM_BUFFER";
-}
-
 /**
  * 元素缓冲数据类型。
  *

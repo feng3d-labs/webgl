@@ -1,4 +1,4 @@
-import { IDrawVertex, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
+import { DrawVertex, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
 import { IGLTransformFeedback } from "./IGLTransformFeedback";
 
 declare module "@feng3d/render-api"
@@ -39,7 +39,7 @@ export interface IGLTransformFeedbackObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawVertex
      */
-    readonly draw: IDrawVertex;
+    readonly draw: DrawVertex;
 
     /**
      * Uniform渲染数据
