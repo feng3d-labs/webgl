@@ -80,7 +80,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     const renderObject: RenderObject = {
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
-        pipeline: program,
+        material: program,
         uniforms: {
             MVP: new Float32Array([
                 0.8, 0.0, 0.0, 0.0,
@@ -165,7 +165,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             vertices: vertexArray.vertices,
             draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 },
         },
-        pipeline: program,
+        material: program,
     };
 
     const renderPass2: RenderPass = {

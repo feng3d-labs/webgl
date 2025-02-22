@@ -120,7 +120,7 @@ function render()
     ]);
 
     const renderObject: RenderObject = {
-        pipeline: program,
+        material: program,
         uniforms: { mvp: matrix, diffuse: { texture, sampler } },
         geometry:{
             vertices: vertexArray.vertices,
@@ -156,7 +156,7 @@ function render()
                 {
                     ...renderObject,
                     viewport: viewport0,
-                    pipeline: {
+                    material: {
                         ...program, fragment: {
                             ...program.fragment,
                             targets: [{
@@ -177,7 +177,7 @@ function render()
                 {
                     ...renderObject,
                     viewport: viewport0,
-                    pipeline: {
+                    material: {
                         ...program, fragment: {
                             ...program.fragment,
                             targets: [{

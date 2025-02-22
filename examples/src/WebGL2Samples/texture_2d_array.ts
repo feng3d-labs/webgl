@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         const ro: RenderObject = {
-            pipeline: program,
+            material: program,
             uniforms: {
                 MVP: matrix,
                 diffuse: { texture, sampler },

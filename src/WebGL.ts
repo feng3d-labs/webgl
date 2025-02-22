@@ -73,9 +73,9 @@ export class WebGL
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(pipeline: Material)
+    deleteProgram(material: Material)
     {
-        deleteProgram(this._gl, pipeline);
+        deleteProgram(this._gl, material);
     }
 
     deleteTransformFeedback(transformFeedback: IGLTransformFeedback)

@@ -232,15 +232,15 @@ export class RunWebGL
 
     private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
     {
-        const { pipeline, vertices, uniforms, transformFeedback, draw } = renderObject;
+        const { material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
         const drawMode = getIGLDrawMode("point-list");
 
-        this.runTransformFeedbackPipeline(gl, pipeline);
+        this.runTransformFeedbackPipeline(gl, material);
 
-        this.runVertexArray(gl, pipeline, vertices, undefined);
+        this.runVertexArray(gl, material, vertices, undefined);
 
-        this.runUniforms(gl, pipeline, uniforms);
+        this.runUniforms(gl, material, uniforms);
 
         this.runTransformFeedback(gl, transformFeedback, drawMode);
 
@@ -321,9 +321,9 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, pipeline: Material, uniforms: Uniforms)
+    private runUniforms(gl: WebGLRenderingContext, material: Material, uniforms: Uniforms)
     {
-        const webGLProgram = getGLProgram(gl, pipeline);
+        const webGLProgram = getGLProgram(gl, material);
 
         webGLProgram.uniforms.forEach((uniformInfo) =>
         {
@@ -545,14 +545,14 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, pipeline: Material, vertices: VertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, material: Material, vertices: VertexAttributes, indices: IIndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
         let webGLVertexArrayObject: WebGLVertexArrayObject;
         if (gl instanceof WebGL2RenderingContext)
         {
-            webGLVertexArrayObject = gl._vertexArrays.get([pipeline, vertices, indices]);
+            webGLVertexArrayObject = gl._vertexArrays.get([material, vertices, indices]);
             if (webGLVertexArrayObject)
             {
                 gl.bindVertexArray(webGLVertexArrayObject);
@@ -562,10 +562,10 @@ export class RunWebGL
 
             webGLVertexArrayObject = gl.createVertexArray();
             gl.bindVertexArray(webGLVertexArrayObject);
-            gl._vertexArrays.set([pipeline, vertices, indices], webGLVertexArrayObject);
+            gl._vertexArrays.set([material, vertices, indices], webGLVertexArrayObject);
         }
 
-        const shaderResult = getGLProgram(gl, pipeline);
+        const shaderResult = getGLProgram(gl, material);
 
         //
         shaderResult.attributes.forEach((activeInfo) =>
@@ -770,13 +770,13 @@ export class RunWebGL
         }
     }
 
-    private runProgram(gl: WebGLRenderingContext, pipeline: Material)
+    private runProgram(gl: WebGLRenderingContext, material: Material)
     {
-        const program = getGLProgram(gl, pipeline);
+        const program = getGLProgram(gl, material);
         gl.useProgram(program);
 
         //
-        this.runColorTargetStates(gl, pipeline.fragment.targets);
+        this.runColorTargetStates(gl, material.fragment.targets);
     }
 
     private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])

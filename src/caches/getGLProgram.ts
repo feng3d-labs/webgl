@@ -38,14 +38,14 @@ declare global
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, pipeline: Material | IGLTransformFeedbackPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, material: Material | IGLTransformFeedbackPipeline)
 {
-    const shaderKey = getKey(pipeline);
+    const shaderKey = getKey(material);
     let result = gl._programs[shaderKey];
     if (result) return result;
 
-    const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as Material).fragment?.code || `#version 300 es
+    const vertex = material.vertex.code;
+    const fragment = (material as Material).fragment?.code || `#version 300 es
         precision highp float;
         precision highp int;
 
@@ -53,7 +53,7 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: Material | IGL
         {
         }
     `;
-    const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const transformFeedbackVaryings = (material as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
     gl._programs[shaderKey] = result;
@@ -61,9 +61,9 @@ export function getGLProgram(gl: WebGLRenderingContext, pipeline: Material | IGL
     return result;
 }
 
-export function deleteProgram(gl: WebGLRenderingContext, pipeline: Material)
+export function deleteProgram(gl: WebGLRenderingContext, material: Material)
 {
-    const shaderKey = getKey(pipeline);
+    const shaderKey = getKey(material);
     const result = gl._programs[shaderKey];
     if (result)
     {
@@ -72,11 +72,11 @@ export function deleteProgram(gl: WebGLRenderingContext, pipeline: Material)
     }
 }
 
-function getKey(pipeline: Material | IGLTransformFeedbackPipeline)
+function getKey(material: Material | IGLTransformFeedbackPipeline)
 {
-    const vertex = pipeline.vertex.code;
-    const fragment = (pipeline as Material).fragment?.code;
-    const transformFeedbackVaryings = (pipeline as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const vertex = material.vertex.code;
+    const fragment = (material as Material).fragment?.code;
+    const transformFeedbackVaryings = (material as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
 }

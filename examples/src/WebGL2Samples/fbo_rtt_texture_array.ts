@@ -133,7 +133,7 @@ const renderPass1: RenderPass = {
     renderObjects: [
         {
             viewport: { x: 0, y: 0, width: w, height: h },
-            pipeline: multipleOutputProgram,
+            material: multipleOutputProgram,
             uniforms: { mvp: matrix },
             geometry:{
                 primitive: { topology: "triangle-list" },
@@ -153,7 +153,7 @@ const renderPass: RenderPass = {
 };
 
 const renderObject: RenderObject = {
-    pipeline: layerProgram,
+    material: layerProgram,
     uniforms: { mvp: matrix, diffuse: { texture, sampler } },
     geometry: {
         primitive: { topology: "triangle-list" },

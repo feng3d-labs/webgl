@@ -37,7 +37,7 @@ const renderObject: RenderObject = {
         vertices: vertexArray.vertices,
         draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     },
-    pipeline: program
+    material: program
 };
 
 canvas.width = window.innerWidth;

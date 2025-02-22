@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: Material = {
+const material: Material = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;
@@ -64,7 +64,7 @@ function getRenderObject(batchId: number)
         uniforms: {
             offset: offsets[batchId].offset,
         },
-        pipeline,
+        material,
     };
 
     return renderObject;

@@ -20,7 +20,7 @@ function main()
   const buffers = initBuffers();
 
   const renderObject: RenderObject = {
-    pipeline: {
+    material: {
       vertex: {
         code: `
         attribute vec4 aVertexPosition;

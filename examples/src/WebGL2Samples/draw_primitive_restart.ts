@@ -50,7 +50,7 @@ const renderObject: RenderObject = {
         indices,
         draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
     },
-    pipeline: program,
+    material: program,
 };
 
 webgl.submit({

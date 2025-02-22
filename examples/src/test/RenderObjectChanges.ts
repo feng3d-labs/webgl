@@ -10,7 +10,7 @@ const init = async (canvas: HTMLCanvasElement) =>
     const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" }); // 初始化WebGL
 
     const renderObject: RenderObject = { // 渲染对象
-        pipeline: { // 渲染管线
+        material: { // 渲染管线
             vertex: { // 顶点着色器
                 code: `
                 attribute vec4 position;
@@ -66,7 +66,7 @@ const init = async (canvas: HTMLCanvasElement) =>
     window.onclick = () =>
     {
         // 修改顶点着色器代码
-        renderObject.pipeline.vertex.code = `
+        renderObject.material.vertex.code = `
                 attribute vec4 position;
 
                 void main() {
@@ -77,7 +77,7 @@ const init = async (canvas: HTMLCanvasElement) =>
                 `;
 
         // 修改片段着色器代码
-        renderObject.pipeline.fragment.code = `
+        renderObject.material.fragment.code = `
                 precision highp float;
                 uniform vec4 color;
                 void main() {

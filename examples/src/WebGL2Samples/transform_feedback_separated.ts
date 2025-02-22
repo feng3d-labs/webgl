@@ -102,7 +102,7 @@ import { getShaderSource } from "./utility";
                     __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [
                         {
-                            pipeline: programTransform,
+                            material: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,

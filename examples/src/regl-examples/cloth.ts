@@ -175,7 +175,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
         uniforms: {},
-        pipeline: {
+        material: {
             vertex: {
                 code: `precision mediump float;
 

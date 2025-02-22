@@ -132,7 +132,7 @@ import { getShaderSource } from "./utility";
     }
 
     const transformRO: IGLTransformFeedbackObject = {
-        pipeline: transformFeedbackPipeline,
+        material: transformFeedbackPipeline,
         vertices: null,
         transformFeedback: null,
         uniforms: {

@@ -51,7 +51,7 @@ const rp: RenderPass = {
 };
 
 const ro: RenderObject = {
-    pipeline: program,
+    material: program,
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,

@@ -31,7 +31,7 @@ const renderObject: RenderObject = {
         draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
     uniforms: {},
-    pipeline: {
+    material: {
         vertex: {
             code: `precision mediump float;
         uniform mat4 projection, view;

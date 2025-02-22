@@ -51,7 +51,7 @@ import { getShaderSource } from "./utility";
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
-            pipeline: program,
+            material: program,
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,

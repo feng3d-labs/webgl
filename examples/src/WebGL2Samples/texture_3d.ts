@@ -158,7 +158,7 @@ import { getShaderSource } from "./utility";
     }
 
     const ro: RenderObject = {
-        pipeline: program,
+        material: program,
         uniforms: {
             diffuse: { texture, sampler },
         },

@@ -88,7 +88,7 @@ function render()
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
-            pipeline: program,
+            material: program,
             uniforms: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },

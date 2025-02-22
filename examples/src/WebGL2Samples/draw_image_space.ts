@@ -42,7 +42,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
             primitive: { topology: "triangle-list" },
             draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         },
-        pipeline: program
+        material: program
     };
 
     webgl.submit({

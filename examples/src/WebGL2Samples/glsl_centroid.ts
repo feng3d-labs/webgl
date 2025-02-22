@@ -160,7 +160,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     const rp: RenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
-            pipeline: programs[i],
+            material: programs[i],
             uniforms: { MVP: IDENTITY },
             geometry: {
                 primitive: { topology: "triangle-list" },
@@ -178,7 +178,7 @@ const rp2: RenderPass = {
     renderObjects,
 };
 const ro: RenderObject = {
-    pipeline: programs[PROGRAM.SPLASH],
+    material: programs[PROGRAM.SPLASH],
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArrays[PROGRAM.SPLASH].vertices,

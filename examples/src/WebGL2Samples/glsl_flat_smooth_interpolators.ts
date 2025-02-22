@@ -168,7 +168,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                     renderObjects.push(
                         {
                             viewport: viewport[i],
-                            pipeline: programs[i],
+                            material: programs[i],
                             uniforms: {
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,

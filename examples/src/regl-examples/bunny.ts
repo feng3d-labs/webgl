@@ -41,7 +41,7 @@ const renderObject: RenderObject = {
     uniforms: {
         model: mat4.identity([]),
     },
-    pipeline: {
+    material: {
         vertex: {
             code: `precision mediump float;
         attribute vec3 position;

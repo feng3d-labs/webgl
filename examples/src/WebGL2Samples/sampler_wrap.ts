@@ -146,7 +146,7 @@ function render()
     ]);
 
     const ro: RenderObject = {
-        pipeline: program,
+        material: program,
         uniforms: { mvp: matrix },
         geometry: {
             primitive: { topology: "triangle-list" },

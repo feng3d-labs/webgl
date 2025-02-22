@@ -74,7 +74,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
         uniforms: {},
-        pipeline: {
+        material: {
             vertex: {
                 code: `precision mediump float;
         attribute vec3 position;

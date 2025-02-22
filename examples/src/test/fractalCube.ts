@@ -27,7 +27,7 @@ async function main()
     } = { texture: { size: [canvas.width, canvas.height] }, sampler: {} };
 
     const renderObject: RenderObject = {
-        pipeline: {
+        material: {
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;

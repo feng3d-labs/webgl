@@ -1,4 +1,4 @@
-import { RenderPass, Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { Material, RenderObject, RenderPass, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -26,7 +26,7 @@ const vertexPosBuffer = new Float32Array([
     -0.5, -0.5,
 ]);
 
-const pipeline: Material = {
+const material: Material = {
     vertex: {
         code: getShaderSource("vs")
     },
@@ -44,7 +44,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 const vertexCount = 12;
 const renderObject: RenderObject = {
-    pipeline,
+    material,
     geometry: {
         primitive: { topology: "triangle-strip" },
         vertices: vertexArray.vertices,
@@ -81,4 +81,4 @@ const rp: RenderPass = {
 
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
-webgl.deleteProgram(pipeline);
+webgl.deleteProgram(material);

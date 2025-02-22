@@ -27,7 +27,7 @@ export interface IGLTransformFeedbackObject
     /**
      * 渲染管线描述。
      */
-    readonly pipeline: IGLTransformFeedbackPipeline;
+    readonly material: IGLTransformFeedbackPipeline;
 
     /**
      * 顶点属性数据映射。

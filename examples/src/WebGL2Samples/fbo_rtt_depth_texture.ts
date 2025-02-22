@@ -93,7 +93,7 @@ const frameBuffer: RenderPassDescriptor = {
 const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
-        pipeline: depthProgram,
+        material: depthProgram,
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
@@ -109,7 +109,7 @@ const rp2: RenderPass = {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects: [{
-        pipeline: drawProgram,
+        material: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         geometry:{
             primitive: { topology: "triangle-list" },

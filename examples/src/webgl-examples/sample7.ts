@@ -22,7 +22,7 @@ async function main()
     const texture = await loadTexture("../../cubetexture.png");
 
     const renderObject: RenderObject = {
-        pipeline: {
+        material: {
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;

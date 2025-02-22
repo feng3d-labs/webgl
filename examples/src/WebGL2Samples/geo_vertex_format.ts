@@ -201,7 +201,7 @@ import { getShaderSource, loadImage } from "./utility";
     const lightPosition = [0.0, 0.0, 5.0];
 
     const ro: RenderObject = {
-        pipeline: program,
+        material: program,
         uniforms: {
             u_model: modelMatrix,
             u_modelInvTrans: modelInvTrans,

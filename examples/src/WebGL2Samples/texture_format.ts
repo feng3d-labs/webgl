@@ -174,7 +174,7 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    pipeline: programNormalized,
+                    material: programNormalized,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
@@ -192,7 +192,7 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    pipeline: programUint,
+                    material: programUint,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },

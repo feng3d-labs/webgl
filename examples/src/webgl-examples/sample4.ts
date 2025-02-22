@@ -16,7 +16,7 @@ function main()
   const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
 
   const renderObject: RenderObject = {
-    pipeline: {
+    material: {
       vertex: {
         code: `
         attribute vec4 aVertexPosition;

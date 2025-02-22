@@ -101,7 +101,7 @@ const IDENTITY = mat4.create();
 const renderPass1: RenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
-        pipeline: programs[PROGRAM.TEXTURE],
+        material: programs[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
         geometry: {
             primitive: { topology: "LINE_LOOP" },
@@ -122,7 +122,7 @@ const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [
         {
-            pipeline: programs[PROGRAM.SPLASH],
+            material: programs[PROGRAM.SPLASH],
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
             geometry: {
                 primitive: { topology: "triangle-list" },

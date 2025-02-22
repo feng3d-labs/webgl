@@ -26,7 +26,7 @@ function main()
     const video = setupVideo("../../Firefox.mp4");
 
     const renderObject: RenderObject = {
-        pipeline: {
+        material: {
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;

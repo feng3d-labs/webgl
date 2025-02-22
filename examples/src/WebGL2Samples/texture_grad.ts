@@ -197,7 +197,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     const ro: RenderObject = {
-        pipeline: program,
+        material: program,
         uniforms: {},
         geometry:{
             primitive: { cullFace: "back" },
