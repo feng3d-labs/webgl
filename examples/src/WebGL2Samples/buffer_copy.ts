@@ -1,5 +1,5 @@
-import { CopyBufferToBuffer, RenderPass, Material, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
+import { CopyBufferToBuffer, Material, RenderPass, VertexAttributes } from "@feng3d/render-api";
+import { GLCanvasContext, GLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -29,7 +29,7 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: GLVertexBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 

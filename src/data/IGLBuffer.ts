@@ -20,14 +20,14 @@ declare module "@feng3d/render-api"
     }
 }
 
-export interface IGLVertexBuffer extends Buffer
+export class GLVertexBuffer extends Buffer
 {
-    target: "ARRAY_BUFFER";
+    target: "ARRAY_BUFFER" = "ARRAY_BUFFER";
 
     /**
      * 缓冲区数据。
      */
-    data?: IVertexDataTypes;
+    declare data?: IVertexDataTypes;
 }
 
 /**

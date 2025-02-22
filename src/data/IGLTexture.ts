@@ -1,10 +1,10 @@
 import { Texture } from "@feng3d/render-api";
-import { IGLCanvasTexture } from "./IGLCanvasTexture";
+import { GLCanvasTexture } from "./GLCanvasTexture";
 
 /**
  * 类似纹理，包含画布纹理以及正常纹理。
  */
-export type IGLTextureLike = IGLCanvasTexture | Texture;
+export type IGLTextureLike = GLCanvasTexture | Texture;
 
 /**
  * 纹理绑定点。

@@ -8,7 +8,7 @@ export class GLCanvasContext implements WebGLContextAttributes
     /**
      * 画布编号。
      */
-    canvasId?: string
+    canvasId?: string;
 
     /**
      * WebGL上下文类型
