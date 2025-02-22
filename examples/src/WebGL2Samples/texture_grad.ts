@@ -203,7 +203,7 @@ import { getShaderSource, loadImage } from "./utility";
             primitive: { cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),
-            draw: { __type: "DrawIndexed", indexCount: 36 },
+            draw: { __type__: "DrawIndexed", indexCount: 36 },
         }
     };
 

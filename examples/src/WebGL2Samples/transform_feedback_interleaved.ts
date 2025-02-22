@@ -88,14 +88,14 @@ import { getShaderSource } from "./utility";
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type: "TransformFeedbackPass",
+                    __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [
                         {
                             pipeline: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,
-                            draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
                         }
                     ],
                 },
@@ -108,7 +108,7 @@ import { getShaderSource } from "./utility";
                             geometry:{
                                 vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                                 indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                                draw: { __type: "DrawVertex", vertexCount: VERTEX_COUNT },
+                                draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
                             },
                         }
                     ],

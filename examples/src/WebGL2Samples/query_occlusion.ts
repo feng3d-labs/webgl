@@ -55,18 +55,18 @@ const ro: RenderObject = {
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,
-        draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
+        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
     }
 };
 renderObjects.push(ro);
 
 const occlusionQuery: IGLOcclusionQuery = {
-    __type: "OcclusionQuery",
+    __type__: "OcclusionQuery",
     renderObjects: [{
         ...ro,
         geometry: {
             ...ro.geometry,
-            draw: { __type: "DrawVertex", firstVertex: 3, vertexCount: 3 },
+            draw: { __type__: "DrawVertex", firstVertex: 3, vertexCount: 3 },
         }
     }]
 };

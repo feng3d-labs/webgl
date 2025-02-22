@@ -106,7 +106,7 @@ import { getShaderSource, loadImage } from "./utility";
             },
             geometry:{
                 vertices: vertexArray.vertices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         };
 
@@ -174,7 +174,7 @@ import { getShaderSource, loadImage } from "./utility";
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
+            sources: [{ __type__: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
         };
         const sampler3D: Sampler = {
             lodMinClamp: 0,

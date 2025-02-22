@@ -177,7 +177,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                                 primitive: { topology: "triangle-list" },
                                 vertices: vertexArray.vertices,
                                 indices,
-                                draw: { __type: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
+                                draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
                             },
                         });
                 }

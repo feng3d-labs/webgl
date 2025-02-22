@@ -77,27 +77,27 @@ export class RunWebGL
     {
         commandEncoder.passEncoders.forEach((passEncoder) =>
         {
-            if (!passEncoder.__type)
+            if (!passEncoder.__type__)
             {
                 this.runRenderPass(gl, passEncoder as RenderPass);
             }
-            else if (passEncoder.__type === "RenderPass")
+            else if (passEncoder.__type__ === "RenderPass")
             {
                 this.runRenderPass(gl, passEncoder);
             }
-            else if (passEncoder.__type === "TransformFeedbackPass")
+            else if (passEncoder.__type__ === "TransformFeedbackPass")
             {
                 this.runTransformFeedbackPass(gl, passEncoder);
             }
-            else if (passEncoder.__type === "BlitFramebuffer")
+            else if (passEncoder.__type__ === "BlitFramebuffer")
             {
                 this.runBlitFramebuffer(gl, passEncoder);
             }
-            else if (passEncoder.__type === "CopyTextureToTexture")
+            else if (passEncoder.__type__ === "CopyTextureToTexture")
             {
                 this.runCopyTextureToTexture(gl, passEncoder);
             }
-            else if (passEncoder.__type === "CopyBufferToBuffer")
+            else if (passEncoder.__type__ === "CopyBufferToBuffer")
             {
                 this.runCopyBuffer(gl, passEncoder);
             }
@@ -188,7 +188,7 @@ export class RunWebGL
     {
         renderObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type === "OcclusionQuery")
+            if (renderObject.__type__ === "OcclusionQuery")
             {
                 this.runOcclusionQuery(gl, attachmentSize, renderObject);
             }
@@ -220,7 +220,7 @@ export class RunWebGL
         const topology = primitive?.topology || "triangle-list";
         const drawMode = getIGLDrawMode(topology);
 
-        if (draw.__type === 'DrawVertex')
+        if (draw.__type__ === 'DrawVertex')
         {
             this.runDrawVertex(gl, drawMode, draw);
         }

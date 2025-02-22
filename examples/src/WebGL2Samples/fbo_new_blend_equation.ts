@@ -124,7 +124,7 @@ function render()
         uniforms: { mvp: matrix, diffuse: { texture, sampler } },
         geometry:{
             vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }
     };
 

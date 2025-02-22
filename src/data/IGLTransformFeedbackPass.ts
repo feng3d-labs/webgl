@@ -14,7 +14,7 @@ export interface IGLTransformFeedbackPass
     /**
      * 数据类型。
      */
-    readonly __type: "TransformFeedbackPass";
+    readonly __type__: "TransformFeedbackPass";
 
     /**
      * 变换反馈对象列表。

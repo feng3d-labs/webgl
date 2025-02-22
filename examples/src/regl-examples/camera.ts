@@ -28,7 +28,7 @@ const renderObject: RenderObject = {
             normal: { data: new Float32Array(normals), format: "float32x3" },
         },
         indices: new Uint16Array(indices),
-        draw: { __type: "DrawIndexed", indexCount: indices.length },
+        draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
     uniforms: {},
     pipeline: {

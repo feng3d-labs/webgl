@@ -58,7 +58,7 @@ const rp: RenderPass = {
             vertices: {
                 pos: { data: vertices, format: "float32x2" },
             },
-            draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
+            draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
         }
     }]
 };

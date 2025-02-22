@@ -28,7 +28,7 @@ const renderObject: RenderObject = {
                 format: "float32x2",
             },
         },
-        draw: { __type: "DrawVertex", vertexCount: 3 },
+        draw: { __type__: "DrawVertex", vertexCount: 3 },
     },
     uniforms: { color: [1, 0, 0, 1] },
     pipeline: {

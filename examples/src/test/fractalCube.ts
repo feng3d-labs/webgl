@@ -74,7 +74,7 @@ async function main()
                 },
             },
             indices: buffers.indices,
-            draw: { __type: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
         uniforms: { uSampler: texture },
     };
@@ -92,7 +92,7 @@ async function main()
                 },
                 // 从画布中拷贝到纹理。
                 {
-                    __type: "CopyTextureToTexture",
+                    __type__: "CopyTextureToTexture",
                     source: { texture: null }, // 当值设置为 null或者undefined时表示当前画布。
                     destination: { texture: texture.texture },
                     copySize: [canvas.width, canvas.height],

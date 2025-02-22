@@ -151,7 +151,7 @@ function render()
         geometry: {
             primitive: { topology: "triangle-list" },
             vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+            draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
         }
     };
 
@@ -167,7 +167,7 @@ function render()
                 },
                 geometry: {
                     ...ro.geometry,
-                    draw: { __type: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+                    draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
                 }
             });
     }

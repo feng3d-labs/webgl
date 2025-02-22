@@ -87,7 +87,7 @@ function main()
                 },
             },
             indices: buffers.indices,
-            draw: { __type: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
         uniforms: { uSampler: texture },
     };
@@ -325,7 +325,7 @@ function initTexture(): IGLSamplerTexture
     const texture: Texture = {
         size: [1, 1],
         format: "rgba8unorm",
-        sources: [{ __type: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
+        sources: [{ __type__: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
     const sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
 

@@ -97,7 +97,7 @@ const renderPass: RenderPass = {
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 3 },
+            draw: { __type__: "DrawVertex", vertexCount: 3 },
         }
     }],
 
@@ -114,7 +114,7 @@ const rp2: RenderPass = {
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 6 },
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }
     }],
 };

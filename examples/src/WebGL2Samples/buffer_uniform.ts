@@ -91,7 +91,7 @@ import { getShaderSource } from "./utility";
         geometry:{
             vertices: vertexArray.vertices,
             indices: elementData,
-            draw: { __type: "DrawIndexed", indexCount: 6, firstIndex: 0 }
+            draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }
         },
     };
 

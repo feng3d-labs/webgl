@@ -165,7 +165,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[i].vertices,
-                draw: { __type: "DrawVertex", vertexCount },
+                draw: { __type__: "DrawVertex", vertexCount },
             }
         }]
     };
@@ -182,7 +182,7 @@ const ro: RenderObject = {
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6 },
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
     },
 };
 
@@ -203,7 +203,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
             geometry: {
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         }
     );

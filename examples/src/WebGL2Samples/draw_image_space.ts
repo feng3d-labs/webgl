@@ -40,7 +40,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         },
         geometry: {
             primitive: { topology: "triangle-list" },
-            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 3 },
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         },
         pipeline: program
     };

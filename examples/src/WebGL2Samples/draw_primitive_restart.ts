@@ -48,7 +48,7 @@ const renderObject: RenderObject = {
         primitive: { topology: "triangle-strip" },
         vertices: vertexArray.vertices,
         indices,
-        draw: { __type: "DrawIndexed", indexCount: 7, instanceCount: 2 },
+        draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
     },
     pipeline: program,
 };

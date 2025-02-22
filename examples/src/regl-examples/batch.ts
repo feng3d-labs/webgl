@@ -59,7 +59,7 @@ function getRenderObject(batchId: number)
     const renderObject: RenderObject = {
         geometry: {
             vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", vertexCount: 3 }
+            draw: { __type__: "DrawVertex", vertexCount: 3 }
         },
         uniforms: {
             offset: offsets[batchId].offset,

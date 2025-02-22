@@ -135,7 +135,7 @@ import { getShaderSource } from "./utility";
         vertices: null,
         transformFeedback: null,
         uniforms: {},
-        draw: { __type: "DrawVertex", vertexCount: NUM_INSTANCES },
+        draw: { __type__: "DrawVertex", vertexCount: NUM_INSTANCES },
     };
 
     const renderRO: RenderObject = {
@@ -144,7 +144,7 @@ import { getShaderSource } from "./utility";
         uniforms: {},
         geometry:{
             primitive: { topology: "triangle-list" },
-            draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
+            draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
         }
     };
 
@@ -152,7 +152,7 @@ import { getShaderSource } from "./utility";
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type: "TransformFeedbackPass",
+                    __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [transformRO],
                 },
                 {

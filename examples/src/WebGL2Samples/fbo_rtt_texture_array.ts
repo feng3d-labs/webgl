@@ -138,7 +138,7 @@ const renderPass1: RenderPass = {
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: multipleOutputVertexArray.vertices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         }]
 };
@@ -158,7 +158,7 @@ const renderObject: RenderObject = {
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: layerVertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 6 },
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
     }
 };
 
@@ -172,7 +172,7 @@ for (let i = 0; i < Textures.MAX; ++i)
             uniforms: { ...renderObject.uniforms, layer: i },
             geometry: {
                 ...renderObject.geometry,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         }
     );

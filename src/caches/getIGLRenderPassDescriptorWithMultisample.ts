@@ -47,7 +47,7 @@ return colorAttachment;
 
     // 拷贝 渲染缓冲区到 IGLTexture
     const blitFramebuffer: GLBlitFramebuffer = {
-        __type: "BlitFramebuffer",
+        __type__: "BlitFramebuffer",
         read: passDescriptor,
         draw: sourcePassDescriptor,
         blitFramebuffers: [[0, 0, textureSize[0], textureSize[1],

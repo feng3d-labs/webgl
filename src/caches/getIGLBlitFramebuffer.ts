@@ -52,7 +52,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture
     ];
 
     const blitFramebuffer: GLBlitFramebuffer = {
-        __type: "BlitFramebuffer",
+        __type__: "BlitFramebuffer",
         read: {
             colorAttachments: sourceColorAttachments,
             depthStencilAttachment: sourceDepthStencilAttachment,

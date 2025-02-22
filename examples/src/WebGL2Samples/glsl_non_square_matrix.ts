@@ -71,7 +71,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         }]
     };

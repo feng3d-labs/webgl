@@ -138,7 +138,7 @@ import { getShaderSource } from "./utility";
         uniforms: {
             u_acceleration: [0.0, ACCELERATION],
         },
-        draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
+        draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
     const renderRO: RenderObject = {
@@ -148,7 +148,7 @@ import { getShaderSource } from "./utility";
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
         geometry:{
-            draw: { __type: "DrawVertex", vertexCount: NUM_PARTICLES },
+            draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
             primitive: { topology: "point-list" },
         }
     };
@@ -157,7 +157,7 @@ import { getShaderSource } from "./utility";
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type: "TransformFeedbackPass",
+                    __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [transformRO],
                 },
                 {

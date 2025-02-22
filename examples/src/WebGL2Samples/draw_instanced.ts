@@ -35,7 +35,7 @@ const renderObject: RenderObject = {
     geometry:{
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,
-        draw: { __type: "DrawVertex", vertexCount: 3, instanceCount: 2 },
+        draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     },
     pipeline: program
 };

@@ -172,7 +172,7 @@ import * as vec3 from "./stackgl/gl-vec3";
                 uv: { data: new Float32Array(uvs), format: "float32x2" },
             },
             indices: new Uint16Array(indices),
-            draw: { __type: "DrawIndexed", indexCount: indices.length },
+            draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
         uniforms: {},
         pipeline: {

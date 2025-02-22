@@ -224,7 +224,7 @@ import { getShaderSource, loadImage } from "./utility";
                         primitive: { topology: IDrawMode2Name[primitive.mode] },
                         vertices: vertexArrayMaps[mid][i].vertices,
                         indices: vertexArrayMaps[mid][i].indices,
-                        draw: { __type: "DrawIndexed", indexCount: primitive.indices.length }
+                        draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length }
                     }
                 });
             }

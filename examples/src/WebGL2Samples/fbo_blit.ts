@@ -93,7 +93,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         geometry: {
             primitive: { topology: "triangle-list" },
             vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 }
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 }
         }
     };
 
@@ -144,7 +144,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     }
 
     const blitFramebuffer: GLBlitFramebuffer = {
-        __type: "BlitFramebuffer",
+        __type__: "BlitFramebuffer",
         read: fboRenderPass.descriptor,
         draw: renderPassResolve.descriptor,
         blitFramebuffers,
@@ -163,7 +163,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         },
         geometry: {
             vertices: vertexArray.vertices,
-            draw: { __type: "DrawVertex", firstVertex: 0, vertexCount: 6 },
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 },
         },
         pipeline: program,
     };

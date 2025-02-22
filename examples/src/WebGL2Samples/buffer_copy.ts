@@ -34,7 +34,7 @@ import { getShaderSource } from "./utility";
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
     const cb: CopyBufferToBuffer = {
-        __type: "CopyBufferToBuffer",
+        __type__: "CopyBufferToBuffer",
         source: vertexPosBufferSrc,
         destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),
         sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
@@ -55,7 +55,7 @@ import { getShaderSource } from "./utility";
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             },
         }]
     };

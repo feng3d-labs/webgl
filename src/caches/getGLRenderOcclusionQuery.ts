@@ -8,7 +8,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
     let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects["_GLRenderOcclusionQuery"];
     if (renderOcclusionQuery) return renderOcclusionQuery;
 
-    const occlusionQueryObjects: IGLOcclusionQuery[] = renderObjects.filter((cv) => cv.__type === "OcclusionQuery") as any;
+    const occlusionQueryObjects: IGLOcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === "OcclusionQuery") as any;
     if (occlusionQueryObjects.length === 0)
     {
         renderObjects["_GLRenderOcclusionQuery"] = defautRenderOcclusionQuery;

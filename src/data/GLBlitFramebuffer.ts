@@ -8,7 +8,7 @@ export class GLBlitFramebuffer
     /**
      * 数据类型。
      */
-    readonly __type: "BlitFramebuffer" = "BlitFramebuffer";
+    readonly __type__: "BlitFramebuffer" = "BlitFramebuffer";
 
     read: RenderPassDescriptor;
     draw: RenderPassDescriptor;

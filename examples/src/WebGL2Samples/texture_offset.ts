@@ -109,7 +109,7 @@ import { getShaderSource, loadImage } from "./utility";
                 },
                 geometry: {
                     vertices: vertexArray.vertices,
-                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
                 }
             });
 
@@ -127,7 +127,7 @@ import { getShaderSource, loadImage } from "./utility";
                 },
                 geometry: {
                     vertices: vertexArray.vertices,
-                    draw: { __type: "DrawVertex", vertexCount: 6 },
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
                 }
             });
 

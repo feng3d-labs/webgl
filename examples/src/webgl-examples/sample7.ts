@@ -84,7 +84,7 @@ async function main()
                 },
             },
             indices: buffers.indices,
-            draw: { __type: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         }
     };
 

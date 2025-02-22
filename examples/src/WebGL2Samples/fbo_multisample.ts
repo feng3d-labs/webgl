@@ -106,7 +106,7 @@ const renderPass1: RenderPass = {
         geometry: {
             primitive: { topology: "LINE_LOOP" },
             vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
-            draw: { __type: "DrawVertex", vertexCount },
+            draw: { __type__: "DrawVertex", vertexCount },
         }
     }]
 };
@@ -127,7 +127,7 @@ const renderPass2: RenderPass = {
             geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         }
     ],

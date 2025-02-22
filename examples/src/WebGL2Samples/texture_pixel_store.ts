@@ -63,7 +63,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [image.width / 2, image.height / 2],
             format: "rgba8unorm",
             sources: [{
-                __type: "TextureDataSource",
+                __type__: "TextureDataSource",
                 mipLevel: 0,
                 size: [image.width / 2, image.height / 2],
                 data: pixels,
@@ -99,7 +99,7 @@ import { getShaderSource, loadImage } from "./utility";
             geometry:{
                 vertices: vertexArray.vertices,
                 indices: vertexArray.indices,
-                draw: { __type: "DrawVertex", vertexCount: 6 },
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             }
         });
 
