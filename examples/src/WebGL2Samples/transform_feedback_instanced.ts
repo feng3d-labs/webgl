@@ -140,7 +140,7 @@ import { getShaderSource } from "./utility";
 
     const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
-        pipeline: programs[PROGRAM_DRAW],
+        material: programs[PROGRAM_DRAW],
         uniforms: {},
         geometry:{
             primitive: { topology: "triangle-list" },

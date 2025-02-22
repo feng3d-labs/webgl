@@ -115,7 +115,7 @@ import { getShaderSource } from "./utility";
                     renderObjects: [
                         // Second draw, reuse captured attributes
                         {
-                            pipeline: programs[PROGRAM_FEEDBACK],
+                            material: programs[PROGRAM_FEEDBACK],
                             geometry: {
                                 vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                                 indices: vertexArrays[PROGRAM_FEEDBACK].indices,

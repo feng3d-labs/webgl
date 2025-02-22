@@ -211,7 +211,7 @@ import { getShaderSource, loadImage } from "./utility";
                 mat4.multiply(localMV, mvMatrix, primitive.matrix);
 
                 renderObjects.push({
-                    pipeline: {
+                    material: {
                         ...program,
                     },
                     uniforms: {

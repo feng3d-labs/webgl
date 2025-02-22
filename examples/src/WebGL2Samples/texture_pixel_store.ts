@@ -91,7 +91,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         renderObjects.push({
-            pipeline: program,
+            material: program,
             uniforms: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
