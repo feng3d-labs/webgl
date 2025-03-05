@@ -467,6 +467,7 @@ export class RunWebGL
         {
             data = [data];
         }
+        if (data.toArray) data = data.toArray();
         const location = uniformInfo.location;
         switch (type)
         {

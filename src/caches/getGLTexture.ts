@@ -91,7 +91,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             if (width && height)
                             {
                                 gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], image);
@@ -130,7 +130,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], data, offset);
                         }
                         else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
@@ -161,7 +161,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], gl[format], gl[type], image);
                         }
                         else
@@ -189,7 +189,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             console.assert(offset === 0, `WebGL1中ITextureDataLayout.offset必须为0`);
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], width, height, 0, gl[format], gl[type], data);
                         }

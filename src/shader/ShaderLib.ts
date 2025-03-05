@@ -127,7 +127,7 @@ export class ShaderLib
         this._shaderCache = {};
     }
 
-    private getMacroCode(variables: string[], valueObj: Object)
+    getMacroCode(variables: string[], valueObj: Object)
     {
         let macroHeader = "";
         variables.forEach((macroName) =>
