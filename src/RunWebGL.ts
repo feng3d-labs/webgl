@@ -201,7 +201,7 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
-        const { viewport, scissorRect, material, geometry, uniforms } = renderObject;
+        const { viewport, scissorRect, pipeline: material, geometry, uniforms } = renderObject;
         RenderPipeline.init(material);
 
         this.runViewPort(gl, attachmentSize, viewport);
@@ -233,7 +233,7 @@ export class RunWebGL
 
     private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
     {
-        const { material, vertices, uniforms, transformFeedback, draw } = renderObject;
+        const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
         const drawMode = getIGLDrawMode("point-list");
 

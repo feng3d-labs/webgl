@@ -1,4 +1,4 @@
-import { RenderPass, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -12,7 +12,7 @@ const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program
-const program: Material = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
 };
 
@@ -66,7 +66,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
-            material: program,
+            pipeline: program,
             uniforms: { MVP: matrix, diffuse: { texture, sampler } },
             geometry:{
                 primitive: { topology: "triangle-list" },

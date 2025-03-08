@@ -28,7 +28,7 @@ function main()
       },
     },
     renderObjects: [{
-      material: {
+      pipeline: {
         vertex: {
           code: `
           attribute vec4 aVertexPosition;

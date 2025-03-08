@@ -20,7 +20,7 @@ const init = async (canvas: HTMLCanvasElement) =>
                             }],
                         },
                         renderObjects: [{ // 渲染对象
-                            material: { // 渲染管线
+                            pipeline: { // 渲染管线
                                 vertex: { // 顶点着色器
                                     code: `
                                     attribute vec4 position;

@@ -1,4 +1,4 @@
-import { IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -48,7 +48,7 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: Material[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
     },
@@ -160,7 +160,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     const rp: RenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
-            material: programs[i],
+            pipeline: programs[i],
             uniforms: { MVP: IDENTITY },
             geometry: {
                 primitive: { topology: "triangle-list" },
@@ -178,7 +178,7 @@ const rp2: RenderPass = {
     renderObjects,
 };
 const ro: RenderObject = {
-    material: programs[PROGRAM.SPLASH],
+    pipeline: programs[PROGRAM.SPLASH],
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArrays[PROGRAM.SPLASH].vertices,

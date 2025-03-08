@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, RenderPass, IRenderPassObject, Material, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { IIndicesDataTypes, RenderPass, IRenderPassObject, RenderPipeline, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { getIVertexFormat, GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -42,7 +42,7 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs: Material[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
         depthStencil: { depthCompare: "less-equal" },
@@ -168,7 +168,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                     renderObjects.push(
                         {
                             viewport: viewport[i],
-                            material: programs[i],
+                            pipeline: programs[i],
                             uniforms: {
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,

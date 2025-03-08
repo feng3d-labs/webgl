@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -19,7 +19,7 @@ const PROGRAM = {
     MAX: 2
 };
 
-const programs: Material[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") },
         fragment: { code: getShaderSource("fs-render") },
@@ -101,7 +101,7 @@ const IDENTITY = mat4.create();
 const renderPass1: RenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
-        material: programs[PROGRAM.TEXTURE],
+        pipeline: programs[PROGRAM.TEXTURE],
         uniforms: { MVP: IDENTITY },
         geometry: {
             primitive: { topology: "LINE_LOOP" },
@@ -122,7 +122,7 @@ const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [
         {
-            material: programs[PROGRAM.SPLASH],
+            pipeline: programs[PROGRAM.SPLASH],
             uniforms: { diffuse: { texture, sampler }, MVP: mvp },
             geometry: {
                 primitive: { topology: "triangle-list" },

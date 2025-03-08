@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, Material, VertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
+import { IIndicesDataTypes, IVertexDataTypes, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { getIGLVertexBuffer, GLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -29,7 +29,7 @@ import { getShaderSource } from "./utility";
         return programTransform;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: Material = {
+    const programFeedback: RenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
@@ -91,7 +91,7 @@ import { getShaderSource } from "./utility";
                     __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [
                         {
-                            material: programTransform,
+                            pipeline: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,
@@ -104,7 +104,7 @@ import { getShaderSource } from "./utility";
                     renderObjects: [
                         // Second draw, reuse captured attributes
                         {
-                            material: programFeedback,
+                            pipeline: programFeedback,
                             geometry:{
                                 vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                                 indices: vertexArrays[PROGRAM_FEEDBACK].indices,

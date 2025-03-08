@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -19,13 +19,13 @@ const windowSize = {
 // -- Initialize program
 
 // Draw buffer shaders
-const drawBufferProgram: Material = {
+const drawBufferProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
 };
 
 // Draw shaders
-const drawProgram: Material = {
+const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
 };
@@ -99,7 +99,7 @@ const frameBuffer: RenderPassDescriptor = {
 const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
-        material: drawBufferProgram,
+        pipeline: drawBufferProgram,
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
@@ -112,7 +112,7 @@ const renderPass: RenderPass = {
 const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [{
-        material: drawProgram,
+        pipeline: drawProgram,
         uniforms: {
             color1Map: { texture: color1Texture, sampler: color1Sampler },
             color2Map: { texture: color2Texture, sampler: color2Sampler },

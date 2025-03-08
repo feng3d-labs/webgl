@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { IRenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -36,9 +36,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const programBicubic: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
+    const programBicubic: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
 
-    const programOffsetBicubic: Material = {
+    const programOffsetBicubic: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-offset-bicubic") },
     };
 
@@ -102,7 +102,7 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
-                material: programBicubic,
+                pipeline: programBicubic,
                 uniforms: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
@@ -119,7 +119,7 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
-                material: programOffsetBicubic,
+                pipeline: programOffsetBicubic,
                 uniforms: {
                     MVP: matrix,
                     diffuse: { texture, sampler },

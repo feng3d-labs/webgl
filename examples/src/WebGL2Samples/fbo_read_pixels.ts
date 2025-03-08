@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, IRenderPassObject, Material, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, IRenderPassObject, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -51,12 +51,12 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: Material = {
+const multipleOutputProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
 };
 
 // Layer shaders
-const layerProgram: Material = {
+const layerProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
 };
 
@@ -131,7 +131,7 @@ const rp1: RenderPass = {
     renderObjects: [
         {
             viewport: { x: 0, y: 0, width: w, height: h },
-            material: multipleOutputProgram,
+            pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
             geometry:{
                 primitive: { topology: "triangle-list" },
@@ -149,7 +149,7 @@ const rp: RenderPass = {
 };
 
 const ro: RenderObject = {
-    material: layerProgram,
+    pipeline: layerProgram,
     uniforms: {
         mvp: matrix,
         diffuse: { texture, sampler },

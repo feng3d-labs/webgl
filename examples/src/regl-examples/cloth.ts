@@ -175,9 +175,9 @@ import * as vec3 from "./stackgl/gl-vec3";
             draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
         uniforms: {},
-        material: {
+        pipeline: {
             vertex: {
-                code: `precision mediump float;
+                code: /* wgsl */`precision mediump float;
 
         attribute vec3 position;
         attribute vec3 normal;
@@ -194,7 +194,7 @@ import * as vec3 from "./stackgl/gl-vec3";
           gl_Position = projection * view * vec4(position, 1);
         }` },
             fragment: {
-                code: `precision mediump float;
+                code: /* wgsl */`precision mediump float;
 
         varying vec2 vUv;
         varying vec3 vNormal;

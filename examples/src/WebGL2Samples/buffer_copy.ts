@@ -1,4 +1,4 @@
-import { CopyBufferToBuffer, Material, RenderPass, VertexAttributes } from "@feng3d/render-api";
+import { CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, GLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -16,7 +16,7 @@ import { getShaderSource } from "./utility";
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: Material = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -51,7 +51,7 @@ import { getShaderSource } from "./utility";
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
-            material: program,
+            pipeline: program,
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,

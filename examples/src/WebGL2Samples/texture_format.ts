@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, Material, Sampler, Texture, ITextureFormat, VertexAttributes } from "@feng3d/render-api";
+import { IRenderPassObject, ITextureFormat, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -49,9 +49,9 @@ import { getShaderSource, loadImage } from "./utility";
     }
 
     // -- Init program
-    const programUint: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
+    const programUint: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
 
-    const programNormalized: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
+    const programNormalized: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -174,7 +174,7 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    material: programNormalized,
+                    pipeline: programNormalized,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
@@ -192,7 +192,7 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    material: programUint,
+                    pipeline: programUint,
                     uniforms: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },

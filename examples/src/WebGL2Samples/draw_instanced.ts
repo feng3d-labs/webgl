@@ -1,4 +1,4 @@
-import { Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -18,7 +18,7 @@ const vertexColorBuffer = new Float32Array([
     1.0, 0.5, 0.0,
     0.0, 0.5, 1.0]);
 
-const program: Material = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };
@@ -37,7 +37,7 @@ const renderObject: RenderObject = {
         vertices: vertexArray.vertices,
         draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     },
-    material: program
+    pipeline: program
 };
 
 canvas.width = window.innerWidth;

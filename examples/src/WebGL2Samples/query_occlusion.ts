@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, IGLOcclusionQuery, WebGL } from "@feng3d/webgl";
 
 import { watcher } from "@feng3d/watcher";
@@ -17,7 +17,7 @@ const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program
-const program: Material = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: {},
 };
@@ -51,7 +51,7 @@ const rp: RenderPass = {
 };
 
 const ro: RenderObject = {
-    material: program,
+    pipeline: program,
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,

@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, Material, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
@@ -38,9 +38,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const program: Material = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D: Material = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
+    const program3D: RenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -100,7 +100,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Render
         const ro: RenderObject = {
-            material: program,
+            pipeline: program,
             uniforms: {
                 MVP: matrix,
             },
@@ -120,7 +120,7 @@ import { getShaderSource, loadImage } from "./utility";
             {
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 ...ro,
-                material: program,
+                pipeline: program,
                 uniforms: {
                     ...ro.uniforms,
                     diffuse: { texture: texture2D, sampler: sampler2D },
@@ -132,7 +132,7 @@ import { getShaderSource, loadImage } from "./utility";
             {
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 ...ro,
-                material: program3D,
+                pipeline: program3D,
                 uniforms: {
                     ...ro.uniforms,
                     diffuse: { texture: texture3D, sampler: sampler3D },

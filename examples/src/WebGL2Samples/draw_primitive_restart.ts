@@ -1,4 +1,4 @@
-import { Material, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -22,7 +22,7 @@ const vertexPosBuffer = new Float32Array([
     1.0, 1.0,
 ]);
 
-const program: Material = {
+const program: RenderPipeline = {
     vertex: {
         code: getShaderSource("vs")
     },
@@ -50,7 +50,7 @@ const renderObject: RenderObject = {
         indices,
         draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
     },
-    material: program,
+    pipeline: program,
 };
 
 webgl.submit({

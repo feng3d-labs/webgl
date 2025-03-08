@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject, Material, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, IRenderPassObject, RenderPipeline, Sampler, Texture, RenderObject, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -87,7 +87,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Initialize program
-    const program: Material = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -198,7 +198,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         const ro: RenderObject = {
-            material: program,
+            pipeline: program,
             uniforms: {
                 mvp: matrix,
             },

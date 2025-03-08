@@ -1,4 +1,4 @@
-import { Material, Sampler, Texture, RenderObject } from "@feng3d/render-api";
+import { RenderPipeline, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -23,7 +23,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         magFilter: "linear",
     };
 
-    const program: Material = {
+    const program: RenderPipeline = {
         vertex: {
             code: getShaderSource("vs")
         },
@@ -42,7 +42,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
             primitive: { topology: "triangle-list" },
             draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         },
-        material: program
+        pipeline: program
     };
 
     webgl.submit({

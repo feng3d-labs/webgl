@@ -1,4 +1,4 @@
-import { RenderPass, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -14,7 +14,7 @@ const webgl = new WebGL(rc);
 
 // -- Initialize program
 
-const program: Material = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
 };
 
@@ -88,7 +88,7 @@ function render()
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
-            material: program,
+            pipeline: program,
             uniforms: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },

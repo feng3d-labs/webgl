@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, Material, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -19,13 +19,13 @@ const windowSize = {
 // -- Initialize program
 
 // Depth shaders
-const depthProgram: Material = {
+const depthProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
     depthStencil: {},
 };
 
 // Draw shaders
-const drawProgram: Material = {
+const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
 };
 
@@ -93,7 +93,7 @@ const frameBuffer: RenderPassDescriptor = {
 const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
-        material: depthProgram,
+        pipeline: depthProgram,
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
@@ -109,7 +109,7 @@ const rp2: RenderPass = {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects: [{
-        material: drawProgram,
+        pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         geometry:{
             primitive: { topology: "triangle-list" },
