@@ -1,4 +1,4 @@
-import { Buffer, RenderPassDescriptor, Material, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -73,7 +73,7 @@ export class WebGL
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(material: Material)
+    deleteProgram(material: RenderPipeline)
     {
         deleteProgram(this._gl, material);
     }

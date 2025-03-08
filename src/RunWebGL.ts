@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, ICullFace, IFrontFace, IIndicesDataTypes, IRenderPassObject, Material, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, ICullFace, IFrontFace, IIndicesDataTypes, IRenderPassObject, RenderPipeline, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -39,7 +39,7 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _vertexArrays: ChainMap<[Material, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
     }
 }
 
@@ -202,7 +202,7 @@ export class RunWebGL
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
         const { viewport, scissorRect, material, geometry, uniforms } = renderObject;
-        Material.init(material);
+        RenderPipeline.init(material);
 
         this.runViewPort(gl, attachmentSize, viewport);
 
@@ -322,7 +322,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, material: Material, uniforms: Uniforms)
+    private runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: Uniforms)
     {
         const webGLProgram = getGLProgram(gl, material);
 
@@ -547,7 +547,7 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, material: Material, vertices: VertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
@@ -670,7 +670,7 @@ export class RunWebGL
         gl.useProgram(program);
     }
 
-    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: Material)
+    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
     {
         this.runProgram(gl, renderPipeline);
 
@@ -772,7 +772,7 @@ export class RunWebGL
         }
     }
 
-    private runProgram(gl: WebGLRenderingContext, material: Material)
+    private runProgram(gl: WebGLRenderingContext, material: RenderPipeline)
     {
         const program = getGLProgram(gl, material);
         gl.useProgram(program);
