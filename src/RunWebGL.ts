@@ -201,20 +201,20 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
-        const { viewport, scissorRect, pipeline: material, geometry, uniforms } = renderObject;
-        RenderPipeline.init(material);
+        const { viewport, scissorRect, pipeline, geometry, uniforms } = renderObject;
+        RenderPipeline._init(pipeline);
 
         this.runViewPort(gl, attachmentSize, viewport);
 
         this.runScissor(gl, attachmentSize, scissorRect);
 
-        this.runRenderPipeline(gl, material);
+        this.runRenderPipeline(gl, pipeline);
 
-        this.runUniforms(gl, material, uniforms);
+        this.runUniforms(gl, pipeline, uniforms);
 
         const { vertices, indices, draw, primitive } = geometry;
 
-        this.runVertexArray(gl, material, vertices, indices);
+        this.runVertexArray(gl, pipeline, vertices, indices);
 
         this.runPrimitiveState(gl, primitive);
 

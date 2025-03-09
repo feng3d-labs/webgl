@@ -1,4 +1,3 @@
-import { DataProxy } from "@feng3d/render-api";
 
 /**
  * 画布(WebGL)上下文信息。
@@ -26,14 +25,9 @@ export interface GLCanvasContext extends WebGLContextAttributes
     failIfMajorPerformanceCaveat?: boolean;
 }
 
-export class GLCanvasContext
-{
-    static addInitFunc: (func: (material: GLCanvasContext) => ((material: GLCanvasContext) => void)) => void = DataProxy.addInitFunc;
-    static init: (material: Partial<GLCanvasContext>) => GLCanvasContext = DataProxy.init;
-    static del: (material: GLCanvasContext) => GLCanvasContext = DataProxy.del;
-}
+export class GLCanvasContext { }
 
-GLCanvasContext.addInitFunc((context) =>
+GLCanvasContext._reg((context) =>
 {
     context.contextId ??= "webgl2";
     context.depth ??= true;
@@ -44,7 +38,7 @@ GLCanvasContext.addInitFunc((context) =>
     context.powerPreference ??= "default";
     context.failIfMajorPerformanceCaveat ??= false;
 
-    return (material) =>
+    return () =>
     {
 
     };

@@ -84,8 +84,7 @@ export function getCanvas(canvasContext: GLCanvasContext)
 
 function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: GLCanvasContext)
 {
-    GLCanvasContext.init(canvasContext);
-    const contextAttributes = canvasContext;
+    const contextAttributes = GLCanvasContext._init(canvasContext);
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;
