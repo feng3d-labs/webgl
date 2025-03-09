@@ -202,7 +202,6 @@ export class RunWebGL
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
         const { viewport, scissorRect, pipeline, geometry, uniforms } = renderObject;
-        RenderPipeline._init(pipeline);
 
         this.runViewPort(gl, attachmentSize, viewport);
 
