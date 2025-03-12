@@ -1,4 +1,4 @@
-export type IGLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
+export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
 
 /**
  * 纹理放大滤波器

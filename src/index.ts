@@ -5,7 +5,6 @@ export * from "./data/GLVertexBuffer";
 export * from "./data/Buffer";
 export * from "./data/GLCapabilities";
 export * from "./data/GLCommandEncoder";
-export * from "./data/IGLDepthStencilState";
 export * from "./data/IGLOcclusionQuery";
 export * from "./data/IGLPrimitiveState";
 export * from "./data/IGLReadPixels";

@@ -1,6 +1,5 @@
-import { RenderPipeline } from "@feng3d/render-api";
+import { GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
-import { IGLAttributeInfo } from "../internal/IGLAttributeInfo";
 import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
 import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
 import { getIGLAttributeType } from "./getIGLAttributeType";
@@ -34,6 +33,30 @@ declare global
         uniformBlocks: IUniformBlockInfo[];
     }
 }
+
+export interface IGLAttributeInfo
+{
+    /**
+     * 名称。
+     */
+    name: string;
+
+    /**
+     * 顶点尺寸。
+     */
+    size: number;
+
+    /**
+     * 属性缓冲数据类型
+     */
+    type?: GLVertexAttributeTypes;
+
+    /**
+     * 属性地址
+     */
+    location: number;
+}
+
 
 /**
  * 激活渲染程序

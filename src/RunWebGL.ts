@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, ICullFace, IFrontFace, IIndicesDataTypes, IRenderPassObject, RenderPipeline, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, ICullFace, IFrontFace, IIndicesDataTypes, IRenderPassObject, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -12,9 +12,8 @@ import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRender
 import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
-import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
 import { IGLDrawElementType } from "./data/Buffer";
-import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
+import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
@@ -691,10 +690,10 @@ export class RunWebGL
 
             if (stencilFront)
             {
-                const func: IGLStencilFunc = getIGLStencilFunc(stencilFront.compare ?? "always");
-                const fail: IGLStencilOp = getIGLStencilOp(stencilFront.failOp);
-                const zfail: IGLStencilOp = getIGLStencilOp(stencilFront.depthFailOp);
-                const zpass: IGLStencilOp = getIGLStencilOp(stencilFront.passOp);
+                const func = getIGLStencilFunc(stencilFront.compare ?? "always");
+                const fail = getIGLStencilOp(stencilFront.failOp);
+                const zfail = getIGLStencilOp(stencilFront.depthFailOp);
+                const zpass = getIGLStencilOp(stencilFront.passOp);
                 //
                 gl.stencilFuncSeparate(gl.FRONT, gl[func], ref, readMask);
                 gl.stencilOpSeparate(gl.FRONT, gl[fail], gl[zfail], gl[zpass]);
@@ -702,10 +701,10 @@ export class RunWebGL
             }
             if (stencilBack)
             {
-                const func: IGLStencilFunc = getIGLStencilFunc(stencilBack.compare ?? "always");
-                const fail: IGLStencilOp = getIGLStencilOp(stencilBack.failOp);
-                const zfail: IGLStencilOp = getIGLStencilOp(stencilBack.depthFailOp);
-                const zpass: IGLStencilOp = getIGLStencilOp(stencilBack.passOp);
+                const func = getIGLStencilFunc(stencilBack.compare ?? "always");
+                const fail = getIGLStencilOp(stencilBack.failOp);
+                const zfail = getIGLStencilOp(stencilBack.depthFailOp);
+                const zpass = getIGLStencilOp(stencilBack.passOp);
                 //
                 gl.stencilFuncSeparate(gl.BACK, gl[func], ref, readMask);
                 gl.stencilOpSeparate(gl.BACK, gl[fail], gl[zfail], gl[zpass]);
@@ -722,7 +721,7 @@ export class RunWebGL
     {
         if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
         {
-            const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
+            const depthCompare = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
             const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
             //
             gl.enable(gl.DEPTH_TEST);

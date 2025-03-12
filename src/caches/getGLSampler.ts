@@ -1,6 +1,5 @@
 import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
-import { IGLCompareFunction } from "../data/IGLDepthStencilState";
-import { IGLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
+import { GLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 import { getIGLCompareFunction } from "../runs/runDepthState";
 
 declare global
@@ -28,8 +27,8 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
         const wrapR: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
-        const compareMode: IGLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
-        const compare: IGLCompareFunction = getIGLCompareFunction(sampler.compare ?? "less-equal");
+        const compareMode: GLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
+        const compare = getIGLCompareFunction(sampler.compare ?? "less-equal");
 
         //
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
