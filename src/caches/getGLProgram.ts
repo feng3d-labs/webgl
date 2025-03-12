@@ -1,7 +1,6 @@
 import { GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, IGLUniformBufferType, IGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
 import { GLTransformFeedbackPipeline, GLTransformFeedbackVaryings } from "../data/GLTransformFeedbackPass";
-import { getIGLAttributeType } from "./getIGLAttributeType";
 
 declare global
 {
@@ -122,7 +121,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const activeInfo = gl.getActiveAttrib(program, i);
         const { name, size, type } = activeInfo;
         const location = gl.getAttribLocation(program, name);
-        const typeString = getIGLAttributeType(type as any);
+        const typeString = getGLAttributeType(type as any);
         attributes.push({ name, size, type: typeString, location });
     }
     // 获取uniform信息
@@ -479,3 +478,22 @@ export interface UniformItemInfo
      */
     paths: string[];
 }
+
+/**
+ * WebGL 属性类型。
+ */
+export type GLAttributeType = keyof typeof webglAttributeTypeValue;
+
+/**
+ * 获取顶点数据类型名称。
+ *
+ * @param gl
+ * @param value
+ */
+export function getGLAttributeType(value: keyof typeof webglAttributeValueType): GLAttributeType
+{
+    return webglAttributeValueType[value];
+}
+
+const webglAttributeTypeValue = Object.freeze({ FLOAT: 5126, BYTE: 5120, SHORT: 5122, UNSIGNED_BYTE: 5121, UNSIGNED_SHORT: 5123, HALF_FLOAT: 5131, INT: 5124, UNSIGNED_INT: 5125 });
+const webglAttributeValueType = Object.freeze({ 5120: "BYTE", 5121: "UNSIGNED_BYTE", 5122: "SHORT", 5123: "UNSIGNED_SHORT", 5124: "INT", 5125: "UNSIGNED_INT", 5126: "FLOAT", 5131: "HALF_FLOAT" });

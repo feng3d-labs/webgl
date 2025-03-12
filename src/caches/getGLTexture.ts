@@ -1,8 +1,8 @@
 import { Texture, TextureDataSource, TextureImageSource, TextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
-import { getIGLTextureFormats } from "./getIGLTextureFormats";
-import { getIGLTextureTarget } from "./getIGLTextureTarget";
+import { getGLTextureFormats } from "./getGLTextureFormats";
+import { getGLTextureTarget } from "./getGLTextureTarget";
 
 declare global
 {
@@ -44,8 +44,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     // 创建纹理
     const createTexture = () =>
     {
-        const target = getIGLTextureTarget(texture.dimension);
-        const { internalformat, format, type } = getIGLTextureFormats(texture.format);
+        const target = getGLTextureTarget(texture.dimension);
+        const { internalformat, format, type } = getGLTextureFormats(texture.format);
 
         webGLTexture = gl.createTexture(); // Create a texture object
         gl._textures.set(texture, webGLTexture);
@@ -254,8 +254,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         const { writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
-        const target = getIGLTextureTarget(texture.dimension);
-        const { format, type } = getIGLTextureFormats(texture.format);
+        const target = getGLTextureTarget(texture.dimension);
+        const { format, type } = getGLTextureFormats(texture.format);
 
         gl.bindTexture(gl[target], webGLTexture);
 

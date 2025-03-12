@@ -1,5 +1,5 @@
 import { CopyTextureToTexture, ImageCopyTexture, RenderPassColorAttachment, RenderPassDepthStencilAttachment, TextureView } from "@feng3d/render-api";
-import { GLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/GLBlitFramebuffer";
+import { GLBlitFramebuffer, GLBlitFramebufferItem } from "../data/GLBlitFramebuffer";
 
 /**
  * 通过 IGLBlitFramebuffer 实现纹理之间拷贝并不靠谱。
@@ -7,7 +7,7 @@ import { GLBlitFramebuffer, IGLBlitFramebufferItem } from "../data/GLBlitFramebu
  * @param copyTextureToTexture GL纹理之间拷贝。
  * @returns
  */
-export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture)
+export function getGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture)
 {
     const { source, destination, copySize } = copyTextureToTexture;
 
@@ -26,26 +26,26 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture
     if (sourceAspect === "all")
     {
         mask = "COLOR_BUFFER_BIT";
-        sourceColorAttachments.push({ view: getIGLTextureView(source) });
-        destinationColorAttachments.push({ view: getIGLTextureView(destination) });
+        sourceColorAttachments.push({ view: getGLTextureView(source) });
+        destinationColorAttachments.push({ view: getGLTextureView(destination) });
     }
     else if (sourceAspect === "depth-only")
     {
         mask = "DEPTH_BUFFER_BIT";
-        sourceDepthStencilAttachment = { view: getIGLTextureView(source) };
-        destinationDepthStencilAttachment = { view: getIGLTextureView(destination) };
+        sourceDepthStencilAttachment = { view: getGLTextureView(source) };
+        destinationDepthStencilAttachment = { view: getGLTextureView(destination) };
     }
     else if (sourceAspect === "stencil-only")
     {
         mask = "STENCIL_BUFFER_BIT";
-        sourceDepthStencilAttachment = { view: getIGLTextureView(source) };
-        destinationDepthStencilAttachment = { view: getIGLTextureView(destination) };
+        sourceDepthStencilAttachment = { view: getGLTextureView(source) };
+        destinationDepthStencilAttachment = { view: getGLTextureView(destination) };
     }
 
     const sourceOrigin = source.origin || [0, 0];
     const destinationOrigin = destination.origin || [0, 0];
     //
-    const blitFramebufferItem: IGLBlitFramebufferItem = [
+    const blitFramebufferItem: GLBlitFramebufferItem = [
         sourceOrigin[0], sourceOrigin[1], sourceOrigin[0] + copySize[0], sourceOrigin[1] + copySize[1],
         destinationOrigin[0], destinationOrigin[1], destinationOrigin[0] + copySize[0], destinationOrigin[1] + copySize[1],
         mask, "NEAREST",
@@ -67,7 +67,7 @@ export function getIGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture
     return blitFramebuffer;
 }
 
-function getIGLTextureView(source: ImageCopyTexture)
+function getGLTextureView(source: ImageCopyTexture)
 {
     if (!source.texture) return undefined;
 

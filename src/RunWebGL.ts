@@ -1,15 +1,15 @@
 import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
+import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
+import { getGLDrawMode, GLDrawMode } from "./caches/getGLDrawMode";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
 import { getGLProgram, UniformItemInfo } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
+import { getGLRenderPassDescriptorWithMultisample } from "./caches/getGLRenderPassDescriptorWithMultisample";
 import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "./caches/getGLSampler";
+import { getGLTextureTarget, GLTextureTarget } from "./caches/getGLTextureTarget";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
-import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
-import { getIGLDrawMode, IGLDrawMode } from "./caches/getIGLDrawMode";
-import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
-import { getIGLTextureTarget, GLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
@@ -134,7 +134,7 @@ export class RunWebGL
 
         if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as TextureView).texture)
         {
-            const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
+            const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
             this.runRenderPassDescriptor(gl, passDescriptor);
 
@@ -215,7 +215,7 @@ export class RunWebGL
         this.runPrimitiveState(gl, primitive);
 
         const topology = primitive?.topology || "triangle-list";
-        const drawMode = getIGLDrawMode(topology);
+        const drawMode = getGLDrawMode(topology);
 
         if (draw.__type__ === 'DrawVertex')
         {
@@ -231,7 +231,7 @@ export class RunWebGL
     {
         const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
-        const drawMode = getIGLDrawMode("point-list");
+        const drawMode = getGLDrawMode("point-list");
 
         this.runTransformFeedbackPipeline(gl, material);
 
@@ -261,7 +261,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: DrawIndexed)
+    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IIndicesDataTypes, drawIndexed: DrawIndexed)
     {
         const type: IGLDrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
@@ -290,7 +290,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, drawArrays: DrawVertex)
+    private runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
     {
         //
         const vertexCount = drawArrays.vertexCount;
@@ -386,7 +386,7 @@ export class RunWebGL
         const { texture, sampler } = samplerTexture;
         const { location, textureID } = uniformInfo;
 
-        const textureTarget = getIGLTextureTarget(texture.dimension);
+        const textureTarget = getGLTextureTarget(texture.dimension);
 
         // 设置纹理所在采样编号
         gl.uniform1i(location, textureID);
@@ -637,7 +637,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback, topology: IGLDrawMode)
+    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback, topology: GLDrawMode)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -881,7 +881,7 @@ export class RunWebGL
 
     private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: CopyTextureToTexture)
     {
-        const blitFramebuffer = getIGLBlitFramebuffer(copyTextureToTexture);
+        const blitFramebuffer = getGLBlitFramebuffer(copyTextureToTexture);
         this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 

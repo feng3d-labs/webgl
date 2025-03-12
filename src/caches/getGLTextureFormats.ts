@@ -1,15 +1,15 @@
 import { TextureFormat } from "@feng3d/render-api";
 
-export function getIGLTextureFormats(format: TextureFormat = "rgba8unorm")
+export function getGLTextureFormats(format: TextureFormat = "rgba8unorm")
 {
-    const glTextureFormat: IGLTextureFormats = formatMap[format];
+    const glTextureFormat: GLTextureFormats = formatMap[format];
 
     console.assert(!!glTextureFormat, `未处理格式 ${format}；或者WebGL不支持纹理， 该格式只在WebGPU中支持！`);
 
     return glTextureFormat;
 }
 
-export interface IGLTextureFormats
+export interface GLTextureFormats
 {
     /**
      * 内部纹理格式。
@@ -33,7 +33,7 @@ export interface IGLTextureFormats
     readonly type?: GLTextureDataType;
 }
 
-const formatMap: { [key: string]: IGLTextureFormats } = {
+const formatMap: { [key: string]: GLTextureFormats } = {
     r8unorm: { internalformat: "R8", format: "RED", type: "UNSIGNED_BYTE" },
     r8snorm: undefined,
     r8uint: { internalformat: "R8", format: "RED", type: "UNSIGNED_BYTE" },
@@ -136,7 +136,7 @@ const formatMap: { [key: string]: IGLTextureFormats } = {
  *
  * @see https://registry.khronos.org/webgl/specs/latest/2.0/#TEXTURE_TYPES_FORMATS_FROM_DOM_ELEMENTS_TABLE
  */
-type IGLTextureTypes =
+type GLTextureTypes =
     | { internalformat: "RGB", format: "RGB", type: "UNSIGNED_BYTE" | "UNSIGNED_SHORT_5_6_5" }
     | { internalformat: "RGBA", format: "RGBA", type: "UNSIGNED_BYTE" | "UNSIGNED_SHORT_4_4_4_4" | "UNSIGNED_SHORT_5_5_5_1" }
     | { internalformat: "LUMINANCE_ALPHA", format: "LUMINANCE_ALPHA", type: "UNSIGNED_BYTE" }
@@ -170,6 +170,6 @@ type IGLTextureTypes =
     | { internalformat: "DEPTH_COMPONENT16", format: "DEPTH_COMPONENT", type: "UNSIGNED_SHORT", }
     ;
 
-export type GLTextureInternalFormat = IGLTextureTypes["internalformat"];
-export type GLTextureFormat = IGLTextureTypes["format"];
-export type GLTextureDataType = IGLTextureTypes["type"];
+export type GLTextureInternalFormat = GLTextureTypes["internalformat"];
+export type GLTextureFormat = GLTextureTypes["format"];
+export type GLTextureDataType = GLTextureTypes["type"];

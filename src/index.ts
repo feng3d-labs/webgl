@@ -19,8 +19,6 @@ export * from "./runs/getIGLBuffer";
 export * from "./runs/runColorTargetStates";
 export * from "./RunWebGL";
 
-export * from "./gl/WebGLEnums";
-
 export * from "./shader/Macro";
 export * from "./shader/ShaderLib";
 export * from "./shader/ShaderMacroUtils";

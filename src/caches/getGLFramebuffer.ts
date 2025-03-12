@@ -1,9 +1,9 @@
 import { RenderPassDescriptor, TextureView } from "@feng3d/render-api";
 import { GLRenderbuffer } from "../data/GLRenderbuffer";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
+import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from "./getGLRenderPassDescriptorWithMultisample";
 import { getGLTexture } from "./getGLTexture";
-import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
-import { getIGLTextureTarget } from "./getIGLTextureTarget";
+import { getGLTextureTarget } from "./getGLTextureTarget";
 
 declare global
 {
@@ -44,7 +44,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             const baseArrayLayer = view.baseArrayLayer || 0;
 
             const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = getIGLTextureTarget(texture.dimension);
+            const textureTarget = getGLTextureTarget(texture.dimension);
 
             if (textureTarget === "TEXTURE_2D")
             {
@@ -88,7 +88,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const baseArrayLayer = view.baseArrayLayer || 0;
 
         const webGLTexture = getGLTexture(gl, texture);
-        const textureTarget = getIGLTextureTarget(texture.dimension);
+        const textureTarget = getGLTextureTarget(texture.dimension);
 
         if (textureTarget === "TEXTURE_2D")
         {
@@ -132,7 +132,7 @@ export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: Ren
     gl.deleteFramebuffer(webGLFramebuffer);
 }
 
-function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, renderPassDescriptorWithMultisample: IGLRenderPassDescriptorWithMultisample)
+function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, renderPassDescriptorWithMultisample: GLRenderPassDescriptorWithMultisample)
 {
     deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.read, false);
     deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.draw, false);

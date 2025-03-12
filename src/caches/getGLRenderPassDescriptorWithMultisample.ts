@@ -1,7 +1,7 @@
 import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
 import { GLBlitFramebuffer } from "../data/GLBlitFramebuffer";
 import { GLRenderbufferInternalformat, GLRenderbuffer } from "../data/GLRenderbuffer";
-import { getIGLTextureFormats } from "./getIGLTextureFormats";
+import { getGLTextureFormats } from "./getGLTextureFormats";
 
 /**
  *
@@ -11,7 +11,7 @@ import { getIGLTextureFormats } from "./getIGLTextureFormats";
  *
  * @param sourcePassDescriptor 需要渲染到纹理并且开启多重采样的渲染通道描述。
  */
-export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: RenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
+export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: RenderPassDescriptor): GLRenderPassDescriptorWithMultisample
 {
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
@@ -39,7 +39,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
                 view: renderbuffer as any,
             };
 
-return colorAttachment;
+            return colorAttachment;
         }),
         depthStencilAttachment: sourcePassDescriptor.depthStencilAttachment,
         sampleCount: sourcePassDescriptor.sampleCount,
@@ -55,14 +55,14 @@ return colorAttachment;
             "COLOR_BUFFER_BIT", "NEAREST"]],
     };
 
-    sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as IGLRenderPassDescriptorWithMultisample;
+    sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as GLRenderPassDescriptorWithMultisample;
 
     return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 }
 
 function getGLRenderbufferInternalformat(format?: TextureFormat)
 {
-    const { internalformat } = getIGLTextureFormats(format);
+    const { internalformat } = getGLTextureFormats(format);
 
     return internalformat as GLRenderbufferInternalformat;
 }
@@ -72,7 +72,7 @@ export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptor
 /**
  * 由`passDescriptor.multisample`值存在的IGLRenderPassDescriptor生成。
  */
-export interface IGLRenderPassDescriptorWithMultisample
+export interface GLRenderPassDescriptorWithMultisample
 {
     /**
      * 渲染到渲染缓冲区上。
