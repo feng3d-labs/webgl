@@ -8,12 +8,12 @@ import { Buffer, IIndicesDataTypes } from "@feng3d/render-api";
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer
  *
  */
-export class GLIndexBuffer extends Buffer
+export interface GLIndexBuffer extends Buffer
 {
-    target: "ELEMENT_ARRAY_BUFFER" = "ELEMENT_ARRAY_BUFFER";
+    target: "ELEMENT_ARRAY_BUFFER";
 
     /**
      * 顶点索引数据。
      */
-    declare data?: IIndicesDataTypes;
+    data?: IIndicesDataTypes;
 }

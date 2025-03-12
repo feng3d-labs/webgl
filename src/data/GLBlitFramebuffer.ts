@@ -3,12 +3,12 @@ import { RenderPassDescriptor } from "@feng3d/render-api";
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
  */
-export class GLBlitFramebuffer
+export interface GLBlitFramebuffer
 {
     /**
      * 数据类型。
      */
-    readonly __type__: "BlitFramebuffer" = "BlitFramebuffer";
+    readonly __type__: "BlitFramebuffer";
 
     read: RenderPassDescriptor;
     draw: RenderPassDescriptor;

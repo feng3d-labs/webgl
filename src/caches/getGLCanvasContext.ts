@@ -1,4 +1,4 @@
-import { GLCanvasContext } from "../data/GLCanvasContext";
+import { defaultGLCanvasContext, GLCanvasContext } from "../data/GLCanvasContext";
 import { ChainMap } from "../utils/ChainMap";
 import { getCapabilities } from "./getCapabilities";
 
@@ -84,19 +84,19 @@ export function getCanvas(canvasContext: GLCanvasContext)
 
 function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: GLCanvasContext)
 {
-    const contextAttributes = GLCanvasContext._init(canvasContext);
+    const contextAttributes = Object.assign({}, defaultGLCanvasContext, canvasContext);
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;
     if (gl) return gl;
 
     gl = canvas.getContext("webgl", contextAttributes) || canvas.getContext("webgl2", contextAttributes);
-    gl && console.warn(`无法使用用户提供参数获取指定WebGL上下文`, canvasContext);
+    gl && console.warn(`无法使用用户提供参数获取指定WebGL上下文`, contextAttributes);
     if (gl) return gl;
 
     // 使用默认参数获取WebGL上下文
     gl = canvas.getContext("webgl") || canvas.getContext("webgl2");
-    gl && console.warn(`无法使用用户提供参数获取WebGL上下文`, canvasContext);
+    gl && console.warn(`无法使用用户提供参数获取WebGL上下文`, contextAttributes);
     if (gl) return gl;
 
     console.error(`无法获取WebGL上下文。`);

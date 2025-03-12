@@ -25,21 +25,16 @@ export interface GLCanvasContext extends WebGLContextAttributes
     failIfMajorPerformanceCaveat?: boolean;
 }
 
-export class GLCanvasContext { }
-
-GLCanvasContext._reg((context) =>
-{
-    context.contextId ??= "webgl2";
-    context.depth ??= true;
-    context.stencil ??= true;
-    context.antialias ??= false;
-    context.premultipliedAlpha ??= true;
-    context.preserveDrawingBuffer ??= false;
-    context.powerPreference ??= "default";
-    context.failIfMajorPerformanceCaveat ??= false;
-
-    return () =>
-    {
-
-    };
-});
+/**
+ * 默认画布(WebGL)上下文信息。
+ */
+export const defaultGLCanvasContext: GLCanvasContext = {
+    contextId: "webgl2",
+    depth: true,
+    stencil: true, 
+    antialias: false,
+    premultipliedAlpha: true,
+    preserveDrawingBuffer: false,
+    powerPreference: "default",
+    failIfMajorPerformanceCaveat: false,
+}
