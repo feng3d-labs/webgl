@@ -1,5 +1,5 @@
 import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
-import { GLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -320,7 +320,7 @@ function initBuffers()
 //
 // Initialize a texture.
 //
-function initTexture(): GLSamplerTexture
+function initTexture(): SamplerTexture
 {
     const texture: Texture = {
         size: [1, 1],

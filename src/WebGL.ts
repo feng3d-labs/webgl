@@ -9,8 +9,8 @@ import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
 import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { GLRenderbuffer } from "./data/GLRenderbuffer";
-import { GLTransformFeedback } from "./data/GLTransformFeedbackPass";
+import { Renderbuffer } from "./data/Renderbuffer";
+import { TransformFeedback } from "./data/TransformFeedbackPass";
 import { readPixels } from "./utils/readPixels";
 
 /**
@@ -53,7 +53,7 @@ export class WebGL
         deleteFramebuffer(this._gl, passDescriptor);
     }
 
-    deleteRenderbuffer(renderbuffer: GLRenderbuffer)
+    deleteRenderbuffer(renderbuffer: Renderbuffer)
     {
         deleteRenderbuffer(this._gl, renderbuffer);
     }
@@ -78,7 +78,7 @@ export class WebGL
         deleteProgram(this._gl, material);
     }
 
-    deleteTransformFeedback(transformFeedback: GLTransformFeedback)
+    deleteTransformFeedback(transformFeedback: TransformFeedback)
     {
         deleteTransformFeedback(this._gl, transformFeedback);
     }

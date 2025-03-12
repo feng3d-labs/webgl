@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -11,14 +11,13 @@ import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTex
 import { getGLTextureTarget, GLTextureTarget } from "./caches/getGLTextureTarget";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
 import { _GL_Submit_Times } from "./const/const";
-import { IGLUniformBufferType } from "./const/IGLUniformType";
-import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
-import { GLSamplerTexture } from "./data/GLSamplerTexture";
-import { GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPass, GLTransformFeedbackPipeline } from "./data/GLTransformFeedbackPass";
-import { GLUniformBuffer } from "./data/GLUniformBuffer";
-import { IGLDrawElementType } from "./data/polyfills/Buffer";
+import { GLUniformBufferType } from "./const/GLUniformType";
+import { BlitFramebuffer } from "./data/BlitFramebuffer";
+import { SamplerTexture } from "./data/SamplerTexture";
+import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPass, TransformFeedbackPipeline } from "./data/TransformFeedbackPass";
+import { DrawElementType } from "./data/polyfills/Buffer";
 import { getGLTexture } from "./internal";
-import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
+import { getIGLBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
@@ -29,7 +28,7 @@ import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
 
-import "./data/OcclusionQuery";
+import "./data/polyfills/OcclusionQuery";
 
 declare global
 {
@@ -104,7 +103,7 @@ export class RunWebGL
         });
     }
 
-    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: GLTransformFeedbackPass)
+    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: TransformFeedbackPass)
     {
         // 执行变换反馈通道时关闭光栅化功能
         if (gl instanceof WebGL2RenderingContext)
@@ -226,7 +225,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: GLTransformFeedbackObject)
+    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: TransformFeedbackObject)
     {
         const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
@@ -245,7 +244,7 @@ export class RunWebGL
         this.endTransformFeedback(gl, transformFeedback);
     }
 
-    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback)
+    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
     {
         //
         if (transformFeedback)
@@ -262,7 +261,7 @@ export class RunWebGL
 
     private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IIndicesDataTypes, drawIndexed: DrawIndexed)
     {
-        const type: IGLDrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
+        const type: DrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
         const indexCount = drawIndexed.indexCount;
         const firstIndex = drawIndexed.firstIndex || 0;
@@ -342,11 +341,11 @@ export class RunWebGL
 
                 if (isTexture)
                 {
-                    this.runSamplerTexture(gl, v, uniformData as GLSamplerTexture);
+                    this.runSamplerTexture(gl, v, uniformData as SamplerTexture);
                 }
                 else
                 {
-                    this.runUniform(gl, type as IGLUniformBufferType, v, uniformData);
+                    this.runUniform(gl, type as GLUniformBufferType, v, uniformData);
                 }
             });
         });
@@ -359,19 +358,18 @@ export class RunWebGL
                 const uniformData = uniforms[name] as TypedArray | BufferBinding;
 
                 //
-                let buffer: GLUniformBuffer;
-                const typedArray = uniformData as TypedArray;
-                if (typedArray.buffer && typedArray.BYTES_PER_ELEMENT)
-                {
-                    buffer = getIGLUniformBuffer(typedArray);
-                }
-                else
+                let typedArray = uniformData as TypedArray;
+                if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
                 {
                     const bufferBinding = uniforms[name] as BufferBinding;
                     updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
-                    buffer = getIGLUniformBuffer(bufferBinding.bufferView);
+                    typedArray = bufferBinding.bufferView;
                 }
-                (buffer as UnReadonly<GLUniformBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
+                const buffer = getIGLBuffer(typedArray, "UNIFORM_BUFFER", "DYNAMIC_DRAW");
+                buffer.target ??= "UNIFORM_BUFFER";
+                buffer.usage ??= "DYNAMIC_DRAW";
+
+                (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
@@ -380,7 +378,7 @@ export class RunWebGL
         }
     }
 
-    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: GLSamplerTexture)
+    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
     {
         const { texture, sampler } = samplerTexture;
         const { location, textureID } = uniformInfo;
@@ -457,7 +455,7 @@ export class RunWebGL
     /**
      * 设置环境Uniform数据
      */
-    private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
+    private runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
     {
         if (typeof data === "number")
         {
@@ -587,7 +585,9 @@ export class RunWebGL
     {
         if (!indices) return;
 
-        const indexBuffer = getIGLIndexBuffer(indices);
+        const indexBuffer = getIGLBuffer(indices, "ELEMENT_ARRAY_BUFFER");
+        indexBuffer.target ??= "ELEMENT_ARRAY_BUFFER";
+        indexBuffer.usage ??= "STATIC_DRAW";
 
         const buffer = getGLBuffer(gl, indexBuffer);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
@@ -621,7 +621,8 @@ export class RunWebGL
         offset = offset || 0;
 
         //
-        const buffer = getIGLVertexBuffer(attribute.data);
+        const buffer = getIGLBuffer(attribute.data, "ARRAY_BUFFER", "STATIC_DRAW");
+
         const webGLBuffer = getGLBuffer(gl, buffer);
         gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
@@ -636,7 +637,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback, topology: GLDrawMode)
+    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback, topology: GLDrawMode)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -659,7 +660,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: GLTransformFeedbackPipeline)
+    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: TransformFeedbackPipeline)
     {
         const program = getGLProgram(gl, renderPipeline);
         gl.useProgram(program);
@@ -884,7 +885,7 @@ export class RunWebGL
         this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: GLBlitFramebuffer)
+    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: BlitFramebuffer)
     {
         const { read, draw, blitFramebuffers } = blitFramebuffer;
 

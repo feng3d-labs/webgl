@@ -1,6 +1,6 @@
 import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
-import { GLBlitFramebuffer } from "../data/GLBlitFramebuffer";
-import { GLRenderbufferInternalformat, GLRenderbuffer } from "../data/GLRenderbuffer";
+import { BlitFramebuffer } from "../data/BlitFramebuffer";
+import { RenderbufferInternalformat, Renderbuffer } from "../data/Renderbuffer";
 import { getGLTextureFormats } from "./getGLTextureFormats";
 
 /**
@@ -19,7 +19,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
 
     const textureSize = texture.size;
 
-    const renderbuffers: GLRenderbuffer[] = [];
+    const renderbuffers: Renderbuffer[] = [];
 
     // 创建支持 多重采样的 渲染通道
     const passDescriptor: RenderPassDescriptor = {
@@ -27,7 +27,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
         {
             const texture = v.view.texture;
 
-            const renderbuffer: GLRenderbuffer = {
+            const renderbuffer: Renderbuffer = {
                 internalformat: getGLRenderbufferInternalformat(texture.format),
                 width: textureSize[0],
                 height: textureSize[1],
@@ -46,7 +46,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
     };
 
     // 拷贝 渲染缓冲区到 IGLTexture
-    const blitFramebuffer: GLBlitFramebuffer = {
+    const blitFramebuffer: BlitFramebuffer = {
         __type__: "BlitFramebuffer",
         read: passDescriptor,
         draw: sourcePassDescriptor,
@@ -64,7 +64,7 @@ function getGLRenderbufferInternalformat(format?: TextureFormat)
 {
     const { internalformat } = getGLTextureFormats(format);
 
-    return internalformat as GLRenderbufferInternalformat;
+    return internalformat as RenderbufferInternalformat;
 }
 
 export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptorWithMultisample";
@@ -81,9 +81,9 @@ export interface GLRenderPassDescriptorWithMultisample
     /**
      * 拷贝渲染缓冲区到目标纹理中。
      */
-    blitFramebuffer: GLBlitFramebuffer;
+    blitFramebuffer: BlitFramebuffer;
     /**
      * 需要销毁的临时渲染缓冲区。
      */
-    renderbuffers: GLRenderbuffer[];
+    renderbuffers: Renderbuffer[];
 }

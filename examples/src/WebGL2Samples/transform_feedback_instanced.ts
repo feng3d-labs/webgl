@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IVertexDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -68,9 +68,9 @@ import { getShaderSource } from "./utility";
     const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks: GLTransformFeedback[] = [];
+    const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -107,7 +107,7 @@ import { getShaderSource } from "./utility";
 
     function initPrograms()
     {
-        const programTransform: GLTransformFeedbackPipeline = {
+        const programTransform: TransformFeedbackPipeline = {
             vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
         };
@@ -125,12 +125,12 @@ import { getShaderSource } from "./utility";
             },
         };
 
-        const programs: [GLTransformFeedbackPipeline, RenderPipeline] = [programTransform, programDraw];
+        const programs: [TransformFeedbackPipeline, RenderPipeline] = [programTransform, programDraw];
 
         return programs;
     }
 
-    const transformRO: GLTransformFeedbackObject = {
+    const transformRO: TransformFeedbackObject = {
         pipeline: programs[PROGRAM_TRANSFORM],
         vertices: null,
         transformFeedback: null,

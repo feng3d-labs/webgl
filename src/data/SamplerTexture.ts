@@ -5,7 +5,7 @@ import { Sampler, Texture } from "@feng3d/render-api";
  *
  * 采样器与纹理。
  */
-export interface GLSamplerTexture
+export interface SamplerTexture
 {
     /**
      * 纹理。

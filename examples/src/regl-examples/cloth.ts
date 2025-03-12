@@ -1,5 +1,5 @@
 import { RenderObject, Submit } from "@feng3d/render-api";
-import { getIGLVertexBuffer, GLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { getIGLBuffer, SamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -361,8 +361,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        getIGLVertexBuffer(renderObject.geometry.vertices.position.data).data = new Float32Array(positions);
-        getIGLVertexBuffer(renderObject.geometry.vertices.normal.data).data = new Float32Array(normals);
+        getIGLBuffer(renderObject.geometry.vertices.position.data).data = new Float32Array(positions);
+        getIGLBuffer(renderObject.geometry.vertices.normal.data).data = new Float32Array(normals);
 
         tick++;
 
@@ -388,7 +388,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse: GLSamplerTexture = {
+    const diffuse: SamplerTexture = {
         texture: {
             size: [img.width, img.height],
             generateMipmap: true,

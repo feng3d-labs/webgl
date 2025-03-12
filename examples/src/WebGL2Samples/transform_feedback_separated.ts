@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IVertexDataTypes, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { GLTransformFeedback, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, VertexDataTypes, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
+import { TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -19,7 +19,7 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const transformFeedbackPipeline: GLTransformFeedbackPipeline = {
+        const transformFeedbackPipeline: TransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
         };
@@ -54,7 +54,7 @@ import { getShaderSource } from "./utility";
         MAX: 3
     };
 
-    const buffers: IVertexDataTypes[] = [
+    const buffers: VertexDataTypes[] = [
         // Transform buffer
         positions,
         // Feedback empty buffers
@@ -78,7 +78,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init TransformFeedback
-    const transformFeedback: GLTransformFeedback = {
+    const transformFeedback: TransformFeedback = {
         bindBuffers: [
             { index: 0, data: buffers[BufferType.POSITION] },
             { index: 1, data: buffers[BufferType.COLOR] },

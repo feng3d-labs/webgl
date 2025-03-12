@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IVertexDataTypes, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { getIGLVertexBuffer, GLTransformFeedback, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderPipeline, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { getIGLBuffer, TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -21,7 +21,7 @@ import { getShaderSource } from "./utility";
 
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: GLTransformFeedbackPipeline = {
+        const programTransform: TransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "INTERLEAVED_ATTRIBS" },
         };
@@ -45,7 +45,7 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: IVertexDataTypes[] = [
+    const buffers: VertexDataTypes[] = [
         // Transform buffer
         vertices,
         // Feedback empty buffer
@@ -68,7 +68,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init TransformFeedback
-    const transformFeedback: GLTransformFeedback = {
+    const transformFeedback: TransformFeedback = {
         bindBuffers: [
             { index: 0, data: buffers[PROGRAM_FEEDBACK] }
         ]
@@ -118,8 +118,8 @@ import { getShaderSource } from "./utility";
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
-    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_TRANSFORM]));
-    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_FEEDBACK]));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_TRANSFORM]));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_FEEDBACK]));
     webgl.deleteProgram(programTransform);
     webgl.deleteProgram(programFeedback);
 })();

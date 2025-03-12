@@ -1,6 +1,6 @@
 import { GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
-import { getWebGLUniformType, IGLUniformBufferType, IGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
-import { GLTransformFeedbackPipeline, GLTransformFeedbackVaryings } from "../data/GLTransformFeedbackPass";
+import { getWebGLUniformType, GLUniformBufferType, GLUniformType, isWebGLUniformTextureType } from "../const/GLUniformType";
+import { TransformFeedbackPipeline, TransformFeedbackVaryings } from "../data/TransformFeedbackPass";
 
 declare global
 {
@@ -59,7 +59,7 @@ export interface IGLAttributeInfo
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline | GLTransformFeedbackPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline | TransformFeedbackPipeline)
 {
     const shaderKey = getKey(material);
     let result = gl._programs[shaderKey];
@@ -74,7 +74,7 @@ export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline
         {
         }
     `;
-    const transformFeedbackVaryings = (material as GLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const transformFeedbackVaryings = (material as TransformFeedbackPipeline).transformFeedbackVaryings;
 
     result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
     gl._programs[shaderKey] = result;
@@ -93,16 +93,16 @@ export function deleteProgram(gl: WebGLRenderingContext, material: RenderPipelin
     }
 }
 
-function getKey(material: RenderPipeline | GLTransformFeedbackPipeline)
+function getKey(material: RenderPipeline | TransformFeedbackPipeline)
 {
     const vertex = material.vertex.code;
     const fragment = (material as RenderPipeline).fragment?.code;
-    const transformFeedbackVaryings = (material as GLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const transformFeedbackVaryings = (material as TransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
 }
 
-function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: GLTransformFeedbackVaryings)
+function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: TransformFeedbackVaryings)
 {
     // 编译顶点着色器
     const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
@@ -277,7 +277,7 @@ function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: strin
     return shader;
 }
 
-function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: GLTransformFeedbackVaryings)
+function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: TransformFeedbackVaryings)
 {
     // 创建程序对象
     const program = gl.createProgram();
@@ -346,7 +346,7 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): IBufferBindingInf
     const items: { paths: string[], offset: number, size: number, Cls: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor }[] = [];
     uniformBlock.uniforms.forEach((uniformInfo) =>
     {
-        const uniformBufferType = uniformInfo.type as IGLUniformBufferType;
+        const uniformBufferType = uniformInfo.type as GLUniformBufferType;
         const alignSize = uniformBufferTypeAlignSizeMap[uniformBufferType];
         console.assert(alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
 
@@ -440,7 +440,7 @@ export interface GLUniformInfo
      */
     name: string;
 
-    type: IGLUniformType;
+    type: GLUniformType;
 
     /**
      * 是否纹理。

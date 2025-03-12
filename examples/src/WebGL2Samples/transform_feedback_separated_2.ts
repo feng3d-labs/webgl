@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IVertexDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -61,9 +61,9 @@ import { getShaderSource } from "./utility";
     const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks: GLTransformFeedback[] = [];
+    const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -108,9 +108,9 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    function initProgram(): [GLTransformFeedbackPipeline, RenderPipeline]
+    function initProgram(): [TransformFeedbackPipeline, RenderPipeline]
     {
-        const transformFeedbackPipeline: GLTransformFeedbackPipeline = {
+        const transformFeedbackPipeline: TransformFeedbackPipeline = {
             vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
         };
@@ -131,7 +131,7 @@ import { getShaderSource } from "./utility";
         return [transformFeedbackPipeline, program];
     }
 
-    const transformRO: GLTransformFeedbackObject = {
+    const transformRO: TransformFeedbackObject = {
         pipeline: transformFeedbackPipeline,
         vertices: null,
         transformFeedback: null,

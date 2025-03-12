@@ -1,14 +1,14 @@
-import { DrawVertex, IVertexDataTypes, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
+import { DrawVertex, VertexDataTypes, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
     export interface PassEncoderMap
     {
-        GLTransformFeedbackPass: GLTransformFeedbackPass,
+        TransformFeedbackPass: TransformFeedbackPass,
     }
 }
 
-export interface GLTransformFeedbackPass
+export interface TransformFeedbackPass
 {
     /**
      * 数据类型。
@@ -18,15 +18,15 @@ export interface GLTransformFeedbackPass
     /**
      * 变换反馈对象列表。
      */
-    transformFeedbackObjects: GLTransformFeedbackObject[];
+    transformFeedbackObjects: TransformFeedbackObject[];
 }
 
-export interface GLTransformFeedbackObject
+export interface TransformFeedbackObject
 {
     /**
      * 渲染管线描述。
      */
-    readonly pipeline: GLTransformFeedbackPipeline;
+    readonly pipeline: TransformFeedbackPipeline;
 
     /**
      * 顶点属性数据映射。
@@ -50,10 +50,10 @@ export interface GLTransformFeedbackObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/bindTransformFeedback
      */
-    transformFeedback: GLTransformFeedback;
+    transformFeedback: TransformFeedback;
 }
 
-export interface GLTransformFeedbackPipeline
+export interface TransformFeedbackPipeline
 {
     /**
      * 顶点着色器阶段描述。
@@ -65,10 +65,10 @@ export interface GLTransformFeedbackPipeline
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
      */
-    transformFeedbackVaryings: GLTransformFeedbackVaryings;
+    transformFeedbackVaryings: TransformFeedbackVaryings;
 }
 
-export interface GLTransformFeedbackVaryings
+export interface TransformFeedbackVaryings
 {
     /**
      * 回写变量列表。
@@ -84,17 +84,17 @@ export interface GLTransformFeedbackVaryings
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/createTransformFeedback
  */
-export interface GLTransformFeedback
+export interface TransformFeedback
 {
     /**
      * 绑定缓冲区列表。
      */
-    bindBuffers: GLTransformFeedbacBindBuffer[];
+    bindBuffers: TransformFeedbacBindBuffer[];
 }
 
-export interface GLTransformFeedbacBindBuffer
+export interface TransformFeedbacBindBuffer
 {
     index: number;
 
-    data: IVertexDataTypes;
+    data: VertexDataTypes;
 }

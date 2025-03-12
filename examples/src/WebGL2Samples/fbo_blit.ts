@@ -1,5 +1,5 @@
 import { CanvasContext, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, TextureView, VertexAttributes } from "@feng3d/render-api";
-import { GLBlitFramebuffer, GLBlitFramebufferItem, WebGL } from "@feng3d/webgl";
+import { BlitFramebuffer, BlitFramebufferItem, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -120,7 +120,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         descriptor: framebufferResolve,
     };
 
-    const blitFramebuffers: GLBlitFramebufferItem[] = [];
+    const blitFramebuffers: BlitFramebufferItem[] = [];
     const TILE = 4;
     const BORDER = 2;
     for (let j = 0; j < TILE; j++)
@@ -143,7 +143,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
         }
     }
 
-    const blitFramebuffer: GLBlitFramebuffer = {
+    const blitFramebuffer: BlitFramebuffer = {
         __type__: "BlitFramebuffer",
         read: fboRenderPass.descriptor,
         draw: renderPassResolve.descriptor,

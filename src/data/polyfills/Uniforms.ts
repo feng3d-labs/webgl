@@ -1,11 +1,11 @@
 import { UniformDataItem } from "@feng3d/render-api";
-import { GLSamplerTexture } from "../GLSamplerTexture";
+import { SamplerTexture } from "../SamplerTexture";
 
 declare module "@feng3d/render-api"
 {
     export interface UniformTypeMap
     {
-        GLSamplerTexture: GLSamplerTexture;
+        GLSamplerTexture: SamplerTexture;
         UniformDataItem: UniformDataItem;
     }
 }

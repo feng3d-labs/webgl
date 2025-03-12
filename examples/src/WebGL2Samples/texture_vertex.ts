@@ -1,4 +1,4 @@
-import { CanvasContext, IIndicesDataTypes, IRenderPassObject, IVertexDataTypes, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, IIndicesDataTypes, IRenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
 import { getIVertexFormat, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -50,7 +50,7 @@ import { getShaderSource, loadImage } from "./utility";
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IVertexDataTypes;
+    let vertexBuffer: VertexDataTypes;
     let indicesBuffer: IIndicesDataTypes;
 
     let texture: Texture;

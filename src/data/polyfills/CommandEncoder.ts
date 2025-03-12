@@ -1,11 +1,11 @@
 import { TextureLike } from "@feng3d/render-api";
-import { GLBlitFramebuffer } from "../GLBlitFramebuffer";
+import { BlitFramebuffer } from "../BlitFramebuffer";
 
 declare module "@feng3d/render-api"
 {
     export interface PassEncoderMap
     {
-        GLBlitFramebuffer: GLBlitFramebuffer;
+        GLBlitFramebuffer: BlitFramebuffer;
     }
 
     /**
