@@ -13,7 +13,7 @@ import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
-import { IGLDrawElementType } from "./data/IGLBuffer";
+import { IGLDrawElementType } from "./data/Buffer";
 import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
 import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";

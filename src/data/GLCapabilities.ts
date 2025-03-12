@@ -5,7 +5,7 @@ declare global
         /**
          * WEBGL支持功能
         */
-        _capabilities: IGLCapabilities;
+        _capabilities: GLCapabilities;
     }
 }
 
@@ -15,7 +15,7 @@ declare global
  * @see https://webglreport.com
  * @see http://html5test.com
  */
-export interface IGLCapabilities
+export interface GLCapabilities
 {
     /**
      * 纹理各向异性过滤最大值

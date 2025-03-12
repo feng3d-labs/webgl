@@ -5,7 +5,7 @@ declare module "@feng3d/render-api"
 {
     export interface IPassEncoderMap
     {
-        IGLBlitFramebuffer: GLBlitFramebuffer;
+        GLBlitFramebuffer: GLBlitFramebuffer;
     }
 
     /**

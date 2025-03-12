@@ -1,6 +1,6 @@
 import { Buffer, IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
 import { GLIndexBuffer } from "../data/GLIndexBuffer";
-import { IGLBufferTarget, IGLBufferUsage } from "../data/IGLBuffer";
+import { IGLBufferTarget, IGLBufferUsage } from "../data/Buffer";
 import { GLVertexBuffer } from "../data/GLVertexBuffer";
 import { IGLUniformBuffer } from "../data/IGLUniformBuffer";
 
