@@ -1,4 +1,4 @@
-import { GLTransformFeedback } from "../data/GLTransformFeedback";
+import { GLTransformFeedback } from "../data/GLTransformFeedbackPass";
 import { getIGLVertexBuffer } from "../runs/getIGLBuffer";
 import { getGLBuffer } from "./getGLBuffer";
 

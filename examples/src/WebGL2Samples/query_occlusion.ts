@@ -1,5 +1,5 @@
-import { IRenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IRenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { watcher } from "@feng3d/watcher";
 
@@ -13,7 +13,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // -- Init WebGL Context
-const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init Program

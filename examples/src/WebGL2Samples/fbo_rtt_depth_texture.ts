@@ -1,5 +1,5 @@
-import { RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
 const webgl = new WebGL(renderingContext);
 
 const windowSize = {
@@ -94,7 +94,7 @@ const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: depthProgram,
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 3 },
@@ -111,7 +111,7 @@ const rp2: RenderPass = {
     renderObjects: [{
         pipeline: drawProgram,
         uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 6 },

@@ -1,5 +1,5 @@
-import { RenderObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: GLCanvasContext = { canvasId: "glcanvas" };
+const renderingContext: CanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 const vertexPosBuffer = new Float32Array([-0.3, -0.5,

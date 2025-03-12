@@ -11,7 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
+const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
 
 const camera = createCamera({
     center: [0, 2.5, 0]
@@ -22,7 +22,7 @@ const indices = bunny.cells.flat();
 const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
 const renderObject: RenderObject = {
-    geometry:{
+    geometry: {
         vertices: {
             position: { data: new Float32Array(positions), format: "float32x3" },
             normal: { data: new Float32Array(normals), format: "float32x3" },

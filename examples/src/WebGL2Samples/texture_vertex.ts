@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, PrimitiveTopology, IRenderPassObject, IVertexDataTypes, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { getIVertexFormat, GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, IRenderPassObject, IVertexDataTypes, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { getIVertexFormat, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -36,7 +36,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     // -- Init program

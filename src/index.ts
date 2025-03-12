@@ -1,14 +1,13 @@
 export * from "./data/GLBlitFramebuffer";
-export * from "./data/GLCanvasContext";
 export * from "./data/GLCapabilities";
 export * from "./data/GLIndexBuffer";
 export * from "./data/GLRenderbuffer";
 export * from "./data/GLSamplerTexture";
-export * from "./data/GLTransformFeedback";
 export * from "./data/GLTransformFeedbackPass";
 export * from "./data/GLUniformBuffer";
 export * from "./data/GLVertexBuffer";
 
+export * from "./data/polyfills/CanvasContext";
 export * from "./data/polyfills/Buffer";
 export * from "./data/polyfills/CommandEncoder";
 export * from "./data/polyfills/PrimitiveState";

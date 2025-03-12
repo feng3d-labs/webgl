@@ -1,5 +1,4 @@
-import { DrawVertex, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
-import { GLTransformFeedback } from "./GLTransformFeedback";
+import { DrawVertex, IVertexDataTypes, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
@@ -80,4 +79,22 @@ export interface GLTransformFeedbackVaryings
      * 交叉或者分离。
      */
     bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
+}
+
+/**
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/createTransformFeedback
+ */
+export interface GLTransformFeedback
+{
+    /**
+     * 绑定缓冲区列表。
+     */
+    bindBuffers: GLTransformFeedbacBindBuffer[];
+}
+
+export interface GLTransformFeedbacBindBuffer
+{
+    index: number;
+
+    data: IVertexDataTypes;
 }

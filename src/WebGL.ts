@@ -1,4 +1,4 @@
-import { Buffer, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -9,9 +9,8 @@ import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
 import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { GLCanvasContext } from "./data/GLCanvasContext";
 import { GLRenderbuffer } from "./data/GLRenderbuffer";
-import { GLTransformFeedback } from "./data/GLTransformFeedback";
+import { GLTransformFeedback } from "./data/GLTransformFeedbackPass";
 import { readPixels } from "./utils/readPixels";
 
 /**
@@ -22,10 +21,10 @@ import { readPixels } from "./utils/readPixels";
 export class WebGL
 {
     private _runWebGL: RunWebGL = new RunWebGL();
-    private _renderingContext: GLCanvasContext;
+    private _renderingContext: CanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext?: GLCanvasContext)
+    constructor(renderingContext?: CanvasContext)
     {
         this._renderingContext = renderingContext;
         this._gl = getGLCanvasContext(this._renderingContext);

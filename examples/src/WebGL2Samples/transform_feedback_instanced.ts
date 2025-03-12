@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IVertexDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, IVertexDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
+import { GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,7 +12,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)

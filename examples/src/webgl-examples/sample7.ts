@@ -13,7 +13,7 @@ async function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.

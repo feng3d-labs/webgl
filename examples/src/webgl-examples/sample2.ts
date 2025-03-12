@@ -10,7 +10,7 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
     const renderPass: RenderPass = {
         descriptor: {

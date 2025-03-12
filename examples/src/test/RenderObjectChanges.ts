@@ -7,7 +7,7 @@ const init = async (canvas: HTMLCanvasElement) =>
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" }); // 初始化WebGL
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" }); // 初始化WebGL
 
     const renderObject: RenderObject = { // 渲染对象
         pipeline: { // 渲染管线

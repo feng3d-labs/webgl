@@ -1,4 +1,5 @@
-import { defaultGLCanvasContext, GLCanvasContext } from "../data/GLCanvasContext";
+import { CanvasContext } from "@feng3d/render-api";
+import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
 import { ChainMap } from "../utils/ChainMap";
 import { getCapabilities } from "./getCapabilities";
 
@@ -8,13 +9,13 @@ import { getCapabilities } from "./getCapabilities";
  * @param renderingContext
  * @returns
  */
-export function getGLCanvasContext(renderingContext: GLCanvasContext)
+export function getGLCanvasContext(renderingContext: CanvasContext)
 {
     const key = renderingContext.canvasId;
     let value = canvasContextMap.get(key);
     if (!value)
     {
-        const canvas = getCanvas(renderingContext);
+        const canvas = getCanvas(renderingContext.canvasId);
         value = getWebGLContext(canvas, renderingContext);
 
         //
@@ -71,23 +72,23 @@ function autoCreateCanvas(canvasId: string)
     return canvas;
 }
 
-export function getCanvas(canvasContext: GLCanvasContext)
+export function getCanvas(canvasId: string)
 {
-    let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
+    let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!canvas || !(canvas instanceof HTMLCanvasElement))
     {
-        canvas = autoCreateCanvas(canvasContext.canvasId);
+        canvas = autoCreateCanvas(canvasId);
     }
 
     return canvas;
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: GLCanvasContext)
+function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: CanvasContext)
 {
-    const contextAttributes = Object.assign({}, defaultGLCanvasContext, canvasContext);
+    const contextAttributes = Object.assign({}, defaultWebGLContextAttributes, canvasContext.webGLContextAttributes);
 
     // 使用用户提供参数获取WebGL上下文
-    let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;
+    let gl = canvas.getContext(canvasContext.webGLcontextId, contextAttributes) as any;
     if (gl) return gl;
 
     gl = canvas.getContext("webgl", contextAttributes) || canvas.getContext("webgl2", contextAttributes);

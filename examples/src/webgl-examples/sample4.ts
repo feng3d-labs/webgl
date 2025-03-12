@@ -13,7 +13,7 @@ function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+  const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
   const renderObject: RenderObject = {
     pipeline: {

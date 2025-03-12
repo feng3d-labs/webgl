@@ -10,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
+const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -31,7 +31,7 @@ let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
 const renderObject: RenderObject = {
-    geometry:{
+    geometry: {
         vertices: {
             position: { data: new Float32Array(positions), format: "float32x3" },
         },

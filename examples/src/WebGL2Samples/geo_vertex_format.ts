@@ -1,5 +1,5 @@
-import { RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -12,7 +12,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init program
@@ -208,7 +208,7 @@ import { getShaderSource, loadImage } from "./utility";
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list", cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),

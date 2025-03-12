@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, RenderPass, IRenderPassObject, RenderPipeline, VertexAttributes, Viewport } from "@feng3d/render-api";
-import { getIVertexFormat, GLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, IRenderPassObject, RenderPass, RenderPipeline, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { getIVertexFormat, WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -10,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: GLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
