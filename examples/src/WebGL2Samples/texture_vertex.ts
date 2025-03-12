@@ -1,4 +1,4 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderPassObject, IVertexDataTypes, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { IIndicesDataTypes, PrimitiveTopology, IRenderPassObject, IVertexDataTypes, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { getIVertexFormat, GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -7,7 +7,7 @@ import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
-    const IDrawMode2Name: { [key: string]: IPrimitiveTopology } = {
+    const IDrawMode2Name: { [key: string]: PrimitiveTopology } = {
         0: "point-list",
         3: "line-strip",
         2: "LINE_LOOP",

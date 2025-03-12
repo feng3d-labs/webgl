@@ -1,5 +1,5 @@
-import { RenderPass, IRenderPassObject, RenderPipeline, RenderObject, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, IGLOcclusionQuery, WebGL } from "@feng3d/webgl";
+import { IRenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { watcher } from "@feng3d/watcher";
 
@@ -60,7 +60,7 @@ const ro: RenderObject = {
 };
 renderObjects.push(ro);
 
-const occlusionQuery: IGLOcclusionQuery = {
+const occlusionQuery: OcclusionQuery = {
     __type__: "OcclusionQuery",
     renderObjects: [{
         ...ro,

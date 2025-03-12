@@ -1,5 +1,4 @@
-import { RenderPass, IRenderPassObject } from "@feng3d/render-api";
-import { IGLOcclusionQuery, IGLQuery } from "../data/IGLOcclusionQuery";
+import { IRenderPassObject, OcclusionQuery, RenderPass } from "@feng3d/render-api";
 
 export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
 {
@@ -8,7 +7,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
     let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects["_GLRenderOcclusionQuery"];
     if (renderOcclusionQuery) return renderOcclusionQuery;
 
-    const occlusionQueryObjects: IGLOcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === "OcclusionQuery") as any;
+    const occlusionQueryObjects: OcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === "OcclusionQuery") as any;
     if (occlusionQueryObjects.length === 0)
     {
         renderObjects["_GLRenderOcclusionQuery"] = defautRenderOcclusionQuery;
@@ -53,9 +52,9 @@ interface GLRenderOcclusionQuery
 
 const defautRenderOcclusionQuery = { init: () => { }, resolve: () => { } };
 
-export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQuery: IGLOcclusionQuery)
+export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQuery: OcclusionQuery)
 {
-    const query: IGLQuery = {} as any;
+    const query: { result?: number } = {};
     let webGLQuery: WebGLQuery;
 
     // 开始查询
@@ -81,7 +80,7 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
 
         if (gl instanceof WebGL2RenderingContext)
         {
-            const result: IGLOcclusionQuery = await new Promise((resolve, reject) =>
+            const result: OcclusionQuery = await new Promise((resolve, reject) =>
             {
                 (function tick()
                 {
@@ -96,7 +95,7 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
 
                     query.result = gl.getQueryParameter(webGLQuery, gl.QUERY_RESULT);
 
-                    occlusionQuery.result = query;
+                    occlusionQuery.result = query as any;
 
                     resolve(occlusionQuery);
 
@@ -110,13 +109,13 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
         return undefined;
     };
 
-    return { begin, end, resolve } as IGLOcclusionQueryStep;
+    return { begin, end, resolve } as GLOcclusionQueryStep;
 }
 
 /**
  * 不被遮挡查询步骤。
  */
-export interface IGLOcclusionQueryStep
+export interface GLOcclusionQueryStep
 {
     /**
      * 开始查询
@@ -131,5 +130,5 @@ export interface IGLOcclusionQueryStep
     /**
      * 获取查询结果，将获取被赋值新结果的遮挡查询对象。
      */
-    resolve: () => Promise<IGLOcclusionQuery>
+    resolve: () => Promise<OcclusionQuery>
 }

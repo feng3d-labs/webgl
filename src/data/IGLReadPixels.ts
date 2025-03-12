@@ -1,4 +1,4 @@
-import { RenderPassDescriptor } from "@feng3d/render-api";
+import { ReadPixels, RenderPassDescriptor } from "@feng3d/render-api";
 import { GLAttachmentPoint } from "../gl/WebGLEnums";
 import { IGLTextureDataType, IGLTextureFormat } from "./IGLTexture";
 
@@ -7,7 +7,7 @@ import { IGLTextureDataType, IGLTextureFormat } from "./IGLTexture";
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels
  */
-export interface IGLReadPixels
+export interface IGLReadPixels extends ReadPixels
 {
     frameBuffer: RenderPassDescriptor;
 

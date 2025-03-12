@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, ICullFace, IFrontFace, IIndicesDataTypes, IRenderPassObject, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, CullFace, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
@@ -14,7 +14,6 @@ import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
 import { IGLDrawElementType } from "./data/Buffer";
 import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
-import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
 import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
 import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
 import { IGLTextureTarget } from "./data/IGLTexture";
@@ -33,6 +32,8 @@ import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
 import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
+
+import "./data/OcclusionQuery";
 
 declare global
 {
@@ -751,8 +752,8 @@ export class RunWebGL
 
     private runPrimitiveState(gl: WebGLRenderingContext, primitive?: PrimitiveState)
     {
-        const cullFace: ICullFace = primitive?.cullFace || "none";
-        const frontFace: IFrontFace = primitive?.frontFace || "ccw";
+        const cullFace: CullFace = primitive?.cullFace || "none";
+        const frontFace: FrontFace = primitive?.frontFace || "ccw";
 
         const enableCullFace = cullFace !== "none";
         const glCullMode: IGLCullFace = getIGLCullFace(cullFace);
@@ -819,7 +820,7 @@ export class RunWebGL
         }
     }
 
-    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: IGLOcclusionQuery)
+    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: OcclusionQuery)
     {
         // 开始查询
         occlusionQuery._step.begin();

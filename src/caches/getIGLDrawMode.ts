@@ -1,6 +1,6 @@
-import { IPrimitiveTopology } from "@feng3d/render-api";
+import { PrimitiveTopology } from "@feng3d/render-api";
 
-export function getIGLDrawMode(topology: IPrimitiveTopology): IGLDrawMode
+export function getIGLDrawMode(topology: PrimitiveTopology): IGLDrawMode
 {
     let drawMode = drawModeMap[topology];
 

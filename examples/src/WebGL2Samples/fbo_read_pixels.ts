@@ -175,15 +175,15 @@ webgl.submit({ commandEncoders: [{ passEncoders: [rp1, rp] }] });
 
 const data = new Uint8Array(w * h * 4 * 3);
 
-webgl.runReadPixels({
+webgl.readPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT0",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: 0
 });
-webgl.runReadPixels({
+webgl.readPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4
 });
-webgl.runReadPixels({
+webgl.readPixels({
     frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
     x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4 * 2
 });

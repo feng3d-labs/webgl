@@ -43,7 +43,7 @@ export class WebGL
         this._runWebGL.runSubmit(this._gl, submit);
     }
 
-    runReadPixels(glReadPixels: IGLReadPixels)
+    readPixels(glReadPixels: IGLReadPixels)
     {
         readPixels(this._gl, glReadPixels);
     }

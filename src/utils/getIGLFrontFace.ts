@@ -1,6 +1,6 @@
-import { IFrontFace } from "@feng3d/render-api";
+import { FrontFace } from "@feng3d/render-api";
 
-export function getIGLFrontFace(frontFace: IFrontFace)
+export function getIGLFrontFace(frontFace: FrontFace)
 {
     const glFrontFace: IGLFrontFace = frontFaceMap[frontFace];
 

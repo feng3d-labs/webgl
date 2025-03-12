@@ -1,6 +1,6 @@
-import { ICullFace } from "@feng3d/render-api";
+import { CullFace } from "@feng3d/render-api";
 
-export function getIGLCullFace(cullFace: ICullFace)
+export function getIGLCullFace(cullFace: CullFace)
 {
     const glCullMode: IGLCullFace = cullFaceMap[cullFace];
 

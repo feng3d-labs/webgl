@@ -1,5 +1,4 @@
 import { RenderPass, IRenderPassObject } from "@feng3d/render-api";
-import { IGLOcclusionQuery } from "./IGLOcclusionQuery";
 
 declare module "@feng3d/render-api"
 {
@@ -15,11 +14,11 @@ declare module "@feng3d/render-api"
          *
          * 当提交WebGL后自动获取结果后填充该属性。
          */
-        occlusionQueryResults?: IGLOcclusionQuery[];
+        occlusionQueryResults?: OcclusionQuery[];
     }
 
     export interface IRenderPassObjectMap
     {
-        IGLOcclusionQuery: IGLOcclusionQuery
+        OcclusionQuery: OcclusionQuery
     }
 }
