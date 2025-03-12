@@ -1,8 +1,8 @@
 import { Buffer, IIndicesDataTypes, IVertexDataTypes, TypedArray } from "@feng3d/render-api";
 import { GLIndexBuffer } from "../data/GLIndexBuffer";
-import { IGLBufferTarget, IGLBufferUsage } from "../data/Buffer";
+import { GLUniformBuffer } from "../data/GLUniformBuffer";
 import { GLVertexBuffer } from "../data/GLVertexBuffer";
-import { IGLUniformBuffer } from "../data/IGLUniformBuffer";
+import { IGLBufferTarget, IGLBufferUsage } from "../data/polyfills/Buffer";
 
 export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: IGLBufferUsage = "STATIC_DRAW"): Buffer
 {
@@ -21,7 +21,7 @@ export function getIGLBuffer(data: TypedArray, target?: IGLBufferTarget, usage: 
 
 export function getIGLUniformBuffer(data: TypedArray, usage?: "DYNAMIC_DRAW")
 {
-    const vertexBuffer: IGLUniformBuffer = data[_IGLBuffer] = data[_IGLBuffer] || getIGLBuffer(data, "UNIFORM_BUFFER", usage);
+    const vertexBuffer: GLUniformBuffer = data[_IGLBuffer] = data[_IGLBuffer] || getIGLBuffer(data, "UNIFORM_BUFFER", usage);
     vertexBuffer.target = vertexBuffer.target || "UNIFORM_BUFFER";
 
     return vertexBuffer;

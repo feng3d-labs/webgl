@@ -1,5 +1,5 @@
 import { IIndicesDataTypes, IVertexDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { GLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { GLCanvasContext, GLTransformFeedback, GLTransformFeedbackObject, GLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -61,7 +61,7 @@ import { getShaderSource } from "./utility";
     const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks: IGLTransformFeedback[] = [];
+    const transformFeedbacks: GLTransformFeedback[] = [];
 
     const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
 
@@ -108,9 +108,9 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    function initProgram(): [IGLTransformFeedbackPipeline, RenderPipeline]
+    function initProgram(): [GLTransformFeedbackPipeline, RenderPipeline]
     {
-        const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
+        const transformFeedbackPipeline: GLTransformFeedbackPipeline = {
             vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
         };
@@ -131,7 +131,7 @@ import { getShaderSource } from "./utility";
         return [transformFeedbackPipeline, program];
     }
 
-    const transformRO: IGLTransformFeedbackObject = {
+    const transformRO: GLTransformFeedbackObject = {
         pipeline: transformFeedbackPipeline,
         vertices: null,
         transformFeedback: null,

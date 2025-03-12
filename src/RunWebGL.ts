@@ -1,26 +1,23 @@
-import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, DepthStencilState, DrawIndexed, DrawVertex, CullFace, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
 
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
-import { getGLProgram } from "./caches/getGLProgram";
+import { getGLProgram, UniformItemInfo } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
-import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap } from "./caches/getGLSampler";
+import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "./caches/getGLSampler";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
 import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
 import { getIGLDrawMode, IGLDrawMode } from "./caches/getIGLDrawMode";
 import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
-import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
+import { getIGLTextureTarget, GLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
 import { IGLUniformBufferType } from "./const/IGLUniformType";
-import { IGLDrawElementType } from "./data/Buffer";
 import { GLBlitFramebuffer } from "./data/GLBlitFramebuffer";
-import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
-import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
-import { IGLTextureTarget } from "./data/IGLTexture";
-import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
-import { IGLUniformBuffer } from "./data/IGLUniformBuffer";
-import { IUniformItemInfo } from "./data/IGLUniformInfo";
+import { GLSamplerTexture } from "./data/GLSamplerTexture";
+import { GLTransformFeedback } from "./data/GLTransformFeedback";
+import { GLTransformFeedbackObject, GLTransformFeedbackPass, GLTransformFeedbackPipeline } from "./data/GLTransformFeedbackPass";
+import { GLUniformBuffer } from "./data/GLUniformBuffer";
+import { IGLDrawElementType } from "./data/polyfills/Buffer";
 import { getGLTexture } from "./internal";
 import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
@@ -47,11 +44,11 @@ declare global
 {
     interface WebGLTexture
     {
-        minFilter?: IGLTextureMinFilter,
-        magFilter?: IGLTextureMagFilter,
-        wrapS?: IGLTextureWrap,
-        wrapT?: IGLTextureWrap,
-        wrapR?: IGLTextureWrap,
+        minFilter?: GLTextureMinFilter,
+        magFilter?: GLTextureMagFilter,
+        wrapS?: GLTextureWrap,
+        wrapT?: GLTextureWrap,
+        wrapR?: GLTextureWrap,
         maxAnisotropy?: number,
         lodMinClamp?: number;
         lodMaxClamp?: number;
@@ -108,7 +105,7 @@ export class RunWebGL
         });
     }
 
-    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: IGLTransformFeedbackPass)
+    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: GLTransformFeedbackPass)
     {
         // 执行变换反馈通道时关闭光栅化功能
         if (gl instanceof WebGL2RenderingContext)
@@ -230,7 +227,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
+    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: GLTransformFeedbackObject)
     {
         const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
@@ -249,7 +246,7 @@ export class RunWebGL
         this.endTransformFeedback(gl, transformFeedback);
     }
 
-    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
+    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback)
     {
         //
         if (transformFeedback)
@@ -346,7 +343,7 @@ export class RunWebGL
 
                 if (isTexture)
                 {
-                    this.runSamplerTexture(gl, v, uniformData as IGLSamplerTexture);
+                    this.runSamplerTexture(gl, v, uniformData as GLSamplerTexture);
                 }
                 else
                 {
@@ -363,7 +360,7 @@ export class RunWebGL
                 const uniformData = uniforms[name] as TypedArray | BufferBinding;
 
                 //
-                let buffer: IGLUniformBuffer;
+                let buffer: GLUniformBuffer;
                 const typedArray = uniformData as TypedArray;
                 if (typedArray.buffer && typedArray.BYTES_PER_ELEMENT)
                 {
@@ -375,7 +372,7 @@ export class RunWebGL
                     updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                     buffer = getIGLUniformBuffer(bufferBinding.bufferView);
                 }
-                (buffer as UnReadonly<IGLUniformBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
+                (buffer as UnReadonly<GLUniformBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
@@ -384,7 +381,7 @@ export class RunWebGL
         }
     }
 
-    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: IUniformItemInfo, samplerTexture: IGLSamplerTexture)
+    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: GLSamplerTexture)
     {
         const { texture, sampler } = samplerTexture;
         const { location, textureID } = uniformInfo;
@@ -408,7 +405,7 @@ export class RunWebGL
     /**
      * 设置采样参数
      */
-    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
+    private runSampler(gl: WebGLRenderingContext, textureTarget: GLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -417,10 +414,10 @@ export class RunWebGL
         }
         else
         {
-            const minFilter: IGLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
-            const magFilter: IGLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
-            const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
-            const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
+            const minFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
+            const magFilter = getIGLTextureMagFilter(sampler.magFilter);
+            const wrapS = getIGLTextureWrap(sampler.addressModeU);
+            const wrapT = getIGLTextureWrap(sampler.addressModeV);
 
             // 设置纹理参数
             if (webGLTexture.minFilter !== minFilter)
@@ -461,7 +458,7 @@ export class RunWebGL
     /**
      * 设置环境Uniform数据
      */
-    private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
+    private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
     {
         if (typeof data === "number")
         {
@@ -640,7 +637,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback, topology: IGLDrawMode)
+    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: GLTransformFeedback, topology: IGLDrawMode)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -663,7 +660,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: IGLTransformFeedbackPipeline)
+    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: GLTransformFeedbackPipeline)
     {
         const program = getGLProgram(gl, renderPipeline);
         gl.useProgram(program);

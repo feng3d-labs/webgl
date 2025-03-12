@@ -1,15 +1,15 @@
 import { DrawVertex, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
-import { IGLTransformFeedback } from "./IGLTransformFeedback";
+import { GLTransformFeedback } from "./GLTransformFeedback";
 
 declare module "@feng3d/render-api"
 {
-    export interface IPassEncoderMap
+    export interface PassEncoderMap
     {
-        IGLTransformFeedbackPass: IGLTransformFeedbackPass,
+        GLTransformFeedbackPass: GLTransformFeedbackPass,
     }
 }
 
-export interface IGLTransformFeedbackPass
+export interface GLTransformFeedbackPass
 {
     /**
      * 数据类型。
@@ -19,15 +19,15 @@ export interface IGLTransformFeedbackPass
     /**
      * 变换反馈对象列表。
      */
-    transformFeedbackObjects: IGLTransformFeedbackObject[];
+    transformFeedbackObjects: GLTransformFeedbackObject[];
 }
 
-export interface IGLTransformFeedbackObject
+export interface GLTransformFeedbackObject
 {
     /**
      * 渲染管线描述。
      */
-    readonly pipeline: IGLTransformFeedbackPipeline;
+    readonly pipeline: GLTransformFeedbackPipeline;
 
     /**
      * 顶点属性数据映射。
@@ -51,10 +51,10 @@ export interface IGLTransformFeedbackObject
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/bindTransformFeedback
      */
-    transformFeedback: IGLTransformFeedback;
+    transformFeedback: GLTransformFeedback;
 }
 
-export interface IGLTransformFeedbackPipeline
+export interface GLTransformFeedbackPipeline
 {
     /**
      * 顶点着色器阶段描述。
@@ -66,10 +66,10 @@ export interface IGLTransformFeedbackPipeline
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings
      */
-    transformFeedbackVaryings: IGLTransformFeedbackVaryings;
+    transformFeedbackVaryings: GLTransformFeedbackVaryings;
 }
 
-export interface IGLTransformFeedbackVaryings
+export interface GLTransformFeedbackVaryings
 {
     /**
      * 回写变量列表。

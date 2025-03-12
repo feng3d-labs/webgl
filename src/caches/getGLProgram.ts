@@ -1,7 +1,6 @@
 import { GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
-import { getWebGLUniformType, IGLUniformBufferType, isWebGLUniformTextureType } from "../const/IGLUniformType";
-import { IGLTransformFeedbackPipeline, IGLTransformFeedbackVaryings } from "../data/IGLTransformFeedbackPass";
-import { IGLUniformInfo, IUniformItemInfo } from "../data/IGLUniformInfo";
+import { getWebGLUniformType, IGLUniformBufferType, IGLUniformType, isWebGLUniformTextureType } from "../const/IGLUniformType";
+import { GLTransformFeedbackPipeline, GLTransformFeedbackVaryings } from "../data/GLTransformFeedbackPass";
 import { getIGLAttributeType } from "./getIGLAttributeType";
 
 declare global
@@ -23,14 +22,14 @@ declare global
         /**
          * uniform信息列表
          */
-        uniforms: IGLUniformInfo[];
+        uniforms: GLUniformInfo[];
 
         /**
          * 统一变量块信息列表。
          *
          * 仅 WebGL2 中存在。
          */
-        uniformBlocks: IUniformBlockInfo[];
+        uniformBlocks: UniformBlockInfo[];
     }
 }
 
@@ -61,7 +60,7 @@ export interface IGLAttributeInfo
 /**
  * 激活渲染程序
  */
-export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline | IGLTransformFeedbackPipeline)
+export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline | GLTransformFeedbackPipeline)
 {
     const shaderKey = getKey(material);
     let result = gl._programs[shaderKey];
@@ -76,7 +75,7 @@ export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline
         {
         }
     `;
-    const transformFeedbackVaryings = (material as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const transformFeedbackVaryings = (material as GLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     result = getWebGLProgram(gl, vertex, fragment, transformFeedbackVaryings);
     gl._programs[shaderKey] = result;
@@ -95,16 +94,16 @@ export function deleteProgram(gl: WebGLRenderingContext, material: RenderPipelin
     }
 }
 
-function getKey(material: RenderPipeline | IGLTransformFeedbackPipeline)
+function getKey(material: RenderPipeline | GLTransformFeedbackPipeline)
 {
     const vertex = material.vertex.code;
     const fragment = (material as RenderPipeline).fragment?.code;
-    const transformFeedbackVaryings = (material as IGLTransformFeedbackPipeline).transformFeedbackVaryings;
+    const transformFeedbackVaryings = (material as GLTransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
 }
 
-function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: IGLTransformFeedbackVaryings)
+function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: GLTransformFeedbackVaryings)
 {
     // 编译顶点着色器
     const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
@@ -128,7 +127,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    const uniforms: IGLUniformInfo[] = [];
+    const uniforms: GLUniformInfo[] = [];
     let textureID = 0;
     for (let i = 0; i < numUniforms; i++)
     {
@@ -150,7 +149,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             }
         }
 
-        const items: IUniformItemInfo[] = [];
+        const items: UniformItemInfo[] = [];
         for (let j = 0; j < names.length; j++)
         {
             const name = names[j];
@@ -184,7 +183,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             gl.uniformBlockBinding(program, i, i);
             // 获取包含的统一变量列表。
             const uniformIndices: Uint32Array = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
-            const uniformList: IGLUniformInfo[] = [];
+            const uniformList: GLUniformInfo[] = [];
             for (let i = 0; i < uniformIndices.length; i++)
             {
                 const unifrom = uniforms[uniformIndices[i]];
@@ -193,7 +192,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             }
             const name = gl.getActiveUniformBlockName(program, i);
             //
-            const info: IUniformBlockInfo = {
+            const info: UniformBlockInfo = {
                 name,
                 index: i,
                 dataSize: gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_DATA_SIZE),
@@ -221,7 +220,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
 /**
  * 统一变量块信息。
  */
-export interface IUniformBlockInfo
+export interface UniformBlockInfo
 {
     /**
      * 名称。
@@ -241,7 +240,7 @@ export interface IUniformBlockInfo
     /**
      * 包含的统一变量列表。
      */
-    uniforms: IGLUniformInfo[];
+    uniforms: GLUniformInfo[];
 
     /**
      * 缓冲区绑定信息。
@@ -279,7 +278,7 @@ function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: strin
     return shader;
 }
 
-function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: IGLTransformFeedbackVaryings)
+function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader, transformFeedbackVaryings: GLTransformFeedbackVaryings)
 {
     // 创建程序对象
     const program = gl.createProgram();
@@ -338,7 +337,7 @@ export interface IBufferBindingInfo
     }[]
 }
 
-function getBufferBindingInfo(uniformBlock: IUniformBlockInfo): IBufferBindingInfo
+function getBufferBindingInfo(uniformBlock: UniformBlockInfo): IBufferBindingInfo
 {
     const size = uniformBlock.dataSize;
     //
@@ -430,3 +429,53 @@ const uniformBufferTypeAlignSizeMap: {
     FLOAT_MAT4x2: { align: 8, size: 32, clsType: Float32Array },
     FLOAT_MAT4x3: { align: 16, size: 64, clsType: Float32Array },
 };
+
+
+/**
+ * WebGL统一变量
+ */
+export interface GLUniformInfo
+{
+    /**
+     * 名称。
+     */
+    name: string;
+
+    type: IGLUniformType;
+
+    /**
+     * 是否纹理。
+     */
+    isTexture: boolean;
+
+    /**
+     * 子项信息列表。
+     */
+    items: UniformItemInfo[]
+
+    /**
+     * 是否在Block中。
+     */
+    inBlock?: boolean;
+}
+
+/**
+ * WebGL统一变量
+ */
+export interface UniformItemInfo
+{
+    /**
+     * uniform地址
+     */
+    location: WebGLUniformLocation;
+
+    /**
+     * texture索引
+     */
+    textureID: number;
+
+    /**
+     * Uniform数组索引，当Uniform数据为数组数据时生效
+     */
+    paths: string[];
+}

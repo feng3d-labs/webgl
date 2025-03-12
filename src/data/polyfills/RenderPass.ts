@@ -17,7 +17,7 @@ declare module "@feng3d/render-api"
         occlusionQueryResults?: OcclusionQuery[];
     }
 
-    export interface IRenderPassObjectMap
+    export interface RenderPassObjectMap
     {
         OcclusionQuery: OcclusionQuery
     }

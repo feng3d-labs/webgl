@@ -1,6 +1,5 @@
-import { TextureSize, Texture, TextureDataSource, TextureImageSource } from "@feng3d/render-api";
+import { Texture, TextureDataSource, TextureImageSource, TextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 import { getIGLTextureTarget } from "./getIGLTextureTarget";
@@ -21,7 +20,7 @@ declare global
     }
 }
 
-export const defaultTexturePixelStore: IGLTexturePixelStore = {
+export const defaultTexturePixelStore: GLTexturePixelStore = {
     packAlignment: 4,
     unpackAlignment: 4,
     unpackFlipY: false,
@@ -81,7 +80,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -119,7 +118,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         const offset = dataLayout?.offset || 0;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -151,7 +150,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -178,7 +177,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         const offset = dataLayout?.offset || 0;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -278,7 +277,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                 const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                 //
-                const pixelStore: IGLTexturePixelStore = {};
+                const pixelStore: GLTexturePixelStore = {};
                 pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                 pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                 pixelStore.unpackFlipY = flipY || false;
@@ -337,7 +336,7 @@ return;
             const offset = dataLayout?.offset || 0;
 
             //
-            const pixelStore: IGLTexturePixelStore = {};
+            const pixelStore: GLTexturePixelStore = {};
             pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
             pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
             pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -437,7 +436,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: Texture)
  * @param gl
  * @param pixelStore 像素解包打包时参数。
  */
-function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTexturePixelStore)
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: GLTexturePixelStore)
 {
     const {
         packAlignment,
@@ -473,4 +472,152 @@ function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTextureP
         gl.pixelStorei(gl.UNPACK_SKIP_ROWS, unpackSkipRows);
         gl.pixelStorei(gl.UNPACK_SKIP_IMAGES, unpackSkipImages);
     }
+}
+
+/**
+ * 像素解包打包时参数。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
+ */
+interface GLTexturePixelStore
+{
+    /**
+     * Packing of pixel data into memory
+     *
+     * gl.PACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    packAlignment?: 1 | 2 | 4 | 8;
+
+    /**
+     * Unpacking of pixel data from memory.
+     *
+     * gl.UNPACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    unpackAlignment?: 1 | 2 | 4 | 8;
+
+    /**
+     * 解包图像数据时进行Y轴反转。
+     *
+     * Flips the source data along its vertical axis if true.
+     *
+     * gl.UNPACK_FLIP_Y_WEBGL
+     *
+     * 默认为 false。
+     */
+    unpackFlipY?: boolean;
+
+    /**
+     * 将图像RGB颜色值得每一个分量乘以A。
+     *
+     * Multiplies the alpha channel into the other color channels
+     *
+     * gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
+     *
+     * 默认为 false。
+     */
+    unpackPremulAlpha?: boolean;
+
+    /**
+     * Default color space conversion or no color space conversion.
+     *
+     * gl.UNPACK_COLORSPACE_CONVERSION_WEBGL
+     *
+     * 默认为 "BROWSER_DEFAULT_WEBGL" 。
+     */
+    unpackColorSpaceConversion?: "BROWSER_DEFAULT_WEBGL" | "NONE";
+
+    /**
+     * Number of pixels in a row.
+     *
+     * gl.PACK_ROW_LENGTH
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packRowLength?: number;
+
+    /**
+     * Number of pixel locations skipped before the first pixel is written into memory.
+     *
+     * gl.PACK_SKIP_PIXELS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packSkipPixels?: number;
+
+    /**
+     * Number of rows of pixel locations skipped before the first pixel is written into memory
+     *
+     * gl.PACK_SKIP_ROWS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packSkipRows?: number;
+
+    /**
+     * Number of pixels in a row.
+     *
+     * gl.UNPACK_ROW_LENGTH
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackRowLength?: number;
+
+    /**
+     * Image height used for reading pixel data from memory
+     *
+     * gl.UNPACK_IMAGE_HEIGHT
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackImageHeight?: number;
+
+    /**
+     *
+     * Number of pixel images skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_PIXELS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipPixels?: number;
+
+    /**
+     *
+     * Number of rows of pixel locations skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_ROWS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipRows?: number;
+
+    /**
+     *
+     * Number of pixel images skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_IMAGES
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipImages?: number;
 }

@@ -1,5 +1,7 @@
 import { IRenderPassObject, OcclusionQuery, RenderPass } from "@feng3d/render-api";
 
+import "../data/polyfills/OcclusionQuery";
+
 export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
 {
     if (!renderObjects) return defautRenderOcclusionQuery;

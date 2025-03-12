@@ -1,5 +1,5 @@
 import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
-import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { GLSamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -304,7 +304,7 @@ async function loadTexture(url: string)
         sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
     }
 
-    return { texture, sampler } as IGLSamplerTexture;
+    return { texture, sampler } as GLSamplerTexture;
 }
 
 function isPowerOf2(value: number)

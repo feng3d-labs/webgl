@@ -1,5 +1,5 @@
 import { RenderPassDescriptor, TextureView } from "@feng3d/render-api";
-import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
+import { GLRenderbuffer } from "../data/GLRenderbuffer";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
 import { getGLTexture } from "./getGLTexture";
 import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
@@ -34,7 +34,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
     const drawBuffers: number[] = [];
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
-        const view = item.view as (TextureView | IGLRenderbuffer);
+        const view = item.view as (TextureView | GLRenderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
         if ("texture" in view)

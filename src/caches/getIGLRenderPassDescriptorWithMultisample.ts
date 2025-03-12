@@ -1,6 +1,6 @@
 import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
 import { GLBlitFramebuffer } from "../data/GLBlitFramebuffer";
-import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
+import { GLRenderbufferInternalformat, GLRenderbuffer } from "../data/GLRenderbuffer";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
 
 /**
@@ -19,7 +19,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
 
     const textureSize = texture.size;
 
-    const renderbuffers: IGLRenderbuffer[] = [];
+    const renderbuffers: GLRenderbuffer[] = [];
 
     // 创建支持 多重采样的 渲染通道
     const passDescriptor: RenderPassDescriptor = {
@@ -27,7 +27,7 @@ export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: 
         {
             const texture = v.view.texture;
 
-            const renderbuffer: IGLRenderbuffer = {
+            const renderbuffer: GLRenderbuffer = {
                 internalformat: getGLRenderbufferInternalformat(texture.format),
                 width: textureSize[0],
                 height: textureSize[1],
@@ -85,5 +85,5 @@ export interface IGLRenderPassDescriptorWithMultisample
     /**
      * 需要销毁的临时渲染缓冲区。
      */
-    renderbuffers: IGLRenderbuffer[];
+    renderbuffers: GLRenderbuffer[];
 }

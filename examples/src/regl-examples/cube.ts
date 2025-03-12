@@ -1,5 +1,5 @@
-import { Submit, RenderObject } from "@feng3d/render-api";
-import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderObject, Submit } from "@feng3d/render-api";
+import { GLSamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -136,7 +136,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = {
+    const diffuse: GLSamplerTexture = {
         texture: {
             size: [img.width, img.height],
             sources: [{ image: img }]

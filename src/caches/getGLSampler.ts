@@ -1,5 +1,4 @@
 import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
-import { GLSamplerCompareMode, IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "../data/IGLSampler";
 import { getIGLCompareFunction } from "../runs/runDepthState";
 
 declare global
@@ -9,6 +8,7 @@ declare global
         _samplers: Map<Sampler, WebGLSampler>;
     }
 }
+export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
 
 export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
 {
@@ -20,11 +20,11 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
         webGLSampler = gl.createSampler();
         gl._samplers.set(sampler, webGLSampler);
 
-        const minFilter: IGLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
-        const magFilter: IGLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
-        const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
-        const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
-        const wrapR: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
+        const minFilter: GLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
+        const magFilter: GLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
+        const wrapS: GLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
+        const wrapT: GLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
+        const wrapR: GLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
         const compareMode: GLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
@@ -55,24 +55,51 @@ export function deleteSampler(gl: WebGLRenderingContext, sampler?: Sampler)
     }
 }
 
+/**
+ * 纹理坐标s包装函数枚举
+ * Wrapping function for texture coordinate s
+ *
+ * * `REPEAT`
+ * * `CLAMP_TO_EDGE`
+ * * `MIRRORED_REPEAT`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type GLTextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
+
 export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
 {
-    const textureWrap: IGLTextureWrap = addressModeMap[addressMode];
+    const textureWrap: GLTextureWrap = addressModeMap[addressMode];
 
     console.assert(!!textureWrap, `接收到错误值，请从 ${Object.keys(addressModeMap).toString()} 中取值！`);
 
     return textureWrap;
 }
 
-const addressModeMap: { [key: string]: IGLTextureWrap } = {
+const addressModeMap: { [key: string]: GLTextureWrap } = {
     "clamp-to-edge": "CLAMP_TO_EDGE",
     repeat: "REPEAT",
     "mirror-repeat": "MIRRORED_REPEAT",
 };
 
-export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter?: IFilterMode): IGLTextureMinFilter
+/**
+ * 纹理缩小过滤器
+ * Texture minification filter
+ *
+ * * `LINEAR`
+ * * `NEAREST`
+ * * `NEAREST_MIPMAP_NEAREST`
+ * * `LINEAR_MIPMAP_NEAREST`
+ * * `NEAREST_MIPMAP_LINEAR`
+ * * `LINEAR_MIPMAP_LINEAR`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type GLTextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST" | "LINEAR_MIPMAP_NEAREST" | "NEAREST_MIPMAP_LINEAR" | "LINEAR_MIPMAP_LINEAR";
+
+export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter?: IFilterMode): GLTextureMinFilter
 {
-    let glMinFilter: IGLTextureMinFilter;
+    let glMinFilter: GLTextureMinFilter;
     if (minFilter === "linear")
     {
         if (mipmapFilter === "linear")
@@ -106,17 +133,27 @@ export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipma
 
     return glMinFilter;
 }
+/**
+ * 纹理放大滤波器
+ * Texture magnification filter
+ *
+ * * `LINEAR`
+ * * `NEAREST`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
+ */
+export type GLTextureMagFilter = "LINEAR" | "NEAREST";
 
 export function getIGLTextureMagFilter(magFilter: IFilterMode = "nearest")
 {
-    const glMagFilter: IGLTextureMagFilter = magFilterMap[magFilter];
+    const glMagFilter: GLTextureMagFilter = magFilterMap[magFilter];
 
     console.assert(!!glMagFilter, `接收到错误值，请从 ${Object.keys(magFilterMap).toString()} 中取值！`);
 
     return glMagFilter;
 }
 
-const magFilterMap: { [key: string]: IGLTextureMagFilter } = {
+const magFilterMap: { [key: string]: GLTextureMagFilter } = {
     nearest: "NEAREST",
     linear: "LINEAR",
 };
