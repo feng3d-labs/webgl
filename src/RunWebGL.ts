@@ -13,9 +13,9 @@ import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
 import { _GL_Submit_Times } from "./const/const";
 import { GLUniformBufferType } from "./const/GLUniformType";
 import { BlitFramebuffer } from "./data/BlitFramebuffer";
+import { DrawElementType } from "./data/polyfills/Buffer";
 import { SamplerTexture } from "./data/SamplerTexture";
 import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPass, TransformFeedbackPipeline } from "./data/TransformFeedbackPass";
-import { DrawElementType } from "./data/polyfills/Buffer";
 import { getGLTexture } from "./internal";
 import { getIGLBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
@@ -28,6 +28,7 @@ import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
 import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
 
+import { getCapabilities } from "./caches/getCapabilities";
 import "./data/polyfills/OcclusionQuery";
 
 declare global
@@ -446,7 +447,7 @@ export class RunWebGL
             const extension = gl.getExtension("EXT_texture_filter_anisotropic");
             if (extension)
             {
-                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, gl._capabilities.maxAnisotropy));
+                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, getCapabilities(gl).maxAnisotropy));
             }
             webGLTexture.maxAnisotropy = maxAnisotropy;
         }

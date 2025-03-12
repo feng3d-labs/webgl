@@ -18,6 +18,7 @@ export function getGLCanvasContext(renderingContext: CanvasContext)
         const canvas = getCanvas(renderingContext.canvasId);
         value = getWebGLContext(canvas, renderingContext);
 
+        renderingContext.webGLContextAttributes
         //
         getCapabilities(value);
         initMap(value);

@@ -21,7 +21,7 @@ export function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descrip
                 return { width: view.texture.size[0], height: view.texture.size[1] };
             }
 
-                return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+            return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
         }
     }
 
@@ -34,7 +34,7 @@ export function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descrip
             return { width: view.texture.size[0], height: view.texture.size[1] };
         }
 
-            return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
     }
 
     return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };

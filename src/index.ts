@@ -1,5 +1,4 @@
 export * from "./data/BlitFramebuffer";
-export * from "./data/Capabilities";
 export * from "./data/Renderbuffer";
 export * from "./data/SamplerTexture";
 export * from "./data/TransformFeedbackPass";
