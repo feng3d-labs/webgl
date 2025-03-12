@@ -1,7 +1,7 @@
-import { ITextureDimension } from "@feng3d/render-api";
+import { TextureDimension } from "@feng3d/render-api";
 import { IGLTextureTarget } from "../data/IGLTexture";
 
-export function getIGLTextureTarget(dimension: ITextureDimension = "2d")
+export function getIGLTextureTarget(dimension: TextureDimension = "2d")
 {
     const target: IGLTextureTarget = dimensionMap[dimension];
 

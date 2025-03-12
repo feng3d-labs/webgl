@@ -133,7 +133,7 @@ const rp1: RenderPass = {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
             uniforms: { mvp: matrix },
-            geometry:{
+            geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: multipleOutputVertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },
@@ -155,7 +155,7 @@ const ro: RenderObject = {
         diffuse: { texture, sampler },
         layer: 0,
     },
-    geometry:{
+    geometry: {
         vertices: layerVertexArray.vertices,
         draw: { __type__: "DrawVertex", vertexCount: 6 },
     }
@@ -175,18 +175,24 @@ webgl.submit({ commandEncoders: [{ passEncoders: [rp1, rp] }] });
 
 const data = new Uint8Array(w * h * 4 * 3);
 
-webgl.readPixels({
-    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT0",
-    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: 0
+let result = webgl.readPixels({
+    textureView: frameBuffer.colorAttachments[0].view,
+    origin: [0, 0],
+    copySize: [w, h],
 });
-webgl.readPixels({
-    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
-    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4
+data.set(new Uint8Array(result.buffer), 0);
+result = webgl.readPixels({
+    textureView: frameBuffer.colorAttachments[1].view,
+    origin: [0, 0],
+    copySize: [w, h],
 });
-webgl.readPixels({
-    frameBuffer, attachmentPoint: "COLOR_ATTACHMENT1",
-    x: 0, y: 0, width: w, height: h, format: "RGBA", type: "UNSIGNED_BYTE", dstData: data, dstOffset: w * h * 4 * 2
+data.set(new Uint8Array(result.buffer), w * h * 4);
+result = webgl.readPixels({
+    textureView: frameBuffer.colorAttachments[2].view,
+    origin: [0, 0],
+    copySize: [w, h],
 });
+data.set(new Uint8Array(result.buffer), w * h * 4 * 2);
 
 console.log(data);
 

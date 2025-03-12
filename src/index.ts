@@ -6,7 +6,6 @@ export * from "./data/Buffer";
 export * from "./data/GLCapabilities";
 export * from "./data/GLCommandEncoder";
 export * from "./data/GLPrimitiveState";
-export * from "./data/IGLReadPixels";
 export * from "./data/IGLRenderbuffer";
 export * from "./data/IGLRenderPass";
 export * from "./data/IGLSampler";

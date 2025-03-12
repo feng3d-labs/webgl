@@ -1,4 +1,4 @@
-import { RenderPassColorAttachment, RenderPassDescriptor, ITextureFormat, TextureView } from "@feng3d/render-api";
+import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
 import { GLBlitFramebuffer } from "../data/GLBlitFramebuffer";
 import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
 import { getIGLTextureFormats } from "./getIGLTextureFormats";
@@ -60,7 +60,7 @@ return colorAttachment;
     return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 }
 
-function getGLRenderbufferInternalformat(format?: ITextureFormat)
+function getGLRenderbufferInternalformat(format?: TextureFormat)
 {
     const { internalformat } = getIGLTextureFormats(format);
 

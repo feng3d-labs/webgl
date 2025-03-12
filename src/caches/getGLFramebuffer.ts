@@ -123,7 +123,7 @@ export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: Ren
     {
         deleteRenderPassDescriptorWithMultisample(gl, passDescriptor[_IGLRenderPassDescriptorWithMultisample]);
 
-return;
+        return;
     }
 
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);

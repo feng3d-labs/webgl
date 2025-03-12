@@ -1,4 +1,4 @@
-import { IRenderPassObject, ITextureFormat, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { IRenderPassObject, TextureFormat, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { GLCanvasContext, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -95,7 +95,7 @@ import { getShaderSource, loadImage } from "./utility";
             MAX: 9
         };
 
-        const textureFormats: { format: ITextureFormat }[] = new Array(TextureTypes.MAX);
+        const textureFormats: { format: TextureFormat }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
             format: "rgba8unorm",

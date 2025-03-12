@@ -1,4 +1,4 @@
-import { ITextureSize, Texture, TextureDataSource, TextureImageSource } from "@feng3d/render-api";
+import { TextureSize, Texture, TextureDataSource, TextureImageSource } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
 import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
@@ -389,7 +389,7 @@ return;
     watcher.watch(texture, "writeTextures", updateTexture);
 
     // 监听纹理尺寸发生变化
-    const resize = (newValue: ITextureSize, oldValue: ITextureSize) =>
+    const resize = (newValue: TextureSize, oldValue: TextureSize) =>
     {
         if (!!newValue && !!oldValue)
         {

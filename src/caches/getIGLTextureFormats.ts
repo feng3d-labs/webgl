@@ -1,7 +1,7 @@
-import { ITextureFormat } from "@feng3d/render-api";
+import { TextureFormat } from "@feng3d/render-api";
 import { IGLTextureFormats } from "../data/IGLTextureFormats";
 
-export function getIGLTextureFormats(format: ITextureFormat = "rgba8unorm")
+export function getIGLTextureFormats(format: TextureFormat = "rgba8unorm")
 {
     const glTextureFormat: IGLTextureFormats = formatMap[format];
 

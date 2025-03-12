@@ -1,4 +1,4 @@
-import { Buffer, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -10,7 +10,6 @@ import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { GLCanvasContext } from "./data/GLCanvasContext";
-import { IGLReadPixels } from "./data/IGLReadPixels";
 import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
 import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
 import { readPixels } from "./utils/readPixels";
@@ -43,9 +42,11 @@ export class WebGL
         this._runWebGL.runSubmit(this._gl, submit);
     }
 
-    readPixels(glReadPixels: IGLReadPixels)
+    readPixels(glReadPixels: ReadPixels)
     {
-        readPixels(this._gl, glReadPixels);
+        glReadPixels.result = readPixels(this._gl, glReadPixels);
+
+        return glReadPixels.result;
     }
 
     deleteFramebuffer(passDescriptor: RenderPassDescriptor)
