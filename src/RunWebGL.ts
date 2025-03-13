@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -22,10 +22,6 @@ import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFacto
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
 import { ChainMap } from "./utils/ChainMap";
-import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
-import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
-import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
-import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
 
 import { getCapabilities } from "./caches/getCapabilities";
@@ -155,21 +151,26 @@ export class RunWebGL
     {
         passDescriptor = passDescriptor || {};
 
-        //
-        const colorAttachment = Object.assign({}, defaultRenderPassColorAttachment, passDescriptor.colorAttachments?.[0]);
 
         //
         const framebuffer = getGLFramebuffer(gl, passDescriptor);
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
         //
-        const { clearValue, loadOp } = colorAttachment;
+        const colorAttachment = passDescriptor.colorAttachments?.[0];
+        //
+        const clearValue = colorAttachment?.clearValue ?? [0, 0, 0, 0];
+        const loadOp = colorAttachment?.loadOp ?? "clear";
         gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
 
         //
-        const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
-        const { depthClearValue, depthLoadOp, stencilClearValue, stencilLoadOp } = depthStencilAttachment;
+        const depthStencilAttachment = passDescriptor.depthStencilAttachment;
+        const depthClearValue = depthStencilAttachment?.depthClearValue ?? 1;
+        const depthLoadOp = depthStencilAttachment?.depthLoadOp ?? "load";
+        const stencilClearValue = depthStencilAttachment?.stencilClearValue ?? 0;
+        const stencilLoadOp = depthStencilAttachment?.stencilLoadOp ?? "load";
 
+        //
         gl.clearDepth(depthClearValue);
         gl.clearStencil(stencilClearValue);
 
@@ -599,7 +600,7 @@ export class RunWebGL
         const { stepMode, format } = attribute;
         let { arrayStride, offset } = attribute;
 
-        const glVertexFormat = getIGLVertexFormat(format);
+        const glVertexFormat = vertexFormatMap[format];
         const { numComponents, normalized, type } = glVertexFormat;
 
         gl.enableVertexAttribArray(location);
@@ -753,12 +754,16 @@ export class RunWebGL
         const cullFace: CullFace = primitive?.cullFace || "none";
         const frontFace: FrontFace = primitive?.frontFace || "ccw";
 
-        const enableCullFace = cullFace !== "none";
-        const glCullMode: IGLCullFace = getIGLCullFace(cullFace);
-        const glFrontFace: IGLFrontFace = getIGLFrontFace(frontFace);
 
-        if (enableCullFace)
+        if (cullFace !== "none")
         {
+            const glCullMode = cullFaceMap[cullFace];
+            console.assert(!!glCullMode, `接收到错误值，请从 ${Object.keys(cullFaceMap).toString()} 中取值！`);
+
+            const glFrontFace = frontFaceMap[frontFace];
+            console.assert(!!glFrontFace, `接收到错误 IFrontFace 值，请从 ${Object.keys(frontFaceMap).toString()} 中取值！`);
+
+            //
             gl.enable(gl.CULL_FACE);
             gl.cullFace(gl[glCullMode]);
             gl.frontFace(gl[glFrontFace]);
@@ -940,5 +945,48 @@ export class RunWebGL
     }
 }
 
-export const defaultRenderPassColorAttachment: RenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-export const defaultDepthStencilAttachment: RenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+const cullFaceMap = Object.freeze({
+    FRONT_AND_BACK: "FRONT_AND_BACK",
+    none: "BACK", // 不会开启剔除面功能，什么值无所谓。
+    front: "FRONT",
+    back: "BACK",
+});
+
+const frontFaceMap = Object.freeze({ ccw: "CCW", cw: "CW", });
+
+/**
+ * 获取渲染通道附件尺寸。
+ *
+ * @param gl
+ * @param descriptor
+ */
+function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: RenderPassDescriptor): { readonly width: number; readonly height: number; }
+{
+    if (!descriptor) return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+
+    const colorAttachments = descriptor.colorAttachments;
+    if (colorAttachments)
+    {
+        const view = colorAttachments[0]?.view;
+        if (view)
+        {
+            return { width: view.texture.size[0], height: view.texture.size[1] };
+        }
+
+        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+    }
+
+    const depthStencilAttachment = descriptor.depthStencilAttachment;
+    if (depthStencilAttachment)
+    {
+        const view = depthStencilAttachment.view;
+        if (view)
+        {
+            return { width: view.texture.size[0], height: view.texture.size[1] };
+        }
+
+        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+    }
+
+    return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+}

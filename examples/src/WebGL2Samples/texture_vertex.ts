@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IRenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
-import { getIVertexFormat, WebGL } from "@feng3d/webgl";
+import { CanvasContext, GLVertexAttributeTypes, IIndicesDataTypes, IRenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -235,3 +235,23 @@ import { getShaderSource, loadImage } from "./utility";
         requestAnimationFrame(render);
     }
 })();
+
+function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: GLVertexAttributeTypes = "FLOAT", normalized = false): VertexFormat
+{
+    for (const key in vertexFormatMap)
+    {
+        const element = vertexFormatMap[key];
+        if (
+            element.numComponents === numComponents
+            && element.type === type
+            && !element.normalized === !normalized
+        )
+        {
+            return key as VertexFormat;
+        }
+    }
+
+    console.error(`没有找到与 ${JSON.stringify({ numComponents, type, normalized })} 对应的顶点数据格式！`);
+
+    return undefined;
+}

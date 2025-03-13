@@ -1,5 +1,5 @@
-import { CanvasContext, IIndicesDataTypes, IRenderPassObject, RenderPass, RenderPipeline, VertexAttributes, Viewport } from "@feng3d/render-api";
-import { getIVertexFormat, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, IRenderPassObject, RenderPass, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -100,11 +100,11 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             vertexArray = {
                 vertices: {
                     position: {
-                        data: vertices, format: getIVertexFormat(positionInfo.size),
+                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[positionInfo.size],
                         arrayStride: positionInfo.stride, offset: positionInfo.offset
                     },
                     normal: {
-                        data: vertices, format: getIVertexFormat(normalInfo.size),
+                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[normalInfo.size],
                         arrayStride: normalInfo.stride, offset: normalInfo.offset
                     },
                 },

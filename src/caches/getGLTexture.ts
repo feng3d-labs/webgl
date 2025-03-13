@@ -1,6 +1,5 @@
 import { Texture, TextureDataSource, TextureImageSource, TextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
 import { getGLTextureFormats } from "./getGLTextureFormats";
 import { getGLTextureTarget } from "./getGLTextureTarget";
 
@@ -325,7 +324,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                     }
                 }
 
-return;
+                return;
             }
 
             // 处理数据资源
@@ -621,3 +620,41 @@ interface GLTexturePixelStore
      */
     unpackSkipImages?: number;
 }
+
+function getTextureCubeMapTarget(depthOrArrayLayers: number)
+{
+    const textureCubeMapTarget: GLTextureCubeMapTarget = textureCubeMapTargetMap[depthOrArrayLayers];
+
+    console.assert(!!textureCubeMapTarget, `CubeMap的depthOrArrayLayers值应在[0-5]之间！`);
+
+    return textureCubeMapTarget;
+}
+
+const textureCubeMapTargetMap: GLTextureCubeMapTarget[] = [
+    "TEXTURE_CUBE_MAP_POSITIVE_X",
+    "TEXTURE_CUBE_MAP_NEGATIVE_X",
+    "TEXTURE_CUBE_MAP_POSITIVE_Y",
+    "TEXTURE_CUBE_MAP_NEGATIVE_Y",
+    "TEXTURE_CUBE_MAP_POSITIVE_Z",
+    "TEXTURE_CUBE_MAP_NEGATIVE_Z",
+];
+
+/**
+ * A GLenum specifying the texture target.
+ *
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_X: Positive X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_X: Negative X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Y: Positive Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Y: Negative Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Z: Positive Z face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Z: Negative Z face for a cube-mapped texture.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+type GLTextureCubeMapTarget =
+    | "TEXTURE_CUBE_MAP_POSITIVE_X"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
