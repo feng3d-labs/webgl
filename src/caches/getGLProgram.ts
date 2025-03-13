@@ -1,4 +1,4 @@
-import { GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
+import { BufferBindingInfo, GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
 import { getWebGLUniformType, GLUniformBufferType, GLUniformType, isWebGLUniformTextureType } from "../const/GLUniformType";
 import { TransformFeedbackPipeline, TransformFeedbackVaryings } from "../data/TransformFeedbackPass";
 
@@ -244,7 +244,7 @@ export interface UniformBlockInfo
     /**
      * 缓冲区绑定信息。
      */
-    bufferBindingInfo: IBufferBindingInfo;
+    bufferBindingInfo: BufferBindingInfo;
 }
 
 /**
@@ -322,21 +322,7 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
  */
 export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
 
-/**
- * 缓冲区绑定信息。
- */
-export interface IBufferBindingInfo
-{
-    size: number;
-    items: {
-        paths: string[];
-        offset: number;
-        size: number;
-        Cls: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor;
-    }[]
-}
-
-function getBufferBindingInfo(uniformBlock: UniformBlockInfo): IBufferBindingInfo
+function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
 {
     const size = uniformBlock.dataSize;
     //
@@ -377,7 +363,7 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): IBufferBindingInf
 
     console.assert(size === currentSize, `uniformBlock映射尺寸出现错误( ${size}  ${currentSize} )！`);
 
-    const bufferBindingInfo: IBufferBindingInfo = {
+    const bufferBindingInfo: BufferBindingInfo = {
         size: uniformBlock.dataSize,
         items,
     };

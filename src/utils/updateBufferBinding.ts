@@ -1,6 +1,5 @@
-import { BufferBinding, UnReadonly } from "@feng3d/render-api";
+import { BufferBinding, BufferBindingInfo, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IBufferBindingInfo } from "../caches/getGLProgram";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
 /**
@@ -10,11 +9,11 @@ import { getIGLBuffer } from "../runs/getIGLBuffer";
  *
  * @see https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/08%20Advanced%20GLSL/#uniform_1
  */
-export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, uniformData: BufferBinding)
+export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, uniformData: BufferBinding)
 {
     if (uniformData["_bufferBindingInfo"] !== undefined)
     {
-        const preVariableInfo = uniformData["_bufferBindingInfo"] as any as IBufferBindingInfo;
+        const preVariableInfo = uniformData["_bufferBindingInfo"] as any as BufferBindingInfo;
         if (preVariableInfo.size !== bufferBindingInfo.size)
         {
             console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, bufferBindingInfo, preVariableInfo });
@@ -62,7 +61,7 @@ export function updateBufferBinding(bufferBindingInfo: IBufferBindingInfo, unifo
                 }
             }
 
-            let data: Float32Array | Int32Array | Uint32Array;
+            let data: Int16Array | Int32Array | Uint32Array | Float32Array;
             if (typeof value === "number")
             {
                 data = new Cls([value]);
