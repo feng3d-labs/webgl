@@ -7,7 +7,7 @@ declare module "@feng3d/render-api"
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
      */
-    export interface Buffer
+    export interface GBuffer
     {
         /**
          * WebGL缓冲区目标。

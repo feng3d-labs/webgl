@@ -1,4 +1,4 @@
-import { CanvasContext, IPassEncoder, IRenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { CanvasContext, IPassEncoder, RenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -172,7 +172,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     passEncoders.push(rp);
 }
 
-const renderObjects: IRenderPassObject[] = [];
+const renderObjects: RenderPassObject[] = [];
 // Pass 2
 const rp2: RenderPass = {
     renderObjects,

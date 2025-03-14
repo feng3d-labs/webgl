@@ -1,4 +1,4 @@
-import { CanvasContext, IRenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
@@ -110,7 +110,7 @@ import { getShaderSource, loadImage } from "./utility";
             }
         };
 
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects

@@ -1,11 +1,11 @@
-import { Buffer, TypedArray } from "@feng3d/render-api";
+import { GBuffer, TypedArray } from "@feng3d/render-api";
 import { BufferTarget, BufferUsage } from "../data/polyfills/Buffer";
 
-export function getIGLBuffer(data: TypedArray, target?: BufferTarget, usage: BufferUsage = "STATIC_DRAW"): Buffer
+export function getIGLBuffer(data: TypedArray, target?: BufferTarget, usage: BufferUsage = "STATIC_DRAW"): GBuffer
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
-    const buffer: Buffer = {
+    const buffer: GBuffer = {
         size: Math.ceil(data.byteLength / 4) * 4,
         target,
         usage,

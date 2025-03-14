@@ -3,7 +3,7 @@ import { SamplerTexture } from "../SamplerTexture";
 
 declare module "@feng3d/render-api"
 {
-    export interface UniformTypeMap
+    export interface BindingResourceTypeMap
     {
         GLSamplerTexture: SamplerTexture;
         UniformDataItem: UniformDataItem;

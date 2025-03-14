@@ -1,4 +1,4 @@
-import { CanvasContext, IIndicesDataTypes, IRenderPassObject, RenderPass, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
+import { CanvasContext, IIndicesDataTypes, RenderPassObject, RenderPass, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -135,7 +135,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],

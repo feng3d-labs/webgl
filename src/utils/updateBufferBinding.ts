@@ -1,4 +1,4 @@
-import { BufferBinding, BufferBindingInfo, UnReadonly } from "@feng3d/render-api";
+import { BufferBinding, BufferBindingInfo, UnReadonly, GBuffer } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
@@ -77,7 +77,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
 
             const writeBuffers = buffer.writeBuffers ?? [];
             writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
-            buffer.writeBuffers = writeBuffers;
+            (buffer as UnReadonly<GBuffer>).writeBuffers = writeBuffers;
         };
 
         update();

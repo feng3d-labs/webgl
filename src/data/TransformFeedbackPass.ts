@@ -1,4 +1,4 @@
-import { DrawVertex, VertexDataTypes, Uniforms, VertexAttributes, VertexState } from "@feng3d/render-api";
+import { BindingResources, DrawVertex, VertexAttributes, VertexDataTypes, VertexState } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
@@ -43,7 +43,7 @@ export interface TransformFeedbackObject
     /**
      * Uniform渲染数据
      */
-    uniforms?: Uniforms;
+    uniforms?: BindingResources;
 
     /**
      * 回写顶点着色器中输出到缓冲区。

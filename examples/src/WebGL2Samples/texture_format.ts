@@ -1,4 +1,4 @@
-import { CanvasContext, IRenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -163,7 +163,7 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects

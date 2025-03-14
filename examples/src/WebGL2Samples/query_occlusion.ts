@@ -1,4 +1,4 @@
-import { CanvasContext, IRenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { watcher } from "@feng3d/watcher";
@@ -40,7 +40,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
     }
 };
 
-const renderObjects: IRenderPassObject[] = [];
+const renderObjects: RenderPassObject[] = [];
 // -- Render
 const rp: RenderPass = {
     descriptor: {

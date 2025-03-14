@@ -1,4 +1,4 @@
-import { BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, IRenderPassObject, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, Uniforms, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, GBuffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -181,7 +181,7 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly IRenderPassObject[])
+    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly RenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {
@@ -318,7 +318,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: Uniforms)
+    private runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
     {
         const webGLProgram = getGLProgram(gl, material);
 
@@ -371,7 +371,7 @@ export class RunWebGL
                 buffer.target ??= "UNIFORM_BUFFER";
                 buffer.usage ??= "DYNAMIC_DRAW";
 
-                (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
+                (buffer as UnReadonly<GBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);

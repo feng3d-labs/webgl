@@ -1,4 +1,4 @@
-import { CanvasContext, GLVertexAttributeTypes, IIndicesDataTypes, IRenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
+import { CanvasContext, GLVertexAttributeTypes, IIndicesDataTypes, RenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -181,7 +181,7 @@ import { getShaderSource, loadImage } from "./utility";
     const localMV = mat4.create();
     function render()
     {
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         // -- Render
         const rp: RenderPass = {
             descriptor: {

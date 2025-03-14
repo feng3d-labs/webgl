@@ -1,4 +1,4 @@
-import { RenderPass, IRenderPassObject } from "@feng3d/render-api";
+import { RenderPass, RenderPassObject } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
