@@ -1,7 +1,5 @@
-import { CanvasContext, RenderPassObject, OcclusionQuery, RenderObject, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, OcclusionQuery, RenderObject, RenderPass, RenderPassObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
-
-import { watcher } from "@feng3d/watcher";
 
 import { getShaderSource } from "./utility";
 
@@ -68,17 +66,15 @@ const occlusionQuery: OcclusionQuery = {
             ...ro.geometry,
             draw: { __type__: "DrawVertex", firstVertex: 3, vertexCount: 3 },
         }
-    }]
+    }],
+    onQuery(result: number) {
+        document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(result)}`;
+    }
 };
 
 renderObjects.push(occlusionQuery);
 
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
-
-watcher.watch(occlusionQuery, "result", () =>
-{
-    document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(occlusionQuery.result.result)}`;
-});
 
 // -- Delete WebGL resources
 webgl.deleteProgram(program);

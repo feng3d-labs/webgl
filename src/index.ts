@@ -7,7 +7,6 @@ export * from "./data/polyfills/CanvasContext";
 export * from "./data/polyfills/Buffer";
 export * from "./data/polyfills/CommandEncoder";
 export * from "./data/polyfills/PrimitiveState";
-export * from "./data/polyfills/RenderPass";
 export * from "./data/polyfills/Uniforms";
 
 export * from "./runs/getIGLBuffer";

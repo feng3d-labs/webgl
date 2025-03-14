@@ -37,7 +37,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
 
         Promise.all(results).then((v) =>
         {
-            renderPass.occlusionQueryResults = v;
+            renderPass.onOcclusionQuery(occlusionQueryObjects, v);
         });
     };
 
@@ -78,11 +78,11 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
      */
     const resolve = async () =>
     {
-        if (query.result !== undefined) return occlusionQuery;
+        if (query.result !== undefined) return query.result;
 
         if (gl instanceof WebGL2RenderingContext)
         {
-            const result: OcclusionQuery = await new Promise((resolve, reject) =>
+            const result: number = await new Promise((resolve, reject) =>
             {
                 (function tick()
                 {
@@ -95,11 +95,11 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
                         return;
                     }
 
-                    query.result = gl.getQueryParameter(webGLQuery, gl.QUERY_RESULT);
+                    const result = query.result = gl.getQueryParameter(webGLQuery, gl.QUERY_RESULT) as number;
 
-                    occlusionQuery.result = query as any;
+                    occlusionQuery.onQuery(result);
 
-                    resolve(occlusionQuery);
+                    resolve(result);
 
                     gl.deleteQuery(webGLQuery);
                 })();
@@ -132,5 +132,5 @@ export interface GLOcclusionQueryStep
     /**
      * 获取查询结果，将获取被赋值新结果的遮挡查询对象。
      */
-    resolve: () => Promise<OcclusionQuery>
+    resolve: () => Promise<number>
 }
