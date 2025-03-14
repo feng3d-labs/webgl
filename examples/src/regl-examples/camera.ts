@@ -30,7 +30,7 @@ const renderObject: RenderObject = {
         indices: new Uint16Array(indices),
         draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
-    uniforms: {},
+    bindingResources: {},
     pipeline: {
         vertex: {
             code: `precision mediump float;

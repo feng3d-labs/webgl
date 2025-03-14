@@ -89,7 +89,7 @@ function render()
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },

@@ -76,7 +76,7 @@ async function main()
             indices: buffers.indices,
             draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
-        uniforms: { uSampler: texture },
+        bindingResources: { uSampler: texture },
     };
 
     const submit: Submit = {
@@ -113,8 +113,8 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
 
         webgl.submit(submit);
 

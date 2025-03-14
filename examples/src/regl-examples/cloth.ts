@@ -174,7 +174,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             indices: new Uint16Array(indices),
             draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
-        uniforms: {},
+        bindingResources: {},
         pipeline: {
             vertex: {
                 code: /* wgsl */`precision mediump float;
@@ -371,8 +371,8 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        renderObject.uniforms.view = camera.view();
-        renderObject.uniforms.projection
+        renderObject.bindingResources.view = camera.view();
+        renderObject.bindingResources.projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -395,7 +395,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
     };
-    renderObject.uniforms.texture = diffuse;
+    renderObject.bindingResources.texture = diffuse;
 
     draw();
 })();

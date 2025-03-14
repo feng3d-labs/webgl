@@ -169,7 +169,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                         {
                             viewport: viewport[i],
                             pipeline: programs[i],
-                            uniforms: {
+                            bindingResources: {
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },

@@ -89,7 +89,7 @@ function main()
             indices: buffers.indices,
             draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
-        uniforms: { uSampler: texture },
+        bindingResources: { uSampler: texture },
     };
 
     const renderPass: RenderPass = {
@@ -122,9 +122,9 @@ function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
-        renderObject.uniforms.uNormalMatrix = normalMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uNormalMatrix = normalMatrix;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

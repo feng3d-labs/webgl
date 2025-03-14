@@ -81,7 +81,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     const renderObject: RenderObject = {
         viewport: { x: 0, y: 0, width: FRAMEBUFFER_SIZE.x, height: FRAMEBUFFER_SIZE.y },
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             MVP: new Float32Array([
                 0.8, 0.0, 0.0, 0.0,
                 0.0, 0.8, 0.0, 0.0,
@@ -152,7 +152,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
 
     const renderObject2: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
-        uniforms: {
+        bindingResources: {
             MVP: new Float32Array([
                 1.0, 0.0, 0.0, 0.0,
                 0.0, 1.0, 0.0, 0.0,

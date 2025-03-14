@@ -92,7 +92,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         renderObjects.push({
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },

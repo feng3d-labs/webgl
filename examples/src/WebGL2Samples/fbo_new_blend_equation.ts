@@ -121,7 +121,7 @@ function render()
 
     const renderObject: RenderObject = {
         pipeline: program,
-        uniforms: { mvp: matrix, diffuse: { texture, sampler } },
+        bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
         geometry:{
             vertices: vertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 6 },

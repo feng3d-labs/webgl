@@ -103,7 +103,7 @@ import { getShaderSource, loadImage } from "./utility";
             {
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 pipeline: programBicubic,
-                uniforms: {
+                bindingResources: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                 },
@@ -120,7 +120,7 @@ import { getShaderSource, loadImage } from "./utility";
             {
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 pipeline: programOffsetBicubic,
-                uniforms: {
+                bindingResources: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                     offset,

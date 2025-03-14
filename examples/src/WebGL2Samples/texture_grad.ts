@@ -198,7 +198,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const ro: RenderObject = {
         pipeline: program,
-        uniforms: {},
+        bindingResources: {},
         geometry:{
             primitive: { cullFace: "back" },
             vertices: vertexArray.vertices,
@@ -222,9 +222,9 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        ro.uniforms.mvMatrix = mvMatrix;
-        ro.uniforms.pMatrix = perspectiveMatrix;
-        ro.uniforms.diffuse = { texture, sampler };
+        ro.bindingResources.mvMatrix = mvMatrix;
+        ro.bindingResources.pMatrix = perspectiveMatrix;
+        ro.bindingResources.diffuse = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

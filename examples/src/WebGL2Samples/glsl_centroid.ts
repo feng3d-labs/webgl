@@ -161,7 +161,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
-            uniforms: { MVP: IDENTITY },
+            bindingResources: { MVP: IDENTITY },
             geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[i].vertices,
@@ -198,7 +198,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         {
             ...ro,
             viewport: viewport[i],
-            uniforms: {
+            bindingResources: {
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },

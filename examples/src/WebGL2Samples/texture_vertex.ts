@@ -214,7 +214,7 @@ import { getShaderSource, loadImage } from "./utility";
                     pipeline: {
                         ...program,
                     },
-                    uniforms: {
+                    bindingResources: {
                         mvMatrix: localMV,
                         pMatrix: perspectiveMatrix,
                         displacementMap: { texture, sampler },

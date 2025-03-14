@@ -110,7 +110,7 @@ const rp2: RenderPass = {
     },
     renderObjects: [{
         pipeline: drawProgram,
-        uniforms: { depthMap: { texture: depthTexture, sampler: depthSampler } },
+        bindingResources: { depthMap: { texture: depthTexture, sampler: depthSampler } },
         geometry: {
             primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,

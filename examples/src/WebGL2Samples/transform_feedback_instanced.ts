@@ -141,7 +141,7 @@ import { getShaderSource } from "./utility";
     const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
-        uniforms: {},
+        bindingResources: {},
         geometry:{
             primitive: { topology: "triangle-list" },
             draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },

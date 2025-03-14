@@ -83,7 +83,7 @@ import { getShaderSource } from "./utility";
 
     const ro: RenderObject = {
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             PerDraw: transforms,
             PerPass: lightPos,
             PerScene: material,

@@ -144,7 +144,7 @@ import { getShaderSource } from "./utility";
     const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
         geometry: {

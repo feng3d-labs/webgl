@@ -202,7 +202,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     const ro: RenderObject = {
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             u_model: modelMatrix,
             u_modelInvTrans: modelInvTrans,
             u_lightPosition: lightPosition,
@@ -234,8 +234,8 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        ro.uniforms.u_viewProj = viewProj;
-        ro.uniforms.s_tex2D = { texture, sampler };
+        ro.bindingResources.u_viewProj = viewProj;
+        ro.bindingResources.s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

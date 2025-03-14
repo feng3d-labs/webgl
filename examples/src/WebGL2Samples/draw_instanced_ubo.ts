@@ -50,7 +50,7 @@ const rp: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             Transform: transforms,
             Material: materials,
         },

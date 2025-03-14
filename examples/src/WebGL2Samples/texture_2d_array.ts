@@ -84,7 +84,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         const ro: RenderObject = {
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
@@ -103,7 +103,7 @@ import { getShaderSource, loadImage } from "./utility";
         (function render()
         {
             // -- Render
-            ro.uniforms.layer = frame;
+            ro.bindingResources.layer = frame;
 
             webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

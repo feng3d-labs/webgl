@@ -34,7 +34,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
     };
 
     const renderObject: RenderObject = {
-        uniforms: {
+        bindingResources: {
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },

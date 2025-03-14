@@ -38,7 +38,7 @@ const renderObject: RenderObject = {
         indices: new Uint16Array(indices),
         draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
-    uniforms: {
+    bindingResources: {
         model: mat4.identity([]),
     },
     pipeline: {
@@ -79,12 +79,12 @@ function draw()
     tick++;
     const t = 0.01 * tick;
 
-    renderObject.uniforms.view = mat4.lookAt([],
+    renderObject.bindingResources.view = mat4.lookAt([],
         [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
         [0, 2.5, 0],
         [0, 1, 0]);
 
-    renderObject.uniforms.projection
+    renderObject.bindingResources.projection
         = mat4.perspective([],
             Math.PI / 4,
             viewportWidth / viewportHeight,

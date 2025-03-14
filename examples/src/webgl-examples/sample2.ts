@@ -56,7 +56,7 @@ function main()
                 },
                 draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
             },
-            uniforms: {
+            bindingResources: {
                 uProjectionMatrix: projectionMatrix,
                 uModelViewMatrix: modelViewMatrix,
             },

@@ -113,7 +113,7 @@ const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
     renderObjects: [{
         pipeline: drawProgram,
-        uniforms: {
+        bindingResources: {
             color1Map: { texture: color1Texture, sampler: color1Sampler },
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },

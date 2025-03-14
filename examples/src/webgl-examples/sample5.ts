@@ -60,7 +60,7 @@ function main()
       indices: buffers.indices,
       draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
     },
-    uniforms: {},
+    bindingResources: {},
   };
 
   const renderPass: RenderPass = {
@@ -88,8 +88,8 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-    renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
+    renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+    renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

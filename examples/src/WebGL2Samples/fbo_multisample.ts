@@ -102,7 +102,7 @@ const renderPass1: RenderPass = {
     descriptor: framebuffer,
     renderObjects: [{
         pipeline: programs[PROGRAM.TEXTURE],
-        uniforms: { MVP: IDENTITY },
+        bindingResources: { MVP: IDENTITY },
         geometry: {
             primitive: { topology: "LINE_LOOP" },
             vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
@@ -123,7 +123,7 @@ const renderPass2: RenderPass = {
     renderObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
-            uniforms: { diffuse: { texture, sampler }, MVP: mvp },
+            bindingResources: { diffuse: { texture, sampler }, MVP: mvp },
             geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArrays[PROGRAM.SPLASH].vertices,

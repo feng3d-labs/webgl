@@ -43,7 +43,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 };
 
 const renderObject: RenderObject = {
-    uniforms: {},
+    bindingResources: {},
     geometry: {
         primitive: { topology: "triangle-strip" },
         vertices: vertexArray.vertices,

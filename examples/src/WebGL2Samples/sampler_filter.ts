@@ -149,7 +149,7 @@ function render()
 
     const ro: RenderObject = {
         pipeline: program,
-        uniforms: { mvp: matrix },
+        bindingResources: { mvp: matrix },
         geometry:{
             primitive: { topology: "triangle-list" },
             vertices: vertexArray.vertices,
@@ -164,8 +164,8 @@ function render()
             {
                 ...ro,
                 viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: {
                         texture, sampler: samplers[i]
                     }

@@ -159,7 +159,7 @@ import { getShaderSource } from "./utility";
 
     const ro: RenderObject = {
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             diffuse: { texture, sampler },
         },
         geometry:{
@@ -196,7 +196,7 @@ import { getShaderSource } from "./utility";
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            renderPassObjects[i].uniforms.orientation = matrices[i];
+            renderPassObjects[i].bindingResources.orientation = matrices[i];
         }
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

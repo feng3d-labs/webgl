@@ -105,10 +105,10 @@ export function createCamera(props)
   {
     Object.keys(cameraState).forEach(function (name)
     {
-      renderObject.uniforms[name] = setupCamera[name];
+      renderObject.bindingResources[name] = setupCamera[name];
     });
 
-    renderObject.uniforms["projection"] = perspective(cameraState.projection,
+    renderObject.bindingResources["projection"] = perspective(cameraState.projection,
       Math.PI / 4.0,
       viewportWidth / viewportHeight,
       0.01,

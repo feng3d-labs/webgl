@@ -101,7 +101,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const ro: RenderObject = {
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
             },
             geometry:{
@@ -121,8 +121,8 @@ import { getShaderSource, loadImage } from "./utility";
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 ...ro,
                 pipeline: program,
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: { texture: texture2D, sampler: sampler2D },
                 },
             });
@@ -133,8 +133,8 @@ import { getShaderSource, loadImage } from "./utility";
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 ...ro,
                 pipeline: program3D,
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: { texture: texture3D, sampler: sampler3D },
                 },
             });

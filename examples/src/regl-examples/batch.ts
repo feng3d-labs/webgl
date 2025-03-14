@@ -61,7 +61,7 @@ function getRenderObject(batchId: number)
             vertices: vertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 3 }
         },
-        uniforms: {
+        bindingResources: {
             offset: offsets[batchId].offset,
         },
         pipeline: pipeline,
@@ -99,12 +99,12 @@ function draw()
         batchId = i;
         //
         const ro = renderObjects[i];
-        ro.uniforms.color = [
+        ro.bindingResources.color = [
             Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
             Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
             Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
             1];
-        ro.uniforms.angle = 0.01 * tick;
+        ro.bindingResources.angle = 0.01 * tick;
     }
 
     webgl.submit(submit);

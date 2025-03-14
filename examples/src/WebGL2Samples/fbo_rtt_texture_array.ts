@@ -134,7 +134,7 @@ const renderPass1: RenderPass = {
         {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
-            uniforms: { mvp: matrix },
+            bindingResources: { mvp: matrix },
             geometry:{
                 primitive: { topology: "triangle-list" },
                 vertices: multipleOutputVertexArray.vertices,
@@ -154,7 +154,7 @@ const renderPass: RenderPass = {
 
 const renderObject: RenderObject = {
     pipeline: layerProgram,
-    uniforms: { mvp: matrix, diffuse: { texture, sampler } },
+    bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
     geometry: {
         primitive: { topology: "triangle-list" },
         vertices: layerVertexArray.vertices,
@@ -169,7 +169,7 @@ for (let i = 0; i < Textures.MAX; ++i)
         {
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             ...renderObject,
-            uniforms: { ...renderObject.uniforms, layer: i },
+            bindingResources: { ...renderObject.bindingResources, layer: i },
             geometry: {
                 ...renderObject.geometry,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },

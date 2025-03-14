@@ -65,7 +65,7 @@ function main()
       },
       draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
     },
-    uniforms: {},
+    bindingResources: {},
   };
 
   const renderPass: RenderPass = {
@@ -93,8 +93,8 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-    renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
+    renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+    renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

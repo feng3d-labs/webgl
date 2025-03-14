@@ -31,7 +31,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 };
 
 const renderObject: RenderObject = {
-    uniforms: {},
+    bindingResources: {},
     geometry:{
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,

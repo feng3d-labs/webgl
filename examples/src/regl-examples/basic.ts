@@ -30,7 +30,7 @@ const renderObject: RenderObject = {
         },
         draw: { __type__: "DrawVertex", vertexCount: 3 },
     },
-    uniforms: { color: [1, 0, 0, 1] },
+    bindingResources: { color: [1, 0, 0, 1] },
     pipeline: {
         vertex: {
             code: `

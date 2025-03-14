@@ -73,7 +73,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             indices: new Uint16Array(indices),
             draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
-        uniforms: {},
+        bindingResources: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -116,11 +116,11 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
-        renderObject.uniforms.view = mat4.lookAt([],
+        renderObject.bindingResources.view = mat4.lookAt([],
             [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
             [0, 0.0, 0],
             [0, 1, 0]);
-        renderObject.uniforms.projection
+        renderObject.bindingResources.projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -142,7 +142,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear" }
     };
-    renderObject.uniforms.tex = diffuse;
+    renderObject.bindingResources.tex = diffuse;
 
     draw();
 })();

@@ -66,7 +66,7 @@ async function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        uniforms: { uSampler: texture },
+        bindingResources: { uSampler: texture },
         geometry: {
             primitive: { topology: "triangle-list" },
             vertices: {
@@ -113,9 +113,9 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
-        renderObject.uniforms.uNormalMatrix = normalMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uNormalMatrix = normalMatrix;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

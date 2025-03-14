@@ -199,7 +199,7 @@ import { getShaderSource, loadImage } from "./utility";
 
         const ro: RenderObject = {
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 mvp: matrix,
             },
             geometry:{
@@ -217,7 +217,7 @@ import { getShaderSource, loadImage } from "./utility";
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     ...ro,
-                    uniforms: {
+                    bindingResources: {
                         mvp: matrix,
                         lodBias: lodBiasArray[i],
                         diffuse: { texture: textures[i], sampler: samplers[i] },
