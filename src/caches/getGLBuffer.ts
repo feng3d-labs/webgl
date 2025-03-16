@@ -14,11 +14,11 @@ declare global
 
 export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
 {
-    let webGLBuffer = gl._buffers.get(buffer);
+    let webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer) return webGLBuffer;
 
     webGLBuffer = gl.createBuffer();
-    gl._buffers.set(buffer, webGLBuffer);
+    gl._bufferMap.set(buffer, webGLBuffer);
 
     const target = buffer.target;
 
@@ -92,10 +92,10 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
 
 export function deleteBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
 {
-    const webGLBuffer = gl._buffers.get(buffer);
+    const webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer)
     {
-        gl._buffers.delete(buffer);
+        gl._bufferMap.delete(buffer);
         webGLBuffer.destroy();
         delete webGLBuffer.destroy;
         //

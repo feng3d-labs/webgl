@@ -9,13 +9,13 @@ declare global
 {
     interface WebGLRenderingContext
     {
-        _buffers: Map<GBuffer, WebGLBuffer>
-        _textures: Map<Texture, WebGLTexture>
-        _renderbuffers: Map<Renderbuffer, WebGLRenderbuffer>;
-        _framebuffers: Map<RenderPassDescriptor, WebGLFramebuffer>;
+        _bufferMap: WeakMap<GBuffer, WebGLBuffer>
+        _textures: WeakMap<Texture, WebGLTexture>
+        _renderbuffers: WeakMap<Renderbuffer, WebGLRenderbuffer>;
+        _framebuffers: WeakMap<RenderPassDescriptor, WebGLFramebuffer>;
         _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
-        _samplers: Map<Sampler, WebGLSampler>;
-        _transforms: Map<TransformFeedback, WebGLTransformFeedback>;
+        _samplers: WeakMap<Sampler, WebGLSampler>;
+        _transforms: WeakMap<TransformFeedback, WebGLTransformFeedback>;
         _programs: { [key: string]: WebGLProgram }
         _shaders: { [key: string]: WebGLShader }
     }
@@ -39,13 +39,13 @@ export function getGLCanvasContext(canvasContext: CanvasContext)
         //
         getCapabilities(value);
 
-        value._buffers = new Map();
-        value._textures = new Map();
-        value._renderbuffers = new Map();
-        value._framebuffers = new Map();
+        value._bufferMap = new WeakMap();
+        value._textures = new WeakMap();
+        value._renderbuffers = new WeakMap();
+        value._framebuffers = new WeakMap();
         value._vertexArrays = new ChainMap();
-        value._samplers = new Map();
-        value._transforms = new Map();
+        value._samplers = new WeakMap();
+        value._transforms = new WeakMap();
         value._programs = {};
         value._shaders = {};
 
