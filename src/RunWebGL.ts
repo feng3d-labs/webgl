@@ -1,4 +1,4 @@
-import { BindingResources, BlendComponent, BlendState, GBuffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IIndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, GBuffer, IIndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -21,10 +21,8 @@ import { getIGLBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
-import { ChainMap } from "./utils/ChainMap";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
 
-import { getCapabilities } from "./caches/getCapabilities";
 import "./data/polyfills/OcclusionQuery";
 
 declare global
@@ -440,7 +438,7 @@ export class RunWebGL
             const extension = gl.getExtension("EXT_texture_filter_anisotropic");
             if (extension)
             {
-                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, getCapabilities(gl).maxAnisotropy));
+                gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, gl._capabilities.maxAnisotropy));
             }
             webGLTexture.maxAnisotropy = maxAnisotropy;
         }

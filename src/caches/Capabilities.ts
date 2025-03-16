@@ -1,40 +1,3 @@
-
-export function getCapabilities(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
-{
-    let capabilities = capabilitiesMap.get(gl);
-    if (capabilities) return capabilities;
-
-    capabilities = new Capabilities(gl, precision);
-    capabilitiesMap.set(gl, capabilities);
-
-    return capabilities;
-}
-
-const capabilitiesMap = new WeakMap<WebGLRenderingContext | WebGL2RenderingContext, Capabilities>();
-
-function _getMaxPrecision(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
-{
-    if (precision === "highp")
-    {
-        if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
-            && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
-        {
-            return "highp";
-        }
-        precision = "mediump";
-    }
-    if (precision === "mediump")
-    {
-        if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
-            && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
-        {
-            return "mediump";
-        }
-    }
-
-    return "lowp";
-}
-
 /**
  * WEBGL支持功能
  *
@@ -220,7 +183,30 @@ export class Capabilities
     }
     private _vaoAvailable: boolean;
 
-    constructor(private _gl: WebGLRenderingContext | WebGL2RenderingContext, private _precision: "highp" | "mediump" | "lowp")
+    constructor(private _gl: WebGLRenderingContext | WebGL2RenderingContext, private _precision: "highp" | "mediump" | "lowp" = "highp")
     {
     }
+}
+
+function _getMaxPrecision(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
+{
+    if (precision === "highp")
+    {
+        if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
+            && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
+        {
+            return "highp";
+        }
+        precision = "mediump";
+    }
+    if (precision === "mediump")
+    {
+        if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
+            && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
+        {
+            return "mediump";
+        }
+    }
+
+    return "lowp";
 }

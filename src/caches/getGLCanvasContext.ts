@@ -3,12 +3,14 @@ import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
 import { Renderbuffer } from "../data/Renderbuffer";
 import { TransformFeedback } from "../data/TransformFeedbackPass";
 import { ChainMap } from "../utils/ChainMap";
-import { getCapabilities } from "./getCapabilities";
+import { Capabilities } from "./Capabilities";
 
 declare global
 {
     interface WebGLRenderingContext
     {
+        _capabilities: Capabilities;
+        //
         _bufferMap: WeakMap<GBuffer, WebGLBuffer>
         _textures: WeakMap<Texture, WebGLTexture>
         _renderbuffers: WeakMap<Renderbuffer, WebGLRenderbuffer>;
@@ -29,35 +31,35 @@ declare global
  */
 export function getGLCanvasContext(canvasContext: CanvasContext)
 {
-    let value = canvasContextMap.get(canvasContext);
-    if (!value)
+    let gl = canvasContextMap.get(canvasContext);
+    if (!gl)
     {
         const canvas = typeof canvasContext.canvasId === "string" ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
-        value = getWebGLContext(canvas, canvasContext);
+        gl = getWebGLContext(canvas, canvasContext);
 
         canvasContext.webGLContextAttributes
         //
-        getCapabilities(value);
+        gl._capabilities = new Capabilities(gl);
 
-        value._bufferMap = new WeakMap();
-        value._textures = new WeakMap();
-        value._renderbuffers = new WeakMap();
-        value._framebuffers = new WeakMap();
-        value._vertexArrays = new ChainMap();
-        value._samplers = new WeakMap();
-        value._transforms = new WeakMap();
-        value._programs = {};
-        value._shaders = {};
+        gl._bufferMap = new WeakMap();
+        gl._textures = new WeakMap();
+        gl._renderbuffers = new WeakMap();
+        gl._framebuffers = new WeakMap();
+        gl._vertexArrays = new ChainMap();
+        gl._samplers = new WeakMap();
+        gl._transforms = new WeakMap();
+        gl._programs = {};
+        gl._shaders = {};
 
         //
         canvas.addEventListener("webglcontextlost", _onContextLost, false);
         canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
         canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
 
-        canvasContextMap.set(canvasContext, value);
+        canvasContextMap.set(canvasContext, gl);
     }
 
-    return value;
+    return gl;
 }
 
 function _onContextLost(event: Event)
