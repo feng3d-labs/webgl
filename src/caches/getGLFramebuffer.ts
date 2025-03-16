@@ -5,14 +5,6 @@ import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMult
 import { getGLTexture } from "./getGLTexture";
 import { getGLTextureTarget } from "./getGLTextureTarget";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _framebuffers: Map<RenderPassDescriptor, WebGLFramebuffer>;
-    }
-}
-
 /**
  * 获取帧缓冲区
  */

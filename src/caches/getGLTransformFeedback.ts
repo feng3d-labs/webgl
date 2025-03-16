@@ -2,14 +2,6 @@ import { TransformFeedback } from "../data/TransformFeedbackPass";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 import { getGLBuffer } from "./getGLBuffer";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _transforms: Map<TransformFeedback, WebGLTransformFeedback>;
-    }
-}
-
 export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
     let webGLTransformFeedback = gl._transforms.get(transformFeedback);

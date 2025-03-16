@@ -3,11 +3,6 @@ import { watcher } from "@feng3d/watcher";
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _buffers: Map<GBuffer, WebGLBuffer>
-    }
-
     interface WebGLBuffer
     {
         /**

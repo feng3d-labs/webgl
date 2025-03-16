@@ -5,11 +5,6 @@ import { getGLTextureTarget } from "./getGLTextureTarget";
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _textures: Map<Texture, WebGLTexture>
-    }
-
     interface WebGLTexture
     {
         /**

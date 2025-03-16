@@ -27,7 +27,7 @@ export class WebGL
     constructor(renderingContext?: CanvasContext)
     {
         this._renderingContext = renderingContext;
-        this._gl = getGLCanvasContext(this._renderingContext);
+        this._gl = getGLCanvasContext(this._renderingContext) as any;
     }
 
     /**

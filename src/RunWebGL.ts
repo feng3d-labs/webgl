@@ -29,14 +29,6 @@ import "./data/polyfills/OcclusionQuery";
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
-    }
-}
-
-declare global
-{
     interface WebGLTexture
     {
         minFilter?: GLTextureMinFilter,

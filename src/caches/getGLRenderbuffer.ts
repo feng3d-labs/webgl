@@ -1,13 +1,5 @@
 import { Renderbuffer } from "../data/Renderbuffer";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _renderbuffers: Map<Renderbuffer, WebGLRenderbuffer>;
-    }
-}
-
 export function getGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: Renderbuffer, sampleCount?: 4)
 {
     let webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);

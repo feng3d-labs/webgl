@@ -1,5 +1,5 @@
 
-export function getCapabilities(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
+export function getCapabilities(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
 {
     let capabilities = capabilitiesMap.get(gl);
     if (capabilities) return capabilities;
@@ -10,9 +10,9 @@ export function getCapabilities(gl: WebGLRenderingContext, precision: "highp" | 
     return capabilities;
 }
 
-const capabilitiesMap = new WeakMap<WebGLRenderingContext, Capabilities>();
+const capabilitiesMap = new WeakMap<WebGLRenderingContext | WebGL2RenderingContext, Capabilities>();
 
-function _getMaxPrecision(gl: WebGLRenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
+function _getMaxPrecision(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
 {
     if (precision === "highp")
     {
@@ -220,7 +220,7 @@ export class Capabilities
     }
     private _vaoAvailable: boolean;
 
-    constructor(private _gl: WebGLRenderingContext, private _precision: "highp" | "mediump" | "lowp")
+    constructor(private _gl: WebGLRenderingContext | WebGL2RenderingContext, private _precision: "highp" | "mediump" | "lowp")
     {
     }
 }

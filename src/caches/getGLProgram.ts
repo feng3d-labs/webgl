@@ -4,12 +4,6 @@ import { TransformFeedbackPipeline, TransformFeedbackVaryings } from "../data/Tr
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _programs: { [key: string]: WebGLProgram }
-        _shaders: { [key: string]: WebGLShader }
-    }
-
     export interface WebGLProgram
     {
         vertex: string;

@@ -1,7 +1,25 @@
-import { CanvasContext } from "@feng3d/render-api";
+import { CanvasContext, GBuffer, IIndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
+import { Renderbuffer } from "../data/Renderbuffer";
+import { TransformFeedback } from "../data/TransformFeedbackPass";
 import { ChainMap } from "../utils/ChainMap";
 import { getCapabilities } from "./getCapabilities";
+
+declare global
+{
+    interface WebGLRenderingContext
+    {
+        _buffers: Map<GBuffer, WebGLBuffer>
+        _textures: Map<Texture, WebGLTexture>
+        _renderbuffers: Map<Renderbuffer, WebGLRenderbuffer>;
+        _framebuffers: Map<RenderPassDescriptor, WebGLFramebuffer>;
+        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _samplers: Map<Sampler, WebGLSampler>;
+        _transforms: Map<TransformFeedback, WebGLTransformFeedback>;
+        _programs: { [key: string]: WebGLProgram }
+        _shaders: { [key: string]: WebGLShader }
+    }
+}
 
 /**
  * 获取WebGL上下文。
@@ -11,7 +29,6 @@ import { getCapabilities } from "./getCapabilities";
  */
 export function getGLCanvasContext(canvasContext: CanvasContext)
 {
-    const key = canvasContext.canvasId;
     let value = canvasContextMap.get(canvasContext);
     if (!value)
     {
@@ -21,7 +38,16 @@ export function getGLCanvasContext(canvasContext: CanvasContext)
         canvasContext.webGLContextAttributes
         //
         getCapabilities(value);
-        initMap(value);
+
+        value._buffers = new Map();
+        value._textures = new Map();
+        value._renderbuffers = new Map();
+        value._framebuffers = new Map();
+        value._vertexArrays = new ChainMap();
+        value._samplers = new Map();
+        value._transforms = new Map();
+        value._programs = {};
+        value._shaders = {};
 
         //
         canvas.addEventListener("webglcontextlost", _onContextLost, false);
@@ -32,19 +58,6 @@ export function getGLCanvasContext(canvasContext: CanvasContext)
     }
 
     return value;
-}
-
-function initMap(gl: WebGLRenderingContext)
-{
-    gl._buffers = new Map();
-    gl._textures = new Map();
-    gl._renderbuffers = new Map();
-    gl._framebuffers = new Map();
-    gl._vertexArrays = new ChainMap();
-    gl._samplers = new Map();
-    gl._transforms = new Map();
-    gl._programs = {};
-    gl._shaders = {};
 }
 
 function _onContextLost(event: Event)
@@ -64,12 +77,12 @@ function _onContextCreationError(event: WebGLContextEvent)
     console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasContext: CanvasContext)
+function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasContext: CanvasContext): WebGLRenderingContext 
 {
     const contextAttributes = Object.assign({}, defaultWebGLContextAttributes, canvasContext.webGLContextAttributes);
 
     // 使用用户提供参数获取WebGL上下文
-    let gl = canvas.getContext(canvasContext.webGLcontextId || "webgl2", contextAttributes) as any;
+    let gl = canvas.getContext(canvasContext.webGLcontextId || "webgl2", contextAttributes);
     gl || console.warn(`无法使用用户提供参数获取指定WebGL上下文`, contextAttributes);
 
     gl = canvas.getContext("webgl2", contextAttributes)
@@ -79,7 +92,7 @@ function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasCont
 
     gl || console.error(`无法获取WebGL上下文。`);
 
-    return gl;
+    return gl as any;
 }
 
 const canvasContextMap = new WeakMap<CanvasContext, WebGLRenderingContext>();

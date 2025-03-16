@@ -1,13 +1,6 @@
 import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
 import { getIGLCompareFunction } from "../runs/runDepthState";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _samplers: Map<Sampler, WebGLSampler>;
-    }
-}
 export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
 
 export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
