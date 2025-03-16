@@ -624,6 +624,7 @@ export class RunWebGL
 
         //
         const buffer = getIGLBuffer(attribute.data, "ARRAY_BUFFER", "STATIC_DRAW");
+        buffer.target ??= "ARRAY_BUFFER";
 
         const webGLBuffer = getGLBuffer(gl, buffer);
         gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);

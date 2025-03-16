@@ -1,4 +1,4 @@
-import { CanvasContext, IPassEncoder, RenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { CanvasContext, PassEncoder, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
@@ -150,7 +150,7 @@ const vertexArrays: { vertices?: VertexAttributes }[] = [
 ];
 
 // -- Render
-const passEncoders: IPassEncoder[] = [];
+const passEncoders: PassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();

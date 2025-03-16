@@ -37,7 +37,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
 
         Promise.all(results).then((v) =>
         {
-            renderPass.onOcclusionQuery(occlusionQueryObjects, v);
+            renderPass.onOcclusionQuery?.(occlusionQueryObjects, v);
         });
     };
 
