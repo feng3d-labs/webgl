@@ -1,8 +1,7 @@
-import { CanvasContext, GBuffer, IIndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, ChainMap, GBuffer, IIndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
 import { Renderbuffer } from "../data/Renderbuffer";
 import { TransformFeedback } from "../data/TransformFeedbackPass";
-import { ChainMap } from "../utils/ChainMap";
 import { Capabilities } from "./Capabilities";
 
 declare global
@@ -31,33 +30,30 @@ declare global
  */
 export function getGLCanvasContext(canvasContext: CanvasContext)
 {
-    let gl = canvasContextMap.get(canvasContext);
-    if (!gl)
-    {
-        const canvas = typeof canvasContext.canvasId === "string" ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
-        gl = getWebGLContext(canvas, canvasContext);
+    let gl: WebGLRenderingContext = canvasContext["_gl"];
+    if (gl) return gl;
 
-        canvasContext.webGLContextAttributes
-        //
-        gl._capabilities = new Capabilities(gl);
+    const canvas = typeof canvasContext.canvasId === "string" ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
+    gl = canvasContext["_gl"] = getWebGLContext(canvas, canvasContext);
 
-        gl._bufferMap = new WeakMap();
-        gl._textures = new WeakMap();
-        gl._renderbuffers = new WeakMap();
-        gl._framebuffers = new WeakMap();
-        gl._vertexArrays = new ChainMap();
-        gl._samplers = new WeakMap();
-        gl._transforms = new WeakMap();
-        gl._programs = {};
-        gl._shaders = {};
+    canvasContext.webGLContextAttributes
+    //
+    gl._capabilities = new Capabilities(gl);
 
-        //
-        canvas.addEventListener("webglcontextlost", _onContextLost, false);
-        canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
-        canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
+    gl._bufferMap = new WeakMap();
+    gl._textures = new WeakMap();
+    gl._renderbuffers = new WeakMap();
+    gl._framebuffers = new WeakMap();
+    gl._vertexArrays = new ChainMap();
+    gl._samplers = new WeakMap();
+    gl._transforms = new WeakMap();
+    gl._programs = {};
+    gl._shaders = {};
 
-        canvasContextMap.set(canvasContext, gl);
-    }
+    //
+    canvas.addEventListener("webglcontextlost", _onContextLost, false);
+    canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
+    canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
 
     return gl;
 }
@@ -96,5 +92,3 @@ function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasCont
 
     return gl as any;
 }
-
-const canvasContextMap = new WeakMap<CanvasContext, WebGLRenderingContext>();
