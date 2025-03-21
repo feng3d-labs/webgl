@@ -1,4 +1,4 @@
-import { GBuffer, UnReadonly } from "@feng3d/render-api";
+import { Buffer, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 
 declare global
@@ -12,7 +12,7 @@ declare global
     }
 }
 
-export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
+export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
 {
     let webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer) return webGLBuffer;
@@ -61,7 +61,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
             }
             gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
         });
-        (buffer as UnReadonly<GBuffer>).writeBuffers = null;
+        (buffer as UnReadonly<Buffer>).writeBuffers = null;
     };
 
     const dataChange = () =>
@@ -70,7 +70,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
 
         const writeBuffers = buffer.writeBuffers || [];
         writeBuffers.unshift({ data: buffer.data });
-        (buffer as UnReadonly<GBuffer>).writeBuffers = writeBuffers;
+        (buffer as UnReadonly<Buffer>).writeBuffers = writeBuffers;
     };
 
     dataChange();
@@ -90,7 +90,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
     return webGLBuffer;
 }
 
-export function deleteBuffer(gl: WebGLRenderingContext, buffer: GBuffer)
+export function deleteBuffer(gl: WebGLRenderingContext, buffer: Buffer)
 {
     const webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer)
