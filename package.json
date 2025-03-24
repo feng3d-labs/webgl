@@ -64,6 +64,6 @@
   },
   "dependencies": {
     "@feng3d/render-api": "0.0.2",
-    "@feng3d/watcher": "^0.8.11"
+    "@feng3d/watcher": "^0.8.12"
   }
 }
