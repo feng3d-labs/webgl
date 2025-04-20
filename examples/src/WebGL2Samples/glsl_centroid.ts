@@ -1,5 +1,5 @@
-import { IPassEncoder, IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IViewport } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, PassEncoder, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource } from "./utility";
 
@@ -9,7 +9,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -24,7 +24,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
+const viewport: Viewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -48,18 +48,15 @@ const PROGRAM = {
     MAX: 3
 };
 
-const programs: IRenderPipeline[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
-        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "triangle-list" },
     }
 ];
 
@@ -104,8 +101,8 @@ const FRAMEBUFFER_SIZE = {
     x: canvas.width,
     y: canvas.height
 };
-const textures: ITexture[] = [];
-const samplers: ISampler[] = [];
+const textures: Texture[] = [];
+const samplers: Sampler[] = [];
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
@@ -125,13 +122,13 @@ const FRAMEBUFFER = {
     COLORBUFFER_CENTROID: 3
 };
 
-const framebuffers: IRenderPassDescriptor[] = [
+const framebuffers: RenderPassDescriptor[] = [
     { colorAttachments: [{ view: { texture: textures[0], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
     { colorAttachments: [{ view: { texture: textures[1], baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }], sampleCount: 4 },
 ];
 
 // -- Init VertexArray
-const vertexArrays: { vertices?: IVertexAttributes }[] = [
+const vertexArrays: { vertices?: VertexAttributes }[] = [
     {
         vertices: {
             position: { data: positions, format: "float32x2" },
@@ -153,33 +150,40 @@ const vertexArrays: { vertices?: IVertexAttributes }[] = [
 ];
 
 // -- Render
-const passEncoders: IPassEncoder[] = [];
+const passEncoders: PassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: framebuffers[i],
         renderObjects: [{
             pipeline: programs[i],
-            vertices: vertexArrays[i].vertices,
-            uniforms: { MVP: IDENTITY },
-            drawVertex: { vertexCount },
+            bindingResources: { MVP: IDENTITY },
+            geometry: {
+                primitive: { topology: "triangle-list" },
+                vertices: vertexArrays[i].vertices,
+                draw: { __type__: "DrawVertex", vertexCount },
+            }
         }]
     };
     passEncoders.push(rp);
 }
 
-const renderObjects: IRenderPassObject[] = [];
+const renderObjects: RenderPassObject[] = [];
 // Pass 2
-const rp2: IRenderPass = {
+const rp2: RenderPass = {
     renderObjects,
 };
-const ro: IRenderObject = {
+const ro: RenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
-    vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+    geometry: {
+        primitive: { topology: "triangle-list" },
+        vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
+    },
 };
 
 const scaleVector3 = vec3.create();
@@ -194,11 +198,13 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         {
             ...ro,
             viewport: viewport[i],
-            uniforms: {
+            bindingResources: {
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            drawVertex: { vertexCount: 6 },
+            geometry: {
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         }
     );
 }

@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,11 +12,11 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // --Init WebGL Context
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -73,7 +73,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Init Vertex Array
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: vertices, format: "float32x3", arrayStride: 40, offset: 0 },
             normal: { data: vertices, format: "float32x3", arrayStride: 40, offset: 12 },
@@ -81,24 +81,26 @@ import { getShaderSource } from "./utility";
         },
     };
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
-        indices: elementData,
-        uniforms: {
+        bindingResources: {
             PerDraw: transforms,
             PerPass: lightPos,
             PerScene: material,
         },
-        drawIndexed: { indexCount: 6, firstIndex: 0 }
+        geometry:{
+            vertices: vertexArray.vertices,
+            indices: elementData,
+            draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }
+        },
     };
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
 
-    const submit: ISubmit = { commandEncoders: [{ passEncoders: [rp] }] };
+    const submit: Submit = { commandEncoders: [{ passEncoders: [rp] }] };
 
     let uTime = 0;
     function render()

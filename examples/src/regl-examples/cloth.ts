@@ -1,5 +1,5 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
-import { getIGLVertexBuffer, IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderObject, Submit } from "@feng3d/render-api";
+import { getIGLBuffer, SamplerTexture, WebGL } from "@feng3d/webgl";
 
 import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
@@ -164,18 +164,20 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            normal: { data: new Float32Array(normals), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+    const renderObject: RenderObject = {
+        geometry:{
+            vertices: {
+                position: { data: new Float32Array(positions), format: "float32x3" },
+                normal: { data: new Float32Array(normals), format: "float32x3" },
+                uv: { data: new Float32Array(uvs), format: "float32x2" },
+            },
+            indices: new Uint16Array(indices),
+            draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
-        indices: new Uint16Array(indices),
-        drawIndexed: { indexCount: indices.length },
-        uniforms: {},
+        bindingResources: {},
         pipeline: {
             vertex: {
-                code: `precision mediump float;
+                code: /* wgsl */`precision mediump float;
 
         attribute vec3 position;
         attribute vec3 normal;
@@ -192,7 +194,7 @@ import * as vec3 from "./stackgl/gl-vec3";
           gl_Position = projection * view * vec4(position, 1);
         }` },
             fragment: {
-                code: `precision mediump float;
+                code: /* wgsl */`precision mediump float;
 
         varying vec2 vUv;
         varying vec3 vNormal;
@@ -221,7 +223,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
@@ -359,8 +361,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        getIGLVertexBuffer(renderObject.vertices.position.data).data = new Float32Array(positions);
-        getIGLVertexBuffer(renderObject.vertices.normal.data).data = new Float32Array(normals);
+        getIGLBuffer(renderObject.geometry.vertices.position.data).data = new Float32Array(positions);
+        getIGLBuffer(renderObject.geometry.vertices.normal.data).data = new Float32Array(normals);
 
         tick++;
 
@@ -369,8 +371,8 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        renderObject.uniforms.view = camera.view();
-        renderObject.uniforms.projection
+        renderObject.bindingResources.view = camera.view();
+        renderObject.bindingResources.projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -386,14 +388,14 @@ import * as vec3 from "./stackgl/gl-vec3";
     img.src = "../../assets/cloth.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = {
+    const diffuse: SamplerTexture = {
         texture: {
             size: [img.width, img.height],
             generateMipmap: true,
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
     };
-    renderObject.uniforms.texture = diffuse;
+    renderObject.bindingResources.texture = diffuse;
 
     draw();
 })();

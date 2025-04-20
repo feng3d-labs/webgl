@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,11 +10,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.width = canvas.height * 960 / 540;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -38,15 +38,15 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             texcoord: { data: texCoords, format: "float32x2" },
         }
     };
 
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: Texture;
+    let sampler: Sampler;
     loadImage("../../assets/img/di-animation-array.jpg", function (image)
     {
         const NUM_IMAGES = 3;
@@ -68,7 +68,7 @@ import { getShaderSource, loadImage } from "./utility";
             size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
             dimension: "2d-array",
             format: "rgba8unorm",
-            sources: [{ __type: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
+            sources: [{ __type__: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
         };
         sampler = {
             minFilter: "linear",
@@ -82,17 +82,19 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IRenderObject = {
+        const ro: RenderObject = {
             pipeline: program,
-            vertices: vertexArray.vertices,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            drawVertex: { vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         };
 
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: "clear" }] },
             renderObjects: [ro],
         };
@@ -101,7 +103,7 @@ import { getShaderSource, loadImage } from "./utility";
         (function render()
         {
             // -- Render
-            ro.uniforms.layer = frame;
+            ro.bindingResources.layer = frame;
 
             webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

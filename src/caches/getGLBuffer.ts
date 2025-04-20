@@ -1,13 +1,8 @@
-import { IBuffer } from "@feng3d/render-api";
+import { Buffer, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _buffers: Map<IBuffer, WebGLBuffer>
-    }
-
     interface WebGLBuffer
     {
         /**
@@ -17,13 +12,13 @@ declare global
     }
 }
 
-export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
+export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
 {
-    let webGLBuffer = gl._buffers.get(buffer);
+    let webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer) return webGLBuffer;
 
     webGLBuffer = gl.createBuffer();
-    gl._buffers.set(buffer, webGLBuffer);
+    gl._bufferMap.set(buffer, webGLBuffer);
 
     const target = buffer.target;
 
@@ -66,7 +61,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
             }
             gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
         });
-        buffer.writeBuffers = null;
+        (buffer as UnReadonly<Buffer>).writeBuffers = null;
     };
 
     const dataChange = () =>
@@ -75,7 +70,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
 
         const writeBuffers = buffer.writeBuffers || [];
         writeBuffers.unshift({ data: buffer.data });
-        buffer.writeBuffers = writeBuffers;
+        (buffer as UnReadonly<Buffer>).writeBuffers = writeBuffers;
     };
 
     dataChange();
@@ -95,12 +90,12 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
     return webGLBuffer;
 }
 
-export function deleteBuffer(gl: WebGLRenderingContext, buffer: IBuffer)
+export function deleteBuffer(gl: WebGLRenderingContext, buffer: Buffer)
 {
-    const webGLBuffer = gl._buffers.get(buffer);
+    const webGLBuffer = gl._bufferMap.get(buffer);
     if (webGLBuffer)
     {
-        gl._buffers.delete(buffer);
+        gl._bufferMap.delete(buffer);
         webGLBuffer.destroy();
         delete webGLBuffer.destroy;
         //

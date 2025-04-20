@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { angleNormals } from "./mikolalysenko/angle-normals";
@@ -11,7 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
+const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
 
 const camera = createCamera({
     center: [0, 2.5, 0]
@@ -21,14 +21,16 @@ const positions = bunny.positions.flat();
 const indices = bunny.cells.flat();
 const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
-const renderObject: IRenderObject = {
-    vertices: {
-        position: { data: new Float32Array(positions), format: "float32x3" },
-        normal: { data: new Float32Array(normals), format: "float32x3" },
+const renderObject: RenderObject = {
+    geometry: {
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+            normal: { data: new Float32Array(normals), format: "float32x3" },
+        },
+        indices: new Uint16Array(indices),
+        draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
-    indices: new Uint16Array(indices),
-    drawIndexed: { indexCount: indices.length },
-    uniforms: {},
+    bindingResources: {},
     pipeline: {
         vertex: {
             code: `precision mediump float;

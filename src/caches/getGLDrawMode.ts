@@ -1,6 +1,6 @@
-import { IPrimitiveTopology } from "@feng3d/render-api";
+import { PrimitiveTopology } from "@feng3d/render-api";
 
-export function getIGLDrawMode(topology: IPrimitiveTopology): IGLDrawMode
+export function getGLDrawMode(topology: PrimitiveTopology): GLDrawMode
 {
     let drawMode = drawModeMap[topology];
 
@@ -11,7 +11,7 @@ export function getIGLDrawMode(topology: IPrimitiveTopology): IGLDrawMode
     return drawMode;
 }
 
-const drawModeMap: { [key: string]: IGLDrawMode } = {
+const drawModeMap: { [key: string]: GLDrawMode } = {
     "point-list": "POINTS",
     "line-list": "LINES",
     "line-strip": "LINE_STRIP",
@@ -44,4 +44,4 @@ const drawModeMap: { [key: string]: IGLDrawMode } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type IGLDrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";
+export type GLDrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";

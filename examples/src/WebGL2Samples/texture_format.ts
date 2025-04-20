@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, ITextureFormat, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -11,7 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Viewport
@@ -49,9 +49,9 @@ import { getShaderSource, loadImage } from "./utility";
     }
 
     // -- Init program
-    const programUint: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
+    const programUint: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
 
-    const programNormalized: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
+    const programNormalized: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -73,7 +73,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             texcoord: { data: texCoords, format: "float32x2" },
@@ -95,7 +95,7 @@ import { getShaderSource, loadImage } from "./utility";
             MAX: 9
         };
 
-        const textureFormats: { format: ITextureFormat }[] = new Array(TextureTypes.MAX);
+        const textureFormats: { format: TextureFormat }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
             format: "rgba8unorm",
@@ -135,8 +135,8 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
 
-        const textures: ITexture[] = new Array(TextureTypes.MAX);
-        const samplers: ISampler[] = new Array(TextureTypes.MAX);
+        const textures: Texture[] = new Array(TextureTypes.MAX);
+        const samplers: Sampler[] = new Array(TextureTypes.MAX);
         let i = 0;
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
@@ -163,8 +163,8 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const renderObjects: IRenderPassObject[] = [];
-        const rp: IRenderPass = {
+        const renderObjects: RenderPassObject[] = [];
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects
         };
@@ -174,13 +174,15 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    vertices: vertexArray.vertices,
                     pipeline: programNormalized,
-                    uniforms: {
+                    bindingResources: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    drawVertex: { vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type__: "DrawVertex", vertexCount: 6 },
+                    }
                 });
         }
 
@@ -190,13 +192,15 @@ import { getShaderSource, loadImage } from "./utility";
             renderObjects.push(
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                    vertices: vertexArray.vertices,
                     pipeline: programUint,
-                    uniforms: {
+                    bindingResources: {
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    drawVertex: { vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type__: "DrawVertex", vertexCount: 6 },
+                    }
                 });
         }
 

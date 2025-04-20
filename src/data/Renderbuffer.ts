@@ -1,15 +1,15 @@
 /**
- * 渲染缓冲区。
+ * WebGL渲染缓冲区。
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/renderbufferStorageMultisample
  */
-export interface IGLRenderbuffer
+export interface Renderbuffer
 {
     /**
-     * 渲染缓冲区内部格式。
+     * WebGL渲染缓冲区内部格式。
      */
-    readonly internalformat: GLRenderbufferInternalformat,
+    readonly internalformat: RenderbufferInternalformat,
 
     /**
      * 宽度。
@@ -23,6 +23,8 @@ export interface IGLRenderbuffer
 }
 
 /**
+ * WebGL渲染缓冲区内部格式。
+ * 
  * A GLenum specifying the internal format of the renderbuffer. Possible values:
  *
  * * gl.RGBA4: 4 red bits, 4 green bits, 4 blue bits 4 alpha bits.
@@ -85,7 +87,7 @@ export interface IGLRenderbuffer
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  */
-export type GLRenderbufferInternalformat = "RGBA4" | "RGB565" | "RGB5_A1" | "DEPTH_COMPONENT16" | "STENCIL_INDEX8" | "DEPTH_STENCIL" // WebGL1
+export type RenderbufferInternalformat = "RGBA4" | "RGB565" | "RGB5_A1" | "DEPTH_COMPONENT16" | "STENCIL_INDEX8" | "DEPTH_STENCIL" // WebGL1
     | "R8" | "R8UI" | "R8I" | "R16UI" | "R16I" | "R32UI" | "R32I" | "RG8" | "RG8UI" | "RG8I" // WebGL2
     | "RG16UI" | "RG16I" | "RG32UI" | "RG32I" | "RGB8" | "RGBA8" | "SRGB8_ALPHA8" | "RGB10_A2" // WebGL2
     | "RGBA8UI" | "RGBA8I" | "RGB10_A2UI" | "RGBA16UI" | "RGBA16I" | "RGBA32I" | "RGBA32UI" // WebGL2

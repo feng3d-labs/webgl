@@ -1,5 +1,5 @@
-import { ICopyBufferToBuffer, IRenderPass, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLVertexBuffer, WebGL, getIGLBuffer } from "@feng3d/webgl";
+import { GBuffer, CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,13 +12,12 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init Program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "triangle-list" },
     };
 
     // -- Init Buffer
@@ -30,31 +29,34 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: IGLVertexBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: GBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
-    const cb: ICopyBufferToBuffer = {
-        __type: "CopyBufferToBuffer",
+    const cb: CopyBufferToBuffer = {
+        __type__: "CopyBufferToBuffer",
         source: vertexPosBufferSrc,
         destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),
         sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
     };
 
     // -- Init Vertex Array
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             pos: { data: vertexPosBufferDst, format: "float32x2" },
         }
     };
 
     // -- Render
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertices: vertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            geometry: {
+                primitive: { topology: "triangle-list" },
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            },
         }]
     };
 

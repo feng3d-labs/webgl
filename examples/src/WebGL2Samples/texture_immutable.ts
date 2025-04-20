@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource, loadImage } from "./utility";
@@ -12,7 +12,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     const Corners = {
@@ -38,9 +38,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
-    const program3D: IRenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
+    const program3D: RenderPipeline = { vertex: { code: getShaderSource("vs-3d") }, fragment: { code: getShaderSource("fs-3d") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -62,7 +62,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             in_texcoord: { data: texCoords, format: "float32x2" },
@@ -83,7 +83,7 @@ import { getShaderSource, loadImage } from "./utility";
         ]);
 
         // -- Init 2D Texture
-        const texture2D: ITexture = {
+        const texture2D: Texture = {
             format: "rgba8unorm",
             mipLevelCount: 1,
             size: [512, 512],
@@ -91,7 +91,7 @@ import { getShaderSource, loadImage } from "./utility";
                 image, flipY: false,
             }],
         };
-        const sampler2D: ISampler = {
+        const sampler2D: Sampler = {
             minFilter: "nearest",
             magFilter: "linear",
             addressModeU: "clamp-to-edge",
@@ -99,17 +99,19 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         // -- Render
-        const ro: IRenderObject = {
+        const ro: RenderObject = {
             pipeline: program,
-            vertices: vertexArray.vertices,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
             },
-            drawVertex: { vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         };
 
-        const renderObjects: IRenderPassObject[] = [];
-        const rp: IRenderPass = {
+        const renderObjects: RenderPassObject[] = [];
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects
         };
@@ -119,8 +121,8 @@ import { getShaderSource, loadImage } from "./utility";
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 ...ro,
                 pipeline: program,
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: { texture: texture2D, sampler: sampler2D },
                 },
             });
@@ -131,8 +133,8 @@ import { getShaderSource, loadImage } from "./utility";
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 ...ro,
                 pipeline: program3D,
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: { texture: texture3D, sampler: sampler3D },
                 },
             });
@@ -166,15 +168,15 @@ import { getShaderSource, loadImage } from "./utility";
             }
         }
 
-        const texture3D: ITexture = {
+        const texture3D: Texture = {
             dimension: "3d",
             format: "r8uint",
             generateMipmap: true,
             mipLevelCount: Math.log2(SIZE),
             size: [SIZE, SIZE, SIZE],
-            sources: [{ __type: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
+            sources: [{ __type__: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
         };
-        const sampler3D: ISampler = {
+        const sampler3D: Sampler = {
             lodMinClamp: 0,
             lodMaxClamp: Math.log2(SIZE),
             minFilter: "linear",

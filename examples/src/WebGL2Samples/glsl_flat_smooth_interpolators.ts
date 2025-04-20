@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, IVertexAttributes, IViewport } from "@feng3d/render-api";
-import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderPassObject, RenderPass, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
 import { getShaderSource } from "./utility";
@@ -10,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -25,7 +25,7 @@ const VIEWPORTS = {
     MAX: 2
 };
 
-const viewport: IViewport[] = new Array(VIEWPORTS.MAX);
+const viewport: Viewport[] = new Array(VIEWPORTS.MAX);
 
 viewport[VIEWPORTS.LEFT] = {
     x: 0,
@@ -42,15 +42,13 @@ viewport[VIEWPORTS.RIGHT] = {
 };
 
 // -- Initialize program
-const programs: IRenderPipeline[] = [
+const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
-        primitive: { topology: "triangle-list" },
         depthStencil: { depthCompare: "less-equal" },
     },
     {
         vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
-        primitive: { topology: "triangle-list" },
         depthStencil: { depthCompare: "less-equal" },
     }
 ];
@@ -64,7 +62,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: { vertexArray: { vertices?: IVertexAttributes }, indices: IIndicesDataTypes }[]
+        [key: string]: { vertexArray: { vertices?: VertexAttributes }, indices: IIndicesDataTypes }[]
     } = {};
 
     // var in loop
@@ -73,7 +71,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     };
     let primitive: Primitive;
     //  { matrix: mat4, attributes: { [key: string]: { size: number, type: number, stride: number, offset: number } }, vertexBuffer, indices };
-    let vertexArray: { vertices?: IVertexAttributes };
+    let vertexArray: { vertices?: VertexAttributes };
 
     let i: number; let len: number;
 
@@ -102,11 +100,11 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             vertexArray = {
                 vertices: {
                     position: {
-                        data: vertices, format: getIVertexFormat(positionInfo.size),
+                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[positionInfo.size],
                         arrayStride: positionInfo.stride, offset: positionInfo.offset
                     },
                     normal: {
-                        data: vertices, format: getIVertexFormat(normalInfo.size),
+                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[normalInfo.size],
                         arrayStride: normalInfo.stride, offset: normalInfo.offset
                     },
                 },
@@ -137,8 +135,8 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
     // -- Render loop
     (function render()
     {
-        const renderObjects: IRenderPassObject[] = [];
-        const rp: IRenderPass = {
+        const renderObjects: RenderPassObject[] = [];
+        const rp: RenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
@@ -171,13 +169,16 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                         {
                             viewport: viewport[i],
                             pipeline: programs[i],
-                            vertices: vertexArray.vertices,
-                            indices,
-                            uniforms: {
+                            bindingResources: {
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },
-                            drawIndexed: { indexCount: primitive.indices.length, firstIndex: 0 },
+                            geometry: {
+                                primitive: { topology: "triangle-list" },
+                                vertices: vertexArray.vertices,
+                                indices,
+                                draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
+                            },
                         });
                 }
             }

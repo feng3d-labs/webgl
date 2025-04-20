@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
@@ -12,18 +12,17 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: {
             code: getShaderSource("fs"), targets: [{
 
             }]
         },
         depthStencil: {},
-        primitive: { topology: "triangle-list", cullFace: "back" }
     };
 
     // -- Init buffers
@@ -116,7 +115,7 @@ import { getShaderSource, loadImage } from "./utility";
     ];
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x3" },
             texcoord: { data: texCoords, format: "float32x2" },
@@ -126,8 +125,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: Texture;
+    let sampler: Sampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -206,15 +205,18 @@ import { getShaderSource, loadImage } from "./utility";
         lastMouseY = newY;
     };
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
-        indices: new Uint16Array(cubeVertexIndices),
-        uniforms: {},
-        drawIndexed: { indexCount: 36 },
+        bindingResources: {},
+        geometry:{
+            primitive: { topology: "triangle-list", cullFace: "back" },
+            vertices: vertexArray.vertices,
+            indices: new Uint16Array(cubeVertexIndices),
+            draw: { __type__: "DrawIndexed", indexCount: 36 },
+        }
     };
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro]
     };
@@ -230,9 +232,9 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        ro.uniforms.mvMatrix = mvMatrix;
-        ro.uniforms.pMatrix = perspectiveMatrix;
-        ro.uniforms.diffuse = { texture, sampler };
+        ro.bindingResources.mvMatrix = mvMatrix;
+        ro.bindingResources.pMatrix = perspectiveMatrix;
+        ro.bindingResources.diffuse = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

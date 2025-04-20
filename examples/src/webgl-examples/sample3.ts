@@ -1,4 +1,4 @@
-import { IRenderPass } from "@feng3d/render-api";
+import { RenderPass } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -14,9 +14,9 @@ function main()
   // Draw the scene
   const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+  const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
-  const renderPass: IRenderPass = {
+  const renderPass: RenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -29,7 +29,6 @@ function main()
     },
     renderObjects: [{
       pipeline: {
-        primitive: { topology: "triangle-strip" },
         vertex: {
           code: `
           attribute vec4 aVertexPosition;
@@ -54,31 +53,34 @@ function main()
         ` },
         depthStencil: { depthCompare: "less-equal" }
       },
-      vertices: {
-        aVertexPosition: {
-          format: "float32x2",
-          data: new Float32Array([
-            1.0, 1.0,
-            -1.0, 1.0,
-            1.0, -1.0,
-            -1.0, -1.0,
-          ]),
+      geometry: {
+        primitive: { topology: "triangle-strip" },
+        vertices: {
+          aVertexPosition: {
+            format: "float32x2",
+            data: new Float32Array([
+              1.0, 1.0,
+              -1.0, 1.0,
+              1.0, -1.0,
+              -1.0, -1.0,
+            ]),
+          },
+          aVertexColor: {
+            format: "float32x4",
+            data: new Float32Array([
+              1.0, 1.0, 1.0, 1.0, // white
+              1.0, 0.0, 0.0, 1.0, // red
+              0.0, 1.0, 0.0, 1.0, // green
+              0.0, 0.0, 1.0, 1.0, // blue
+            ]),
+          },
         },
-        aVertexColor: {
-          format: "float32x4",
-          data: new Float32Array([
-            1.0, 1.0, 1.0, 1.0, // white
-            1.0, 0.0, 0.0, 1.0, // red
-            0.0, 1.0, 0.0, 1.0, // green
-            0.0, 0.0, 1.0, 1.0, // blue
-          ]),
-        },
+        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
       },
-      uniforms: {
+      bindingResources: {
         uProjectionMatrix: projectionMatrix,
         uModelViewMatrix: modelViewMatrix,
       },
-      drawVertex: { firstVertex: 0, vertexCount: 4 },
     }],
   };
 

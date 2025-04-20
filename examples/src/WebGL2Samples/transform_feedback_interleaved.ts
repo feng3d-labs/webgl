@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPipeline, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLVertexBuffer, IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderPipeline, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { getIGLBuffer, TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 (function ()
@@ -12,7 +12,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     // -- Init Program
@@ -21,7 +21,7 @@ import { getShaderSource } from "./utility";
 
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
     {
-        const programTransform: IGLTransformFeedbackPipeline = {
+        const programTransform: TransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
             transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "INTERLEAVED_ATTRIBS" },
         };
@@ -29,7 +29,7 @@ import { getShaderSource } from "./utility";
         return programTransform;
     })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
 
-    const programFeedback: IRenderPipeline = {
+    const programFeedback: RenderPipeline = {
         vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
     };
 
@@ -45,7 +45,7 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: IVertexDataTypes[] = [
+    const buffers: VertexDataTypes[] = [
         // Transform buffer
         vertices,
         // Feedback empty buffer
@@ -53,7 +53,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[] = [
+    const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[] = [
         {
             vertices: {
                 position: { data: buffers[PROGRAM_TRANSFORM], format: "float32x4" },
@@ -68,7 +68,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init TransformFeedback
-    const transformFeedback: IGLTransformFeedback = {
+    const transformFeedback: TransformFeedback = {
         bindBuffers: [
             { index: 0, data: buffers[PROGRAM_FEEDBACK] }
         ]
@@ -88,14 +88,14 @@ import { getShaderSource } from "./utility";
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type: "TransformFeedbackPass",
+                    __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [
                         {
                             pipeline: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,
-                            drawVertex: { vertexCount: VERTEX_COUNT },
+                            draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
                         }
                     ],
                 },
@@ -105,9 +105,11 @@ import { getShaderSource } from "./utility";
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programFeedback,
-                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                            drawVertex: { vertexCount: VERTEX_COUNT },
+                            geometry:{
+                                vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                                indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                                draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
+                            },
                         }
                     ],
                 }]
@@ -116,8 +118,8 @@ import { getShaderSource } from "./utility";
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
-    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_TRANSFORM]));
-    webgl.deleteBuffer(getIGLVertexBuffer(buffers[PROGRAM_FEEDBACK]));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_TRANSFORM]));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_FEEDBACK]));
     webgl.deleteProgram(programTransform);
     webgl.deleteProgram(programFeedback);
 })();

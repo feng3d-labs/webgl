@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes } from "@feng3d/render-api";
+import { RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 const canvas = document.createElement("canvas");
@@ -21,7 +21,7 @@ const offsets = [{ offset: [-1, -1] },
 { offset: [1, 0] },
 { offset: [1, 1] }];
 
-const pipeline: IRenderPipeline = {
+const pipeline: RenderPipeline = {
     vertex: {
         code: `precision mediump float;
     attribute vec2 position;
@@ -41,7 +41,7 @@ const pipeline: IRenderPipeline = {
     depthStencil: { depthWriteEnabled: false },
 };
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: {
             data: new Float32Array([
@@ -56,25 +56,27 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 function getRenderObject(batchId: number)
 {
-    const renderObject: IRenderObject = {
-        vertices: vertexArray.vertices,
-        uniforms: {
+    const renderObject: RenderObject = {
+        geometry: {
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 3 }
+        },
+        bindingResources: {
             offset: offsets[batchId].offset,
         },
-        pipeline,
-        drawVertex: { vertexCount: 3 }
+        pipeline: pipeline,
     };
 
     return renderObject;
 }
 
-const renderObjects: IRenderObject[] = [];
+const renderObjects: RenderObject[] = [];
 for (let i = 0; i < offsets.length; i++)
 {
     renderObjects.push(getRenderObject(i));
 }
 
-const submit: ISubmit = {
+const submit: Submit = {
     commandEncoders: [{
         passEncoders: [
             {
@@ -97,12 +99,12 @@ function draw()
         batchId = i;
         //
         const ro = renderObjects[i];
-        ro.uniforms.color = [
+        ro.bindingResources.color = [
             Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
             Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
             Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
             1];
-        ro.uniforms.angle = 0.01 * tick;
+        ro.bindingResources.angle = 0.01 * tick;
     }
 
     webgl.submit(submit);

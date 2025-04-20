@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
+const renderingContext: CanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
@@ -51,15 +51,13 @@ viewport[Textures.BLUE] = {
 // -- Initialize program
 
 // Multiple out shaders
-const multipleOutputProgram: IRenderPipeline = {
+const multipleOutputProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
-    primitive: { topology: "triangle-list" },
 };
 
 // Layer shaders
-const layerProgram: IRenderPipeline = {
+const layerProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-layer") }, fragment: { code: getShaderSource("fs-layer") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -84,13 +82,13 @@ const texcoords = new Float32Array([
 
 // -- Initialize vertex array
 
-const multipleOutputVertexArray: { vertices?: IVertexAttributes } = {
+const multipleOutputVertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: positions, format: "float32x2" },
     }
 };
 
-const layerVertexArray: { vertices?: IVertexAttributes } = {
+const layerVertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: positions, format: "float32x2" },
         textureCoordinates: { data: texcoords, format: "float32x2" },
@@ -102,16 +100,16 @@ const layerVertexArray: { vertices?: IVertexAttributes } = {
 const w = 16;
 const h = 16;
 
-const texture: ITexture = {
+const texture: Texture = {
     dimension: "2d-array",
     format: "rgba8unorm",
     size: [w, h, 3],
 };
-const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest", lodMinClamp: 0, lodMaxClamp: 0 };
+const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest", lodMinClamp: 0, lodMaxClamp: 0 };
 
 // -- Initialize frame buffer
 
-const frameBuffer: IRenderPassDescriptor = {
+const frameBuffer: RenderPassDescriptor = {
     colorAttachments: [
         { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.RED } },
         { view: { texture, baseMipLevel: 0, baseArrayLayer: Textures.GREEN } },
@@ -130,32 +128,38 @@ const matrix = new Float32Array([
     0.0, 0.0, 0.0, 1.0
 ]);
 
-const renderPass1: IRenderPass = {
+const renderPass1: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [
         {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
-            uniforms: { mvp: matrix },
-            vertices: multipleOutputVertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            bindingResources: { mvp: matrix },
+            geometry:{
+                primitive: { topology: "triangle-list" },
+                vertices: multipleOutputVertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         }]
 };
 
 // Pass 2
-const renderObjects: IRenderPassObject[] = [];
-const renderPass: IRenderPass = {
+const renderObjects: RenderPassObject[] = [];
+const renderPass: RenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
     renderObjects,
 };
 
-const renderObject: IRenderObject = {
+const renderObject: RenderObject = {
     pipeline: layerProgram,
-    uniforms: { mvp: matrix, diffuse: { texture, sampler } },
-    vertices: layerVertexArray.vertices,
-
+    bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
+    geometry: {
+        primitive: { topology: "triangle-list" },
+        vertices: layerVertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
+    }
 };
 
 //
@@ -165,8 +169,11 @@ for (let i = 0; i < Textures.MAX; ++i)
         {
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             ...renderObject,
-            uniforms: { ...renderObject.uniforms, layer: i },
-            drawVertex: { vertexCount: 6 },
+            bindingResources: { ...renderObject.bindingResources, layer: i },
+            geometry: {
+                ...renderObject.geometry,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         }
     );
 }

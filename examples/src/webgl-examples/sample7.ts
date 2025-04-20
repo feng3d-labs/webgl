@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
-import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
+import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -13,7 +13,7 @@ async function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
@@ -21,9 +21,8 @@ async function main()
 
     const texture = await loadTexture("../../cubetexture.png");
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -67,26 +66,29 @@ async function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        vertices: {
-            aVertexPosition: {
-                format: "float32x3",
-                data: buffers.position,
+        bindingResources: { uSampler: texture },
+        geometry: {
+            primitive: { topology: "triangle-list" },
+            vertices: {
+                aVertexPosition: {
+                    format: "float32x3",
+                    data: buffers.position,
+                },
+                aVertexNormal: {
+                    format: "float32x3",
+                    data: buffers.normal,
+                },
+                aTextureCoord: {
+                    format: "float32x2",
+                    data: buffers.textureCoord,
+                },
             },
-            aVertexNormal: {
-                format: "float32x3",
-                data: buffers.normal,
-            },
-            aTextureCoord: {
-                format: "float32x2",
-                data: buffers.textureCoord,
-            },
-        },
-        indices: buffers.indices,
-        uniforms: { uSampler: texture },
-        drawIndexed: { firstIndex: 0, indexCount: 36 },
+            indices: buffers.indices,
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        }
     };
 
-    const renderPass: IRenderPass = {
+    const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -111,9 +113,9 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
-        renderObject.uniforms.uNormalMatrix = normalMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uNormalMatrix = normalMatrix;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
@@ -288,21 +290,21 @@ async function loadTexture(url: string)
 
     const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [img.width, img.height],
         format: "rgba8unorm",
         sources: [{ image: img }],
         generateMipmap,
     };
 
-    let sampler: ISampler = {};
+    let sampler: Sampler = {};
 
     if (!generateMipmap)
     {
         sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
     }
 
-    return { texture, sampler } as IGLSamplerTexture;
+    return { texture, sampler } as SamplerTexture;
 }
 
 function isPowerOf2(value: number)

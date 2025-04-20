@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderObject, IRenderPipeline, ISubmit, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { IGLCanvasContext, IGLTransformFeedback, IGLTransformFeedbackObject, IGLTransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource } from "./utility";
 
@@ -13,7 +13,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     canvas.addEventListener("webglcontextlost", function (event)
@@ -58,12 +58,12 @@ import { getShaderSource } from "./utility";
     const NUM_LOCATIONS = 5;
 
     // -- Init Vertex Arrays and Buffers
-    const vertexArrays: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes }[][] = [];
+    const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
-    const transformFeedbacks: IGLTransformFeedback[] = [];
+    const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: IVertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -108,14 +108,14 @@ import { getShaderSource } from "./utility";
         };
     }
 
-    function initProgram(): [IGLTransformFeedbackPipeline, IRenderPipeline]
+    function initProgram(): [TransformFeedbackPipeline, RenderPipeline]
     {
-        const transformFeedbackPipeline: IGLTransformFeedbackPipeline = {
+        const transformFeedbackPipeline: TransformFeedbackPipeline = {
             vertex: { code: getShaderSource("vs-emit") },
             transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
         };
 
-        const program: IRenderPipeline = {
+        const program: RenderPipeline = {
             vertex: { code: getShaderSource("vs-draw") },
             fragment: {
                 code: getShaderSource("fs-draw"),
@@ -126,36 +126,38 @@ import { getShaderSource } from "./utility";
                     }
                 }]
             },
-            primitive: { topology: "point-list" },
         };
 
         return [transformFeedbackPipeline, program];
     }
 
-    const transformRO: IGLTransformFeedbackObject = {
+    const transformRO: TransformFeedbackObject = {
         pipeline: transformFeedbackPipeline,
         vertices: null,
         transformFeedback: null,
         uniforms: {
             u_acceleration: [0.0, ACCELERATION],
         },
-        drawVertex: { vertexCount: NUM_PARTICLES },
+        draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
-    const renderRO: IRenderObject = {
+    const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
-        drawVertex: { vertexCount: NUM_PARTICLES },
+        geometry: {
+            draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
+            primitive: { topology: "point-list" },
+        }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type: "TransformFeedbackPass",
+                    __type__: "TransformFeedbackPass",
                     transformFeedbackObjects: [transformRO],
                 },
                 {
@@ -186,8 +188,8 @@ import { getShaderSource } from "./utility";
         transform();
 
         //
-        renderRO.vertices = vertexArrays[currentSourceIdx][1].vertices;
-        renderRO.indices = vertexArrays[currentSourceIdx][1].indices;
+        renderRO.geometry.vertices = vertexArrays[currentSourceIdx][1].vertices;
+        renderRO.geometry.indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit(submit);
 

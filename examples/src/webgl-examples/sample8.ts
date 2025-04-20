@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, ISampler, ITexture } from "@feng3d/render-api";
-import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
+import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -15,7 +15,7 @@ function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
@@ -25,9 +25,8 @@ function main()
 
     const video = setupVideo("../../Firefox.mp4");
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -71,26 +70,29 @@ function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        vertices: {
-            aVertexPosition: {
-                format: "float32x3",
-                data: buffers.position,
+        geometry: {
+            primitive: { topology: "triangle-list" },
+            vertices: {
+                aVertexPosition: {
+                    format: "float32x3",
+                    data: buffers.position,
+                },
+                aVertexNormal: {
+                    format: "float32x3",
+                    data: buffers.normal,
+                },
+                aTextureCoord: {
+                    format: "float32x2",
+                    data: buffers.textureCoord,
+                },
             },
-            aVertexNormal: {
-                format: "float32x3",
-                data: buffers.normal,
-            },
-            aTextureCoord: {
-                format: "float32x2",
-                data: buffers.textureCoord,
-            },
+            indices: buffers.indices,
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
-        indices: buffers.indices,
-        uniforms: { uSampler: texture },
-        drawIndexed: { firstIndex: 0, indexCount: 36 },
+        bindingResources: { uSampler: texture },
     };
 
-    const renderPass: IRenderPass = {
+    const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -120,9 +122,9 @@ function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
-        renderObject.uniforms.uNormalMatrix = normalMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uNormalMatrix = normalMatrix;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
@@ -318,14 +320,14 @@ function initBuffers()
 //
 // Initialize a texture.
 //
-function initTexture(): IGLSamplerTexture
+function initTexture(): SamplerTexture
 {
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [1, 1],
         format: "rgba8unorm",
-        sources: [{ __type: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
+        sources: [{ __type__: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
-    const sampler: ISampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
+    const sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
 
     return { texture, sampler };
 }
@@ -333,7 +335,7 @@ function initTexture(): IGLSamplerTexture
 //
 // copy the video texture
 //
-function updateTexture(texture: ITexture, video: HTMLVideoElement)
+function updateTexture(texture: Texture, video: HTMLVideoElement)
 {
     // 修改纹理尺寸
     if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)

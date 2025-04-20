@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 
 import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
 import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";
@@ -101,21 +101,21 @@ export function createCamera(props)
     lookAt(cameraState.view, eye, center, up);
   }
 
-  const injectContext = (renderObject: IRenderObject, viewportWidth: number, viewportHeight: number) =>
+  const injectContext = (renderObject: RenderObject, viewportWidth: number, viewportHeight: number) =>
   {
     Object.keys(cameraState).forEach(function (name)
     {
-      renderObject.uniforms[name] = setupCamera[name];
+      renderObject.bindingResources[name] = setupCamera[name];
     });
 
-    renderObject.uniforms["projection"] = perspective(cameraState.projection,
+    renderObject.bindingResources["projection"] = perspective(cameraState.projection,
       Math.PI / 4.0,
       viewportWidth / viewportHeight,
       0.01,
       1000.0);
   };
 
-  function setupCamera(renderObject: IRenderObject, viewportWidth: number, viewportHeight: number)
+  function setupCamera(renderObject: RenderObject, viewportWidth: number, viewportHeight: number)
   {
     updateCamera();
     injectContext(renderObject, viewportWidth, viewportHeight);

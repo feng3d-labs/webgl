@@ -1,14 +1,15 @@
-import { IRenderPass, IRenderPassObject } from "@feng3d/render-api";
-import { IGLOcclusionQuery, IGLQuery } from "../data/IGLOcclusionQuery";
+import { RenderPassObject, OcclusionQuery, RenderPass } from "@feng3d/render-api";
 
-export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly IRenderPassObject[])
+import "../data/polyfills/OcclusionQuery";
+
+export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly RenderPassObject[])
 {
     if (!renderObjects) return defautRenderOcclusionQuery;
     if (!(gl instanceof WebGL2RenderingContext)) return defautRenderOcclusionQuery;
     let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects["_GLRenderOcclusionQuery"];
     if (renderOcclusionQuery) return renderOcclusionQuery;
 
-    const occlusionQueryObjects: IGLOcclusionQuery[] = renderObjects.filter((cv) => cv.__type === "OcclusionQuery") as any;
+    const occlusionQueryObjects: OcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === "OcclusionQuery") as any;
     if (occlusionQueryObjects.length === 0)
     {
         renderObjects["_GLRenderOcclusionQuery"] = defautRenderOcclusionQuery;
@@ -30,13 +31,13 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
     /**
      * 查询结果。
      */
-    const resolve = (renderPass: IRenderPass) =>
+    const resolve = (renderPass: RenderPass) =>
     {
         const results = occlusionQueryObjects.map((v) => v._step.resolve());
 
         Promise.all(results).then((v) =>
         {
-            renderPass.occlusionQueryResults = v;
+            renderPass.onOcclusionQuery?.(occlusionQueryObjects, v);
         });
     };
 
@@ -48,14 +49,14 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
 interface GLRenderOcclusionQuery
 {
     init: () => void
-    resolve: (renderPass: IRenderPass) => void
+    resolve: (renderPass: RenderPass) => void
 }
 
 const defautRenderOcclusionQuery = { init: () => { }, resolve: () => { } };
 
-export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQuery: IGLOcclusionQuery)
+export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQuery: OcclusionQuery)
 {
-    const query: IGLQuery = {} as any;
+    const query: { result?: number } = {};
     let webGLQuery: WebGLQuery;
 
     // 开始查询
@@ -77,11 +78,11 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
      */
     const resolve = async () =>
     {
-        if (query.result !== undefined) return occlusionQuery;
+        if (query.result !== undefined) return query.result;
 
         if (gl instanceof WebGL2RenderingContext)
         {
-            const result: IGLOcclusionQuery = await new Promise((resolve, reject) =>
+            const result: number = await new Promise((resolve, reject) =>
             {
                 (function tick()
                 {
@@ -94,11 +95,11 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
                         return;
                     }
 
-                    query.result = gl.getQueryParameter(webGLQuery, gl.QUERY_RESULT);
+                    const result = query.result = gl.getQueryParameter(webGLQuery, gl.QUERY_RESULT) as number;
 
-                    occlusionQuery.result = query;
+                    occlusionQuery.onQuery(result);
 
-                    resolve(occlusionQuery);
+                    resolve(result);
 
                     gl.deleteQuery(webGLQuery);
                 })();
@@ -110,13 +111,13 @@ export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQue
         return undefined;
     };
 
-    return { begin, end, resolve } as IGLOcclusionQueryStep;
+    return { begin, end, resolve } as GLOcclusionQueryStep;
 }
 
 /**
  * 不被遮挡查询步骤。
  */
-export interface IGLOcclusionQueryStep
+export interface GLOcclusionQueryStep
 {
     /**
      * 开始查询
@@ -131,5 +132,5 @@ export interface IGLOcclusionQueryStep
     /**
      * 获取查询结果，将获取被赋值新结果的遮挡查询对象。
      */
-    resolve: () => Promise<IGLOcclusionQuery>
+    resolve: () => Promise<number>
 }

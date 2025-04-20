@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIGLBuffer, IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IIndicesDataTypes, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { getIGLBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,11 +10,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -27,7 +27,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: IVertexDataTypes = positions;
+    const vertexPosBuffer: VertexDataTypes = positions;
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -37,10 +37,10 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: IVertexDataTypes = texCoords;
+    const vertexTexBuffer: VertexDataTypes = texCoords;
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes, indices?: IIndicesDataTypes } = {
+    const vertexArray: { vertices?: VertexAttributes, indices?: IIndicesDataTypes } = {
         vertices: {
             position: { data: vertexPosBuffer, format: "float32x2" },
             texcoord: { data: vertexTexBuffer, format: "float32x2" },
@@ -59,11 +59,11 @@ import { getShaderSource, loadImage } from "./utility";
         const pixels = new Uint8Array(imageData.data.buffer);
 
         // -- Init Texture
-        const texture: ITexture = {
+        const texture: Texture = {
             size: [image.width / 2, image.height / 2],
             format: "rgba8unorm",
             sources: [{
-                __type: "TextureDataSource",
+                __type__: "TextureDataSource",
                 mipLevel: 0,
                 size: [image.width / 2, image.height / 2],
                 data: pixels,
@@ -71,14 +71,14 @@ import { getShaderSource, loadImage } from "./utility";
                 dataImageOrigin: [image.width / 4, image.width / 4],
             }]
         };
-        const sampler: ISampler = {
+        const sampler: Sampler = {
             minFilter: "nearest",
             magFilter: "nearest",
         };
 
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         // -- Render
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects,
         };
@@ -92,13 +92,15 @@ import { getShaderSource, loadImage } from "./utility";
 
         renderObjects.push({
             pipeline: program,
-            vertices: vertexArray.vertices,
-            indices: vertexArray.indices,
-            uniforms: {
+            bindingResources: {
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            drawVertex: { vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                indices: vertexArray.indices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

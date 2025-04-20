@@ -1,22 +1,14 @@
-import { IRenderPassDescriptor, ITextureView } from "@feng3d/render-api";
-import { IGLRenderbuffer } from "../data/IGLRenderbuffer";
+import { RenderPassDescriptor, TextureView } from "@feng3d/render-api";
+import { Renderbuffer } from "../data/Renderbuffer";
 import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
+import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from "./getGLRenderPassDescriptorWithMultisample";
 import { getGLTexture } from "./getGLTexture";
-import { _IGLRenderPassDescriptorWithMultisample, IGLRenderPassDescriptorWithMultisample } from "./getIGLRenderPassDescriptorWithMultisample";
-import { getIGLTextureTarget } from "./getIGLTextureTarget";
-
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _framebuffers: Map<IRenderPassDescriptor, WebGLFramebuffer>;
-    }
-}
+import { getGLTextureTarget } from "./getGLTextureTarget";
 
 /**
  * 获取帧缓冲区
  */
-export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
@@ -34,7 +26,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
     const drawBuffers: number[] = [];
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
-        const view = item.view as (ITextureView | IGLRenderbuffer);
+        const view = item.view as (TextureView | Renderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
         if ("texture" in view)
@@ -44,7 +36,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
             const baseArrayLayer = view.baseArrayLayer || 0;
 
             const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = getIGLTextureTarget(texture.dimension);
+            const textureTarget = getGLTextureTarget(texture.dimension);
 
             if (textureTarget === "TEXTURE_2D")
             {
@@ -88,7 +80,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
         const baseArrayLayer = view.baseArrayLayer || 0;
 
         const webGLTexture = getGLTexture(gl, texture);
-        const textureTarget = getIGLTextureTarget(texture.dimension);
+        const textureTarget = getGLTextureTarget(texture.dimension);
 
         if (textureTarget === "TEXTURE_2D")
         {
@@ -117,13 +109,13 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRen
  * @param handleMultisample 处理存在多重采样的渲染通道描述。
  * @returns
  */
-export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor, handleMultisample = true)
+export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor, handleMultisample = true)
 {
     if (handleMultisample && passDescriptor?.[_IGLRenderPassDescriptorWithMultisample])
     {
         deleteRenderPassDescriptorWithMultisample(gl, passDescriptor[_IGLRenderPassDescriptorWithMultisample]);
 
-return;
+        return;
     }
 
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
@@ -132,7 +124,7 @@ return;
     gl.deleteFramebuffer(webGLFramebuffer);
 }
 
-function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, renderPassDescriptorWithMultisample: IGLRenderPassDescriptorWithMultisample)
+function deleteRenderPassDescriptorWithMultisample(gl: WebGLRenderingContext, renderPassDescriptorWithMultisample: GLRenderPassDescriptorWithMultisample)
 {
     deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.read, false);
     deleteFramebuffer(gl, renderPassDescriptorWithMultisample.blitFramebuffer.draw, false);

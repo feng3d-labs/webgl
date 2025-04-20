@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -9,14 +9,13 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Initialize program
 
-const program: IRenderPipeline = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -41,7 +40,7 @@ const texcoords = new Float32Array([
 
 // -- Initialize vertex array
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: positions, format: "float32x2" },
         textureCoordinates: { data: texcoords, format: "float32x2" },
@@ -50,12 +49,12 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 // -- Initialize samplers
 
-const samplerA: ISampler = {
+const samplerA: Sampler = {
     minFilter: "nearest", magFilter: "nearest", mipmapFilter: "nearest",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
 };
-const samplerB: ISampler = {
+const samplerB: Sampler = {
     minFilter: "linear", magFilter: "linear", mipmapFilter: "linear",
     addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", addressModeW: "clamp-to-edge",
     lodMinClamp: -1000.0, lodMaxClamp: 1000.0,
@@ -64,7 +63,7 @@ const samplerB: ISampler = {
 // -- Load texture then render
 
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: ITexture;
+let texture: Texture;
 loadImage(imageUrl, function (image)
 {
     texture = {
@@ -86,17 +85,20 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            vertices: vertexArray.vertices,
-            uniforms: {
+            bindingResources: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },
-            drawVertex: { vertexCount: 6, instanceCount: 1 },
+            geometry:{
+                primitive: { topology: "triangle-list" },
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+            }
         }],
     };
 

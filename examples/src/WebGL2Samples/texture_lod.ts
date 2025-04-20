@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -11,7 +11,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     // -- Mouse Behaviour
@@ -87,7 +87,7 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Initialize program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     };
 
@@ -111,7 +111,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Initialize vertex array
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             textureCoordinates: { data: texcoords, format: "float32x2" },
@@ -120,8 +120,8 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Load texture then render
     const imageUrl = "../../assets/img/Di-3d.png";
-    const textures: ITexture[] = new Array(Corners.MAX);
-    const samplers: ISampler[] = new Array(Corners.MAX);
+    const textures: Texture[] = new Array(Corners.MAX);
+    const samplers: Sampler[] = new Array(Corners.MAX);
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
@@ -183,9 +183,9 @@ import { getShaderSource, loadImage } from "./utility";
 
     function render()
     {
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         // Clear color buffer
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects,
         };
@@ -197,13 +197,15 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const ro: IRenderObject = {
+        const ro: RenderObject = {
             pipeline: program,
-            uniforms: {
+            bindingResources: {
                 mvp: matrix,
             },
-            vertices: vertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            geometry:{
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];
@@ -215,7 +217,7 @@ import { getShaderSource, loadImage } from "./utility";
                 {
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     ...ro,
-                    uniforms: {
+                    bindingResources: {
                         mvp: matrix,
                         lodBias: lodBiasArray[i],
                         diffuse: { texture: textures[i], sampler: samplers[i] },

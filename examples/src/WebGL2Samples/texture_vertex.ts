@@ -1,5 +1,5 @@
-import { IIndicesDataTypes, IPrimitiveTopology, IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes, IVertexDataTypes } from "@feng3d/render-api";
-import { getIVertexFormat, IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, GLVertexAttributeTypes, IIndicesDataTypes, RenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -7,7 +7,7 @@ import { getShaderSource, loadImage } from "./utility";
 
 (function ()
 {
-    const IDrawMode2Name: { [key: string]: IPrimitiveTopology } = {
+    const IDrawMode2Name: { [key: string]: PrimitiveTopology } = {
         0: "point-list",
         3: "line-strip",
         2: "LINE_LOOP",
@@ -36,29 +36,25 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: { depthCompare: "less" },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertices?: IVertexAttributes, indices: IIndicesDataTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: VertexAttributes, indices: IIndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: IVertexDataTypes;
+    let vertexBuffer: VertexDataTypes;
     let indicesBuffer: IIndicesDataTypes;
 
-    let texture: ITexture;
-    let sampler: ISampler;
-
-    const ro: IRenderObject = {
-        pipeline: program,
-    };
+    let texture: Texture;
+    let sampler: Sampler;
 
     // -- Load model then render
     const glTFLoader = new GlTFLoader();
@@ -185,9 +181,9 @@ import { getShaderSource, loadImage } from "./utility";
     const localMV = mat4.create();
     function render()
     {
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         // -- Render
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: {
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
@@ -217,17 +213,19 @@ import { getShaderSource, loadImage } from "./utility";
                 renderObjects.push({
                     pipeline: {
                         ...program,
-                        primitive: { topology: IDrawMode2Name[primitive.mode] }
                     },
-                    vertices: vertexArrayMaps[mid][i].vertices,
-                    indices: vertexArrayMaps[mid][i].indices,
-                    uniforms: {
+                    bindingResources: {
                         mvMatrix: localMV,
                         pMatrix: perspectiveMatrix,
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    drawIndexed: { indexCount: primitive.indices.length }
+                    geometry:{
+                        primitive: { topology: IDrawMode2Name[primitive.mode] },
+                        vertices: vertexArrayMaps[mid][i].vertices,
+                        indices: vertexArrayMaps[mid][i].indices,
+                        draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length }
+                    }
                 });
             }
         }
@@ -237,3 +235,23 @@ import { getShaderSource, loadImage } from "./utility";
         requestAnimationFrame(render);
     }
 })();
+
+function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: GLVertexAttributeTypes = "FLOAT", normalized = false): VertexFormat
+{
+    for (const key in vertexFormatMap)
+    {
+        const element = vertexFormatMap[key];
+        if (
+            element.numComponents === numComponents
+            && element.type === type
+            && !element.normalized === !normalized
+        )
+        {
+            return key as VertexFormat;
+        }
+    }
+
+    console.error(`没有找到与 ${JSON.stringify({ numComponents, type, normalized })} 对应的顶点数据格式！`);
+
+    return undefined;
+}

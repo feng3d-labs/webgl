@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
 
@@ -11,11 +11,11 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -37,7 +37,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             texcoord: { data: texCoords, format: "float32x2" },
@@ -47,14 +47,14 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage("../../assets/img/Di-3d.png", function (image)
     {
         // -- Init Texture
-        const texture: ITexture = {
+        const texture: Texture = {
             size: [image.width, image.height],
             format: "rgba8unorm",
             sources: [{
                 mipLevel: 0, image, flipY: false,
             }],
         };
-        const sampler: ISampler = {
+        const sampler: Sampler = {
             minFilter: "nearest",
             magFilter: "nearest",
         };
@@ -68,17 +68,19 @@ import { getShaderSource, loadImage } from "./utility";
             0.0, 0.0, 0.0, 1.0
         ]);
 
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects: [
                 {
                     pipeline: program,
-                    vertices: vertexArray.vertices,
-                    uniforms: {
+                    bindingResources: {
                         MVP: matrix,
                         diffuse: { texture, sampler },
                     },
-                    drawVertex: { vertexCount: 6 },
+                    geometry:{
+                        vertices: vertexArray.vertices,
+                        draw: { __type__: "DrawVertex", vertexCount: 6 },
+                    }
                 }
             ],
         };

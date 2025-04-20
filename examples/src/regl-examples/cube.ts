@@ -1,5 +1,5 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
-import { IGLSamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderObject, Submit } from "@feng3d/render-api";
+import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
 
 (async () =>
@@ -64,14 +64,16 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportWidth = 1;
     let viewportHeight = 1;
 
-    const renderObject: IRenderObject = {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+    const renderObject: RenderObject = {
+        geometry:{
+            vertices: {
+                position: { data: new Float32Array(positions), format: "float32x3" },
+                uv: { data: new Float32Array(uvs), format: "float32x2" },
+            },
+            indices: new Uint16Array(indices),
+            draw: { __type__: "DrawIndexed", indexCount: indices.length },
         },
-        indices: new Uint16Array(indices),
-        drawIndexed: { indexCount: indices.length },
-        uniforms: {},
+        bindingResources: {},
         pipeline: {
             vertex: {
                 code: `precision mediump float;
@@ -96,7 +98,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         }
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
@@ -114,11 +116,11 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
-        renderObject.uniforms.view = mat4.lookAt([],
+        renderObject.bindingResources.view = mat4.lookAt([],
             [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
             [0, 0.0, 0],
             [0, 1, 0]);
-        renderObject.uniforms.projection
+        renderObject.bindingResources.projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -134,13 +136,13 @@ import * as mat4 from "./stackgl/gl-mat4";
     img.src = "../../assets/peppers.png";
     await img.decode();
 
-    const diffuse: IGLSamplerTexture = {
+    const diffuse: SamplerTexture = {
         texture: {
             size: [img.width, img.height],
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear" }
     };
-    renderObject.uniforms.tex = diffuse;
+    renderObject.bindingResources.tex = diffuse;
 
     draw();
 })();

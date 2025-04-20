@@ -1,17 +1,10 @@
-import { ITexture, ITextureDataSource, ITextureImageSource, ITextureSize } from "@feng3d/render-api";
+import { Texture, TextureDataSource, TextureImageSource, TextureSize } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
-import { IGLTexturePixelStore } from "../data/IGLTexturePixelStore";
-import { getTextureCubeMapTarget } from "../utils/getTextureCubeMapTarget";
-import { getIGLTextureFormats } from "./getIGLTextureFormats";
-import { getIGLTextureTarget } from "./getIGLTextureTarget";
+import { getGLTextureFormats } from "./getGLTextureFormats";
+import { getGLTextureTarget } from "./getGLTextureTarget";
 
 declare global
 {
-    interface WebGLRenderingContext
-    {
-        _textures: Map<ITexture, WebGLTexture>
-    }
-
     interface WebGLTexture
     {
         /**
@@ -21,7 +14,7 @@ declare global
     }
 }
 
-export const defaultTexturePixelStore: IGLTexturePixelStore = {
+export const defaultTexturePixelStore: GLTexturePixelStore = {
     packAlignment: 4,
     unpackAlignment: 4,
     unpackFlipY: false,
@@ -37,7 +30,7 @@ export const defaultTexturePixelStore: IGLTexturePixelStore = {
     unpackSkipImages: 0,
 };
 
-export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     let webGLTexture = gl._textures.get(texture);
     if (webGLTexture) return webGLTexture;
@@ -45,8 +38,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
     // 创建纹理
     const createTexture = () =>
     {
-        const target = getIGLTextureTarget(texture.dimension);
-        const { internalformat, format, type } = getIGLTextureFormats(texture.format);
+        const target = getGLTextureTarget(texture.dimension);
+        const { internalformat, format, type } = getGLTextureFormats(texture.format);
 
         webGLTexture = gl.createTexture(); // Create a texture object
         gl._textures.set(texture, webGLTexture);
@@ -75,13 +68,13 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                 const zoffset = textureOrigin?.[2];
                 if (gl instanceof WebGL2RenderingContext)
                 {
-                    const imageSource = v as ITextureImageSource;
+                    const imageSource = v as TextureImageSource;
                     if (imageSource.image)
                     {
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -91,7 +84,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             if (width && height)
                             {
                                 gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], image);
@@ -112,14 +105,14 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                     }
                     else
                     {
-                        const bufferSource = v as ITextureDataSource;
+                        const bufferSource = v as TextureDataSource;
                         const { data, dataLayout, dataImageOrigin } = bufferSource;
 
                         //
                         const offset = dataLayout?.offset || 0;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -130,7 +123,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], data, offset);
                         }
                         else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
@@ -145,13 +138,13 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                 }
                 else
                 {
-                    const imageSource = v as ITextureImageSource;
+                    const imageSource = v as TextureImageSource;
                     if (imageSource.image)
                     {
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -161,7 +154,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], gl[format], gl[type], image);
                         }
                         else
@@ -171,14 +164,14 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                     }
                     else
                     {
-                        const bufferSource = v as ITextureDataSource;
+                        const bufferSource = v as TextureDataSource;
                         const { data, dataLayout, dataImageOrigin } = bufferSource;
 
                         //
                         const offset = dataLayout?.offset || 0;
 
                         //
-                        const pixelStore: IGLTexturePixelStore = {};
+                        const pixelStore: GLTexturePixelStore = {};
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -189,7 +182,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
 
                         if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
                             console.assert(offset === 0, `WebGL1中ITextureDataLayout.offset必须为0`);
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], width, height, 0, gl[format], gl[type], data);
                         }
@@ -255,8 +248,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
         const { writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
-        const target = getIGLTextureTarget(texture.dimension);
-        const { format, type } = getIGLTextureFormats(texture.format);
+        const target = getGLTextureTarget(texture.dimension);
+        const { format, type } = getGLTextureFormats(texture.format);
 
         gl.bindTexture(gl[target], webGLTexture);
 
@@ -272,13 +265,13 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
             const zoffset = textureOrigin?.[2];
 
             // 处理图片资源
-            const imageSource = v as ITextureImageSource;
+            const imageSource = v as TextureImageSource;
             if (imageSource.image)
             {
                 const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                 //
-                const pixelStore: IGLTexturePixelStore = {};
+                const pixelStore: GLTexturePixelStore = {};
                 pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                 pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                 pixelStore.unpackFlipY = flipY || false;
@@ -326,18 +319,18 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: ITexture)
                     }
                 }
 
-return;
+                return;
             }
 
             // 处理数据资源
-            const bufferSource = v as ITextureDataSource;
+            const bufferSource = v as TextureDataSource;
             const { data, dataLayout, dataImageOrigin } = bufferSource;
 
             //
             const offset = dataLayout?.offset || 0;
 
             //
-            const pixelStore: IGLTexturePixelStore = {};
+            const pixelStore: GLTexturePixelStore = {};
             pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
             pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
             pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -389,7 +382,7 @@ return;
     watcher.watch(texture, "writeTextures", updateTexture);
 
     // 监听纹理尺寸发生变化
-    const resize = (newValue: ITextureSize, oldValue: ITextureSize) =>
+    const resize = (newValue: TextureSize, oldValue: TextureSize) =>
     {
         if (!!newValue && !!oldValue)
         {
@@ -423,7 +416,7 @@ return;
     return webGLTexture;
 }
 
-export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
+export function deleteTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     const webGLTexture = gl._textures.get(texture);
     if (!webGLTexture) return;
@@ -437,7 +430,7 @@ export function deleteTexture(gl: WebGLRenderingContext, texture: ITexture)
  * @param gl
  * @param pixelStore 像素解包打包时参数。
  */
-function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTexturePixelStore)
+function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: GLTexturePixelStore)
 {
     const {
         packAlignment,
@@ -474,3 +467,189 @@ function setTexturePixelStore(gl: WebGLRenderingContext, pixelStore: IGLTextureP
         gl.pixelStorei(gl.UNPACK_SKIP_IMAGES, unpackSkipImages);
     }
 }
+
+/**
+ * 像素解包打包时参数。
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/pixelStorei
+ */
+interface GLTexturePixelStore
+{
+    /**
+     * Packing of pixel data into memory
+     *
+     * gl.PACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    packAlignment?: 1 | 2 | 4 | 8;
+
+    /**
+     * Unpacking of pixel data from memory.
+     *
+     * gl.UNPACK_ALIGNMENT
+     *
+     * 默认值为 4 。
+     */
+    unpackAlignment?: 1 | 2 | 4 | 8;
+
+    /**
+     * 解包图像数据时进行Y轴反转。
+     *
+     * Flips the source data along its vertical axis if true.
+     *
+     * gl.UNPACK_FLIP_Y_WEBGL
+     *
+     * 默认为 false。
+     */
+    unpackFlipY?: boolean;
+
+    /**
+     * 将图像RGB颜色值得每一个分量乘以A。
+     *
+     * Multiplies the alpha channel into the other color channels
+     *
+     * gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
+     *
+     * 默认为 false。
+     */
+    unpackPremulAlpha?: boolean;
+
+    /**
+     * Default color space conversion or no color space conversion.
+     *
+     * gl.UNPACK_COLORSPACE_CONVERSION_WEBGL
+     *
+     * 默认为 "BROWSER_DEFAULT_WEBGL" 。
+     */
+    unpackColorSpaceConversion?: "BROWSER_DEFAULT_WEBGL" | "NONE";
+
+    /**
+     * Number of pixels in a row.
+     *
+     * gl.PACK_ROW_LENGTH
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packRowLength?: number;
+
+    /**
+     * Number of pixel locations skipped before the first pixel is written into memory.
+     *
+     * gl.PACK_SKIP_PIXELS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packSkipPixels?: number;
+
+    /**
+     * Number of rows of pixel locations skipped before the first pixel is written into memory
+     *
+     * gl.PACK_SKIP_ROWS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    packSkipRows?: number;
+
+    /**
+     * Number of pixels in a row.
+     *
+     * gl.UNPACK_ROW_LENGTH
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackRowLength?: number;
+
+    /**
+     * Image height used for reading pixel data from memory
+     *
+     * gl.UNPACK_IMAGE_HEIGHT
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackImageHeight?: number;
+
+    /**
+     *
+     * Number of pixel images skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_PIXELS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipPixels?: number;
+
+    /**
+     *
+     * Number of rows of pixel locations skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_ROWS
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipRows?: number;
+
+    /**
+     *
+     * Number of pixel images skipped before the first pixel is read from memory
+     *
+     * gl.UNPACK_SKIP_IMAGES
+     *
+     * 默认值为 0 。
+     *
+     * 仅 WebGL2。
+     */
+    unpackSkipImages?: number;
+}
+
+function getTextureCubeMapTarget(depthOrArrayLayers: number)
+{
+    const textureCubeMapTarget: GLTextureCubeMapTarget = textureCubeMapTargetMap[depthOrArrayLayers];
+
+    console.assert(!!textureCubeMapTarget, `CubeMap的depthOrArrayLayers值应在[0-5]之间！`);
+
+    return textureCubeMapTarget;
+}
+
+const textureCubeMapTargetMap: GLTextureCubeMapTarget[] = [
+    "TEXTURE_CUBE_MAP_POSITIVE_X",
+    "TEXTURE_CUBE_MAP_NEGATIVE_X",
+    "TEXTURE_CUBE_MAP_POSITIVE_Y",
+    "TEXTURE_CUBE_MAP_NEGATIVE_Y",
+    "TEXTURE_CUBE_MAP_POSITIVE_Z",
+    "TEXTURE_CUBE_MAP_NEGATIVE_Z",
+];
+
+/**
+ * A GLenum specifying the texture target.
+ *
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_X: Positive X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_X: Negative X face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Y: Positive Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Y: Negative Y face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_POSITIVE_Z: Positive Z face for a cube-mapped texture.
+ * gl.TEXTURE_CUBE_MAP_NEGATIVE_Z: Negative Z face for a cube-mapped texture.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+ */
+type GLTextureCubeMapTarget =
+    | "TEXTURE_CUBE_MAP_POSITIVE_X"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
+    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
+    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";

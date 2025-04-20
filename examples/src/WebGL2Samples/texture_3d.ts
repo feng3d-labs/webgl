@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
 import { getShaderSource } from "./utility";
 
@@ -11,7 +11,7 @@ import { getShaderSource } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
     const webgl = new WebGL(rc);
 
     // -- Divide viewport
@@ -79,14 +79,14 @@ import { getShaderSource } from "./utility";
         }
     }
 
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [SIZE, SIZE, SIZE],
         dimension: "3d",
         format: "r8unorm",
         generateMipmap: true,
-        sources: [{ __type: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data }],
+        sources: [{ __type__: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data }],
     };
-    const sampler: ISampler = {
+    const sampler: Sampler = {
         lodMinClamp: 0,
         lodMaxClamp: Math.log2(SIZE),
         minFilter: "linear",
@@ -95,7 +95,7 @@ import { getShaderSource } from "./utility";
     };
 
     // -- Initialize program
-    const program: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
 
     // -- Initialize buffer
     const positions = new Float32Array([
@@ -118,7 +118,7 @@ import { getShaderSource } from "./utility";
 
     // -- Initilize vertex array
 
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             in_texcoord: { data: texCoords, format: "float32x2" },
@@ -157,16 +157,18 @@ import { getShaderSource } from "./utility";
         ];
     }
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
-        uniforms: {
+        bindingResources: {
             diffuse: { texture, sampler },
         },
-        vertices: vertexArray.vertices,
-        drawVertex: { vertexCount: 6 }
+        geometry:{
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 }
+        }
     };
 
-    const renderPassObjects: IRenderObject[] = [];
+    const renderPassObjects: RenderObject[] = [];
     for (let i = 0; i < Corners.MAX; ++i)
     {
         renderPassObjects.push({
@@ -175,7 +177,7 @@ import { getShaderSource } from "./utility";
         });
     }
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: renderPassObjects,
     };
@@ -194,7 +196,7 @@ import { getShaderSource } from "./utility";
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            renderPassObjects[i].uniforms.orientation = matrices[i];
+            renderPassObjects[i].bindingResources.orientation = matrices[i];
         }
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

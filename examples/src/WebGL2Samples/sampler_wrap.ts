@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
@@ -58,9 +58,8 @@ viewport[Corners.TOP_LEFT] = {
 
 // -- Initialize program
 
-const program: IRenderPipeline = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -85,7 +84,7 @@ const texcoords = new Float32Array([
 
 // -- Initilize vertex array
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: positions, format: "float32x2" },
         textureCoordinates: { data: texcoords, format: "float32x2" },
@@ -94,7 +93,7 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 
 // -- Initialize samplers
 
-const samplers: ISampler[] = new Array(Corners.MAX);
+const samplers: Sampler[] = new Array(Corners.MAX);
 
 for (let i = 0; i < Corners.MAX; ++i)
 {
@@ -118,7 +117,7 @@ samplers[Corners.BOTTOM_LEFT].addressModeV = "clamp-to-edge";
 // -- Load texture then render
 
 const imageUrl = "../../assets/img/Di-3d.png";
-let texture: ITexture;
+let texture: Texture;
 loadImage(imageUrl, function (image)
 {
     texture = {
@@ -132,9 +131,9 @@ loadImage(imageUrl, function (image)
 
 function render()
 {
-    const renderObjects: IRenderPassObject[] = [];
+    const renderObjects: RenderPassObject[] = [];
     // Clear color buffer
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects,
     };
@@ -146,10 +145,14 @@ function render()
         0.0, 0.0, 0.0, 1.0
     ]);
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
-        uniforms: { mvp: matrix },
-        vertices: vertexArray.vertices,
+        bindingResources: { mvp: matrix },
+        geometry: {
+            primitive: { topology: "triangle-list" },
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+        }
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -158,11 +161,14 @@ function render()
             {
                 ...ro,
                 viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
-                uniforms: {
-                    ...ro.uniforms,
+                bindingResources: {
+                    ...ro.bindingResources,
                     diffuse: { texture, sampler: samplers[i] },
                 },
-                drawVertex: { vertexCount: 6, instanceCount: 1 },
+                geometry: {
+                    ...ro.geometry,
+                    draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
+                }
             });
     }
 

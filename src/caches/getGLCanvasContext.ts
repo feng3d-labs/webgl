@@ -1,49 +1,61 @@
-import { IGLCanvasContext } from "../data/IGLCanvasContext";
-import { defaultCanvasContext } from "../defaults/defaults";
-import { ChainMap } from "../utils/ChainMap";
-import { getCapabilities } from "./getCapabilities";
+import { CanvasContext, ChainMap, GBuffer, IIndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
+import { Renderbuffer } from "../data/Renderbuffer";
+import { TransformFeedback } from "../data/TransformFeedbackPass";
+import { Capabilities } from "./Capabilities";
+
+declare global
+{
+    interface WebGLRenderingContext
+    {
+        _capabilities: Capabilities;
+        //
+        _bufferMap: WeakMap<GBuffer, WebGLBuffer>
+        _textures: WeakMap<Texture, WebGLTexture>
+        _renderbuffers: WeakMap<Renderbuffer, WebGLRenderbuffer>;
+        _framebuffers: WeakMap<RenderPassDescriptor, WebGLFramebuffer>;
+        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _samplers: WeakMap<Sampler, WebGLSampler>;
+        _transforms: WeakMap<TransformFeedback, WebGLTransformFeedback>;
+        _programs: { [key: string]: WebGLProgram }
+        _shaders: { [key: string]: WebGLShader }
+    }
+}
 
 /**
  * 获取WebGL上下文。
  *
- * @param renderingContext
+ * @param canvasContext
  * @returns
  */
-export function getGLCanvasContext(renderingContext: IGLCanvasContext)
+export function getGLCanvasContext(canvasContext: CanvasContext)
 {
-    const key = renderingContext.canvasId;
-    let value = canvasContextMap.get(key);
-    if (!value)
-    {
-        const canvas = getCanvas(renderingContext);
-        value = getWebGLContext(canvas, renderingContext);
+    let gl: WebGLRenderingContext = canvasContext["_gl"];
+    if (gl) return gl;
 
-        //
-        getCapabilities(value);
-        initMap(value);
+    const canvas = typeof canvasContext.canvasId === "string" ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
+    gl = canvasContext["_gl"] = getWebGLContext(canvas, canvasContext);
 
-        //
-        canvas.addEventListener("webglcontextlost", _onContextLost, false);
-        canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
-        canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
+    canvasContext.webGLContextAttributes
+    //
+    gl._capabilities = new Capabilities(gl);
 
-        canvasContextMap.set(key, value);
-    }
-
-    return value;
-}
-
-function initMap(gl: WebGLRenderingContext)
-{
-    gl._buffers = new Map();
-    gl._textures = new Map();
-    gl._renderbuffers = new Map();
-    gl._framebuffers = new Map();
+    gl._bufferMap = new WeakMap();
+    gl._textures = new WeakMap();
+    gl._renderbuffers = new WeakMap();
+    gl._framebuffers = new WeakMap();
     gl._vertexArrays = new ChainMap();
-    gl._samplers = new Map();
-    gl._transforms = new Map();
+    gl._samplers = new WeakMap();
+    gl._transforms = new WeakMap();
     gl._programs = {};
     gl._shaders = {};
+
+    //
+    canvas.addEventListener("webglcontextlost", _onContextLost, false);
+    canvas.addEventListener("webglcontextrestored", _onContextRestore, false);
+    canvas.addEventListener("webglcontextcreationerror", _onContextCreationError, false);
+
+    return gl;
 }
 
 function _onContextLost(event: Event)
@@ -63,46 +75,20 @@ function _onContextCreationError(event: WebGLContextEvent)
     console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
 }
 
-function autoCreateCanvas(canvasId: string)
+function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasContext: CanvasContext): WebGLRenderingContext 
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = canvasId;
-    document.body.appendChild(canvas);
-
-    return canvas;
-}
-
-export function getCanvas(canvasContext: IGLCanvasContext)
-{
-    let canvas = document.getElementById(canvasContext.canvasId) as HTMLCanvasElement;
-    if (!canvas || !(canvas instanceof HTMLCanvasElement))
-    {
-        canvas = autoCreateCanvas(canvasContext.canvasId);
-    }
-
-    return canvas;
-}
-
-function getWebGLContext(canvas: HTMLCanvasElement, canvasContext: IGLCanvasContext)
-{
-    const contextAttributes = Object.assign({}, defaultCanvasContext, canvasContext);
+    const contextAttributes = Object.assign({}, defaultWebGLContextAttributes, canvasContext.webGLContextAttributes);
 
     // 使用用户提供参数获取WebGL上下文
-    let gl = canvas.getContext(contextAttributes.contextId, contextAttributes) as any;
-    if (gl) return gl;
+    let gl = canvas.getContext(canvasContext.webGLcontextId || "webgl2", contextAttributes);
+    gl || console.warn(`无法使用用户提供参数获取指定WebGL上下文`, contextAttributes);
 
-    gl = canvas.getContext("webgl", contextAttributes) || canvas.getContext("webgl2", contextAttributes);
-    gl && console.warn(`无法使用用户提供参数获取指定WebGL上下文，${canvasContext}`);
-    if (gl) return gl;
+    gl = canvas.getContext("webgl2", contextAttributes)
+        || canvas.getContext("webgl2")
+        || canvas.getContext("webgl", contextAttributes)
+        || canvas.getContext("webgl");
 
-    // 使用默认参数获取WebGL上下文
-    gl = canvas.getContext("webgl") || canvas.getContext("webgl2");
-    gl && console.warn(`无法使用用户提供参数获取WebGL上下文，${canvasContext}`);
-    if (gl) return gl;
+    gl || console.error(`无法获取WebGL上下文。`);
 
-    console.error(`无法获取WebGL上下文。`);
-
-    return null;
+    return gl as any;
 }
-
-const canvasContextMap = new Map<string, WebGLRenderingContext>();

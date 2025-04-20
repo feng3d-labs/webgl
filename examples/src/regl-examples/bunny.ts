@@ -1,4 +1,4 @@
-import { IRenderObject, ISubmit } from "@feng3d/render-api";
+import { Submit, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
@@ -10,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", antialias: true });
+const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -30,13 +30,15 @@ let tick = 0;
 let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
-const renderObject: IRenderObject = {
-    vertices: {
-        position: { data: new Float32Array(positions), format: "float32x3" },
+const renderObject: RenderObject = {
+    geometry: {
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+        },
+        indices: new Uint16Array(indices),
+        draw: { __type__: "DrawIndexed", indexCount: indices.length },
     },
-    indices: new Uint16Array(indices),
-    drawIndexed: { indexCount: indices.length },
-    uniforms: {
+    bindingResources: {
         model: mat4.identity([]),
     },
     pipeline: {
@@ -58,7 +60,7 @@ const renderObject: IRenderObject = {
     }
 };
 
-const submit: ISubmit = {
+const submit: Submit = {
     commandEncoders: [{
         passEncoders: [
             {
@@ -77,12 +79,12 @@ function draw()
     tick++;
     const t = 0.01 * tick;
 
-    renderObject.uniforms.view = mat4.lookAt([],
+    renderObject.bindingResources.view = mat4.lookAt([],
         [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
         [0, 2.5, 0],
         [0, 1, 0]);
 
-    renderObject.uniforms.projection
+    renderObject.bindingResources.projection
         = mat4.perspective([],
             Math.PI / 4,
             viewportWidth / viewportHeight,

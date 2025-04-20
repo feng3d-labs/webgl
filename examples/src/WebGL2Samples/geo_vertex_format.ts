@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { HalfFloat } from "./third-party/HalfFloatUtility";
 import { getShaderSource, loadImage } from "./utility";
@@ -12,13 +12,12 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: IRenderPipeline = {
+    const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "triangle-list", cullFace: "back" },
         depthStencil: {},
     };
 
@@ -150,7 +149,7 @@ import { getShaderSource, loadImage } from "./utility";
 
     // -- Init VertexArray
 
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             a_position: { data: positions, format: "float32x3" },
             a_normal: { data: normals, format: "float16x4", arrayStride: 6 }, // 由于不支持类型 "float16x3"，则需要设置 arrayStride 为6，表示每次间隔3个半浮点数。
@@ -161,8 +160,8 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Init Texture
 
     const imageUrl = "../../assets/img/Di-3d.png";
-    let texture: ITexture;
-    let sampler: ISampler;
+    let texture: Texture;
+    let sampler: Sampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -201,20 +200,23 @@ import { getShaderSource, loadImage } from "./utility";
 
     const lightPosition = [0.0, 0.0, 5.0];
 
-    const ro: IRenderObject = {
+    const ro: RenderObject = {
         pipeline: program,
-        vertices: vertexArray.vertices,
-        indices: new Uint16Array(cubeVertexIndices),
-        uniforms: {
+        bindingResources: {
             u_model: modelMatrix,
             u_modelInvTrans: modelInvTrans,
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
-        drawIndexed: { indexCount: 36 },
+        geometry: {
+            primitive: { topology: "triangle-list", cullFace: "back" },
+            vertices: vertexArray.vertices,
+            indices: new Uint16Array(cubeVertexIndices),
+            draw: { __type__: "DrawIndexed", indexCount: 36 },
+        }
     };
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [ro],
     };
@@ -232,8 +234,8 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        ro.uniforms.u_viewProj = viewProj;
-        ro.uniforms.s_tex2D = { texture, sampler };
+        ro.bindingResources.u_viewProj = viewProj;
+        ro.bindingResources.s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

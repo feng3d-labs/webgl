@@ -1,16 +1,8 @@
-import { IGLTransformFeedback } from "../data/IGLTransformFeedback";
-import { getIGLVertexBuffer } from "../runs/getIGLBuffer";
+import { TransformFeedback } from "../data/TransformFeedbackPass";
+import { getIGLBuffer } from "../runs/getIGLBuffer";
 import { getGLBuffer } from "./getGLBuffer";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _transforms: Map<IGLTransformFeedback, WebGLTransformFeedback>;
-    }
-}
-
-export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
+export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
     let webGLTransformFeedback = gl._transforms.get(transformFeedback);
     if (webGLTransformFeedback) return webGLTransformFeedback;
@@ -24,7 +16,8 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
         transformFeedback.bindBuffers.forEach((v) =>
         {
             const { index, data } = v;
-            const buffer = getIGLVertexBuffer(data, "STREAM_COPY");
+            const buffer = getIGLBuffer(data, "ARRAY_BUFFER", "STREAM_COPY");
+
             const webGLBuffer = getGLBuffer(gl, buffer);
             gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
         });
@@ -36,7 +29,7 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
     return webGLTransformFeedback;
 }
 
-export function deleteTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
+export function deleteTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
     const webGLTransformFeedback = gl._transforms.get(transformFeedback);
     if (!webGLTransformFeedback) return;

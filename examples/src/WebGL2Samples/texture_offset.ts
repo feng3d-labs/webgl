@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPassObject, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 (function ()
@@ -10,7 +10,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2", antialias: false };
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
     const webgl = new WebGL(rc);
 
     const Corners = {
@@ -36,9 +36,9 @@ import { getShaderSource, loadImage } from "./utility";
     };
 
     // -- Init program
-    const programBicubic: IRenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
+    const programBicubic: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-bicubic") } };
 
-    const programOffsetBicubic: IRenderPipeline = {
+    const programOffsetBicubic: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-offset-bicubic") },
     };
 
@@ -62,7 +62,7 @@ import { getShaderSource, loadImage } from "./utility";
     ]);
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: IVertexAttributes } = {
+    const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
             position: { data: positions, format: "float32x2" },
             texcoord: { data: texCoords, format: "float32x2" },
@@ -72,21 +72,21 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage("../../assets/img/Di-3d.png", function (image)
     {
         // -- Init Texture
-        const texture: ITexture = {
+        const texture: Texture = {
             size: [image.width, image.height],
             format: "rgba8unorm",
             sources: [{ mipLevel: 0, image, flipY: false }],
         };
-        const sampler: ISampler = {
+        const sampler: Sampler = {
             minFilter: "nearest",
             magFilter: "nearest",
             addressModeU: "clamp-to-edge",
             addressModeV: "clamp-to-edge",
         };
 
-        const renderObjects: IRenderPassObject[] = [];
+        const renderObjects: RenderPassObject[] = [];
         // -- Render
-        const rp: IRenderPass = {
+        const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
             renderObjects
         };
@@ -102,13 +102,15 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
-                vertices: vertexArray.vertices,
                 pipeline: programBicubic,
-                uniforms: {
+                bindingResources: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                 },
-                drawVertex: { vertexCount: 6 },
+                geometry: {
+                    vertices: vertexArray.vertices,
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
+                }
             });
 
         // Offset
@@ -117,14 +119,16 @@ import { getShaderSource, loadImage } from "./utility";
         renderObjects.push(
             {
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
-                vertices: vertexArray.vertices,
                 pipeline: programOffsetBicubic,
-                uniforms: {
+                bindingResources: {
                     MVP: matrix,
                     diffuse: { texture, sampler },
                     offset,
                 },
-                drawVertex: { vertexCount: 6 },
+                geometry: {
+                    vertices: vertexArray.vertices,
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
+                }
             });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

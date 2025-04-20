@@ -1,5 +1,5 @@
-import { IRenderPass, IRenderPipeline, ISampler, ITexture, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,13 +8,12 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const rc: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 const webgl = new WebGL(rc);
 
 // -- Init program
-const program: IRenderPipeline = {
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-    primitive: { topology: "triangle-list" },
 };
 
 // -- Init buffers: vec2 Position, vec2 Texcoord
@@ -37,7 +36,7 @@ const texCoords = new Float32Array([
 ]);
 
 // -- Init VertexArray
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         position: { data: positions, format: "float32x2" },
         texcoord: { data: texCoords, format: "float32x2" },
@@ -47,14 +46,14 @@ const vertexArray: { vertices?: IVertexAttributes } = {
 loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [image.width, image.height],
         format: "rgba8unorm",
         sources: [{
             image, flipY: false,
         }]
     };
-    const sampler: ISampler = { minFilter: "nearest", magFilter: "nearest" };
+    const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest" };
 
     // -- Render
     const matrix = new Float32Array([
@@ -64,13 +63,16 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         0.2, -0.2, 0.0 //translation
     ]);
 
-    const rp: IRenderPass = {
+    const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
         renderObjects: [{
             pipeline: program,
-            uniforms: { MVP: matrix, diffuse: { texture, sampler } },
-            vertices: vertexArray.vertices,
-            drawVertex: { vertexCount: 6 },
+            bindingResources: { MVP: matrix, diffuse: { texture, sampler } },
+            geometry:{
+                primitive: { topology: "triangle-list" },
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
+            }
         }]
     };
 

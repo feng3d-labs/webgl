@@ -1,5 +1,5 @@
-import { IRenderObject, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
 let cubeRotation = 0.0;
@@ -13,7 +13,7 @@ async function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-    const renderingContext: IGLCanvasContext = { canvasId: "glcanvas", contextId: "webgl2" };
+    const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 
     const webgl = new WebGL(renderingContext);
 
@@ -22,13 +22,12 @@ async function main()
     const buffers = initBuffers();
 
     const texture: {
-        texture: ITexture;
-        sampler: ISampler;
+        texture: Texture;
+        sampler: Sampler;
     } = { texture: { size: [canvas.width, canvas.height] }, sampler: {} };
 
-    const renderObject: IRenderObject = {
+    const renderObject: RenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -62,22 +61,25 @@ async function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        vertices: {
-            aVertexPosition: {
-                format: "float32x3",
-                data: buffers.position,
+        geometry: {
+            primitive: { topology: "triangle-list" },
+            vertices: {
+                aVertexPosition: {
+                    format: "float32x3",
+                    data: buffers.position,
+                },
+                aTextureCoord: {
+                    format: "float32x2",
+                    data: buffers.textureCoord,
+                },
             },
-            aTextureCoord: {
-                format: "float32x2",
-                data: buffers.textureCoord,
-            },
+            indices: buffers.indices,
+            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         },
-        indices: buffers.indices,
-        uniforms: { uSampler: texture },
-        drawIndexed: { firstIndex: 0, indexCount: 36 },
+        bindingResources: { uSampler: texture },
     };
 
-    const submit: ISubmit = {
+    const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 // 绘制
@@ -90,7 +92,7 @@ async function main()
                 },
                 // 从画布中拷贝到纹理。
                 {
-                    __type: "CopyTextureToTexture",
+                    __type__: "CopyTextureToTexture",
                     source: { texture: null }, // 当值设置为 null或者undefined时表示当前画布。
                     destination: { texture: texture.texture },
                     copySize: [canvas.width, canvas.height],
@@ -111,8 +113,8 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-        renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
+        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
 
         webgl.submit(submit);
 

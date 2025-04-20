@@ -1,4 +1,4 @@
-import { IRenderObject } from "@feng3d/render-api";
+import { RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 /**
@@ -16,18 +16,21 @@ document.body.appendChild(canvas);
 
 const webgl = new WebGL({ canvasId: "glcanvas" });
 
-const renderObject: IRenderObject = {
-    vertices: {
-        position: {
-            data: new Float32Array([
-                -1, 0,
-                0, -1,
-                1, 1
-            ]),
-            format: "float32x2",
+const renderObject: RenderObject = {
+    geometry: {
+        vertices: {
+            position: {
+                data: new Float32Array([
+                    -1, 0,
+                    0, -1,
+                    1, 1
+                ]),
+                format: "float32x2",
+            },
         },
+        draw: { __type__: "DrawVertex", vertexCount: 3 },
     },
-    uniforms: { color: [1, 0, 0, 1] },
+    bindingResources: { color: [1, 0, 0, 1] },
     pipeline: {
         vertex: {
             code: `
@@ -49,7 +52,6 @@ const renderObject: IRenderObject = {
         },
         depthStencil: {},
     },
-    drawVertex: { vertexCount: 3 },
 };
 
 function draw()

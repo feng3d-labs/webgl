@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPipeline, ISampler, ITexture } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPipeline, Sampler, Texture } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,23 +8,22 @@ canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
+const renderingContext: CanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 loadImage("../../assets/img/Di-3d.png", (img) =>
 {
-    const texture: ITexture = {
+    const texture: Texture = {
         size: [img.width, img.height],
         sources: [{ image: img, flipY: false }],
         format: "rgba8unorm",
     };
-    const sampler: ISampler = {
+    const sampler: Sampler = {
         minFilter: "linear",
         magFilter: "linear",
     };
 
-    const program: IRenderPipeline = {
-        primitive: { topology: "triangle-list" },
+    const program: RenderPipeline = {
         vertex: {
             code: getShaderSource("vs")
         },
@@ -34,12 +33,15 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         }
     };
 
-    const renderObject: IRenderObject = {
-        uniforms: {
+    const renderObject: RenderObject = {
+        bindingResources: {
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
-        drawVertex: { firstVertex: 0, vertexCount: 3 },
+        geometry: {
+            primitive: { topology: "triangle-list" },
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
+        },
         pipeline: program
     };
 

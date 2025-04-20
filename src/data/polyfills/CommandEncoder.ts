@@ -1,11 +1,11 @@
-import { ITextureLike } from "@feng3d/render-api";
-import { IGLBlitFramebuffer } from "./IGLBlitFramebuffer";
+import { TextureLike } from "@feng3d/render-api";
+import { BlitFramebuffer } from "../BlitFramebuffer";
 
 declare module "@feng3d/render-api"
 {
-    export interface IPassEncoderMap
+    export interface PassEncoderMap
     {
-        IGLBlitFramebuffer: IGLBlitFramebuffer;
+        GLBlitFramebuffer: BlitFramebuffer;
     }
 
     /**
@@ -14,12 +14,12 @@ declare module "@feng3d/render-api"
      * {@link GPUCommandEncoder.copyTextureToTexture}
      * {@link GPUImageCopyTexture}
      */
-    export interface IImageCopyTexture
+    export interface ImageCopyTexture
     {
         /**
          *
          * 注：当值设置为 null或者undefined时表示当前画布。
          */
-        texture: ITextureLike;
+        texture: TextureLike;
     }
 }

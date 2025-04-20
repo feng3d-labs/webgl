@@ -1,4 +1,4 @@
-import { IRenderObject, IRenderPass } from "@feng3d/render-api";
+import { RenderPass, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -13,15 +13,14 @@ function main()
 {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
-  const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" });
+  const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
 
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   const buffers = initBuffers();
 
-  const renderObject: IRenderObject = {
+  const renderObject: RenderObject = {
     pipeline: {
-      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;
@@ -46,22 +45,25 @@ function main()
       ` },
       depthStencil: { depthCompare: "less-equal" }
     },
-    vertices: {
-      aVertexPosition: {
-        format: "float32x3",
-        data: buffers.position,
+    geometry: {
+      primitive: { topology: "triangle-list" },
+      vertices: {
+        aVertexPosition: {
+          format: "float32x3",
+          data: buffers.position,
+        },
+        aVertexColor: {
+          format: "float32x4",
+          data: buffers.color,
+        },
       },
-      aVertexColor: {
-        format: "float32x4",
-        data: buffers.color,
-      },
+      indices: buffers.indices,
+      draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
     },
-    indices: buffers.indices,
-    uniforms: {},
-    drawIndexed: { firstIndex: 0, indexCount: 36 },
+    bindingResources: {},
   };
 
-  const renderPass: IRenderPass = {
+  const renderPass: RenderPass = {
     descriptor: {
       colorAttachments: [{
         clearValue: [0.0, 0.0, 0.0, 1.0],
@@ -86,8 +88,8 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    renderObject.uniforms.uProjectionMatrix = projectionMatrix;
-    renderObject.uniforms.uModelViewMatrix = modelViewMatrix;
+    renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
+    renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

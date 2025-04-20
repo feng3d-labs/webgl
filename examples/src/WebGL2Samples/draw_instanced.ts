@@ -1,5 +1,5 @@
-import { IRenderObject, IRenderPipeline, IVertexAttributes } from "@feng3d/render-api";
-import { IGLCanvasContext, WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
 const canvas = document.createElement("canvas");
@@ -8,7 +8,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const renderingContext: IGLCanvasContext = { canvasId: "glcanvas" };
+const renderingContext: CanvasContext = { canvasId: "glcanvas" };
 const webgl = new WebGL(renderingContext);
 
 const vertexPosBuffer = new Float32Array([-0.3, -0.5,
@@ -18,23 +18,25 @@ const vertexColorBuffer = new Float32Array([
     1.0, 0.5, 0.0,
     0.0, 0.5, 1.0]);
 
-const program: IRenderPipeline = {
-    primitive: { topology: "triangle-list" },
+const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") },
     fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
 };
 
-const vertexArray: { vertices?: IVertexAttributes } = {
+const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
         pos: { data: vertexPosBuffer, format: "float32x2" },
         color: { data: vertexColorBuffer, format: "float32x3", stepMode: "instance" },
     },
 };
 
-const renderObject: IRenderObject = {
-    vertices: vertexArray.vertices,
-    uniforms: {},
-    drawVertex: { vertexCount: 3, instanceCount: 2 },
+const renderObject: RenderObject = {
+    bindingResources: {},
+    geometry:{
+        primitive: { topology: "triangle-list" },
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
+    },
     pipeline: program
 };
 

@@ -1,4 +1,4 @@
-import { IBuffer, IRenderPassDescriptor, IRenderPipeline, ISampler, ISubmit, ITexture } from "@feng3d/render-api";
+import { GBuffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -9,10 +9,8 @@ import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
 import { deleteSampler } from "./caches/getGLSampler";
 import { deleteTexture } from "./caches/getGLTexture";
 import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { IGLCanvasContext } from "./data/IGLCanvasContext";
-import { IGLReadPixels } from "./data/IGLReadPixels";
-import { IGLRenderbuffer } from "./data/IGLRenderbuffer";
-import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
+import { Renderbuffer } from "./data/Renderbuffer";
+import { TransformFeedback } from "./data/TransformFeedbackPass";
 import { readPixels } from "./utils/readPixels";
 
 /**
@@ -23,13 +21,13 @@ import { readPixels } from "./utils/readPixels";
 export class WebGL
 {
     private _runWebGL: RunWebGL = new RunWebGL();
-    private _renderingContext: IGLCanvasContext;
+    private _renderingContext: CanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext?: IGLCanvasContext)
+    constructor(renderingContext?: CanvasContext)
     {
         this._renderingContext = renderingContext;
-        this._gl = getGLCanvasContext(this._renderingContext);
+        this._gl = getGLCanvasContext(this._renderingContext) as any;
     }
 
     /**
@@ -38,47 +36,49 @@ export class WebGL
      * @param submit 一次 GPU 提交内容。
      *
      */
-    submit(submit: ISubmit)
+    submit(submit: Submit)
     {
         this._runWebGL.runSubmit(this._gl, submit);
     }
 
-    runReadPixels(glReadPixels: IGLReadPixels)
+    readPixels(glReadPixels: ReadPixels)
     {
-        readPixels(this._gl, glReadPixels);
+        glReadPixels.result = readPixels(this._gl, glReadPixels);
+
+        return glReadPixels.result;
     }
 
-    deleteFramebuffer(passDescriptor: IRenderPassDescriptor)
+    deleteFramebuffer(passDescriptor: RenderPassDescriptor)
     {
         deleteFramebuffer(this._gl, passDescriptor);
     }
 
-    deleteRenderbuffer(renderbuffer: IGLRenderbuffer)
+    deleteRenderbuffer(renderbuffer: Renderbuffer)
     {
         deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    deleteBuffer(buffer: IBuffer)
+    deleteBuffer(buffer: GBuffer)
     {
         deleteBuffer(this._gl, buffer);
     }
 
-    deleteTexture(texture: ITexture)
+    deleteTexture(texture: Texture)
     {
         deleteTexture(this._gl, texture);
     }
 
-    deleteSampler(sampler: ISampler)
+    deleteSampler(sampler: Sampler)
     {
         deleteSampler(this._gl, sampler);
     }
 
-    deleteProgram(pipeline: IRenderPipeline)
+    deleteProgram(material: RenderPipeline)
     {
-        deleteProgram(this._gl, pipeline);
+        deleteProgram(this._gl, material);
     }
 
-    deleteTransformFeedback(transformFeedback: IGLTransformFeedback)
+    deleteTransformFeedback(transformFeedback: TransformFeedback)
     {
         deleteTransformFeedback(this._gl, transformFeedback);
     }

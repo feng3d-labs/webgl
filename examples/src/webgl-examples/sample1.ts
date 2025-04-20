@@ -1,4 +1,4 @@
-import { ISubmit } from "@feng3d/render-api";
+import { Submit } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 const init = async (canvas: HTMLCanvasElement) =>
@@ -7,9 +7,9 @@ const init = async (canvas: HTMLCanvasElement) =>
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", contextId: "webgl" }); // 初始化WebGL
+    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" }); // 初始化WebGL
 
-    const submit: ISubmit = { // 一次GPU提交
+    const submit: Submit = { // 一次GPU提交
         commandEncoders: [ // 命令编码列表
             {
                 passEncoders: [ // 通道编码列表
@@ -39,12 +39,14 @@ const init = async (canvas: HTMLCanvasElement) =>
                                     }
                                     ` },
                             },
-                            vertices: {
-                                position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: "float32x2" }, // 顶点坐标数据
+                            geometry: {
+                                vertices: {
+                                    position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: "float32x2" }, // 顶点坐标数据
+                                },
+                                indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
+                                draw: { __type__: "DrawIndexed", indexCount: 3 }, // 绘制命令
                             },
-                            indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
-                            uniforms: { color: [1, 0, 0, 1] }, // Uniform 颜色值。
-                            drawIndexed: { indexCount: 3 }, // 绘制命令
+                            bindingResources: { color: [1, 0, 0, 1] }, // Uniform 颜色值。
                         }]
                     },
                 ]

@@ -1,56 +1,39 @@
-import { getBlendConstantColor, IBlendComponent, IBufferBinding, IColorTargetState, ICommandEncoder, ICopyBufferToBuffer, ICopyTextureToTexture, ICullFace, IDepthStencilState, IDrawIndexed, IDrawVertex, IFrontFace, IIndicesDataTypes, IPrimitiveState, IRenderObject, IRenderPass, IRenderPassColorAttachment, IRenderPassDepthStencilAttachment, IRenderPassDescriptor, IRenderPassObject, IRenderPipeline, ISampler, IScissorRect, ISubmit, ITextureView, IUniforms, IVertexAttribute, IVertexAttributes, IViewport, TypedArray, UnReadonly } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, GBuffer, IIndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
+import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
+import { getGLDrawMode, GLDrawMode } from "./caches/getGLDrawMode";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
-import { getGLProgram } from "./caches/getGLProgram";
+import { getGLProgram, UniformItemInfo } from "./caches/getGLProgram";
 import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
-import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap } from "./caches/getGLSampler";
+import { getGLRenderPassDescriptorWithMultisample } from "./caches/getGLRenderPassDescriptorWithMultisample";
+import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "./caches/getGLSampler";
+import { getGLTextureTarget, GLTextureTarget } from "./caches/getGLTextureTarget";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
-import { getIGLBlitFramebuffer } from "./caches/getIGLBlitFramebuffer";
-import { getIGLDrawMode, IGLDrawMode } from "./caches/getIGLDrawMode";
-import { getIGLRenderPassDescriptorWithMultisample } from "./caches/getIGLRenderPassDescriptorWithMultisample";
-import { getIGLTextureTarget } from "./caches/getIGLTextureTarget";
 import { _GL_Submit_Times } from "./const/const";
-import { IGLUniformBufferType } from "./const/IGLUniformType";
-import { IGLBlitFramebuffer } from "./data/IGLBlitFramebuffer";
-import { IGLDrawElementType, IGLUniformBuffer } from "./data/IGLBuffer";
-import { IGLCompareFunction, IGLStencilFunc, IGLStencilOp } from "./data/IGLDepthStencilState";
-import { IGLOcclusionQuery } from "./data/IGLOcclusionQuery";
-import { IGLTextureMagFilter, IGLTextureMinFilter, IGLTextureWrap } from "./data/IGLSampler";
-import { IGLSamplerTexture } from "./data/IGLSamplerTexture";
-import { IGLTextureTarget } from "./data/IGLTexture";
-import { IGLTransformFeedback } from "./data/IGLTransformFeedback";
-import { IGLTransformFeedbackObject, IGLTransformFeedbackPass, IGLTransformFeedbackPipeline } from "./data/IGLTransformFeedbackPass";
-import { IUniformItemInfo } from "./data/IGLUniformInfo";
+import { GLUniformBufferType } from "./const/GLUniformType";
+import { BlitFramebuffer } from "./data/BlitFramebuffer";
+import { DrawElementType } from "./data/polyfills/Buffer";
+import { SamplerTexture } from "./data/SamplerTexture";
+import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPass, TransformFeedbackPipeline } from "./data/TransformFeedbackPass";
 import { getGLTexture } from "./internal";
-import { getIGLIndexBuffer, getIGLUniformBuffer, getIGLVertexBuffer } from "./runs/getIGLBuffer";
+import { getIGLBuffer } from "./runs/getIGLBuffer";
 import { getIGLBlendEquation, getIGLBlendFactor, IGLBlendEquation, IGLBlendFactor } from "./runs/runColorTargetStates";
 import { getIGLCompareFunction } from "./runs/runDepthState";
 import { getIGLStencilFunc, getIGLStencilOp } from "./runs/runStencilState";
-import { ChainMap } from "./utils/ChainMap";
-import { getGLRenderPassAttachmentSize } from "./utils/getGLRenderPassAttachmentSize";
-import { getIGLCullFace, IGLCullFace } from "./utils/getIGLCullFace";
-import { getIGLFrontFace, IGLFrontFace } from "./utils/getIGLFrontFace";
-import { getIGLVertexFormat } from "./utils/getIVertexFormat";
 import { updateBufferBinding } from "./utils/updateBufferBinding";
 
-declare global
-{
-    interface WebGLRenderingContext
-    {
-        _vertexArrays: ChainMap<[IRenderPipeline, IVertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
-    }
-}
+import "./data/polyfills/OcclusionQuery";
 
 declare global
 {
     interface WebGLTexture
     {
-        minFilter?: IGLTextureMinFilter,
-        magFilter?: IGLTextureMagFilter,
-        wrapS?: IGLTextureWrap,
-        wrapT?: IGLTextureWrap,
-        wrapR?: IGLTextureWrap,
+        minFilter?: GLTextureMinFilter,
+        magFilter?: GLTextureMagFilter,
+        wrapS?: GLTextureWrap,
+        wrapT?: GLTextureWrap,
+        wrapR?: GLTextureWrap,
         maxAnisotropy?: number,
         lodMinClamp?: number;
         lodMaxClamp?: number;
@@ -59,7 +42,7 @@ declare global
 
 export class RunWebGL
 {
-    runSubmit(gl: WebGLRenderingContext, submit: ISubmit)
+    runSubmit(gl: WebGLRenderingContext, submit: Submit)
     {
         const commandBuffers = submit.commandEncoders.map((v) =>
         {
@@ -72,31 +55,31 @@ export class RunWebGL
         gl[_GL_Submit_Times] = ~~gl[_GL_Submit_Times] + 1;
     }
 
-    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: ICommandEncoder)
+    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
     {
         commandEncoder.passEncoders.forEach((passEncoder) =>
         {
-            if (!passEncoder.__type)
+            if (!passEncoder.__type__)
             {
-                this.runRenderPass(gl, passEncoder as IRenderPass);
+                this.runRenderPass(gl, passEncoder as RenderPass);
             }
-            else if (passEncoder.__type === "RenderPass")
+            else if (passEncoder.__type__ === "RenderPass")
             {
                 this.runRenderPass(gl, passEncoder);
             }
-            else if (passEncoder.__type === "TransformFeedbackPass")
+            else if (passEncoder.__type__ === "TransformFeedbackPass")
             {
                 this.runTransformFeedbackPass(gl, passEncoder);
             }
-            else if (passEncoder.__type === "BlitFramebuffer")
+            else if (passEncoder.__type__ === "BlitFramebuffer")
             {
                 this.runBlitFramebuffer(gl, passEncoder);
             }
-            else if (passEncoder.__type === "CopyTextureToTexture")
+            else if (passEncoder.__type__ === "CopyTextureToTexture")
             {
                 this.runCopyTextureToTexture(gl, passEncoder);
             }
-            else if (passEncoder.__type === "CopyBufferToBuffer")
+            else if (passEncoder.__type__ === "CopyBufferToBuffer")
             {
                 this.runCopyBuffer(gl, passEncoder);
             }
@@ -107,7 +90,7 @@ export class RunWebGL
         });
     }
 
-    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: IGLTransformFeedbackPass)
+    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: TransformFeedbackPass)
     {
         // 执行变换反馈通道时关闭光栅化功能
         if (gl instanceof WebGL2RenderingContext)
@@ -124,7 +107,7 @@ export class RunWebGL
         }
     }
 
-    protected runRenderPass(gl: WebGLRenderingContext, renderPass: IRenderPass)
+    protected runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     {
         // 获取附件尺寸
         const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
@@ -134,9 +117,9 @@ export class RunWebGL
         //
         occlusionQuery.init();
 
-        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as ITextureView).texture)
+        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as TextureView).texture)
         {
-            const { passDescriptor, blitFramebuffer } = getIGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
+            const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
             this.runRenderPassDescriptor(gl, passDescriptor);
 
@@ -154,25 +137,30 @@ export class RunWebGL
         occlusionQuery.resolve(renderPass);
     }
 
-    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: IRenderPassDescriptor)
+    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
 
-        //
-        const colorAttachment = Object.assign({}, defaultRenderPassColorAttachment, passDescriptor.colorAttachments?.[0]);
 
         //
         const framebuffer = getGLFramebuffer(gl, passDescriptor);
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
         //
-        const { clearValue, loadOp } = colorAttachment;
+        const colorAttachment = passDescriptor.colorAttachments?.[0];
+        //
+        const clearValue = colorAttachment?.clearValue ?? [0, 0, 0, 0];
+        const loadOp = colorAttachment?.loadOp ?? "clear";
         gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
 
         //
-        const depthStencilAttachment = Object.assign({}, defaultDepthStencilAttachment, passDescriptor.depthStencilAttachment);
-        const { depthClearValue, depthLoadOp, stencilClearValue, stencilLoadOp } = depthStencilAttachment;
+        const depthStencilAttachment = passDescriptor.depthStencilAttachment;
+        const depthClearValue = depthStencilAttachment?.depthClearValue ?? 1;
+        const depthLoadOp = depthStencilAttachment?.depthLoadOp ?? "load";
+        const stencilClearValue = depthStencilAttachment?.stencilClearValue ?? 0;
+        const stencilLoadOp = depthStencilAttachment?.stencilLoadOp ?? "load";
 
+        //
         gl.clearDepth(depthClearValue);
         gl.clearStencil(stencilClearValue);
 
@@ -183,11 +171,11 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly IRenderPassObject[])
+    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly RenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type === "OcclusionQuery")
+            if (renderObject.__type__ === "OcclusionQuery")
             {
                 this.runOcclusionQuery(gl, attachmentSize, renderObject);
             }
@@ -198,12 +186,9 @@ export class RunWebGL
         });
     }
 
-    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: IRenderObject)
+    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
-        const { viewport, scissorRect, pipeline, vertices, indices, uniforms, drawIndexed, drawVertex } = renderObject;
-
-        const topology = pipeline.primitive?.topology || "triangle-list";
-        const drawMode = getIGLDrawMode(topology);
+        const { viewport, scissorRect, pipeline, geometry, bindingResources: uniforms } = renderObject;
 
         this.runViewPort(gl, attachmentSize, viewport);
 
@@ -211,40 +196,47 @@ export class RunWebGL
 
         this.runRenderPipeline(gl, pipeline);
 
-        this.runVertexArray(gl, pipeline, vertices, indices);
-
         this.runUniforms(gl, pipeline, uniforms);
 
-        if (drawVertex)
+        const { vertices, indices, draw, primitive } = geometry;
+
+        this.runVertexArray(gl, pipeline, vertices, indices);
+
+        this.runPrimitiveState(gl, primitive);
+
+        const topology = primitive?.topology || "triangle-list";
+        const drawMode = getGLDrawMode(topology);
+
+        if (draw.__type__ === 'DrawVertex')
         {
-            this.runDrawVertex(gl, drawMode, drawVertex);
+            this.runDrawVertex(gl, drawMode, draw);
         }
-        if (drawIndexed)
+        else
         {
-            this.runDrawIndexed(gl, drawMode, indices, drawIndexed);
+            this.runDrawIndexed(gl, drawMode, indices, draw);
         }
     }
 
-    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: IGLTransformFeedbackObject)
+    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: TransformFeedbackObject)
     {
-        const { pipeline, vertices, uniforms, transformFeedback, drawVertex } = renderObject;
+        const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
-        const drawMode = getIGLDrawMode("point-list");
+        const drawMode = getGLDrawMode("point-list");
 
-        this.runTransformFeedbackPipeline(gl, pipeline);
+        this.runTransformFeedbackPipeline(gl, material);
 
-        this.runVertexArray(gl, pipeline, vertices, undefined);
+        this.runVertexArray(gl, material, vertices, undefined);
 
-        this.runUniforms(gl, pipeline, uniforms);
+        this.runUniforms(gl, material, uniforms);
 
         this.runTransformFeedback(gl, transformFeedback, drawMode);
 
-        this.runDrawVertex(gl, drawMode, drawVertex);
+        this.runDrawVertex(gl, drawMode, draw);
 
         this.endTransformFeedback(gl, transformFeedback);
     }
 
-    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback)
+    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
     {
         //
         if (transformFeedback)
@@ -259,9 +251,9 @@ export class RunWebGL
         }
     }
 
-    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: IGLDrawMode, indices: IIndicesDataTypes, drawIndexed: IDrawIndexed)
+    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IIndicesDataTypes, drawIndexed: DrawIndexed)
     {
-        const type: IGLDrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
+        const type: DrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
         const indexCount = drawIndexed.indexCount;
         const firstIndex = drawIndexed.firstIndex || 0;
@@ -288,7 +280,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawVertex(gl: WebGLRenderingContext, drawMode: IGLDrawMode, drawArrays: IDrawVertex)
+    private runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
     {
         //
         const vertexCount = drawArrays.vertexCount;
@@ -316,9 +308,9 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, pipeline: IRenderPipeline, uniforms: IUniforms)
+    private runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
     {
-        const webGLProgram = getGLProgram(gl, pipeline);
+        const webGLProgram = getGLProgram(gl, material);
 
         webGLProgram.uniforms.forEach((uniformInfo) =>
         {
@@ -341,11 +333,11 @@ export class RunWebGL
 
                 if (isTexture)
                 {
-                    this.runSamplerTexture(gl, v, uniformData as IGLSamplerTexture);
+                    this.runSamplerTexture(gl, v, uniformData as SamplerTexture);
                 }
                 else
                 {
-                    this.runUniform(gl, type as IGLUniformBufferType, v, uniformData);
+                    this.runUniform(gl, type as GLUniformBufferType, v, uniformData);
                 }
             });
         });
@@ -355,22 +347,21 @@ export class RunWebGL
             webGLProgram.uniformBlocks.forEach((uniformBlock) =>
             {
                 const { name, index } = uniformBlock;
-                const uniformData = uniforms[name] as TypedArray | IBufferBinding;
+                const uniformData = uniforms[name] as TypedArray | BufferBinding;
 
                 //
-                let buffer: IGLUniformBuffer;
-                const typedArray = uniformData as TypedArray;
-                if (typedArray.buffer && typedArray.BYTES_PER_ELEMENT)
+                let typedArray = uniformData as TypedArray;
+                if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
                 {
-                    buffer = getIGLUniformBuffer(typedArray);
-                }
-                else
-                {
-                    const bufferBinding = uniforms[name] as IBufferBinding;
+                    const bufferBinding = uniforms[name] as BufferBinding;
                     updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
-                    buffer = getIGLUniformBuffer(bufferBinding.bufferView);
+                    typedArray = bufferBinding.bufferView;
                 }
-                (buffer as UnReadonly<IGLUniformBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
+                const buffer = getIGLBuffer(typedArray, "UNIFORM_BUFFER", "DYNAMIC_DRAW");
+                buffer.target ??= "UNIFORM_BUFFER";
+                buffer.usage ??= "DYNAMIC_DRAW";
+
+                (buffer as UnReadonly<GBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
@@ -379,12 +370,12 @@ export class RunWebGL
         }
     }
 
-    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: IUniformItemInfo, samplerTexture: IGLSamplerTexture)
+    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
     {
         const { texture, sampler } = samplerTexture;
         const { location, textureID } = uniformInfo;
 
-        const textureTarget = getIGLTextureTarget(texture.dimension);
+        const textureTarget = getGLTextureTarget(texture.dimension);
 
         // 设置纹理所在采样编号
         gl.uniform1i(location, textureID);
@@ -403,7 +394,7 @@ export class RunWebGL
     /**
      * 设置采样参数
      */
-    private runSampler(gl: WebGLRenderingContext, textureTarget: IGLTextureTarget, webGLTexture: WebGLTexture, sampler: ISampler, textureID: number)
+    private runSampler(gl: WebGLRenderingContext, textureTarget: GLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -412,10 +403,10 @@ export class RunWebGL
         }
         else
         {
-            const minFilter: IGLTextureMinFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
-            const magFilter: IGLTextureMagFilter = getIGLTextureMagFilter(sampler.magFilter);
-            const wrapS: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeU);
-            const wrapT: IGLTextureWrap = getIGLTextureWrap(sampler.addressModeV);
+            const minFilter = getIGLTextureMinFilter(sampler.minFilter, sampler.mipmapFilter);
+            const magFilter = getIGLTextureMagFilter(sampler.magFilter);
+            const wrapS = getIGLTextureWrap(sampler.addressModeU);
+            const wrapT = getIGLTextureWrap(sampler.addressModeV);
 
             // 设置纹理参数
             if (webGLTexture.minFilter !== minFilter)
@@ -456,12 +447,13 @@ export class RunWebGL
     /**
      * 设置环境Uniform数据
      */
-    private runUniform(gl: WebGLRenderingContext, type: IGLUniformBufferType, uniformInfo: IUniformItemInfo, data: any)
+    private runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
     {
         if (typeof data === "number")
         {
             data = [data];
         }
+        if (data.toArray) data = data.toArray();
         const location = uniformInfo.location;
         switch (type)
         {
@@ -540,14 +532,14 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, pipeline: IRenderPipeline, vertices: IVertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
         let webGLVertexArrayObject: WebGLVertexArrayObject;
         if (gl instanceof WebGL2RenderingContext)
         {
-            webGLVertexArrayObject = gl._vertexArrays.get([pipeline, vertices, indices]);
+            webGLVertexArrayObject = gl._vertexArrays.get([material, vertices, indices]);
             if (webGLVertexArrayObject)
             {
                 gl.bindVertexArray(webGLVertexArrayObject);
@@ -557,10 +549,10 @@ export class RunWebGL
 
             webGLVertexArrayObject = gl.createVertexArray();
             gl.bindVertexArray(webGLVertexArrayObject);
-            gl._vertexArrays.set([pipeline, vertices, indices], webGLVertexArrayObject);
+            gl._vertexArrays.set([material, vertices, indices], webGLVertexArrayObject);
         }
 
-        const shaderResult = getGLProgram(gl, pipeline);
+        const shaderResult = getGLProgram(gl, material);
 
         //
         shaderResult.attributes.forEach((activeInfo) =>
@@ -585,18 +577,20 @@ export class RunWebGL
     {
         if (!indices) return;
 
-        const indexBuffer = getIGLIndexBuffer(indices);
+        const indexBuffer = getIGLBuffer(indices, "ELEMENT_ARRAY_BUFFER");
+        indexBuffer.target ??= "ELEMENT_ARRAY_BUFFER";
+        indexBuffer.usage ??= "STATIC_DRAW";
 
         const buffer = getGLBuffer(gl, indexBuffer);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 
-    private runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: IVertexAttribute)
+    private runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
     {
         const { stepMode, format } = attribute;
         let { arrayStride, offset } = attribute;
 
-        const glVertexFormat = getIGLVertexFormat(format);
+        const glVertexFormat = vertexFormatMap[format];
         const { numComponents, normalized, type } = glVertexFormat;
 
         gl.enableVertexAttribArray(location);
@@ -619,7 +613,9 @@ export class RunWebGL
         offset = offset || 0;
 
         //
-        const buffer = getIGLVertexBuffer(attribute.data);
+        const buffer = getIGLBuffer(attribute.data, "ARRAY_BUFFER", "STATIC_DRAW");
+        buffer.target ??= "ARRAY_BUFFER";
+
         const webGLBuffer = getGLBuffer(gl, buffer);
         gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
@@ -634,7 +630,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: IGLTransformFeedback, topology: IGLDrawMode)
+    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback, topology: GLDrawMode)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -657,23 +653,21 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: IGLTransformFeedbackPipeline)
+    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: TransformFeedbackPipeline)
     {
         const program = getGLProgram(gl, renderPipeline);
         gl.useProgram(program);
     }
 
-    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: IRenderPipeline)
+    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
     {
         this.runProgram(gl, renderPipeline);
-
-        this.runPrimitiveState(gl, renderPipeline?.primitive);
 
         this.runDepthState(gl, renderPipeline.depthStencil);
         this.runStencilState(gl, renderPipeline.depthStencil);
     }
 
-    private runStencilState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
+    private runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         const { stencilFront, stencilBack } = { ...depthStencil };
         //
@@ -687,10 +681,10 @@ export class RunWebGL
 
             if (stencilFront)
             {
-                const func: IGLStencilFunc = getIGLStencilFunc(stencilFront.compare ?? "always");
-                const fail: IGLStencilOp = getIGLStencilOp(stencilFront.failOp);
-                const zfail: IGLStencilOp = getIGLStencilOp(stencilFront.depthFailOp);
-                const zpass: IGLStencilOp = getIGLStencilOp(stencilFront.passOp);
+                const func = getIGLStencilFunc(stencilFront.compare ?? "always");
+                const fail = getIGLStencilOp(stencilFront.failOp);
+                const zfail = getIGLStencilOp(stencilFront.depthFailOp);
+                const zpass = getIGLStencilOp(stencilFront.passOp);
                 //
                 gl.stencilFuncSeparate(gl.FRONT, gl[func], ref, readMask);
                 gl.stencilOpSeparate(gl.FRONT, gl[fail], gl[zfail], gl[zpass]);
@@ -698,10 +692,10 @@ export class RunWebGL
             }
             if (stencilBack)
             {
-                const func: IGLStencilFunc = getIGLStencilFunc(stencilBack.compare ?? "always");
-                const fail: IGLStencilOp = getIGLStencilOp(stencilBack.failOp);
-                const zfail: IGLStencilOp = getIGLStencilOp(stencilBack.depthFailOp);
-                const zpass: IGLStencilOp = getIGLStencilOp(stencilBack.passOp);
+                const func = getIGLStencilFunc(stencilBack.compare ?? "always");
+                const fail = getIGLStencilOp(stencilBack.failOp);
+                const zfail = getIGLStencilOp(stencilBack.depthFailOp);
+                const zpass = getIGLStencilOp(stencilBack.passOp);
                 //
                 gl.stencilFuncSeparate(gl.BACK, gl[func], ref, readMask);
                 gl.stencilOpSeparate(gl.BACK, gl[fail], gl[zfail], gl[zpass]);
@@ -714,11 +708,11 @@ export class RunWebGL
         }
     }
 
-    private runDepthState(gl: WebGLRenderingContext, depthStencil?: IDepthStencilState)
+    private runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
         {
-            const depthCompare: IGLCompareFunction = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
+            const depthCompare = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
             const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
             //
             gl.enable(gl.DEPTH_TEST);
@@ -746,17 +740,21 @@ export class RunWebGL
         }
     }
 
-    private runPrimitiveState(gl: WebGLRenderingContext, primitive?: IPrimitiveState)
+    private runPrimitiveState(gl: WebGLRenderingContext, primitive?: PrimitiveState)
     {
-        const cullFace: ICullFace = primitive?.cullFace || "none";
-        const frontFace: IFrontFace = primitive?.frontFace || "ccw";
+        const cullFace: CullFace = primitive?.cullFace || "none";
+        const frontFace: FrontFace = primitive?.frontFace || "ccw";
 
-        const enableCullFace = cullFace !== "none";
-        const glCullMode: IGLCullFace = getIGLCullFace(cullFace);
-        const glFrontFace: IGLFrontFace = getIGLFrontFace(frontFace);
 
-        if (enableCullFace)
+        if (cullFace !== "none")
         {
+            const glCullMode = cullFaceMap[cullFace];
+            console.assert(!!glCullMode, `接收到错误值，请从 ${Object.keys(cullFaceMap).toString()} 中取值！`);
+
+            const glFrontFace = frontFaceMap[frontFace];
+            console.assert(!!glFrontFace, `接收到错误 IFrontFace 值，请从 ${Object.keys(frontFaceMap).toString()} 中取值！`);
+
+            //
             gl.enable(gl.CULL_FACE);
             gl.cullFace(gl[glCullMode]);
             gl.frontFace(gl[glFrontFace]);
@@ -767,16 +765,16 @@ export class RunWebGL
         }
     }
 
-    private runProgram(gl: WebGLRenderingContext, pipeline: IRenderPipeline)
+    private runProgram(gl: WebGLRenderingContext, material: RenderPipeline)
     {
-        const program = getGLProgram(gl, pipeline);
+        const program = getGLProgram(gl, material);
         gl.useProgram(program);
 
         //
-        this.runColorTargetStates(gl, pipeline.fragment.targets);
+        this.runColorTargetStates(gl, material.fragment.targets);
     }
 
-    private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly IColorTargetState[])
+    private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
     {
         //
         const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
@@ -786,8 +784,8 @@ export class RunWebGL
         const blend = targets?.[0]?.blend;
         if (blend)
         {
-            const color: IBlendComponent = blend.color;
-            const alpha: IBlendComponent = blend.alpha;
+            const color: BlendComponent = blend.color;
+            const alpha: BlendComponent = blend.alpha;
 
             const colorOperation: IGLBlendEquation = getIGLBlendEquation(color?.operation) || "FUNC_ADD";
             const colorSrcFactor: IGLBlendFactor = getIGLBlendFactor(color?.srcFactor, color?.operation) || "SRC_ALPHA";
@@ -798,7 +796,7 @@ export class RunWebGL
             const alphaDstFactor: IGLBlendFactor = getIGLBlendFactor(alpha?.dstFactor, color?.operation) || colorDstFactor;
 
             // 当混合系数用到了混合常量值时设置混合常量值。
-            const constantColor = getBlendConstantColor(blend);
+            const constantColor = BlendState.getBlendConstantColor(blend);
             if (constantColor)
             {
                 const constantColor = blend.constantColor ?? [0, 0, 0, 0];
@@ -816,7 +814,7 @@ export class RunWebGL
         }
     }
 
-    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: IGLOcclusionQuery)
+    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: OcclusionQuery)
     {
         // 开始查询
         occlusionQuery._step.begin();
@@ -831,7 +829,7 @@ export class RunWebGL
         occlusionQuery._step.end();
     }
 
-    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: IViewport)
+    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: Viewport)
     {
         if (viewport)
         {
@@ -854,7 +852,7 @@ export class RunWebGL
         }
     }
 
-    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: IScissorRect)
+    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: ScissorRect)
     {
         if (scissor)
         {
@@ -878,13 +876,13 @@ export class RunWebGL
         }
     }
 
-    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: ICopyTextureToTexture)
+    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: CopyTextureToTexture)
     {
-        const blitFramebuffer = getIGLBlitFramebuffer(copyTextureToTexture);
+        const blitFramebuffer = getGLBlitFramebuffer(copyTextureToTexture);
         this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: IGLBlitFramebuffer)
+    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: BlitFramebuffer)
     {
         const { read, draw, blitFramebuffers } = blitFramebuffer;
 
@@ -914,7 +912,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: ICopyBufferToBuffer)
+    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferToBuffer)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -938,5 +936,48 @@ export class RunWebGL
     }
 }
 
-export const defaultRenderPassColorAttachment: IRenderPassColorAttachment = { clearValue: [0, 0, 0, 0], loadOp: "clear" };
-export const defaultDepthStencilAttachment: IRenderPassDepthStencilAttachment = { depthClearValue: 1, depthLoadOp: "load", stencilClearValue: 0, stencilLoadOp: "load" };
+const cullFaceMap = Object.freeze({
+    FRONT_AND_BACK: "FRONT_AND_BACK",
+    none: "BACK", // 不会开启剔除面功能，什么值无所谓。
+    front: "FRONT",
+    back: "BACK",
+});
+
+const frontFaceMap = Object.freeze({ ccw: "CCW", cw: "CW", });
+
+/**
+ * 获取渲染通道附件尺寸。
+ *
+ * @param gl
+ * @param descriptor
+ */
+function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: RenderPassDescriptor): { readonly width: number; readonly height: number; }
+{
+    if (!descriptor) return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+
+    const colorAttachments = descriptor.colorAttachments;
+    if (colorAttachments)
+    {
+        const view = colorAttachments[0]?.view;
+        if (view)
+        {
+            return { width: view.texture.size[0], height: view.texture.size[1] };
+        }
+
+        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+    }
+
+    const depthStencilAttachment = descriptor.depthStencilAttachment;
+    if (depthStencilAttachment)
+    {
+        const view = depthStencilAttachment.view;
+        if (view)
+        {
+            return { width: view.texture.size[0], height: view.texture.size[1] };
+        }
+
+        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+    }
+
+    return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
+}

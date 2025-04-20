@@ -1,7 +1,7 @@
-import { IRenderPassColorAttachment, IRenderPassDescriptor, ITextureFormat, ITextureView } from "@feng3d/render-api";
-import { IGLBlitFramebuffer } from "../data/IGLBlitFramebuffer";
-import { GLRenderbufferInternalformat, IGLRenderbuffer } from "../data/IGLRenderbuffer";
-import { getIGLTextureFormats } from "./getIGLTextureFormats";
+import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
+import { BlitFramebuffer } from "../data/BlitFramebuffer";
+import { RenderbufferInternalformat, Renderbuffer } from "../data/Renderbuffer";
+import { getGLTextureFormats } from "./getGLTextureFormats";
 
 /**
  *
@@ -11,43 +11,43 @@ import { getIGLTextureFormats } from "./getIGLTextureFormats";
  *
  * @param sourcePassDescriptor 需要渲染到纹理并且开启多重采样的渲染通道描述。
  */
-export function getIGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: IRenderPassDescriptor): IGLRenderPassDescriptorWithMultisample
+export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: RenderPassDescriptor): GLRenderPassDescriptorWithMultisample
 {
     if (sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample]) return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 
-    const texture = (sourcePassDescriptor.colorAttachments[0].view as ITextureView).texture;
+    const texture = (sourcePassDescriptor.colorAttachments[0].view as TextureView).texture;
 
     const textureSize = texture.size;
 
-    const renderbuffers: IGLRenderbuffer[] = [];
+    const renderbuffers: Renderbuffer[] = [];
 
     // 创建支持 多重采样的 渲染通道
-    const passDescriptor: IRenderPassDescriptor = {
+    const passDescriptor: RenderPassDescriptor = {
         colorAttachments: sourcePassDescriptor.colorAttachments.map((v) =>
         {
             const texture = v.view.texture;
 
-            const renderbuffer: IGLRenderbuffer = {
+            const renderbuffer: Renderbuffer = {
                 internalformat: getGLRenderbufferInternalformat(texture.format),
                 width: textureSize[0],
                 height: textureSize[1],
             };
             renderbuffers.push(renderbuffer);
 
-            const colorAttachment: IRenderPassColorAttachment = {
+            const colorAttachment: RenderPassColorAttachment = {
                 ...v,
                 view: renderbuffer as any,
             };
 
-return colorAttachment;
+            return colorAttachment;
         }),
         depthStencilAttachment: sourcePassDescriptor.depthStencilAttachment,
         sampleCount: sourcePassDescriptor.sampleCount,
     };
 
     // 拷贝 渲染缓冲区到 IGLTexture
-    const blitFramebuffer: IGLBlitFramebuffer = {
-        __type: "BlitFramebuffer",
+    const blitFramebuffer: BlitFramebuffer = {
+        __type__: "BlitFramebuffer",
         read: passDescriptor,
         draw: sourcePassDescriptor,
         blitFramebuffers: [[0, 0, textureSize[0], textureSize[1],
@@ -55,16 +55,16 @@ return colorAttachment;
             "COLOR_BUFFER_BIT", "NEAREST"]],
     };
 
-    sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as IGLRenderPassDescriptorWithMultisample;
+    sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as GLRenderPassDescriptorWithMultisample;
 
     return sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample];
 }
 
-function getGLRenderbufferInternalformat(format?: ITextureFormat)
+function getGLRenderbufferInternalformat(format?: TextureFormat)
 {
-    const { internalformat } = getIGLTextureFormats(format);
+    const { internalformat } = getGLTextureFormats(format);
 
-    return internalformat as GLRenderbufferInternalformat;
+    return internalformat as RenderbufferInternalformat;
 }
 
 export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptorWithMultisample";
@@ -72,18 +72,18 @@ export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptor
 /**
  * 由`passDescriptor.multisample`值存在的IGLRenderPassDescriptor生成。
  */
-export interface IGLRenderPassDescriptorWithMultisample
+export interface GLRenderPassDescriptorWithMultisample
 {
     /**
      * 渲染到渲染缓冲区上。
      */
-    passDescriptor: IRenderPassDescriptor;
+    passDescriptor: RenderPassDescriptor;
     /**
      * 拷贝渲染缓冲区到目标纹理中。
      */
-    blitFramebuffer: IGLBlitFramebuffer;
+    blitFramebuffer: BlitFramebuffer;
     /**
      * 需要销毁的临时渲染缓冲区。
      */
-    renderbuffers: IGLRenderbuffer[];
+    renderbuffers: Renderbuffer[];
 }
