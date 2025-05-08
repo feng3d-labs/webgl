@@ -1,6 +1,6 @@
 {
   "name": "@feng3d/webgl",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "feng3d引擎的纯数据驱动的WebGL渲染库。",
   "homepage": "https://feng3d.com/webgl",
   "author": "feng",

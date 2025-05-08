@@ -178,7 +178,7 @@ import { getShaderSource } from "./utility";
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderPassObjects: renderPassObjects,
+        renderPassObjects,
     };
 
     function render()
