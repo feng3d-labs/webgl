@@ -88,16 +88,14 @@ import { getShaderSource } from "./utility";
             PerPass: lightPos,
             PerScene: material,
         },
-        geometry: {
-            vertices: vertexArray.vertices,
-            indices: elementData,
-            draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }
-        },
+        vertices: vertexArray.vertices,
+        indices: elementData,
+        draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }
     };
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [ro],
+        renderPassObjects: [ro],
     };
 
     const submit: Submit = { commandEncoders: [{ passEncoders: [rp] }] };

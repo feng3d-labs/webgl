@@ -1,4 +1,4 @@
-import { GBuffer, CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, CopyBufferToBuffer, Buffer, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
 import { WebGL, getIGLBuffer } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -18,6 +18,7 @@ import { getShaderSource } from "./utility";
     // -- Init Program
     const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+        primitive: { topology: "triangle-list" },
     };
 
     // -- Init Buffer
@@ -29,7 +30,7 @@ import { getShaderSource } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBufferSrc: GBuffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: Buffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
@@ -50,13 +51,10 @@ import { getShaderSource } from "./utility";
     // -- Render
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [{
+        renderPassObjects: [{
             pipeline: program,
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            },
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }]
     };
 

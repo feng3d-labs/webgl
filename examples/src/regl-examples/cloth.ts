@@ -5,6 +5,7 @@ import { fit } from "./hughsk/canvas-fit";
 import { attachCamera } from "./hughsk/canvas-orbit-camera";
 import * as mat4 from "./stackgl/gl-mat4";
 import * as vec3 from "./stackgl/gl-vec3";
+import { reactive } from "@feng3d/reactivity";
 
 (async () =>
 {
@@ -165,15 +166,13 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportHeight = 1;
 
     const renderObject: RenderObject = {
-        geometry: {
-            vertices: {
-                position: { data: new Float32Array(positions), format: "float32x3" },
-                normal: { data: new Float32Array(normals), format: "float32x3" },
-                uv: { data: new Float32Array(uvs), format: "float32x2" },
-            },
-            indices: new Uint16Array(indices),
-            draw: { __type__: "DrawIndexed", indexCount: indices.length },
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+            normal: { data: new Float32Array(normals), format: "float32x3" },
+            uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
+        indices: new Uint16Array(indices),
+        draw: { __type__: "DrawIndexed", indexCount: indices.length },
         bindingResources: {},
         pipeline: {
             vertex: {
@@ -227,7 +226,7 @@ import * as vec3 from "./stackgl/gl-vec3";
         commandEncoders: [{
             passEncoders: [
                 {
-                    renderObjects: [renderObject]
+                    renderPassObjects: [renderObject]
                 }
             ]
         }]
@@ -361,8 +360,8 @@ import * as vec3 from "./stackgl/gl-vec3";
             return pv;
         }, []);
 
-        getIGLBuffer(renderObject.geometry.vertices.position.data).data = new Float32Array(positions);
-        getIGLBuffer(renderObject.geometry.vertices.normal.data).data = new Float32Array(normals);
+        reactive(getIGLBuffer(renderObject.vertices.position.data)).data = new Float32Array(positions);
+        reactive(getIGLBuffer(renderObject.vertices.normal.data)).data = new Float32Array(normals);
 
         tick++;
 
@@ -371,8 +370,8 @@ import * as vec3 from "./stackgl/gl-vec3";
 
         camera.tick();
 
-        renderObject.bindingResources.view = camera.view();
-        renderObject.bindingResources.projection
+        reactive(renderObject.bindingResources).view = camera.view();
+        reactive(renderObject.bindingResources).projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -395,7 +394,7 @@ import * as vec3 from "./stackgl/gl-vec3";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
     };
-    renderObject.bindingResources.texture = diffuse;
+    reactive(renderObject.bindingResources).texture = diffuse;
 
     draw();
 })();

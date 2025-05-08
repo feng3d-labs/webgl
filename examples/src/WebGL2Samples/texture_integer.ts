@@ -75,15 +75,13 @@ import { getShaderSource, loadImage } from "./utility";
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            geometry: {
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         };
 
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects: [ro],
+            renderPassObjects: [ro],
         };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

@@ -1,4 +1,4 @@
-import { CanvasContext, IIndicesDataTypes, RenderPassObject, RenderPass, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
 import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
@@ -46,10 +46,12 @@ const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
         depthStencil: { depthCompare: "less-equal" },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
         depthStencil: { depthCompare: "less-equal" },
+        primitive: { topology: "triangle-list" },
     }
 ];
 // -- Load gltf then render
@@ -62,7 +64,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Initialize vertex array
     const vertexArrayMaps: {
-        [key: string]: { vertexArray: { vertices?: VertexAttributes }, indices: IIndicesDataTypes }[]
+        [key: string]: { vertexArray: { vertices?: VertexAttributes }, indices: IndicesDataTypes }[]
     } = {};
 
     // var in loop
@@ -141,7 +143,7 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects,
+            renderPassObjects: renderObjects,
         };
 
         mat4.rotateY(modelView, modelView, rotatationSpeedY);
@@ -173,12 +175,9 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                                 mvp: localMVP,
                                 mvNormal: localMVNormal,
                             },
-                            geometry: {
-                                primitive: { topology: "triangle-list" },
-                                vertices: vertexArray.vertices,
-                                indices,
-                                draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
-                            },
+                            vertices: vertexArray.vertices,
+                            indices,
+                            draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
                         });
                 }
             }

@@ -29,7 +29,8 @@ const program: RenderPipeline = {
     fragment: {
         code: getShaderSource("fs"),
         targets: [{ blend: {} }],
-    }
+    },
+    primitive: { topology: "triangle-strip" },
 };
 
 const indices = new Uint16Array([
@@ -44,12 +45,9 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 const renderObject: RenderObject = {
     bindingResources: {},
-    geometry: {
-        primitive: { topology: "triangle-strip" },
-        vertices: vertexArray.vertices,
-        indices,
-        draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
-    },
+    vertices: vertexArray.vertices,
+    indices,
+    draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
     pipeline: program,
 };
 
@@ -62,7 +60,7 @@ webgl.submit({
                     loadOp: "clear",
                 }],
             },
-            renderObjects: [renderObject]
+            renderPassObjects: [renderObject]
         }]
     }]
 });

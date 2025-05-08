@@ -14,6 +14,7 @@ const webgl = new WebGL(rc);
 // -- Init program
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Init buffers: vec2 Position, vec2 Texcoord
@@ -65,14 +66,11 @@ loadImage("../../assets/img/Di-3d.png", function (image)
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [{
+        renderPassObjects: [{
             pipeline: program,
             bindingResources: { MVP: matrix, diffuse: { texture, sampler } },
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }]
     };
 

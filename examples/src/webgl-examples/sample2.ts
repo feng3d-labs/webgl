@@ -23,7 +23,7 @@ function main()
                 depthLoadOp: "clear",
             },
         },
-        renderObjects: [{
+        renderPassObjects: [{
             pipeline: {
                 vertex: {
                     code: `
@@ -39,23 +39,21 @@ function main()
             void main() {
                 gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
             }` },
+                primitive: { topology: "triangle-strip" },
                 depthStencil: { depthCompare: "less-equal" }
             },
-            geometry: {
-                primitive: { topology: "triangle-strip" },
-                vertices: {
-                    aVertexPosition: {
-                        format: "float32x2",
-                        data: new Float32Array([
-                            1.0, 1.0,
-                            -1.0, 1.0,
-                            1.0, -1.0,
-                            -1.0, -1.0,
-                        ]),
-                    }
-                },
-                draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
+            vertices: {
+                aVertexPosition: {
+                    format: "float32x2",
+                    data: new Float32Array([
+                        1.0, 1.0,
+                        -1.0, 1.0,
+                        1.0, -1.0,
+                        -1.0, -1.0,
+                    ]),
+                }
             },
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
             bindingResources: {
                 uProjectionMatrix: projectionMatrix,
                 uModelViewMatrix: modelViewMatrix,

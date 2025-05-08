@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -122,16 +122,14 @@ function render()
     const renderObject: RenderObject = {
         pipeline: program,
         bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
-        geometry: {
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 },
-        }
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
     };
 
     const renderObjects: RenderPassObject[] = [];
     const renderPass: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects,
+        renderPassObjects: renderObjects,
     };
 
     for (let i = 0; i < Corners.MAX; ++i)

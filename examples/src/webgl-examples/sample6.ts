@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
@@ -23,6 +24,7 @@ async function main()
 
   const renderObject: RenderObject = {
     pipeline: {
+      primitive: { topology: "triangle-list" },
       vertex: {
         code: `
         attribute vec4 aVertexPosition;
@@ -49,21 +51,18 @@ async function main()
       ` },
       depthStencil: { depthCompare: "less-equal" }
     },
-    geometry: {
-      primitive: { topology: "triangle-list" },
-      vertices: {
-        aVertexPosition: {
-          format: "float32x3",
-          data: buffers.position,
-        },
-        aTextureCoord: {
-          format: "float32x2",
-          data: buffers.textureCoord,
-        },
+    vertices: {
+      aVertexPosition: {
+        format: "float32x3",
+        data: buffers.position,
       },
-      indices: buffers.indices,
-      draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+      aTextureCoord: {
+        format: "float32x2",
+        data: buffers.textureCoord,
+      },
     },
+    indices: buffers.indices,
+    draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
     bindingResources: { uSampler: texture },
   };
 
@@ -78,7 +77,7 @@ async function main()
         depthLoadOp: "clear",
       },
     },
-    renderObjects: [renderObject],
+    renderPassObjects: [renderObject],
   };
 
   let then = 0;
@@ -92,8 +91,8 @@ async function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
-    renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+    reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
+    reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

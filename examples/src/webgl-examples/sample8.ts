@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
 import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
@@ -27,6 +28,7 @@ function main()
 
     const renderObject: RenderObject = {
         pipeline: {
+            primitive: { topology: "triangle-list" },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -70,25 +72,22 @@ function main()
       ` },
             depthStencil: { depthCompare: "less-equal" }
         },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: {
-                aVertexPosition: {
-                    format: "float32x3",
-                    data: buffers.position,
-                },
-                aVertexNormal: {
-                    format: "float32x3",
-                    data: buffers.normal,
-                },
-                aTextureCoord: {
-                    format: "float32x2",
-                    data: buffers.textureCoord,
-                },
+        vertices: {
+            aVertexPosition: {
+                format: "float32x3",
+                data: buffers.position,
             },
-            indices: buffers.indices,
-            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+            aVertexNormal: {
+                format: "float32x3",
+                data: buffers.normal,
+            },
+            aTextureCoord: {
+                format: "float32x2",
+                data: buffers.textureCoord,
+            },
         },
+        indices: buffers.indices,
+        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         bindingResources: { uSampler: texture },
     };
 
@@ -103,7 +102,7 @@ function main()
                 depthLoadOp: "clear",
             },
         },
-        renderObjects: [renderObject],
+        renderPassObjects: [renderObject],
     };
 
     let then = 0;
@@ -122,9 +121,9 @@ function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
-        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
-        renderObject.bindingResources.uNormalMatrix = normalMatrix;
+        reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
+        reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
+        reactive(renderObject.bindingResources).uNormalMatrix = normalMatrix;
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
@@ -340,10 +339,10 @@ function updateTexture(texture: Texture, video: HTMLVideoElement)
     // 修改纹理尺寸
     if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)
     {
-        texture.size = [video.videoWidth, video.videoHeight];
+        reactive(texture).size = [video.videoWidth, video.videoHeight];
     }
 
-    texture.sources = [{ image: video }];
+    reactive(texture).sources = [{ image: video }];
 }
 
 //

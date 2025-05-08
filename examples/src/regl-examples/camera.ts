@@ -22,14 +22,12 @@ const indices = bunny.cells.flat();
 const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
 const renderObject: RenderObject = {
-    geometry: {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            normal: { data: new Float32Array(normals), format: "float32x3" },
-        },
-        indices: new Uint16Array(indices),
-        draw: { __type__: "DrawIndexed", indexCount: indices.length },
+    vertices: {
+        position: { data: new Float32Array(positions), format: "float32x3" },
+        normal: { data: new Float32Array(normals), format: "float32x3" },
     },
+    indices: new Uint16Array(indices),
+    draw: { __type__: "DrawIndexed", indexCount: indices.length },
     bindingResources: {},
     pipeline: {
         vertex: {
@@ -65,7 +63,7 @@ function draw()
             passEncoders: [
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
-                    renderObjects: [renderObject]
+                    renderPassObjects: [renderObject]
                 }
             ]
         }]

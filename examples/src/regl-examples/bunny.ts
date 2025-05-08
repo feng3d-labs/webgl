@@ -3,6 +3,7 @@ import { WebGL } from "@feng3d/webgl";
 
 import * as bunny from "./mikolalysenko/bunny";
 import * as mat4 from "./stackgl/gl-mat4";
+import { reactive } from "@feng3d/reactivity";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -31,13 +32,11 @@ let viewportWidth = canvas.clientWidth;
 let viewportHeight = canvas.clientHeight;
 
 const renderObject: RenderObject = {
-    geometry: {
-        vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-        },
-        indices: new Uint16Array(indices),
-        draw: { __type__: "DrawIndexed", indexCount: indices.length },
+    vertices: {
+        position: { data: new Float32Array(positions), format: "float32x3" },
     },
+    indices: new Uint16Array(indices),
+    draw: { __type__: "DrawIndexed", indexCount: indices.length },
     bindingResources: {
         model: mat4.identity([]),
     },
@@ -65,7 +64,7 @@ const submit: Submit = {
         passEncoders: [
             {
                 descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
-                renderObjects: [renderObject]
+                renderPassObjects: [renderObject]
             }
         ]
     }]
@@ -79,12 +78,12 @@ function draw()
     tick++;
     const t = 0.01 * tick;
 
-    renderObject.bindingResources.view = mat4.lookAt([],
+    reactive(renderObject.bindingResources).view = mat4.lookAt([],
         [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
         [0, 2.5, 0],
         [0, 1, 0]);
 
-    renderObject.bindingResources.projection
+    reactive(renderObject.bindingResources).projection
         = mat4.perspective([],
             Math.PI / 4,
             viewportWidth / viewportHeight,

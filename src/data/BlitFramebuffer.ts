@@ -1,5 +1,13 @@
 import { RenderPassDescriptor } from "@feng3d/render-api";
 
+declare module "@feng3d/render-api"
+{
+    export interface PassEncoderMap
+    {
+        BlitFramebuffer: BlitFramebuffer,
+    }
+}
+
 /**
  * 拷贝渲染缓冲与纹理直接拷贝数据。
  */

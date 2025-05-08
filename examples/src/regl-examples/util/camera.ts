@@ -3,6 +3,7 @@ import { RenderObject } from "@feng3d/render-api";
 import { mouseListen as mouseChange } from "../mikolalysenko/mouse-change";
 import { mouseWheelListen as mouseWheel } from "../mikolalysenko/mouse-wheel";
 import { identity, lookAt, perspective } from "../stackgl/gl-mat4";
+import { reactive } from "@feng3d/reactivity";
 
 export function createCamera(props)
 {
@@ -105,10 +106,10 @@ export function createCamera(props)
   {
     Object.keys(cameraState).forEach(function (name)
     {
-      renderObject.bindingResources[name] = setupCamera[name];
+      reactive(renderObject.bindingResources)[name] = setupCamera[name];
     });
 
-    renderObject.bindingResources["projection"] = perspective(cameraState.projection,
+    reactive(renderObject.bindingResources)["projection"] = perspective(cameraState.projection,
       Math.PI / 4.0,
       viewportWidth / viewportHeight,
       0.01,

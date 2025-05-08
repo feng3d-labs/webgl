@@ -30,7 +30,8 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
         fragment: {
             code: getShaderSource("fs"),
             targets: [{ blend: {} }],
-        }
+        },
+        primitive: { topology: "triangle-list" },
     };
 
     const renderObject: RenderObject = {
@@ -38,10 +39,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
             diffuse: { texture, sampler },
             u_imageSize: [canvas.width / 2, canvas.height / 2],
         },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
-        },
+        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
         pipeline: program
     };
 
@@ -55,7 +53,7 @@ loadImage("../../assets/img/Di-3d.png", (img) =>
                             loadOp: "clear",
                         }],
                     },
-                    renderObjects: [renderObject]
+                    renderPassObjects: [renderObject]
                 }
             ]
         }]

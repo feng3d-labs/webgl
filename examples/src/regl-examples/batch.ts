@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
@@ -57,10 +58,8 @@ const vertexArray: { vertices?: VertexAttributes } = {
 function getRenderObject(batchId: number)
 {
     const renderObject: RenderObject = {
-        geometry: {
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 3 }
-        },
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 3 },
         bindingResources: {
             offset: offsets[batchId].offset,
         },
@@ -81,7 +80,7 @@ const submit: Submit = {
         passEncoders: [
             {
                 descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
-                renderObjects
+                renderPassObjects: renderObjects
             }
         ]
     }]
@@ -99,12 +98,12 @@ function draw()
         batchId = i;
         //
         const ro = renderObjects[i];
-        ro.bindingResources.color = [
+        reactive(ro.bindingResources).color = [
             Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
             Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),
             Math.sin(0.02 * ((0.3 + Math.cos(2.0 * batchId)) * tick + 0.8 * batchId)),
             1];
-        ro.bindingResources.angle = 0.01 * tick;
+        reactive(ro.bindingResources).angle = 0.01 * tick;
     }
 
     webgl.submit(submit);

@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { RenderPass, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
@@ -39,32 +40,30 @@ function main()
           gl_FragColor = vColor;
         }
       ` },
-      depthStencil: { depthCompare: "less-equal" }
-    },
-    geometry: {
+      depthStencil: { depthCompare: "less-equal" },
       primitive: { topology: "triangle-strip" },
-      vertices: {
-        aVertexPosition: {
-          format: "float32x2",
-          data: new Float32Array([
-            1.0, 1.0,
-            -1.0, 1.0,
-            1.0, -1.0,
-            -1.0, -1.0,
-          ]),
-        },
-        aVertexColor: {
-          format: "float32x4",
-          data: new Float32Array([
-            1.0, 1.0, 1.0, 1.0, // white
-            1.0, 0.0, 0.0, 1.0, // red
-            0.0, 1.0, 0.0, 1.0, // green
-            0.0, 0.0, 1.0, 1.0, // blue
-          ]),
-        },
-      },
-      draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
     },
+    vertices: {
+      aVertexPosition: {
+        format: "float32x2",
+        data: new Float32Array([
+          1.0, 1.0,
+          -1.0, 1.0,
+          1.0, -1.0,
+          -1.0, -1.0,
+        ]),
+      },
+      aVertexColor: {
+        format: "float32x4",
+        data: new Float32Array([
+          1.0, 1.0, 1.0, 1.0, // white
+          1.0, 0.0, 0.0, 1.0, // red
+          0.0, 1.0, 0.0, 1.0, // green
+          0.0, 0.0, 1.0, 1.0, // blue
+        ]),
+      },
+    },
+    draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
     bindingResources: {},
   };
 
@@ -79,7 +78,7 @@ function main()
         depthLoadOp: "clear",
       },
     },
-    renderObjects: [renderObject],
+    renderPassObjects: [renderObject],
   };
 
   let then = 0;
@@ -93,8 +92,8 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
-    renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+    reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
+    reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

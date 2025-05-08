@@ -33,7 +33,8 @@ const pipeline: RenderPipeline = {
     fragment: {
         code: getShaderSource("fs"),
         targets: [{ blend: {} }],
-    }
+    },
+    primitive: { topology: "triangle-strip" },
 };
 
 const vertexArray: { vertices?: VertexAttributes } = {
@@ -45,11 +46,8 @@ const vertexArray: { vertices?: VertexAttributes } = {
 const vertexCount = 12;
 const renderObject: RenderObject = {
     pipeline,
-    geometry: {
-        primitive: { topology: "triangle-strip" },
-        vertices: vertexArray.vertices,
-        draw: undefined,
-    }
+    vertices: vertexArray.vertices,
+    draw: undefined,
 };
 
 const rp: RenderPass = {
@@ -59,22 +57,16 @@ const rp: RenderPass = {
             loadOp: "clear",
         }],
     },
-    renderObjects: [
+    renderPassObjects: [
         {
             ...renderObject,
             viewport: { x: 0, y: 0, width: canvas.width / 2, height: canvas.height },
-            geometry: {
-                ...renderObject.geometry,
-                draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: vertexCount / 2 },
-            }
+            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: vertexCount / 2 },
         },
         {
             ...renderObject,
             viewport: { x: canvas.width / 2, y: 0, width: canvas.width / 2, height: canvas.height },
-            geometry: {
-                ...renderObject.geometry,
-                draw: { __type__: "DrawVertex", firstVertex: 6, vertexCount: vertexCount / 2 },
-            },
+            draw: { __type__: "DrawVertex", firstVertex: 6, vertexCount: vertexCount / 2 },
         },
     ],
 };

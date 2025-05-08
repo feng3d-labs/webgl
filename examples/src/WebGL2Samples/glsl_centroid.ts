@@ -51,12 +51,15 @@ const PROGRAM = {
 const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") }, fragment: { code: getShaderSource("fs-render") },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-render-centroid") }, fragment: { code: getShaderSource("fs-render-centroid") },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") }, fragment: { code: getShaderSource("fs-splash") },
+        primitive: { topology: "triangle-list" },
     }
 ];
 
@@ -159,14 +162,11 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
     // render buffers
     const rp: RenderPass = {
         descriptor: framebuffers[i],
-        renderObjects: [{
+        renderPassObjects: [{
             pipeline: programs[i],
             bindingResources: { MVP: IDENTITY },
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: vertexArrays[i].vertices,
-                draw: { __type__: "DrawVertex", vertexCount },
-            }
+            vertices: vertexArrays[i].vertices,
+            draw: { __type__: "DrawVertex", vertexCount },
         }]
     };
     passEncoders.push(rp);
@@ -175,15 +175,12 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 const renderObjects: RenderPassObject[] = [];
 // Pass 2
 const rp2: RenderPass = {
-    renderObjects,
+    renderPassObjects: renderObjects,
 };
 const ro: RenderObject = {
     pipeline: programs[PROGRAM.SPLASH],
-    geometry: {
-        primitive: { topology: "triangle-list" },
-        vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-        draw: { __type__: "DrawVertex", vertexCount: 6 },
-    },
+    vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+    draw: { __type__: "DrawVertex", vertexCount: 6 },
 };
 
 const scaleVector3 = vec3.create();
@@ -202,9 +199,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
                 MVP: mvp,
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
-            geometry: {
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }
     );
 }

@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -53,6 +53,7 @@ viewport[Textures.BLUE] = {
 // Multiple out shaders
 const multipleOutputProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-multiple-output") }, fragment: { code: getShaderSource("fs-multiple-output") },
+    primitive: { topology: "triangle-list" },
 };
 
 // Layer shaders
@@ -128,16 +129,13 @@ const matrix = new Float32Array([
 ]);
 const rp1: RenderPass = {
     descriptor: frameBuffer,
-    renderObjects: [
+    renderPassObjects: [
         {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
             bindingResources: { mvp: matrix },
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: multipleOutputVertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: multipleOutputVertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }],
 };
 
@@ -145,7 +143,7 @@ const renderObjects: RenderPassObject[] = [];
 // Pass 2
 const rp: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    renderObjects
+    renderPassObjects: renderObjects
 };
 
 const ro: RenderObject = {
@@ -155,10 +153,8 @@ const ro: RenderObject = {
         diffuse: { texture, sampler },
         layer: 0,
     },
-    geometry: {
-        vertices: layerVertexArray.vertices,
-        draw: { __type__: "DrawVertex", vertexCount: 6 },
-    }
+    vertices: layerVertexArray.vertices,
+    draw: { __type__: "DrawVertex", vertexCount: 6 },
 };
 
 for (let i = 0; i < Textures.MAX; ++i)

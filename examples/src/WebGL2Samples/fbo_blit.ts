@@ -19,6 +19,7 @@ const program: RenderPipeline = {
         code: getShaderSource("fs"),
         targets: [{ blend: {} }]
     },
+    primitive: { topology: "triangle-list" },
 };
 
 const vertexPosBuffer = new Float32Array([
@@ -90,11 +91,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: { texture: textureDiffuse, sampler: samplerDiffuse },
         },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 }
-        }
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 }
     };
 
     // Render FBO
@@ -105,7 +103,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 clearValue: [0.3, 0.3, 0.3, 1.0]
             }]
         },
-        renderObjects: [renderObject],
+        renderPassObjects: [renderObject],
     };
 
     const framebufferResolve: RenderPassDescriptor = {
@@ -161,10 +159,8 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
             ]),
             diffuse: { texture: textureColorBuffer, sampler: samplerColorBuffer },
         },
-        geometry: {
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 },
-        },
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 6 },
         pipeline: program,
     };
 
@@ -175,7 +171,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
                 loadOp: "clear",
             }],
         },
-        renderObjects: [renderObject2]
+        renderPassObjects: [renderObject2]
     };
 
     // 执行

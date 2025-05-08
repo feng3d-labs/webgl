@@ -16,6 +16,7 @@ const webgl = new WebGL(rc);
 
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -87,18 +88,15 @@ function render()
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [{
+        renderPassObjects: [{
             pipeline: program,
             bindingResources: {
                 mvp: matrix,
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
-            }
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
         }],
     };
 

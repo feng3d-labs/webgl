@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { snoise } from "./third-party/noise3D";
@@ -162,10 +163,8 @@ import { getShaderSource } from "./utility";
         bindingResources: {
             diffuse: { texture, sampler },
         },
-        geometry: {
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 }
-        }
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 }
     };
 
     const renderPassObjects: RenderObject[] = [];
@@ -179,7 +178,7 @@ import { getShaderSource } from "./utility";
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: renderPassObjects,
+        renderPassObjects: renderPassObjects,
     };
 
     function render()
@@ -196,7 +195,7 @@ import { getShaderSource } from "./utility";
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            renderPassObjects[i].bindingResources.orientation = matrices[i];
+            reactive(renderPassObjects[i].bindingResources).orientation = matrices[i];
         }
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

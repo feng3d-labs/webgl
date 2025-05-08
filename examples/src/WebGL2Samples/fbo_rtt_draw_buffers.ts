@@ -22,12 +22,14 @@ const windowSize = {
 const drawBufferProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw-buffer") },
     fragment: { code: getShaderSource("fs-draw-buffer") },
+    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") },
     fragment: { code: getShaderSource("fs-draw") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -98,30 +100,24 @@ const frameBuffer: RenderPassDescriptor = {
 
 const renderPass: RenderPass = {
     descriptor: frameBuffer,
-    renderObjects: [{
+    renderPassObjects: [{
         pipeline: drawBufferProgram,
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: triVertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 3 },
-        }
+        vertices: triVertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 3 },
     }],
 };
 
 // Pass 2: Draw to screen
 const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    renderObjects: [{
+    renderPassObjects: [{
         pipeline: drawProgram,
         bindingResources: {
             color1Map: { texture: color1Texture, sampler: color1Sampler },
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: quadVertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 },
-        }
+        vertices: quadVertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
     }],
 };
 

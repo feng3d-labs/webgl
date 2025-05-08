@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4, vec3 } from "gl-matrix";
@@ -19,6 +20,7 @@ import { getShaderSource, loadImage } from "./utility";
     const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: {},
+        primitive: { topology: "triangle-list", cullFace: "back" },
     };
 
     // -- Init geometries
@@ -208,17 +210,14 @@ import { getShaderSource, loadImage } from "./utility";
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
-        geometry: {
-            primitive: { topology: "triangle-list", cullFace: "back" },
-            vertices: vertexArray.vertices,
-            indices: new Uint16Array(cubeVertexIndices),
-            draw: { __type__: "DrawIndexed", indexCount: 36 },
-        }
+        vertices: vertexArray.vertices,
+        indices: new Uint16Array(cubeVertexIndices),
+        draw: { __type__: "DrawIndexed", indexCount: 36 },
     };
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [ro],
+        renderPassObjects: [ro],
     };
 
     function render()
@@ -234,8 +233,8 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        ro.bindingResources.u_viewProj = viewProj;
-        ro.bindingResources.s_tex2D = { texture, sampler };
+        reactive(ro.bindingResources).u_viewProj = viewProj;
+        reactive(ro.bindingResources).s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

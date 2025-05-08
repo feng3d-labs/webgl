@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { Submit, RenderObject } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
@@ -28,13 +29,11 @@ const init = async (canvas: HTMLCanvasElement) =>
                 }
                 ` },
         },
-        geometry: {
-            vertices: {
-                position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: "float32x2" }, // 顶点坐标数据
-            },
-            indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
-            draw: { __type__: "DrawIndexed", indexCount: 3 }, // 绘制命令
+        vertices: {
+            position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: "float32x2" }, // 顶点坐标数据
         },
+        indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
+        draw: { __type__: "DrawIndexed", indexCount: 3 }, // 绘制命令
         bindingResources: { color: [1, 0, 0, 1] }, // Uniform 颜色值。
     };
 
@@ -48,7 +47,7 @@ const init = async (canvas: HTMLCanvasElement) =>
                                 clearValue: [0.0, 0.0, 0.0, 1.0], // 渲染前填充颜色
                             }],
                         },
-                        renderObjects: [renderObject]
+                        renderPassObjects: [renderObject]
                     },
                 ]
             }
@@ -66,7 +65,7 @@ const init = async (canvas: HTMLCanvasElement) =>
     window.onclick = () =>
     {
         // 修改顶点着色器代码
-        renderObject.pipeline.vertex.code = `
+        reactive(renderObject.pipeline.vertex).code = `
                 attribute vec4 position;
 
                 void main() {
@@ -77,7 +76,7 @@ const init = async (canvas: HTMLCanvasElement) =>
                 `;
 
         // 修改片段着色器代码
-        renderObject.pipeline.fragment.code = `
+        reactive(renderObject.pipeline.fragment).code = `
                 precision highp float;
                 uniform vec4 color;
                 void main() {

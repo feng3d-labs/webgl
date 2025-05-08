@@ -1,6 +1,7 @@
 import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
+import { reactive } from "@feng3d/reactivity";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -60,6 +61,7 @@ viewport[Corners.TOP_LEFT] = {
 
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -104,15 +106,15 @@ for (let i = 0; i < Corners.MAX; ++i)
     };
 }
 
-samplers[Corners.TOP_LEFT].addressModeU = "mirror-repeat";
-samplers[Corners.TOP_RIGHT].addressModeU = "clamp-to-edge";
-samplers[Corners.BOTTOM_RIGHT].addressModeU = "repeat";
-samplers[Corners.BOTTOM_LEFT].addressModeU = "clamp-to-edge";
+reactive(samplers[Corners.TOP_LEFT]).addressModeU = "mirror-repeat";
+reactive(samplers[Corners.TOP_RIGHT]).addressModeU = "clamp-to-edge";
+reactive(samplers[Corners.BOTTOM_RIGHT]).addressModeU = "repeat";
+reactive(samplers[Corners.BOTTOM_LEFT]).addressModeU = "clamp-to-edge";
 
-samplers[Corners.TOP_LEFT].addressModeV = "mirror-repeat";
-samplers[Corners.TOP_RIGHT].addressModeV = "mirror-repeat";
-samplers[Corners.BOTTOM_RIGHT].addressModeV = "repeat";
-samplers[Corners.BOTTOM_LEFT].addressModeV = "clamp-to-edge";
+reactive(samplers[Corners.TOP_LEFT]).addressModeV = "mirror-repeat";
+reactive(samplers[Corners.TOP_RIGHT]).addressModeV = "mirror-repeat";
+reactive(samplers[Corners.BOTTOM_RIGHT]).addressModeV = "repeat";
+reactive(samplers[Corners.BOTTOM_LEFT]).addressModeV = "clamp-to-edge";
 
 // -- Load texture then render
 
@@ -135,7 +137,7 @@ function render()
     // Clear color buffer
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects,
+        renderPassObjects: renderObjects,
     };
 
     const matrix = new Float32Array([
@@ -148,11 +150,8 @@ function render()
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: { mvp: matrix },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
-        }
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
     };
 
     for (let i = 0; i < Corners.MAX; ++i)
@@ -165,10 +164,7 @@ function render()
                     ...ro.bindingResources,
                     diffuse: { texture, sampler: samplers[i] },
                 },
-                geometry: {
-                    ...ro.geometry,
-                    draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
-                }
+                draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
             });
     }
 

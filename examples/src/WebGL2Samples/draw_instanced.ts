@@ -20,7 +20,8 @@ const vertexColorBuffer = new Float32Array([
 
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") },
-    fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] }
+    fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] },
+    primitive: { topology: "triangle-list" },
 };
 
 const vertexArray: { vertices?: VertexAttributes } = {
@@ -32,11 +33,8 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 const renderObject: RenderObject = {
     bindingResources: {},
-    geometry: {
-        primitive: { topology: "triangle-list" },
-        vertices: vertexArray.vertices,
-        draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
-    },
+    vertices: vertexArray.vertices,
+    draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     pipeline: program
 };
 
@@ -53,7 +51,7 @@ webgl.submit({
                         loadOp: "clear",
                     }],
                 },
-                renderObjects: [renderObject]
+                renderPassObjects: [renderObject]
             }
         ]
     }]

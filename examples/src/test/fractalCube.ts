@@ -1,3 +1,4 @@
+import { reactive } from "@feng3d/reactivity";
 import { CanvasContext, RenderObject, Sampler, Submit, Texture } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
@@ -59,23 +60,21 @@ async function main()
           gl_FragColor = color;
         }
       ` },
+            primitive: { topology: "triangle-list" },
             depthStencil: { depthCompare: "less-equal" }
         },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: {
-                aVertexPosition: {
-                    format: "float32x3",
-                    data: buffers.position,
-                },
-                aTextureCoord: {
-                    format: "float32x2",
-                    data: buffers.textureCoord,
-                },
+        vertices: {
+            aVertexPosition: {
+                format: "float32x3",
+                data: buffers.position,
             },
-            indices: buffers.indices,
-            draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+            aTextureCoord: {
+                format: "float32x2",
+                data: buffers.textureCoord,
+            },
         },
+        indices: buffers.indices,
+        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
         bindingResources: { uSampler: texture },
     };
 
@@ -88,7 +87,7 @@ async function main()
                         colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
                         depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
                     },
-                    renderObjects: [renderObject],
+                    renderPassObjects: [renderObject],
                 },
                 // 从画布中拷贝到纹理。
                 {
@@ -113,8 +112,8 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-        renderObject.bindingResources.uProjectionMatrix = projectionMatrix;
-        renderObject.bindingResources.uModelViewMatrix = modelViewMatrix;
+        reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
+        reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
 
         webgl.submit(submit);
 

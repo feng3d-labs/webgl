@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { snoise } from "./third-party/noise3D";
@@ -104,16 +104,14 @@ import { getShaderSource, loadImage } from "./utility";
             bindingResources: {
                 MVP: matrix,
             },
-            geometry: {
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         };
 
         const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects
+            renderPassObjects: renderObjects
         };
 
         renderObjects.push(

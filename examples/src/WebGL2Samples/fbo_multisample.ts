@@ -23,10 +23,12 @@ const programs: RenderPipeline[] = [
     {
         vertex: { code: getShaderSource("vs-render") },
         fragment: { code: getShaderSource("fs-render") },
+        primitive: { topology: "triangle-list" },
     },
     {
         vertex: { code: getShaderSource("vs-splash") },
         fragment: { code: getShaderSource("fs-splash") },
+        primitive: { topology: "triangle-list" },
     },
 ];
 
@@ -100,14 +102,14 @@ const IDENTITY = mat4.create();
 // Pass 1
 const renderPass1: RenderPass = {
     descriptor: framebuffer,
-    renderObjects: [{
-        pipeline: programs[PROGRAM.TEXTURE],
-        bindingResources: { MVP: IDENTITY },
-        geometry: {
+    renderPassObjects: [{
+        pipeline: {
+            ...programs[PROGRAM.TEXTURE],
             primitive: { topology: "LINE_LOOP" },
-            vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
-            draw: { __type__: "DrawVertex", vertexCount },
-        }
+        },
+        bindingResources: { MVP: IDENTITY },
+        vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
+        draw: { __type__: "DrawVertex", vertexCount },
     }]
 };
 
@@ -120,15 +122,12 @@ mat4.scale(mvp, IDENTITY, scaleVector3);
 
 const renderPass2: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-    renderObjects: [
+    renderPassObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
             bindingResources: { diffuse: { texture, sampler }, MVP: mvp },
-            geometry: {
-                primitive: { topology: "triangle-list" },
-                vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArrays[PROGRAM.SPLASH].vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         }
     ],
 };

@@ -18,6 +18,7 @@ const webgl = new WebGL(rc);
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
     depthStencil: {},
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Init Buffer
@@ -45,16 +46,13 @@ const rp: RenderPass = {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
         depthStencilAttachment: { depthLoadOp: "clear" },
     },
-    renderObjects,
+    renderPassObjects: renderObjects,
 };
 
 const ro: RenderObject = {
     pipeline: program,
-    geometry: {
-        primitive: { topology: "triangle-list" },
-        vertices: vertexArray.vertices,
-        draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
-    }
+    vertices: vertexArray.vertices,
+    draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 3 },
 };
 renderObjects.push(ro);
 
@@ -62,13 +60,10 @@ const occlusionQuery: OcclusionQuery = {
     __type__: "OcclusionQuery",
     renderObjects: [{
         ...ro,
-        geometry: {
-            ...ro.geometry,
-            draw: { __type__: "DrawVertex", firstVertex: 3, vertexCount: 3 },
-        }
+        draw: { __type__: "DrawVertex", firstVertex: 3, vertexCount: 3 },
     }],
     onQuery(result: number)
-{
+    {
         document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(result)}`;
     }
 };

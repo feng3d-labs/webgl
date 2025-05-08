@@ -48,18 +48,16 @@ const materials = {
 // -- Render
 const rp: RenderPass = {
     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: "clear" }] },
-    renderObjects: [{
+    renderPassObjects: [{
         pipeline: program,
         bindingResources: {
             Transform: transforms,
             Material: materials,
         },
-        geometry: {
-            vertices: {
-                pos: { data: vertices, format: "float32x2" },
-            },
-            draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
-        }
+        vertices: {
+            pos: { data: vertices, format: "float32x2" },
+        },
+        draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
     }]
 };
 

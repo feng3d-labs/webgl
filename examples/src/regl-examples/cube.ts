@@ -1,6 +1,7 @@
 import { RenderObject, Submit } from "@feng3d/render-api";
 import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
+import { reactive } from "@feng3d/reactivity";
 
 (async () =>
 {
@@ -65,14 +66,12 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderObject: RenderObject = {
-        geometry: {
-            vertices: {
-                position: { data: new Float32Array(positions), format: "float32x3" },
-                uv: { data: new Float32Array(uvs), format: "float32x2" },
-            },
-            indices: new Uint16Array(indices),
-            draw: { __type__: "DrawIndexed", indexCount: indices.length },
+        vertices: {
+            position: { data: new Float32Array(positions), format: "float32x3" },
+            uv: { data: new Float32Array(uvs), format: "float32x2" },
         },
+        indices: new Uint16Array(indices),
+        draw: { __type__: "DrawIndexed", indexCount: indices.length },
         bindingResources: {},
         pipeline: {
             vertex: {
@@ -102,7 +101,7 @@ import * as mat4 from "./stackgl/gl-mat4";
         commandEncoders: [{
             passEncoders: [
                 {
-                    renderObjects: [renderObject]
+                    renderPassObjects: [renderObject]
                 }
             ]
         }]
@@ -116,11 +115,11 @@ import * as mat4 from "./stackgl/gl-mat4";
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
-        renderObject.bindingResources.view = mat4.lookAt([],
+        reactive(renderObject.bindingResources).view = mat4.lookAt([],
             [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
             [0, 0.0, 0],
             [0, 1, 0]);
-        renderObject.bindingResources.projection
+        reactive(renderObject.bindingResources).projection
             = mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
@@ -142,7 +141,7 @@ import * as mat4 from "./stackgl/gl-mat4";
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear" }
     };
-    renderObject.bindingResources.tex = diffuse;
+    reactive(renderObject.bindingResources).tex = diffuse;
 
     draw();
 })();

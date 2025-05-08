@@ -22,11 +22,13 @@ const windowSize = {
 const depthProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-depth") }, fragment: { code: getShaderSource("fs-depth") },
     depthStencil: {},
+    primitive: { topology: "triangle-list" },
 };
 
 // Draw shaders
 const drawProgram: RenderPipeline = {
     vertex: { code: getShaderSource("vs-draw") }, fragment: { code: getShaderSource("fs-draw") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -92,13 +94,10 @@ const frameBuffer: RenderPassDescriptor = {
 // Pass 1: Depth
 const renderPass: RenderPass = {
     descriptor: frameBuffer,
-    renderObjects: [{
+    renderPassObjects: [{
         pipeline: depthProgram,
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: triVertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 3 },
-        }
+        vertices: triVertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 3 },
     }],
 
 };
@@ -108,14 +107,11 @@ const rp2: RenderPass = {
     descriptor: {
         colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
     },
-    renderObjects: [{
+    renderPassObjects: [{
         pipeline: drawProgram,
         bindingResources: { depthMap: { texture: depthTexture, sampler: depthSampler } },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: quadVertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 },
-        }
+        vertices: quadVertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6 },
     }],
 };
 

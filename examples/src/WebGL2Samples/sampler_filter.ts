@@ -1,4 +1,5 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { reactive } from "@feng3d/reactivity";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -60,6 +61,7 @@ viewport[Corners.TOP_LEFT] = {
 
 const program: RenderPipeline = {
     vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+    primitive: { topology: "triangle-list" },
 };
 
 // -- Initialize buffer
@@ -100,20 +102,20 @@ for (let i = 0; i < Corners.MAX; ++i)
 }
 
 // Min filter
-samplers[Corners.TOP_LEFT].minFilter = "nearest";
-samplers[Corners.TOP_RIGHT].minFilter = "linear";
-samplers[Corners.BOTTOM_RIGHT].minFilter = "linear";
-samplers[Corners.BOTTOM_LEFT].minFilter = "linear";
+reactive(samplers[Corners.TOP_LEFT]).minFilter = "nearest";
+reactive(samplers[Corners.TOP_RIGHT]).minFilter = "linear";
+reactive(samplers[Corners.BOTTOM_RIGHT]).minFilter = "linear";
+reactive(samplers[Corners.BOTTOM_LEFT]).minFilter = "linear";
 
 // Mag filter
-samplers[Corners.TOP_LEFT].magFilter = "nearest";
-samplers[Corners.TOP_RIGHT].magFilter = "linear";
-samplers[Corners.BOTTOM_RIGHT].magFilter = "linear";
-samplers[Corners.BOTTOM_LEFT].magFilter = "linear";
+reactive(samplers[Corners.TOP_LEFT]).magFilter = "nearest";
+reactive(samplers[Corners.TOP_RIGHT]).magFilter = "linear";
+reactive(samplers[Corners.BOTTOM_RIGHT]).magFilter = "linear";
+reactive(samplers[Corners.BOTTOM_LEFT]).magFilter = "linear";
 
 //
-samplers[Corners.BOTTOM_RIGHT].mipmapFilter = "nearest";
-samplers[Corners.BOTTOM_LEFT].mipmapFilter = "linear";
+reactive(samplers[Corners.BOTTOM_RIGHT]).mipmapFilter = "nearest";
+reactive(samplers[Corners.BOTTOM_LEFT]).mipmapFilter = "linear";
 
 // -- Load texture then render
 
@@ -144,17 +146,14 @@ function render()
     const renderObjects: RenderPassObject[] = [];
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects
+        renderPassObjects: renderObjects
     };
 
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: { mvp: matrix },
-        geometry: {
-            primitive: { topology: "triangle-list" },
-            vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
-        }
+        vertices: vertexArray.vertices,
+        draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },
     };
 
     // Bind samplers

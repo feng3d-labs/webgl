@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -166,7 +166,7 @@ import { getShaderSource, loadImage } from "./utility";
         const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects
+            renderPassObjects: renderObjects
         };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
@@ -179,10 +179,8 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    geometry: {
-                        vertices: vertexArray.vertices,
-                        draw: { __type__: "DrawVertex", vertexCount: 6 },
-                    }
+                    vertices: vertexArray.vertices,
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
                 });
         }
 
@@ -197,10 +195,8 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    geometry: {
-                        vertices: vertexArray.vertices,
-                        draw: { __type__: "DrawVertex", vertexCount: 6 },
-                    }
+                    vertices: vertexArray.vertices,
+                    draw: { __type__: "DrawVertex", vertexCount: 6 },
                 });
         }
 

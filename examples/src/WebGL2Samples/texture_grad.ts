@@ -1,6 +1,7 @@
 import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
+import { reactive } from "@feng3d/reactivity";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -19,6 +20,7 @@ import { getShaderSource, loadImage } from "./utility";
     const program: RenderPipeline = {
         vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
         depthStencil: {},
+        primitive: { cullFace: "back" },
     };
 
     // -- Init buffers
@@ -199,17 +201,14 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {},
-        geometry: {
-            primitive: { cullFace: "back" },
-            vertices: vertexArray.vertices,
-            indices: new Uint16Array(cubeVertexIndices),
-            draw: { __type__: "DrawIndexed", indexCount: 36 },
-        }
+        vertices: vertexArray.vertices,
+        indices: new Uint16Array(cubeVertexIndices),
+        draw: { __type__: "DrawIndexed", indexCount: 36 },
     };
 
     const rp: RenderPass = {
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderObjects: [ro],
+        renderPassObjects: [ro],
     };
 
     function render()
@@ -222,9 +221,9 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        ro.bindingResources.mvMatrix = mvMatrix;
-        ro.bindingResources.pMatrix = perspectiveMatrix;
-        ro.bindingResources.diffuse = { texture, sampler };
+        reactive(ro.bindingResources).mvMatrix = mvMatrix;
+        reactive(ro.bindingResources).pMatrix = perspectiveMatrix;
+        reactive(ro.bindingResources).diffuse = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
