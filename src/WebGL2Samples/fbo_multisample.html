@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-primitive-line-msaa.cpp -->
+<head>
+    <title>WebGL 2 Samples - fbo_multisample</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    
+  <script type="module" crossorigin src="../../assets/src/WebGL2Samples/fbo_multisample.html-7178a793.js"></script>
+  <link rel="modulepreload" crossorigin href="../../assets/modulepreload-polyfill-3cfb730f.js">
+  <link rel="modulepreload" crossorigin href="../../assets/utility-e972c1ee.js">
+  <link rel="modulepreload" crossorigin href="../../assets/WebGL-b4686ab5.js">
+  <link rel="modulepreload" crossorigin href="../../assets/common-d8a29b8a.js">
+  <link rel="modulepreload" crossorigin href="../../assets/mat4-90bd9af0.js">
+  <link rel="modulepreload" crossorigin href="../../assets/vec3-5d562fd8.js">
+  <link rel="stylesheet" href="../../assets/utility-d67c8ce6.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - fbo_multisample</div>
+    <p id="description">
+        Render to a texture with multi-sampling enabled.
+    </p>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs-render" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 MVP;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+
+        void main()
+        {
+            gl_Position = MVP * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs-render" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = vec4(1.0, 0.5, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="vs-splash" type="x-shader/x-vertex">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 MVP;
+
+        layout(location = 0) in vec2 position;
+        layout(location = 1) in vec2 texcoord;
+
+        out vec2 uv;
+
+        void main()
+        {
+            uv = texcoord;
+            gl_Position = MVP * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs-splash" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        in vec2 uv;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, uv);
+        }
+    </script>
+
+    
+    
+    <div id="highlightedLines"  style="display: none">#L183-L245</div>
+</body>
+
+</html>

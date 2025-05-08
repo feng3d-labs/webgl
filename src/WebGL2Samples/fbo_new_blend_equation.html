@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - fbo_new_blend_equation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    
+  <script type="module" crossorigin src="../../assets/src/WebGL2Samples/fbo_new_blend_equation.html-4ef27d0d.js"></script>
+  <link rel="modulepreload" crossorigin href="../../assets/modulepreload-polyfill-3cfb730f.js">
+  <link rel="modulepreload" crossorigin href="../../assets/utility-e972c1ee.js">
+  <link rel="modulepreload" crossorigin href="../../assets/WebGL-b4686ab5.js">
+  <link rel="stylesheet" href="../../assets/utility-d67c8ce6.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - fbo_new_blend_equation</div>
+    <p id="description">
+        TOP_LEFT: DST, TOP_RIGHT: SRC<br />BOTTOM_LEFT: gl.blendEquation(gl.MAX), BOTTOM_RIGHT: gl.blendEquation(gl.MIN)
+    </p>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 4
+
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 mvp;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 textureCoordinates;
+
+        out vec2 v_st;
+
+        void main()
+        {
+            v_st = textureCoordinates;
+            gl_Position = mvp * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        #define FRAG_COLOR_LOCATION 0
+
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        in vec2 v_st;
+
+        layout(location = FRAG_COLOR_LOCATION) out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, v_st);
+        }
+    </script>
+
+    
+
+    <div id="highlightedLines" style="display: none">#L231-L241</div>
+</body>
+
+</html>

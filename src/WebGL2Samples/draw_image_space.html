@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-draw-image-space.cpp -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - draw_image_space</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    
+  <script type="module" crossorigin src="../../assets/src/WebGL2Samples/draw_image_space.html-93243930.js"></script>
+  <link rel="modulepreload" crossorigin href="../../assets/modulepreload-polyfill-3cfb730f.js">
+  <link rel="modulepreload" crossorigin href="../../assets/utility-e972c1ee.js">
+  <link rel="modulepreload" crossorigin href="../../assets/WebGL-b4686ab5.js">
+  <link rel="stylesheet" href="../../assets/utility-d67c8ce6.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - draw_image_space</div>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+        
+        void main()
+        {
+            gl_Position = vec4(2.f * float(uint(gl_VertexID) % 2u) - 1.f, 2.f * float(uint(gl_VertexID) / 2u) - 1.f, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        uniform vec2 u_imageSize;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, vec2(gl_FragCoord.x, u_imageSize.y - gl_FragCoord.y) / u_imageSize);
+        }
+    </script>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- Ported from the OpenGL Samples Pack https://github.com/g-truc/ogl-samples/blob/master/tests/gl-320-texture-pixel-store.cpp -->
+<html lang="en">
+
+<head>
+    <title>WebGL 2 Samples - texture_pixel_store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    
+  <script type="module" crossorigin src="../../assets/src/WebGL2Samples/texture_pixel_store.html-74adc217.js"></script>
+  <link rel="modulepreload" crossorigin href="../../assets/modulepreload-polyfill-3cfb730f.js">
+  <link rel="modulepreload" crossorigin href="../../assets/utility-e972c1ee.js">
+  <link rel="modulepreload" crossorigin href="../../assets/WebGL-b4686ab5.js">
+  <link rel="stylesheet" href="../../assets/utility-d67c8ce6.css">
+</head>
+
+<body>
+    <div id="info">WebGL 2 Samples - texture_pixel_store</div>
+    <p id="description">
+        Use pixelStorei to only store a part of the loaded image as the texture
+    </p>
+
+    <!-- WebGL 2 shaders -->
+    <script id="vs" type="x-shader/x-vertex">
+        #version 300 es
+        #define POSITION_LOCATION 0
+        #define TEXCOORD_LOCATION 4
+        
+        precision highp float;
+        precision highp int;
+
+        uniform mat4 MVP;
+
+        layout(location = POSITION_LOCATION) in vec2 position;
+        layout(location = TEXCOORD_LOCATION) in vec2 texcoord;
+
+        out vec2 v_st;
+
+        void main()
+        {
+            v_st = texcoord;
+            gl_Position = MVP * vec4(position, 0.0, 1.0);
+        }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+        #version 300 es
+        precision highp float;
+        precision highp int;
+
+        uniform sampler2D diffuse;
+
+        in vec2 v_st;
+
+        out vec4 color;
+
+        void main()
+        {
+            color = texture(diffuse, v_st);
+        }
+    </script>
+
+    
+    <div id="highlightedLines"  style="display: none">#L132-L152</div>
+</body>
+
+</html>
