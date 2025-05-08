@@ -1,5 +1,6 @@
-import { CanvasContext, IIndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
 import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { reactive } from "@feng3d/reactivity";
 
 import { getShaderSource } from "./utility";
 
@@ -58,7 +59,7 @@ import { getShaderSource } from "./utility";
     const NUM_LOCATIONS = 5;
 
     // -- Init Vertex Arrays and Buffers
-    const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[][] = [];
+    const vertexArrays: { vertices?: VertexAttributes, indices?: IndicesDataTypes }[][] = [];
 
     // Transform feedback objects track output buffer state
     const transformFeedbacks: TransformFeedback[] = [];
@@ -126,6 +127,7 @@ import { getShaderSource } from "./utility";
                     }
                 }]
             },
+            primitive: { topology: "point-list" },
         };
 
         return [transformFeedbackPipeline, program];
@@ -147,10 +149,7 @@ import { getShaderSource } from "./utility";
         bindingResources: {
             u_color: [0.0, 1.0, 1.0, 1.0],
         },
-        geometry: {
-            draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
-            primitive: { topology: "point-list" },
-        }
+        draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
     };
 
     const submit: Submit = {
@@ -162,7 +161,7 @@ import { getShaderSource } from "./utility";
                 },
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-                    renderObjects: [renderRO],
+                    renderPassObjects: [renderRO],
                 }
             ]
         }]
@@ -177,7 +176,7 @@ import { getShaderSource } from "./utility";
         transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
         transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        transformRO.uniforms.u_time = time;
+        reactive(transformRO.uniforms).u_time = time;
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;
@@ -188,8 +187,8 @@ import { getShaderSource } from "./utility";
         transform();
 
         //
-        renderRO.geometry.vertices = vertexArrays[currentSourceIdx][1].vertices;
-        renderRO.geometry.indices = vertexArrays[currentSourceIdx][1].indices;
+        reactive(renderRO).vertices = vertexArrays[currentSourceIdx][1].vertices;
+        reactive(renderRO).indices = vertexArrays[currentSourceIdx][1].indices;
 
         webgl.submit(submit);
 
