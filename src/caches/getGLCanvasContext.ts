@@ -1,4 +1,4 @@
-import { CanvasContext, ChainMap, GBuffer, IIndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { Buffer, CanvasContext, ChainMap, IndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { defaultWebGLContextAttributes } from "../data/polyfills/CanvasContext";
 import { Renderbuffer } from "../data/Renderbuffer";
 import { TransformFeedback } from "../data/TransformFeedbackPass";
@@ -10,11 +10,11 @@ declare global
     {
         _capabilities: Capabilities;
         //
-        _bufferMap: WeakMap<GBuffer, WebGLBuffer>
+        _bufferMap: WeakMap<Buffer, WebGLBuffer>
         _textures: WeakMap<Texture, WebGLTexture>
         _renderbuffers: WeakMap<Renderbuffer, WebGLRenderbuffer>;
         _framebuffers: WeakMap<RenderPassDescriptor, WebGLFramebuffer>;
-        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IIndicesDataTypes], WebGLVertexArrayObject>;
+        _vertexArrays: ChainMap<[RenderPipeline, VertexAttributes, IndicesDataTypes], WebGLVertexArrayObject>;
         _samplers: WeakMap<Sampler, WebGLSampler>;
         _transforms: WeakMap<TransformFeedback, WebGLTransformFeedback>;
         _programs: { [key: string]: WebGLProgram }
@@ -36,7 +36,7 @@ export function getGLCanvasContext(canvasContext: CanvasContext)
     const canvas = typeof canvasContext.canvasId === "string" ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
     gl = canvasContext["_gl"] = getWebGLContext(canvas, canvasContext);
 
-    canvasContext.webGLContextAttributes
+    canvasContext.webGLContextAttributes;
     //
     gl._capabilities = new Capabilities(gl);
 
@@ -75,7 +75,7 @@ function _onContextCreationError(event: WebGLContextEvent)
     console.error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
 }
 
-function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasContext: CanvasContext): WebGLRenderingContext 
+function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasContext: CanvasContext): WebGLRenderingContext
 {
     const contextAttributes = Object.assign({}, defaultWebGLContextAttributes, canvasContext.webGLContextAttributes);
 

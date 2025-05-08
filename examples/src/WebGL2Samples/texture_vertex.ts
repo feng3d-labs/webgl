@@ -36,7 +36,7 @@ import { getShaderSource, loadImage } from "./utility";
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init program
@@ -220,7 +220,7 @@ import { getShaderSource, loadImage } from "./utility";
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    geometry:{
+                    geometry: {
                         primitive: { topology: IDrawMode2Name[primitive.mode] },
                         vertices: vertexArrayMaps[mid][i].vertices,
                         indices: vertexArrayMaps[mid][i].indices,

@@ -12,7 +12,7 @@ import { getShaderSource } from "./utility";
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false }};
+    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init Program
@@ -105,7 +105,7 @@ import { getShaderSource } from "./utility";
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programFeedback,
-                            geometry:{
+                            geometry: {
                                 vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                                 indices: vertexArrays[PROGRAM_FEEDBACK].indices,
                                 draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },

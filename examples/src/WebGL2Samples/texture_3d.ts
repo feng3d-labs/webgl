@@ -162,7 +162,7 @@ import { getShaderSource } from "./utility";
         bindingResources: {
             diffuse: { texture, sampler },
         },
-        geometry:{
+        geometry: {
             vertices: vertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 6 }
         }

@@ -1,4 +1,4 @@
-import { BindingResources, BlendComponent, BlendState, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, GBuffer, IIndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -113,7 +113,7 @@ export class RunWebGL
         const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
 
         // 处理不被遮挡查询
-        const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderObjects);
+        const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderPassObjects);
         //
         occlusionQuery.init();
 
@@ -123,7 +123,7 @@ export class RunWebGL
 
             this.runRenderPassDescriptor(gl, passDescriptor);
 
-            this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
+            this.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
 
             this.runBlitFramebuffer(gl, blitFramebuffer);
         }
@@ -131,7 +131,7 @@ export class RunWebGL
         {
             this.runRenderPassDescriptor(gl, renderPass.descriptor);
 
-            this.runRenderObjects(gl, attachmentSize, renderPass.renderObjects);
+            this.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
         }
 
         occlusionQuery.resolve(renderPass);
@@ -140,7 +140,6 @@ export class RunWebGL
     private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
-
 
         //
         const framebuffer = getGLFramebuffer(gl, passDescriptor);
@@ -188,7 +187,8 @@ export class RunWebGL
 
     private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
-        const { viewport, scissorRect, pipeline, geometry, bindingResources: uniforms } = renderObject;
+        const { viewport, scissorRect, pipeline, vertices, indices, draw, bindingResources: uniforms } = renderObject;
+        const primitive = pipeline?.primitive;
 
         this.runViewPort(gl, attachmentSize, viewport);
 
@@ -198,8 +198,6 @@ export class RunWebGL
 
         this.runUniforms(gl, pipeline, uniforms);
 
-        const { vertices, indices, draw, primitive } = geometry;
-
         this.runVertexArray(gl, pipeline, vertices, indices);
 
         this.runPrimitiveState(gl, primitive);
@@ -207,7 +205,7 @@ export class RunWebGL
         const topology = primitive?.topology || "triangle-list";
         const drawMode = getGLDrawMode(topology);
 
-        if (draw.__type__ === 'DrawVertex')
+        if (draw.__type__ === "DrawVertex")
         {
             this.runDrawVertex(gl, drawMode, draw);
         }
@@ -251,7 +249,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IIndicesDataTypes, drawIndexed: DrawIndexed)
+    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IndicesDataTypes, drawIndexed: DrawIndexed)
     {
         const type: DrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
@@ -361,7 +359,7 @@ export class RunWebGL
                 buffer.target ??= "UNIFORM_BUFFER";
                 buffer.usage ??= "DYNAMIC_DRAW";
 
-                (buffer as UnReadonly<GBuffer>).label = buffer.label || (`UniformBuffer ${name}`);
+                (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
                 //
                 const webGLBuffer = getGLBuffer(gl, buffer);
@@ -532,7 +530,7 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IIndicesDataTypes)
+    private runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
@@ -573,7 +571,7 @@ export class RunWebGL
         this.runIndexBuffer(gl, indices);
     }
 
-    private runIndexBuffer(gl: WebGLRenderingContext, indices?: IIndicesDataTypes)
+    private runIndexBuffer(gl: WebGLRenderingContext, indices?: IndicesDataTypes)
     {
         if (!indices) return;
 
@@ -744,7 +742,6 @@ export class RunWebGL
     {
         const cullFace: CullFace = primitive?.cullFace || "none";
         const frontFace: FrontFace = primitive?.frontFace || "ccw";
-
 
         if (cullFace !== "none")
         {
@@ -943,7 +940,7 @@ const cullFaceMap = Object.freeze({
     back: "BACK",
 });
 
-const frontFaceMap = Object.freeze({ ccw: "CCW", cw: "CW", });
+const frontFaceMap = Object.freeze({ ccw: "CCW", cw: "CW" });
 
 /**
  * 获取渲染通道附件尺寸。

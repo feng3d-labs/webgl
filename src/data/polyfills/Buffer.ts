@@ -41,7 +41,7 @@ export type DrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT
 
 /**
  * WebGL缓冲区使用模式。
- * 
+ *
  * A GLenum specifying the intended usage pattern of the data store for optimization purposes. Possible values:
  *
  * * gl.STATIC_DRAW: The contents are intended to be specified once by the application, and used many times as the source for WebGL drawing and image specification commands.
@@ -65,7 +65,7 @@ export type BufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebG
 
 /**
  * WebGL缓冲区目标。
- * 
+ *
  * A GLenum specifying the binding point (target). Possible values:
  *
  * * gl.ARRAY_BUFFER: Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.

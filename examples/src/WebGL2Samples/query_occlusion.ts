@@ -67,7 +67,8 @@ const occlusionQuery: OcclusionQuery = {
             draw: { __type__: "DrawVertex", firstVertex: 3, vertexCount: 3 },
         }
     }],
-    onQuery(result: number) {
+    onQuery(result: number)
+{
         document.getElementById("samplesPassed").innerHTML = `Any samples passed: ${Number(result)}`;
     }
 };

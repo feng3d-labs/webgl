@@ -88,7 +88,7 @@ import { getShaderSource } from "./utility";
             PerPass: lightPos,
             PerScene: material,
         },
-        geometry:{
+        geometry: {
             vertices: vertexArray.vertices,
             indices: elementData,
             draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }

@@ -1,6 +1,5 @@
 import { GLTextureWrap } from "../caches/getGLSampler";
 
-
 /**
  * The pname parameter is a GLenum specifying the texture parameter to set.
  *

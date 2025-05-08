@@ -12,5 +12,5 @@ declare module "@feng3d/render-api"
          */
         _step?: GLOcclusionQueryStep;
     }
-    
+
 }

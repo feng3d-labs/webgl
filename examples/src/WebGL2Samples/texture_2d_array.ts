@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            geometry:{
+            geometry: {
                 vertices: vertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },
             }

@@ -65,7 +65,7 @@ import * as mat4 from "./stackgl/gl-mat4";
     let viewportHeight = 1;
 
     const renderObject: RenderObject = {
-        geometry:{
+        geometry: {
             vertices: {
                 position: { data: new Float32Array(positions), format: "float32x3" },
                 uv: { data: new Float32Array(uvs), format: "float32x2" },

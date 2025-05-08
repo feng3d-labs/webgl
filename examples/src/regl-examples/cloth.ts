@@ -165,7 +165,7 @@ import * as vec3 from "./stackgl/gl-vec3";
     let viewportHeight = 1;
 
     const renderObject: RenderObject = {
-        geometry:{
+        geometry: {
             vertices: {
                 position: { data: new Float32Array(positions), format: "float32x3" },
                 normal: { data: new Float32Array(normals), format: "float32x3" },

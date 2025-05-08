@@ -31,4 +31,4 @@ export const defaultWebGLContextAttributes: WebGLContextAttributes = {
     preserveDrawingBuffer: false,
     powerPreference: "default",
     failIfMajorPerformanceCaveat: false,
-}
+};

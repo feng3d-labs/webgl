@@ -104,7 +104,7 @@ import { getShaderSource, loadImage } from "./utility";
             bindingResources: {
                 MVP: matrix,
             },
-            geometry:{
+            geometry: {
                 vertices: vertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },
             }

@@ -100,7 +100,7 @@ const renderPass: RenderPass = {
     descriptor: frameBuffer,
     renderObjects: [{
         pipeline: drawBufferProgram,
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list" },
             vertices: triVertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 3 },
@@ -117,7 +117,7 @@ const renderPass2: RenderPass = {
             color1Map: { texture: color1Texture, sampler: color1Sampler },
             color2Map: { texture: color2Texture, sampler: color2Sampler },
         },
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list" },
             vertices: quadVertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 6 },

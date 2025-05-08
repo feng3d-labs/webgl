@@ -135,7 +135,7 @@ const renderPass1: RenderPass = {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
             bindingResources: { mvp: matrix },
-            geometry:{
+            geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: multipleOutputVertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },

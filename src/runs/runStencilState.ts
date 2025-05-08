@@ -1,6 +1,6 @@
-import { ICompareFunction, IStencilOperation } from "@feng3d/render-api";
+import { CompareFunction, StencilOperation } from "@feng3d/render-api";
 
-export function getIGLStencilFunc(compare: ICompareFunction)
+export function getIGLStencilFunc(compare: CompareFunction)
 {
     const stencilFunc: GLStencilFunc = compareMap[compare];
 
@@ -34,8 +34,7 @@ const compareMap: { [key: string]: GLStencilFunc } = {
  */
 export type GLStencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
 
-
-export function getIGLStencilOp(stencilOperation?: IStencilOperation)
+export function getIGLStencilOp(stencilOperation?: StencilOperation)
 {
     const glStencilOp: GLStencilOp = stencilOperationMap[stencilOperation];
 

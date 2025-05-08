@@ -24,7 +24,7 @@ export interface Renderbuffer
 
 /**
  * WebGL渲染缓冲区内部格式。
- * 
+ *
  * A GLenum specifying the internal format of the renderbuffer. Possible values:
  *
  * * gl.RGBA4: 4 red bits, 4 green bits, 4 blue bits 4 alpha bits.

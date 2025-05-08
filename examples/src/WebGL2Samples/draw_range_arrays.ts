@@ -44,7 +44,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 const vertexCount = 12;
 const renderObject: RenderObject = {
-    pipeline: pipeline,
+    pipeline,
     geometry: {
         primitive: { topology: "triangle-strip" },
         vertices: vertexArray.vertices,

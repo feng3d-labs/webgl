@@ -1,6 +1,6 @@
-import { ICompareFunction, DepthStencilState } from "@feng3d/render-api";
+import { CompareFunction } from "@feng3d/render-api";
 
-export function getIGLCompareFunction(depthCompare: ICompareFunction)
+export function getIGLCompareFunction(depthCompare: CompareFunction)
 {
     const glDepthCompare: GLCompareFunction = depthCompareMap[depthCompare];
 

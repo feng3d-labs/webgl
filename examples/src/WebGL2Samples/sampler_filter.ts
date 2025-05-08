@@ -150,7 +150,7 @@ function render()
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: { mvp: matrix },
-        geometry:{
+        geometry: {
             primitive: { topology: "triangle-list" },
             vertices: vertexArray.vertices,
             draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },

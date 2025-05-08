@@ -49,7 +49,6 @@ export interface IGLAttributeInfo
     location: number;
 }
 
-
 /**
  * 激活渲染程序
  */
@@ -408,7 +407,6 @@ const uniformBufferTypeAlignSizeMap: {
     FLOAT_MAT4x2: { align: 8, size: 32, clsType: Float32Array },
     FLOAT_MAT4x3: { align: 16, size: 64, clsType: Float32Array },
 };
-
 
 /**
  * WebGL统一变量

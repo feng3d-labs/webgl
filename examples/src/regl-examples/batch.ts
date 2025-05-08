@@ -64,7 +64,7 @@ function getRenderObject(batchId: number)
         bindingResources: {
             offset: offsets[batchId].offset,
         },
-        pipeline: pipeline,
+        pipeline,
     };
 
     return renderObject;

@@ -14,11 +14,11 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
         //
         const { format, type } = getGLTextureFormats(textureView.texture.format);
         const bytesPerPixel = Texture.getTextureBytesPerPixel(textureView.texture.format);
-        const dataConstructor = Texture.getTextureDataConstructor(textureView.texture.format);
+        const DataConstructor = Texture.getTextureDataConstructor(textureView.texture.format);
         //
         const bytesPerRow = width * bytesPerPixel;
         const bufferSize = bytesPerRow * height;
-        bufferData = new dataConstructor(bufferSize / dataConstructor.BYTES_PER_ELEMENT);
+        bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
         //
         const frameBuffer: RenderPassDescriptor = {
             colorAttachments: [

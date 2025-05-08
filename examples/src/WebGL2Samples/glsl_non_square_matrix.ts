@@ -68,7 +68,7 @@ loadImage("../../assets/img/Di-3d.png", function (image)
         renderObjects: [{
             pipeline: program,
             bindingResources: { MVP: matrix, diffuse: { texture, sampler } },
-            geometry:{
+            geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6 },

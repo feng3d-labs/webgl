@@ -15,7 +15,6 @@ import { TextureDimension } from "@feng3d/render-api";
  */
 export type GLTextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
 
-
 export function getGLTextureTarget(dimension: TextureDimension = "2d")
 {
     const target: GLTextureTarget = dimensionMap[dimension];

@@ -94,7 +94,7 @@ function render()
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },
-            geometry:{
+            geometry: {
                 primitive: { topology: "triangle-list" },
                 vertices: vertexArray.vertices,
                 draw: { __type__: "DrawVertex", vertexCount: 6, instanceCount: 1 },

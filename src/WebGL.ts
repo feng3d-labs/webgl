@@ -1,4 +1,4 @@
-import { GBuffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
 
 import { RunWebGL } from "./RunWebGL";
 import { deleteBuffer } from "./caches/getGLBuffer";
@@ -58,7 +58,7 @@ export class WebGL
         deleteRenderbuffer(this._gl, renderbuffer);
     }
 
-    deleteBuffer(buffer: GBuffer)
+    deleteBuffer(buffer: Buffer)
     {
         deleteBuffer(this._gl, buffer);
     }

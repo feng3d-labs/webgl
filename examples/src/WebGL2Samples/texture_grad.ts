@@ -199,7 +199,7 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {},
-        geometry:{
+        geometry: {
             primitive: { cullFace: "back" },
             vertices: vertexArray.vertices,
             indices: new Uint16Array(cubeVertexIndices),

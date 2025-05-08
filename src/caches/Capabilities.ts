@@ -13,7 +13,8 @@ export class Capabilities
     {
         if (this._maxAnisotropy) return this._maxAnisotropy;
         this._maxAnisotropy = this._gl.getExtension("EXT_texture_filter_anisotropic") ? this._gl.getParameter(this._gl.getExtension("EXT_texture_filter_anisotropic").MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
-        return this._maxAnisotropy;
+
+return this._maxAnisotropy;
     }
     private _maxAnisotropy: number;
 
@@ -24,7 +25,8 @@ export class Capabilities
     {
         if (this._maxTextures) return this._maxTextures;
         this._maxTextures = this._gl.getParameter(this._gl.MAX_TEXTURE_IMAGE_UNITS);
-        return this._maxTextures;
+
+return this._maxTextures;
     }
     private _maxTextures: number;
 
@@ -35,7 +37,8 @@ export class Capabilities
     {
         if (this._maxVertexTextures) return this._maxVertexTextures;
         this._maxVertexTextures = this._gl.getParameter(this._gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-        return this._maxVertexTextures;
+
+return this._maxVertexTextures;
     }
     private _maxVertexTextures: number;
 
@@ -46,7 +49,8 @@ export class Capabilities
     {
         if (this._maxTextureSize) return this._maxTextureSize;
         this._maxTextureSize = this._gl.getParameter(this._gl.MAX_TEXTURE_SIZE);
-        return this._maxTextureSize;
+
+return this._maxTextureSize;
     }
     private _maxTextureSize: number;
 
@@ -57,7 +61,8 @@ export class Capabilities
     {
         if (this._maxCubemapSize) return this._maxCubemapSize;
         this._maxCubemapSize = this._gl.getParameter(this._gl.MAX_CUBE_MAP_TEXTURE_SIZE);
-        return this._maxCubemapSize;
+
+return this._maxCubemapSize;
     }
     private _maxCubemapSize: number;
 
@@ -68,7 +73,8 @@ export class Capabilities
     {
         if (this._maxAttributes) return this._maxAttributes;
         this._maxAttributes = this._gl.getParameter(this._gl.MAX_VERTEX_ATTRIBS);
-        return this._maxAttributes;
+
+return this._maxAttributes;
     }
     private _maxAttributes: number;
 
@@ -79,7 +85,8 @@ export class Capabilities
     {
         if (this._maxVertexUniforms) return this._maxVertexUniforms;
         this._maxVertexUniforms = this._gl.getParameter(this._gl.MAX_VERTEX_UNIFORM_VECTORS);
-        return this._maxVertexUniforms;
+
+return this._maxVertexUniforms;
     }
     private _maxVertexUniforms: number;
 
@@ -90,7 +97,8 @@ export class Capabilities
     {
         if (this._maxVaryings) return this._maxVaryings;
         this._maxVaryings = this._gl.getParameter(this._gl.MAX_VARYING_VECTORS);
-        return this._maxVaryings;
+
+return this._maxVaryings;
     }
     private _maxVaryings: number;
 
@@ -101,7 +109,8 @@ export class Capabilities
     {
         if (this._maxFragmentUniforms) return this._maxFragmentUniforms;
         this._maxFragmentUniforms = this._gl.getParameter(this._gl.MAX_FRAGMENT_UNIFORM_VECTORS);
-        return this._maxFragmentUniforms;
+
+return this._maxFragmentUniforms;
     }
     private _maxFragmentUniforms: number;
 
@@ -112,7 +121,8 @@ export class Capabilities
     {
         if (this._vertexTextures) return this._vertexTextures;
         this._vertexTextures = this.maxVertexTextures > 0;
-        return this._vertexTextures;
+
+return this._vertexTextures;
     }
     private _vertexTextures: boolean;
 
@@ -123,7 +133,8 @@ export class Capabilities
     {
         if (this._floatFragmentTextures) return this._floatFragmentTextures;
         this._floatFragmentTextures = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension("OES_texture_float");
-        return this._floatFragmentTextures;
+
+return this._floatFragmentTextures;
     }
     private _floatFragmentTextures: boolean;
 
@@ -134,7 +145,8 @@ export class Capabilities
     {
         if (this._floatVertexTextures) return this._floatVertexTextures;
         this._floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
-        return this._floatVertexTextures;
+
+return this._floatVertexTextures;
     }
     private _floatVertexTextures: boolean;
 
@@ -145,10 +157,10 @@ export class Capabilities
     {
         if (this._maxPrecision) return this._maxPrecision;
         this._maxPrecision = _getMaxPrecision(this._gl, this._precision);
-        return this._maxPrecision;
+
+return this._maxPrecision;
     }
     private _maxPrecision: "highp" | "mediump" | "lowp";
-
 
     /**
      *
@@ -157,7 +169,8 @@ export class Capabilities
     {
         if (this._maxSamples) return this._maxSamples;
         this._maxSamples = this._gl instanceof WebGL2RenderingContext ? this._gl.getParameter(this._gl.MAX_SAMPLES) : 0;
-        return this._maxSamples;
+
+return this._maxSamples;
     }
     private _maxSamples: number;
 
@@ -168,7 +181,8 @@ export class Capabilities
     {
         if (this._stencilBits) return this._stencilBits;
         this._stencilBits = this._gl.getParameter(this._gl.STENCIL_BITS);
-        return this._stencilBits;
+
+return this._stencilBits;
     }
     private _stencilBits: number;
 
@@ -179,7 +193,8 @@ export class Capabilities
     {
         if (this._vaoAvailable) return this._vaoAvailable;
         this._vaoAvailable = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension("OES_vertex_array_object");
-        return this._vaoAvailable;
+
+return this._vaoAvailable;
     }
     private _vaoAvailable: boolean;
 

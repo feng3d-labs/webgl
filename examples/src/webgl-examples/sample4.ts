@@ -41,7 +41,7 @@ function main()
       ` },
       depthStencil: { depthCompare: "less-equal" }
     },
-    geometry:{
+    geometry: {
       primitive: { topology: "triangle-strip" },
       vertices: {
         aVertexPosition: {

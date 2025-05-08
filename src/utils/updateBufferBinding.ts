@@ -1,4 +1,4 @@
-import { BufferBinding, BufferBindingInfo, UnReadonly, GBuffer } from "@feng3d/render-api";
+import { Buffer, BufferBinding, BufferBindingInfo, UnReadonly } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
@@ -9,20 +9,25 @@ import { getIGLBuffer } from "../runs/getIGLBuffer";
  *
  * @see https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/08%20Advanced%20GLSL/#uniform_1
  */
+// 在文件顶部添加Map声明
+const bufferBindingInfoMap = new WeakMap<BufferBinding, BufferBindingInfo>();
+
 export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, uniformData: BufferBinding)
 {
-    if (uniformData["_bufferBindingInfo"] !== undefined)
+    // 使用Map替代属性访问
+    if (bufferBindingInfoMap.has(uniformData))
     {
-        const preVariableInfo = uniformData["_bufferBindingInfo"] as any as BufferBindingInfo;
+        const preVariableInfo = bufferBindingInfoMap.get(uniformData);
         if (preVariableInfo.size !== bufferBindingInfo.size)
         {
             console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, bufferBindingInfo, preVariableInfo });
         }
 
-        return;
+return;
     }
 
-    uniformData["_bufferBindingInfo"] = bufferBindingInfo as any;
+    // 使用Map存储数据
+    bufferBindingInfoMap.set(uniformData, bufferBindingInfo);
 
     const size = bufferBindingInfo.size;
     // 是否存在默认值。
@@ -77,7 +82,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
 
             const writeBuffers = buffer.writeBuffers ?? [];
             writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
-            (buffer as UnReadonly<GBuffer>).writeBuffers = writeBuffers;
+            (buffer as UnReadonly<Buffer>).writeBuffers = writeBuffers;
         };
 
         update();

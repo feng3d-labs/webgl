@@ -179,7 +179,7 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    geometry:{
+                    geometry: {
                         vertices: vertexArray.vertices,
                         draw: { __type__: "DrawVertex", vertexCount: 6 },
                     }
@@ -197,7 +197,7 @@ import { getShaderSource, loadImage } from "./utility";
                         MVP: matrix,
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
-                    geometry:{
+                    geometry: {
                         vertices: vertexArray.vertices,
                         draw: { __type__: "DrawVertex", vertexCount: 6 },
                     }

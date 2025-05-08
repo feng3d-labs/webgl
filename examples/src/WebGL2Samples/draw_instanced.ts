@@ -32,7 +32,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 
 const renderObject: RenderObject = {
     bindingResources: {},
-    geometry:{
+    geometry: {
         primitive: { topology: "triangle-list" },
         vertices: vertexArray.vertices,
         draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: 2 },
