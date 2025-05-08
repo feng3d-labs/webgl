@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects
+            renderPassObjects: renderObjects
         };
 
         const matrix = new Float32Array([
@@ -107,10 +107,8 @@ import { getShaderSource, loadImage } from "./utility";
                     MVP: matrix,
                     diffuse: { texture, sampler },
                 },
-                geometry: {
-                    vertices: vertexArray.vertices,
-                    draw: { __type__: "DrawVertex", vertexCount: 6 },
-                }
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             });
 
         // Offset
@@ -125,10 +123,8 @@ import { getShaderSource, loadImage } from "./utility";
                     diffuse: { texture, sampler },
                     offset,
                 },
-                geometry: {
-                    vertices: vertexArray.vertices,
-                    draw: { __type__: "DrawVertex", vertexCount: 6 },
-                }
+                vertices: vertexArray.vertices,
+                draw: { __type__: "DrawVertex", vertexCount: 6 },
             });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

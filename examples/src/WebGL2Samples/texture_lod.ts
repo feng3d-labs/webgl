@@ -187,7 +187,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Clear color buffer
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects,
+            renderPassObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -202,10 +202,8 @@ import { getShaderSource, loadImage } from "./utility";
             bindingResources: {
                 mvp: matrix,
             },
-            geometry: {
-                vertices: vertexArray.vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArray.vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];

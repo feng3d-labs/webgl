@@ -1,4 +1,4 @@
-import { CanvasContext, GLVertexAttributeTypes, IIndicesDataTypes, RenderPassObject, PrimitiveTopology, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
+import { CanvasContext, GLVertexAttributeTypes, IndicesDataTypes, PrimitiveTopology, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -45,13 +45,13 @@ import { getShaderSource, loadImage } from "./utility";
         depthStencil: { depthCompare: "less" },
     };
 
-    const vertexArrayMaps: { [key: string]: { vertices?: VertexAttributes, indices: IIndicesDataTypes }[] } = {};
+    const vertexArrayMaps: { [key: string]: { vertices?: VertexAttributes, indices: IndicesDataTypes }[] } = {};
 
     // var in loop
     let mesh;
     let primitive: Primitive;
     let vertexBuffer: VertexDataTypes;
-    let indicesBuffer: IIndicesDataTypes;
+    let indicesBuffer: IndicesDataTypes;
 
     let texture: Texture;
     let sampler: Sampler;
@@ -188,7 +188,7 @@ import { getShaderSource, loadImage } from "./utility";
                 colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
                 depthStencilAttachment: { depthLoadOp: "clear" }
             },
-            renderObjects,
+            renderPassObjects: renderObjects,
         };
 
         orientation[0] = 0.00020; // yaw
@@ -213,6 +213,7 @@ import { getShaderSource, loadImage } from "./utility";
                 renderObjects.push({
                     pipeline: {
                         ...program,
+                        primitive: { topology: IDrawMode2Name[primitive.mode] },
                     },
                     bindingResources: {
                         mvMatrix: localMV,
@@ -220,12 +221,9 @@ import { getShaderSource, loadImage } from "./utility";
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },
-                    geometry: {
-                        primitive: { topology: IDrawMode2Name[primitive.mode] },
-                        vertices: vertexArrayMaps[mid][i].vertices,
-                        indices: vertexArrayMaps[mid][i].indices,
-                        draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length }
-                    }
+                    vertices: vertexArrayMaps[mid][i].vertices,
+                    indices: vertexArrayMaps[mid][i].indices,
+                    draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length }
                 });
             }
         }

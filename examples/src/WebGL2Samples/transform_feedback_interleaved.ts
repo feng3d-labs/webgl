@@ -1,4 +1,4 @@
-import { CanvasContext, IIndicesDataTypes, RenderPipeline, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderPipeline, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
 import { getIGLBuffer, TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -53,7 +53,7 @@ import { getShaderSource } from "./utility";
     ];
 
     // -- Init Vertex Array
-    const vertexArrays: { vertices?: VertexAttributes, indices?: IIndicesDataTypes }[] = [
+    const vertexArrays: { vertices?: VertexAttributes, indices?: IndicesDataTypes }[] = [
         {
             vertices: {
                 position: { data: buffers[PROGRAM_TRANSFORM], format: "float32x4" },
@@ -101,15 +101,13 @@ import { getShaderSource } from "./utility";
                 },
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-                    renderObjects: [
+                    renderPassObjects: [
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programFeedback,
-                            geometry: {
-                                vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
-                                indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                                draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
-                            },
+                            vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
+                            indices: vertexArrays[PROGRAM_FEEDBACK].indices,
+                            draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
                         }
                     ],
                 }]

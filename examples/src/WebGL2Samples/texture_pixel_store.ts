@@ -1,4 +1,4 @@
-import { CanvasContext, IIndicesDataTypes, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
 import { getIGLBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -40,7 +40,7 @@ import { getShaderSource, loadImage } from "./utility";
     const vertexTexBuffer: VertexDataTypes = texCoords;
 
     // -- Init VertexArray
-    const vertexArray: { vertices?: VertexAttributes, indices?: IIndicesDataTypes } = {
+    const vertexArray: { vertices?: VertexAttributes, indices?: IndicesDataTypes } = {
         vertices: {
             position: { data: vertexPosBuffer, format: "float32x2" },
             texcoord: { data: vertexTexBuffer, format: "float32x2" },
@@ -80,7 +80,7 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects,
+            renderPassObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -96,11 +96,9 @@ import { getShaderSource, loadImage } from "./utility";
                 MVP: matrix,
                 diffuse: { texture, sampler },
             },
-            geometry: {
-                vertices: vertexArray.vertices,
-                indices: vertexArray.indices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices: vertexArray.vertices,
+            indices: vertexArray.indices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

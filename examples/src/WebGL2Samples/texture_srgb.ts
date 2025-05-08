@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
 import { getIGLBuffer, WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -72,7 +72,7 @@ import { getShaderSource, loadImage } from "./utility";
         // Clear color buffer
         const rp: RenderPass = {
             descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderObjects,
+            renderPassObjects: renderObjects,
         };
 
         const matrix = new Float32Array([
@@ -87,10 +87,8 @@ import { getShaderSource, loadImage } from "./utility";
                 mvp: matrix,
                 materialDiffuse: { texture, sampler },
             },
-            geometry: {
-                vertices,
-                draw: { __type__: "DrawVertex", vertexCount: 6 },
-            }
+            vertices,
+            draw: { __type__: "DrawVertex", vertexCount: 6 },
         });
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
