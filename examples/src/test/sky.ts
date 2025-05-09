@@ -4,7 +4,8 @@ import { mat4 } from "gl-matrix";
 
 import sky_frag from "./sky_frag.glsl";
 import sky_vert from "./sky_vert.glsl";
-import { reactive } from "@feng3d/reactivity";
+import { effect, reactive } from "@feng3d/reactivity";
+import { GUI } from "dat.gui";
 
 main();
 
@@ -14,6 +15,12 @@ main();
 async function main()
 {
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+
+    const gui: GUI = new GUI();
+    if (gui.domElement.parentElement !== null)
+    {
+        gui.domElement.parentElement.style.top = '300px';
+    }
 
     const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 
@@ -55,6 +62,21 @@ async function main()
         },
     };
 
+    const folderSky = gui.addFolder('Sky');
+    folderSky.add(r_parameters, 'elevation', 0, 90, 0.1);
+    folderSky.add(r_parameters, 'azimuth', - 180, 180, 0.1);
+    folderSky.open();
+
+    effect(() =>
+    {
+        const phi = (90 - r_parameters.elevation) / 180 * Math.PI;
+        const theta = (r_parameters.azimuth) / 180 * Math.PI;
+
+        const sun = setFromSphericalCoords(1, phi, theta);
+        reactive(renderObject.bindingResources).sunPosition = sun;
+
+    })
+
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
@@ -71,12 +93,13 @@ async function main()
     };
 
     let then = 0;
+    const cameraMatrix = mat4.create();
 
     // Draw the scene repeatedly
     function render()
     {
         let now = Date.now();
-        now *= 0.001; // convert to seconds
+        now *= 0.0001; // convert to seconds
         const deltaTime = now - then;
         then = now;
 
@@ -96,8 +119,15 @@ async function main()
 
         const modelMatrix = mat4.fromValues(10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1);
 
+        mat4.rotateY(cameraMatrix, cameraMatrix, deltaTime);
+        const viewMatrix = mat4.create();
+        mat4.invert(viewMatrix, cameraMatrix);
+
+        const modelViewMatrix = mat4.create();
+        mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
+
         reactive(renderObject.bindingResources).modelMatrix = modelMatrix;
-        reactive(renderObject.bindingResources).modelViewMatrix = mat4.clone(modelMatrix);
+        reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix;
         reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix;
         reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
 
@@ -173,4 +203,25 @@ function initBuffers()
         position: new Float32Array(positions),
         indices: new Uint16Array(indices),
     };
+}
+
+const parameters: {
+    readonly elevation: number,
+    readonly azimuth: number,
+} = {
+    elevation: 2,
+    azimuth: 180,
+};
+
+const r_parameters = reactive(parameters);
+
+function setFromSphericalCoords(radius, phi, theta)
+{
+    const sinPhiRadius = Math.sin(phi) * radius;
+
+    const x = sinPhiRadius * Math.sin(theta);
+    const y = Math.cos(phi) * radius;
+    const z = sinPhiRadius * Math.cos(theta);
+
+    return [x, y, z];
 }
