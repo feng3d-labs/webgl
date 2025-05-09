@@ -33,7 +33,7 @@ async function main()
     const gui: GUI = new GUI();
     if (gui.domElement.parentElement !== null)
     {
-        gui.domElement.parentElement.style.top = '300px';
+        gui.domElement.parentElement.style.top = "300px";
     }
 
     const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
@@ -76,11 +76,11 @@ async function main()
         },
     };
 
-    const folderSky = gui.addFolder('Sky');
-    folderSky.add(r_parameters, 'elevation', 0, 90, 0.1);
-    folderSky.add(r_parameters, 'azimuth', - 180, 180, 0.1);
-    folderSky.add(r_parameters, 'cameraRotationX', - 180, 180, 0.1);
-    folderSky.add(r_parameters, 'cameraRotationY', - 180, 180, 0.1);
+    const folderSky = gui.addFolder("Sky");
+    folderSky.add(r_parameters, "elevation", 0, 90, 0.1);
+    folderSky.add(r_parameters, "azimuth", -180, 180, 0.1);
+    folderSky.add(r_parameters, "cameraRotationX", -180, 180, 0.1);
+    folderSky.add(r_parameters, "cameraRotationY", -180, 180, 0.1);
     folderSky.open();
 
     effect(() =>
@@ -90,7 +90,6 @@ async function main()
 
         const sun = setFromSphericalCoords(1, phi, theta);
         reactive(renderObject.bindingResources).sunPosition = sun;
-
     });
 
     effect(() =>
@@ -129,7 +128,6 @@ async function main()
         reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix;
         reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
     });
-
 
     const submit: Submit = {
         commandEncoders: [{
