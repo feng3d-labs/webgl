@@ -12,6 +12,7 @@ const files = {
     "test":[
         "fractalCube",
         "RenderObjectChanges",
+        "sky",
     ],
     "regl-examples": [
         "basic",
