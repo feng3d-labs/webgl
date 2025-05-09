@@ -1,11 +1,25 @@
+import { effect, reactive } from "@feng3d/reactivity";
 import { CanvasContext, RenderObject, Submit } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
+import { GUI } from "dat.gui";
 import { mat4 } from "gl-matrix";
 
 import sky_frag from "./sky_frag.glsl";
 import sky_vert from "./sky_vert.glsl";
-import { effect, reactive } from "@feng3d/reactivity";
-import { GUI } from "dat.gui";
+
+const parameters: {
+    readonly elevation: number,
+    readonly azimuth: number,
+    readonly cameraRotationX: number,
+    readonly cameraRotationY: number,
+} = {
+    elevation: 2,
+    azimuth: 180,
+    cameraRotationX: 0,
+    cameraRotationY: 0,
+};
+
+const r_parameters = reactive(parameters);
 
 main();
 
@@ -65,6 +79,8 @@ async function main()
     const folderSky = gui.addFolder('Sky');
     folderSky.add(r_parameters, 'elevation', 0, 90, 0.1);
     folderSky.add(r_parameters, 'azimuth', - 180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationX', - 180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationY', - 180, 180, 0.1);
     folderSky.open();
 
     effect(() =>
@@ -75,34 +91,14 @@ async function main()
         const sun = setFromSphericalCoords(1, phi, theta);
         reactive(renderObject.bindingResources).sunPosition = sun;
 
-    })
+    });
 
-    const submit: Submit = {
-        commandEncoders: [{
-            passEncoders: [
-                // 绘制
-                {
-                    descriptor: {
-                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
-                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
-                    },
-                    renderPassObjects: [renderObject],
-                },
-            ]
-        }]
-    };
-
-    let then = 0;
-    const cameraMatrix = mat4.create();
-
-    // Draw the scene repeatedly
-    function render()
+    effect(() =>
     {
-        let now = Date.now();
-        now *= 0.0001; // convert to seconds
-        const deltaTime = now - then;
-        then = now;
+        const cameraRotationX = r_parameters.cameraRotationX / 180 * Math.PI;
+        const cameraRotationY = r_parameters.cameraRotationY / 180 * Math.PI;
 
+        //
         const fieldOfView = 45 * Math.PI / 180; // in radians
         const aspect = canvas.clientWidth / canvas.clientHeight;
         const zNear = 0.1;
@@ -119,7 +115,9 @@ async function main()
 
         const modelMatrix = mat4.fromValues(10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1);
 
-        mat4.rotateY(cameraMatrix, cameraMatrix, deltaTime);
+        const cameraMatrix = mat4.create();
+        mat4.rotateX(cameraMatrix, cameraMatrix, cameraRotationX);
+        mat4.rotateY(cameraMatrix, cameraMatrix, cameraRotationY);
         const viewMatrix = mat4.create();
         mat4.invert(viewMatrix, cameraMatrix);
 
@@ -130,7 +128,27 @@ async function main()
         reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix;
         reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix;
         reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
+    });
 
+
+    const submit: Submit = {
+        commandEncoders: [{
+            passEncoders: [
+                // 绘制
+                {
+                    descriptor: {
+                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
+                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
+                    },
+                    renderPassObjects: [renderObject],
+                },
+            ]
+        }]
+    };
+
+    // Draw the scene repeatedly
+    function render()
+    {
         webgl.submit(submit);
 
         requestAnimationFrame(render);
@@ -204,16 +222,6 @@ function initBuffers()
         indices: new Uint16Array(indices),
     };
 }
-
-const parameters: {
-    readonly elevation: number,
-    readonly azimuth: number,
-} = {
-    elevation: 2,
-    azimuth: 180,
-};
-
-const r_parameters = reactive(parameters);
 
 function setFromSphericalCoords(radius, phi, theta)
 {
