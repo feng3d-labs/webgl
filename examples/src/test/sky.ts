@@ -31,10 +31,6 @@ async function main()
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
 
     const gui: GUI = new GUI();
-    if (gui.domElement.parentElement !== null)
-    {
-        gui.domElement.parentElement.style.top = "300px";
-    }
 
     const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
 
