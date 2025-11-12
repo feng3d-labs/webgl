@@ -171,7 +171,7 @@ import { getShaderSource } from './utility';
         transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
         transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        reactive(transformRO.uniforms).u_time = time;
+        reactive(transformRO.uniforms).u_time = { value: time };
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

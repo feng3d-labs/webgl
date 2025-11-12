@@ -115,16 +115,19 @@ import * as mat4 from './stackgl/gl-mat4';
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
-        reactive(renderObject.bindingResources).view = mat4.lookAt([],
-            [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-            [0, 0.0, 0],
-            [0, 1, 0]);
-        reactive(renderObject.bindingResources).projection
-            = mat4.perspective([],
+        reactive(renderObject.bindingResources).view = {
+            value: mat4.lookAt([],
+                [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
+                [0, 0.0, 0],
+                [0, 1, 0]),
+        };
+        reactive(renderObject.bindingResources).projection = {
+            value: mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,
-                10);
+                1000),
+        };
 
         webgl.submit(submit);
 

@@ -223,8 +223,8 @@ import { getShaderSource, loadImage } from './utility';
         mat4.rotateY(mvMatrix, mvMatrix, orientation[1] * Math.PI);
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
-        reactive(ro.bindingResources).mvMatrix = mvMatrix as Float32Array;
-        reactive(ro.bindingResources).pMatrix = perspectiveMatrix as Float32Array;
+        reactive(ro.bindingResources).mvMatrix = { value: mvMatrix as Float32Array };
+        reactive(ro.bindingResources).pMatrix = { value: perspectiveMatrix as Float32Array };
         reactive(ro.bindingResources).diffuse = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

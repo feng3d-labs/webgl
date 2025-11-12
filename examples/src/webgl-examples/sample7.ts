@@ -112,9 +112,9 @@ async function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix as Float32Array;
-        reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix as Float32Array;
-        reactive(renderObject.bindingResources).uNormalMatrix = normalMatrix as Float32Array;
+        reactive(renderObject.bindingResources).uProjectionMatrix = { value: projectionMatrix as Float32Array };
+        reactive(renderObject.bindingResources).uModelViewMatrix = { value: modelViewMatrix as Float32Array };
+        reactive(renderObject.bindingResources).uNormalMatrix = { value: normalMatrix as Float32Array };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

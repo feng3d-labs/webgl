@@ -88,7 +88,7 @@ import { getShaderSource, loadImage } from './utility';
         const ro: RenderObject = {
             pipeline: program,
             bindingResources: {
-                MVP: matrix,
+                MVP: { value: matrix },
                 diffuse: { texture, sampler },
             },
             vertices: vertexArray.vertices,
@@ -104,7 +104,7 @@ import { getShaderSource, loadImage } from './utility';
         (function render()
         {
             // -- Render
-            reactive(ro.bindingResources).layer = frame;
+            reactive(ro.bindingResources).layer = { value: frame };
 
             webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 

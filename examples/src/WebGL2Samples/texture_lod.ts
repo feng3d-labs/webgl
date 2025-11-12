@@ -208,7 +208,7 @@ import { getShaderSource, loadImage } from './utility';
         const ro: RenderObject = {
             pipeline: program,
             bindingResources: {
-                mvp: matrix,
+                mvp: { value: matrix },
             },
             vertices: vertexArray.vertices,
             draw: { __type__: 'DrawVertex', vertexCount: 6 },
@@ -224,8 +224,8 @@ import { getShaderSource, loadImage } from './utility';
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     ...ro,
                     bindingResources: {
-                        mvp: matrix,
-                        lodBias: lodBiasArray[i],
+                        mvp: { value: matrix },
+                        lodBias: { value: lodBiasArray[i] },
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
                 });

@@ -39,7 +39,7 @@ loadImage('../../assets/img/Di-3d.png', (img) =>
     const renderObject: RenderObject = {
         bindingResources: {
             diffuse: { texture, sampler },
-            u_imageSize: [canvas.width / 2, canvas.height / 2],
+            u_imageSize: { value: [canvas.width / 2, canvas.height / 2] },
         },
         draw: { __type__: 'DrawVertex', firstVertex: 0, vertexCount: 3 },
         pipeline: program,

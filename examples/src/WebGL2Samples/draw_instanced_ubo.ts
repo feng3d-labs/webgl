@@ -51,8 +51,8 @@ const rp: RenderPass = {
     renderPassObjects: [{
         pipeline: program,
         bindingResources: {
-            Transform: transforms,
-            Material: materials,
+            Transform: { value: transforms },
+            Material: { value: materials },
         },
         vertices: {
             pos: { data: vertices, format: 'float32x2' },

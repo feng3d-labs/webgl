@@ -1,6 +1,6 @@
+import { reactive } from '@feng3d/reactivity';
 import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexData } from '@feng3d/render-api';
 import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
-import { reactive } from '@feng3d/reactivity';
 
 import { getShaderSource } from './utility';
 
@@ -138,7 +138,7 @@ import { getShaderSource } from './utility';
         vertices: null,
         transformFeedback: null,
         uniforms: {
-            u_acceleration: [0.0, ACCELERATION],
+            u_acceleration: { value: [0.0, ACCELERATION] },
         },
         draw: { __type__: 'DrawVertex', vertexCount: NUM_PARTICLES },
     };
@@ -147,7 +147,7 @@ import { getShaderSource } from './utility';
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         bindingResources: {
-            u_color: [0.0, 1.0, 1.0, 1.0],
+            u_color: { value: [0.0, 1.0, 1.0, 1.0] },
         },
         draw: { __type__: 'DrawVertex', vertexCount: NUM_PARTICLES },
     };
@@ -176,7 +176,7 @@ import { getShaderSource } from './utility';
         transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
         transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        reactive(transformRO.uniforms).u_time = time;
+        reactive(transformRO.uniforms).u_time = { value: time };
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

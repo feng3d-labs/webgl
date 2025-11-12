@@ -123,7 +123,7 @@ function render()
 
     const renderObject: RenderObject = {
         pipeline: program,
-        bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
+        bindingResources: { mvp: { value: matrix }, diffuse: { texture, sampler } },
         vertices: vertexArray.vertices,
         draw: { __type__: 'DrawVertex', vertexCount: 6 },
     };

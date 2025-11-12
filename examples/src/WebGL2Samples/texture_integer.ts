@@ -74,7 +74,7 @@ import { getShaderSource, loadImage } from './utility';
         const ro: RenderObject = {
             pipeline: program,
             bindingResources: {
-                MVP: matrix,
+                MVP: { value: matrix },
                 diffuse: { texture, sampler },
             },
             vertices: vertexArray.vertices,

@@ -41,7 +41,7 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
             }
             else
             {
-                runUniform(gl, type as GLUniformBufferType, v, uniformData);
+                runUniform(gl, type as GLUniformBufferType, v, uniformData as BufferBinding);
             }
         });
     });

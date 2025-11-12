@@ -166,7 +166,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
         descriptor: framebuffers[i],
         renderPassObjects: [{
             pipeline: programs[i],
-            bindingResources: { MVP: IDENTITY as Float32Array },
+            bindingResources: { MVP: { value: IDENTITY as Float32Array } },
             vertices: vertexArrays[i].vertices,
             draw: { __type__: 'DrawVertex', vertexCount },
         }],
@@ -198,7 +198,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             ...ro,
             viewport: viewport[i],
             bindingResources: {
-                MVP: mvp as Float32Array,
+                MVP: { value: mvp as Float32Array },
                 diffuse: { texture: textures[i], sampler: samplers[i] },
             },
             draw: { __type__: 'DrawVertex', vertexCount: 6 },

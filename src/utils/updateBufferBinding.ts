@@ -52,7 +52,9 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
         const { paths, offset: itemInfoOffset, size: itemInfoSize, Cls } = v;
         const update = () =>
         {
-            let value: any = uniformData;
+            let value: any = uniformData.value;
+            if (value === undefined) return;
+
             for (let i = 0; i < paths.length; i++)
             {
                 value = value[paths[i]];

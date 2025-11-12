@@ -207,10 +207,10 @@ import { getShaderSource, loadImage } from './utility';
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {
-            u_model: modelMatrix as Float32Array,
-            u_modelInvTrans: modelInvTrans as Float32Array,
-            u_lightPosition: lightPosition,
-            u_ambient: 0.1,
+            u_model: { value: modelMatrix as Float32Array },
+            u_modelInvTrans: { value: modelInvTrans as Float32Array },
+            u_lightPosition: { value: lightPosition },
+            u_ambient: { value: 0.1 },
         },
         vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),
@@ -235,7 +235,7 @@ import { getShaderSource, loadImage } from './utility';
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        reactive(ro.bindingResources).u_viewProj = viewProj as Float32Array;
+        reactive(ro.bindingResources).u_viewProj = { value: viewProj as Float32Array };
         reactive(ro.bindingResources).s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

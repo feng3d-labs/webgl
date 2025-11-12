@@ -93,7 +93,7 @@ import { getShaderSource } from './utility';
                         {
                             pipeline: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
-                            uniforms: { MVP: matrix },
+                            uniforms: { MVP: { value: matrix } },
                             transformFeedback,
                             draw: { __type__: 'DrawVertex', vertexCount: VERTEX_COUNT },
                         },

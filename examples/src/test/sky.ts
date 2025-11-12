@@ -59,21 +59,21 @@ async function main()
         indices: buffers.indices,
         draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
         bindingResources: {
-            modelMatrix: [10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1],
-            modelViewMatrix: [-3853.8425, -4464.3149, 8075.7534, 0, 0.0000, 8751.7734, 4838.0225, 0, -9227.5615, 1864.4976, -3372.7957, 0, -0.0000, -0.4583, -2.5568, 1],
-            projectionMatrix: [1.2071, 0, 0, 0, 0, 2.4142, 0, 0, 0, 0, -1.0002, -1, 0, 0, -0.2000, 0],
-            cameraPosition: [1.8602, 1.6380, -0.7769],
-            sunPosition: [0.0000, 0.0349, -0.9994],
-            rayleigh: 2,
-            turbidity: 10,
-            mieCoefficient: 0.0050,
-            up: [0, 1, 0],
-            mieDirectionalG: 0.2,
+            modelMatrix: { value: [10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1] },
+            modelViewMatrix: { value: [-3853.8425, -4464.3149, 8075.7534, 0, 0.0000, 8751.7734, 4838.0225, 0, -9227.5615, 1864.4976, -3372.7957, 0, -0.0000, -0.4583, -2.5568, 1] },
+            projectionMatrix: { value: [1.2071, 0, 0, 0, 0, 2.4142, 0, 0, 0, 0, -1.0002, -1, 0, 0, -0.2000, 0] },
+            cameraPosition: { value: [1.8602, 1.6380, -0.7769] },
+            sunPosition: { value: [0.0000, 0.0349, -0.9994] },
+            rayleigh: { value: 2 },
+            turbidity: { value: 10 },
+            mieCoefficient: { value: 0.0050 },
+            up: { value: [0, 1, 0] },
+            mieDirectionalG: { value: 0.2 },
         },
     };
 
     const folderSky = gui.addFolder('Sky');
-    folderSky.add(r_parameters, 'elevation', 0, 90, 0.1);
+    folderSky.add(r_parameters, 'elevation', 0, 10, 0.1);
     folderSky.add(r_parameters, 'azimuth', -180, 180, 0.1);
     folderSky.add(r_parameters, 'cameraRotationX', -180, 180, 0.1);
     folderSky.add(r_parameters, 'cameraRotationY', -180, 180, 0.1);
@@ -85,7 +85,7 @@ async function main()
         const theta = (r_parameters.azimuth) / 180 * Math.PI;
 
         const sun = setFromSphericalCoords(1, phi, theta);
-        reactive(renderObject.bindingResources).sunPosition = sun;
+        reactive(renderObject.bindingResources).sunPosition = { value: sun };
     });
 
     effect(() =>
@@ -119,10 +119,10 @@ async function main()
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
 
-        reactive(renderObject.bindingResources).modelMatrix = modelMatrix as Float32Array;
-        reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix as Float32Array;
-        reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix as Float32Array;
-        reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
+        reactive(renderObject.bindingResources).modelMatrix = { value: modelMatrix as Float32Array };
+        reactive(renderObject.bindingResources).modelViewMatrix = { value: modelViewMatrix as Float32Array };
+        reactive(renderObject.bindingResources).projectionMatrix = { value: projectionMatrix as Float32Array };
+        reactive(renderObject.bindingResources).cameraPosition = { value: [0, 0, 0] };
     });
 
     const submit: Submit = {

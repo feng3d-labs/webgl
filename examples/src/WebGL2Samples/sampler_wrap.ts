@@ -151,7 +151,7 @@ function render()
 
     const ro: RenderObject = {
         pipeline: program,
-        bindingResources: { mvp: matrix },
+        bindingResources: { mvp: { value: matrix } },
         vertices: vertexArray.vertices,
         draw: { __type__: 'DrawVertex', vertexCount: 6, instanceCount: 1 },
     };

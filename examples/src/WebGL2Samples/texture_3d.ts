@@ -197,7 +197,7 @@ import { getShaderSource } from './utility';
 
         for (let i = 0; i < Corners.MAX; ++i)
         {
-            reactive(renderPassObjects[i].bindingResources).orientation = matrices[i];
+            reactive(renderPassObjects[i].bindingResources).orientation = { value: matrices[i] };
         }
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

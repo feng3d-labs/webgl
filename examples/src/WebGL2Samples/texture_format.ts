@@ -178,7 +178,7 @@ import { getShaderSource, loadImage } from './utility';
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     pipeline: programNormalized,
                     bindingResources: {
-                        MVP: matrix,
+                        MVP: { value: matrix },
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
                     vertices: vertexArray.vertices,
@@ -194,7 +194,7 @@ import { getShaderSource, loadImage } from './utility';
                     viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
                     pipeline: programUint,
                     bindingResources: {
-                        MVP: matrix,
+                        MVP: { value: matrix },
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
                     vertices: vertexArray.vertices,

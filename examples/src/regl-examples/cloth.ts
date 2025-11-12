@@ -370,13 +370,14 @@ import { reactive } from '@feng3d/reactivity';
 
         camera.tick();
 
-        reactive(renderObject.bindingResources).view = camera.view();
-        reactive(renderObject.bindingResources).projection
-            = mat4.perspective([],
+        reactive(renderObject.bindingResources).view = { value: camera.view() };
+        reactive(renderObject.bindingResources).projection = {
+            value: mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,
-                1000);
+                1000),
+        };
 
         webgl.submit(submit);
 

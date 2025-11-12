@@ -138,7 +138,7 @@ const renderPass1: RenderPass = {
         {
             viewport: { x: 0, y: 0, width: w, height: h },
             pipeline: multipleOutputProgram,
-            bindingResources: { mvp: matrix },
+            bindingResources: { mvp: { value: matrix } },
             vertices: multipleOutputVertexArray.vertices,
             draw: { __type__: 'DrawVertex', vertexCount: 6 },
         }],
@@ -155,7 +155,7 @@ const renderPass: RenderPass = {
 
 const renderObject: RenderObject = {
     pipeline: layerProgram,
-    bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
+    bindingResources: { mvp: { value: matrix }, diffuse: { texture, sampler } },
     vertices: layerVertexArray.vertices,
     draw: { __type__: 'DrawVertex', vertexCount: 6 },
 };
@@ -167,7 +167,7 @@ for (let i = 0; i < Textures.MAX; ++i)
         {
             viewport: { x: viewport[i].x, y: viewport[i].y, width: viewport[i].z, height: viewport[i].w },
             ...renderObject,
-            bindingResources: { ...renderObject.bindingResources, layer: i },
+            bindingResources: { ...renderObject.bindingResources, layer: { value: i } },
             draw: { __type__: 'DrawVertex', vertexCount: 6 },
         },
     );

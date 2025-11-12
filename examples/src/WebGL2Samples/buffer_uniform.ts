@@ -84,9 +84,9 @@ import { getShaderSource } from './utility';
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {
-            PerDraw: transforms,
-            PerPass: lightPos,
-            PerScene: material,
+            PerDraw: { value: transforms },
+            PerPass: { value: lightPos },
+            PerScene: { value: material },
         },
         vertices: vertexArray.vertices,
         indices: elementData,

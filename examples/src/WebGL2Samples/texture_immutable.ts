@@ -104,7 +104,7 @@ import { getShaderSource, loadImage } from './utility';
         const ro: RenderObject = {
             pipeline: program,
             bindingResources: {
-                MVP: matrix,
+                MVP: { value: matrix },
             },
             vertices: vertexArray.vertices,
             draw: { __type__: 'DrawVertex', vertexCount: 6 },

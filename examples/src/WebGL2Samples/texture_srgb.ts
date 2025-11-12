@@ -86,7 +86,7 @@ import { getShaderSource, loadImage } from './utility';
         renderObjects.push({
             pipeline: program,
             bindingResources: {
-                mvp: matrix,
+                mvp: { value: matrix },
                 materialDiffuse: { texture, sampler },
             },
             vertices,

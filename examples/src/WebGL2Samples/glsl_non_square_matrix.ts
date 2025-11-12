@@ -70,7 +70,7 @@ loadImage('../../assets/img/Di-3d.png', function (image)
         descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [{
             pipeline: program,
-            bindingResources: { MVP: matrix, diffuse: { texture, sampler } },
+            bindingResources: { MVP: { value: matrix }, diffuse: { texture, sampler } },
             vertices: vertexArray.vertices,
             draw: { __type__: 'DrawVertex', vertexCount: 6 },
         }],

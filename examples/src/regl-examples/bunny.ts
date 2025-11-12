@@ -1,9 +1,9 @@
-import { Submit, RenderObject } from '@feng3d/render-api';
+import { RenderObject, Submit } from '@feng3d/render-api';
 import { WebGL } from '@feng3d/webgl';
 
+import { reactive } from '@feng3d/reactivity';
 import * as bunny from './mikolalysenko/bunny';
 import * as mat4 from './stackgl/gl-mat4';
-import { reactive } from '@feng3d/reactivity';
 
 const canvas = document.createElement('canvas');
 canvas.id = 'glcanvas';
@@ -38,7 +38,7 @@ const renderObject: RenderObject = {
     indices: new Uint16Array(indices),
     draw: { __type__: 'DrawIndexed', indexCount: indices.length },
     bindingResources: {
-        model: mat4.identity([]),
+        model: { value: mat4.identity([]) },
     },
     pipeline: {
         vertex: {
@@ -78,17 +78,20 @@ function draw()
     tick++;
     const t = 0.01 * tick;
 
-    reactive(renderObject.bindingResources).view = mat4.lookAt([],
-        [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
-        [0, 2.5, 0],
-        [0, 1, 0]);
+    reactive(renderObject.bindingResources).view = {
+        value: mat4.lookAt([],
+            [30 * Math.cos(t), 2.5, 30 * Math.sin(t)],
+            [0, 2.5, 0],
+            [0, 1, 0]),
+    };
 
-    reactive(renderObject.bindingResources).projection
-        = mat4.perspective([],
+    reactive(renderObject.bindingResources).projection = {
+        value: mat4.perspective([],
             Math.PI / 4,
             viewportWidth / viewportHeight,
             0.01,
-            1000);
+            1000),
+    };
 
     webgl.submit(submit);
 

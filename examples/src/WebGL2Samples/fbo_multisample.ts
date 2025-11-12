@@ -109,7 +109,7 @@ const renderPass1: RenderPass = {
             ...programs[PROGRAM.TEXTURE],
             primitive: { topology: 'LINE_LOOP' },
         },
-        bindingResources: { MVP: IDENTITY as Float32Array },
+        bindingResources: { MVP: { value: IDENTITY as Float32Array } },
         vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
         draw: { __type__: 'DrawVertex', vertexCount },
     }],
@@ -127,7 +127,7 @@ const renderPass2: RenderPass = {
     renderPassObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
-            bindingResources: { diffuse: { texture, sampler }, MVP: mvp as Float32Array },
+            bindingResources: { diffuse: { texture, sampler }, MVP: { value: mvp as Float32Array } },
             vertices: vertexArrays[PROGRAM.SPLASH].vertices,
             draw: { __type__: 'DrawVertex', vertexCount: 6 },
         },

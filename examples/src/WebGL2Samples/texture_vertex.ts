@@ -218,8 +218,8 @@ import { getShaderSource, loadImage } from './utility';
                         primitive: { topology: IDrawMode2Name[primitive.mode] },
                     },
                     bindingResources: {
-                        mvMatrix: localMV as Float32Array,
-                        pMatrix: perspectiveMatrix as Float32Array,
+                        mvMatrix: { value: localMV as Float32Array },
+                        pMatrix: { value: perspectiveMatrix as Float32Array },
                         displacementMap: { texture, sampler },
                         diffuse: { texture, sampler },
                     },

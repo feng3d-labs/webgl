@@ -93,7 +93,7 @@ function render()
         renderPassObjects: [{
             pipeline: program,
             bindingResources: {
-                mvp: matrix,
+                mvp: { value: matrix },
                 materialDiffuse0: { texture, sampler: samplerA },
                 materialDiffuse1: { texture, sampler: samplerB },
             },

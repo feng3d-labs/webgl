@@ -1,16 +1,22 @@
+import { BufferBinding } from '@feng3d/render-api';
 import { UniformItemInfo } from '../caches/getGLProgram';
 import { GLUniformBufferType } from '../const/GLUniformType';
 
 /**
  * 设置环境Uniform数据
  */
-export function runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
+export function runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, bufferBinding: BufferBinding)
 {
+    let data: any = bufferBinding.value;
+
     if (typeof data === 'number')
     {
         data = [data];
     }
-    if (data.toArray) data = data.toArray();
+    else if (data.toArray)
+    {
+        data = data.toArray();
+    }
     const location = uniformInfo.location;
     switch (type)
     {

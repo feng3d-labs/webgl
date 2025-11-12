@@ -106,7 +106,7 @@ import { getShaderSource, loadImage } from './utility';
                 viewport: { x: viewports[Corners.RIGHT].x, y: viewports[Corners.RIGHT].y, width: viewports[Corners.RIGHT].z, height: viewports[Corners.RIGHT].w },
                 pipeline: programBicubic,
                 bindingResources: {
-                    MVP: matrix,
+                    MVP: { value: matrix },
                     diffuse: { texture, sampler },
                 },
                 vertices: vertexArray.vertices,
@@ -121,9 +121,9 @@ import { getShaderSource, loadImage } from './utility';
                 viewport: { x: viewports[Corners.LEFT].x, y: viewports[Corners.LEFT].y, width: viewports[Corners.LEFT].z, height: viewports[Corners.LEFT].w },
                 pipeline: programOffsetBicubic,
                 bindingResources: {
-                    MVP: matrix,
+                    MVP: { value: matrix },
                     diffuse: { texture, sampler },
-                    offset,
+                    offset: { value: offset },
                 },
                 vertices: vertexArray.vertices,
                 draw: { __type__: 'DrawVertex', vertexCount: 6 },
