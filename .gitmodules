@@ -1,3 +1,6 @@
 [submodule "packages/render-api"]
 	path = packages/render-api
 	url = https://gitee.com/feng3d/render-api.git
+[submodule "packages/webgpu"]
+	path = packages/webgpu
+	url = https://gitee.com/feng3d/webgpu.git

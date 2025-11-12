@@ -12,6 +12,7 @@ import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
 import { Renderbuffer } from "./data/Renderbuffer";
 import { TransformFeedback } from "./data/TransformFeedbackPass";
 import { readPixels } from "./utils/readPixels";
+import { runSubmit } from "./internal/runSubmit";
 
 /**
  * WEBGL 对象。
@@ -20,7 +21,6 @@ import { readPixels } from "./utils/readPixels";
  */
 export class WebGL
 {
-    private _runWebGL: RunWebGL = new RunWebGL();
     private _renderingContext: CanvasContext;
     private _gl: WebGLRenderingContext;
 
@@ -38,7 +38,7 @@ export class WebGL
      */
     submit(submit: Submit)
     {
-        this._runWebGL.runSubmit(this._gl, submit);
+        runSubmit(this._gl, submit);
     }
 
     readPixels(glReadPixels: ReadPixels)

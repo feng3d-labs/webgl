@@ -1,4 +1,5 @@
-import { Buffer, BufferBinding, BufferBindingInfo, UnReadonly } from "@feng3d/render-api";
+import { reactive } from "@feng3d/reactivity";
+import { BufferBinding, BufferBindingInfo } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
 
@@ -23,7 +24,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, bufferBindingInfo, preVariableInfo });
         }
 
-return;
+        return;
     }
 
     // 使用Map存储数据
@@ -82,7 +83,7 @@ return;
 
             const writeBuffers = buffer.writeBuffers ?? [];
             writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
-            (buffer as UnReadonly<Buffer>).writeBuffers = writeBuffers;
+            reactive(buffer).writeBuffers = writeBuffers;
         };
 
         update();

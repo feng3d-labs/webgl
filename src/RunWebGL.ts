@@ -1,4 +1,4 @@
-import { BindingResources, BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, Submit, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CommandEncoder, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
@@ -10,7 +10,6 @@ import { getGLRenderPassDescriptorWithMultisample } from "./caches/getGLRenderPa
 import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "./caches/getGLSampler";
 import { getGLTextureTarget, GLTextureTarget } from "./caches/getGLTextureTarget";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
-import { _GL_Submit_Times } from "./const/const";
 import { GLUniformBufferType } from "./const/GLUniformType";
 import { BlitFramebuffer } from "./data/BlitFramebuffer";
 import { DrawElementType } from "./data/polyfills/Buffer";
@@ -42,20 +41,7 @@ declare global
 
 export class RunWebGL
 {
-    runSubmit(gl: WebGLRenderingContext, submit: Submit)
-    {
-        const commandBuffers = submit.commandEncoders.map((v) =>
-        {
-            const commandBuffer = this.runCommandEncoder(gl, v);
-
-            return commandBuffer;
-        });
-
-        // 派发提交WebGPU事件
-        gl[_GL_Submit_Times] = ~~gl[_GL_Submit_Times] + 1;
-    }
-
-    protected runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
+    protected static runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
     {
         commandEncoder.passEncoders.forEach((passEncoder) =>
         {
@@ -90,7 +76,7 @@ export class RunWebGL
         });
     }
 
-    protected runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: TransformFeedbackPass)
+    protected static runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: TransformFeedbackPass)
     {
         // 执行变换反馈通道时关闭光栅化功能
         if (gl instanceof WebGL2RenderingContext)
@@ -107,7 +93,7 @@ export class RunWebGL
         }
     }
 
-    protected runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
+    protected static runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     {
         // 获取附件尺寸
         const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
@@ -137,7 +123,7 @@ export class RunWebGL
         occlusionQuery.resolve(renderPass);
     }
 
-    private runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
+    private static runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
     {
         passDescriptor = passDescriptor || {};
 
@@ -170,7 +156,7 @@ export class RunWebGL
         );
     }
 
-    private runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly RenderPassObject[])
+    private static runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly RenderPassObject[])
     {
         renderObjects?.forEach((renderObject) =>
         {
@@ -185,7 +171,7 @@ export class RunWebGL
         });
     }
 
-    private runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
+    private static runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
     {
         const { viewport, scissorRect, pipeline, vertices, indices, draw, bindingResources: uniforms } = renderObject;
         const primitive = pipeline?.primitive;
@@ -215,7 +201,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: TransformFeedbackObject)
+    private static runTransformFeedbackObject(gl: WebGLRenderingContext, renderObject: TransformFeedbackObject)
     {
         const { pipeline: material, vertices, uniforms, transformFeedback, draw } = renderObject;
 
@@ -234,7 +220,7 @@ export class RunWebGL
         this.endTransformFeedback(gl, transformFeedback);
     }
 
-    private endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
+    private static endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
     {
         //
         if (transformFeedback)
@@ -249,7 +235,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IndicesDataTypes, drawIndexed: DrawIndexed)
+    private static runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IndicesDataTypes, drawIndexed: DrawIndexed)
     {
         const type: DrawElementType = indices.BYTES_PER_ELEMENT === 2 ? "UNSIGNED_SHORT" : "UNSIGNED_INT";
         //
@@ -278,7 +264,7 @@ export class RunWebGL
         }
     }
 
-    private runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
+    private static runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
     {
         //
         const vertexCount = drawArrays.vertexCount;
@@ -306,7 +292,7 @@ export class RunWebGL
     /**
      * 激活常量
      */
-    private runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
+    private static runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
     {
         const webGLProgram = getGLProgram(gl, material);
 
@@ -368,7 +354,7 @@ export class RunWebGL
         }
     }
 
-    private runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
+    private static runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
     {
         const { texture, sampler } = samplerTexture;
         const { location, textureID } = uniformInfo;
@@ -392,7 +378,7 @@ export class RunWebGL
     /**
      * 设置采样参数
      */
-    private runSampler(gl: WebGLRenderingContext, textureTarget: GLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
+    private static runSampler(gl: WebGLRenderingContext, textureTarget: GLTextureTarget, webGLTexture: WebGLTexture, sampler: Sampler, textureID: number)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -445,7 +431,7 @@ export class RunWebGL
     /**
      * 设置环境Uniform数据
      */
-    private runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
+    private static runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType, uniformInfo: UniformItemInfo, data: any)
     {
         if (typeof data === "number")
         {
@@ -530,7 +516,7 @@ export class RunWebGL
     /**
      * 执行设置或者上传渲染对象的顶点以及索引数据。
      */
-    private runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IndicesDataTypes)
+    private static runVertexArray(gl: WebGLRenderingContext, material: RenderPipeline, vertices: VertexAttributes, indices: IndicesDataTypes)
     {
         if (!vertices && !indices) return;
 
@@ -571,7 +557,7 @@ export class RunWebGL
         this.runIndexBuffer(gl, indices);
     }
 
-    private runIndexBuffer(gl: WebGLRenderingContext, indices?: IndicesDataTypes)
+    private static runIndexBuffer(gl: WebGLRenderingContext, indices?: IndicesDataTypes)
     {
         if (!indices) return;
 
@@ -583,7 +569,7 @@ export class RunWebGL
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     }
 
-    private runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
+    private static runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
     {
         const { stepMode, format } = attribute;
         let { arrayStride, offset } = attribute;
@@ -628,7 +614,7 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback, topology: GLDrawMode)
+    private static runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback, topology: GLDrawMode)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -651,13 +637,13 @@ export class RunWebGL
         }
     }
 
-    private runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: TransformFeedbackPipeline)
+    private static runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: TransformFeedbackPipeline)
     {
         const program = getGLProgram(gl, renderPipeline);
         gl.useProgram(program);
     }
 
-    private runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
+    private static runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
     {
         this.runProgram(gl, renderPipeline);
 
@@ -665,7 +651,7 @@ export class RunWebGL
         this.runStencilState(gl, renderPipeline.depthStencil);
     }
 
-    private runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
+    private static runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         const { stencilFront, stencilBack } = { ...depthStencil };
         //
@@ -706,7 +692,7 @@ export class RunWebGL
         }
     }
 
-    private runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
+    private static runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
     {
         if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
         {
@@ -738,7 +724,7 @@ export class RunWebGL
         }
     }
 
-    private runPrimitiveState(gl: WebGLRenderingContext, primitive?: PrimitiveState)
+    private static runPrimitiveState(gl: WebGLRenderingContext, primitive?: PrimitiveState)
     {
         const cullFace: CullFace = primitive?.cullFace || "none";
         const frontFace: FrontFace = primitive?.frontFace || "ccw";
@@ -762,7 +748,7 @@ export class RunWebGL
         }
     }
 
-    private runProgram(gl: WebGLRenderingContext, material: RenderPipeline)
+    private static runProgram(gl: WebGLRenderingContext, material: RenderPipeline)
     {
         const program = getGLProgram(gl, material);
         gl.useProgram(program);
@@ -771,7 +757,7 @@ export class RunWebGL
         this.runColorTargetStates(gl, material.fragment.targets);
     }
 
-    private runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
+    private static runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
     {
         //
         const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
@@ -811,7 +797,7 @@ export class RunWebGL
         }
     }
 
-    private runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: OcclusionQuery)
+    private static runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: OcclusionQuery)
     {
         // 开始查询
         occlusionQuery._step.begin();
@@ -826,7 +812,7 @@ export class RunWebGL
         occlusionQuery._step.end();
     }
 
-    private runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: Viewport)
+    private static runViewPort(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, viewport: Viewport)
     {
         if (viewport)
         {
@@ -849,7 +835,7 @@ export class RunWebGL
         }
     }
 
-    private runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: ScissorRect)
+    private static runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: ScissorRect)
     {
         if (scissor)
         {
@@ -873,13 +859,13 @@ export class RunWebGL
         }
     }
 
-    private runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: CopyTextureToTexture)
+    private static runCopyTextureToTexture(gl: WebGLRenderingContext, copyTextureToTexture: CopyTextureToTexture)
     {
         const blitFramebuffer = getGLBlitFramebuffer(copyTextureToTexture);
         this.runBlitFramebuffer(gl, blitFramebuffer);
     }
 
-    private runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: BlitFramebuffer)
+    private static runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: BlitFramebuffer)
     {
         const { read, draw, blitFramebuffers } = blitFramebuffer;
 
@@ -909,7 +895,7 @@ export class RunWebGL
         }
     }
 
-    private runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferToBuffer)
+    private static runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferToBuffer)
     {
         if (gl instanceof WebGL2RenderingContext)
         {
