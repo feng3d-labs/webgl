@@ -12,7 +12,7 @@ declare module '@feng3d/render-api'
         /**
          * WebGL缓冲区目标。
          */
-        target: BufferTarget;
+        target?: BufferTarget;
 
         /**
          * 为优化目的指定数据存储的预期使用模式的GLenum。
