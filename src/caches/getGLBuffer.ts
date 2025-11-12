@@ -1,4 +1,5 @@
-import { Buffer, UnReadonly } from "@feng3d/render-api";
+import { UnReadonly } from "@feng3d/reactivity";
+import { Buffer } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 
 declare global

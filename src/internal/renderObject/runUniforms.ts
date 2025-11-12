@@ -1,4 +1,5 @@
-import { BindingResources, Buffer, BufferBinding, RenderPipeline, TypedArray, UnReadonly } from "@feng3d/render-api";
+import { UnReadonly } from "@feng3d/reactivity";
+import { BindingResources, Buffer, BufferBinding, RenderPipeline, TypedArray } from "@feng3d/render-api";
 import { getGLBuffer } from "../../caches/getGLBuffer";
 import { getGLProgram } from "../../caches/getGLProgram";
 import { GLUniformBufferType } from "../../const/GLUniformType";

@@ -1,4 +1,4 @@
-import { reactive } from "@feng3d/reactivity";
+import { reactive, UnReadonly } from "@feng3d/reactivity";
 import { BufferBinding, BufferBindingInfo } from "@feng3d/render-api";
 import { watcher } from "@feng3d/watcher";
 import { getIGLBuffer } from "../runs/getIGLBuffer";
