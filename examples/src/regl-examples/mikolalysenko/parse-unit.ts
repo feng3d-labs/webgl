@@ -8,7 +8,7 @@ export function parseUnit(str, out?)
     str = String(str);
     const num = parseFloat(str);
     out[0] = num;
-    out[1] = str.match(/[\d.\-\+]*\s*(.*)/)[1] || '';
+    out[1] = str.match(/[\d.\-+]*\s*(.*)/)[1] || '';
 
     return out;
 }

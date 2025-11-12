@@ -107,11 +107,11 @@ import { getShaderSource } from './utility';
 
         // -- update uniform buffer
         transforms.transform.MV[0] = 0.1 * Math.cos(uTime) + 0.4;
-        transforms.transform.MV = transforms.transform.MV; // 强制更新
+        transforms.transform.MV = transforms.transform.MV.concat(); // 强制更新
 
         lightPos.light.position[0] = Math.cos(3 * uTime);
         lightPos.light.position[1] = Math.sin(6 * uTime);
-        lightPos.light.position = lightPos.light.position; // 强制更新
+        lightPos.light.position = lightPos.light.position.concat(); // 强制更新
 
         webgl.submit(submit);
 
