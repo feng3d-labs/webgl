@@ -1,12 +1,10 @@
-import { BindingResources, BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPass, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, TextureView, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
+import { BindingResources, BlendComponent, BlendState, Buffer, BufferBinding, ColorTargetState, CopyBufferToBuffer, CopyTextureToTexture, CullFace, DepthStencilState, DrawIndexed, DrawVertex, FrontFace, IndicesDataTypes, OcclusionQuery, PrimitiveState, RenderObject, RenderPassDescriptor, RenderPassObject, RenderPipeline, Sampler, ScissorRect, TypedArray, UnReadonly, VertexAttribute, VertexAttributes, vertexFormatMap, Viewport } from "@feng3d/render-api";
 
 import { getGLBlitFramebuffer } from "./caches/getGLBlitFramebuffer";
 import { getGLBuffer } from "./caches/getGLBuffer";
 import { getGLDrawMode, GLDrawMode } from "./caches/getGLDrawMode";
 import { getGLFramebuffer } from "./caches/getGLFramebuffer";
 import { getGLProgram, UniformItemInfo } from "./caches/getGLProgram";
-import { getGLRenderOcclusionQuery } from "./caches/getGLRenderOcclusionQuery";
-import { getGLRenderPassDescriptorWithMultisample } from "./caches/getGLRenderPassDescriptorWithMultisample";
 import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "./caches/getGLSampler";
 import { getGLTextureTarget, GLTextureTarget } from "./caches/getGLTextureTarget";
 import { getGLTransformFeedback } from "./caches/getGLTransformFeedback";
@@ -56,36 +54,6 @@ export class RunWebGL
         {
             gl.disable(gl.RASTERIZER_DISCARD);
         }
-    }
-
-    static runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
-    {
-        // 获取附件尺寸
-        const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
-
-        // 处理不被遮挡查询
-        const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderPassObjects);
-        //
-        occlusionQuery.init();
-
-        if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as TextureView).texture)
-        {
-            const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
-
-            this.runRenderPassDescriptor(gl, passDescriptor);
-
-            this.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
-
-            this.runBlitFramebuffer(gl, blitFramebuffer);
-        }
-        else
-        {
-            this.runRenderPassDescriptor(gl, renderPass.descriptor);
-
-            this.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
-        }
-
-        occlusionQuery.resolve(renderPass);
     }
 
     static runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
@@ -892,40 +860,3 @@ const cullFaceMap = Object.freeze({
 });
 
 const frontFaceMap = Object.freeze({ ccw: "CCW", cw: "CW" });
-
-/**
- * 获取渲染通道附件尺寸。
- *
- * @param gl
- * @param descriptor
- */
-function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: RenderPassDescriptor): { readonly width: number; readonly height: number; }
-{
-    if (!descriptor) return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
-
-    const colorAttachments = descriptor.colorAttachments;
-    if (colorAttachments)
-    {
-        const view = colorAttachments[0]?.view;
-        if (view)
-        {
-            return { width: view.texture.size[0], height: view.texture.size[1] };
-        }
-
-        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
-    }
-
-    const depthStencilAttachment = descriptor.depthStencilAttachment;
-    if (depthStencilAttachment)
-    {
-        const view = depthStencilAttachment.view;
-        if (view)
-        {
-            return { width: view.texture.size[0], height: view.texture.size[1] };
-        }
-
-        return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
-    }
-
-    return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
-}

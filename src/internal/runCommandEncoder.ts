@@ -1,5 +1,6 @@
 import { CommandEncoder, RenderPass } from "@feng3d/render-api";
 import { RunWebGL } from "../RunWebGL";
+import { runRenderPass } from "./runRenderPass";
 
 export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
 {
@@ -7,7 +8,7 @@ export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: Com
     {
         if (!passEncoder.__type__ || passEncoder.__type__ === "RenderPass")
         {
-            RunWebGL.runRenderPass(gl, passEncoder as RenderPass);
+            runRenderPass(gl, passEncoder as RenderPass);
 
             return;
         }
