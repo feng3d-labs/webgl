@@ -1,6 +1,9 @@
 import { CommandEncoder, RenderPass } from "@feng3d/render-api";
-import { RunWebGL } from "../RunWebGL";
 import { runRenderPass } from "./runRenderPass";
+import { runTransformFeedbackPass } from "./runTransformFeedbackPass";
+import { runBlitFramebuffer } from "./runBlitFramebuffer";
+import { runCopyTextureToTexture } from "./runCopyTextureToTexture";
+import { runCopyBuffer } from "./runCopyBuffer";
 
 export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
 {
@@ -14,25 +17,25 @@ export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: Com
         }
         if (passEncoder.__type__ === "TransformFeedbackPass")
         {
-            RunWebGL.runTransformFeedbackPass(gl, passEncoder);
+            runTransformFeedbackPass(gl, passEncoder);
 
             return;
         }
         if (passEncoder.__type__ === "BlitFramebuffer")
         {
-            RunWebGL.runBlitFramebuffer(gl, passEncoder);
+            runBlitFramebuffer(gl, passEncoder);
 
             return;
         }
         if (passEncoder.__type__ === "CopyTextureToTexture")
         {
-            RunWebGL.runCopyTextureToTexture(gl, passEncoder);
+            runCopyTextureToTexture(gl, passEncoder);
 
             return;
         }
         if (passEncoder.__type__ === "CopyBufferToBuffer")
         {
-            RunWebGL.runCopyBuffer(gl, passEncoder);
+            runCopyBuffer(gl, passEncoder);
 
             return;
         }

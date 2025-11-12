@@ -1,7 +1,9 @@
-import { RenderPass, RenderPassDescriptor } from "@feng3d/render-api";
+import { RenderPass, RenderPassDescriptor, TextureView } from "@feng3d/render-api";
 import { getGLRenderOcclusionQuery } from "../caches/getGLRenderOcclusionQuery";
 import { getGLRenderPassDescriptorWithMultisample } from "../caches/getGLRenderPassDescriptorWithMultisample";
-import { RunWebGL } from "../RunWebGL";
+import { runRenderPassDescriptor } from "./runRenderPassDescriptor";
+import { runRenderObjects } from "./runRenderObjects";
+import { runBlitFramebuffer } from "./runBlitFramebuffer";
 
 export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 {
@@ -17,17 +19,17 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     {
         const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
 
-        RunWebGL.runRenderPassDescriptor(gl, passDescriptor);
+        runRenderPassDescriptor(gl, passDescriptor);
 
-        RunWebGL.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
+        runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
 
-        RunWebGL.runBlitFramebuffer(gl, blitFramebuffer);
+        runBlitFramebuffer(gl, blitFramebuffer);
     }
     else
     {
-        RunWebGL.runRenderPassDescriptor(gl, renderPass.descriptor);
+        runRenderPassDescriptor(gl, renderPass.descriptor);
 
-        RunWebGL.runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
+        runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
     }
 
     occlusionQuery.resolve(renderPass);
