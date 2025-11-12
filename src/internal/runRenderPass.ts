@@ -1,9 +1,10 @@
 import { RenderPass, RenderPassDescriptor, TextureView } from "@feng3d/render-api";
 import { getGLRenderOcclusionQuery } from "../caches/getGLRenderOcclusionQuery";
 import { getGLRenderPassDescriptorWithMultisample } from "../caches/getGLRenderPassDescriptorWithMultisample";
-import { runRenderPassDescriptor } from "./runRenderPassDescriptor";
-import { runRenderObjects } from "./runRenderObjects";
+import { runRenderObject } from "./renderObject/runRenderObject";
 import { runBlitFramebuffer } from "./runBlitFramebuffer";
+import { runOcclusionQuery } from "./runOcclusionQuery";
+import { runRenderPassDescriptor } from "./runRenderPassDescriptor";
 
 export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 {
@@ -21,7 +22,17 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 
         runRenderPassDescriptor(gl, passDescriptor);
 
-        runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
+        renderPass.renderPassObjects?.forEach((renderObject) =>
+        {
+            if (renderObject.__type__ === "OcclusionQuery")
+            {
+                runOcclusionQuery(gl, attachmentSize, renderObject);
+            }
+            else
+            {
+                runRenderObject(gl, attachmentSize, renderObject);
+            }
+        });
 
         runBlitFramebuffer(gl, blitFramebuffer);
     }
@@ -29,7 +40,17 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     {
         runRenderPassDescriptor(gl, renderPass.descriptor);
 
-        runRenderObjects(gl, attachmentSize, renderPass.renderPassObjects);
+        renderPass.renderPassObjects?.forEach((renderObject) =>
+        {
+            if (renderObject.__type__ === "OcclusionQuery")
+            {
+                runOcclusionQuery(gl, attachmentSize, renderObject);
+            }
+            else
+            {
+                runRenderObject(gl, attachmentSize, renderObject);
+            }
+        });
     }
 
     occlusionQuery.resolve(renderPass);
