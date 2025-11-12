@@ -205,8 +205,8 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {
-            u_model: modelMatrix,
-            u_modelInvTrans: modelInvTrans,
+            u_model: modelMatrix as Float32Array,
+            u_modelInvTrans: modelInvTrans as Float32Array,
             u_lightPosition: lightPosition,
             u_ambient: 0.1,
         },
@@ -233,7 +233,7 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        reactive(ro.bindingResources).u_viewProj = viewProj;
+        reactive(ro.bindingResources).u_viewProj = viewProj as Float32Array;
         reactive(ro.bindingResources).s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

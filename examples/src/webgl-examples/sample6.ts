@@ -91,8 +91,8 @@ async function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
-    reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
+    reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix as Float32Array;
+    reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix as Float32Array;
 
     webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 

@@ -76,8 +76,8 @@ function main()
       },
       draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
       bindingResources: {
-        uProjectionMatrix: projectionMatrix,
-        uModelViewMatrix: modelViewMatrix,
+        uProjectionMatrix: projectionMatrix as Float32Array,
+        uModelViewMatrix: modelViewMatrix as Float32Array,
       },
     }],
   };

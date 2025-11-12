@@ -119,9 +119,9 @@ async function main()
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
 
-        reactive(renderObject.bindingResources).modelMatrix = modelMatrix;
-        reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix;
-        reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix;
+        reactive(renderObject.bindingResources).modelMatrix = modelMatrix as Float32Array;
+        reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix as Float32Array;
+        reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix as Float32Array;
         reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
     });
 

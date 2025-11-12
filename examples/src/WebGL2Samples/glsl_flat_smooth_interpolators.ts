@@ -172,8 +172,8 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                             viewport: viewport[i],
                             pipeline: programs[i],
                             bindingResources: {
-                                mvp: localMVP,
-                                mvNormal: localMVNormal,
+                                mvp: localMVP as Float32Array,
+                                mvNormal: localMVNormal as Float32Array,
                             },
                             vertices: vertexArray.vertices,
                             indices,
