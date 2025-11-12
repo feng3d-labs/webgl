@@ -1,5 +1,5 @@
 import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
-import { getIGLCompareFunction } from "../runs/runDepthState";
+import { getGLCompareFunction } from "../runs/getGLCompareFunction";
 
 export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
 
@@ -21,7 +21,7 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
         const compareMode: GLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
-        const compare = getIGLCompareFunction(sampler.compare ?? "less-equal");
+        const compare = getGLCompareFunction(sampler.compare ?? "less-equal");
 
         //
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);

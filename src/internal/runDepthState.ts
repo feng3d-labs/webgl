@@ -1,11 +1,11 @@
 import { DepthStencilState } from "@feng3d/render-api";
-import { getIGLCompareFunction } from "../runs/runDepthState";
+import { getGLCompareFunction } from "../runs/getGLCompareFunction";
 
 export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
 {
     if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== "always"))
     {
-        const depthCompare = getIGLCompareFunction(depthStencil.depthCompare ?? "less");
+        const depthCompare = getGLCompareFunction(depthStencil.depthCompare ?? "less");
         const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
         //
         gl.enable(gl.DEPTH_TEST);

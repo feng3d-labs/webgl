@@ -11,7 +11,6 @@ export * from "./data/polyfills/Uniforms";
 
 export * from "./runs/getIGLBuffer";
 export * from "./runs/runColorTargetStates";
-export * from "./RunWebGL";
 
 export * from "./shader/Macro";
 export * from "./shader/ShaderLib";

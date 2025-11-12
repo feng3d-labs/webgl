@@ -1,6 +1,6 @@
 import { CompareFunction } from "@feng3d/render-api";
 
-export function getIGLCompareFunction(depthCompare: CompareFunction)
+export function getGLCompareFunction(depthCompare: CompareFunction)
 {
     const glDepthCompare: GLCompareFunction = depthCompareMap[depthCompare];
 
