@@ -11,42 +11,42 @@
  *  });
  */
 
-let prefix = "";
+let prefix = '';
 let _addEventListener;
 
 // detect event model
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 if (window.addEventListener)
 {
-    _addEventListener = "addEventListener";
+    _addEventListener = 'addEventListener';
 }
 else
 {
-    _addEventListener = "attachEvent";
-    prefix = "on";
+    _addEventListener = 'attachEvent';
+    prefix = 'on';
 }
 
 // detect available wheel event
-const support = "onwheel" in document.createElement("div") ? "wheel" // Modern browsers support "wheel"
-    // eslint-disable-next-line dot-notation
-    : document["onmousewheel"] !== undefined ? "mousewheel" // Webkit and IE support at least "mousewheel"
-        : "DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
+const support = 'onwheel' in document.createElement('div') ? 'wheel' // Modern browsers support "wheel"
+
+    : document['onmousewheel'] !== undefined ? 'mousewheel' // Webkit and IE support at least "mousewheel"
+        : 'DOMMouseScroll'; // let's assume that remaining browsers are older Firefox
 
 export function addWheelListener(elem, callback, useCapture)
 {
     _addWheelListener(elem, support, callback, useCapture);
 
     // handle MozMousePixelScroll in older Firefox
-    if (support === "DOMMouseScroll")
+    if (support === 'DOMMouseScroll')
     {
-        _addWheelListener(elem, "MozMousePixelScroll", callback, useCapture);
+        _addWheelListener(elem, 'MozMousePixelScroll', callback, useCapture);
     }
 }
 
 function _addWheelListener(elem, eventName, callback, useCapture)
 {
-    elem[_addEventListener](prefix + eventName, support === "wheel" ? callback : function (originalEvent)
+    elem[_addEventListener](prefix + eventName, support === 'wheel' ? callback : function (originalEvent)
     {
         !originalEvent && (originalEvent = window.event);
 
@@ -56,8 +56,8 @@ function _addWheelListener(elem, eventName, callback, useCapture)
             // keep a ref to the original event object
             originalEvent,
             target: originalEvent.target || originalEvent.srcElement,
-            type: "wheel",
-            deltaMode: originalEvent.type === "MozMousePixelScroll" ? 0 : 1,
+            type: 'wheel',
+            deltaMode: originalEvent.type === 'MozMousePixelScroll' ? 0 : 1,
             deltaX: 0,
             delatZ: 0,
             preventDefault()
@@ -65,11 +65,11 @@ function _addWheelListener(elem, eventName, callback, useCapture)
                 originalEvent.preventDefault
                     ? originalEvent.preventDefault()
                     : originalEvent.returnValue = false;
-            }
+            },
         };
 
         // calculate deltaY (and deltaX) according to the event
-        if (support === "mousewheel")
+        if (support === 'mousewheel')
         {
             event.deltaY = -1 / 40 * originalEvent.wheelDelta;
             // Webkit also support wheelDeltaX

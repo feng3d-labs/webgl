@@ -1,34 +1,34 @@
-import { CanvasContext, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4, vec3 } from "gl-matrix";
-import { getShaderSource } from "./utility";
+import { CanvasContext, RenderPass, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4, vec3 } from 'gl-matrix';
+import { getShaderSource } from './utility';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 const webgl = new WebGL(renderingContext);
 
 // -- Init program
 const PROGRAM = {
     TEXTURE: 0,
     SPLASH: 1,
-    MAX: 2
+    MAX: 2,
 };
 
 const programs: RenderPipeline[] = [
     {
-        vertex: { code: getShaderSource("vs-render") },
-        fragment: { code: getShaderSource("fs-render") },
-        primitive: { topology: "triangle-list" },
+        vertex: { code: getShaderSource('vs-render') },
+        fragment: { code: getShaderSource('fs-render') },
+        primitive: { topology: 'triangle-list' },
     },
     {
-        vertex: { code: getShaderSource("vs-splash") },
-        fragment: { code: getShaderSource("fs-splash") },
-        primitive: { topology: "triangle-list" },
+        vertex: { code: getShaderSource('vs-splash') },
+        fragment: { code: getShaderSource('fs-splash') },
+        primitive: { topology: 'triangle-list' },
     },
 ];
 
@@ -52,7 +52,7 @@ const positions = new Float32Array([
     1.0, 1.0,
     1.0, 1.0,
     -1.0, 1.0,
-    -1.0, -1.0
+    -1.0, -1.0,
 ]);
 
 const texCoords = new Float32Array([
@@ -61,39 +61,39 @@ const texCoords = new Float32Array([
     1.0, 0.0,
     1.0, 0.0,
     0.0, 0.0,
-    0.0, 1.0
+    0.0, 1.0,
 ]);
 
 // -- Init Texture
 // used for draw framebuffer storage
 const FRAMEBUFFER_SIZE = {
     x: canvas.width,
-    y: canvas.height
+    y: canvas.height,
 };
 const texture: Texture = {
     descriptor: {
-        format: "rgba8unorm",
-        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
+        format: 'rgba8unorm',
+        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
     },
 };
-const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest" };
+const sampler: Sampler = { minFilter: 'nearest', magFilter: 'nearest' };
 
 // -- Init Frame Buffers
 const framebuffer: RenderPassDescriptor = {
     colorAttachments: [{ view: { texture, baseMipLevel: 0 }, clearValue: [0.0, 0.0, 0.0, 1.0] }],
-    sampleCount: 4 // 多重采样
+    sampleCount: 4, // 多重采样
 };
 
 // -- Init VertexArray
 const vertexArrays: { vertices?: VertexAttributes }[] = [
     {
-        vertices: { position: { data, format: "float32x2" } }
+        vertices: { position: { data, format: 'float32x2' } },
     },
     {
         vertices: {
-            position: { data: positions, format: "float32x2" },
-            texcoord: { data: texCoords, format: "float32x2" },
-        }
+            position: { data: positions, format: 'float32x2' },
+            texcoord: { data: texCoords, format: 'float32x2' },
+        },
     },
 ];
 
@@ -107,12 +107,12 @@ const renderPass1: RenderPass = {
     renderPassObjects: [{
         pipeline: {
             ...programs[PROGRAM.TEXTURE],
-            primitive: { topology: "LINE_LOOP" },
+            primitive: { topology: 'LINE_LOOP' },
         },
         bindingResources: { MVP: IDENTITY as Float32Array },
         vertices: vertexArrays[PROGRAM.TEXTURE].vertices,
-        draw: { __type__: "DrawVertex", vertexCount },
-    }]
+        draw: { __type__: 'DrawVertex', vertexCount },
+    }],
 };
 
 // Pass 2
@@ -123,14 +123,14 @@ const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
 const renderPass2: RenderPass = {
-    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
     renderPassObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],
             bindingResources: { diffuse: { texture, sampler }, MVP: mvp as Float32Array },
             vertices: vertexArrays[PROGRAM.SPLASH].vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 },
-        }
+            draw: { __type__: 'DrawVertex', vertexCount: 6 },
+        },
     ],
 };
 
@@ -138,8 +138,8 @@ webgl.submit({
     commandEncoders: [{
         passEncoders: [renderPass1,
             // blitFramebuffer,
-            renderPass2]
-    }]
+            renderPass2],
+    }],
 });
 
 // -- Delete WebGL resources

@@ -1,5 +1,5 @@
-import { DrawVertex } from "@feng3d/render-api";
-import { GLDrawMode } from "../../caches/getGLDrawMode";
+import { DrawVertex } from '@feng3d/render-api';
+import { GLDrawMode } from '../../caches/getGLDrawMode';
 
 export function runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
 {
@@ -16,7 +16,7 @@ export function runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, d
         }
         else
         {
-            const extension = gl.getExtension("ANGLE_instanced_arrays");
+            const extension = gl.getExtension('ANGLE_instanced_arrays');
             extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
         }
     }

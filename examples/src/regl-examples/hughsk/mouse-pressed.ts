@@ -1,9 +1,9 @@
-import { EventEmitter as Emitter } from "../Gozala/events";
+import { EventEmitter as Emitter } from '../Gozala/events';
 
 const map = [
-    "left",
-    "middle",
-    "right"
+    'left',
+    'middle',
+    'right',
 ];
 
 export function pressed(element, preventDefault)
@@ -15,15 +15,15 @@ export function pressed(element, preventDefault)
     mouse.middle = false;
     mouse.dispose = dispose;
 
-    if (typeof window !== "undefined")
+    if (typeof window !== 'undefined')
     {
         element = element || window;
-        element.addEventListener("mousedown", mousedown, false);
-        window.addEventListener("mouseup", mouseup, false);
+        element.addEventListener('mousedown', mousedown, false);
+        window.addEventListener('mouseup', mouseup, false);
 
         if (preventDefault)
         {
-            element.addEventListener("contextmenu", preventDefaulter, false);
+            element.addEventListener('contextmenu', preventDefaulter, false);
         }
     }
 
@@ -33,7 +33,7 @@ export function pressed(element, preventDefault)
     {
         mouse.right = false;
         mouse[map[e.button]] = true;
-        mouse.emit("down", e);
+        mouse.emit('down', e);
 
         if (!preventDefault) return;
         if (!e.preventDefault) return false;
@@ -45,7 +45,7 @@ export function pressed(element, preventDefault)
     {
         mouse.right = false;
         mouse[map[e.button]] = false;
-        mouse.emit("up", e);
+        mouse.emit('up', e);
 
         if (!preventDefault) return;
         if (!e.preventDefault) return;
@@ -66,9 +66,9 @@ export function pressed(element, preventDefault)
 
         if (element)
         {
-            element.removeEventListener("contextmenu", preventDefaulter, false);
-            element.removeEventListener("mousedown", mousedown, false);
-            window.removeEventListener("mouseup", mouseup, false);
+            element.removeEventListener('contextmenu', preventDefaulter, false);
+            element.removeEventListener('mousedown', mousedown, false);
+            window.removeEventListener('mouseup', mouseup, false);
         }
     }
 }

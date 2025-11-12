@@ -1,17 +1,17 @@
-import { Submit, RenderObject } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { Submit, RenderObject } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import * as bunny from "./mikolalysenko/bunny";
-import * as mat4 from "./stackgl/gl-mat4";
-import { reactive } from "@feng3d/reactivity";
+import * as bunny from './mikolalysenko/bunny';
+import * as mat4 from './stackgl/gl-mat4';
+import { reactive } from '@feng3d/reactivity';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
+const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } });
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -33,10 +33,10 @@ let viewportHeight = canvas.clientHeight;
 
 const renderObject: RenderObject = {
     vertices: {
-        position: { data: new Float32Array(positions), format: "float32x3" },
+        position: { data: new Float32Array(positions), format: 'float32x3' },
     },
     indices: new Uint16Array(indices),
-    draw: { __type__: "DrawIndexed", indexCount: indices.length },
+    draw: { __type__: 'DrawIndexed', indexCount: indices.length },
     bindingResources: {
         model: mat4.identity([]),
     },
@@ -56,7 +56,7 @@ const renderObject: RenderObject = {
             targets: [{ blend: {} }],
         },
         depthStencil: {},
-    }
+    },
 };
 
 const submit: Submit = {
@@ -64,10 +64,10 @@ const submit: Submit = {
         passEncoders: [
             {
                 descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
-                renderPassObjects: [renderObject]
-            }
-        ]
-    }]
+                renderPassObjects: [renderObject],
+            },
+        ],
+    }],
 };
 
 function draw()

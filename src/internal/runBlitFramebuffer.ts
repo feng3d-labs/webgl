@@ -1,5 +1,5 @@
-import { BlitFramebuffer } from "../data/BlitFramebuffer";
-import { getGLFramebuffer } from "../caches/getGLFramebuffer";
+import { BlitFramebuffer } from '../data/BlitFramebuffer';
+import { getGLFramebuffer } from '../caches/getGLFramebuffer';
 
 export function runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: BlitFramebuffer)
 {

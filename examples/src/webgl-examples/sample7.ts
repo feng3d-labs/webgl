@@ -1,7 +1,7 @@
-import { reactive } from "@feng3d/reactivity";
-import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
-import { SamplerTexture, WebGL } from "@feng3d/webgl";
-import { mat4 } from "gl-matrix";
+import { reactive } from '@feng3d/reactivity';
+import { RenderObject, RenderPass, Sampler, Texture } from '@feng3d/render-api';
+import { SamplerTexture, WebGL } from '@feng3d/webgl';
+import { mat4 } from 'gl-matrix';
 
 let cubeRotation = 0.0;
 
@@ -12,19 +12,19 @@ main();
 //
 async function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
     const buffers = initBuffers();
 
-    const texture = await loadTexture("../../cubetexture.png");
+    const texture = await loadTexture('../../cubetexture.png');
 
     const renderObject: RenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
+            primitive: { topology: 'triangle-list' },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -66,36 +66,36 @@ async function main()
           gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
         }
       ` },
-            depthStencil: { depthCompare: "less-equal" }
+            depthStencil: { depthCompare: 'less-equal' },
         },
         bindingResources: { uSampler: texture },
         vertices: {
             aVertexPosition: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.position,
             },
             aVertexNormal: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.normal,
             },
             aTextureCoord: {
-                format: "float32x2",
+                format: 'float32x2',
                 data: buffers.textureCoord,
             },
         },
         indices: buffers.indices,
-        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
     };
 
     const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
-                loadOp: "clear",
+                loadOp: 'clear',
             }],
             depthStencilAttachment: {
                 depthClearValue: 1.0,
-                depthLoadOp: "clear",
+                depthLoadOp: 'clear',
             },
         },
         renderPassObjects: [renderObject],
@@ -208,7 +208,7 @@ function initBuffers()
         -1.0, 0.0, 0.0,
         -1.0, 0.0, 0.0,
         -1.0, 0.0, 0.0,
-        -1.0, 0.0, 0.0
+        -1.0, 0.0, 0.0,
     ];
 
     // Now set up the texture coordinates for the faces.
@@ -292,7 +292,7 @@ async function loadTexture(url: string)
     const texture: Texture = {
         descriptor: {
             size: [img.width, img.height],
-            format: "rgba8unorm",
+            format: 'rgba8unorm',
             generateMipmap,
         },
         sources: [{ image: img }],
@@ -302,7 +302,7 @@ async function loadTexture(url: string)
 
     if (!generateMipmap)
     {
-        sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
+        sampler = { addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge', minFilter: 'linear' };
     }
 
     return { texture, sampler } as SamplerTexture;

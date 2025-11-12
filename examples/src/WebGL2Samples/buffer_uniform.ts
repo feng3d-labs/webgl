@@ -1,40 +1,40 @@
-import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { getShaderSource } from "./utility";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Submit, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { getShaderSource } from './utility';
 
 (function ()
 {
     // --Init Canvas
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
     // --Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
     const webgl = new WebGL(rc);
 
     // -- Init Program
     const program: RenderPipeline = {
-        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+        vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') },
     };
 
     // -- Init Buffer
     const elementData = new Uint16Array([
         0, 1, 2,
-        2, 3, 0
+        2, 3, 0,
     ]);
 
-    //vec3 position, vec3 normal, vec4 color
+    // vec3 position, vec3 normal, vec4 color
     const vertices = new Float32Array([
         -1.0, -1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,
         1.0, -1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0,
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-        -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0
+        -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0,
     ]);
 
-    //mat4 P, mat4 MV, mat3 Mnormal
+    // mat4 P, mat4 MV, mat3 Mnormal
     const transforms = {
         transform: {
             P: [1.0, 0.0, 0.0, 0.0,
@@ -53,31 +53,31 @@ import { getShaderSource } from "./utility";
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0,
             ],
-        }
+        },
     };
 
     const lightPos = {
         light: {
-            position: [0.0, 0.0, 0.0]
-        }
+            position: [0.0, 0.0, 0.0],
+        },
     };
 
-    //vec3 ambient, diffuse, specular, float shininess
+    // vec3 ambient, diffuse, specular, float shininess
     const material = {
         material: {
             ambient: [0.1, 0.0, 0.0],
             diffuse: [0.5, 0.0, 0.0],
             specular: [1.0, 1.0, 1.0],
             shininess: 4.0,
-        }
+        },
     };
 
     // -- Init Vertex Array
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            position: { data: vertices, format: "float32x3", arrayStride: 40, offset: 0 },
-            normal: { data: vertices, format: "float32x3", arrayStride: 40, offset: 12 },
-            color: { data: vertices, format: "float32x4", arrayStride: 40, offset: 24 },
+            position: { data: vertices, format: 'float32x3', arrayStride: 40, offset: 0 },
+            normal: { data: vertices, format: 'float32x3', arrayStride: 40, offset: 12 },
+            color: { data: vertices, format: 'float32x4', arrayStride: 40, offset: 24 },
         },
     };
 
@@ -90,11 +90,11 @@ import { getShaderSource } from "./utility";
         },
         vertices: vertexArray.vertices,
         indices: elementData,
-        draw: { __type__: "DrawIndexed", indexCount: 6, firstIndex: 0 }
+        draw: { __type__: 'DrawIndexed', indexCount: 6, firstIndex: 0 },
     };
 
     const rp: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [ro],
     };
 

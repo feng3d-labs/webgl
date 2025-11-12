@@ -1,6 +1,6 @@
-import { UnReadonly } from "@feng3d/reactivity";
-import { Buffer } from "@feng3d/render-api";
-import { watcher } from "@feng3d/watcher";
+import { UnReadonly } from '@feng3d/reactivity';
+import { Buffer } from '@feng3d/render-api';
+import { watcher } from '@feng3d/watcher';
 
 declare global
 {
@@ -24,7 +24,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
     const target = buffer.target;
 
     const size = buffer.size;
-    const usage = buffer.usage || "STATIC_DRAW";
+    const usage = buffer.usage || 'STATIC_DRAW';
 
     // 上传数据到WebGL
     gl.bindBuffer(gl[target], webGLBuffer);
@@ -44,12 +44,12 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
             const dataOffset = writeBuffer.dataOffset ?? 0;
             //
             let arrayBufferView: Uint8Array;
-            if ("buffer" in data)
+            if ('buffer' in data)
             {
                 arrayBufferView = new Uint8Array(
                     data.buffer,
                     data.byteOffset + dataOffset * data.BYTES_PER_ELEMENT,
-                    (data.length - dataOffset) * data.BYTES_PER_ELEMENT
+                    (data.length - dataOffset) * data.BYTES_PER_ELEMENT,
                 );
             }
             else
@@ -57,7 +57,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
                 arrayBufferView = new Uint8Array(
                     data,
                     dataOffset,
-                    data.byteLength - dataOffset
+                    data.byteLength - dataOffset,
                 );
             }
             gl.bufferSubData(gl[target], bufferOffset, arrayBufferView);
@@ -78,14 +78,14 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer)
     writeBuffer();
 
     //
-    watcher.watch(buffer, "data", dataChange);
-    watcher.watch(buffer, "writeBuffers", writeBuffer);
+    watcher.watch(buffer, 'data', dataChange);
+    watcher.watch(buffer, 'writeBuffers', writeBuffer);
 
     //
     webGLBuffer.destroy = () =>
     {
-        watcher.unwatch(buffer, "data", dataChange);
-        watcher.unwatch(buffer, "writeBuffers", writeBuffer);
+        watcher.unwatch(buffer, 'data', dataChange);
+        watcher.unwatch(buffer, 'writeBuffers', writeBuffer);
     };
 
     return webGLBuffer;

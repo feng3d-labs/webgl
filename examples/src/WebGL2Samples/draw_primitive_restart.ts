@@ -1,14 +1,14 @@
-import { CanvasContext, RenderObject, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { getShaderSource } from "./utility";
+import { CanvasContext, RenderObject, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { getShaderSource } from './utility';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: CanvasContext = { canvasId: "glcanvas" };
+const renderingContext: CanvasContext = { canvasId: 'glcanvas' };
 const webgl = new WebGL(renderingContext);
 
 // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.18
@@ -24,22 +24,22 @@ const vertexPosBuffer = new Float32Array([
 
 const program: RenderPipeline = {
     vertex: {
-        code: getShaderSource("vs")
+        code: getShaderSource('vs'),
     },
     fragment: {
-        code: getShaderSource("fs"),
+        code: getShaderSource('fs'),
         targets: [{ blend: {} }],
     },
-    primitive: { topology: "triangle-strip" },
+    primitive: { topology: 'triangle-strip' },
 };
 
 const indices = new Uint16Array([
-    0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1
+    0, 1, 2, MAX_UNSIGNED_SHORT, 2, 3, 1,
 ]);
 
 const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
-        pos: { data: vertexPosBuffer, format: "float32x2" },
+        pos: { data: vertexPosBuffer, format: 'float32x2' },
     },
 };
 
@@ -47,7 +47,7 @@ const renderObject: RenderObject = {
     bindingResources: {},
     vertices: vertexArray.vertices,
     indices,
-    draw: { __type__: "DrawIndexed", indexCount: 7, instanceCount: 2 },
+    draw: { __type__: 'DrawIndexed', indexCount: 7, instanceCount: 2 },
     pipeline: program,
 };
 
@@ -57,12 +57,12 @@ webgl.submit({
             descriptor: {
                 colorAttachments: [{
                     clearValue: [0.0, 0.0, 0.0, 1.0],
-                    loadOp: "clear",
+                    loadOp: 'clear',
                 }],
             },
-            renderPassObjects: [renderObject]
-        }]
-    }]
+            renderPassObjects: [renderObject],
+        }],
+    }],
 });
 
 // -- Delete WebGL resources

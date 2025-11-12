@@ -1,48 +1,48 @@
-import { CanvasContext, GLVertexAttributeTypes, IndicesDataTypes, PrimitiveTopology, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { CanvasContext, GLVertexAttributeTypes, IndicesDataTypes, PrimitiveTopology, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData, VertexFormat, vertexFormatMap } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { mat4, vec3 } from "gl-matrix";
-import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
-import { getShaderSource, loadImage } from "./utility";
+import { mat4, vec3 } from 'gl-matrix';
+import { GlTFLoader, Primitive } from './third-party/gltf-loader';
+import { getShaderSource, loadImage } from './utility';
 
 (function ()
 {
     const IDrawMode2Name: { [key: string]: PrimitiveTopology } = {
-        0: "point-list",
-        3: "line-strip",
-        2: "LINE_LOOP",
-        1: "line-list",
-        5: "triangle-strip",
-        6: "TRIANGLE_FAN",
-        4: "triangle-list",
+        0: 'point-list',
+        3: 'line-strip',
+        2: 'LINE_LOOP',
+        1: 'line-list',
+        5: 'triangle-strip',
+        6: 'TRIANGLE_FAN',
+        4: 'triangle-list',
     };
 
     const VertexAttributeType2Name = Object.freeze({
-        5126: "FLOAT",
-        5120: "BYTE",
-        5122: "SHORT",
-        5121: "UNSIGNED_BYTE",
-        5123: "UNSIGNED_SHORT",
-        5131: "HALF_FLOAT",
-        5124: "INT",
-        5125: "UNSIGNED_INT",
-        36255: "INT_2_10_10_10_REV",
-        33640: "UNSIGNED_INT_2_10_10_10_REV"
+        5126: 'FLOAT',
+        5120: 'BYTE',
+        5122: 'SHORT',
+        5121: 'UNSIGNED_BYTE',
+        5123: 'UNSIGNED_SHORT',
+        5131: 'HALF_FLOAT',
+        5124: 'INT',
+        5125: 'UNSIGNED_INT',
+        36255: 'INT_2_10_10_10_REV',
+        33640: 'UNSIGNED_INT_2_10_10_10_REV',
     });
 
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init program
     const program: RenderPipeline = {
-        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        depthStencil: { depthCompare: "less" },
+        vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') },
+        depthStencil: { depthCompare: 'less' },
     };
 
     const vertexArrayMaps: { [key: string]: { vertices?: VertexAttributes, indices: IndicesDataTypes }[] } = {};
@@ -59,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
     // -- Load model then render
     const glTFLoader = new GlTFLoader();
     let curScene;
-    const gltfUrl = "../../assets/gltf/plane.gltf";
+    const gltfUrl = '../../assets/gltf/plane.gltf';
     glTFLoader.loadGLTF(gltfUrl, function (glTF)
     {
         curScene = glTF.scenes[glTF.defaultScene];
@@ -93,29 +93,29 @@ import { getShaderSource, loadImage } from "./utility";
                         position: { data: vertexBuffer, format: getIVertexFormat(positionInfo.size, VertexAttributeType2Name[positionInfo.type]), arrayStride: positionInfo.stride, offset: positionInfo.offset },
                         normal: { data: vertexBuffer, format: getIVertexFormat(normalInfo.size, VertexAttributeType2Name[normalInfo.type]), arrayStride: normalInfo.stride, offset: normalInfo.offset },
                         texcoord: { data: vertexBuffer, format: getIVertexFormat(texcoordInfo.size, VertexAttributeType2Name[texcoordInfo.type]), arrayStride: texcoordInfo.stride, offset: texcoordInfo.offset },
-                    }, indices: indicesBuffer
+                    }, indices: indicesBuffer,
                 });
             }
         }
 
         // -- Init Texture
-        const imageUrl = "../../assets/img/heightmap.jpg";
+        const imageUrl = '../../assets/img/heightmap.jpg';
         loadImage(imageUrl, function (image)
         {
             // -- Init 2D Texture
             texture = {
                 descriptor: {
-                    format: "rgba8unorm",
+                    format: 'rgba8unorm',
                     mipLevelCount: 1,
                     size: [256, 256],
                 },
                 sources: [{ image, flipY: false }],
             };
             sampler = {
-                minFilter: "nearest",
-                magFilter: "nearest",
-                addressModeU: "clamp-to-edge",
-                addressModeV: "clamp-to-edge",
+                minFilter: 'nearest',
+                magFilter: 'nearest',
+                addressModeU: 'clamp-to-edge',
+                addressModeV: 'clamp-to-edge',
             };
 
             requestAnimationFrame(render);
@@ -187,8 +187,8 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Render
         const rp: RenderPass = {
             descriptor: {
-                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
-                depthStencilAttachment: { depthLoadOp: "clear" }
+                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }],
+                depthStencilAttachment: { depthLoadOp: 'clear' },
             },
             renderPassObjects: renderObjects,
         };
@@ -225,7 +225,7 @@ import { getShaderSource, loadImage } from "./utility";
                     },
                     vertices: vertexArrayMaps[mid][i].vertices,
                     indices: vertexArrayMaps[mid][i].indices,
-                    draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length }
+                    draw: { __type__: 'DrawIndexed', indexCount: primitive.indices.length },
                 });
             }
         }
@@ -236,7 +236,7 @@ import { getShaderSource, loadImage } from "./utility";
     }
 })();
 
-function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: GLVertexAttributeTypes = "FLOAT", normalized = false): VertexFormat
+function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: GLVertexAttributeTypes = 'FLOAT', normalized = false): VertexFormat
 {
     for (const key in vertexFormatMap)
     {

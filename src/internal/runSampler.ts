@@ -1,6 +1,6 @@
-import { Sampler } from "@feng3d/render-api";
-import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from "../caches/getGLSampler";
-import { GLTextureTarget } from "../caches/getGLTextureTarget";
+import { Sampler } from '@feng3d/render-api';
+import { getGLSampler, getIGLTextureMagFilter, getIGLTextureMinFilter, getIGLTextureWrap, GLTextureMagFilter, GLTextureMinFilter, GLTextureWrap } from '../caches/getGLSampler';
+import { GLTextureTarget } from '../caches/getGLTextureTarget';
 
 declare global
 {
@@ -61,7 +61,7 @@ export function runSampler(gl: WebGLRenderingContext, textureTarget: GLTextureTa
     const maxAnisotropy = sampler?.maxAnisotropy || 1;
     if (webGLTexture.maxAnisotropy !== maxAnisotropy)
     {
-        const extension = gl.getExtension("EXT_texture_filter_anisotropic");
+        const extension = gl.getExtension('EXT_texture_filter_anisotropic');
         if (extension)
         {
             gl.texParameterf(gl[textureTarget], extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAnisotropy, gl._capabilities.maxAnisotropy));

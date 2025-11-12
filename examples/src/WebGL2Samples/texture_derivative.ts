@@ -1,30 +1,30 @@
-import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { reactive } from "@feng3d/reactivity";
-import { mat4, vec3 } from "gl-matrix";
-import { getShaderSource, loadImage } from "./utility";
+import { reactive } from '@feng3d/reactivity';
+import { mat4, vec3 } from 'gl-matrix';
+import { getShaderSource, loadImage } from './utility';
 
 (function ()
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
     const webgl = new WebGL(rc);
 
     // -- Init program
     const program: RenderPipeline = {
-        vertex: { code: getShaderSource("vs") }, fragment: {
-            code: getShaderSource("fs"), targets: [{
+        vertex: { code: getShaderSource('vs') }, fragment: {
+            code: getShaderSource('fs'), targets: [{
 
-            }]
+            }],
         },
         depthStencil: {},
-        primitive: { topology: "triangle-list", cullFace: "back" },
+        primitive: { topology: 'triangle-list', cullFace: 'back' },
     };
 
     // -- Init buffers
@@ -64,7 +64,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, -1.0, -1.0,
         -1.0, -1.0, 1.0,
         -1.0, 1.0, 1.0,
-        -1.0, 1.0, -1.0
+        -1.0, 1.0, -1.0,
     ]);
 
     const texCoords = new Float32Array([
@@ -102,7 +102,7 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0,
         1.0, 1.0,
-        1.0, 0.0
+        1.0, 0.0,
     ]);
 
     // Element buffer
@@ -113,20 +113,20 @@ import { getShaderSource, loadImage } from "./utility";
         8, 9, 10, 8, 10, 11, // top
         12, 13, 14, 12, 14, 15, // bottom
         16, 17, 18, 16, 18, 19, // right
-        20, 21, 22, 20, 22, 23 // left
+        20, 21, 22, 20, 22, 23, // left
     ];
 
     // -- Init VertexArray
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            position: { data: positions, format: "float32x3" },
-            texcoord: { data: texCoords, format: "float32x2" },
+            position: { data: positions, format: 'float32x3' },
+            texcoord: { data: texCoords, format: 'float32x2' },
         },
     };
 
     // -- Init Texture
 
-    const imageUrl = "../../assets/img/Di-3d.png";
+    const imageUrl = '../../assets/img/Di-3d.png';
     let texture: Texture;
     let sampler: Sampler;
     loadImage(imageUrl, function (image)
@@ -134,19 +134,19 @@ import { getShaderSource, loadImage } from "./utility";
         // -- Init 2D Texture
         texture = {
             descriptor: {
-                format: "rgba8unorm",
+                format: 'rgba8unorm',
                 mipLevelCount: 1,
                 size: [512, 512],
             },
             sources: [{
                 image, flipY: false,
-            }]
+            }],
         };
         sampler = {
-            minFilter: "nearest",
-            magFilter: "nearest",
-            addressModeU: "clamp-to-edge",
-            addressModeV: "clamp-to-edge",
+            minFilter: 'nearest',
+            magFilter: 'nearest',
+            addressModeU: 'clamp-to-edge',
+            addressModeV: 'clamp-to-edge',
         };
 
         // // -- Allocate storage for the texture
@@ -214,12 +214,12 @@ import { getShaderSource, loadImage } from "./utility";
         bindingResources: {},
         vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),
-        draw: { __type__: "DrawIndexed", indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', indexCount: 36 },
     };
 
     const rp: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-        renderPassObjects: [ro]
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
+        renderPassObjects: [ro],
     };
 
     function render()

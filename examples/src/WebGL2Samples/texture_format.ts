@@ -1,24 +1,24 @@
-import { CanvasContext, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, TextureFormat, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { getShaderSource, loadImage } from "./utility";
+import { getShaderSource, loadImage } from './utility';
 
 (function ()
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
     const webgl = new WebGL(rc);
 
     // -- Viewport
 
     const windowSize = {
         x: canvas.width,
-        y: canvas.height
+        y: canvas.height,
     };
 
     const Views = {
@@ -31,7 +31,7 @@ import { getShaderSource, loadImage } from "./utility";
         TOP_LEFT: 6,
         TOP_CENTER: 7,
         TOP_RIGHT: 8,
-        MAX: 9
+        MAX: 9,
     };
 
     const viewport = new Array(Views.MAX);
@@ -44,14 +44,14 @@ import { getShaderSource, loadImage } from "./utility";
             x: windowSize.x * col / 3.0,
             y: windowSize.y * row / 3.0,
             z: windowSize.x / 3.0,
-            w: windowSize.y / 3.0
+            w: windowSize.y / 3.0,
         };
     }
 
     // -- Init program
-    const programUint: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-uint") } };
+    const programUint: RenderPipeline = { vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs-uint') } };
 
-    const programNormalized: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs-normalized") } };
+    const programNormalized: RenderPipeline = { vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs-normalized') } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -60,7 +60,7 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 1.0,
         -1.0, 1.0,
-        -1.0, -1.0
+        -1.0, -1.0,
     ]);
 
     const texCoords = new Float32Array([
@@ -69,18 +69,18 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 0.0,
         1.0, 0.0,
         0.0, 0.0,
-        0.0, 1.0
+        0.0, 1.0,
     ]);
 
     // -- Init VertexArray
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            position: { data: positions, format: "float32x2" },
-            texcoord: { data: texCoords, format: "float32x2" },
-        }
+            position: { data: positions, format: 'float32x2' },
+            texcoord: { data: texCoords, format: 'float32x2' },
+        },
     };
 
-    loadImage("../../assets/img/Di-3d.png", function (image)
+    loadImage('../../assets/img/Di-3d.png', function (image)
     {
         const TextureTypes = {
             RGB: 0,
@@ -92,45 +92,45 @@ import { getShaderSource, loadImage } from "./utility";
             RG16F: 6,
             RGB8UI: 7,
             RGBA8UI: 8,
-            MAX: 9
+            MAX: 9,
         };
 
         const textureFormats: { format: TextureFormat }[] = new Array(TextureTypes.MAX);
 
         textureFormats[TextureTypes.RGB] = {
-            format: "rgba8unorm",
+            format: 'rgba8unorm',
         };
 
         textureFormats[TextureTypes.RGB8] = {
-            format: "rgba8unorm",
+            format: 'rgba8unorm',
         };
 
         textureFormats[TextureTypes.RGB16F] = {
-            format: "rgba16float",
+            format: 'rgba16float',
         };
 
         textureFormats[TextureTypes.RGBA32F] = {
-            format: "rgba32float",
+            format: 'rgba32float',
         };
 
         textureFormats[TextureTypes.R16F] = {
-            format: "r16float",
+            format: 'r16float',
         };
 
         textureFormats[TextureTypes.RG16F] = {
-            format: "rg16float",
+            format: 'rg16float',
         };
 
         textureFormats[TextureTypes.RGBA] = {
-            format: "rgba8unorm",
+            format: 'rgba8unorm',
         };
 
         textureFormats[TextureTypes.RGB8UI] = {
-            format: "rgba8uint",
+            format: 'rgba8uint',
         };
 
         textureFormats[TextureTypes.RGBA8UI] = {
-            format: "rgba8uint",
+            format: 'rgba8uint',
         };
 
         // -- Init Texture
@@ -150,8 +150,8 @@ import { getShaderSource, loadImage } from "./utility";
                 }],
             };
             samplers[i] = {
-                minFilter: "nearest",
-                magFilter: "nearest",
+                minFilter: 'nearest',
+                magFilter: 'nearest',
                 lodMinClamp: 0,
                 lodMaxClamp: 0,
             };
@@ -162,13 +162,13 @@ import { getShaderSource, loadImage } from "./utility";
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
             0.0, 0.0, 1.0, 0.0,
-            0.0, 0.0, 0.0, 1.0
+            0.0, 0.0, 0.0, 1.0,
         ]);
 
         const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
-            descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
-            renderPassObjects: renderObjects
+            descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
+            renderPassObjects: renderObjects,
         };
 
         for (i = 0; i < TextureTypes.RGB8UI; ++i)
@@ -182,7 +182,7 @@ import { getShaderSource, loadImage } from "./utility";
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
                     vertices: vertexArray.vertices,
-                    draw: { __type__: "DrawVertex", vertexCount: 6 },
+                    draw: { __type__: 'DrawVertex', vertexCount: 6 },
                 });
         }
 
@@ -198,7 +198,7 @@ import { getShaderSource, loadImage } from "./utility";
                         diffuse: { texture: textures[i], sampler: samplers[i] },
                     },
                     vertices: vertexArray.vertices,
-                    draw: { __type__: "DrawVertex", vertexCount: 6 },
+                    draw: { __type__: 'DrawVertex', vertexCount: 6 },
                 });
         }
 

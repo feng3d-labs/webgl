@@ -1,4 +1,4 @@
-const shaderMacroKeys = ["if", "ifdef", "defined"];
+const shaderMacroKeys = ['if', 'ifdef', 'defined'];
 
 export class ShaderMacroUtils
 {
@@ -30,11 +30,11 @@ export class ShaderMacroUtils
     getMacroVariablesFromCode(code: string)
     {
         const variables: string[] = [];
-        const lines = code.split("\n");
+        const lines = code.split('\n');
         for (let i = 0; i < lines.length; i++)
         {
             const line = lines[i];
-            if (line.indexOf("#if") !== -1)
+            if (line.indexOf('#if') !== -1)
             {
                 const reg = /(\w+)/g;
                 let result: RegExpExecArray = reg.exec(line);

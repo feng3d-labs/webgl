@@ -1,6 +1,6 @@
-import { BufferBindingInfo, GLVertexAttributeTypes, RenderPipeline } from "@feng3d/render-api";
-import { getWebGLUniformType, GLUniformBufferType, GLUniformType, isWebGLUniformTextureType } from "../const/GLUniformType";
-import { TransformFeedbackPipeline, TransformFeedbackVaryings } from "../data/TransformFeedbackPass";
+import { BufferBindingInfo, GLVertexAttributeTypes, RenderPipeline } from '@feng3d/render-api';
+import { getWebGLUniformType, GLUniformBufferType, GLUniformType, isWebGLUniformTextureType } from '../const/GLUniformType';
+import { TransformFeedbackPipeline, TransformFeedbackVaryings } from '../data/TransformFeedbackPass';
 
 declare global
 {
@@ -98,10 +98,10 @@ function getKey(material: RenderPipeline | TransformFeedbackPipeline)
 function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: string, transformFeedbackVaryings: TransformFeedbackVaryings)
 {
     // 编译顶点着色器
-    const vertexShader = getWebGLShader(gl, "VERTEX_SHADER", vshader);
+    const vertexShader = getWebGLShader(gl, 'VERTEX_SHADER', vshader);
 
     // 编译片段着色器
-    const fragmentShader = getWebGLShader(gl, "FRAGMENT_SHADER", fshader);
+    const fragmentShader = getWebGLShader(gl, 'FRAGMENT_SHADER', fshader);
 
     // 创建着色器程序
     const program = createLinkProgram(gl, vertexShader, fragmentShader, transformFeedbackVaryings);
@@ -133,7 +133,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const names = [name];
         if (size > 1)
         {
-            console.assert(name.substring(name.length - 3) === "[0]");
+            console.assert(name.substring(name.length - 3) === '[0]');
             const baseName = name.substring(0, name.length - 3);
             for (let j = 1; j < size; j++)
             {
@@ -313,7 +313,7 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
  *
  * Either a gl.FRAGMENT_SHADER or a gl.VERTEX_SHADER.
  */
-export type ShaderType = "FRAGMENT_SHADER" | "VERTEX_SHADER";
+export type ShaderType = 'FRAGMENT_SHADER' | 'VERTEX_SHADER';
 
 function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
 {
@@ -330,7 +330,7 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
         console.assert(alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
 
         //
-        const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf("."));
+        const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf('.'));
         if (structName !== currentstructName)
         {
             currentSize = roundUp(16, currentSize); // 结构体之间对齐
@@ -474,4 +474,4 @@ export function getGLAttributeType(value: keyof typeof webglAttributeValueType):
 }
 
 const webglAttributeTypeValue = Object.freeze({ FLOAT: 5126, BYTE: 5120, SHORT: 5122, UNSIGNED_BYTE: 5121, UNSIGNED_SHORT: 5123, HALF_FLOAT: 5131, INT: 5124, UNSIGNED_INT: 5125 });
-const webglAttributeValueType = Object.freeze({ 5120: "BYTE", 5121: "UNSIGNED_BYTE", 5122: "SHORT", 5123: "UNSIGNED_SHORT", 5124: "INT", 5125: "UNSIGNED_INT", 5126: "FLOAT", 5131: "HALF_FLOAT" });
+const webglAttributeValueType = Object.freeze({ 5120: 'BYTE', 5121: 'UNSIGNED_BYTE', 5122: 'SHORT', 5123: 'UNSIGNED_SHORT', 5124: 'INT', 5125: 'UNSIGNED_INT', 5126: 'FLOAT', 5131: 'HALF_FLOAT' });

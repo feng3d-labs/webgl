@@ -1,4 +1,4 @@
-import * as glMatrix from "./common";
+import * as glMatrix from './common';
 
 /**
  * 2 Dimensional Vector
@@ -12,14 +12,14 @@ import * as glMatrix from "./common";
  */
 export function create()
 {
-  const out = new glMatrix.ARRAY_TYPE(2);
-  if (glMatrix.ARRAY_TYPE !== Float32Array)
-  {
-    out[0] = 0;
-    out[1] = 0;
-  }
+    const out = new glMatrix.ARRAY_TYPE(2);
+    if (glMatrix.ARRAY_TYPE !== Float32Array)
+    {
+        out[0] = 0;
+        out[1] = 0;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -30,11 +30,11 @@ export function create()
  */
 export function clone(a)
 {
-  const out = new glMatrix.ARRAY_TYPE(2);
-  out[0] = a[0];
-  out[1] = a[1];
+    const out = new glMatrix.ARRAY_TYPE(2);
+    out[0] = a[0];
+    out[1] = a[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -46,11 +46,11 @@ export function clone(a)
  */
 export function fromValues(x, y)
 {
-  const out = new glMatrix.ARRAY_TYPE(2);
-  out[0] = x;
-  out[1] = y;
+    const out = new glMatrix.ARRAY_TYPE(2);
+    out[0] = x;
+    out[1] = y;
 
-  return out;
+    return out;
 }
 
 /**
@@ -62,10 +62,10 @@ export function fromValues(x, y)
  */
 export function copy(out, a)
 {
-  out[0] = a[0];
-  out[1] = a[1];
+    out[0] = a[0];
+    out[1] = a[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -78,10 +78,10 @@ export function copy(out, a)
  */
 export function set(out, x, y)
 {
-  out[0] = x;
-  out[1] = y;
+    out[0] = x;
+    out[1] = y;
 
-  return out;
+    return out;
 }
 
 /**
@@ -94,10 +94,10 @@ export function set(out, x, y)
  */
 export function add(out, a, b)
 {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -110,10 +110,10 @@ export function add(out, a, b)
  */
 export function subtract(out, a, b)
 {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -126,10 +126,10 @@ export function subtract(out, a, b)
  */
 export function multiply(out, a, b)
 {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
+    out[0] = a[0] * b[0];
+    out[1] = a[1] * b[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -142,10 +142,10 @@ export function multiply(out, a, b)
  */
 export function divide(out, a, b)
 {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
+    out[0] = a[0] / b[0];
+    out[1] = a[1] / b[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -157,10 +157,10 @@ export function divide(out, a, b)
  */
 export function ceil(out, a)
 {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
+    out[0] = Math.ceil(a[0]);
+    out[1] = Math.ceil(a[1]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -172,10 +172,10 @@ export function ceil(out, a)
  */
 export function floor(out, a)
 {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
+    out[0] = Math.floor(a[0]);
+    out[1] = Math.floor(a[1]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -188,10 +188,10 @@ export function floor(out, a)
  */
 export function min(out, a, b)
 {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
+    out[0] = Math.min(a[0], b[0]);
+    out[1] = Math.min(a[1], b[1]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -204,10 +204,10 @@ export function min(out, a, b)
  */
 export function max(out, a, b)
 {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
+    out[0] = Math.max(a[0], b[0]);
+    out[1] = Math.max(a[1], b[1]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -219,10 +219,10 @@ export function max(out, a, b)
  */
 export function round(out, a)
 {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
+    out[0] = Math.round(a[0]);
+    out[1] = Math.round(a[1]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -235,10 +235,10 @@ export function round(out, a)
  */
 export function scale(out, a, b)
 {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
+    out[0] = a[0] * b;
+    out[1] = a[1] * b;
 
-  return out;
+    return out;
 }
 
 /**
@@ -252,10 +252,10 @@ export function scale(out, a, b)
  */
 export function scaleAndAdd(out, a, b, scale)
 {
-  out[0] = a[0] + (b[0] * scale);
-  out[1] = a[1] + (b[1] * scale);
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
 
-  return out;
+    return out;
 }
 
 /**
@@ -267,10 +267,10 @@ export function scaleAndAdd(out, a, b, scale)
  */
 export function distance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
 
-  return Math.sqrt(x * x + y * y);
+    return Math.sqrt(x * x + y * y);
 }
 
 /**
@@ -282,10 +282,10 @@ export function distance(a, b)
  */
 export function squaredDistance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
 
-  return x * x + y * y;
+    return x * x + y * y;
 }
 
 /**
@@ -296,10 +296,10 @@ export function squaredDistance(a, b)
  */
 export function length(a)
 {
-  const x = a[0];
-  const y = a[1];
+    const x = a[0];
+    const y = a[1];
 
-  return Math.sqrt(x * x + y * y);
+    return Math.sqrt(x * x + y * y);
 }
 
 /**
@@ -310,10 +310,10 @@ export function length(a)
  */
 export function squaredLength(a)
 {
-  const x = a[0];
-  const y = a[1];
+    const x = a[0];
+    const y = a[1];
 
-  return x * x + y * y;
+    return x * x + y * y;
 }
 
 /**
@@ -325,10 +325,10 @@ export function squaredLength(a)
  */
 export function negate(out, a)
 {
-  out[0] = -a[0];
-  out[1] = -a[1];
+    out[0] = -a[0];
+    out[1] = -a[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -340,10 +340,10 @@ export function negate(out, a)
  */
 export function inverse(out, a)
 {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
+    out[0] = 1.0 / a[0];
+    out[1] = 1.0 / a[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -355,18 +355,18 @@ export function inverse(out, a)
  */
 export function normalize(out, a)
 {
-  const x = a[0];
-  const y = a[1];
-  let len = x * x + y * y;
-  if (len > 0)
-  {
+    const x = a[0];
+    const y = a[1];
+    let len = x * x + y * y;
+    if (len > 0)
+    {
     // TODO: evaluate use of glm_invsqrt here?
-    len = 1 / Math.sqrt(len);
-    out[0] = a[0] * len;
-    out[1] = a[1] * len;
-  }
+        len = 1 / Math.sqrt(len);
+        out[0] = a[0] * len;
+        out[1] = a[1] * len;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -378,7 +378,7 @@ export function normalize(out, a)
  */
 export function dot(a, b)
 {
-  return a[0] * b[0] + a[1] * b[1];
+    return a[0] * b[0] + a[1] * b[1];
 }
 
 /**
@@ -392,11 +392,11 @@ export function dot(a, b)
  */
 export function cross(out, a, b)
 {
-  const z = a[0] * b[1] - a[1] * b[0];
-  out[0] = out[1] = 0;
-  out[2] = z;
+    const z = a[0] * b[1] - a[1] * b[0];
+    out[0] = out[1] = 0;
+    out[2] = z;
 
-  return out;
+    return out;
 }
 
 /**
@@ -410,12 +410,12 @@ export function cross(out, a, b)
  */
 export function lerp(out, a, b, t)
 {
-  const ax = a[0];
-  const ay = a[1];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
+    const ax = a[0];
+    const ay = a[1];
+    out[0] = ax + t * (b[0] - ax);
+    out[1] = ay + t * (b[1] - ay);
 
-  return out;
+    return out;
 }
 
 /**
@@ -427,12 +427,12 @@ export function lerp(out, a, b, t)
  */
 export function random(out, scale)
 {
-  scale = scale || 1.0;
-  const r = glMatrix.RANDOM() * 2.0 * Math.PI;
-  out[0] = Math.cos(r) * scale;
-  out[1] = Math.sin(r) * scale;
+    scale = scale || 1.0;
+    const r = glMatrix.RANDOM() * 2.0 * Math.PI;
+    out[0] = Math.cos(r) * scale;
+    out[1] = Math.sin(r) * scale;
 
-  return out;
+    return out;
 }
 
 /**
@@ -445,12 +445,12 @@ export function random(out, scale)
  */
 export function transformMat2(out, a, m)
 {
-  const x = a[0];
-  const y = a[1];
-  out[0] = m[0] * x + m[2] * y;
-  out[1] = m[1] * x + m[3] * y;
+    const x = a[0];
+    const y = a[1];
+    out[0] = m[0] * x + m[2] * y;
+    out[1] = m[1] * x + m[3] * y;
 
-  return out;
+    return out;
 }
 
 /**
@@ -463,12 +463,12 @@ export function transformMat2(out, a, m)
  */
 export function transformMat2d(out, a, m)
 {
-  const x = a[0];
-  const y = a[1];
-  out[0] = m[0] * x + m[2] * y + m[4];
-  out[1] = m[1] * x + m[3] * y + m[5];
+    const x = a[0];
+    const y = a[1];
+    out[0] = m[0] * x + m[2] * y + m[4];
+    out[1] = m[1] * x + m[3] * y + m[5];
 
-  return out;
+    return out;
 }
 
 /**
@@ -482,12 +482,12 @@ export function transformMat2d(out, a, m)
  */
 export function transformMat3(out, a, m)
 {
-  const x = a[0];
-  const y = a[1];
-  out[0] = m[0] * x + m[3] * y + m[6];
-  out[1] = m[1] * x + m[4] * y + m[7];
+    const x = a[0];
+    const y = a[1];
+    out[0] = m[0] * x + m[3] * y + m[6];
+    out[1] = m[1] * x + m[4] * y + m[7];
 
-  return out;
+    return out;
 }
 
 /**
@@ -502,12 +502,12 @@ export function transformMat3(out, a, m)
  */
 export function transformMat4(out, a, m)
 {
-  const x = a[0];
-  const y = a[1];
-  out[0] = m[0] * x + m[4] * y + m[12];
-  out[1] = m[1] * x + m[5] * y + m[13];
+    const x = a[0];
+    const y = a[1];
+    out[0] = m[0] * x + m[4] * y + m[12];
+    out[1] = m[1] * x + m[5] * y + m[13];
 
-  return out;
+    return out;
 }
 
 /**
@@ -520,17 +520,17 @@ export function transformMat4(out, a, m)
  */
 export function rotate(out, a, b, c)
 {
-  // Translate point to the origin
-  const p0 = a[0] - b[0];
-  const p1 = a[1] - b[1];
-  const sinC = Math.sin(c);
-  const cosC = Math.cos(c);
+    // Translate point to the origin
+    const p0 = a[0] - b[0];
+    const p1 = a[1] - b[1];
+    const sinC = Math.sin(c);
+    const cosC = Math.cos(c);
 
-  // perform rotation and translate to correct position
-  out[0] = p0 * cosC - p1 * sinC + b[0];
-  out[1] = p0 * sinC + p1 * cosC + b[1];
+    // perform rotation and translate to correct position
+    out[0] = p0 * cosC - p1 * sinC + b[0];
+    out[1] = p0 * sinC + p1 * cosC + b[1];
 
-  return out;
+    return out;
 }
 
 /**
@@ -541,37 +541,37 @@ export function rotate(out, a, b, c)
  */
 export function angle(a, b)
 {
-  const x1 = a[0];
-  const y1 = a[1];
-  const x2 = b[0];
-  const y2 = b[1];
+    const x1 = a[0];
+    const y1 = a[1];
+    const x2 = b[0];
+    const y2 = b[1];
 
-  let len1 = x1 * x1 + y1 * y1;
-  if (len1 > 0)
-  {
+    let len1 = x1 * x1 + y1 * y1;
+    if (len1 > 0)
+    {
     // TODO: evaluate use of glm_invsqrt here?
-    len1 = 1 / Math.sqrt(len1);
-  }
+        len1 = 1 / Math.sqrt(len1);
+    }
 
-  let len2 = x2 * x2 + y2 * y2;
-  if (len2 > 0)
-  {
+    let len2 = x2 * x2 + y2 * y2;
+    if (len2 > 0)
+    {
     // TODO: evaluate use of glm_invsqrt here?
-    len2 = 1 / Math.sqrt(len2);
-  }
+        len2 = 1 / Math.sqrt(len2);
+    }
 
-  const cosine = (x1 * x2 + y1 * y2) * len1 * len2;
+    const cosine = (x1 * x2 + y1 * y2) * len1 * len2;
 
-  if (cosine > 1.0)
-  {
-    return 0;
-  }
-  else if (cosine < -1.0)
-  {
-    return Math.PI;
-  }
+    if (cosine > 1.0)
+    {
+        return 0;
+    }
+    else if (cosine < -1.0)
+    {
+        return Math.PI;
+    }
 
-  return Math.acos(cosine);
+    return Math.acos(cosine);
 }
 
 /**
@@ -582,7 +582,7 @@ export function angle(a, b)
  */
 export function str(a)
 {
-  return `vec2(${a[0]}, ${a[1]})`;
+    return `vec2(${a[0]}, ${a[1]})`;
 }
 
 /**
@@ -594,7 +594,7 @@ export function str(a)
  */
 export function exactEquals(a, b)
 {
-  return a[0] === b[0] && a[1] === b[1];
+    return a[0] === b[0] && a[1] === b[1];
 }
 
 /**
@@ -606,12 +606,12 @@ export function exactEquals(a, b)
  */
 export function equals(a, b)
 {
-  const a0 = a[0]; const
-    a1 = a[1];
-  const b0 = b[0]; const
-    b1 = b[1];
+    const a0 = a[0]; const
+        a1 = a[1];
+    const b0 = b[0]; const
+        b1 = b[1];
 
-  return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
+    return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
     && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)));
 }
 
@@ -671,38 +671,38 @@ export const sqrLen = squaredLength;
  */
 export const forEach = (function ()
 {
-  const vec = create();
+    const vec = create();
 
-  return function (a, stride, offset, count, fn, arg)
-  {
-    let i; let
-      l;
-    if (!stride)
+    return function (a, stride, offset, count, fn, arg)
     {
-      stride = 2;
-    }
+        let i; let
+            l;
+        if (!stride)
+        {
+            stride = 2;
+        }
 
-    if (!offset)
-    {
-      offset = 0;
-    }
+        if (!offset)
+        {
+            offset = 0;
+        }
 
-    if (count)
-    {
-      l = Math.min((count * stride) + offset, a.length);
-    }
-    else
-    {
-      l = a.length;
-    }
+        if (count)
+        {
+            l = Math.min((count * stride) + offset, a.length);
+        }
+        else
+        {
+            l = a.length;
+        }
 
-    for (i = offset; i < l; i += stride)
-    {
-      vec[0] = a[i]; vec[1] = a[i + 1];
-      fn(vec, vec, arg);
-      a[i] = vec[0]; a[i + 1] = vec[1];
-    }
+        for (i = offset; i < l; i += stride)
+        {
+            vec[0] = a[i]; vec[1] = a[i + 1];
+            fn(vec, vec, arg);
+            a[i] = vec[0]; a[i + 1] = vec[1];
+        }
 
-    return a;
-  };
+        return a;
+    };
 })();

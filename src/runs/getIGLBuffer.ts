@@ -1,7 +1,7 @@
-import { Buffer, TypedArray } from "@feng3d/render-api";
-import { BufferTarget, BufferUsage } from "../data/polyfills/Buffer";
+import { Buffer, TypedArray } from '@feng3d/render-api';
+import { BufferTarget, BufferUsage } from '../data/polyfills/Buffer';
 
-export function getIGLBuffer(data: TypedArray, target?: BufferTarget, usage: BufferUsage = "STATIC_DRAW"): Buffer
+export function getIGLBuffer(data: TypedArray, target?: BufferTarget, usage: BufferUsage = 'STATIC_DRAW'): Buffer
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
@@ -16,4 +16,4 @@ export function getIGLBuffer(data: TypedArray, target?: BufferTarget, usage: Buf
     return buffer;
 }
 
-const _IGLBuffer = "_IGLBuffer";
+const _IGLBuffer = '_IGLBuffer';

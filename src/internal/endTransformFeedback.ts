@@ -1,4 +1,4 @@
-import { TransformFeedback } from "../data/TransformFeedbackPass";
+import { TransformFeedback } from '../data/TransformFeedbackPass';
 
 export function endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {

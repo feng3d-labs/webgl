@@ -1,5 +1,5 @@
-import { ShaderMacro } from "./Macro";
-import { shaderMacroUtils } from "./ShaderMacroUtils";
+import { ShaderMacro } from './Macro';
+import { shaderMacroUtils } from './ShaderMacroUtils';
 
 export const shaderConfig: ShaderConfig = { shaders: {}, modules: {} };
 
@@ -39,10 +39,12 @@ export class ShaderLib
 
         return this._shaderConfig;
     }
+
     set shaderConfig(v)
     {
         this._shaderConfig = v;
     }
+
     private _shaderConfig: ShaderConfig;
 
     private _shaderCache: { [shaderName: string]: { vertex: string, fragment: string, vertexMacroVariables: string[], fragmentMacroVariables: string[] } } = {};
@@ -127,17 +129,17 @@ export class ShaderLib
         this._shaderCache = {};
     }
 
-    getMacroCode(variables: string[], valueObj: Object)
+    getMacroCode(variables: string[], valueObj: object)
     {
-        let macroHeader = "";
+        let macroHeader = '';
         variables.forEach((macroName) =>
         {
             const value = valueObj[macroName];
-            if (typeof value === "boolean")
+            if (typeof value === 'boolean')
             {
                 value && (macroHeader += `#define ${macroName}\n`);
             }
-            else if (typeof value === "number")
+            else if (typeof value === 'number')
             {
                 macroHeader += `#define ${macroName} ${value}\n`;
             }

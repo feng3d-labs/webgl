@@ -1,5 +1,5 @@
-import { OcclusionQuery } from "@feng3d/render-api";
-import { runRenderObject } from "./renderObject/runRenderObject";
+import { OcclusionQuery } from '@feng3d/render-api';
+import { runRenderObject } from './renderObject/runRenderObject';
 
 export function runOcclusionQuery(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, occlusionQuery: OcclusionQuery)
 {

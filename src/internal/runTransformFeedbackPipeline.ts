@@ -1,5 +1,5 @@
-import { TransformFeedbackPipeline } from "../data/TransformFeedbackPass";
-import { getGLProgram } from "../caches/getGLProgram";
+import { TransformFeedbackPipeline } from '../data/TransformFeedbackPass';
+import { getGLProgram } from '../caches/getGLProgram';
 
 export function runTransformFeedbackPipeline(gl: WebGLRenderingContext, renderPipeline: TransformFeedbackPipeline)
 {

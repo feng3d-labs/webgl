@@ -1,4 +1,4 @@
-import { CompareFunction, DepthStencilState, StencilOperation } from "@feng3d/render-api";
+import { CompareFunction, DepthStencilState, StencilOperation } from '@feng3d/render-api';
 
 export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
 {
@@ -14,7 +14,7 @@ export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthS
 
         if (stencilFront)
         {
-            const func = getGLStencilFunc(stencilFront.compare ?? "always");
+            const func = getGLStencilFunc(stencilFront.compare ?? 'always');
             const fail = getGLStencilOp(stencilFront.failOp);
             const zfail = getGLStencilOp(stencilFront.depthFailOp);
             const zpass = getGLStencilOp(stencilFront.passOp);
@@ -25,7 +25,7 @@ export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthS
         }
         if (stencilBack)
         {
-            const func = getGLStencilFunc(stencilBack.compare ?? "always");
+            const func = getGLStencilFunc(stencilBack.compare ?? 'always');
             const fail = getGLStencilOp(stencilBack.failOp);
             const zfail = getGLStencilOp(stencilBack.depthFailOp);
             const zpass = getGLStencilOp(stencilBack.passOp);
@@ -49,14 +49,14 @@ function getGLStencilFunc(compare: CompareFunction)
 }
 
 const compareMap: { [key: string]: GLStencilFunc } = {
-    never: "NEVER",
-    less: "LESS",
-    equal: "EQUAL",
-    "less-equal": "LEQUAL",
-    greater: "GREATER",
-    "not-equal": "NOTEQUAL",
-    "greater-equal": "GEQUAL",
-    always: "ALWAYS",
+    never: 'NEVER',
+    less: 'LESS',
+    equal: 'EQUAL',
+    'less-equal': 'LEQUAL',
+    greater: 'GREATER',
+    'not-equal': 'NOTEQUAL',
+    'greater-equal': 'GEQUAL',
+    always: 'ALWAYS',
 };
 
 /**
@@ -73,7 +73,7 @@ const compareMap: { [key: string]: GLStencilFunc } = {
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilFunc
  */
-type GLStencilFunc = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
+type GLStencilFunc = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS';
 
 function getGLStencilOp(stencilOperation?: StencilOperation)
 {
@@ -82,14 +82,14 @@ function getGLStencilOp(stencilOperation?: StencilOperation)
     return glStencilOp;
 }
 const stencilOperationMap: { [key: string]: GLStencilOp } = {
-    keep: "KEEP",
-    zero: "ZERO",
-    replace: "REPLACE",
-    invert: "INVERT",
-    "increment-clamp": "INCR",
-    "decrement-clamp": "DECR",
-    "increment-wrap": "INCR_WRAP",
-    "decrement-wrap": "DECR_WRAP",
+    keep: 'KEEP',
+    zero: 'ZERO',
+    replace: 'REPLACE',
+    invert: 'INVERT',
+    'increment-clamp': 'INCR',
+    'decrement-clamp': 'DECR',
+    'increment-wrap': 'INCR_WRAP',
+    'decrement-wrap': 'DECR_WRAP',
 };
 
 /**
@@ -106,4 +106,4 @@ const stencilOperationMap: { [key: string]: GLStencilOp } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/stencilOp
  */
-type GLStencilOp = "KEEP" | "ZERO" | "REPLACE" | "INCR" | "INCR_WRAP" | "DECR" | "DECR_WRAP" | "INVERT";
+type GLStencilOp = 'KEEP' | 'ZERO' | 'REPLACE' | 'INCR' | 'INCR_WRAP' | 'DECR' | 'DECR_WRAP' | 'INVERT';

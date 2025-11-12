@@ -1,4 +1,4 @@
-import { BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState } from "@feng3d/render-api";
+import { BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState } from '@feng3d/render-api';
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
 {
@@ -13,9 +13,9 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
         const color: BlendComponent = blend.color;
         const alpha: BlendComponent = blend.alpha;
 
-        const colorOperation: GLBlendEquation = getGLBlendEquation(color?.operation) || "FUNC_ADD";
-        const colorSrcFactor: GLBlendFactor = getGLBlendFactor(color?.srcFactor, color?.operation) || "SRC_ALPHA";
-        const colorDstFactor: GLBlendFactor = getGLBlendFactor(color?.dstFactor, color?.operation) || "ONE_MINUS_SRC_ALPHA";
+        const colorOperation: GLBlendEquation = getGLBlendEquation(color?.operation) || 'FUNC_ADD';
+        const colorSrcFactor: GLBlendFactor = getGLBlendFactor(color?.srcFactor, color?.operation) || 'SRC_ALPHA';
+        const colorDstFactor: GLBlendFactor = getGLBlendFactor(color?.dstFactor, color?.operation) || 'ONE_MINUS_SRC_ALPHA';
         //
         const alphaOperation: GLBlendEquation = getGLBlendEquation(alpha?.operation) || colorOperation;
         const alphaSrcFactor: GLBlendFactor = getGLBlendFactor(alpha?.srcFactor, color?.operation) || colorSrcFactor;
@@ -52,18 +52,18 @@ function getGLBlendEquation(operation?: BlendOperation)
 }
 
 const operationMap: { [key: string]: GLBlendEquation } = {
-    add: "FUNC_ADD",
-    subtract: "FUNC_SUBTRACT",
-    "reverse-subtract": "FUNC_REVERSE_SUBTRACT",
-    min: "MIN",
-    max: "MAX",
+    add: 'FUNC_ADD',
+    subtract: 'FUNC_SUBTRACT',
+    'reverse-subtract': 'FUNC_REVERSE_SUBTRACT',
+    min: 'MIN',
+    max: 'MAX',
 };
 
 function getGLBlendFactor(blendFactor: BlendFactor, operation: BlendOperation)
 {
     if (!blendFactor) return undefined;
 
-    if (operation === "max" || operation === "min") blendFactor = "one";
+    if (operation === 'max' || operation === 'min') blendFactor = 'one';
 
     const glBlendFactor: GLBlendFactor = blendFactorMap[blendFactor];
 
@@ -73,19 +73,19 @@ function getGLBlendFactor(blendFactor: BlendFactor, operation: BlendOperation)
 }
 
 const blendFactorMap: { [key: string]: GLBlendFactor } = {
-    zero: "ZERO",
-    one: "ONE",
-    src: "SRC_COLOR",
-    "one-minus-src": "ONE_MINUS_SRC_COLOR",
-    "src-alpha": "SRC_ALPHA",
-    "one-minus-src-alpha": "ONE_MINUS_SRC_ALPHA",
-    dst: "DST_COLOR",
-    "one-minus-dst": "ONE_MINUS_DST_COLOR",
-    "dst-alpha": "DST_ALPHA",
-    "one-minus-dst-alpha": "ONE_MINUS_DST_ALPHA",
-    "src-alpha-saturated": "SRC_ALPHA_SATURATE",
-    constant: "CONSTANT_COLOR",
-    "one-minus-constant": "ONE_MINUS_CONSTANT_COLOR",
+    zero: 'ZERO',
+    one: 'ONE',
+    src: 'SRC_COLOR',
+    'one-minus-src': 'ONE_MINUS_SRC_COLOR',
+    'src-alpha': 'SRC_ALPHA',
+    'one-minus-src-alpha': 'ONE_MINUS_SRC_ALPHA',
+    dst: 'DST_COLOR',
+    'one-minus-dst': 'ONE_MINUS_DST_COLOR',
+    'dst-alpha': 'DST_ALPHA',
+    'one-minus-dst-alpha': 'ONE_MINUS_DST_ALPHA',
+    'src-alpha-saturated': 'SRC_ALPHA_SATURATE',
+    constant: 'CONSTANT_COLOR',
+    'one-minus-constant': 'ONE_MINUS_CONSTANT_COLOR',
 };
 
 /**
@@ -113,7 +113,7 @@ const blendFactorMap: { [key: string]: GLBlendFactor } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
  */
-type GLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST_COLOR" | "ONE_MINUS_DST_COLOR" | "SRC_ALPHA" | "ONE_MINUS_SRC_ALPHA" | "DST_ALPHA" | "ONE_MINUS_DST_ALPHA" | "SRC_ALPHA_SATURATE" | "CONSTANT_COLOR" | "ONE_MINUS_CONSTANT_COLOR" | "CONSTANT_ALPHA" | "ONE_MINUS_CONSTANT_ALPHA";
+type GLBlendFactor = 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' | 'DST_COLOR' | 'ONE_MINUS_DST_COLOR' | 'SRC_ALPHA' | 'ONE_MINUS_SRC_ALPHA' | 'DST_ALPHA' | 'ONE_MINUS_DST_ALPHA' | 'SRC_ALPHA_SATURATE' | 'CONSTANT_COLOR' | 'ONE_MINUS_CONSTANT_COLOR' | 'CONSTANT_ALPHA' | 'ONE_MINUS_CONSTANT_ALPHA';
 
 /**
  * 混合方法
@@ -142,4 +142,4 @@ type GLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
  */
-type GLBlendEquation = "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT" | "MIN" | "MAX";
+type GLBlendEquation = 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX';

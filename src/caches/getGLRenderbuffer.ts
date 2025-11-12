@@ -1,4 +1,4 @@
-import { Renderbuffer } from "../data/Renderbuffer";
+import { Renderbuffer } from '../data/Renderbuffer';
 
 export function getGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: Renderbuffer, sampleCount?: 4)
 {

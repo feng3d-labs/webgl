@@ -1,8 +1,8 @@
-import { UniformItemInfo } from "../caches/getGLProgram";
-import { getGLTextureTarget } from "../caches/getGLTextureTarget";
-import { SamplerTexture } from "../data/SamplerTexture";
-import { getGLTexture } from "../internal";
-import { runSampler } from "./runSampler";
+import { UniformItemInfo } from '../caches/getGLProgram';
+import { getGLTextureTarget } from '../caches/getGLTextureTarget';
+import { SamplerTexture } from '../data/SamplerTexture';
+import { getGLTexture } from '../internal';
+import { runSampler } from './runSampler';
 
 export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
 {

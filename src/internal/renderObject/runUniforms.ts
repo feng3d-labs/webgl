@@ -1,13 +1,13 @@
-import { UnReadonly } from "@feng3d/reactivity";
-import { BindingResources, Buffer, BufferBinding, RenderPipeline, TypedArray } from "@feng3d/render-api";
-import { getGLBuffer } from "../../caches/getGLBuffer";
-import { getGLProgram } from "../../caches/getGLProgram";
-import { GLUniformBufferType } from "../../const/GLUniformType";
-import { SamplerTexture } from "../../data/SamplerTexture";
-import { getIGLBuffer } from "../../runs/getIGLBuffer";
-import { updateBufferBinding } from "../../utils/updateBufferBinding";
-import { runSamplerTexture } from "../runSamplerTexture";
-import { runUniform } from "../runUniform";
+import { UnReadonly } from '@feng3d/reactivity';
+import { BindingResources, Buffer, BufferBinding, RenderPipeline, TypedArray } from '@feng3d/render-api';
+import { getGLBuffer } from '../../caches/getGLBuffer';
+import { getGLProgram } from '../../caches/getGLProgram';
+import { GLUniformBufferType } from '../../const/GLUniformType';
+import { SamplerTexture } from '../../data/SamplerTexture';
+import { getIGLBuffer } from '../../runs/getIGLBuffer';
+import { updateBufferBinding } from '../../utils/updateBufferBinding';
+import { runSamplerTexture } from '../runSamplerTexture';
+import { runUniform } from '../runUniform';
 
 /**
  * 激活常量
@@ -61,9 +61,9 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
-            const buffer = getIGLBuffer(typedArray, "UNIFORM_BUFFER", "DYNAMIC_DRAW");
-            buffer.target ??= "UNIFORM_BUFFER";
-            buffer.usage ??= "DYNAMIC_DRAW";
+            const buffer = getIGLBuffer(typedArray, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
+            buffer.target ??= 'UNIFORM_BUFFER';
+            buffer.usage ??= 'DYNAMIC_DRAW';
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 

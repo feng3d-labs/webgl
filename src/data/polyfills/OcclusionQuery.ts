@@ -1,7 +1,7 @@
-import {  } from "@feng3d/render-api";
-import { GLOcclusionQueryStep } from "../../caches/getGLRenderOcclusionQuery";
+import {  } from '@feng3d/render-api';
+import { GLOcclusionQueryStep } from '../../caches/getGLRenderOcclusionQuery';
 
-declare module "@feng3d/render-api"
+declare module '@feng3d/render-api'
 {
     export interface OcclusionQuery
     {

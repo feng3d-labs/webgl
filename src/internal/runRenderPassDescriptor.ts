@@ -1,5 +1,5 @@
-import { RenderPassDescriptor } from "@feng3d/render-api";
-import { getGLFramebuffer } from "../caches/getGLFramebuffer";
+import { RenderPassDescriptor } from '@feng3d/render-api';
+import { getGLFramebuffer } from '../caches/getGLFramebuffer';
 
 export function runRenderPassDescriptor(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
 {
@@ -13,24 +13,24 @@ export function runRenderPassDescriptor(gl: WebGLRenderingContext, passDescripto
     const colorAttachment = passDescriptor.colorAttachments?.[0];
     //
     const clearValue = colorAttachment?.clearValue ?? [0, 0, 0, 0];
-    const loadOp = colorAttachment?.loadOp ?? "clear";
+    const loadOp = colorAttachment?.loadOp ?? 'clear';
     gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
 
     //
     const depthStencilAttachment = passDescriptor.depthStencilAttachment;
     const depthClearValue = depthStencilAttachment?.depthClearValue ?? 1;
-    const depthLoadOp = depthStencilAttachment?.depthLoadOp ?? "load";
+    const depthLoadOp = depthStencilAttachment?.depthLoadOp ?? 'load';
     const stencilClearValue = depthStencilAttachment?.stencilClearValue ?? 0;
-    const stencilLoadOp = depthStencilAttachment?.stencilLoadOp ?? "load";
+    const stencilLoadOp = depthStencilAttachment?.stencilLoadOp ?? 'load';
 
     //
     gl.clearDepth(depthClearValue);
     gl.clearStencil(stencilClearValue);
 
     //
-    gl.clear((loadOp === "clear" ? gl.COLOR_BUFFER_BIT : 0)
-        | (depthLoadOp === "clear" ? gl.DEPTH_BUFFER_BIT : 0)
-        | (stencilLoadOp === "clear" ? gl.STENCIL_BUFFER_BIT : 0)
+    gl.clear((loadOp === 'clear' ? gl.COLOR_BUFFER_BIT : 0)
+        | (depthLoadOp === 'clear' ? gl.DEPTH_BUFFER_BIT : 0)
+        | (stencilLoadOp === 'clear' ? gl.STENCIL_BUFFER_BIT : 0),
     );
 }
 

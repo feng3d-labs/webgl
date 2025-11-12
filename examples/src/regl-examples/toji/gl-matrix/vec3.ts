@@ -1,4 +1,4 @@
-import * as glMatrix from "./common";
+import * as glMatrix from './common';
 
 /**
  * 3 Dimensional Vector
@@ -12,15 +12,15 @@ import * as glMatrix from "./common";
  */
 export function create()
 {
-  const out = new glMatrix.ARRAY_TYPE(3);
-  if (glMatrix.ARRAY_TYPE !== Float32Array)
-  {
-    out[0] = 0;
-    out[1] = 0;
-    out[2] = 0;
-  }
+    const out = new glMatrix.ARRAY_TYPE(3);
+    if (glMatrix.ARRAY_TYPE !== Float32Array)
+    {
+        out[0] = 0;
+        out[1] = 0;
+        out[2] = 0;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -31,12 +31,12 @@ export function create()
  */
 export function clone(a)
 {
-  const out = new glMatrix.ARRAY_TYPE(3);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
+    const out = new glMatrix.ARRAY_TYPE(3);
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -47,11 +47,11 @@ export function clone(a)
  */
 export function length(a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
 
-  return Math.sqrt(x * x + y * y + z * z);
+    return Math.sqrt(x * x + y * y + z * z);
 }
 
 /**
@@ -64,12 +64,12 @@ export function length(a)
  */
 export function fromValues(x, y, z)
 {
-  const out = new glMatrix.ARRAY_TYPE(3);
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
+    const out = new glMatrix.ARRAY_TYPE(3);
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
 
-  return out;
+    return out;
 }
 
 /**
@@ -81,11 +81,11 @@ export function fromValues(x, y, z)
  */
 export function copy(out, a)
 {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -99,11 +99,11 @@ export function copy(out, a)
  */
 export function set(out, x, y, z)
 {
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
 
-  return out;
+    return out;
 }
 
 /**
@@ -116,11 +116,11 @@ export function set(out, x, y, z)
  */
 export function add(out, a, b)
 {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -133,11 +133,11 @@ export function add(out, a, b)
  */
 export function subtract(out, a, b)
 {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -150,11 +150,11 @@ export function subtract(out, a, b)
  */
 export function multiply(out, a, b)
 {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
-  out[2] = a[2] * b[2];
+    out[0] = a[0] * b[0];
+    out[1] = a[1] * b[1];
+    out[2] = a[2] * b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -167,11 +167,11 @@ export function multiply(out, a, b)
  */
 export function divide(out, a, b)
 {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
-  out[2] = a[2] / b[2];
+    out[0] = a[0] / b[0];
+    out[1] = a[1] / b[1];
+    out[2] = a[2] / b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -183,11 +183,11 @@ export function divide(out, a, b)
  */
 export function ceil(out, a)
 {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
-  out[2] = Math.ceil(a[2]);
+    out[0] = Math.ceil(a[0]);
+    out[1] = Math.ceil(a[1]);
+    out[2] = Math.ceil(a[2]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -199,11 +199,11 @@ export function ceil(out, a)
  */
 export function floor(out, a)
 {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
-  out[2] = Math.floor(a[2]);
+    out[0] = Math.floor(a[0]);
+    out[1] = Math.floor(a[1]);
+    out[2] = Math.floor(a[2]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -216,11 +216,11 @@ export function floor(out, a)
  */
 export function min(out, a, b)
 {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
-  out[2] = Math.min(a[2], b[2]);
+    out[0] = Math.min(a[0], b[0]);
+    out[1] = Math.min(a[1], b[1]);
+    out[2] = Math.min(a[2], b[2]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -233,11 +233,11 @@ export function min(out, a, b)
  */
 export function max(out, a, b)
 {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
-  out[2] = Math.max(a[2], b[2]);
+    out[0] = Math.max(a[0], b[0]);
+    out[1] = Math.max(a[1], b[1]);
+    out[2] = Math.max(a[2], b[2]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -249,11 +249,11 @@ export function max(out, a, b)
  */
 export function round(out, a)
 {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
-  out[2] = Math.round(a[2]);
+    out[0] = Math.round(a[0]);
+    out[1] = Math.round(a[1]);
+    out[2] = Math.round(a[2]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -266,11 +266,11 @@ export function round(out, a)
  */
 export function scale(out, a, b)
 {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
+    out[0] = a[0] * b;
+    out[1] = a[1] * b;
+    out[2] = a[2] * b;
 
-  return out;
+    return out;
 }
 
 /**
@@ -284,11 +284,11 @@ export function scale(out, a, b)
  */
 export function scaleAndAdd(out, a, b, scale)
 {
-  out[0] = a[0] + (b[0] * scale);
-  out[1] = a[1] + (b[1] * scale);
-  out[2] = a[2] + (b[2] * scale);
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
+    out[2] = a[2] + (b[2] * scale);
 
-  return out;
+    return out;
 }
 
 /**
@@ -300,11 +300,11 @@ export function scaleAndAdd(out, a, b, scale)
  */
 export function distance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
-  const z = b[2] - a[2];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
+    const z = b[2] - a[2];
 
-  return Math.sqrt(x * x + y * y + z * z);
+    return Math.sqrt(x * x + y * y + z * z);
 }
 
 /**
@@ -316,11 +316,11 @@ export function distance(a, b)
  */
 export function squaredDistance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
-  const z = b[2] - a[2];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
+    const z = b[2] - a[2];
 
-  return x * x + y * y + z * z;
+    return x * x + y * y + z * z;
 }
 
 /**
@@ -331,11 +331,11 @@ export function squaredDistance(a, b)
  */
 export function squaredLength(a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
 
-  return x * x + y * y + z * z;
+    return x * x + y * y + z * z;
 }
 
 /**
@@ -347,11 +347,11 @@ export function squaredLength(a)
  */
 export function negate(out, a)
 {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  out[2] = -a[2];
+    out[0] = -a[0];
+    out[1] = -a[1];
+    out[2] = -a[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -363,11 +363,11 @@ export function negate(out, a)
  */
 export function inverse(out, a)
 {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
-  out[2] = 1.0 / a[2];
+    out[0] = 1.0 / a[0];
+    out[1] = 1.0 / a[1];
+    out[2] = 1.0 / a[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -379,20 +379,20 @@ export function inverse(out, a)
  */
 export function normalize(out, a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
-  let len = x * x + y * y + z * z;
-  if (len > 0)
-  {
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
+    let len = x * x + y * y + z * z;
+    if (len > 0)
+    {
     // TODO: evaluate use of glm_invsqrt here?
-    len = 1 / Math.sqrt(len);
-    out[0] = a[0] * len;
-    out[1] = a[1] * len;
-    out[2] = a[2] * len;
-  }
+        len = 1 / Math.sqrt(len);
+        out[0] = a[0] * len;
+        out[1] = a[1] * len;
+        out[2] = a[2] * len;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -404,7 +404,7 @@ export function normalize(out, a)
  */
 export function dot(a, b)
 {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
 /**
@@ -417,16 +417,16 @@ export function dot(a, b)
  */
 export function cross(out, a, b)
 {
-  const ax = a[0]; const ay = a[1]; const
-    az = a[2];
-  const bx = b[0]; const by = b[1]; const
-    bz = b[2];
+    const ax = a[0]; const ay = a[1]; const
+        az = a[2];
+    const bx = b[0]; const by = b[1]; const
+        bz = b[2];
 
-  out[0] = ay * bz - az * by;
-  out[1] = az * bx - ax * bz;
-  out[2] = ax * by - ay * bx;
+    out[0] = ay * bz - az * by;
+    out[1] = az * bx - ax * bz;
+    out[2] = ax * by - ay * bx;
 
-  return out;
+    return out;
 }
 
 /**
@@ -440,14 +440,14 @@ export function cross(out, a, b)
  */
 export function lerp(out, a, b, t)
 {
-  const ax = a[0];
-  const ay = a[1];
-  const az = a[2];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
-  out[2] = az + t * (b[2] - az);
+    const ax = a[0];
+    const ay = a[1];
+    const az = a[2];
+    out[0] = ax + t * (b[0] - ax);
+    out[1] = ay + t * (b[1] - ay);
+    out[2] = az + t * (b[2] - az);
 
-  return out;
+    return out;
 }
 
 /**
@@ -463,17 +463,17 @@ export function lerp(out, a, b, t)
  */
 export function hermite(out, a, b, c, d, t)
 {
-  const factorTimes2 = t * t;
-  const factor1 = factorTimes2 * (2 * t - 3) + 1;
-  const factor2 = factorTimes2 * (t - 2) + t;
-  const factor3 = factorTimes2 * (t - 1);
-  const factor4 = factorTimes2 * (3 - 2 * t);
+    const factorTimes2 = t * t;
+    const factor1 = factorTimes2 * (2 * t - 3) + 1;
+    const factor2 = factorTimes2 * (t - 2) + t;
+    const factor3 = factorTimes2 * (t - 1);
+    const factor4 = factorTimes2 * (3 - 2 * t);
 
-  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
-  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
-  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+    out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
+    out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
+    out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
 
-  return out;
+    return out;
 }
 
 /**
@@ -489,19 +489,19 @@ export function hermite(out, a, b, c, d, t)
  */
 export function bezier(out, a, b, c, d, t)
 {
-  const inverseFactor = 1 - t;
-  const inverseFactorTimesTwo = inverseFactor * inverseFactor;
-  const factorTimes2 = t * t;
-  const factor1 = inverseFactorTimesTwo * inverseFactor;
-  const factor2 = 3 * t * inverseFactorTimesTwo;
-  const factor3 = 3 * factorTimes2 * inverseFactor;
-  const factor4 = factorTimes2 * t;
+    const inverseFactor = 1 - t;
+    const inverseFactorTimesTwo = inverseFactor * inverseFactor;
+    const factorTimes2 = t * t;
+    const factor1 = inverseFactorTimesTwo * inverseFactor;
+    const factor2 = 3 * t * inverseFactorTimesTwo;
+    const factor3 = 3 * factorTimes2 * inverseFactor;
+    const factor4 = factorTimes2 * t;
 
-  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
-  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
-  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+    out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
+    out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
+    out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
 
-  return out;
+    return out;
 }
 
 /**
@@ -513,17 +513,17 @@ export function bezier(out, a, b, c, d, t)
  */
 export function random(out, scale)
 {
-  scale = scale || 1.0;
+    scale = scale || 1.0;
 
-  const r = glMatrix.RANDOM() * 2.0 * Math.PI;
-  const z = (glMatrix.RANDOM() * 2.0) - 1.0;
-  const zScale = Math.sqrt(1.0 - z * z) * scale;
+    const r = glMatrix.RANDOM() * 2.0 * Math.PI;
+    const z = (glMatrix.RANDOM() * 2.0) - 1.0;
+    const zScale = Math.sqrt(1.0 - z * z) * scale;
 
-  out[0] = Math.cos(r) * zScale;
-  out[1] = Math.sin(r) * zScale;
-  out[2] = z * scale;
+    out[0] = Math.cos(r) * zScale;
+    out[1] = Math.sin(r) * zScale;
+    out[2] = z * scale;
 
-  return out;
+    return out;
 }
 
 /**
@@ -537,15 +537,15 @@ export function random(out, scale)
  */
 export function transformMat4(out, a, m)
 {
-  const x = a[0]; const y = a[1]; const
-    z = a[2];
-  let w = m[3] * x + m[7] * y + m[11] * z + m[15];
-  w = w || 1.0;
-  out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
-  out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
-  out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
+    const x = a[0]; const y = a[1]; const
+        z = a[2];
+    let w = m[3] * x + m[7] * y + m[11] * z + m[15];
+    w = w || 1.0;
+    out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
+    out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
+    out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
 
-  return out;
+    return out;
 }
 
 /**
@@ -558,13 +558,13 @@ export function transformMat4(out, a, m)
  */
 export function transformMat3(out, a, m)
 {
-  const x = a[0]; const y = a[1]; const
-    z = a[2];
-  out[0] = x * m[0] + y * m[3] + z * m[6];
-  out[1] = x * m[1] + y * m[4] + z * m[7];
-  out[2] = x * m[2] + y * m[5] + z * m[8];
+    const x = a[0]; const y = a[1]; const
+        z = a[2];
+    out[0] = x * m[0] + y * m[3] + z * m[6];
+    out[1] = x * m[1] + y * m[4] + z * m[7];
+    out[2] = x * m[2] + y * m[5] + z * m[8];
 
-  return out;
+    return out;
 }
 
 /**
@@ -578,35 +578,35 @@ export function transformMat3(out, a, m)
  */
 export function transformQuat(out, a, q)
 {
-  // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
-  const qx = q[0]; const qy = q[1]; const qz = q[2]; const
-    qw = q[3];
-  const x = a[0]; const y = a[1]; const
-    z = a[2];
-  // var qvec = [qx, qy, qz];
-  // var uv = vec3.cross([], qvec, a);
-  let uvx = qy * z - qz * y;
-  let uvy = qz * x - qx * z;
-  let uvz = qx * y - qy * x;
-  // var uuv = vec3.cross([], qvec, uv);
-  let uuvx = qy * uvz - qz * uvy;
-  let uuvy = qz * uvx - qx * uvz;
-  let uuvz = qx * uvy - qy * uvx;
-  // vec3.scale(uv, uv, 2 * w);
-  const w2 = qw * 2;
-  uvx *= w2;
-  uvy *= w2;
-  uvz *= w2;
-  // vec3.scale(uuv, uuv, 2);
-  uuvx *= 2;
-  uuvy *= 2;
-  uuvz *= 2;
-  // return vec3.add(out, a, vec3.add(out, uv, uuv));
-  out[0] = x + uvx + uuvx;
-  out[1] = y + uvy + uuvy;
-  out[2] = z + uvz + uuvz;
+    // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
+    const qx = q[0]; const qy = q[1]; const qz = q[2]; const
+        qw = q[3];
+    const x = a[0]; const y = a[1]; const
+        z = a[2];
+    // var qvec = [qx, qy, qz];
+    // var uv = vec3.cross([], qvec, a);
+    let uvx = qy * z - qz * y;
+    let uvy = qz * x - qx * z;
+    let uvz = qx * y - qy * x;
+    // var uuv = vec3.cross([], qvec, uv);
+    let uuvx = qy * uvz - qz * uvy;
+    let uuvy = qz * uvx - qx * uvz;
+    let uuvz = qx * uvy - qy * uvx;
+    // vec3.scale(uv, uv, 2 * w);
+    const w2 = qw * 2;
+    uvx *= w2;
+    uvy *= w2;
+    uvz *= w2;
+    // vec3.scale(uuv, uuv, 2);
+    uuvx *= 2;
+    uuvy *= 2;
+    uuvz *= 2;
+    // return vec3.add(out, a, vec3.add(out, uv, uuv));
+    out[0] = x + uvx + uuvx;
+    out[1] = y + uvy + uuvy;
+    out[2] = z + uvz + uuvz;
 
-  return out;
+    return out;
 }
 
 /**
@@ -619,24 +619,24 @@ export function transformQuat(out, a, q)
  */
 export function rotateX(out, a, b, c)
 {
-  const p = []; const
-    r = [];
-  // Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
+    const p = []; const
+        r = [];
+    // Translate point to the origin
+    p[0] = a[0] - b[0];
+    p[1] = a[1] - b[1];
+    p[2] = a[2] - b[2];
 
-  // perform rotation
-  r[0] = p[0];
-  r[1] = p[1] * Math.cos(c) - p[2] * Math.sin(c);
-  r[2] = p[1] * Math.sin(c) + p[2] * Math.cos(c);
+    // perform rotation
+    r[0] = p[0];
+    r[1] = p[1] * Math.cos(c) - p[2] * Math.sin(c);
+    r[2] = p[1] * Math.sin(c) + p[2] * Math.cos(c);
 
-  // translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
+    // translate to correct position
+    out[0] = r[0] + b[0];
+    out[1] = r[1] + b[1];
+    out[2] = r[2] + b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -649,24 +649,24 @@ export function rotateX(out, a, b, c)
  */
 export function rotateY(out, a, b, c)
 {
-  const p = []; const
-    r = [];
-  // Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
+    const p = []; const
+        r = [];
+    // Translate point to the origin
+    p[0] = a[0] - b[0];
+    p[1] = a[1] - b[1];
+    p[2] = a[2] - b[2];
 
-  // perform rotation
-  r[0] = p[2] * Math.sin(c) + p[0] * Math.cos(c);
-  r[1] = p[1];
-  r[2] = p[2] * Math.cos(c) - p[0] * Math.sin(c);
+    // perform rotation
+    r[0] = p[2] * Math.sin(c) + p[0] * Math.cos(c);
+    r[1] = p[1];
+    r[2] = p[2] * Math.cos(c) - p[0] * Math.sin(c);
 
-  // translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
+    // translate to correct position
+    out[0] = r[0] + b[0];
+    out[1] = r[1] + b[1];
+    out[2] = r[2] + b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -679,24 +679,24 @@ export function rotateY(out, a, b, c)
  */
 export function rotateZ(out, a, b, c)
 {
-  const p = []; const
-    r = [];
-  // Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
+    const p = []; const
+        r = [];
+    // Translate point to the origin
+    p[0] = a[0] - b[0];
+    p[1] = a[1] - b[1];
+    p[2] = a[2] - b[2];
 
-  // perform rotation
-  r[0] = p[0] * Math.cos(c) - p[1] * Math.sin(c);
-  r[1] = p[0] * Math.sin(c) + p[1] * Math.cos(c);
-  r[2] = p[2];
+    // perform rotation
+    r[0] = p[0] * Math.cos(c) - p[1] * Math.sin(c);
+    r[1] = p[0] * Math.sin(c) + p[1] * Math.cos(c);
+    r[2] = p[2];
 
-  // translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
+    // translate to correct position
+    out[0] = r[0] + b[0];
+    out[1] = r[1] + b[1];
+    out[2] = r[2] + b[2];
 
-  return out;
+    return out;
 }
 
 /**
@@ -707,24 +707,24 @@ export function rotateZ(out, a, b, c)
  */
 export function angle(a, b)
 {
-  const tempA = fromValues(a[0], a[1], a[2]);
-  const tempB = fromValues(b[0], b[1], b[2]);
+    const tempA = fromValues(a[0], a[1], a[2]);
+    const tempB = fromValues(b[0], b[1], b[2]);
 
-  normalize(tempA, tempA);
-  normalize(tempB, tempB);
+    normalize(tempA, tempA);
+    normalize(tempB, tempB);
 
-  const cosine = dot(tempA, tempB);
+    const cosine = dot(tempA, tempB);
 
-  if (cosine > 1.0)
-  {
-    return 0;
-  }
-  else if (cosine < -1.0)
-  {
-    return Math.PI;
-  }
+    if (cosine > 1.0)
+    {
+        return 0;
+    }
+    else if (cosine < -1.0)
+    {
+        return Math.PI;
+    }
 
-  return Math.acos(cosine);
+    return Math.acos(cosine);
 }
 
 /**
@@ -735,7 +735,7 @@ export function angle(a, b)
  */
 export function str(a)
 {
-  return `vec3(${a[0]}, ${a[1]}, ${a[2]})`;
+    return `vec3(${a[0]}, ${a[1]}, ${a[2]})`;
 }
 
 /**
@@ -747,7 +747,7 @@ export function str(a)
  */
 export function exactEquals(a, b)
 {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 }
 
 /**
@@ -759,12 +759,12 @@ export function exactEquals(a, b)
  */
 export function equals(a, b)
 {
-  const a0 = a[0]; const a1 = a[1]; const
-    a2 = a[2];
-  const b0 = b[0]; const b1 = b[1]; const
-    b2 = b[2];
+    const a0 = a[0]; const a1 = a[1]; const
+        a2 = a[2];
+    const b0 = b[0]; const b1 = b[1]; const
+        b2 = b[2];
 
-  return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
+    return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
     && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1))
     && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)));
 }
@@ -825,38 +825,38 @@ export const sqrLen = squaredLength;
  */
 export const forEach = (function ()
 {
-  const vec = create();
+    const vec = create();
 
-  return function (a, stride, offset, count, fn, arg)
-  {
-    let i; let
-      l;
-    if (!stride)
+    return function (a, stride, offset, count, fn, arg)
     {
-      stride = 3;
-    }
+        let i; let
+            l;
+        if (!stride)
+        {
+            stride = 3;
+        }
 
-    if (!offset)
-    {
-      offset = 0;
-    }
+        if (!offset)
+        {
+            offset = 0;
+        }
 
-    if (count)
-    {
-      l = Math.min((count * stride) + offset, a.length);
-    }
-    else
-    {
-      l = a.length;
-    }
+        if (count)
+        {
+            l = Math.min((count * stride) + offset, a.length);
+        }
+        else
+        {
+            l = a.length;
+        }
 
-    for (i = offset; i < l; i += stride)
-    {
-      vec[0] = a[i]; vec[1] = a[i + 1]; vec[2] = a[i + 2];
-      fn(vec, vec, arg);
-      a[i] = vec[0]; a[i + 1] = vec[1]; a[i + 2] = vec[2];
-    }
+        for (i = offset; i < l; i += stride)
+        {
+            vec[0] = a[i]; vec[1] = a[i + 1]; vec[2] = a[i + 2];
+            fn(vec, vec, arg);
+            a[i] = vec[0]; a[i + 1] = vec[1]; a[i + 2] = vec[2];
+        }
 
-    return a;
-  };
+        return a;
+    };
 })();

@@ -1,11 +1,11 @@
-import { effect, reactive } from "@feng3d/reactivity";
-import { CanvasContext, RenderObject, Submit } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { GUI } from "dat.gui";
-import { mat4 } from "gl-matrix";
+import { effect, reactive } from '@feng3d/reactivity';
+import { CanvasContext, RenderObject, Submit } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { GUI } from 'dat.gui';
+import { mat4 } from 'gl-matrix';
 
-import sky_frag from "./sky_frag.glsl";
-import sky_vert from "./sky_vert.glsl";
+import sky_frag from './sky_frag.glsl';
+import sky_vert from './sky_vert.glsl';
 
 const parameters: {
     readonly elevation: number,
@@ -28,11 +28,11 @@ main();
 //
 async function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
     const gui: GUI = new GUI();
 
-    const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 
     const webgl = new WebGL(renderingContext);
 
@@ -43,21 +43,21 @@ async function main()
     const renderObject: RenderObject = {
         pipeline: {
             vertex: {
-                code: sky_vert
+                code: sky_vert,
             }, fragment: {
-                code: sky_frag
+                code: sky_frag,
             },
-            primitive: { topology: "triangle-list" },
-            depthStencil: { depthCompare: "less-equal" }
+            primitive: { topology: 'triangle-list' },
+            depthStencil: { depthCompare: 'less-equal' },
         },
         vertices: {
             position: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.position,
             },
         },
         indices: buffers.indices,
-        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
         bindingResources: {
             modelMatrix: [10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1],
             modelViewMatrix: [-3853.8425, -4464.3149, 8075.7534, 0, 0.0000, 8751.7734, 4838.0225, 0, -9227.5615, 1864.4976, -3372.7957, 0, -0.0000, -0.4583, -2.5568, 1],
@@ -72,11 +72,11 @@ async function main()
         },
     };
 
-    const folderSky = gui.addFolder("Sky");
-    folderSky.add(r_parameters, "elevation", 0, 90, 0.1);
-    folderSky.add(r_parameters, "azimuth", -180, 180, 0.1);
-    folderSky.add(r_parameters, "cameraRotationX", -180, 180, 0.1);
-    folderSky.add(r_parameters, "cameraRotationY", -180, 180, 0.1);
+    const folderSky = gui.addFolder('Sky');
+    folderSky.add(r_parameters, 'elevation', 0, 90, 0.1);
+    folderSky.add(r_parameters, 'azimuth', -180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationX', -180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationY', -180, 180, 0.1);
     folderSky.open();
 
     effect(() =>
@@ -131,13 +131,13 @@ async function main()
                 // 绘制
                 {
                     descriptor: {
-                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
-                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
+                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: 'clear' }],
+                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: 'clear' },
                     },
                     renderPassObjects: [renderObject],
                 },
-            ]
-        }]
+            ],
+        }],
     };
 
     // Draw the scene repeatedly

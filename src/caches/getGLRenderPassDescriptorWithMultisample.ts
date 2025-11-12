@@ -1,7 +1,7 @@
-import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from "@feng3d/render-api";
-import { BlitFramebuffer } from "../data/BlitFramebuffer";
-import { RenderbufferInternalformat, Renderbuffer } from "../data/Renderbuffer";
-import { getGLTextureFormats } from "./getGLTextureFormats";
+import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from '@feng3d/render-api';
+import { BlitFramebuffer } from '../data/BlitFramebuffer';
+import { RenderbufferInternalformat, Renderbuffer } from '../data/Renderbuffer';
+import { getGLTextureFormats } from './getGLTextureFormats';
 
 /**
  *
@@ -47,12 +47,12 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
 
     // 拷贝 渲染缓冲区到 IGLTexture
     const blitFramebuffer: BlitFramebuffer = {
-        __type__: "BlitFramebuffer",
+        __type__: 'BlitFramebuffer',
         read: passDescriptor,
         draw: sourcePassDescriptor,
         blitFramebuffers: [[0, 0, textureSize[0], textureSize[1],
             0, 0, textureSize[0], textureSize[1],
-            "COLOR_BUFFER_BIT", "NEAREST"]],
+            'COLOR_BUFFER_BIT', 'NEAREST']],
     };
 
     sourcePassDescriptor[_IGLRenderPassDescriptorWithMultisample] = { passDescriptor, blitFramebuffer, renderbuffers } as GLRenderPassDescriptorWithMultisample;
@@ -67,7 +67,7 @@ function getGLRenderbufferInternalformat(format?: TextureFormat)
     return internalformat as RenderbufferInternalformat;
 }
 
-export const _IGLRenderPassDescriptorWithMultisample = "_IGLRenderPassDescriptorWithMultisample";
+export const _IGLRenderPassDescriptorWithMultisample = '_IGLRenderPassDescriptorWithMultisample';
 
 /**
  * 由`passDescriptor.multisample`值存在的IGLRenderPassDescriptor生成。

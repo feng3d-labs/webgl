@@ -1,5 +1,5 @@
-import { TransformFeedbackPass } from "../data/TransformFeedbackPass";
-import { runTransformFeedbackObject } from "./runTransformFeedbackObject";
+import { TransformFeedbackPass } from '../data/TransformFeedbackPass';
+import { runTransformFeedbackObject } from './runTransformFeedbackObject';
 
 export function runTransformFeedbackPass(gl: WebGLRenderingContext, transformFeedbackPass: TransformFeedbackPass)
 {

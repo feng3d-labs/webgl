@@ -12,6 +12,6 @@ pkg = pkg
     //
     .replace(`"import": "./dist/index.js"`, `"import": "./src/index.ts"`)
     .replace(`"require": "./dist/index.umd.cjs"`, `"require": "./src/index.ts"`)
-    ;
+;
 
 fs.writeFileSync(pkgpath, pkg, 'utf8');

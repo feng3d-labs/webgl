@@ -1,4 +1,4 @@
-declare module "*.module.css" {
+declare module '*.module.css' {
   const styles: { [className: string]: string };
   export default styles;
 }
@@ -9,7 +9,7 @@ declare module "*.module.css" {
  * @kind module
  * @description Generic shaders
  */
-declare module "*.glsl" {
+declare module '*.glsl' {
   const shader: string;
   export default shader;
 }
@@ -20,7 +20,7 @@ declare module "*.glsl" {
  * @kind module
  * @description WebGPU shaders
  */
-declare module "*.wgsl" {
+declare module '*.wgsl' {
   const shader: string;
   export default shader;
 }
@@ -31,7 +31,7 @@ declare module "*.wgsl" {
  * @kind module
  * @description Vertex shaders
  */
-declare module "*.vert" {
+declare module '*.vert' {
   const shader: string;
   export default shader;
 }
@@ -42,7 +42,7 @@ declare module "*.vert" {
  * @kind module
  * @description Fragment shaders
  */
-declare module "*.frag" {
+declare module '*.frag' {
   const shader: string;
   export default shader;
 }
@@ -53,7 +53,7 @@ declare module "*.frag" {
  * @kind module
  * @description Vertex shaders
  */
-declare module "*.vs" {
+declare module '*.vs' {
   const shader: string;
   export default shader;
 }
@@ -64,7 +64,7 @@ declare module "*.vs" {
  * @kind module
  * @description Fragment shaders
  */
-declare module "*.fs" {
+declare module '*.fs' {
   const shader: string;
   export default shader;
 }

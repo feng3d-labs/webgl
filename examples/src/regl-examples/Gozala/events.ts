@@ -40,7 +40,7 @@ EventEmitter.defaultMaxListeners = 10;
 EventEmitter.prototype.setMaxListeners = function (n)
 {
     if (!isNumber(n) || n < 0 || isNaN(n))
-    { throw TypeError("n must be a positive number"); }
+    { throw TypeError('n must be a positive number'); }
     this._maxListeners = n;
 
     return this;
@@ -55,7 +55,7 @@ EventEmitter.prototype.emit = function (type)
     { this._events = {}; }
 
     // If there is no 'error' event listener then throw.
-    if (type === "error")
+    if (type === 'error')
     {
         if (!this._events.error
             || (isObject(this._events.error) && !this._events.error.length))
@@ -70,7 +70,7 @@ EventEmitter.prototype.emit = function (type)
             {
                 // At least give some kind of context to the user
                 const err = new Error(`Uncaught, unspecified "error" event. (${er})`);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
                 // @ts-ignore
                 err.context = er;
                 throw err;
@@ -124,7 +124,7 @@ EventEmitter.prototype.addListener = function (type, listener)
     let m;
 
     if (!isFunction(listener))
-    { throw TypeError("listener must be a function"); }
+    { throw TypeError('listener must be a function'); }
 
     if (!this._events)
     { this._events = {}; }
@@ -133,7 +133,7 @@ EventEmitter.prototype.addListener = function (type, listener)
     // adding it to the listeners, first emit "newListener".
     if (this._events.newListener)
     {
-        this.emit("newListener", type,
+        this.emit('newListener', type,
             isFunction(listener.listener)
                 ? listener.listener : listener);
     }
@@ -163,11 +163,11 @@ EventEmitter.prototype.addListener = function (type, listener)
         if (m && m > 0 && this._events[type].length > m)
         {
             this._events[type].warned = true;
-            console.error("(node) warning: possible EventEmitter memory "
-                + "leak detected. %d listeners added. "
-                + "Use emitter.setMaxListeners() to increase limit.",
-                this._events[type].length);
-            if (typeof console.trace === "function")
+            console.error('(node) warning: possible EventEmitter memory '
+                + 'leak detected. %d listeners added. '
+                + 'Use emitter.setMaxListeners() to increase limit.',
+            this._events[type].length);
+            if (typeof console.trace === 'function')
             {
                 // not supported in IE 10
                 console.trace();
@@ -183,7 +183,7 @@ EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 EventEmitter.prototype.once = function (type, listener)
 {
     if (!isFunction(listener))
-    { throw TypeError("listener must be a function"); }
+    { throw TypeError('listener must be a function'); }
 
     let fired = false;
 
@@ -212,7 +212,7 @@ EventEmitter.prototype.removeListener = function (type, listener)
     let i;
 
     if (!isFunction(listener))
-    { throw TypeError("listener must be a function"); }
+    { throw TypeError('listener must be a function'); }
 
     if (!this._events || !this._events[type])
     { return this; }
@@ -226,7 +226,7 @@ EventEmitter.prototype.removeListener = function (type, listener)
     {
         delete this._events[type];
         if (this._events.removeListener)
-        { this.emit("removeListener", type, listener); }
+        { this.emit('removeListener', type, listener); }
     }
     else if (isObject(list))
     {
@@ -254,7 +254,7 @@ EventEmitter.prototype.removeListener = function (type, listener)
         }
 
         if (this._events.removeListener)
-        { this.emit("removeListener", type, listener); }
+        { this.emit('removeListener', type, listener); }
     }
 
     return this;
@@ -285,10 +285,10 @@ EventEmitter.prototype.removeAllListeners = function (type)
     {
         for (key in this._events)
         {
-            if (key === "removeListener") continue;
+            if (key === 'removeListener') continue;
             this.removeAllListeners(key);
         }
-        this.removeAllListeners("removeListener");
+        this.removeAllListeners('removeListener');
         this._events = {};
 
         return this;
@@ -346,22 +346,22 @@ EventEmitter.listenerCount = function (emitter, type)
 
 function isFunction(arg)
 {
-    return typeof arg === "function";
+    return typeof arg === 'function';
 }
 
 function isNumber(arg)
 {
-    return typeof arg === "number";
+    return typeof arg === 'number';
 }
 
 function isObject(arg)
 {
-    return typeof arg === "object" && arg !== null;
+    return typeof arg === 'object' && arg !== null;
 }
 
 function isUndefined(arg)
 {
-    // eslint-disable-next-line no-void
+
     return arg === void 0;
 }
 

@@ -1,6 +1,6 @@
-import { BindingResources, DrawVertex, VertexAttributes, VertexData, VertexState } from "@feng3d/render-api";
+import { BindingResources, DrawVertex, VertexAttributes, VertexData, VertexState } from '@feng3d/render-api';
 
-declare module "@feng3d/render-api"
+declare module '@feng3d/render-api'
 {
     export interface PassEncoderMap
     {
@@ -13,7 +13,7 @@ export interface TransformFeedbackPass
     /**
      * 数据类型。
      */
-    readonly __type__: "TransformFeedbackPass";
+    readonly __type__: 'TransformFeedbackPass';
 
     /**
      * 变换反馈对象列表。
@@ -78,7 +78,7 @@ export interface TransformFeedbackVaryings
     /**
      * 交叉或者分离。
      */
-    bufferMode: "INTERLEAVED_ATTRIBS" | "SEPARATE_ATTRIBS";
+    bufferMode: 'INTERLEAVED_ATTRIBS' | 'SEPARATE_ATTRIBS';
 }
 
 /**

@@ -1,7 +1,7 @@
-import { reactive } from "@feng3d/reactivity";
-import { CanvasContext, RenderObject, Sampler, Submit, Texture } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4 } from "gl-matrix";
+import { reactive } from '@feng3d/reactivity';
+import { CanvasContext, RenderObject, Sampler, Submit, Texture } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4 } from 'gl-matrix';
 
 let cubeRotation = 0.0;
 
@@ -12,9 +12,9 @@ main();
 //
 async function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
-    const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 
     const webgl = new WebGL(renderingContext);
 
@@ -60,21 +60,21 @@ async function main()
           gl_FragColor = color;
         }
       ` },
-            primitive: { topology: "triangle-list" },
-            depthStencil: { depthCompare: "less-equal" }
+            primitive: { topology: 'triangle-list' },
+            depthStencil: { depthCompare: 'less-equal' },
         },
         vertices: {
             aVertexPosition: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.position,
             },
             aTextureCoord: {
-                format: "float32x2",
+                format: 'float32x2',
                 data: buffers.textureCoord,
             },
         },
         indices: buffers.indices,
-        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
         bindingResources: { uSampler: texture },
     };
 
@@ -84,20 +84,20 @@ async function main()
                 // 绘制
                 {
                     descriptor: {
-                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
-                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
+                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: 'clear' }],
+                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: 'clear' },
                     },
                     renderPassObjects: [renderObject],
                 },
                 // 从画布中拷贝到纹理。
                 {
-                    __type__: "CopyTextureToTexture",
+                    __type__: 'CopyTextureToTexture',
                     source: { texture: null }, // 当值设置为 null或者undefined时表示当前画布。
                     destination: { texture: texture.texture },
                     copySize: [canvas.width, canvas.height],
                 },
-            ]
-        }]
+            ],
+        }],
     };
 
     let then = 0;

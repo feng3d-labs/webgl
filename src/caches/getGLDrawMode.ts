@@ -1,4 +1,4 @@
-import { PrimitiveTopology } from "@feng3d/render-api";
+import { PrimitiveTopology } from '@feng3d/render-api';
 
 export function getGLDrawMode(topology: PrimitiveTopology): GLDrawMode
 {
@@ -12,13 +12,13 @@ export function getGLDrawMode(topology: PrimitiveTopology): GLDrawMode
 }
 
 const drawModeMap: { [key: string]: GLDrawMode } = {
-    "point-list": "POINTS",
-    "line-list": "LINES",
-    "line-strip": "LINE_STRIP",
-    "triangle-list": "TRIANGLES",
-    "triangle-strip": "TRIANGLE_STRIP",
-    LINE_LOOP: "LINE_LOOP",
-    TRIANGLE_FAN: "TRIANGLE_FAN",
+    'point-list': 'POINTS',
+    'line-list': 'LINES',
+    'line-strip': 'LINE_STRIP',
+    'triangle-list': 'TRIANGLES',
+    'triangle-strip': 'TRIANGLE_STRIP',
+    LINE_LOOP: 'LINE_LOOP',
+    TRIANGLE_FAN: 'TRIANGLE_FAN',
 };
 
 /**
@@ -44,4 +44,4 @@ const drawModeMap: { [key: string]: GLDrawMode } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type GLDrawMode = "POINTS" | "LINE_STRIP" | "LINE_LOOP" | "LINES" | "TRIANGLE_STRIP" | "TRIANGLE_FAN" | "TRIANGLES";
+export type GLDrawMode = 'POINTS' | 'LINE_STRIP' | 'LINE_LOOP' | 'LINES' | 'TRIANGLE_STRIP' | 'TRIANGLE_FAN' | 'TRIANGLES';

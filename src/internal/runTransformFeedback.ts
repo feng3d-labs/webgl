@@ -1,6 +1,6 @@
-import { TransformFeedback } from "../data/TransformFeedbackPass";
-import { getGLTransformFeedback } from "../caches/getGLTransformFeedback";
-import { GLDrawMode } from "../caches/getGLDrawMode";
+import { TransformFeedback } from '../data/TransformFeedbackPass';
+import { getGLTransformFeedback } from '../caches/getGLTransformFeedback';
+import { GLDrawMode } from '../caches/getGLDrawMode';
 
 export function runTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback, topology: GLDrawMode)
 {

@@ -1,8 +1,8 @@
-import { createOrbitCamera as createCamera } from "../mikolalysenko/orbit-camera";
-import { pressed as key } from "./key-pressed";
-import { attach as mp } from "./mouse-position";
-import { pressed as mb } from "./mouse-pressed";
-import { getScroller as createScroll } from "./scroll-speed";
+import { createOrbitCamera as createCamera } from '../mikolalysenko/orbit-camera';
+import { pressed as key } from './key-pressed';
+import { attach as mp } from './mouse-position';
+import { pressed as mb } from './mouse-pressed';
+import { getScroller as createScroll } from './scroll-speed';
 
 const panSpeed = 1;
 
@@ -19,7 +19,7 @@ export function attachCamera(canvas, opts?)
     const camera = createCamera(
         [0, 10, 30]
         , [0, 0, 0]
-        , [0, 1, 0]
+        , [0, 1, 0],
     );
 
     camera.tick = tick;
@@ -28,8 +28,8 @@ export function attachCamera(canvas, opts?)
 
     function tick()
     {
-        const ctrl = key("<control>") || key("<alt>");
-        const alt = key("<shift>");
+        const ctrl = key('<control>') || key('<alt>');
+        const alt = key('<shift>');
         const height = canvas.height;
         const width = canvas.width;
 
@@ -37,7 +37,7 @@ export function attachCamera(canvas, opts?)
         {
             camera.rotate(
                 [mpos[0] / width - 0.5, mpos[1] / height - 0.5]
-                , [mpos.prev[0] / width - 0.5, mpos.prev[1] / height - 0.5]
+                , [mpos.prev[0] / width - 0.5, mpos.prev[1] / height - 0.5],
             );
         }
 
@@ -45,7 +45,7 @@ export function attachCamera(canvas, opts?)
         {
             camera.pan([
                 panSpeed * (mpos[0] - mpos.prev[0]) / width,
-                panSpeed * (mpos[1] - mpos.prev[1]) / height
+                panSpeed * (mpos[1] - mpos.prev[1]) / height,
             ]);
         }
 

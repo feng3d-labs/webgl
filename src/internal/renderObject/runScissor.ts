@@ -1,4 +1,4 @@
-import { ScissorRect } from "@feng3d/render-api";
+import { ScissorRect } from '@feng3d/render-api';
 
 export function runScissor(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, scissor: ScissorRect)
 {

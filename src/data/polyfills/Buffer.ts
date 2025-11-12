@@ -1,6 +1,6 @@
-import { } from "@feng3d/render-api";
+import { } from '@feng3d/render-api';
 
-declare module "@feng3d/render-api"
+declare module '@feng3d/render-api'
 {
     /**
      * WebGL缓冲区
@@ -37,7 +37,7 @@ declare module "@feng3d/render-api"
  *
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/drawElements
  */
-export type DrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT";
+export type DrawElementType = 'UNSIGNED_BYTE' | 'UNSIGNED_SHORT' | 'UNSIGNED_INT';
 
 /**
  * WebGL缓冲区使用模式。
@@ -59,8 +59,8 @@ export type DrawElementType = "UNSIGNED_BYTE" | "UNSIGNED_SHORT" | "UNSIGNED_INT
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData
  */
-export type BufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebGL1
-    | "STATIC_READ" | "DYNAMIC_READ" | "STREAM_READ" | "STATIC_COPY" | "DYNAMIC_COPY" | "STREAM_COPY" // WebGL2
+export type BufferUsage = 'STATIC_DRAW' | 'DYNAMIC_DRAW' | 'STREAM_DRAW' // WebGL1
+    | 'STATIC_READ' | 'DYNAMIC_READ' | 'STREAM_READ' | 'STATIC_COPY' | 'DYNAMIC_COPY' | 'STREAM_COPY' // WebGL2
     ;
 
 /**
@@ -80,6 +80,6 @@ export type BufferUsage = "STATIC_DRAW" | "DYNAMIC_DRAW" | "STREAM_DRAW" // WebG
  * * gl.PIXEL_UNPACK_BUFFER: Buffer used for pixel transfer operations.
  *
  */
-export type BufferTarget = "ARRAY_BUFFER" | "ELEMENT_ARRAY_BUFFER" // WebGL1
-    | "COPY_READ_BUFFER" | "COPY_WRITE_BUFFER" | "TRANSFORM_FEEDBACK_BUFFER"// WebGL2
-    | "UNIFORM_BUFFER" | "PIXEL_PACK_BUFFER" | "PIXEL_UNPACK_BUFFER"; // WebGL2
+export type BufferTarget = 'ARRAY_BUFFER' | 'ELEMENT_ARRAY_BUFFER' // WebGL1
+    | 'COPY_READ_BUFFER' | 'COPY_WRITE_BUFFER' | 'TRANSFORM_FEEDBACK_BUFFER'// WebGL2
+    | 'UNIFORM_BUFFER' | 'PIXEL_PACK_BUFFER' | 'PIXEL_UNPACK_BUFFER'; // WebGL2

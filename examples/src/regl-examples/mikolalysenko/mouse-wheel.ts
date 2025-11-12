@@ -1,17 +1,17 @@
 // @see https://github.com/mikolalysenko/mouse-wheel.git
 
-import { toPX } from "./to-px";
+import { toPX } from './to-px';
 
 export function mouseWheelListen(element, callback?, noScroll?)
 {
-    if (typeof element === "function")
+    if (typeof element === 'function')
     {
         noScroll = !!callback;
         callback = element;
         element = window;
     }
 
-    const lineHeight = toPX("ex");
+    const lineHeight = toPX('ex');
     const listener = (ev) =>
     {
         if (noScroll)
@@ -40,7 +40,7 @@ export function mouseWheelListen(element, callback?, noScroll?)
             return callback(dx, dy, dz, ev);
         }
     };
-    element.addEventListener("wheel", listener);
+    element.addEventListener('wheel', listener);
 
     return listener;
 }

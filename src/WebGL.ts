@@ -1,17 +1,17 @@
-import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from '@feng3d/render-api';
 
-import { deleteBuffer } from "./caches/getGLBuffer";
-import { getGLCanvasContext } from "./caches/getGLCanvasContext";
-import { deleteFramebuffer } from "./caches/getGLFramebuffer";
-import { deleteProgram } from "./caches/getGLProgram";
-import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
-import { deleteSampler } from "./caches/getGLSampler";
-import { deleteTexture } from "./caches/getGLTexture";
-import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { Renderbuffer } from "./data/Renderbuffer";
-import { TransformFeedback } from "./data/TransformFeedbackPass";
-import { readPixels } from "./utils/readPixels";
-import { runSubmit } from "./internal/runSubmit";
+import { deleteBuffer } from './caches/getGLBuffer';
+import { getGLCanvasContext } from './caches/getGLCanvasContext';
+import { deleteFramebuffer } from './caches/getGLFramebuffer';
+import { deleteProgram } from './caches/getGLProgram';
+import { deleteRenderbuffer } from './caches/getGLRenderbuffer';
+import { deleteSampler } from './caches/getGLSampler';
+import { deleteTexture } from './caches/getGLTexture';
+import { deleteTransformFeedback } from './caches/getGLTransformFeedback';
+import { Renderbuffer } from './data/Renderbuffer';
+import { TransformFeedback } from './data/TransformFeedbackPass';
+import { readPixels } from './utils/readPixels';
+import { runSubmit } from './internal/runSubmit';
 
 /**
  * WEBGL 对象。

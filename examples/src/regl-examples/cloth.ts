@@ -1,24 +1,24 @@
-import { RenderObject, Submit } from "@feng3d/render-api";
-import { getIGLBuffer, SamplerTexture, WebGL } from "@feng3d/webgl";
+import { RenderObject, Submit } from '@feng3d/render-api';
+import { getIGLBuffer, SamplerTexture, WebGL } from '@feng3d/webgl';
 
-import { fit } from "./hughsk/canvas-fit";
-import { attachCamera } from "./hughsk/canvas-orbit-camera";
-import * as mat4 from "./stackgl/gl-mat4";
-import * as vec3 from "./stackgl/gl-vec3";
-import { reactive } from "@feng3d/reactivity";
+import { fit } from './hughsk/canvas-fit';
+import { attachCamera } from './hughsk/canvas-orbit-camera';
+import * as mat4 from './stackgl/gl-mat4';
+import * as vec3 from './stackgl/gl-vec3';
+import { reactive } from '@feng3d/reactivity';
 
 (async () =>
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
-    const webgl = new WebGL({ canvasId: "glcanvas" });
+    const webgl = new WebGL({ canvasId: 'glcanvas' });
 
     const camera = attachCamera(canvas);
-    window.addEventListener("resize", fit(canvas), false);
+    window.addEventListener('resize', fit(canvas), false);
 
     // configure intial camera view.
     camera.view(mat4.lookAt([], [0, 3.0, 30.0], [0, 0, -5.5], [0, 1, 0]));
@@ -167,12 +167,12 @@ import { reactive } from "@feng3d/reactivity";
 
     const renderObject: RenderObject = {
         vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            normal: { data: new Float32Array(normals), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+            position: { data: new Float32Array(positions), format: 'float32x3' },
+            normal: { data: new Float32Array(normals), format: 'float32x3' },
+            uv: { data: new Float32Array(uvs), format: 'float32x2' },
         },
         indices: new Uint16Array(indices),
-        draw: { __type__: "DrawIndexed", indexCount: indices.length },
+        draw: { __type__: 'DrawIndexed', indexCount: indices.length },
         bindingResources: {},
         pipeline: {
             vertex: {
@@ -219,17 +219,17 @@ import { reactive } from "@feng3d/reactivity";
                 targets: [{ blend: {} }],
             },
             depthStencil: {},
-        }
+        },
     };
 
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    renderPassObjects: [renderObject]
-                }
-            ]
-        }]
+                    renderPassObjects: [renderObject],
+                },
+            ],
+        }],
     };
 
     function draw()
@@ -384,7 +384,7 @@ import { reactive } from "@feng3d/reactivity";
     }
 
     const img = new Image();
-    img.src = "../../assets/cloth.png";
+    img.src = '../../assets/cloth.png';
     await img.decode();
 
     const diffuse: SamplerTexture = {
@@ -393,8 +393,8 @@ import { reactive } from "@feng3d/reactivity";
                 size: [img.width, img.height],
                 generateMipmap: true,
             },
-            sources: [{ image: img }]
-        }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
+            sources: [{ image: img }],
+        }, sampler: { minFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' },
     };
     reactive(renderObject.bindingResources).texture = diffuse;
 

@@ -1,4 +1,4 @@
-import { GLTextureWrap } from "../caches/getGLSampler";
+import { GLTextureWrap } from '../caches/getGLSampler';
 
 /**
  * The pname parameter is a GLenum specifying the texture parameter to set.
@@ -35,12 +35,12 @@ export interface TexParameteri_WebGL2
     /**
      * Texture Comparison function
      */
-    TEXTURE_COMPARE_FUNC: "LEQUAL" | "GEQUAL" | "LESS" | "GREATER" | "EQUAL" | "NOTEQUAL" | "ALWAYS" | "NEVER";
+    TEXTURE_COMPARE_FUNC: 'LEQUAL' | 'GEQUAL' | 'LESS' | 'GREATER' | 'EQUAL' | 'NOTEQUAL' | 'ALWAYS' | 'NEVER';
 
     /**
      * Texture comparison mode
      */
-    TEXTURE_COMPARE_MODE: "NONE" | "COMPARE_REF_TO_TEXTURE";
+    TEXTURE_COMPARE_MODE: 'NONE' | 'COMPARE_REF_TO_TEXTURE';
 
     /**
      * 	Maximum texture mipmap array level. Any int values.
@@ -66,13 +66,13 @@ export interface TexParameteri_WebGL2
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
-export type TexImage2DTarget = "TEXTURE_2D"
-    | "TEXTURE_CUBE_MAP_POSITIVE_X"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
+export type TexImage2DTarget = 'TEXTURE_2D'
+    | 'TEXTURE_CUBE_MAP_POSITIVE_X'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_X'
+    | 'TEXTURE_CUBE_MAP_POSITIVE_Y'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_Y'
+    | 'TEXTURE_CUBE_MAP_POSITIVE_Z'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_Z';
 
 /**
  * A GLenum specifying the binding point (target). Possible values:
@@ -81,7 +81,7 @@ export type TexImage2DTarget = "TEXTURE_2D"
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  */
-export type Renderbuffertarget = "RENDERBUFFER";
+export type Renderbuffertarget = 'RENDERBUFFER';
 
 /**
  * A GLenum specifying the information to query. Possible values:
@@ -139,7 +139,7 @@ export interface PixelStoreiParameter_WebGL1
     /**
      * Default color space conversion or no color space conversion. default gl.BROWSER_DEFAULT_WEBGL.
      */
-    UNPACK_COLORSPACE_CONVERSION_WEBGL: "BROWSER_DEFAULT_WEBGL" | "NONE";
+    UNPACK_COLORSPACE_CONVERSION_WEBGL: 'BROWSER_DEFAULT_WEBGL' | 'NONE';
 }
 
 /**
@@ -209,4 +209,4 @@ export interface ProgramParameter
 /**
  * A precision type value. Either gl.LOW_FLOAT, gl.MEDIUM_FLOAT, gl.HIGH_FLOAT, gl.LOW_INT, gl.MEDIUM_INT, or gl.HIGH_INT.
  */
-export type PrecisionType = "LOW_FLOAT" | "MEDIUM_FLOAT" | "HIGH_FLOAT" | "LOW_INT" | "MEDIUM_INT" | "HIGH_INT";
+export type PrecisionType = 'LOW_FLOAT' | 'MEDIUM_FLOAT' | 'HIGH_FLOAT' | 'LOW_INT' | 'MEDIUM_INT' | 'HIGH_INT';

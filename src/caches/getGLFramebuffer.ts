@@ -1,9 +1,9 @@
-import { RenderPassDescriptor, TextureView } from "@feng3d/render-api";
-import { Renderbuffer } from "../data/Renderbuffer";
-import { deleteRenderbuffer, getGLRenderbuffer } from "./getGLRenderbuffer";
-import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from "./getGLRenderPassDescriptorWithMultisample";
-import { getGLTexture } from "./getGLTexture";
-import { getGLTextureTarget } from "./getGLTextureTarget";
+import { RenderPassDescriptor, TextureView } from '@feng3d/render-api';
+import { Renderbuffer } from '../data/Renderbuffer';
+import { deleteRenderbuffer, getGLRenderbuffer } from './getGLRenderbuffer';
+import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from './getGLRenderPassDescriptorWithMultisample';
+import { getGLTexture } from './getGLTexture';
+import { getGLTextureTarget } from './getGLTextureTarget';
 
 /**
  * 获取帧缓冲区
@@ -29,7 +29,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const view = item.view as (TextureView | Renderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
         drawBuffers.push(attachment);
-        if ("texture" in view)
+        if ('texture' in view)
         {
             const texture = view.texture;
             const baseMipLevel = view.baseMipLevel || 0;
@@ -38,11 +38,11 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             const webGLTexture = getGLTexture(gl, texture);
             const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
 
-            if (textureTarget === "TEXTURE_2D")
+            if (textureTarget === 'TEXTURE_2D')
             {
                 gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment, gl[textureTarget], webGLTexture, baseMipLevel);
             }
-            else if (textureTarget === "TEXTURE_2D_ARRAY")
+            else if (textureTarget === 'TEXTURE_2D_ARRAY')
             {
                 if (gl instanceof WebGL2RenderingContext)
                 {
@@ -82,11 +82,11 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const webGLTexture = getGLTexture(gl, texture);
         const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
 
-        if (textureTarget === "TEXTURE_2D")
+        if (textureTarget === 'TEXTURE_2D')
         {
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
         }
-        else if (textureTarget === "TEXTURE_2D_ARRAY")
+        else if (textureTarget === 'TEXTURE_2D_ARRAY')
         {
             if (gl instanceof WebGL2RenderingContext)
             {

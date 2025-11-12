@@ -1,6 +1,6 @@
-import { Submit } from "@feng3d/render-api";
-import { _GL_Submit_Times } from "../const/const";
-import { runCommandEncoder } from "./runCommandEncoder";
+import { Submit } from '@feng3d/render-api';
+import { _GL_Submit_Times } from '../const/const';
+import { runCommandEncoder } from './runCommandEncoder';
 
 export function runSubmit(gl: WebGLRenderingContext, submit: Submit)
 {

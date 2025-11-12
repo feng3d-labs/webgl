@@ -1,7 +1,7 @@
-import { reactive, UnReadonly } from "@feng3d/reactivity";
-import { BufferBinding, BufferBindingInfo } from "@feng3d/render-api";
-import { watcher } from "@feng3d/watcher";
-import { getIGLBuffer } from "../runs/getIGLBuffer";
+import { reactive, UnReadonly } from '@feng3d/reactivity';
+import { BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
+import { watcher } from '@feng3d/watcher';
+import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 /**
  *
@@ -60,7 +60,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
                 {
                     if (!hasDefautValue)
                     {
-                        console.warn(`没有找到 统一块变量属性 ${paths.join(".")} 的值！`);
+                        console.warn(`没有找到 统一块变量属性 ${paths.join('.')} 的值！`);
                     }
 
                     return;
@@ -68,7 +68,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             }
 
             let data: Int16Array | Int32Array | Uint32Array | Float32Array;
-            if (typeof value === "number")
+            if (typeof value === 'number')
             {
                 data = new Cls([value]);
             }
@@ -87,6 +87,6 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
         };
 
         update();
-        watcher.watchchain(uniformData, paths.join("."), update, undefined, false);
+        watcher.watchchain(uniformData, paths.join('.'), update, undefined, false);
     });
 }

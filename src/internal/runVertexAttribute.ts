@@ -1,6 +1,6 @@
-import { VertexAttribute, vertexFormatMap } from "@feng3d/render-api";
-import { getGLBuffer } from "../caches/getGLBuffer";
-import { getIGLBuffer } from "../runs/getIGLBuffer";
+import { VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
+import { getGLBuffer } from '../caches/getGLBuffer';
+import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
 {
@@ -12,7 +12,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
 
     gl.enableVertexAttribArray(location);
 
-    if (stepMode === "instance")
+    if (stepMode === 'instance')
     {
         if (gl instanceof WebGL2RenderingContext)
         {
@@ -20,7 +20,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
         }
         else
         {
-            const extension = gl.getExtension("ANGLE_instanced_arrays");
+            const extension = gl.getExtension('ANGLE_instanced_arrays');
             extension.vertexAttribDivisorANGLE(location, 1);
         }
     }
@@ -30,14 +30,14 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     offset = offset || 0;
 
     //
-    const buffer = getIGLBuffer(attribute.data, "ARRAY_BUFFER", "STATIC_DRAW");
-    buffer.target ??= "ARRAY_BUFFER";
+    const buffer = getIGLBuffer(attribute.data, 'ARRAY_BUFFER', 'STATIC_DRAW');
+    buffer.target ??= 'ARRAY_BUFFER';
 
     const webGLBuffer = getGLBuffer(gl, buffer);
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
     //
-    if (gl instanceof WebGL2RenderingContext && (type === "INT" || type === "UNSIGNED_INT"))
+    if (gl instanceof WebGL2RenderingContext && (type === 'INT' || type === 'UNSIGNED_INT'))
     {
         gl.vertexAttribIPointer(location, numComponents, gl[type], arrayStride, offset);
     }

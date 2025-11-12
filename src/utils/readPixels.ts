@@ -1,6 +1,6 @@
-import { ReadPixels, RenderPassDescriptor, Texture } from "@feng3d/render-api";
-import { deleteFramebuffer, getGLFramebuffer } from "../caches/getGLFramebuffer";
-import { getGLTextureFormats } from "../caches/getGLTextureFormats";
+import { ReadPixels, RenderPassDescriptor, Texture } from '@feng3d/render-api';
+import { deleteFramebuffer, getGLFramebuffer } from '../caches/getGLFramebuffer';
+import { getGLTextureFormats } from '../caches/getGLTextureFormats';
 
 export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 {
@@ -9,7 +9,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
     if (gl instanceof WebGL2RenderingContext)
     {
         const { textureView, origin, copySize } = readPixels;
-        const attachmentPoint: GLAttachmentPoint = "COLOR_ATTACHMENT0";
+        const attachmentPoint: GLAttachmentPoint = 'COLOR_ATTACHMENT0';
         const [width, height] = copySize;
         //
         const descriptor = textureView.texture.descriptor;
@@ -24,7 +24,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
         const frameBuffer: RenderPassDescriptor = {
             colorAttachments: [
                 { view: textureView },
-            ]
+            ],
         };
         //
         const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
@@ -57,9 +57,9 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
  * gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
  * gl.COLOR_ATTACHMENT1 gl.COLOR_ATTACHMENT2 gl.COLOR_ATTACHMENT3 gl.COLOR_ATTACHMENT4 gl.COLOR_ATTACHMENT5 gl.COLOR_ATTACHMENT6 gl.COLOR_ATTACHMENT7 gl.COLOR_ATTACHMENT8 gl.COLOR_ATTACHMENT9 gl.COLOR_ATTACHMENT10 gl.COLOR_ATTACHMENT11 gl.COLOR_ATTACHMENT12 gl.COLOR_ATTACHMENT13 gl.COLOR_ATTACHMENT14 gl.COLOR_ATTACHMENT15
  */
-export type GLAttachmentPoint = "COLOR_ATTACHMENT0" | "DEPTH_ATTACHMENT" | "STENCIL_ATTACHMENT"
-    | "DEPTH_STENCIL_ATTACHMENT"
-    | "COLOR_ATTACHMENT1" | "COLOR_ATTACHMENT2" | "COLOR_ATTACHMENT3" | "COLOR_ATTACHMENT4" | "COLOR_ATTACHMENT5"
-    | "COLOR_ATTACHMENT6" | "COLOR_ATTACHMENT7" | "COLOR_ATTACHMENT8" | "COLOR_ATTACHMENT9" | "COLOR_ATTACHMENT10"
-    | "COLOR_ATTACHMENT11" | "COLOR_ATTACHMENT12" | "COLOR_ATTACHMENT13" | "COLOR_ATTACHMENT14" | "COLOR_ATTACHMENT15"
+export type GLAttachmentPoint = 'COLOR_ATTACHMENT0' | 'DEPTH_ATTACHMENT' | 'STENCIL_ATTACHMENT'
+    | 'DEPTH_STENCIL_ATTACHMENT'
+    | 'COLOR_ATTACHMENT1' | 'COLOR_ATTACHMENT2' | 'COLOR_ATTACHMENT3' | 'COLOR_ATTACHMENT4' | 'COLOR_ATTACHMENT5'
+    | 'COLOR_ATTACHMENT6' | 'COLOR_ATTACHMENT7' | 'COLOR_ATTACHMENT8' | 'COLOR_ATTACHMENT9' | 'COLOR_ATTACHMENT10'
+    | 'COLOR_ATTACHMENT11' | 'COLOR_ATTACHMENT12' | 'COLOR_ATTACHMENT13' | 'COLOR_ATTACHMENT14' | 'COLOR_ATTACHMENT15'
     ;

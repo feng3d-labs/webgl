@@ -1,19 +1,19 @@
-import { CanvasContext, IndicesDataTypes, VertexData, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
+import { CanvasContext, IndicesDataTypes, VertexData, RenderPipeline, Submit, VertexAttributes } from '@feng3d/render-api';
+import { TransformFeedback, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
 
-import { getShaderSource } from "./utility";
+import { getShaderSource } from './utility';
 
 (function ()
 {
     // -- Init Canvas
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init Program
@@ -21,14 +21,14 @@ import { getShaderSource } from "./utility";
     {
         const transformFeedbackPipeline: TransformFeedbackPipeline = {
             vertex: { code: vertexShaderSourceTransform },
-            transformFeedbackVaryings: { varyings: ["gl_Position", "v_color"], bufferMode: "SEPARATE_ATTRIBS" },
+            transformFeedbackVaryings: { varyings: ['gl_Position', 'v_color'], bufferMode: 'SEPARATE_ATTRIBS' },
         };
 
         return transformFeedbackPipeline;
-    })(getShaderSource("vs-transform"), getShaderSource("fs-transform"));
+    })(getShaderSource('vs-transform'), getShaderSource('fs-transform'));
 
     const programFeedback: RenderPipeline = {
-        vertex: { code: getShaderSource("vs-feedback") }, fragment: { code: getShaderSource("fs-feedback") },
+        vertex: { code: getShaderSource('vs-feedback') }, fragment: { code: getShaderSource('fs-feedback') },
     };
 
     const PROGRAM_TRANSFORM = 0;
@@ -44,14 +44,14 @@ import { getShaderSource } from "./utility";
         1.0, 1.0, 0.0, 1.0,
         1.0, 1.0, 0.0, 1.0,
         -1.0, 1.0, 0.0, 1.0,
-        -1.0, -1.0, 0.0, 1.0
+        -1.0, -1.0, 0.0, 1.0,
     ]);
 
     const BufferType = {
         VERTEX: 0,
         POSITION: 1,
         COLOR: 2,
-        MAX: 3
+        MAX: 3,
     };
 
     const buffers: VertexData[] = [
@@ -66,14 +66,14 @@ import { getShaderSource } from "./utility";
     const vertexArrays: { vertices?: VertexAttributes, indices?: IndicesDataTypes }[] = [
         {
             vertices: {
-                position: { data: buffers[BufferType.VERTEX], format: "float32x4" },
-            }
+                position: { data: buffers[BufferType.VERTEX], format: 'float32x4' },
+            },
         },
         {
             vertices: {
-                position: { data: buffers[BufferType.POSITION], format: "float32x4" },
-                color: { data: buffers[BufferType.COLOR], format: "float32x4" },
-            }
+                position: { data: buffers[BufferType.POSITION], format: 'float32x4' },
+                color: { data: buffers[BufferType.COLOR], format: 'float32x4' },
+            },
         },
     ];
 
@@ -82,7 +82,7 @@ import { getShaderSource } from "./utility";
         bindBuffers: [
             { index: 0, data: buffers[BufferType.POSITION] },
             { index: 1, data: buffers[BufferType.COLOR] },
-        ]
+        ],
     };
 
     // First draw, capture the attributes
@@ -92,38 +92,38 @@ import { getShaderSource } from "./utility";
         0.5, 0.0, 0.0, 0.0,
         0.0, 0.5, 0.0, 0.0,
         0.0, 0.0, 0.5, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        0.0, 0.0, 0.0, 1.0,
     ]);
 
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type__: "TransformFeedbackPass",
+                    __type__: 'TransformFeedbackPass',
                     transformFeedbackObjects: [
                         {
                             pipeline: programTransform,
                             vertices: vertexArrays[PROGRAM_TRANSFORM].vertices,
                             uniforms: { MVP: matrix },
                             transformFeedback,
-                            draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
-                        }
-                    ]
+                            draw: { __type__: 'DrawVertex', vertexCount: VERTEX_COUNT },
+                        },
+                    ],
                 },
                 {
-                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
                     renderPassObjects: [
                         // Second draw, reuse captured attributes
                         {
                             pipeline: programs[PROGRAM_FEEDBACK],
                             vertices: vertexArrays[PROGRAM_FEEDBACK].vertices,
                             indices: vertexArrays[PROGRAM_FEEDBACK].indices,
-                            draw: { __type__: "DrawVertex", vertexCount: VERTEX_COUNT },
-                        }
+                            draw: { __type__: 'DrawVertex', vertexCount: VERTEX_COUNT },
+                        },
                     ],
-                }
-            ]
-        }]
+                },
+            ],
+        }],
     };
 
     webgl.submit(submit);

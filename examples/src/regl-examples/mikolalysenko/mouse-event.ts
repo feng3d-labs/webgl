@@ -2,13 +2,13 @@
 
 function mouseButtons(ev)
 {
-    if (typeof ev === "object")
+    if (typeof ev === 'object')
     {
-        if ("buttons" in ev)
+        if ('buttons' in ev)
         {
             return ev.buttons;
         }
-        else if ("which" in ev)
+        else if ('which' in ev)
         {
             const b = ev.which;
             if (b === 2)
@@ -24,7 +24,7 @@ function mouseButtons(ev)
                 return 1 << (b - 1);
             }
         }
-        else if ("button" in ev)
+        else if ('button' in ev)
         {
             const b = ev.button;
             if (b === 1)
@@ -54,9 +54,9 @@ export const element = mouseElement;
 
 function mouseRelativeX(ev)
 {
-    if (typeof ev === "object")
+    if (typeof ev === 'object')
     {
-        if ("offsetX" in ev)
+        if ('offsetX' in ev)
         {
             return ev.offsetX;
         }
@@ -72,9 +72,9 @@ export const x = mouseRelativeX;
 
 function mouseRelativeY(ev)
 {
-    if (typeof ev === "object")
+    if (typeof ev === 'object')
     {
-        if ("offsetY" in ev)
+        if ('offsetY' in ev)
         {
             return ev.offsetY;
         }

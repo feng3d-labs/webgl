@@ -1,24 +1,24 @@
-import { CanvasContext, CopyBufferToBuffer, Buffer, RenderPass, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { WebGL, getIGLBuffer } from "@feng3d/webgl";
-import { getShaderSource } from "./utility";
+import { CanvasContext, CopyBufferToBuffer, Buffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
+import { WebGL, getIGLBuffer } from '@feng3d/webgl';
+import { getShaderSource } from './utility';
 
 (function ()
 {
     // -- Init Canvas
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
     const webgl = new WebGL(rc);
 
     // -- Init Program
     const program: RenderPipeline = {
-        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
-        primitive: { topology: "triangle-list" },
+        vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') },
+        primitive: { topology: 'triangle-list' },
     };
 
     // -- Init Buffer
@@ -28,34 +28,34 @@ import { getShaderSource } from "./utility";
         1.0, 1.0,
         1.0, 1.0,
         -1.0, 1.0,
-        -1.0, -1.0
+        -1.0, -1.0,
     ]);
-    const vertexPosBufferSrc: Buffer = { target: "ARRAY_BUFFER", size: vertices.byteLength, data: vertices, usage: "STATIC_DRAW" };
+    const vertexPosBufferSrc: Buffer = { target: 'ARRAY_BUFFER', size: vertices.byteLength, data: vertices, usage: 'STATIC_DRAW' };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
     const cb: CopyBufferToBuffer = {
-        __type__: "CopyBufferToBuffer",
+        __type__: 'CopyBufferToBuffer',
         source: vertexPosBufferSrc,
-        destination: getIGLBuffer(vertexPosBufferDst, "ARRAY_BUFFER"),
-        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT
+        destination: getIGLBuffer(vertexPosBufferDst, 'ARRAY_BUFFER'),
+        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT,
     };
 
     // -- Init Vertex Array
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            pos: { data: vertexPosBufferDst, format: "float32x2" },
-        }
+            pos: { data: vertexPosBufferDst, format: 'float32x2' },
+        },
     };
 
     // -- Render
     const rp: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [{
             pipeline: program,
             vertices: vertexArray.vertices,
-            draw: { __type__: "DrawVertex", vertexCount: 6 },
-        }]
+            draw: { __type__: 'DrawVertex', vertexCount: 6 },
+        }],
     };
 
     webgl.submit({ commandEncoders: [{ passEncoders: [cb, rp] }] });

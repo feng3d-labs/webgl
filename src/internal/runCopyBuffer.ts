@@ -1,5 +1,5 @@
-import { CopyBufferToBuffer } from "@feng3d/render-api";
-import { getGLBuffer } from "../caches/getGLBuffer";
+import { CopyBufferToBuffer } from '@feng3d/render-api';
+import { getGLBuffer } from '../caches/getGLBuffer';
 
 export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferToBuffer)
 {

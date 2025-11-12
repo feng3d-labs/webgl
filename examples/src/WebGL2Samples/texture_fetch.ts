@@ -1,21 +1,21 @@
-import { CanvasContext, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { getShaderSource, loadImage } from "./utility";
+import { getShaderSource, loadImage } from './utility';
 
 (function ()
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
     const webgl = new WebGL(rc);
 
     // -- Init program
-    const program: RenderPipeline = { vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") } };
+    const program: RenderPipeline = { vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') } };
 
     // -- Init buffers: vec2 Position, vec2 Texcoord
     const positions = new Float32Array([
@@ -24,7 +24,7 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 1.0,
         1.0, 1.0,
         -1.0, 1.0,
-        -1.0, -1.0
+        -1.0, -1.0,
     ]);
 
     const texCoords = new Float32Array([
@@ -33,32 +33,32 @@ import { getShaderSource, loadImage } from "./utility";
         1.0, 0.0,
         1.0, 0.0,
         0.0, 0.0,
-        0.0, 1.0
+        0.0, 1.0,
     ]);
 
     // -- Init VertexArray
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            position: { data: positions, format: "float32x2" },
-            texcoord: { data: texCoords, format: "float32x2" },
-        }
+            position: { data: positions, format: 'float32x2' },
+            texcoord: { data: texCoords, format: 'float32x2' },
+        },
     };
 
-    loadImage("../../assets/img/Di-3d.png", function (image)
+    loadImage('../../assets/img/Di-3d.png', function (image)
     {
         // -- Init Texture
         const texture: Texture = {
             descriptor: {
                 size: [image.width, image.height],
-                format: "rgba8unorm",
+                format: 'rgba8unorm',
             },
             sources: [{
                 mipLevel: 0, image, flipY: false,
             }],
         };
         const sampler: Sampler = {
-            minFilter: "nearest",
-            magFilter: "nearest",
+            minFilter: 'nearest',
+            magFilter: 'nearest',
         };
 
         // -- Render
@@ -67,11 +67,11 @@ import { getShaderSource, loadImage } from "./utility";
             0.5, 0.0, 0.0, 0.0,
             0.0, 0.5, 0.0, 0.0,
             0.0, 0.0, 0.5, 0.0,
-            0.0, 0.0, 0.0, 1.0
+            0.0, 0.0, 0.0, 1.0,
         ]);
 
         const rp: RenderPass = {
-            descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+            descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
             renderPassObjects: [
                 {
                     pipeline: program,
@@ -80,8 +80,8 @@ import { getShaderSource, loadImage } from "./utility";
                         diffuse: { texture, sampler },
                     },
                     vertices: vertexArray.vertices,
-                    draw: { __type__: "DrawVertex", vertexCount: 6 },
-                }
+                    draw: { __type__: 'DrawVertex', vertexCount: 6 },
+                },
             ],
         };
 

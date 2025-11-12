@@ -1,26 +1,26 @@
-import { reactive } from "@feng3d/reactivity";
-import { RenderObject, RenderPipeline, Submit, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { reactive } from '@feng3d/reactivity';
+import { RenderObject, RenderPipeline, Submit, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas" });
+const webgl = new WebGL({ canvasId: 'glcanvas' });
 
 let batchId = 0;
 let tick = 0;
 const offsets = [{ offset: [-1, -1] },
-{ offset: [-1, 0] },
-{ offset: [-1, 1] },
-{ offset: [0, -1] },
-{ offset: [0, 0] },
-{ offset: [0, 1] },
-{ offset: [1, -1] },
-{ offset: [1, 0] },
-{ offset: [1, 1] }];
+    { offset: [-1, 0] },
+    { offset: [-1, 1] },
+    { offset: [0, -1] },
+    { offset: [0, 0] },
+    { offset: [0, 1] },
+    { offset: [1, -1] },
+    { offset: [1, 0] },
+    { offset: [1, 1] }];
 
 const pipeline: RenderPipeline = {
     vertex: {
@@ -48,18 +48,18 @@ const vertexArray: { vertices?: VertexAttributes } = {
             data: new Float32Array([
                 0.5, 0,
                 0, 0.5,
-                1, 1
+                1, 1,
             ]),
-            format: "float32x2",
+            format: 'float32x2',
         },
-    }
+    },
 };
 
 function getRenderObject(batchId: number)
 {
     const renderObject: RenderObject = {
         vertices: vertexArray.vertices,
-        draw: { __type__: "DrawVertex", vertexCount: 3 },
+        draw: { __type__: 'DrawVertex', vertexCount: 3 },
         bindingResources: {
             offset: offsets[batchId].offset,
         },
@@ -80,10 +80,10 @@ const submit: Submit = {
         passEncoders: [
             {
                 descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
-                renderPassObjects: renderObjects
-            }
-        ]
-    }]
+                renderPassObjects: renderObjects,
+            },
+        ],
+    }],
 };
 
 function draw()

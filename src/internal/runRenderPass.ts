@@ -1,10 +1,10 @@
-import { RenderPass, RenderPassDescriptor, TextureView } from "@feng3d/render-api";
-import { getGLRenderOcclusionQuery } from "../caches/getGLRenderOcclusionQuery";
-import { getGLRenderPassDescriptorWithMultisample } from "../caches/getGLRenderPassDescriptorWithMultisample";
-import { runRenderObject } from "./renderObject/runRenderObject";
-import { runBlitFramebuffer } from "./runBlitFramebuffer";
-import { runOcclusionQuery } from "./runOcclusionQuery";
-import { runRenderPassDescriptor } from "./runRenderPassDescriptor";
+import { RenderPass, RenderPassDescriptor, TextureView } from '@feng3d/render-api';
+import { getGLRenderOcclusionQuery } from '../caches/getGLRenderOcclusionQuery';
+import { getGLRenderPassDescriptorWithMultisample } from '../caches/getGLRenderPassDescriptorWithMultisample';
+import { runRenderObject } from './renderObject/runRenderObject';
+import { runBlitFramebuffer } from './runBlitFramebuffer';
+import { runOcclusionQuery } from './runOcclusionQuery';
+import { runRenderPassDescriptor } from './runRenderPassDescriptor';
 
 export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 {
@@ -24,7 +24,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 
         renderPass.renderPassObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type__ === "OcclusionQuery")
+            if (renderObject.__type__ === 'OcclusionQuery')
             {
                 runOcclusionQuery(gl, attachmentSize, renderObject);
             }
@@ -42,7 +42,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
 
         renderPass.renderPassObjects?.forEach((renderObject) =>
         {
-            if (renderObject.__type__ === "OcclusionQuery")
+            if (renderObject.__type__ === 'OcclusionQuery')
             {
                 runOcclusionQuery(gl, attachmentSize, renderObject);
             }

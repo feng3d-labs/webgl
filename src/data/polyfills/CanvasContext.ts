@@ -1,6 +1,6 @@
-import { CanvasContext } from "@feng3d/render-api";
+import { CanvasContext } from '@feng3d/render-api';
 
-declare module "@feng3d/render-api"
+declare module '@feng3d/render-api'
 {
     /**
      *
@@ -11,7 +11,7 @@ declare module "@feng3d/render-api"
         /**
          * WebGL上下文类型
          */
-        webGLcontextId?: "webgl" | "webgl2";
+        webGLcontextId?: 'webgl' | 'webgl2';
 
         /**
          * WebGL上下文属性。
@@ -29,6 +29,6 @@ export const defaultWebGLContextAttributes: WebGLContextAttributes = {
     antialias: false,
     premultipliedAlpha: true,
     preserveDrawingBuffer: false,
-    powerPreference: "default",
+    powerPreference: 'default',
     failIfMajorPerformanceCaveat: false,
 };
