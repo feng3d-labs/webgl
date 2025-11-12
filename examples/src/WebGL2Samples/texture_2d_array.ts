@@ -1,7 +1,7 @@
+import { reactive } from "@feng3d/reactivity";
 import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
-import { reactive } from "@feng3d/reactivity";
 
 (function ()
 {
@@ -66,9 +66,11 @@ import { reactive } from "@feng3d/reactivity";
 
         // -- Init Texture
         texture = {
-            size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
-            dimension: "2d-array",
-            format: "rgba8unorm",
+            descriptor: {
+                size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES],
+                dimension: "2d-array",
+                format: "rgba8unorm",
+            },
             sources: [{ __type__: "TextureDataSource", size: [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES], data: pixels }],
         };
         sampler = {

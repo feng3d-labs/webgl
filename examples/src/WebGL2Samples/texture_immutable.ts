@@ -84,9 +84,11 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init 2D Texture
         const texture2D: Texture = {
-            format: "rgba8unorm",
-            mipLevelCount: 1,
-            size: [512, 512],
+            descriptor: {
+                format: "rgba8unorm",
+                mipLevelCount: 1,
+                size: [512, 512],
+            },
             sources: [{
                 image, flipY: false,
             }],
@@ -167,11 +169,13 @@ import { getShaderSource, loadImage } from "./utility";
         }
 
         const texture3D: Texture = {
-            dimension: "3d",
-            format: "r8uint",
-            generateMipmap: true,
-            mipLevelCount: Math.log2(SIZE),
-            size: [SIZE, SIZE, SIZE],
+            descriptor: {
+                dimension: "3d",
+                format: "r8uint",
+                generateMipmap: true,
+                mipLevelCount: Math.log2(SIZE),
+                size: [SIZE, SIZE, SIZE],
+            },
             sources: [{ __type__: "TextureDataSource", size: [SIZE, SIZE, SIZE], data }],
         };
         const sampler3D: Sampler = {

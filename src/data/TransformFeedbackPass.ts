@@ -1,4 +1,4 @@
-import { BindingResources, DrawVertex, VertexAttributes, VertexDataTypes, VertexState } from "@feng3d/render-api";
+import { BindingResources, DrawVertex, VertexAttributes, VertexData, VertexState } from "@feng3d/render-api";
 
 declare module "@feng3d/render-api"
 {
@@ -96,5 +96,5 @@ export interface TransformFeedbacBindBuffer
 {
     index: number;
 
-    data: VertexDataTypes;
+    data: VertexData;
 }

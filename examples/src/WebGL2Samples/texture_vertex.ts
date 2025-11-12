@@ -1,4 +1,4 @@
-import { CanvasContext, GLVertexAttributeTypes, IndicesDataTypes, PrimitiveTopology, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
+import { CanvasContext, GLVertexAttributeTypes, IndicesDataTypes, PrimitiveTopology, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData, VertexFormat, vertexFormatMap } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { mat4, vec3 } from "gl-matrix";
@@ -50,7 +50,7 @@ import { getShaderSource, loadImage } from "./utility";
     // var in loop
     let mesh;
     let primitive: Primitive;
-    let vertexBuffer: VertexDataTypes;
+    let vertexBuffer: VertexData;
     let indicesBuffer: IndicesDataTypes;
 
     let texture: Texture;
@@ -104,9 +104,11 @@ import { getShaderSource, loadImage } from "./utility";
         {
             // -- Init 2D Texture
             texture = {
-                format: "rgba8unorm",
-                mipLevelCount: 1,
-                size: [256, 256],
+                descriptor: {
+                    format: "rgba8unorm",
+                    mipLevelCount: 1,
+                    size: [256, 256],
+                },
                 sources: [{ image, flipY: false }],
             };
             sampler = {

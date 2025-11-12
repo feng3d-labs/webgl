@@ -71,8 +71,10 @@ const FRAMEBUFFER_SIZE = {
     y: canvas.height
 };
 const texture: Texture = {
-    format: "rgba8unorm",
-    size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
+    descriptor: {
+        format: "rgba8unorm",
+        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]
+    },
 };
 const sampler: Sampler = { minFilter: "nearest", magFilter: "nearest" };
 

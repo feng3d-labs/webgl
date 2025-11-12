@@ -1,4 +1,4 @@
-import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexData } from "@feng3d/render-api";
 import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { reactive } from "@feng3d/reactivity";
 
@@ -64,7 +64,7 @@ import { getShaderSource } from "./utility";
     // Transform feedback objects track output buffer state
     const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexData[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {

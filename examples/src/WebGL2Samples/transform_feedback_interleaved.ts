@@ -1,4 +1,4 @@
-import { CanvasContext, IndicesDataTypes, RenderPipeline, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderPipeline, VertexAttributes, VertexData } from "@feng3d/render-api";
 import { getIGLBuffer, TransformFeedback, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
 import { getShaderSource } from "./utility";
 
@@ -45,7 +45,7 @@ import { getShaderSource } from "./utility";
         -1.0, -1.0, 0.0, 1.0
     ]);
 
-    const buffers: VertexDataTypes[] = [
+    const buffers: VertexData[] = [
         // Transform buffer
         vertices,
         // Feedback empty buffer

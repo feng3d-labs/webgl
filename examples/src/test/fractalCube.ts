@@ -25,7 +25,7 @@ async function main()
     const texture: {
         texture: Texture;
         sampler: Sampler;
-    } = { texture: { size: [canvas.width, canvas.height] }, sampler: {} };
+    } = { texture: { descriptor: { size: [canvas.width, canvas.height] } }, sampler: {} };
 
     const renderObject: RenderObject = {
         pipeline: {

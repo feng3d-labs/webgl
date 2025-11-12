@@ -1,4 +1,4 @@
-import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
+import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData } from "@feng3d/render-api";
 import { getIGLBuffer, WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
 
@@ -27,7 +27,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, 1.0,
         -1.0, -1.0
     ]);
-    const vertexPosBuffer: VertexDataTypes = positions;
+    const vertexPosBuffer: VertexData = positions;
 
     const texCoords = new Float32Array([
         0.0, 1.0,
@@ -37,7 +37,7 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0
     ]);
-    const vertexTexBuffer: VertexDataTypes = texCoords;
+    const vertexTexBuffer: VertexData = texCoords;
 
     // -- Init VertexArray
     const vertexArray: { vertices?: VertexAttributes, indices?: IndicesDataTypes } = {
@@ -60,8 +60,10 @@ import { getShaderSource, loadImage } from "./utility";
 
         // -- Init Texture
         const texture: Texture = {
-            size: [image.width / 2, image.height / 2],
-            format: "rgba8unorm",
+            descriptor: {
+                size: [image.width / 2, image.height / 2],
+                format: "rgba8unorm",
+            },
             sources: [{
                 __type__: "TextureDataSource",
                 mipLevel: 0,

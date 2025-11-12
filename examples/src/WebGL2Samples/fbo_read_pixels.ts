@@ -102,9 +102,11 @@ const w = 16;
 const h = 16;
 
 const texture: Texture = {
-    dimension: "2d-array",
-    size: [w, h, 3],
-    format: "rgba8unorm",
+    descriptor: {
+        dimension: "2d-array",
+        size: [w, h, 3],
+        format: "rgba8unorm",
+    },
 };
 const sampler: Sampler = { lodMinClamp: 0, lodMaxClamp: 0, minFilter: "nearest", magFilter: "nearest" };
 

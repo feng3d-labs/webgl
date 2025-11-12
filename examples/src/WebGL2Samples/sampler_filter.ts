@@ -124,10 +124,12 @@ let texture: Texture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        size: [image.width, image.height],
-        format: "rgba8unorm",
+        descriptor: {
+            size: [image.width, image.height],
+            format: "rgba8unorm",
+            generateMipmap: true,
+        },
         sources: [{ image, mipLevel: 0 }],
-        generateMipmap: true,
     };
 
     render();

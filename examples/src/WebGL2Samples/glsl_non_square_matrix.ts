@@ -48,8 +48,10 @@ loadImage("../../assets/img/Di-3d.png", function (image)
 {
     // -- Init Texture
     const texture: Texture = {
-        size: [image.width, image.height],
-        format: "rgba8unorm",
+        descriptor: {
+            size: [image.width, image.height],
+            format: "rgba8unorm",
+        },
         sources: [{
             image, flipY: false,
         }]

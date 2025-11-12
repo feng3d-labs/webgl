@@ -1,7 +1,7 @@
+import { reactive } from "@feng3d/reactivity";
 import { RenderObject, Submit } from "@feng3d/render-api";
 import { SamplerTexture, WebGL } from "@feng3d/webgl";
 import * as mat4 from "./stackgl/gl-mat4";
-import { reactive } from "@feng3d/reactivity";
 
 (async () =>
 {
@@ -137,7 +137,9 @@ import { reactive } from "@feng3d/reactivity";
 
     const diffuse: SamplerTexture = {
         texture: {
-            size: [img.width, img.height],
+            descriptor: {
+                size: [img.width, img.height],
+            },
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear" }
     };

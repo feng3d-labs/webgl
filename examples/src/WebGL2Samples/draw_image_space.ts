@@ -14,9 +14,11 @@ const webgl = new WebGL(renderingContext);
 loadImage("../../assets/img/Di-3d.png", (img) =>
 {
     const texture: Texture = {
-        size: [img.width, img.height],
+        descriptor: {
+            size: [img.width, img.height],
+            format: "rgba8unorm",
+        },
         sources: [{ image: img, flipY: false }],
-        format: "rgba8unorm",
     };
     const sampler: Sampler = {
         minFilter: "linear",

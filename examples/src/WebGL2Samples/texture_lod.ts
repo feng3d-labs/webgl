@@ -1,4 +1,4 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
 import { getShaderSource, loadImage } from "./utility";
@@ -125,9 +125,11 @@ import { getShaderSource, loadImage } from "./utility";
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
-            size: [image.width, image.height],
-            format: "rgba8unorm",
-            generateMipmap: true,
+            descriptor: {
+                size: [image.width, image.height],
+                format: "rgba8unorm",
+                generateMipmap: true,
+            },
             sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.TOP_LEFT] = {
@@ -137,9 +139,11 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.TOP_RIGHT] = {
-            size: [image.width, image.height],
-            format: "rgba8unorm",
-            generateMipmap: true,
+            descriptor: {
+                size: [image.width, image.height],
+                format: "rgba8unorm",
+                generateMipmap: true,
+            },
             sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.TOP_RIGHT] = {
@@ -151,9 +155,11 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_LEFT] = {
-            size: [image.width, image.height],
-            format: "rgba8unorm",
-            generateMipmap: true,
+            descriptor: {
+                size: [image.width, image.height],
+                format: "rgba8unorm",
+                generateMipmap: true,
+            },
             sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.BOTTOM_LEFT] = {
@@ -165,9 +171,11 @@ import { getShaderSource, loadImage } from "./utility";
         };
 
         textures[Corners.BOTTOM_RIGHT] = {
-            size: [image.width, image.height],
-            format: "rgba8unorm",
-            generateMipmap: true,
+            descriptor: {
+                size: [image.width, image.height],
+                format: "rgba8unorm",
+                generateMipmap: true,
+            },
             sources: [{ mipLevel: 0, image }],
         };
         samplers[Corners.BOTTOM_RIGHT] = {

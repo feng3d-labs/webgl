@@ -141,8 +141,10 @@ import { getShaderSource, loadImage } from "./utility";
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {
-                size: [image.width, image.height],
-                format: textureFormats[i].format,
+                descriptor: {
+                    size: [image.width, image.height],
+                    format: textureFormats[i].format,
+                },
                 sources: [{
                     mipLevel: 0, image, flipY: false,
                 }],

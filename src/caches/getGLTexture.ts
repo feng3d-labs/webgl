@@ -38,8 +38,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     // 创建纹理
     const createTexture = () =>
     {
-        const target = getGLTextureTarget(texture.dimension);
-        const { internalformat, format, type } = getGLTextureFormats(texture.format);
+        const descriptor = texture.descriptor;
+
+        const target = getGLTextureTarget(descriptor.dimension);
+        const { internalformat, format, type } = getGLTextureFormats(descriptor.format);
 
         webGLTexture = gl.createTexture(); // Create a texture object
         gl._textures.set(texture, webGLTexture);
@@ -47,11 +49,12 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         gl.bindTexture(gl[target], webGLTexture);
 
         //
-        const { sources, generateMipmap } = texture;
+        const { sources } = texture;
+        const generateMipmap = descriptor.generateMipmap;
 
         // 设置纹理尺寸
-        const [width, height, depth] = texture.size;
-        const mipLevelCount = texture.mipLevelCount || 1;
+        const [width, height, depth] = descriptor.size;
+        const mipLevelCount = descriptor.mipLevelCount || 1;
 
         if (sources)
         {
@@ -248,8 +251,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         const { writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
-        const target = getGLTextureTarget(texture.dimension);
-        const { format, type } = getGLTextureFormats(texture.format);
+        const descriptor = texture.descriptor;
+
+        const target = getGLTextureTarget(descriptor.dimension);
+        const { format, type } = getGLTextureFormats(descriptor.format);
 
         gl.bindTexture(gl[target], webGLTexture);
 
@@ -378,7 +383,8 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     };
     updateTexture();
 
-    watcher.watchs(texture, ["generateMipmap"], updateTexture);
+    const descriptor = texture.descriptor;
+    watcher.watchs(descriptor, ["generateMipmap"], updateTexture);
     watcher.watch(texture, "writeTextures", updateTexture);
 
     // 监听纹理尺寸发生变化
@@ -397,7 +403,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
         webGLTexture.destroy();
     };
-    watcher.watch(texture, "size", resize);
+    watcher.watch(descriptor, "size", resize);
 
     webGLTexture.destroy = () =>
     {
@@ -405,10 +411,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         gl.deleteTexture(webGLTexture);
         gl._textures.delete(texture);
         //
-        watcher.unwatchs(texture, ["generateMipmap"], updateTexture);
+        watcher.unwatchs(descriptor, ["generateMipmap"], updateTexture);
         watcher.unwatch(texture, "sources", updateSources);
         watcher.unwatch(texture, "writeTextures", updateTexture);
-        watcher.unwatch(texture, "size", resize);
+        watcher.unwatch(descriptor, "size", resize);
         //
         delete webGLTexture.destroy;
     };

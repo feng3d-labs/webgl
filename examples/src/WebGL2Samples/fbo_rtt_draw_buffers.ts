@@ -76,14 +76,18 @@ const quadVertexArray: { vertices?: VertexAttributes } = {
 // -- Initialize texture targets
 
 const color1Texture: Texture = {
-    format: "rgba8unorm",
-    size: [windowSize.x, windowSize.y],
+    descriptor: {
+        format: "rgba8unorm",
+        size: [windowSize.x, windowSize.y],
+    },
 };
 const color1Sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 
 const color2Texture: Texture = {
-    format: "rgba8unorm",
-    size: [windowSize.x, windowSize.y],
+    descriptor: {
+        format: "rgba8unorm",
+        size: [windowSize.x, windowSize.y],
+    },
 };
 const color2Sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 

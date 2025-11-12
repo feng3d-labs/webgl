@@ -36,7 +36,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             const baseArrayLayer = view.baseArrayLayer || 0;
 
             const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = getGLTextureTarget(texture.dimension);
+            const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
 
             if (textureTarget === "TEXTURE_2D")
             {
@@ -80,7 +80,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const baseArrayLayer = view.baseArrayLayer || 0;
 
         const webGLTexture = getGLTexture(gl, texture);
-        const textureTarget = getGLTextureTarget(texture.dimension);
+        const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
 
         if (textureTarget === "TEXTURE_2D")
         {

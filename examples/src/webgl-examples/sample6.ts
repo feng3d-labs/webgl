@@ -1,5 +1,5 @@
 import { reactive } from "@feng3d/reactivity";
-import { RenderPass, Sampler, Texture, RenderObject } from "@feng3d/render-api";
+import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { mat4 } from "gl-matrix";
 
@@ -222,10 +222,12 @@ async function loadTexture(url: string)
   const generateMipmap = isPowerOf2(img.width) && isPowerOf2(img.height);
 
   const texture: Texture = {
-    size: [img.width, img.height],
-    format: "rgba8unorm",
+    descriptor: {
+      size: [img.width, img.height],
+      format: "rgba8unorm",
+      generateMipmap,
+    },
     sources: [{ image: img }],
-    generateMipmap,
   };
 
   let sampler: Sampler = {};

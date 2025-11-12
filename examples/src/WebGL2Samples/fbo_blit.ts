@@ -52,8 +52,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureDiffuse: Texture = {
-        size: [image.width, image.height],
-        format: "rgba8unorm",
+        descriptor: {
+            size: [image.width, image.height],
+            format: "rgba8unorm",
+        },
         sources: [{
             image, flipY: true
         }],
@@ -64,8 +66,10 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     const textureColorBuffer: Texture = {
-        format: "rgba8unorm",
-        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
+        descriptor: {
+            format: "rgba8unorm",
+            size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
+        },
     };
     const samplerColorBuffer: Sampler = {
         minFilter: "linear",
@@ -73,7 +77,7 @@ loadImage("../../assets/img/Di-3d.png", (image) =>
     };
 
     // 此处 Renderbuffer 直接使用 IGLTextureView 替代。
-    const colorRenderbuffer: TextureView = { texture: { format: "rgba8unorm", size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y] } };
+    const colorRenderbuffer: TextureView = { texture: { descriptor: { format: "rgba8unorm", size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y] } } };
 
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices,

@@ -17,7 +17,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
 
     const texture = (sourcePassDescriptor.colorAttachments[0].view as TextureView).texture;
 
-    const textureSize = texture.size;
+    const textureSize = texture.descriptor.size;
 
     const renderbuffers: Renderbuffer[] = [];
 
@@ -28,7 +28,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
             const texture = v.view.texture;
 
             const renderbuffer: Renderbuffer = {
-                internalformat: getGLRenderbufferInternalformat(texture.format),
+                internalformat: getGLRenderbufferInternalformat(texture.descriptor.format),
                 width: textureSize[0],
                 height: textureSize[1],
             };

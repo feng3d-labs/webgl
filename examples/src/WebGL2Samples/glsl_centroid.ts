@@ -110,8 +110,10 @@ const samplers: Sampler[] = [];
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     textures[i] = {
-        format: "rgba8unorm",
-        size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
+        descriptor: {
+            format: "rgba8unorm",
+            size: [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y],
+        },
     };
     samplers[i] = { minFilter: "nearest", magFilter: "nearest" };
 }

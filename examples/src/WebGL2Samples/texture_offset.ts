@@ -73,8 +73,10 @@ import { getShaderSource, loadImage } from "./utility";
     {
         // -- Init Texture
         const texture: Texture = {
-            size: [image.width, image.height],
-            format: "rgba8unorm",
+            descriptor: {
+                size: [image.width, image.height],
+                format: "rgba8unorm",
+            },
             sources: [{ mipLevel: 0, image, flipY: false }],
         };
         const sampler: Sampler = {

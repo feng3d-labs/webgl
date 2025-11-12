@@ -322,8 +322,10 @@ function initBuffers()
 function initTexture(): SamplerTexture
 {
     const texture: Texture = {
-        size: [1, 1],
-        format: "rgba8unorm",
+        descriptor: {
+            size: [1, 1],
+            format: "rgba8unorm",
+        },
         sources: [{ __type__: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
     const sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
@@ -337,9 +339,9 @@ function initTexture(): SamplerTexture
 function updateTexture(texture: Texture, video: HTMLVideoElement)
 {
     // 修改纹理尺寸
-    if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)
+    if (texture.descriptor.size[0] !== video.videoWidth || texture.descriptor.size[1] !== video.videoHeight)
     {
-        reactive(texture).size = [video.videoWidth, video.videoHeight];
+        reactive(texture.descriptor).size = [video.videoWidth, video.videoHeight];
     }
 
     reactive(texture).sources = [{ image: video }];

@@ -389,8 +389,10 @@ import { reactive } from "@feng3d/reactivity";
 
     const diffuse: SamplerTexture = {
         texture: {
-            size: [img.width, img.height],
-            generateMipmap: true,
+            descriptor: {
+                size: [img.width, img.height],
+                generateMipmap: true,
+            },
             sources: [{ image: img }]
         }, sampler: { minFilter: "linear", mipmapFilter: "linear", addressModeU: "repeat", addressModeV: "repeat" }
     };

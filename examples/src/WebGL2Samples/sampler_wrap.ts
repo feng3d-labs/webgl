@@ -1,7 +1,7 @@
-import { CanvasContext, RenderPassObject, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
+import { reactive } from "@feng3d/reactivity";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 import { getShaderSource, loadImage } from "./utility";
-import { reactive } from "@feng3d/reactivity";
 
 const canvas = document.createElement("canvas");
 canvas.id = "glcanvas";
@@ -123,10 +123,12 @@ let texture: Texture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        size: [image.width, image.height],
+        descriptor: {
+            size: [image.width, image.height],
+            format: "rgba8unorm",
+            generateMipmap: true,
+        },
         sources: [{ image, mipLevel: 0 }],
-        format: "rgba8unorm",
-        generateMipmap: true,
     };
     render();
 });

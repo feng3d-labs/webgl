@@ -51,7 +51,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = colorAttachments[0]?.view;
         if (view)
         {
-            return { width: view.texture.size[0], height: view.texture.size[1] };
+            return { width: view.texture.descriptor.size[0], height: view.texture.descriptor.size[1] };
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
@@ -63,7 +63,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = depthStencilAttachment.view;
         if (view)
         {
-            return { width: view.texture.size[0], height: view.texture.size[1] };
+            return { width: view.texture.descriptor.size[0], height: view.texture.descriptor.size[1] };
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };

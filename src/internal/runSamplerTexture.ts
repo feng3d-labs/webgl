@@ -1,8 +1,7 @@
-import { Sampler } from "@feng3d/render-api";
-import { getGLProgram, UniformItemInfo } from "../caches/getGLProgram";
+import { UniformItemInfo } from "../caches/getGLProgram";
 import { getGLTextureTarget } from "../caches/getGLTextureTarget";
-import { getGLTexture } from "../internal";
 import { SamplerTexture } from "../data/SamplerTexture";
+import { getGLTexture } from "../internal";
 import { runSampler } from "./runSampler";
 
 export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: UniformItemInfo, samplerTexture: SamplerTexture)
@@ -10,7 +9,7 @@ export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: Unifor
     const { texture, sampler } = samplerTexture;
     const { location, textureID } = uniformInfo;
 
-    const textureTarget = getGLTextureTarget(texture.dimension);
+    const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
 
     // 设置纹理所在采样编号
     gl.uniform1i(location, textureID);

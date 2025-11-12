@@ -1,9 +1,9 @@
 import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
 import { WebGL } from "@feng3d/webgl";
 
+import { reactive } from "@feng3d/reactivity";
 import { mat4, vec3 } from "gl-matrix";
 import { getShaderSource, loadImage } from "./utility";
-import { reactive } from "@feng3d/reactivity";
 
 (function ()
 {
@@ -133,9 +133,11 @@ import { reactive } from "@feng3d/reactivity";
     {
         // -- Init 2D Texture
         texture = {
-            format: "rgba8unorm",
-            mipLevelCount: 1,
-            size: [512, 512],
+            descriptor: {
+                format: "rgba8unorm",
+                mipLevelCount: 1,
+                size: [512, 512],
+            },
             sources: [{
                 image, flipY: false,
             }]

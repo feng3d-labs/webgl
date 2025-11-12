@@ -128,9 +128,11 @@ import { getShaderSource, loadImage } from "./utility";
     {
         // -- Init 2D Texture
         texture = {
-            format: "rgba8unorm",
-            mipLevelCount: 1,
-            size: [512, 512],
+            descriptor: {
+                format: "rgba8unorm",
+                mipLevelCount: 1,
+                size: [512, 512],
+            },
             sources: [{
                 image, flipY: false,
             }]

@@ -77,8 +77,10 @@ const quadVertexArray: { vertices?: VertexAttributes } = {
 // the proper texture format combination can be found here
 // https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml
 const depthTexture: Texture = {
-    size: [windowSize.x, windowSize.y],
-    format: "depth16unorm",
+    descriptor: {
+        size: [windowSize.x, windowSize.y],
+        format: "depth16unorm",
+    },
 };
 const depthSampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "nearest", magFilter: "nearest" };
 

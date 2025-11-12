@@ -4,7 +4,7 @@ import { getGLTextureFormats } from "../caches/getGLTextureFormats";
 
 export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 {
-    let bufferData:ArrayBufferView;
+    let bufferData: ArrayBufferView;
 
     if (gl instanceof WebGL2RenderingContext)
     {
@@ -12,9 +12,10 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
         const attachmentPoint: GLAttachmentPoint = "COLOR_ATTACHMENT0";
         const [width, height] = copySize;
         //
-        const { format, type } = getGLTextureFormats(textureView.texture.format);
-        const bytesPerPixel = Texture.getTextureBytesPerPixel(textureView.texture.format);
-        const DataConstructor = Texture.getTextureDataConstructor(textureView.texture.format);
+        const descriptor = textureView.texture.descriptor;
+        const { format, type } = getGLTextureFormats(descriptor.format);
+        const bytesPerPixel = Texture.getTextureBytesPerPixel(descriptor.format);
+        const DataConstructor = Texture.getTextureDataConstructor(descriptor.format);
         //
         const bytesPerRow = width * bytesPerPixel;
         const bufferSize = bytesPerRow * height;

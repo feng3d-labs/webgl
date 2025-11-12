@@ -81,10 +81,12 @@ import { getShaderSource } from "./utility";
     }
 
     const texture: Texture = {
-        size: [SIZE, SIZE, SIZE],
-        dimension: "3d",
-        format: "r8unorm",
-        generateMipmap: true,
+        descriptor: {
+            size: [SIZE, SIZE, SIZE],
+            dimension: "3d",
+            format: "r8unorm",
+            generateMipmap: true,
+        },
         sources: [{ __type__: "TextureDataSource", mipLevel: 0, size: [SIZE, SIZE, SIZE], data }],
     };
     const sampler: Sampler = {
