@@ -1,7 +1,7 @@
-import { DepthStencilState, RenderPipeline } from "@feng3d/render-api";
-import { runProgram } from "./runProgram";
-import { runDepthState } from "./runDepthState";
-import { runStencilState } from "./runStencilState";
+import { RenderPipeline } from "@feng3d/render-api";
+import { runDepthState } from "../runDepthState";
+import { runProgram } from "../runProgram";
+import { runStencilState } from "../runStencilState";
 
 export function runRenderPipeline(gl: WebGLRenderingContext, renderPipeline: RenderPipeline)
 {

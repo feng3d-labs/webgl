@@ -1,9 +1,7 @@
 import { IndicesDataTypes, RenderPipeline, VertexAttributes } from "@feng3d/render-api";
-import { getGLProgram } from "../caches/getGLProgram";
-import { getGLBuffer } from "../caches/getGLBuffer";
-import { getIGLBuffer } from "../runs/getIGLBuffer";
-import { runIndexBuffer } from "./runIndexBuffer";
-import { runVertexAttribute } from "./runVertexAttribute";
+import { getGLProgram } from "../../caches/getGLProgram";
+import { runIndexBuffer } from "../runIndexBuffer";
+import { runVertexAttribute } from "../runVertexAttribute";
 
 /**
  * 执行设置或者上传渲染对象的顶点以及索引数据。

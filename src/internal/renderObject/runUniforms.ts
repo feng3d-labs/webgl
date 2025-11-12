@@ -1,12 +1,12 @@
 import { BindingResources, Buffer, BufferBinding, RenderPipeline, TypedArray, UnReadonly } from "@feng3d/render-api";
-import { getGLProgram, UniformItemInfo } from "../caches/getGLProgram";
-import { getGLBuffer } from "../caches/getGLBuffer";
-import { getIGLBuffer } from "../runs/getIGLBuffer";
-import { SamplerTexture } from "../data/SamplerTexture";
-import { updateBufferBinding } from "../utils/updateBufferBinding";
-import { runSamplerTexture } from "./runSamplerTexture";
-import { runUniform } from "./runUniform";
-import { GLUniformBufferType } from "../const/GLUniformType";
+import { getGLBuffer } from "../../caches/getGLBuffer";
+import { getGLProgram } from "../../caches/getGLProgram";
+import { GLUniformBufferType } from "../../const/GLUniformType";
+import { SamplerTexture } from "../../data/SamplerTexture";
+import { getIGLBuffer } from "../../runs/getIGLBuffer";
+import { updateBufferBinding } from "../../utils/updateBufferBinding";
+import { runSamplerTexture } from "../runSamplerTexture";
+import { runUniform } from "../runUniform";
 
 /**
  * 激活常量

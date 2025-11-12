@@ -1,5 +1,5 @@
 import { DrawVertex } from "@feng3d/render-api";
-import { getGLDrawMode, GLDrawMode } from "../caches/getGLDrawMode";
+import { GLDrawMode } from "../../caches/getGLDrawMode";
 
 export function runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, drawArrays: DrawVertex)
 {

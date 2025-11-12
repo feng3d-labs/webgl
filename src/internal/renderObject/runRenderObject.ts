@@ -1,13 +1,13 @@
-import { IndicesDataTypes, PrimitiveState, RenderObject } from "@feng3d/render-api";
-import { getGLDrawMode, GLDrawMode } from "../caches/getGLDrawMode";
-import { runViewPort } from "./runViewPort";
-import { runScissor } from "./runScissor";
+import { RenderObject } from "@feng3d/render-api";
+import { getGLDrawMode } from "../../caches/getGLDrawMode";
+import { runDrawIndexed } from "./runDrawIndexed";
+import { runDrawVertex } from "./runDrawVertex";
+import { runPrimitiveState } from "./runPrimitiveState";
 import { runRenderPipeline } from "./runRenderPipeline";
+import { runScissor } from "./runScissor";
 import { runUniforms } from "./runUniforms";
 import { runVertexArray } from "./runVertexArray";
-import { runPrimitiveState } from "./runPrimitiveState";
-import { runDrawVertex } from "./runDrawVertex";
-import { runDrawIndexed } from "./runDrawIndexed";
+import { runViewPort } from "./runViewPort";
 
 export function runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
 {

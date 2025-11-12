@@ -1,5 +1,5 @@
 import { RenderPassObject } from "@feng3d/render-api";
-import { runRenderObject } from "./runRenderObject";
+import { runRenderObject } from "./renderObject/runRenderObject";
 import { runOcclusionQuery } from "./runOcclusionQuery";
 
 export function runRenderObjects(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObjects?: readonly RenderPassObject[])

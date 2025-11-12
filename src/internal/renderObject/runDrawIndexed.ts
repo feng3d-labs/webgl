@@ -1,6 +1,6 @@
 import { DrawIndexed, IndicesDataTypes } from "@feng3d/render-api";
-import { getGLDrawMode, GLDrawMode } from "../caches/getGLDrawMode";
-import { DrawElementType } from "../data/polyfills/Buffer";
+import { GLDrawMode } from "../../caches/getGLDrawMode";
+import { DrawElementType } from "../../data/polyfills/Buffer";
 
 export function runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, indices: IndicesDataTypes, drawIndexed: DrawIndexed)
 {
@@ -30,4 +30,3 @@ export function runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, 
         gl.drawElements(gl[drawMode], indexCount, gl[type], offset);
     }
 }
-
