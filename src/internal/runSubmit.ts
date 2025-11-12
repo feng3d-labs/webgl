@@ -1,12 +1,12 @@
 import { Submit } from "@feng3d/render-api";
 import { _GL_Submit_Times } from "../const/const";
-import { RunWebGL } from "../RunWebGL";
+import { runCommandEncoder } from "./runCommandEncoder";
 
 export function runSubmit(gl: WebGLRenderingContext, submit: Submit)
 {
     const commandBuffers = submit.commandEncoders.map((v) =>
     {
-        const commandBuffer = RunWebGL.runCommandEncoder(gl, v);
+        const commandBuffer = runCommandEncoder(gl, v);
 
         return commandBuffer;
     });
