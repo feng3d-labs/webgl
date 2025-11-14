@@ -11,7 +11,7 @@ declare global
         /**
          * 属性信息列表
          */
-        attributes: IGLAttributeInfo[];
+        attributes: GLAttributeInfo[];
         /**
          * uniform信息列表
          */
@@ -26,7 +26,7 @@ declare global
     }
 }
 
-export interface IGLAttributeInfo
+export interface GLAttributeInfo
 {
     /**
      * 名称。
@@ -108,7 +108,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
 
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-    const attributes: IGLAttributeInfo[] = [];
+    const attributes: GLAttributeInfo[] = [];
     for (let i = 0; i < numAttributes; i++)
     {
         const activeInfo = gl.getActiveAttrib(program, i);
