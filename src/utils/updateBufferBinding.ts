@@ -88,6 +88,6 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
         };
 
         update();
-        watcher.watchchain(uniformData, paths.join('.'), update, undefined, false);
+        watcher.watchchain(uniformData, ['value', ...paths].join('.'), update, undefined, false);
     });
 }
