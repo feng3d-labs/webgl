@@ -11,9 +11,9 @@ import { runUniform } from '../runUniform';
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
+export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline, bindingResources: BindingResources)
 {
-    const webGLProgram = getGLProgram(gl, material);
+    const webGLProgram = getGLProgram(gl, pipeline);
 
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
@@ -24,7 +24,7 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
         {
             const { paths } = v;
 
-            let uniformData = uniforms[paths[0]];
+            let uniformData = bindingResources[paths[0]];
             for (let i = 1; i < paths.length; i++)
             {
                 uniformData = uniformData[paths[i]];
@@ -50,13 +50,13 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
         webGLProgram.uniformBlocks.forEach((uniformBlock) =>
         {
             const { name, index } = uniformBlock;
-            const uniformData = uniforms[name] as TypedArray | BufferBinding;
+            const uniformData = bindingResources[name] as TypedArray | BufferBinding;
 
             //
             let typedArray = uniformData as TypedArray;
             if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
             {
-                const bufferBinding = uniforms[name] as BufferBinding;
+                const bufferBinding = bindingResources[name] as BufferBinding;
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
