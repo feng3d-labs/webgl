@@ -9,7 +9,7 @@ export function runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, 
     const firstIndex = drawIndexed.firstIndex || 0;
     const instanceCount = drawIndexed.instanceCount || 1;
     //
-    const offset = firstIndex * indices.BYTES_PER_ELEMENT;
+    const offset = firstIndex * indices.BYTES_PER_ELEMENT + indices.byteOffset;
 
     //
     if (instanceCount > 1)

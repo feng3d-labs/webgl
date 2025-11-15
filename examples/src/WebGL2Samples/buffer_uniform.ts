@@ -21,18 +21,42 @@ import { getShaderSource } from './utility';
     };
 
     // -- Init Buffer
-    const elementData = new Uint16Array([
+    let elementData = new Uint16Array([
         0, 1, 2,
         2, 3, 0,
     ]);
 
+    const useSharedElementBuffer = true;
+    if (useSharedElementBuffer)
+    {
+        // 共享元素缓冲区。模拟与其他模型的不同顶点索引数据公用一个大缓冲区。
+        const elementBuffer = new ArrayBuffer(elementData.byteLength * 2);
+        // 模拟随机偏移。
+        const randomOffset = Math.ceil(Math.random() * (elementBuffer.byteLength - elementData.byteLength) / Uint16Array.BYTES_PER_ELEMENT) * Uint16Array.BYTES_PER_ELEMENT;
+        const elementData1 = new Uint16Array(elementBuffer, randomOffset, elementData.length);
+        elementData1.set(elementData);
+        elementData = elementData1;
+    }
+
     // vec3 position, vec3 normal, vec4 color
-    const vertices = new Float32Array([
+    let vertices = new Float32Array([
         -1.0, -1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,
         1.0, -1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0,
         1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         -1.0, 1.0, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0,
     ]);
+
+    const useSharedVertexBuffer = true;
+    if (useSharedVertexBuffer)
+    {
+        // 共享顶点缓冲区。模拟与其他模型的不同顶点数据公用一个大缓冲区。
+        const vertexBuffer = new ArrayBuffer(vertices.byteLength * 2);
+        // 模拟随机偏移。
+        const randomOffset = Math.ceil(Math.random() * (vertexBuffer.byteLength - vertices.byteLength) / Float32Array.BYTES_PER_ELEMENT) * Float32Array.BYTES_PER_ELEMENT;
+        const vertices1 = new Float32Array(vertexBuffer, randomOffset, vertices.length);
+        vertices1.set(vertices);
+        vertices = vertices1;
+    }
 
     // mat4 P, mat4 MV, mat3 Mnormal
     const transforms = {
@@ -80,11 +104,6 @@ import { getShaderSource } from './utility';
             color: { data: vertices, format: 'float32x4', arrayStride: 40, offset: 24 },
         },
     };
-
-    // {size: 16, label: 'UniformBuffer PerPass', __watchs__: {…}}
-    // {size: 48, label: 'UniformBuffer PerScene', __watchs__: {…}}
-    // {size: 192, label: 'UniformBuffer PerDraw', __watchs__: {…}}
-    // const arrayBuffer = new ArrayBuffer(16 + 64 + 192);
 
     const bindingResources = {
         PerDraw: { value: transforms, bufferView: undefined },
