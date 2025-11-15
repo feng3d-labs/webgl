@@ -64,9 +64,12 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
+            const offset = typedArray.byteOffset;
+            const size = uniformBlock.bufferBindingInfo.size;
+
             //
             const webGLBuffer = getGLBuffer(gl, buffer, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
-            gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
+            gl.bindBufferRange(gl.UNIFORM_BUFFER, index, webGLBuffer, offset, size);
         });
     }
 }

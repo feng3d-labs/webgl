@@ -81,13 +81,54 @@ import { getShaderSource } from './utility';
         },
     };
 
+    // {size: 16, label: 'UniformBuffer PerPass', __watchs__: {…}}
+    // {size: 48, label: 'UniformBuffer PerScene', __watchs__: {…}}
+    // {size: 192, label: 'UniformBuffer PerDraw', __watchs__: {…}}
+    // const arrayBuffer = new ArrayBuffer(16 + 64 + 192);
+
+    const bindingResources = {
+        PerDraw: { value: transforms, bufferView: undefined },
+        PerPass: { value: lightPos, bufferView: undefined },
+        PerScene: { value: material, bufferView: undefined },
+    };
+
+    // 是否使用共用缓冲区。
+    let useSharedBuffer = true;
+    if (useSharedBuffer)
+    {
+        // 3 个统一块共用一个缓冲区。256字节对齐。
+        // PerDraw 192字节
+        // PerPass 16字节
+        // PerScene 64字节
+        const bufferViews = ((sizes: number[]) =>
+        {
+            const result = sizes.reduce((result, b) =>
+            {
+                const start = Math.ceil(result.total / 256) * 256;
+                result.ranges.push({ offset: start, size: b });
+                result.total = start + b;
+
+                return result;
+            }, { total: 0, ranges: [] as { offset: number, size: number }[] });
+
+            const arrayBuffer = new ArrayBuffer(result.total);
+            const bufferViews = result.ranges.map((v) =>
+            {
+                return new Uint8Array(arrayBuffer, v.offset, v.size);
+            });
+
+            return bufferViews;
+
+        })([192, 16, 48]);
+
+        bindingResources.PerDraw.bufferView = bufferViews[0];
+        bindingResources.PerPass.bufferView = bufferViews[1];
+        bindingResources.PerScene.bufferView = bufferViews[2];
+    }
+
     const ro: RenderObject = {
         pipeline: program,
-        bindingResources: {
-            PerDraw: { value: transforms },
-            PerPass: { value: lightPos },
-            PerScene: { value: material },
-        },
+        bindingResources: bindingResources,
         vertices: vertexArray.vertices,
         indices: elementData,
         draw: { __type__: 'DrawIndexed', indexCount: 6, firstIndex: 0 },

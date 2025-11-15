@@ -38,7 +38,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     }
     else
     {
-        console.assert(uniformData.bufferView.byteLength === size, `uniformData.bufferView 统一块数据提供数据尺寸不对！`);
+        console.assert(uniformData.bufferView.byteLength >= size, `uniformData.bufferView 统一块数据提供数据尺寸不能小于实际尺寸！`);
     }
 
     //
