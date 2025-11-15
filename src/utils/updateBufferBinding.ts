@@ -43,7 +43,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     }
 
     //
-    const buffer = getIGLBuffer(uniformData.bufferView);
+    const buffer = getIGLBuffer(uniformData.bufferView.buffer);
     const offset = uniformData.bufferView.byteOffset;
 
     //

@@ -116,8 +116,8 @@ import { getShaderSource } from './utility';
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
-    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_TRANSFORM]));
-    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_FEEDBACK]));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_TRANSFORM].buffer));
+    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_FEEDBACK].buffer));
     webgl.deleteProgram(programTransform);
     webgl.deleteProgram(programFeedback);
 })();

@@ -6,7 +6,7 @@ export function runIndexBuffer(gl: WebGLRenderingContext, indices?: IndicesDataT
 {
     if (!indices) return;
 
-    const indexBuffer = getIGLBuffer(indices);
+    const indexBuffer = getIGLBuffer(indices.buffer);
 
     const buffer = getGLBuffer(gl, indexBuffer, 'ELEMENT_ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);

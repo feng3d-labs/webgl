@@ -106,8 +106,8 @@ import { getShaderSource, loadImage } from './utility';
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(getIGLBuffer(vertexPosBuffer));
-        webgl.deleteBuffer(getIGLBuffer(vertexTexBuffer));
+        webgl.deleteBuffer(getIGLBuffer(vertexPosBuffer.buffer));
+        webgl.deleteBuffer(getIGLBuffer(vertexTexBuffer.buffer));
         webgl.deleteTexture(texture);
         webgl.deleteProgram(program);
     });

@@ -1,12 +1,12 @@
-import { Buffer, TypedArray } from '@feng3d/render-api';
+import { Buffer } from '@feng3d/render-api';
 
-export function getIGLBuffer(data: TypedArray): Buffer
+export function getIGLBuffer(data: ArrayBufferLike): Buffer
 {
     if (data[_IGLBuffer]) return data[_IGLBuffer];
 
     const buffer: Buffer = {
         size: Math.ceil(data.byteLength / 4) * 4,
-        data,
+        data: data,
     };
     data[_IGLBuffer] = buffer;
 

@@ -6,8 +6,8 @@ export function runCopyBufferToBuffer(gl: WebGLRenderingContext, copyBufferToBuf
 {
     if (gl instanceof WebGL2RenderingContext)
     {
-        const rb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.source), 'COPY_READ_BUFFER');
-        const wb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.destination), 'COPY_WRITE_BUFFER');
+        const rb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.source.buffer), 'COPY_READ_BUFFER');
+        const wb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.destination.buffer), 'COPY_WRITE_BUFFER');
 
         const sourceOffset = copyBufferToBuffer.source.byteOffset;
         const destinationOffset = copyBufferToBuffer.destination.byteOffset;

@@ -61,7 +61,7 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
-            const buffer = getIGLBuffer(typedArray);
+            const buffer = getIGLBuffer(typedArray.buffer);
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 

@@ -360,8 +360,8 @@ import { reactive } from '@feng3d/reactivity';
             return pv;
         }, []);
 
-        reactive(getIGLBuffer(renderObject.vertices.position.data)).data = new Float32Array(positions);
-        reactive(getIGLBuffer(renderObject.vertices.normal.data)).data = new Float32Array(normals);
+        reactive(getIGLBuffer(renderObject.vertices.position.data.buffer)).writeBuffers = [{ data: new Float32Array(positions) }];
+        reactive(getIGLBuffer(renderObject.vertices.normal.data.buffer)).writeBuffers = [{ data: new Float32Array(normals) }];
 
         tick++;
 
