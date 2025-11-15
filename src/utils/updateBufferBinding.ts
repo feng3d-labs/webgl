@@ -83,7 +83,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             }
 
             const writeBuffers = buffer.writeBuffers ?? [];
-            writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
+            writeBuffers.push({ data: data, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) / data.BYTES_PER_ELEMENT });
             reactive(buffer).writeBuffers = writeBuffers;
         };
 
