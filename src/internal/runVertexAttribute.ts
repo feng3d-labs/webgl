@@ -1,5 +1,6 @@
 import { Buffer, VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
 import { getGLBuffer } from '../caches/getGLBuffer';
+import { reactive } from '@feng3d/reactivity';
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
 {
@@ -30,6 +31,10 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
 
     //
     const buffer = Buffer.getBuffer(data.buffer);
+    if (!buffer.label)
+    {
+        reactive(buffer).label = (`顶点数据 ${autoVertexIndex++}`);
+    }
 
     const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
@@ -45,3 +50,4 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 }
 
+let autoVertexIndex = 0;
