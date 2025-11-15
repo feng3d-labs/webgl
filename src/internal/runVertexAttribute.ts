@@ -3,7 +3,7 @@ import { getGLBuffer } from '../caches/getGLBuffer';
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
 {
-    const { stepMode, format } = attribute;
+    const { stepMode, format, data } = attribute;
     let { arrayStride, offset } = attribute;
 
     const glVertexFormat = vertexFormatMap[format];
@@ -25,11 +25,11 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    arrayStride = arrayStride || 0;
-    offset = offset || 0;
+    arrayStride = arrayStride || glVertexFormat.byteSize;
+    offset = data.byteOffset + (offset || 0);
 
     //
-    const buffer = Buffer.getBuffer(attribute.data.buffer);
+    const buffer = Buffer.getBuffer(data.buffer);
 
     const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
