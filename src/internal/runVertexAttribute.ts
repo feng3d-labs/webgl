@@ -30,10 +30,9 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     offset = offset || 0;
 
     //
-    const buffer = getIGLBuffer(attribute.data, 'ARRAY_BUFFER', 'STATIC_DRAW');
-    buffer.target ??= 'ARRAY_BUFFER';
+    const buffer = getIGLBuffer(attribute.data);
 
-    const webGLBuffer = getGLBuffer(gl, buffer);
+    const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
     //

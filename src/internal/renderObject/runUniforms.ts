@@ -61,14 +61,12 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
-            const buffer = getIGLBuffer(typedArray, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
-            buffer.target ??= 'UNIFORM_BUFFER';
-            buffer.usage ??= 'DYNAMIC_DRAW';
+            const buffer = getIGLBuffer(typedArray);
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
             //
-            const webGLBuffer = getGLBuffer(gl, buffer);
+            const webGLBuffer = getGLBuffer(gl, buffer, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
             gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
         });
     }

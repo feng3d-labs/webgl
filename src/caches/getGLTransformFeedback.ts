@@ -16,9 +16,9 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
         transformFeedback.bindBuffers.forEach((v) =>
         {
             const { index, data } = v;
-            const buffer = getIGLBuffer(data, 'ARRAY_BUFFER', 'STREAM_COPY');
+            const buffer = getIGLBuffer(data);
 
-            const webGLBuffer = getGLBuffer(gl, buffer);
+            const webGLBuffer = getGLBuffer(gl, buffer, 'TRANSFORM_FEEDBACK_BUFFER', 'STREAM_COPY');
             gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
         });
 

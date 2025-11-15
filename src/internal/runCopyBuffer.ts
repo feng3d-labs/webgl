@@ -7,8 +7,8 @@ export function runCopyBuffer(gl: WebGLRenderingContext, copyBuffer: CopyBufferT
     {
         const { source: read, destination: write, sourceOffset: readOffset, destinationOffset: writeOffset, size } = copyBuffer;
 
-        const rb = getGLBuffer(gl, read);
-        const wb = getGLBuffer(gl, write);
+        const rb = getGLBuffer(gl, read, 'COPY_READ_BUFFER');
+        const wb = getGLBuffer(gl, write, 'COPY_WRITE_BUFFER');
 
         gl.bindBuffer(gl.COPY_READ_BUFFER, rb);
         gl.bindBuffer(gl.COPY_WRITE_BUFFER, wb);

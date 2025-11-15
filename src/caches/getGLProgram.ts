@@ -327,7 +327,7 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
     {
         const uniformBufferType = uniformInfo.type as GLUniformBufferType;
         const alignSize = uniformBufferTypeAlignSizeMap[uniformBufferType];
-        console.assert(alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
+        console.assert(!!alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
 
         //
         const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf('.'));

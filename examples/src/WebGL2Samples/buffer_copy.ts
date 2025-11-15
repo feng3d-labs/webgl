@@ -30,14 +30,14 @@ import { getShaderSource } from './utility';
         -1.0, 1.0,
         -1.0, -1.0,
     ]);
-    const vertexPosBufferSrc: Buffer = { target: 'ARRAY_BUFFER', size: vertices.byteLength, data: vertices, usage: 'STATIC_DRAW' };
+    const vertexPosBufferSrc: Buffer = { size: vertices.byteLength, data: vertices };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
     const cb: CopyBufferToBuffer = {
         __type__: 'CopyBufferToBuffer',
         source: vertexPosBufferSrc,
-        destination: getIGLBuffer(vertexPosBufferDst, 'ARRAY_BUFFER'),
+        destination: getIGLBuffer(vertexPosBufferDst),
         sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT,
     };
 
