@@ -1,5 +1,5 @@
-import { CanvasContext, CopyBufferToBuffer, Buffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
-import { WebGL, getIGLBuffer } from '@feng3d/webgl';
+import { Buffer, CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 (function ()
@@ -36,9 +36,8 @@ import { getShaderSource } from './utility';
 
     const cb: CopyBufferToBuffer = {
         __type__: 'CopyBufferToBuffer',
-        source: vertexPosBufferSrc,
-        destination: getIGLBuffer(vertexPosBufferDst),
-        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT,
+        source: vertices,
+        destination: vertexPosBufferDst,
     };
 
     // -- Init Vertex Array
