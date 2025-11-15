@@ -64,6 +64,6 @@ const rp: RenderPass = {
 webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
 // -- Delete WebGL resources
-// webgl.deleteBuffer(getIGLBuffer(transforms));
-// webgl.deleteBuffer(getIGLBuffer(materials));
+// webgl.deleteBuffer(Buffer.getBuffer(transforms));
+// webgl.deleteBuffer(Buffer.getBuffer(materials));
 webgl.deleteProgram(program);

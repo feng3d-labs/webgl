@@ -1,5 +1,5 @@
-import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData } from '@feng3d/render-api';
-import { getIGLBuffer, WebGL } from '@feng3d/webgl';
+import { Buffer, CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 import { getShaderSource, loadImage } from './utility';
 
 (function ()
@@ -106,8 +106,8 @@ import { getShaderSource, loadImage } from './utility';
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });
 
         // Delete WebGL resources
-        webgl.deleteBuffer(getIGLBuffer(vertexPosBuffer.buffer));
-        webgl.deleteBuffer(getIGLBuffer(vertexTexBuffer.buffer));
+        webgl.deleteBuffer(Buffer.getBuffer(vertexPosBuffer.buffer));
+        webgl.deleteBuffer(Buffer.getBuffer(vertexTexBuffer.buffer));
         webgl.deleteTexture(texture);
         webgl.deleteProgram(program);
     });

@@ -1,6 +1,5 @@
-import { VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
+import { Buffer, VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
 import { getGLBuffer } from '../caches/getGLBuffer';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
 {
@@ -30,7 +29,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     offset = offset || 0;
 
     //
-    const buffer = getIGLBuffer(attribute.data.buffer);
+    const buffer = Buffer.getBuffer(attribute.data.buffer);
 
     const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);

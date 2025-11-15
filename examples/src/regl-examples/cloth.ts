@@ -1,11 +1,11 @@
-import { RenderObject, Submit } from '@feng3d/render-api';
-import { getIGLBuffer, SamplerTexture, WebGL } from '@feng3d/webgl';
+import { Buffer, RenderObject, Submit } from '@feng3d/render-api';
+import { SamplerTexture, WebGL } from '@feng3d/webgl';
 
+import { reactive } from '@feng3d/reactivity';
 import { fit } from './hughsk/canvas-fit';
 import { attachCamera } from './hughsk/canvas-orbit-camera';
 import * as mat4 from './stackgl/gl-mat4';
 import * as vec3 from './stackgl/gl-vec3';
-import { reactive } from '@feng3d/reactivity';
 
 (async () =>
 {
@@ -360,8 +360,8 @@ import { reactive } from '@feng3d/reactivity';
             return pv;
         }, []);
 
-        reactive(getIGLBuffer(renderObject.vertices.position.data.buffer)).writeBuffers = [{ data: new Float32Array(positions) }];
-        reactive(getIGLBuffer(renderObject.vertices.normal.data.buffer)).writeBuffers = [{ data: new Float32Array(normals) }];
+        reactive(Buffer.getBuffer(renderObject.vertices.position.data.buffer)).writeBuffers = [{ data: new Float32Array(positions) }];
+        reactive(Buffer.getBuffer(renderObject.vertices.normal.data.buffer)).writeBuffers = [{ data: new Float32Array(normals) }];
 
         tick++;
 

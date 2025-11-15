@@ -1,5 +1,5 @@
+import { Buffer } from '@feng3d/render-api';
 import { TransformFeedback } from '../data/TransformFeedbackPass';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
 import { getGLBuffer } from './getGLBuffer';
 
 export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
@@ -16,7 +16,7 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
         transformFeedback.bindBuffers.forEach((v) =>
         {
             const { index, data } = v;
-            const buffer = getIGLBuffer(data.buffer);
+            const buffer = Buffer.getBuffer(data.buffer);
 
             const webGLBuffer = getGLBuffer(gl, buffer, 'TRANSFORM_FEEDBACK_BUFFER', 'STREAM_COPY');
             gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);

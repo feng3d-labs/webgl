@@ -1,7 +1,6 @@
 import { reactive, UnReadonly } from '@feng3d/reactivity';
-import { BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
+import { Buffer, BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
 import { watcher } from '@feng3d/watcher';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 /**
  *
@@ -43,7 +42,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     }
 
     //
-    const buffer = getIGLBuffer(uniformData.bufferView.buffer);
+    const buffer = Buffer.getBuffer(uniformData.bufferView.buffer);
     const offset = uniformData.bufferView.byteOffset;
 
     //

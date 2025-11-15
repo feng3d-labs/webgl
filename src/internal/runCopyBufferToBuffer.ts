@@ -1,13 +1,12 @@
-import { CopyBufferToBuffer } from '@feng3d/render-api';
+import { Buffer, CopyBufferToBuffer } from '@feng3d/render-api';
 import { getGLBuffer } from '../caches/getGLBuffer';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 export function runCopyBufferToBuffer(gl: WebGLRenderingContext, copyBufferToBuffer: CopyBufferToBuffer)
 {
     if (gl instanceof WebGL2RenderingContext)
     {
-        const rb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.source.buffer), 'COPY_READ_BUFFER');
-        const wb = getGLBuffer(gl, getIGLBuffer(copyBufferToBuffer.destination.buffer), 'COPY_WRITE_BUFFER');
+        const rb = getGLBuffer(gl, Buffer.getBuffer(copyBufferToBuffer.source.buffer), 'COPY_READ_BUFFER');
+        const wb = getGLBuffer(gl, Buffer.getBuffer(copyBufferToBuffer.destination.buffer), 'COPY_WRITE_BUFFER');
 
         const sourceOffset = copyBufferToBuffer.source.byteOffset;
         const destinationOffset = copyBufferToBuffer.destination.byteOffset;

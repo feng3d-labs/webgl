@@ -8,8 +8,6 @@ export * from './data/polyfills/CommandEncoder';
 export * from './data/polyfills/PrimitiveState';
 export * from './data/polyfills/Uniforms';
 
-export * from './runs/getIGLBuffer';
-
 export * from './shader/Macro';
 export * from './shader/ShaderLib';
 export * from './shader/ShaderMacroUtils';

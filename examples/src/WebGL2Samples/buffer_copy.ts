@@ -1,5 +1,5 @@
-import { CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
-import { getIGLBuffer, WebGL } from '@feng3d/webgl';
+import { Buffer, CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 (function ()
@@ -59,6 +59,6 @@ import { getShaderSource } from './utility';
     webgl.submit({ commandEncoders: [{ passEncoders: [cb, rp] }] });
 
     // -- Delete WebGL resources
-    webgl.deleteBuffer(getIGLBuffer(vertices.buffer));
+    webgl.deleteBuffer(Buffer.getBuffer(vertices.buffer));
     webgl.deleteProgram(program);
 })();

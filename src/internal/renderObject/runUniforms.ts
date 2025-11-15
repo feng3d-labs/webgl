@@ -4,7 +4,6 @@ import { getGLBuffer } from '../../caches/getGLBuffer';
 import { getGLProgram } from '../../caches/getGLProgram';
 import { GLUniformBufferType } from '../../const/GLUniformType';
 import { SamplerTexture } from '../../data/SamplerTexture';
-import { getIGLBuffer } from '../../runs/getIGLBuffer';
 import { updateBufferBinding } from '../../utils/updateBufferBinding';
 import { runSamplerTexture } from '../runSamplerTexture';
 import { runUniform } from '../runUniform';
@@ -61,7 +60,7 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
-            const buffer = getIGLBuffer(typedArray.buffer);
+            const buffer = Buffer.getBuffer(typedArray.buffer);
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
