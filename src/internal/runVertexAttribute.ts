@@ -1,10 +1,10 @@
-import { VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
+import { Buffer, VertexAttribute, vertexFormatMap } from '@feng3d/render-api';
 import { getGLBuffer } from '../caches/getGLBuffer';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
+import { reactive } from '@feng3d/reactivity';
 
 export function runVertexAttribute(gl: WebGLRenderingContext, location: number, attribute: VertexAttribute)
 {
-    const { stepMode, format } = attribute;
+    const { stepMode, format, data } = attribute;
     let { arrayStride, offset } = attribute;
 
     const glVertexFormat = vertexFormatMap[format];
@@ -26,14 +26,17 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 
     //
-    arrayStride = arrayStride || 0;
-    offset = offset || 0;
+    arrayStride = arrayStride || glVertexFormat.byteSize;
+    offset = data.byteOffset + (offset || 0);
 
     //
-    const buffer = getIGLBuffer(attribute.data, 'ARRAY_BUFFER', 'STATIC_DRAW');
-    buffer.target ??= 'ARRAY_BUFFER';
+    const buffer = Buffer.getBuffer(data.buffer);
+    if (!buffer.label)
+    {
+        reactive(buffer).label = (`顶点数据 ${autoVertexIndex++}`);
+    }
 
-    const webGLBuffer = getGLBuffer(gl, buffer);
+    const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
     //
@@ -47,3 +50,4 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
     }
 }
 
+let autoVertexIndex = 0;

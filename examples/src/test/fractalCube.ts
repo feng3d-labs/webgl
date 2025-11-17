@@ -13,6 +13,9 @@ main();
 async function main()
 {
     const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
 
     const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 

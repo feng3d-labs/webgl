@@ -1,5 +1,5 @@
-import { CanvasContext, CopyBufferToBuffer, Buffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
-import { WebGL, getIGLBuffer } from '@feng3d/webgl';
+import { Buffer, CanvasContext, CopyBufferToBuffer, RenderPass, RenderPipeline, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 (function ()
@@ -30,15 +30,13 @@ import { getShaderSource } from './utility';
         -1.0, 1.0,
         -1.0, -1.0,
     ]);
-    const vertexPosBufferSrc: Buffer = { target: 'ARRAY_BUFFER', size: vertices.byteLength, data: vertices, usage: 'STATIC_DRAW' };
 
     const vertexPosBufferDst = new Float32Array(vertices.length);
 
     const cb: CopyBufferToBuffer = {
         __type__: 'CopyBufferToBuffer',
-        source: vertexPosBufferSrc,
-        destination: getIGLBuffer(vertexPosBufferDst, 'ARRAY_BUFFER'),
-        sourceOffset: 0, destinationOffset: 0, size: vertices.length * Float32Array.BYTES_PER_ELEMENT,
+        source: vertices,
+        destination: vertexPosBufferDst,
     };
 
     // -- Init Vertex Array
@@ -61,6 +59,6 @@ import { getShaderSource } from './utility';
     webgl.submit({ commandEncoders: [{ passEncoders: [cb, rp] }] });
 
     // -- Delete WebGL resources
-    webgl.deleteBuffer(vertexPosBufferSrc);
+    webgl.deleteBuffer(Buffer.getBuffer(vertices.buffer));
     webgl.deleteProgram(program);
 })();

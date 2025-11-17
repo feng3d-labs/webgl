@@ -3,13 +3,10 @@ export * from './data/Renderbuffer';
 export * from './data/SamplerTexture';
 export * from './data/TransformFeedbackPass';
 
-export * from './data/polyfills/Buffer';
 export * from './data/polyfills/CanvasContext';
 export * from './data/polyfills/CommandEncoder';
 export * from './data/polyfills/PrimitiveState';
 export * from './data/polyfills/Uniforms';
-
-export * from './runs/getIGLBuffer';
 
 export * from './shader/Macro';
 export * from './shader/ShaderLib';

@@ -3,7 +3,7 @@ import { runRenderPass } from './runRenderPass';
 import { runTransformFeedbackPass } from './runTransformFeedbackPass';
 import { runBlitFramebuffer } from './runBlitFramebuffer';
 import { runCopyTextureToTexture } from './runCopyTextureToTexture';
-import { runCopyBuffer } from './runCopyBuffer';
+import { runCopyBufferToBuffer } from './runCopyBufferToBuffer';
 
 export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: CommandEncoder)
 {
@@ -35,7 +35,7 @@ export function runCommandEncoder(gl: WebGLRenderingContext, commandEncoder: Com
         }
         if (passEncoder.__type__ === 'CopyBufferToBuffer')
         {
-            runCopyBuffer(gl, passEncoder);
+            runCopyBufferToBuffer(gl, passEncoder);
 
             return;
         }

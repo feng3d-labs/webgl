@@ -1,5 +1,5 @@
-import { CanvasContext, IndicesDataTypes, RenderPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
-import { getIGLBuffer, TransformFeedback, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
+import { Buffer, CanvasContext, IndicesDataTypes, RenderPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { TransformFeedback, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 (function ()
@@ -116,8 +116,8 @@ import { getShaderSource } from './utility';
 
     // -- Delete WebGL resources
     webgl.deleteTransformFeedback(transformFeedback);
-    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_TRANSFORM]));
-    webgl.deleteBuffer(getIGLBuffer(buffers[PROGRAM_FEEDBACK]));
+    webgl.deleteBuffer(Buffer.getBuffer(buffers[PROGRAM_TRANSFORM].buffer));
+    webgl.deleteBuffer(Buffer.getBuffer(buffers[PROGRAM_FEEDBACK].buffer));
     webgl.deleteProgram(programTransform);
     webgl.deleteProgram(programFeedback);
 })();

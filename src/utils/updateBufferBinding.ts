@@ -1,7 +1,6 @@
 import { reactive, UnReadonly } from '@feng3d/reactivity';
-import { BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
+import { Buffer, BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
 import { watcher } from '@feng3d/watcher';
-import { getIGLBuffer } from '../runs/getIGLBuffer';
 
 /**
  *
@@ -39,11 +38,11 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     }
     else
     {
-        console.assert(uniformData.bufferView.byteLength === size, `uniformData.bufferView 统一块数据提供数据尺寸不对！`);
+        console.assert(uniformData.bufferView.byteLength >= size, `uniformData.bufferView 统一块数据提供数据尺寸不能小于实际尺寸！`);
     }
 
     //
-    const buffer = getIGLBuffer(uniformData.bufferView);
+    const buffer = Buffer.getBuffer(uniformData.bufferView.buffer);
     const offset = uniformData.bufferView.byteOffset;
 
     //
@@ -84,11 +83,11 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             }
 
             const writeBuffers = buffer.writeBuffers ?? [];
-            writeBuffers.push({ data: data.buffer, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) });
+            writeBuffers.push({ data: data, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) / data.BYTES_PER_ELEMENT });
             reactive(buffer).writeBuffers = writeBuffers;
         };
 
         update();
-        watcher.watchchain(uniformData, paths.join('.'), update, undefined, false);
+        watcher.watchchain(uniformData, ['value', ...paths].join('.'), update, undefined, false);
     });
 }

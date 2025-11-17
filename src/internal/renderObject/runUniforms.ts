@@ -4,7 +4,6 @@ import { getGLBuffer } from '../../caches/getGLBuffer';
 import { getGLProgram } from '../../caches/getGLProgram';
 import { GLUniformBufferType } from '../../const/GLUniformType';
 import { SamplerTexture } from '../../data/SamplerTexture';
-import { getIGLBuffer } from '../../runs/getIGLBuffer';
 import { updateBufferBinding } from '../../utils/updateBufferBinding';
 import { runSamplerTexture } from '../runSamplerTexture';
 import { runUniform } from '../runUniform';
@@ -12,9 +11,9 @@ import { runUniform } from '../runUniform';
 /**
  * 激活常量
  */
-export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline, uniforms: BindingResources)
+export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline, bindingResources: BindingResources)
 {
-    const webGLProgram = getGLProgram(gl, material);
+    const webGLProgram = getGLProgram(gl, pipeline);
 
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
@@ -25,7 +24,7 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
         {
             const { paths } = v;
 
-            let uniformData = uniforms[paths[0]];
+            let uniformData = bindingResources[paths[0]];
             for (let i = 1; i < paths.length; i++)
             {
                 uniformData = uniformData[paths[i]];
@@ -51,25 +50,26 @@ export function runUniforms(gl: WebGLRenderingContext, material: RenderPipeline,
         webGLProgram.uniformBlocks.forEach((uniformBlock) =>
         {
             const { name, index } = uniformBlock;
-            const uniformData = uniforms[name] as TypedArray | BufferBinding;
+            const uniformData = bindingResources[name] as TypedArray | BufferBinding;
 
             //
             let typedArray = uniformData as TypedArray;
             if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
             {
-                const bufferBinding = uniforms[name] as BufferBinding;
+                const bufferBinding = bindingResources[name] as BufferBinding;
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
-            const buffer = getIGLBuffer(typedArray, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
-            buffer.target ??= 'UNIFORM_BUFFER';
-            buffer.usage ??= 'DYNAMIC_DRAW';
+            const buffer = Buffer.getBuffer(typedArray.buffer);
 
             (buffer as UnReadonly<Buffer>).label = buffer.label || (`UniformBuffer ${name}`);
 
+            const offset = typedArray.byteOffset;
+            const size = uniformBlock.bufferBindingInfo.size;
+
             //
-            const webGLBuffer = getGLBuffer(gl, buffer);
-            gl.bindBufferBase(gl.UNIFORM_BUFFER, index, webGLBuffer);
+            const webGLBuffer = getGLBuffer(gl, buffer, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
+            gl.bindBufferRange(gl.UNIFORM_BUFFER, index, webGLBuffer, offset, size);
         });
     }
 }
