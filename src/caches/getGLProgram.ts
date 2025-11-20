@@ -58,7 +58,7 @@ export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline
     let result = gl._programs[shaderKey];
     if (result) return result;
 
-    const vertex = material.vertex.code;
+    const vertex = material.vertex.glsl || material.vertex.code;
     const fragment = (material as RenderPipeline).fragment?.code || `#version 300 es
         precision highp float;
         precision highp int;
@@ -88,8 +88,8 @@ export function deleteProgram(gl: WebGLRenderingContext, material: RenderPipelin
 
 function getKey(material: RenderPipeline | TransformFeedbackPipeline)
 {
-    const vertex = material.vertex.code;
-    const fragment = (material as RenderPipeline).fragment?.code;
+    const vertex = material.vertex.glsl || material.vertex.code;
+    const fragment = (material as RenderPipeline).fragment?.glsl || (material as RenderPipeline).fragment?.code;
     const transformFeedbackVaryings = (material as TransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
