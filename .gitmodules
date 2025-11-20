@@ -4,3 +4,6 @@
 [submodule "packages/webgpu"]
 	path = packages/webgpu
 	url = https://gitee.com/feng3d/webgpu.git
+[submodule "packages/tsl"]
+	path = packages/tsl
+	url = https://gitee.com/feng3d/tsl.git
