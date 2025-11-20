@@ -6,19 +6,20 @@ import { runBlitFramebuffer } from './runBlitFramebuffer';
 import { runOcclusionQuery } from './runOcclusionQuery';
 import { runRenderPassDescriptor } from './runRenderPassDescriptor';
 
-export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
+export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass, defaultRenderPassDescriptor?: RenderPassDescriptor)
 {
+    const descriptor = renderPass.descriptor || defaultRenderPassDescriptor;
     // 获取附件尺寸
-    const attachmentSize = getGLRenderPassAttachmentSize(gl, renderPass.descriptor);
+    const attachmentSize = getGLRenderPassAttachmentSize(gl, descriptor);
 
     // 处理不被遮挡查询
     const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderPassObjects);
     //
     occlusionQuery.init();
 
-    if (renderPass.descriptor?.sampleCount && (renderPass.descriptor.colorAttachments[0].view as TextureView).texture)
+    if (descriptor?.sampleCount && (descriptor.colorAttachments[0].view as TextureView).texture)
     {
-        const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(renderPass.descriptor);
+        const { passDescriptor, blitFramebuffer } = getGLRenderPassDescriptorWithMultisample(descriptor);
 
         runRenderPassDescriptor(gl, passDescriptor);
 
@@ -38,7 +39,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass)
     }
     else
     {
-        runRenderPassDescriptor(gl, renderPass.descriptor);
+        runRenderPassDescriptor(gl, descriptor);
 
         renderPass.renderPassObjects?.forEach((renderObject) =>
         {
