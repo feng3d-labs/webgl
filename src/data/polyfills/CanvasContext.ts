@@ -27,7 +27,7 @@ export const defaultWebGLContextAttributes: WebGLContextAttributes = {
     depth: true,
     stencil: true,
     antialias: false,
-    premultipliedAlpha: true,
+    premultipliedAlpha: false,
     preserveDrawingBuffer: false,
     powerPreference: 'default',
     failIfMajorPerformanceCaveat: false,
