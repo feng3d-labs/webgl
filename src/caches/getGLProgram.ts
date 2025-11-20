@@ -59,7 +59,14 @@ export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline
     if (result) return result;
 
     const vertex = material.vertex.glsl || material.vertex.code;
-    const fragment = (material as RenderPipeline).fragment?.code || `#version 300 es
+    let fragment = undefined;
+    const fragmentState = (material as RenderPipeline).fragment;
+    if (fragmentState)
+    {
+        fragment = fragmentState.glsl || fragmentState.code;
+    }
+
+    fragment = fragment || `#version 300 es
         precision highp float;
         precision highp int;
 
@@ -89,7 +96,12 @@ export function deleteProgram(gl: WebGLRenderingContext, material: RenderPipelin
 function getKey(material: RenderPipeline | TransformFeedbackPipeline)
 {
     const vertex = material.vertex.glsl || material.vertex.code;
-    const fragment = (material as RenderPipeline).fragment?.glsl || (material as RenderPipeline).fragment?.code;
+    let fragment = undefined;
+    const fragmentState = (material as RenderPipeline).fragment;
+    if (fragmentState)
+    {
+        fragment = fragmentState.glsl || fragmentState.code;
+    }
     const transformFeedbackVaryings = (material as TransformFeedbackPipeline).transformFeedbackVaryings;
 
     return `---vertexShader---\n${vertex}\n---fragment---\n${fragment}\n---feedback---${transformFeedbackVaryings?.varyings.toString()} ${transformFeedbackVaryings?.bufferMode}`;
