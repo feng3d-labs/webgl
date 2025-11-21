@@ -5,6 +5,6 @@ describe('test', () =>
 {
     it('test', () =>
     {
-        ok(true);
+        assert.ok(true);
     });
 });
