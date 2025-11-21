@@ -1,4 +1,4 @@
-import { RenderPassColorAttachment, RenderPassDescriptor, TextureFormat, TextureView } from '@feng3d/render-api';
+import { RenderPassColorAttachment, RenderPassDescriptor, Texture, TextureFormat, TextureView } from '@feng3d/render-api';
 import { BlitFramebuffer } from '../data/BlitFramebuffer';
 import { RenderbufferInternalformat, Renderbuffer } from '../data/Renderbuffer';
 import { getGLTextureFormats } from './getGLTextureFormats';
@@ -17,7 +17,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
 
     const texture = (sourcePassDescriptor.colorAttachments[0].view as TextureView).texture;
 
-    const textureSize = texture.descriptor.size;
+    const textureSize = (texture as Texture).descriptor.size;
 
     const renderbuffers: Renderbuffer[] = [];
 
@@ -28,7 +28,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
             const texture = v.view.texture;
 
             const renderbuffer: Renderbuffer = {
-                internalformat: getGLRenderbufferInternalformat(texture.descriptor.format),
+                internalformat: getGLRenderbufferInternalformat((texture as Texture).descriptor.format),
                 width: textureSize[0],
                 height: textureSize[1],
             };

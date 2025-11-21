@@ -1,4 +1,4 @@
-import { RenderPassDescriptor, TextureView } from '@feng3d/render-api';
+import { RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
 import { Renderbuffer } from '../data/Renderbuffer';
 import { deleteRenderbuffer, getGLRenderbuffer } from './getGLRenderbuffer';
 import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from './getGLRenderPassDescriptorWithMultisample';
@@ -35,8 +35,8 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             const baseMipLevel = view.baseMipLevel || 0;
             const baseArrayLayer = view.baseArrayLayer || 0;
 
-            const webGLTexture = getGLTexture(gl, texture);
-            const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
+            const webGLTexture = getGLTexture(gl, texture as Texture);
+            const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
 
             if (textureTarget === 'TEXTURE_2D')
             {
@@ -79,8 +79,8 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const baseMipLevel = view.baseMipLevel || 0;
         const baseArrayLayer = view.baseArrayLayer || 0;
 
-        const webGLTexture = getGLTexture(gl, texture);
-        const textureTarget = getGLTextureTarget(texture.descriptor.dimension);
+        const webGLTexture = getGLTexture(gl, texture as Texture);
+        const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
 
         if (textureTarget === 'TEXTURE_2D')
         {

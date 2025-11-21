@@ -1,4 +1,4 @@
-import { ReadPixels, RenderPassDescriptor, Texture } from '@feng3d/render-api';
+import { ReadPixels, RenderPassDescriptor, Texture, TextureDescriptor } from '@feng3d/render-api';
 import { deleteFramebuffer, getGLFramebuffer } from '../caches/getGLFramebuffer';
 import { getGLTextureFormats } from '../caches/getGLTextureFormats';
 
@@ -12,7 +12,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
         const attachmentPoint: GLAttachmentPoint = 'COLOR_ATTACHMENT0';
         const [width, height] = copySize;
         //
-        const descriptor = textureView.texture.descriptor;
+        const descriptor = (textureView.texture as Texture).descriptor;
         const { format, type } = getGLTextureFormats(descriptor.format);
         const bytesPerPixel = Texture.getTextureBytesPerPixel(descriptor.format);
         const DataConstructor = Texture.getTextureDataConstructor(descriptor.format);

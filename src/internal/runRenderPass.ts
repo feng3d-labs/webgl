@@ -1,4 +1,4 @@
-import { RenderPass, RenderPassDescriptor, TextureView } from '@feng3d/render-api';
+import { RenderObject, RenderPass, RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
 import { getGLRenderOcclusionQuery } from '../caches/getGLRenderOcclusionQuery';
 import { getGLRenderPassDescriptorWithMultisample } from '../caches/getGLRenderPassDescriptorWithMultisample';
 import { runRenderObject } from './renderObject/runRenderObject';
@@ -31,7 +31,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
             }
             else
             {
-                runRenderObject(gl, attachmentSize, renderObject);
+                runRenderObject(gl, attachmentSize, renderObject as RenderObject);
             }
         });
 
@@ -49,7 +49,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
             }
             else
             {
-                runRenderObject(gl, attachmentSize, renderObject);
+                runRenderObject(gl, attachmentSize, renderObject as RenderObject);
             }
         });
     }
@@ -73,7 +73,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = colorAttachments[0]?.view;
         if (view)
         {
-            return { width: view.texture.descriptor.size[0], height: view.texture.descriptor.size[1] };
+            return { width: (view.texture as Texture).descriptor.size[0], height: (view.texture as Texture).descriptor.size[1] };
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
@@ -85,7 +85,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = depthStencilAttachment.view;
         if (view)
         {
-            return { width: view.texture.descriptor.size[0], height: view.texture.descriptor.size[1] };
+            return { width: (view.texture as Texture).descriptor.size[0], height: (view.texture as Texture).descriptor.size[1] };
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
