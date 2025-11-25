@@ -101,6 +101,7 @@ import * as mat4 from './stackgl/gl-mat4';
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
                     renderPassObjects: [renderObject],
                 },
             ],

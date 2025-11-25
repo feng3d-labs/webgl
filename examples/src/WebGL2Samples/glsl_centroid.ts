@@ -177,6 +177,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
 const renderObjects: RenderPassObject[] = [];
 // Pass 2
 const rp2: RenderPass = {
+    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
     renderPassObjects: renderObjects,
 };
 const ro: RenderObject = {

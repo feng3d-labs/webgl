@@ -226,6 +226,7 @@ import * as vec3 from './stackgl/gl-vec3';
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
                     renderPassObjects: [renderObject],
                 },
             ],
