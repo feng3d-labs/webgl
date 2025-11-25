@@ -10,7 +10,10 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-const webgl = new WebGL(renderingContext);
+const webgl = new WebGL(renderingContext, {
+    clearColorValue: [0.5, 0.0, 0.0, 1.0],
+    loadColorOp: 'clear',
+});
 
 // -- Divide viewport
 
@@ -130,7 +133,6 @@ function render()
 
     const renderObjects: RenderPassObject[] = [];
     const renderPass: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: renderObjects,
     };
 

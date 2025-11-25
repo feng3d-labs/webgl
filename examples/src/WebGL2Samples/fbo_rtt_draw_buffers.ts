@@ -9,7 +9,10 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const renderingContext: CanvasContext = { canvasId: 'glcanvas' };
-const webgl = new WebGL(renderingContext);
+const webgl = new WebGL(renderingContext, {
+    clearColorValue: [0.0, 0.0, 0.0, 1.0],
+    loadColorOp: 'clear',
+});
 
 const windowSize = {
     x: canvas.width,
@@ -113,7 +116,6 @@ const renderPass: RenderPass = {
 
 // Pass 2: Draw to screen
 const renderPass2: RenderPass = {
-    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
     renderPassObjects: [{
         pipeline: drawProgram,
         bindingResources: {

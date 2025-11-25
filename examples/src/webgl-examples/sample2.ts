@@ -10,19 +10,14 @@ function main()
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' }, {
+        clearColorValue: [0, 0, 0, 1],
+        loadColorOp: 'clear',
+        depthClearValue: 1.0,
+        depthLoadOp: 'clear',
+    });
 
     const renderPass: RenderPass = {
-        descriptor: {
-            colorAttachments: [{
-                clearValue: [0, 0, 0, 1],
-                loadOp: 'clear',
-            }],
-            depthStencilAttachment: {
-                depthClearValue: 1.0,
-                depthLoadOp: 'clear',
-            },
-        },
         renderPassObjects: [{
             pipeline: {
                 vertex: {

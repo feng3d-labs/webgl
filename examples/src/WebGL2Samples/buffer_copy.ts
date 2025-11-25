@@ -13,7 +13,10 @@ import { getShaderSource } from './utility';
 
     // -- Init WebGL Context
     const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-    const webgl = new WebGL(rc);
+    const webgl = new WebGL(rc, {
+        clearColorValue: [0.0, 0.0, 0.0, 1.0],
+        loadColorOp: 'clear',
+    });
 
     // -- Init Program
     const program: RenderPipeline = {
@@ -48,7 +51,6 @@ import { getShaderSource } from './utility';
 
     // -- Render
     const rp: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [{
             pipeline: program,
             vertices: vertexArray.vertices,

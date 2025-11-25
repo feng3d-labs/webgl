@@ -14,7 +14,12 @@ function main()
 {
     const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' }, {
+        clearColorValue: [0.0, 0.0, 0.0, 1.0],
+        loadColorOp: 'clear',
+        depthClearValue: 1.0,
+        depthLoadOp: 'clear',
+    });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
@@ -63,16 +68,6 @@ function main()
     };
 
     const renderPass: RenderPass = {
-        descriptor: {
-            colorAttachments: [{
-                clearValue: [0.0, 0.0, 0.0, 1.0],
-                loadOp: 'clear',
-            }],
-            depthStencilAttachment: {
-                depthClearValue: 1.0,
-                depthLoadOp: 'clear',
-            },
-        },
         renderPassObjects: [renderObject],
     };
 

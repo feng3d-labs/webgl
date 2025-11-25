@@ -11,7 +11,10 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } });
+const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } }, {
+    clearColorValue: [0, 0, 0, 1],
+    depthClearValue: 1,
+});
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
@@ -63,7 +66,6 @@ const submit: Submit = {
     commandEncoders: [{
         passEncoders: [
             {
-                descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
                 renderPassObjects: [renderObject],
             },
         ],

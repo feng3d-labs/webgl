@@ -7,18 +7,15 @@ const init = async (canvas: HTMLCanvasElement) =>
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
-    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' }); // 初始化WebGL
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' }, {
+        clearColorValue: [0.0, 0.0, 0.0, 1.0],
+    }); // 初始化WebGL
 
     const submit: Submit = { // 一次GPU提交
         commandEncoders: [ // 命令编码列表
             {
                 passEncoders: [ // 通道编码列表
                     { // 渲染通道
-                        descriptor: { // 渲染通道描述
-                            colorAttachments: [{ // 颜色附件
-                                clearValue: [0.0, 0.0, 0.0, 1.0], // 渲染前填充颜色
-                            }],
-                        },
                         renderPassObjects: [{ // 渲染对象
                             pipeline: { // 渲染管线
                                 vertex: { // 顶点着色器
