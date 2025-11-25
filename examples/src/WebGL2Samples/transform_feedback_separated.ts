@@ -14,10 +14,7 @@ import { getShaderSource } from './utility';
 
     // -- Init WebGL Context
     const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
-    const webgl = new WebGL(rc, {
-        clearColorValue: [0.0, 0.0, 0.0, 1.0],
-        loadColorOp: 'clear',
-    });
+    const webgl = new WebGL(rc);
 
     // -- Init Program
     const programTransform = (function (vertexShaderSourceTransform, fragmentShaderSourceTransform)
@@ -114,6 +111,7 @@ import { getShaderSource } from './utility';
                     ],
                 },
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
                     renderPassObjects: [
                         // Second draw, reuse captured attributes
                         {

@@ -19,12 +19,7 @@ async function main()
 
     const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 
-    const webgl = new WebGL(renderingContext, {
-        clearColorValue: [0.5, 0.5, 0.5, 1.0],
-        loadColorOp: 'clear',
-        depthClearValue: 1.0,
-        depthLoadOp: 'clear',
-    });
+    const webgl = new WebGL(renderingContext);
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
@@ -91,6 +86,10 @@ async function main()
             passEncoders: [
                 // 绘制
                 {
+                    descriptor: {
+                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: 'clear' }],
+                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: 'clear' },
+                    },
                     renderPassObjects: [renderObject],
                 },
                 // 从画布中拷贝到纹理。

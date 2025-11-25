@@ -9,10 +9,7 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-const webgl = new WebGL(rc, {
-    clearColorValue: [0.0, 0.0, 0.0, 1.0],
-    loadColorOp: 'clear',
-});
+const webgl = new WebGL(rc);
 
 // -- Init program
 const program: RenderPipeline = {
@@ -70,6 +67,7 @@ loadImage('../../assets/img/Di-3d.png', function (image)
     ]);
 
     const rp: RenderPass = {
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [{
             pipeline: program,
             bindingResources: { MVP: { value: matrix }, diffuse: { texture, sampler } },

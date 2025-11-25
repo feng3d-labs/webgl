@@ -14,10 +14,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: 'glcanvas' }, {
-    clearColorValue: [0, 0, 0, 1],
-    depthClearValue: 1,
-});
+const webgl = new WebGL({ canvasId: 'glcanvas' });
 
 const renderObject: RenderObject = {
     vertices: {
@@ -64,6 +61,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
                     renderPassObjects: [renderObject],
                 },
             ],

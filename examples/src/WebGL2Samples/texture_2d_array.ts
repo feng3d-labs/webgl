@@ -12,10 +12,7 @@ import { getShaderSource, loadImage } from './utility';
     document.body.appendChild(canvas);
 
     const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-    const webgl = new WebGL(rc, {
-        clearColorValue: [1.0, 1.0, 1.0, 1.0],
-        loadColorOp: 'clear',
-    });
+    const webgl = new WebGL(rc);
 
     // -- Init program
     const program: RenderPipeline = {
@@ -99,6 +96,7 @@ import { getShaderSource, loadImage } from './utility';
         };
 
         const rp: RenderPass = {
+            descriptor: { colorAttachments: [{ clearValue: [1.0, 1.0, 1.0, 1.0], loadOp: 'clear' }] },
             renderPassObjects: [ro],
         };
 

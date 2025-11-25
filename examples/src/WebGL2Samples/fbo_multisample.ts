@@ -10,10 +10,7 @@ canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
 const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-const webgl = new WebGL(renderingContext, {
-    clearColorValue: [0.0, 0.0, 0.0, 1.0],
-    loadColorOp: 'clear',
-});
+const webgl = new WebGL(renderingContext);
 
 // -- Init program
 const PROGRAM = {
@@ -126,6 +123,7 @@ const mvp = mat4.create();
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
 const renderPass2: RenderPass = {
+    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
     renderPassObjects: [
         {
             pipeline: programs[PROGRAM.SPLASH],

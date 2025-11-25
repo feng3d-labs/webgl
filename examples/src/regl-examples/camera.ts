@@ -11,9 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } }, {
-    clearColorValue: [0, 0, 0, 1],
-});
+const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } });
 
 const camera = createCamera({
     center: [0, 2.5, 0],
@@ -64,6 +62,7 @@ function draw()
         commandEncoders: [{
             passEncoders: [
                 {
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
                     renderPassObjects: [renderObject],
                 },
             ],

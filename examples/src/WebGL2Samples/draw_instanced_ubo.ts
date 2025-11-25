@@ -9,10 +9,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
-const webgl = new WebGL(rc, {
-    clearColorValue: [0, 0, 0, 1],
-    loadColorOp: 'clear',
-});
+const webgl = new WebGL(rc);
 
 // -- Init program
 const program: RenderPipeline = { vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') } };
@@ -50,6 +47,7 @@ const materials = {
 
 // -- Render
 const rp: RenderPass = {
+    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1], loadOp: 'clear' }] },
     renderPassObjects: [{
         pipeline: program,
         bindingResources: {
