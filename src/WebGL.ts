@@ -1,4 +1,4 @@
-import { Buffer, CanvasContext, CanvasRenderPassDescriptor, ReadPixels, RenderPassColorAttachment, RenderPassDepthStencilAttachment, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture, unreadonly } from '@feng3d/render-api';
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from '@feng3d/render-api';
 
 import { Computed, computed, reactive } from '@feng3d/reactivity';
 import { deleteBuffer } from './caches/getGLBuffer';
@@ -24,97 +24,10 @@ export class WebGL
     private _renderingContext: CanvasContext;
     private _gl: WebGLRenderingContext;
 
-    private _renderPassDescriptorComputed: Computed<RenderPassDescriptor>;
-
-    constructor(canvasContext?: CanvasContext, canvasRenderPassDescriptor?: CanvasRenderPassDescriptor)
+    constructor(canvasContext?: CanvasContext)
     {
         this._renderingContext = canvasContext;
         this._gl = getGLCanvasContext(this._renderingContext) as any;
-
-        this._initRenderPassDescriptorComputed(canvasContext, canvasRenderPassDescriptor);
-    }
-
-    private _initRenderPassDescriptorComputed(canvasContext?: CanvasContext, canvasRenderPassDescriptor?: CanvasRenderPassDescriptor)
-    {
-        if (canvasContext)
-        {
-            const colorAttachment: RenderPassColorAttachment = {};
-            const depthStencilAttachment: RenderPassDepthStencilAttachment = {};
-            //
-            const descriptor: RenderPassDescriptor = {
-                colorAttachments: [colorAttachment],
-            };
-
-            this._renderPassDescriptorComputed = computed(() =>
-            {
-                if (!canvasRenderPassDescriptor) return descriptor;
-
-                const r_canvasRenderPassDescriptor = reactive(canvasRenderPassDescriptor);
-                //
-                r_canvasRenderPassDescriptor.clearColorValue;
-                reactive(descriptor.colorAttachments[0]).clearValue = canvasRenderPassDescriptor.clearColorValue;
-
-                r_canvasRenderPassDescriptor.loadColorOp;
-                reactive(descriptor.colorAttachments[0]).loadOp = canvasRenderPassDescriptor.loadColorOp;
-
-                let hasDepthStencilAttachment = false;
-                if (r_canvasRenderPassDescriptor.depthClearValue !== undefined)
-                {
-                    hasDepthStencilAttachment = true;
-                    reactive(depthStencilAttachment).depthClearValue = r_canvasRenderPassDescriptor.depthClearValue;
-                }
-                else
-                {
-                    delete unreadonly(depthStencilAttachment).depthClearValue;
-                }
-                if (r_canvasRenderPassDescriptor.depthLoadOp !== undefined)
-                {
-                    hasDepthStencilAttachment = true;
-                    reactive(depthStencilAttachment).depthLoadOp = r_canvasRenderPassDescriptor.depthLoadOp;
-                }
-                else
-                {
-                    delete unreadonly(depthStencilAttachment).depthLoadOp;
-                }
-                if (r_canvasRenderPassDescriptor.stencilClearValue !== undefined)
-                {
-                    hasDepthStencilAttachment = true;
-                    reactive(depthStencilAttachment).stencilClearValue = r_canvasRenderPassDescriptor.stencilClearValue;
-                }
-                else
-                {
-                    delete unreadonly(depthStencilAttachment).stencilClearValue;
-                }
-                if (r_canvasRenderPassDescriptor.stencilLoadOp !== undefined)
-                {
-                    hasDepthStencilAttachment = true;
-                    reactive(depthStencilAttachment).stencilLoadOp = r_canvasRenderPassDescriptor.stencilLoadOp;
-                }
-                else
-                {
-                    delete unreadonly(depthStencilAttachment).stencilLoadOp;
-                }
-                if (hasDepthStencilAttachment)
-                {
-                    reactive(descriptor).depthStencilAttachment = depthStencilAttachment;
-                }
-                else
-                {
-                    delete unreadonly(descriptor).depthStencilAttachment;
-                }
-
-                if (r_canvasRenderPassDescriptor.sampleCount !== undefined)
-                {
-                    reactive(descriptor).sampleCount = r_canvasRenderPassDescriptor.sampleCount;
-                }
-                else
-                {
-                    delete unreadonly(descriptor).sampleCount;
-                }
-
-                return descriptor;
-            });
-        }
     }
 
     /**
@@ -125,7 +38,7 @@ export class WebGL
      */
     submit(submit: Submit)
     {
-        runSubmit(this._gl, submit, this._renderPassDescriptorComputed?.value);
+        runSubmit(this._gl, submit);
     }
 
     readPixels(glReadPixels: ReadPixels)
