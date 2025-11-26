@@ -25,6 +25,14 @@ function isSampler(value: any): value is Sampler
 }
 
 /**
+ * 检查是否是 Texture 类型（不是 CanvasTexture）
+ */
+function isTexture(value: any): value is Texture
+{
+    return value && typeof value === 'object' && 'descriptor' in value;
+}
+
+/**
  * 尝试从展开的格式中获取 SamplerTexture
  * 如果找到 name_texture 和 name，且它们分别是 TextureView 和 Sampler，则合并为 SamplerTexture
  */
@@ -38,10 +46,14 @@ function getSamplerTextureFromExpanded(bindingResources: BindingResources, name:
 
     if (textureValue && samplerValue && isTextureView(textureValue) && isSampler(samplerValue))
     {
-        return {
-            texture: textureValue.texture,
-            sampler: samplerValue,
-        };
+        // 确保 texture 是 Texture 类型（不是 CanvasTexture）
+        if (isTexture(textureValue.texture))
+        {
+            return {
+                texture: textureValue.texture,
+                sampler: samplerValue,
+            };
+        }
     }
 
     return undefined;
