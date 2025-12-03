@@ -34,9 +34,7 @@ npm run test:dev
 ```
 
 然后在浏览器中打开：
-- `http://localhost:3001` - 查看深度附件测试（使用封装的 WebGL API）
-- `http://localhost:3001/native-webgl-readpixels.html` - 查看原生 WebGL readPixels 测试
-- `http://localhost:3001/readPixels.html` - 查看 @feng3d/webgl 库的 readPixels 单元测试
+- `http://localhost:3001` - 查看深度附件和画布颜色读取测试
 
 ### 方式 2: 构建后运行
 
@@ -52,13 +50,13 @@ npm run preview
 - **绿色三角形**：z=0.5，更远离相机，后绘制
 
 测试会：
-1. 渲染到纹理视图（而不是直接渲染到画布）
-2. 使用 BlitFramebuffer 将纹理内容复制到画布以便可视化
-3. 读取纹理中心点的像素颜色来验证深度测试是否正确工作
+1. 直接渲染到画布（使用 CanvasTexture）
+2. 使用 `webgl.readPixels` 直接从画布读取中心点的像素颜色
+3. 验证深度测试是否正确工作
 
 ## 文件结构
 
-- `index.html` - 测试页面
-- `test.ts` - 测试逻辑
+- `depth-attachment-canvas-readpixels.html` - 测试页面
+- `depth-attachment-canvas-readpixels.ts` - 测试逻辑
 - `vite.config.js` - Vite 配置文件
 
