@@ -1,8 +1,15 @@
 import { DepthStencilState } from '@feng3d/render-api';
 import { getGLCompareFunction } from '../runs/getGLCompareFunction';
 
-export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
+export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState, hasDepthAttachment = true)
 {
+    // 如果没有深度附件，必须关闭深度检测
+    if (!hasDepthAttachment)
+    {
+        gl.disable(gl.DEPTH_TEST);
+        return;
+    }
+
     if (depthStencil && (depthStencil.depthWriteEnabled || depthStencil.depthCompare !== 'always'))
     {
         const depthCompare = getGLCompareFunction(depthStencil.depthCompare ?? 'less');

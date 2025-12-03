@@ -9,7 +9,7 @@ import { runUniforms } from './runUniforms';
 import { runVertexArray } from './runVertexArray';
 import { runViewPort } from './runViewPort';
 
-export function runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject)
+export function runRenderObject(gl: WebGLRenderingContext, attachmentSize: { width: number, height: number }, renderObject: RenderObject, hasDepthAttachment = true)
 {
     const { viewport, scissorRect, pipeline, vertices, indices, draw, bindingResources: uniforms } = renderObject;
     const primitive = pipeline?.primitive;
@@ -18,7 +18,7 @@ export function runRenderObject(gl: WebGLRenderingContext, attachmentSize: { wid
 
     runScissor(gl, attachmentSize, scissorRect);
 
-    runRenderPipeline(gl, pipeline);
+    runRenderPipeline(gl, pipeline, hasDepthAttachment);
 
     runUniforms(gl, pipeline, uniforms);
 

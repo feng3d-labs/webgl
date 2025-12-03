@@ -12,6 +12,9 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
     // 获取附件尺寸
     const attachmentSize = getGLRenderPassAttachmentSize(gl, descriptor);
 
+    // 检查是否有深度附件
+    const hasDepthAttachment = !!(descriptor?.depthStencilAttachment);
+
     // 处理不被遮挡查询
     const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderPassObjects);
     //
@@ -27,11 +30,11 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
         {
             if (renderObject.__type__ === 'OcclusionQuery')
             {
-                runOcclusionQuery(gl, attachmentSize, renderObject);
+                runOcclusionQuery(gl, attachmentSize, renderObject, hasDepthAttachment);
             }
             else
             {
-                runRenderObject(gl, attachmentSize, renderObject as RenderObject);
+                runRenderObject(gl, attachmentSize, renderObject as RenderObject, hasDepthAttachment);
             }
         });
 
@@ -45,11 +48,11 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
         {
             if (renderObject.__type__ === 'OcclusionQuery')
             {
-                runOcclusionQuery(gl, attachmentSize, renderObject);
+                runOcclusionQuery(gl, attachmentSize, renderObject, hasDepthAttachment);
             }
             else
             {
-                runRenderObject(gl, attachmentSize, renderObject as RenderObject);
+                runRenderObject(gl, attachmentSize, renderObject as RenderObject, hasDepthAttachment);
             }
         });
     }
