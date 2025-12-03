@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL readPixels 测试</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .test-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .test-case {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 400px;
+        }
+
+        .test-case h2 {
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 18px;
+        }
+
+        .test-case p {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            display: block;
+            background-color: #000;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .status.pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .info-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebGL readPixels 测试</h1>
+
+    <div class="test-container">
+        <div class="test-case">
+            <h2>测试 1: 从画布读取红色</h2>
+            <p>渲染一个红色三角形到画布，然后使用 @feng3d/webgl 的 readPixels 读取中心点颜色。</p>
+            <canvas id="canvas-red" width="400" height="300"></canvas>
+            <div id="status-red" class="status">测试中...</div>
+            <div id="info-red" class="info"></div>
+        </div>
+
+        <div class="test-case">
+            <h2>测试 2: 从画布读取绿色</h2>
+            <p>渲染一个绿色三角形到画布，然后使用 @feng3d/webgl 的 readPixels 读取中心点颜色。</p>
+            <canvas id="canvas-green" width="400" height="300"></canvas>
+            <div id="status-green" class="status">测试中...</div>
+            <div id="info-green" class="info"></div>
+        </div>
+
+        <div class="test-case">
+            <h2>测试 3: 从纹理读取颜色</h2>
+            <p>渲染到纹理，然后使用 @feng3d/webgl 的 readPixels 从纹理读取中心点颜色。</p>
+            <canvas id="canvas-texture" width="400" height="300"></canvas>
+            <div id="status-texture" class="status">测试中...</div>
+            <div id="info-texture" class="info"></div>
+        </div>
+    </div>
+
+    <script type="module" src="./readPixels.ts"></script>
+</body>
+</html>
+
