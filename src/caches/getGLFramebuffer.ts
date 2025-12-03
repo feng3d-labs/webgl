@@ -92,40 +92,90 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
     }
 
     // 处理深度模板附件
-    if (passDescriptor.depthStencilAttachment?.view)
+    const depthStencilAttachment = passDescriptor.depthStencilAttachment;
+    if (depthStencilAttachment)
     {
-        const view = passDescriptor.depthStencilAttachment.view;
-
-        const texture = view.texture;
-        const baseMipLevel = view.baseMipLevel || 0;
-        const baseArrayLayer = view.baseArrayLayer || 0;
-
-        // 检查是否是 CanvasTexture
-        if ('context' in texture)
+        // 如果有 view，使用纹理作为深度附件
+        if (depthStencilAttachment.view)
         {
-            // CanvasTexture: 不需要附加到 framebuffer，因为使用的是默认 framebuffer
-            // 跳过处理
-        }
-        else
-        {
-            const webGLTexture = getGLTexture(gl, texture as Texture);
-            const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
+            const view = depthStencilAttachment.view;
 
-            if (textureTarget === 'TEXTURE_2D')
+            const texture = view.texture;
+            const baseMipLevel = view.baseMipLevel || 0;
+            const baseArrayLayer = view.baseArrayLayer || 0;
+
+            // 检查是否是 CanvasTexture
+            if ('context' in texture)
             {
-                gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
-            }
-            else if (textureTarget === 'TEXTURE_2D_ARRAY')
-            {
-                if (gl instanceof WebGL2RenderingContext)
-                {
-                    gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, baseMipLevel, baseArrayLayer);
-                }
+                // CanvasTexture: 不需要附加到 framebuffer，因为使用的是默认 framebuffer
+                // 跳过处理
             }
             else
             {
-                console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
+                const webGLTexture = getGLTexture(gl, texture as Texture);
+                const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
+
+                if (textureTarget === 'TEXTURE_2D')
+                {
+                    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
+                }
+                else if (textureTarget === 'TEXTURE_2D_ARRAY')
+                {
+                    if (gl instanceof WebGL2RenderingContext)
+                    {
+                        gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, baseMipLevel, baseArrayLayer);
+                    }
+                }
+                else
+                {
+                    console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
+                }
             }
+        }
+        // 如果没有 view，但配置了 depthStencilAttachment，自动创建深度 renderbuffer
+        else if (webGLFramebuffer)
+        {
+            // 获取附件尺寸
+            const colorAttachment = passDescriptor.colorAttachments?.[0];
+            let width = gl.drawingBufferWidth;
+            let height = gl.drawingBufferHeight;
+
+            if (colorAttachment?.view)
+            {
+                const view = colorAttachment.view;
+                if ('texture' in view)
+                {
+                    const texture = view.texture;
+                    if ('descriptor' in texture)
+                    {
+                        width = texture.descriptor.size[0];
+                        height = texture.descriptor.size[1];
+                    }
+                }
+            }
+
+            // 创建深度 renderbuffer
+            const depthRenderbuffer = gl.createRenderbuffer();
+            gl.bindRenderbuffer(gl.RENDERBUFFER, depthRenderbuffer);
+            if (gl instanceof WebGL2RenderingContext)
+            {
+                gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH24_STENCIL8, width, height);
+                gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, depthRenderbuffer);
+            }
+            else
+            {
+                gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+                gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthRenderbuffer);
+            }
+
+            // 将 renderbuffer 存储到 framebuffer 的缓存中，以便后续清理
+            // 使用 Map 存储 framebuffer 到 renderbuffer 的映射
+            const glAny = gl as any;
+            if (!glAny._framebufferDepthRenderbuffers)
+            {
+                glAny._framebufferDepthRenderbuffers = new Map();
+            }
+            glAny._framebufferDepthRenderbuffers.set(webGLFramebuffer, depthRenderbuffer);
         }
     }
 
@@ -150,6 +200,19 @@ export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: Ren
 
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     gl._framebuffers.delete(passDescriptor);
+
+    // 删除关联的深度 renderbuffer（如果存在）
+    const glAny = gl as any;
+    if (glAny._framebufferDepthRenderbuffers && webGLFramebuffer)
+    {
+        const depthRenderbuffer = glAny._framebufferDepthRenderbuffers.get(webGLFramebuffer);
+        if (depthRenderbuffer)
+        {
+            gl.deleteRenderbuffer(depthRenderbuffer);
+            glAny._framebufferDepthRenderbuffers.delete(webGLFramebuffer);
+        }
+    }
+
     //
     gl.deleteFramebuffer(webGLFramebuffer);
 }

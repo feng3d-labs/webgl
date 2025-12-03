@@ -1,4 +1,5 @@
-import { CanvasTexture, RenderObject, Submit, TextureView } from '@feng3d/render-api';
+import { CanvasTexture, RenderObject, Submit, Texture, TextureView } from '@feng3d/render-api';
+import { BlitFramebuffer, BlitFramebufferItem } from '@feng3d/webgl';
 import { WebGL } from '@feng3d/webgl';
 
 // 创建两个重叠的三角形
@@ -118,16 +119,19 @@ async function testWithoutDepthAttachment()
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 使用画布纹理视图（必须与 WebGL 构造函数中的 canvasContext 指向相同的画布）
-        const canvasTexture: CanvasTexture = {
-            context: { canvasId: 'canvas-no-depth', webGLcontextId: 'webgl2' },
+        // 创建纹理用于渲染
+        const renderTexture: Texture = {
+            descriptor: {
+                size: [canvas.width, canvas.height],
+                format: 'rgba8unorm',
+            },
         };
 
         const textureView: TextureView = {
-            texture: canvasTexture,
+            texture: renderTexture,
         };
 
-        // 提交渲染（没有深度附件，渲染到画布纹理）
+        // 提交渲染（没有深度附件，渲染到纹理视图）
         // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
         // 如果没有深度测试，后绘制的绿色会覆盖先绘制的红色
         const submit: Submit = {
@@ -150,12 +154,46 @@ async function testWithoutDepthAttachment()
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
 
+        // 将纹理内容复制到画布以便可视化
+        const canvasTexture: CanvasTexture = {
+            context: { canvasId: 'canvas-no-depth', webGLcontextId: 'webgl2' },
+        };
+
+        const canvasTextureView: TextureView = {
+            texture: canvasTexture,
+        };
+
+        // 使用 BlitFramebuffer 将纹理内容复制到画布
+        const blitFramebuffer = {
+            __type__: 'BlitFramebuffer' as const,
+            read: {
+                colorAttachments: [{ view: textureView }],
+            },
+            draw: {
+                colorAttachments: [{ view: canvasTextureView }],
+            },
+            blitFramebuffers: [
+                [0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height, 'COLOR_BUFFER_BIT', 'NEAREST'] as BlitFramebufferItem,
+            ],
+        };
+
+        const blitSubmit: Submit = {
+            commandEncoders: [{
+                passEncoders: [blitFramebuffer],
+            }],
+        };
+
+        webgl.submit(blitSubmit);
+
+        // 等待 blit 完成
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
         // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
 
         // 添加调试信息
-        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
+        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 纹理尺寸: ${canvas.width}x${canvas.height}`);
 
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
 
@@ -206,16 +244,19 @@ async function testWithDepthAttachment()
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 使用画布纹理视图（必须与 WebGL 构造函数中的 canvasContext 指向相同的画布）
-        const canvasTexture: CanvasTexture = {
-            context: { canvasId: 'canvas-with-depth', webGLcontextId: 'webgl2' },
+        // 创建纹理用于渲染
+        const renderTexture: Texture = {
+            descriptor: {
+                size: [canvas.width, canvas.height],
+                format: 'rgba8unorm',
+            },
         };
 
         const textureView: TextureView = {
-            texture: canvasTexture,
+            texture: renderTexture,
         };
 
-        // 提交渲染（有深度附件，渲染到画布纹理）
+        // 提交渲染（有深度附件，渲染到纹理视图）
         // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
         // 有深度测试时，更靠近的红色会覆盖更远的绿色
         const submit: Submit = {
@@ -238,12 +279,46 @@ async function testWithDepthAttachment()
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
 
+        // 将纹理内容复制到画布以便可视化
+        const canvasTexture: CanvasTexture = {
+            context: { canvasId: 'canvas-with-depth', webGLcontextId: 'webgl2' },
+        };
+
+        const canvasTextureView: TextureView = {
+            texture: canvasTexture,
+        };
+
+        // 使用 BlitFramebuffer 将纹理内容复制到画布
+        const blitFramebuffer: BlitFramebuffer = {
+            __type__: 'BlitFramebuffer',
+            read: {
+                colorAttachments: [{ view: textureView }],
+            },
+            draw: {
+                colorAttachments: [{ view: canvasTextureView }],
+            },
+            blitFramebuffers: [
+                [0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height, 'COLOR_BUFFER_BIT', 'NEAREST'] as BlitFramebufferItem,
+            ],
+        };
+
+        const blitSubmit: Submit = {
+            commandEncoders: [{
+                passEncoders: [blitFramebuffer],
+            }],
+        };
+
+        webgl.submit(blitSubmit);
+
+        // 等待 blit 完成
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
         // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
 
         // 添加调试信息
-        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
+        console.log(`测试 2: 读取中心点 (${centerX}, ${centerY}), 纹理尺寸: ${canvas.width}x${canvas.height}`);
 
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
 
