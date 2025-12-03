@@ -34,7 +34,8 @@ npm run test:dev
 ```
 
 然后在浏览器中打开：
-- `http://localhost:3001` - 查看深度附件和画布颜色读取测试
+- `http://localhost:3001` - 查看测试套件主页（显示所有测试的状态）
+- `http://localhost:3001/depth-attachment-canvas-readpixels.html` - 查看深度附件和画布颜色读取测试
 
 ### 方式 2: 构建后运行
 
@@ -56,7 +57,9 @@ npm run preview
 
 ## 文件结构
 
-- `depth-attachment-canvas-readpixels.html` - 测试页面
-- `depth-attachment-canvas-readpixels.ts` - 测试逻辑
+- `index.html` - 测试套件主页，显示所有测试的状态
+- `index.ts` - 测试套件管理逻辑
+- `depth-attachment-canvas-readpixels.html` - 深度附件和画布颜色读取测试页面
+- `depth-attachment-canvas-readpixels.ts` - 深度附件和画布颜色读取测试逻辑
 - `vite.config.js` - Vite 配置文件
 

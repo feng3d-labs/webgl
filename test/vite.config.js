@@ -16,7 +16,8 @@ export default defineConfig({
         outDir: 'dist',
         rollupOptions: {
             input: {
-                main: resolve(__dirname, 'depth-attachment-canvas-readpixels.html'),
+                main: resolve(__dirname, 'index.html'),
+                'depth-attachment-canvas-readpixels': resolve(__dirname, 'depth-attachment-canvas-readpixels.html'),
             },
         },
     },
