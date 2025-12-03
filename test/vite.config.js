@@ -17,8 +17,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'index.html'),
-                'native-webgl-readpixels': resolve(__dirname, 'native-webgl-readpixels.html'),
-                'readPixels': resolve(__dirname, 'readPixels.html'),
             },
         },
     },

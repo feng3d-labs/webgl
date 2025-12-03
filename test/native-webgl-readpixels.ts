@@ -105,7 +105,7 @@ function createGreenTriangle(gl: WebGLRenderingContext | WebGL2RenderingContext,
 function readPixelColor(gl: WebGLRenderingContext | WebGL2RenderingContext, x: number, y: number): [number, number, number, number]
 {
     // 确保所有渲染命令都已完成
-    gl.finish();
+    // gl.finish();
 
     // 绑定到默认 framebuffer（画布）
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -136,7 +136,7 @@ function readPixelColor(gl: WebGLRenderingContext | WebGL2RenderingContext, x: n
 }
 
 // 测试函数
-function testReadPixels(canvasId: string, statusId: string, infoId: string, createTriangle: (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram) => void, expectedColor: [number, number, number, number], colorName: string): void
+async function testReadPixels(canvasId: string, statusId: string, infoId: string, createTriangle: (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram) => void, expectedColor: [number, number, number, number], colorName: string): Promise<void>
 {
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     const statusDiv = document.getElementById(statusId) as HTMLDivElement;
@@ -214,13 +214,18 @@ function testReadPixels(canvasId: string, statusId: string, infoId: string, crea
         createTriangle(gl, program);
 
         // 等待渲染完成
-        gl.finish();
+        // gl.finish();
 
         // 读取中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
 
         console.log(`${colorName} 测试: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
+
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => requestAnimationFrame(resolve));
 
         const [r, g, b, a] = readPixelColor(gl, centerX, centerY);
 

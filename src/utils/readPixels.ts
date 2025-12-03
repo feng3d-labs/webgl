@@ -28,25 +28,18 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
             // 绑定到默认 framebuffer（画布）
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-            gl.readBuffer(gl.BACK); // 默认 framebuffer 使用 BACK 缓冲区
 
-            // 确保所有渲染命令都已完成
-            gl.finish();
+            // 设置读取缓冲区（默认 framebuffer 使用 BACK 缓冲区）
+            gl.readBuffer(gl.BACK);
 
             // 读取像素（注意：WebGL 的坐标系是左下角为原点，需要翻转 y 坐标）
             // origin[1] 是从顶部计算的 y 坐标，需要转换为从底部计算的坐标
             // readPixels 的 y 参数是读取区域的左下角坐标
-            // 如果 origin[1] 是从顶部计算的单个像素位置，那么：
-            // glY = drawingBufferHeight - origin[1] - 1
-            // 但为了支持读取多个像素，使用：
-            // glY = drawingBufferHeight - origin[1] - height
-            // 注意：当 height=1 时，这两种方式结果相同
-            // 但是，如果 origin[1] 是单个像素的 y 坐标（从顶部），我们应该读取该像素本身
-            // 所以对于单个像素，应该使用：glY = drawingBufferHeight - origin[1] - 1
-            // 但是，readPixels 的 y 参数是读取区域的左下角坐标，所以对于单个像素：
-            // 如果 origin[1] 是像素的 y 坐标（从顶部），那么该像素在 WebGL 坐标系中的 y 坐标是：
-            // glY = drawingBufferHeight - origin[1] - 1
-            const glY = gl.drawingBufferHeight - origin[1] - height;
+            // 对于单个像素（height=1），使用：glY = drawingBufferHeight - origin[1] - 1
+            // 对于多个像素，使用：glY = drawingBufferHeight - origin[1] - height
+            const glY = height === 1
+                ? gl.drawingBufferHeight - origin[1] - 1
+                : gl.drawingBufferHeight - origin[1] - height;
 
             // 添加调试信息
             console.log(`readPixels CanvasTexture: origin=(${origin[0]}, ${origin[1]}), copySize=(${width}, ${height}), glY=${glY}, drawingBufferHeight=${gl.drawingBufferHeight}`);

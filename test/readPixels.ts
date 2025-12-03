@@ -162,15 +162,27 @@ async function testReadFromCanvasRed()
 
         webgl.submit(submit);
 
-        // 等待渲染完成
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        await new Promise(resolve => requestAnimationFrame(resolve));
+        // 可选：等待一次渲染帧（如果需要确保渲染完成）
+        // 注意：调用两次 requestAnimationFrame 可能导致缓冲区交换，读取到错误结果
+        // await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 确保 WebGL 上下文状态正确
+        if (gl)
+        {
+            // 确保绑定到默认 framebuffer
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.readBuffer(gl.BACK);
+        }
 
         // 读取中心点颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
 
+        console.log(`测试 1: 准备读取位置 (${centerX}, ${centerY})`);
+
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
+
+        console.log(`测试 1: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 显示信息
         infoDiv.innerHTML = `
@@ -249,15 +261,24 @@ async function testReadFromCanvasGreen()
 
         webgl.submit(submit);
 
-        // 等待渲染完成
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 确保 WebGL 上下文状态正确
+        if (gl)
+        {
+            // 确保绑定到默认 framebuffer
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.readBuffer(gl.BACK);
+        }
 
         // 读取中心点颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
 
+        console.log(`测试 2: 准备读取位置 (${centerX}, ${centerY})`);
+
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
+
+        console.log(`测试 2: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 显示信息
         infoDiv.innerHTML = `
@@ -339,9 +360,9 @@ async function testReadFromTexture()
 
         webgl.submit(submit);
 
-        // 等待渲染完成
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        await new Promise(resolve => requestAnimationFrame(resolve));
+        // 可选：等待一次渲染帧（如果需要确保渲染完成）
+        // 注意：调用两次 requestAnimationFrame 可能导致缓冲区交换，读取到错误结果
+        // await new Promise(resolve => requestAnimationFrame(resolve));
 
         // 读取纹理中心点颜色
         const centerX = Math.floor(canvas.width / 2);
