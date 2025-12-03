@@ -31,7 +31,9 @@ npm run dev
 npm run test:dev
 ```
 
-然后在浏览器中打开显示的 URL（通常是 `http://localhost:3001`）。
+然后在浏览器中打开：
+- `http://localhost:3001` - 查看深度附件测试（使用封装的 WebGL API）
+- `http://localhost:3001/native-webgl-readpixels.html` - 查看原生 WebGL readPixels 测试
 
 ### 方式 2: 构建后运行
 
