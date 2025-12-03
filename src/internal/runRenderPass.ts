@@ -1,4 +1,4 @@
-import { RenderObject, RenderPass, RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
+import { CanvasTexture, RenderObject, RenderPass, RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
 import { getGLRenderOcclusionQuery } from '../caches/getGLRenderOcclusionQuery';
 import { getGLRenderPassDescriptorWithMultisample } from '../caches/getGLRenderPassDescriptorWithMultisample';
 import { runRenderObject } from './renderObject/runRenderObject';
@@ -76,7 +76,27 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = colorAttachments[0]?.view;
         if (view)
         {
-            return { width: (view.texture as Texture).descriptor.size[0], height: (view.texture as Texture).descriptor.size[1] };
+            const texture = view.texture;
+            // 检查是否是 CanvasTexture
+            if ('context' in texture)
+            {
+                // CanvasTexture: 从画布上下文获取尺寸
+                const canvasTexture = texture as CanvasTexture;
+                const canvas = typeof canvasTexture.context.canvasId === 'string'
+                    ? document.getElementById(canvasTexture.context.canvasId) as HTMLCanvasElement
+                    : canvasTexture.context.canvasId;
+                if (canvas)
+                {
+                    return { width: canvas.width, height: canvas.height };
+                }
+            }
+            else if ('descriptor' in texture)
+            {
+                // Texture: 从描述符获取尺寸
+                const regularTexture = texture as Texture;
+
+                return { width: regularTexture.descriptor.size[0], height: regularTexture.descriptor.size[1] };
+            }
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
@@ -88,7 +108,27 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
         const view = depthStencilAttachment.view;
         if (view)
         {
-            return { width: (view.texture as Texture).descriptor.size[0], height: (view.texture as Texture).descriptor.size[1] };
+            const texture = view.texture;
+            // 检查是否是 CanvasTexture
+            if ('context' in texture)
+            {
+                // CanvasTexture: 从画布上下文获取尺寸
+                const canvasTexture = texture as CanvasTexture;
+                const canvas = typeof canvasTexture.context.canvasId === 'string'
+                    ? document.getElementById(canvasTexture.context.canvasId) as HTMLCanvasElement
+                    : canvasTexture.context.canvasId;
+                if (canvas)
+                {
+                    return { width: canvas.width, height: canvas.height };
+                }
+            }
+            else if ('descriptor' in texture)
+            {
+                // Texture: 从描述符获取尺寸
+                const regularTexture = texture as Texture;
+
+                return { width: regularTexture.descriptor.size[0], height: regularTexture.descriptor.size[1] };
+            }
         }
 
         return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };

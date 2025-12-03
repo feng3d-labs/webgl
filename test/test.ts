@@ -1,4 +1,4 @@
-import { RenderObject, Submit, Texture, TextureView } from '@feng3d/render-api';
+import { CanvasTexture, RenderObject, Submit, TextureView } from '@feng3d/render-api';
 import { WebGL } from '@feng3d/webgl';
 
 // 创建两个重叠的三角形
@@ -118,19 +118,16 @@ async function testWithoutDepthAttachment()
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 创建纹理用于渲染和读取
-        const texture: Texture = {
-            descriptor: {
-                size: [canvas.width, canvas.height],
-                format: 'rgba8unorm',
-            },
+        // 使用画布纹理视图（必须与 WebGL 构造函数中的 canvasContext 指向相同的画布）
+        const canvasTexture: CanvasTexture = {
+            context: { canvasId: 'canvas-no-depth', webGLcontextId: 'webgl2' },
         };
 
         const textureView: TextureView = {
-            texture,
+            texture: canvasTexture,
         };
 
-        // 提交渲染（没有深度附件，渲染到纹理）
+        // 提交渲染（没有深度附件，渲染到画布纹理）
         // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
         // 如果没有深度测试，后绘制的绿色会覆盖先绘制的红色
         const submit: Submit = {
@@ -149,21 +146,6 @@ async function testWithoutDepthAttachment()
 
         webgl.submit(submit);
 
-        // 同时渲染到画布以便可视化（使用相同的渲染对象）
-        const canvasSubmit: Submit = {
-            commandEncoders: [{
-                passEncoders: [
-                    {
-                        descriptor: {
-                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }],
-                        },
-                        renderPassObjects: [redTriangle, greenTriangle], // 先绘制红色，后绘制绿色
-                    },
-                ],
-            }],
-        };
-        webgl.submit(canvasSubmit);
-
         // 等待渲染完成 - 使用 requestAnimationFrame 确保 GPU 渲染完成
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
@@ -171,7 +153,13 @@ async function testWithoutDepthAttachment()
         // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
+
+        // 添加调试信息
+        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
+
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
+
+        console.log(`测试 2: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 验证：没有深度附件时，后绘制的绿色三角形（更远）应该覆盖先绘制的红色三角形（更靠近）
         // 中心点应该是绿色（0, 255, 0）或接近绿色
@@ -218,19 +206,16 @@ async function testWithDepthAttachment()
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 创建纹理用于渲染和读取
-        const texture: Texture = {
-            descriptor: {
-                size: [canvas.width, canvas.height],
-                format: 'rgba8unorm',
-            },
+        // 使用画布纹理视图（必须与 WebGL 构造函数中的 canvasContext 指向相同的画布）
+        const canvasTexture: CanvasTexture = {
+            context: { canvasId: 'canvas-with-depth', webGLcontextId: 'webgl2' },
         };
 
         const textureView: TextureView = {
-            texture,
+            texture: canvasTexture,
         };
 
-        // 提交渲染（有深度附件，渲染到纹理）
+        // 提交渲染（有深度附件，渲染到画布纹理）
         // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
         // 有深度测试时，更靠近的红色会覆盖更远的绿色
         const submit: Submit = {
@@ -249,22 +234,6 @@ async function testWithDepthAttachment()
 
         webgl.submit(submit);
 
-        // 同时渲染到画布以便可视化（使用相同的渲染对象）
-        const canvasSubmit: Submit = {
-            commandEncoders: [{
-                passEncoders: [
-                    {
-                        descriptor: {
-                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }],
-                            depthStencilAttachment: { depthClearValue: 1 },
-                        },
-                        renderPassObjects: [redTriangle, greenTriangle],
-                    },
-                ],
-            }],
-        };
-        webgl.submit(canvasSubmit);
-
         // 等待渲染完成 - 使用 requestAnimationFrame 确保 GPU 渲染完成
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
@@ -272,7 +241,13 @@ async function testWithDepthAttachment()
         // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
+
+        // 添加调试信息
+        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
+
         const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
+
+        console.log(`测试 2: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 验证：有深度附件时，更靠近的红色三角形（z=-0.5）应该覆盖更远的绿色三角形（z=0.5）
         // 中心点应该是红色（255, 0, 0）或接近红色

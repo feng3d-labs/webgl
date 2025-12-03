@@ -1,4 +1,4 @@
-import { RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
+import { CanvasTexture, RenderPassDescriptor, Texture, TextureView } from '@feng3d/render-api';
 import { Renderbuffer } from '../data/Renderbuffer';
 import { deleteRenderbuffer, getGLRenderbuffer } from './getGLRenderbuffer';
 import { _IGLRenderPassDescriptorWithMultisample, GLRenderPassDescriptorWithMultisample } from './getGLRenderPassDescriptorWithMultisample';
@@ -12,6 +12,17 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
     if (!view) return null;
+
+    // 检查是否是 CanvasTexture，如果是，返回 null（使用默认 framebuffer）
+    if ('texture' in view)
+    {
+        const texture = view.texture;
+        if ('context' in texture)
+        {
+            // CanvasTexture: 使用默认 framebuffer（画布）
+            return null;
+        }
+    }
 
     let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
     if (webGLFramebuffer) return webGLFramebuffer;
@@ -34,6 +45,16 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             const texture = view.texture;
             const baseMipLevel = view.baseMipLevel || 0;
             const baseArrayLayer = view.baseArrayLayer || 0;
+
+            // 检查是否是 CanvasTexture
+            if ('context' in texture)
+            {
+                // CanvasTexture: 不需要附加到 framebuffer，因为使用的是默认 framebuffer
+                // 跳过处理，不添加到 drawBuffers
+                drawBuffers.pop(); // 移除刚才添加的 attachment
+
+                return; // 跳过当前迭代
+            }
 
             const webGLTexture = getGLTexture(gl, texture as Texture);
             const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
@@ -79,23 +100,32 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         const baseMipLevel = view.baseMipLevel || 0;
         const baseArrayLayer = view.baseArrayLayer || 0;
 
-        const webGLTexture = getGLTexture(gl, texture as Texture);
-        const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
-
-        if (textureTarget === 'TEXTURE_2D')
+        // 检查是否是 CanvasTexture
+        if ('context' in texture)
         {
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
-        }
-        else if (textureTarget === 'TEXTURE_2D_ARRAY')
-        {
-            if (gl instanceof WebGL2RenderingContext)
-            {
-                gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, baseMipLevel, baseArrayLayer);
-            }
+            // CanvasTexture: 不需要附加到 framebuffer，因为使用的是默认 framebuffer
+            // 跳过处理
         }
         else
         {
-            console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
+            const webGLTexture = getGLTexture(gl, texture as Texture);
+            const textureTarget = getGLTextureTarget((texture as Texture).descriptor.dimension);
+
+            if (textureTarget === 'TEXTURE_2D')
+            {
+                gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl[textureTarget], webGLTexture, baseMipLevel);
+            }
+            else if (textureTarget === 'TEXTURE_2D_ARRAY')
+            {
+                if (gl instanceof WebGL2RenderingContext)
+                {
+                    gl.framebufferTextureLayer(gl.DRAW_FRAMEBUFFER, gl.DEPTH_ATTACHMENT, webGLTexture, baseMipLevel, baseArrayLayer);
+                }
+            }
+            else
+            {
+                console.error(`未处理 ${textureTarget} 的深度模板附件纹理设置！`);
+            }
         }
     }
 

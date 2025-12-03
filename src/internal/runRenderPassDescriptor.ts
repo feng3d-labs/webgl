@@ -18,19 +18,27 @@ export function runRenderPassDescriptor(gl: WebGLRenderingContext, passDescripto
 
     //
     const depthStencilAttachment = passDescriptor.depthStencilAttachment;
-    const depthClearValue = depthStencilAttachment?.depthClearValue ?? 1;
-    const depthLoadOp = depthStencilAttachment?.depthLoadOp ?? 'load';
-    const stencilClearValue = depthStencilAttachment?.stencilClearValue ?? 0;
-    const stencilLoadOp = depthStencilAttachment?.stencilLoadOp ?? 'load';
+    if (depthStencilAttachment)
+    {
+        const depthClearValue = depthStencilAttachment.depthClearValue ?? 1;
+        const depthLoadOp = depthStencilAttachment.depthLoadOp ?? 'clear'; // 默认清除深度缓冲区
+        const stencilClearValue = depthStencilAttachment.stencilClearValue ?? 0;
+        const stencilLoadOp = depthStencilAttachment.stencilLoadOp ?? 'load';
 
-    //
-    gl.clearDepth(depthClearValue);
-    gl.clearStencil(stencilClearValue);
+        //
+        gl.clearDepth(depthClearValue);
+        gl.clearStencil(stencilClearValue);
 
-    //
-    gl.clear((loadOp === 'clear' ? gl.COLOR_BUFFER_BIT : 0)
-        | (depthLoadOp === 'clear' ? gl.DEPTH_BUFFER_BIT : 0)
-        | (stencilLoadOp === 'clear' ? gl.STENCIL_BUFFER_BIT : 0),
-    );
+        //
+        gl.clear((loadOp === 'clear' ? gl.COLOR_BUFFER_BIT : 0)
+            | (depthLoadOp === 'clear' ? gl.DEPTH_BUFFER_BIT : 0)
+            | (stencilLoadOp === 'clear' ? gl.STENCIL_BUFFER_BIT : 0),
+        );
+    }
+    else
+    {
+        //
+        gl.clear((loadOp === 'clear' ? gl.COLOR_BUFFER_BIT : 0));
+    }
 }
 

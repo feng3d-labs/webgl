@@ -1,4 +1,4 @@
-import { ReadPixels, RenderPassDescriptor, Texture, TextureDescriptor } from '@feng3d/render-api';
+import { CanvasTexture, ReadPixels, RenderPassDescriptor, Texture, TextureDescriptor, TextureFormat } from '@feng3d/render-api';
 import { deleteFramebuffer, getGLFramebuffer } from '../caches/getGLFramebuffer';
 import { getGLTextureFormats } from '../caches/getGLTextureFormats';
 
@@ -9,33 +9,78 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
     if (gl instanceof WebGL2RenderingContext)
     {
         const { textureView, origin, copySize } = readPixels;
-        const attachmentPoint: GLAttachmentPoint = 'COLOR_ATTACHMENT0';
         const [width, height] = copySize;
-        //
-        const descriptor = (textureView.texture as Texture).descriptor;
-        const { format, type } = getGLTextureFormats(descriptor.format);
-        const bytesPerPixel = Texture.getTextureBytesPerPixel(descriptor.format);
-        const DataConstructor = Texture.getTextureDataConstructor(descriptor.format);
-        //
-        const bytesPerRow = width * bytesPerPixel;
-        const bufferSize = bytesPerRow * height;
-        bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
-        //
-        const frameBuffer: RenderPassDescriptor = {
-            colorAttachments: [
-                { view: textureView },
-            ],
-        };
-        //
-        const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
+        const texture = textureView.texture;
 
-        //
-        gl.readBuffer(gl[attachmentPoint]);
-        gl.readPixels(origin[0], origin[1], width, height, gl[format], gl[type], bufferData, 0);
+        // 检查是否是 CanvasTexture
+        if ('context' in texture)
+        {
+            // CanvasTexture: 从默认 framebuffer（画布）读取
+            const canvasTexture = texture as CanvasTexture;
+            const textureFormat: TextureFormat = 'rgba8unorm'; // 画布默认格式
+            const { format, type } = getGLTextureFormats(textureFormat);
+            const bytesPerPixel = Texture.getTextureBytesPerPixel(textureFormat);
+            const DataConstructor = Texture.getTextureDataConstructor(textureFormat);
 
-        // 释放
-        deleteFramebuffer(gl, frameBuffer);
+            const bytesPerRow = width * bytesPerPixel;
+            const bufferSize = bytesPerRow * height;
+            bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
+
+            // 绑定到默认 framebuffer（画布）
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.readBuffer(gl.BACK); // 默认 framebuffer 使用 BACK 缓冲区
+
+            // 确保所有渲染命令都已完成
+            gl.finish();
+
+            // 读取像素（注意：WebGL 的坐标系是左下角为原点，需要翻转 y 坐标）
+            // origin[1] 是从顶部计算的 y 坐标，需要转换为从底部计算的坐标
+            // readPixels 的 y 参数是读取区域的左下角坐标
+            // 如果 origin[1] 是从顶部计算的单个像素位置，那么：
+            // glY = drawingBufferHeight - origin[1] - 1
+            // 但为了支持读取多个像素，使用：
+            // glY = drawingBufferHeight - origin[1] - height
+            // 注意：当 height=1 时，这两种方式结果相同
+            // 但是，如果 origin[1] 是单个像素的 y 坐标（从顶部），我们应该读取该像素本身
+            // 所以对于单个像素，应该使用：glY = drawingBufferHeight - origin[1] - 1
+            // 但是，readPixels 的 y 参数是读取区域的左下角坐标，所以对于单个像素：
+            // 如果 origin[1] 是像素的 y 坐标（从顶部），那么该像素在 WebGL 坐标系中的 y 坐标是：
+            // glY = drawingBufferHeight - origin[1] - 1
+            const glY = gl.drawingBufferHeight - origin[1] - height;
+
+            // 添加调试信息
+            console.log(`readPixels CanvasTexture: origin=(${origin[0]}, ${origin[1]}), copySize=(${width}, ${height}), glY=${glY}, drawingBufferHeight=${gl.drawingBufferHeight}`);
+
+            gl.readPixels(origin[0], glY, width, height, gl[format], gl[type], bufferData, 0);
+        }
+        else
+        {
+            // Texture: 从纹理 framebuffer 读取
+            const attachmentPoint: GLAttachmentPoint = 'COLOR_ATTACHMENT0';
+            const descriptor = (texture as Texture).descriptor;
+            const { format, type } = getGLTextureFormats(descriptor.format);
+            const bytesPerPixel = Texture.getTextureBytesPerPixel(descriptor.format);
+            const DataConstructor = Texture.getTextureDataConstructor(descriptor.format);
+
+            const bytesPerRow = width * bytesPerPixel;
+            const bufferSize = bytesPerRow * height;
+            bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
+
+            const frameBuffer: RenderPassDescriptor = {
+                colorAttachments: [
+                    { view: textureView },
+                ],
+            };
+
+            const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
+            gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
+
+            gl.readBuffer(gl[attachmentPoint]);
+            gl.readPixels(origin[0], origin[1], width, height, gl[format], gl[type], bufferData, 0);
+
+            // 释放
+            deleteFramebuffer(gl, frameBuffer);
+        }
     }
     else
     {
