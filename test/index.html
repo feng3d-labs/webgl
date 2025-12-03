@@ -104,14 +104,14 @@
     <div class="test-container">
         <div class="test-case">
             <h2>测试 1: 没有深度附件</h2>
-            <p>后绘制的绿色三角形应该覆盖先绘制的红色三角形（深度测试被禁用）</p>
+            <p>先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）。没有深度测试时，后绘制的绿色会覆盖先绘制的红色</p>
             <canvas id="canvas-no-depth" width="400" height="300"></canvas>
             <div id="status-no-depth" class="status">测试中...</div>
         </div>
 
         <div class="test-case">
             <h2>测试 2: 有深度附件</h2>
-            <p>前面的绿色三角形（z=-0.5）应该覆盖后面的红色三角形（z=0.5）（深度测试启用）</p>
+            <p>先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）。有深度测试时，更靠近的红色会覆盖更远的绿色</p>
             <canvas id="canvas-with-depth" width="400" height="300"></canvas>
             <div id="status-with-depth" class="status">测试中...</div>
         </div>
@@ -120,10 +120,10 @@
     <div class="info">
         <h3>测试说明</h3>
         <ul>
-            <li><strong>红色三角形</strong>：z=0.5，先绘制</li>
-            <li><strong>绿色三角形</strong>：z=-0.5，后绘制（更靠近相机）</li>
-            <li><strong>测试 1</strong>：没有深度附件时，深度测试应该被禁用，后绘制的绿色三角形会覆盖红色三角形</li>
-            <li><strong>测试 2</strong>：有深度附件时，深度测试应该启用，前面的绿色三角形会覆盖后面的红色三角形</li>
+            <li><strong>红色三角形</strong>：z=-0.5，更靠近相机，先绘制</li>
+            <li><strong>绿色三角形</strong>：z=0.5，更远离相机，后绘制</li>
+            <li><strong>测试 1</strong>：没有深度附件时，深度测试被禁用。先绘制红色（更靠近），后绘制绿色（更远），后绘制的绿色会覆盖先绘制的红色，中心点应为绿色</li>
+            <li><strong>测试 2</strong>：有深度附件时，深度测试启用。先绘制红色（更靠近），后绘制绿色（更远），更靠近的红色会覆盖更远的绿色，中心点应为红色</li>
         </ul>
     </div>
 

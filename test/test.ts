@@ -1,4 +1,4 @@
-import { RenderObject, Submit } from '@feng3d/render-api';
+import { RenderObject, Submit, Texture, TextureView } from '@feng3d/render-api';
 import { WebGL } from '@feng3d/webgl';
 
 // 创建两个重叠的三角形
@@ -8,9 +8,9 @@ function createRedTriangle(): RenderObject
         vertices: {
             position: {
                 data: new Float32Array([
-                    -0.5, -0.5, 0.5, // 左下
-                    0.5, -0.5, 0.5,  // 右下
-                    0.0, 0.5, 0.5,   // 上
+                    -0.5, -0.5, -0.5, // 左下（z=-0.5，更靠近）
+                    0.5, -0.5, -0.5,  // 右下（z=-0.5，更靠近）
+                    0.0, 0.5, -0.5,   // 上（z=-0.5，更靠近）
                 ]),
                 format: 'float32x3' as const,
             },
@@ -47,9 +47,9 @@ function createGreenTriangle(): RenderObject
         vertices: {
             position: {
                 data: new Float32Array([
-                    -0.3, -0.3, -0.5, // 左下
-                    0.3, -0.3, -0.5,  // 右下
-                    0.0, 0.3, -0.5,   // 上
+                    -0.3, -0.3, 0.5, // 左下（z=0.5，更远）
+                    0.3, -0.3, 0.5,  // 右下（z=0.5，更远）
+                    0.0, 0.3, 0.5,   // 上（z=0.5，更远）
                 ]),
                 format: 'float32x3' as const,
             },
@@ -80,15 +80,19 @@ function createGreenTriangle(): RenderObject
     };
 }
 
-// 读取画布中心点的像素颜色
-function readPixelColor(gl: WebGL2RenderingContext, x: number, y: number): [number, number, number, number]
+// 使用 webgl.readPixels 读取纹理中心点的像素颜色
+function readPixelColor(webgl: WebGL, textureView: TextureView, x: number, y: number): [number, number, number, number]
 {
-    // 绑定默认 framebuffer（画布）
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    
-    // 读取像素（注意：WebGL 的坐标系是左下角为原点，需要翻转 y 坐标）
-    const pixel = new Uint8Array(4);
-    gl.readPixels(x, gl.drawingBufferHeight - y - 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+    // 使用 webgl.readPixels 读取像素（参考 fbo_read_pixels.ts）
+    const result = webgl.readPixels({
+        textureView,
+        origin: [x, y],
+        copySize: [1, 1],
+    });
+
+    // 将结果转换为 Uint8Array 并提取 RGBA 值
+    const pixel = new Uint8Array(result.buffer, result.byteOffset, 4);
+
     return [pixel[0], pixel[1], pixel[2], pixel[3]];
 }
 
@@ -107,19 +111,34 @@ async function testWithoutDepthAttachment()
         {
             statusDiv.textContent = '错误: 无法获取 WebGL2 上下文';
             statusDiv.className = 'status fail';
+
             return;
         }
 
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 提交渲染（没有深度附件，直接渲染到画布）
+        // 创建纹理用于渲染和读取
+        const texture: Texture = {
+            descriptor: {
+                size: [canvas.width, canvas.height],
+                format: 'rgba8unorm',
+            },
+        };
+
+        const textureView: TextureView = {
+            texture,
+        };
+
+        // 提交渲染（没有深度附件，渲染到纹理）
+        // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
+        // 如果没有深度测试，后绘制的绿色会覆盖先绘制的红色
         const submit: Submit = {
             commandEncoders: [{
                 passEncoders: [
                     {
                         descriptor: {
-                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }], // 不指定 view，直接渲染到画布
+                            colorAttachments: [{ clearValue: [0, 0, 0, 1], view: textureView }],
                             // 注意：这里没有 depthStencilAttachment
                         },
                         renderPassObjects: [redTriangle, greenTriangle], // 先绘制红色，后绘制绿色
@@ -130,21 +149,37 @@ async function testWithoutDepthAttachment()
 
         webgl.submit(submit);
 
-        // 等待一帧，确保渲染完成
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // 同时渲染到画布以便可视化（使用相同的渲染对象）
+        const canvasSubmit: Submit = {
+            commandEncoders: [{
+                passEncoders: [
+                    {
+                        descriptor: {
+                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }],
+                        },
+                        renderPassObjects: [redTriangle, greenTriangle], // 先绘制红色，后绘制绿色
+                    },
+                ],
+            }],
+        };
+        webgl.submit(canvasSubmit);
 
-        // 读取画布中心点的像素颜色
+        // 等待渲染完成 - 使用 requestAnimationFrame 确保 GPU 渲染完成
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-        const [r, g, b, a] = readPixelColor(gl, centerX, centerY);
+        const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
 
-        // 验证：没有深度附件时，后绘制的绿色三角形应该覆盖先绘制的红色三角形
+        // 验证：没有深度附件时，后绘制的绿色三角形（更远）应该覆盖先绘制的红色三角形（更靠近）
         // 中心点应该是绿色（0, 255, 0）或接近绿色
         const isGreen = g > 200 && r < 100 && b < 100;
 
         if (isGreen)
         {
-            statusDiv.textContent = '✓ 测试通过: 后绘制的绿色三角形覆盖了红色三角形（深度测试被禁用）';
+            statusDiv.textContent = '✓ 测试通过: 后绘制的绿色三角形（更远）覆盖了先绘制的红色三角形（更靠近）（深度测试被禁用）';
             statusDiv.className = 'status pass';
         }
         else
@@ -176,19 +211,34 @@ async function testWithDepthAttachment()
         {
             statusDiv.textContent = '错误: 无法获取 WebGL2 上下文';
             statusDiv.className = 'status fail';
+
             return;
         }
 
         const redTriangle = createRedTriangle();
         const greenTriangle = createGreenTriangle();
 
-        // 提交渲染（有深度附件，直接渲染到画布）
+        // 创建纹理用于渲染和读取
+        const texture: Texture = {
+            descriptor: {
+                size: [canvas.width, canvas.height],
+                format: 'rgba8unorm',
+            },
+        };
+
+        const textureView: TextureView = {
+            texture,
+        };
+
+        // 提交渲染（有深度附件，渲染到纹理）
+        // 先绘制红色（z=-0.5，更靠近），后绘制绿色（z=0.5，更远）
+        // 有深度测试时，更靠近的红色会覆盖更远的绿色
         const submit: Submit = {
             commandEncoders: [{
                 passEncoders: [
                     {
                         descriptor: {
-                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }], // 不指定 view，直接渲染到画布
+                            colorAttachments: [{ clearValue: [0, 0, 0, 1], view: textureView }],
                             depthStencilAttachment: { depthClearValue: 1 }, // 有深度附件
                         },
                         renderPassObjects: [redTriangle, greenTriangle], // 先绘制红色，后绘制绿色
@@ -199,26 +249,43 @@ async function testWithDepthAttachment()
 
         webgl.submit(submit);
 
-        // 等待一帧，确保渲染完成
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // 同时渲染到画布以便可视化（使用相同的渲染对象）
+        const canvasSubmit: Submit = {
+            commandEncoders: [{
+                passEncoders: [
+                    {
+                        descriptor: {
+                            colorAttachments: [{ clearValue: [0, 0, 0, 1] }],
+                            depthStencilAttachment: { depthClearValue: 1 },
+                        },
+                        renderPassObjects: [redTriangle, greenTriangle],
+                    },
+                ],
+            }],
+        };
+        webgl.submit(canvasSubmit);
 
-        // 读取画布中心点的像素颜色
+        // 等待渲染完成 - 使用 requestAnimationFrame 确保 GPU 渲染完成
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 使用 webgl.readPixels 读取纹理中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-        const [r, g, b, a] = readPixelColor(gl, centerX, centerY);
+        const [r, g, b, a] = readPixelColor(webgl, textureView, centerX, centerY);
 
-        // 验证：有深度附件时，前面的绿色三角形（z=-0.5）应该覆盖后面的红色三角形（z=0.5）
-        // 中心点应该是绿色（0, 255, 0）或接近绿色
-        const isGreen = g > 200 && r < 100 && b < 100;
+        // 验证：有深度附件时，更靠近的红色三角形（z=-0.5）应该覆盖更远的绿色三角形（z=0.5）
+        // 中心点应该是红色（255, 0, 0）或接近红色
+        const isRed = r > 200 && g < 100 && b < 100;
 
-        if (isGreen)
+        if (isRed)
         {
-            statusDiv.textContent = '✓ 测试通过: 前面的绿色三角形覆盖了后面的红色三角形（深度测试启用）';
+            statusDiv.textContent = '✓ 测试通过: 更靠近的红色三角形覆盖了更远的绿色三角形（深度测试启用）';
             statusDiv.className = 'status pass';
         }
         else
         {
-            statusDiv.textContent = `✗ 测试失败: 中心点颜色为 (${r}, ${g}, ${b}, ${a})，期望为绿色`;
+            statusDiv.textContent = `✗ 测试失败: 中心点颜色为 (${r}, ${g}, ${b}, ${a})，期望为红色`;
             statusDiv.className = 'status fail';
         }
     }
