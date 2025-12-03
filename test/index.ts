@@ -65,12 +65,10 @@ function renderTestList()
             <div class="test-header">
                 <div class="test-title">${test.name}</div>
                 <div class="test-status ${statusClass}">${statusText}</div>
+                <button class="btn btn-primary" onclick="openTest(${index})">查看</button>
             </div>
             <div class="test-description">${test.description}</div>
-            <div class="test-actions">
-                <button class="btn btn-primary" onclick="openTest(${index})">打开测试</button>
-                ${test.status === 'fail' && test.error ? `<button class="btn btn-secondary" onclick="showError(${index})">查看错误</button>` : ''}
-            </div>
+            ${test.status === 'fail' && test.error ? `<div class="test-error">${test.error}</div>` : ''}
         `;
 
         testList.appendChild(testItem);
@@ -89,42 +87,61 @@ function openTest(index: number)
     }
 }
 
-// 显示错误信息
-function showError(index: number)
-{
-    const test = tests[index];
-    if (test && test.error)
-    {
-        alert(`测试失败: ${test.error}`);
-    }
-}
-
 // 运行单个测试
 function runTest(index: number)
 {
     const test = tests[index];
     if (!test) return;
 
-    // 创建隐藏的 iframe 来运行测试
+    // 创建 iframe 来运行测试
+    // 注意：WebGL 需要可见的 canvas 才能正常工作
+    // 将 iframe 放在一个很小的可见区域（右下角 1x1 像素），确保 canvas 完全可见
     const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '400px'; // 保持 canvas 的实际尺寸，确保渲染正常
+    iframe.style.height = '300px'; // 保持 canvas 的实际尺寸，确保渲染正常
+    iframe.style.border = 'none';
+    iframe.style.overflow = 'hidden';
+    iframe.style.zIndex = '-1'; // 放在最底层，不遮挡其他内容
+    iframe.style.transform = 'scale(0.01)'; // 缩小到 1%，几乎看不见但完全可见
+    iframe.style.transformOrigin = 'bottom right'; // 从右下角缩放
+    iframe.style.pointerEvents = 'none'; // 禁用鼠标事件
     iframe.src = test.htmlFile;
     test.iframe = iframe;
 
     document.body.appendChild(iframe);
 
-    // 设置超时，如果 10 秒内没有收到结果，标记为失败
+    // 设置超时，如果 30 秒内没有收到结果，标记为失败
     const timeout = setTimeout(() =>
     {
         if (test.status === 'pending')
         {
             test.status = 'fail';
-            test.error = '测试超时（10秒内未完成）';
+            test.error = '测试超时（30秒内未完成）';
             renderTestList();
+
+            // 移除 iframe
+            if (iframe.parentNode)
+            {
+                iframe.parentNode.removeChild(iframe);
+            }
         }
-    }, 10000);
+    }, 30000);
+
+    iframe.onerror = () =>
+    {
+        clearTimeout(timeout);
+        test.status = 'fail';
+        test.error = 'iframe 加载失败';
+        renderTestList();
+
+        if (iframe.parentNode)
+        {
+            iframe.parentNode.removeChild(iframe);
+        }
+    };
 
     // 监听 iframe 发送的消息
     const messageHandler = (event: MessageEvent) =>
@@ -135,16 +152,23 @@ function runTest(index: number)
             window.removeEventListener('message', messageHandler);
 
             test.status = event.data.passed ? 'pass' : 'fail';
-            if (!event.data.passed)
+            if (event.data.message)
             {
                 test.error = event.data.message;
             }
-
-            // 移除 iframe
-            if (iframe.parentNode)
+            else if (!event.data.passed)
             {
-                iframe.parentNode.removeChild(iframe);
+                test.error = '测试失败，但未提供详细错误信息';
             }
+
+            // 延迟移除 iframe，确保测试完全完成
+            setTimeout(() =>
+            {
+                if (iframe.parentNode)
+                {
+                    iframe.parentNode.removeChild(iframe);
+                }
+            }, 500);
 
             renderTestList();
         }
@@ -156,10 +180,8 @@ function runTest(index: number)
 // 运行所有测试
 function runAllTests()
 {
-    console.log('开始自动运行所有测试...');
     for (let i = 0; i < tests.length; i++)
     {
-        // 延迟运行，避免同时创建太多 iframe
         setTimeout(() => runTest(i), i * 500);
     }
 }
@@ -167,13 +189,10 @@ function runAllTests()
 // 初始化
 document.addEventListener('DOMContentLoaded', () =>
 {
-    console.log('WebGL 测试套件初始化...');
     renderTestList();
-    // 自动运行所有测试
     runAllTests();
 });
 
 // 将函数暴露到全局作用域，以便 HTML 中的 onclick 可以调用
 (window as any).openTest = openTest;
-(window as any).showError = showError;
 

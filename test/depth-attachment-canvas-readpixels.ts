@@ -113,7 +113,6 @@ async function testWithoutDepthAttachment()
             statusDiv.textContent = errorMessage;
             statusDiv.className = 'status fail';
             testResults.test1 = { passed: false, message: errorMessage };
-            sendTestResult();
 
             return;
         }
@@ -152,13 +151,7 @@ async function testWithoutDepthAttachment()
         // 使用 webgl.readPixels 直接从画布读取中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-
-        // 添加调试信息
-        console.log(`测试 1: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
-
         const [r, g, b, a] = readPixelColor(webgl, canvasTextureView, centerX, centerY);
-
-        console.log(`测试 1: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 验证：没有深度附件时，后绘制的绿色三角形（更远）应该覆盖先绘制的红色三角形（更靠近）
         // 中心点应该是绿色（0, 255, 0）或接近绿色
@@ -184,7 +177,6 @@ async function testWithoutDepthAttachment()
         const errorMessage = error instanceof Error ? error.message : String(error);
         statusDiv.textContent = `错误: ${errorMessage}`;
         statusDiv.className = 'status fail';
-        console.error('测试 1 错误:', error);
         testResults.test1 = { passed: false, message: errorMessage };
     }
 }
@@ -205,8 +197,7 @@ async function testWithDepthAttachment()
             const errorMessage = '错误: 无法获取 WebGL2 上下文';
             statusDiv.textContent = errorMessage;
             statusDiv.className = 'status fail';
-            testResults.test1 = { passed: false, message: errorMessage };
-            sendTestResult();
+            testResults.test2 = { passed: false, message: errorMessage };
 
             return;
         }
@@ -242,19 +233,13 @@ async function testWithDepthAttachment()
 
         webgl.submit(submit);
 
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => requestAnimationFrame(resolve));
 
         // 使用 webgl.readPixels 直接从画布读取中心点的像素颜色
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-
-        // 添加调试信息
-        console.log(`测试 2: 读取中心点 (${centerX}, ${centerY}), 画布尺寸: ${canvas.width}x${canvas.height}`);
-
         const [r, g, b, a] = readPixelColor(webgl, canvasTextureView, centerX, centerY);
-
-        console.log(`测试 2: 读取到的颜色: (${r}, ${g}, ${b}, ${a})`);
 
         // 验证：有深度附件时，更靠近的红色三角形（z=-0.5）应该覆盖更远的绿色三角形（z=0.5）
         // 中心点应该是红色（255, 0, 0）或接近红色
@@ -280,7 +265,6 @@ async function testWithDepthAttachment()
         const errorMessage = error instanceof Error ? error.message : String(error);
         statusDiv.textContent = `错误: ${errorMessage}`;
         statusDiv.className = 'status fail';
-        console.error('测试 2 错误:', error);
         testResults.test2 = { passed: false, message: errorMessage };
     }
 }
@@ -300,6 +284,16 @@ const testResults: TestResult = {
 // 发送测试结果给父窗口（如果是在 iframe 中运行）
 function sendTestResult()
 {
+    // 检查测试结果是否都已设置（不是初始状态）
+    const test1Completed = testResults.test1.message !== '';
+    const test2Completed = testResults.test2.message !== '';
+
+    // 如果测试未完成，不发送结果
+    if (!test1Completed || !test2Completed)
+    {
+        return;
+    }
+
     const allPassed = testResults.test1.passed && testResults.test2.passed;
     const message = `测试 1: ${testResults.test1.passed ? '通过' : '失败'} - ${testResults.test1.message}\n测试 2: ${testResults.test2.passed ? '通过' : '失败'} - ${testResults.test2.message}`;
 
@@ -318,10 +312,30 @@ function sendTestResult()
 // 运行测试
 document.addEventListener('DOMContentLoaded', async () =>
 {
-    console.log('开始运行 WebGL 深度附件测试...');
-    await testWithoutDepthAttachment();
-    await testWithDepthAttachment();
-    console.log('测试完成');
-    sendTestResult();
+    // 等待页面完全加载
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    try
+    {
+        await testWithoutDepthAttachment();
+        await testWithDepthAttachment();
+    }
+    catch (error)
+    {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        // 确保即使出错也记录结果
+        if (!testResults.test1.message)
+        {
+            testResults.test1 = { passed: false, message: `执行错误: ${errorMessage}` };
+        }
+        if (!testResults.test2.message)
+        {
+            testResults.test2 = { passed: false, message: `执行错误: ${errorMessage}` };
+        }
+    }
+    finally
+    {
+        sendTestResult();
+    }
 });
 
