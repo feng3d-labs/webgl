@@ -5,7 +5,7 @@
  */
 
 // 导入自动生成的测试配置
-import { tests as testConfigs } from './test-config';
+import { tests as testConfigs } from './test_web/test-config';
 
 interface TestInfo
 {

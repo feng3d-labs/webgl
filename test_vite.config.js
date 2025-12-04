@@ -5,8 +5,8 @@ import { defineConfig } from 'vite';
 import fg from 'fast-glob';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const __parentDir = dirname(__dirname); // 父目录（项目根目录）
+const __dirname = dirname(__filename); // 根目录（配置文件所在目录）
+const testWebDir = resolve(__dirname, 'test_web'); // test_web 目录
 
 // 使用 fast-glob 扫描匹配通配符模式的文件
 // fast-glob 支持完整的 glob 模式，包括：
@@ -72,27 +72,40 @@ const TEST_FILE_PATTERN = '**/*.spect.html'; // 默认匹配所有子目录中�
 const EXCLUDE_PATTERNS = [
     '**/node_modules/**', // 排除 node_modules 目录
     '**/dist/**', // 排除 dist 目录
+    '**/test_dist/**', // 排除 test_dist 目录
     '**/.git/**', // 排除 .git 目录
 ];
 
 // 自动扫描所有匹配模式的测试文件
-// 从父目录（项目根目录）开始扫描，包含 test_web 和 packages/webgpu/test_web 中的测试文件
+// 从根目录开始扫描，包含 test_web 和 packages/webgpu/test_web 中的测试文件
 function getSpectHtmlFiles()
 {
     const input = {
-        main: resolve(__dirname, 'index.html'),
+        main: resolve(__dirname, 'test.html'),
     };
 
-    // 从父目录（项目根目录）开始扫描
-    const testFiles = findSpectHtmlFiles(__dirname, __parentDir, TEST_FILE_PATTERN, EXCLUDE_PATTERNS);
+    // 从根目录开始扫描
+    const testFiles = findSpectHtmlFiles(testWebDir, __dirname, TEST_FILE_PATTERN, EXCLUDE_PATTERNS);
 
     testFiles.forEach((file) =>
     {
         // 使用相对路径作为 key，确保唯一性
-        // 如果文件在根目录，直接使用文件名；否则使用相对路径（将路径分隔符替换为 -）
-        const key = file.relativePath.includes('/')
-            ? file.relativePath.replace(/\//g, '-').replace(/\.spect\.html$/, '')
-            : file.name;
+        // 将路径分隔符和相对路径符号替换为 -，确保 key 不包含路径分隔符
+        // 例如：../packages/webgpu/test_web/depth-attachment-canvas-readpixels.spect.html
+        // 转换为：packages-webgpu-test_web-depth-attachment-canvas-readpixels
+        let key = file.relativePath
+            .replace(/^\.\.\//g, '') // 移除开头的 ../
+            .replace(/^\.\//g, '') // 移除开头的 ./
+            .replace(/\//g, '-') // 将路径分隔符替换为 -
+            .replace(/\\/g, '-') // 将 Windows 路径分隔符替换为 -
+            .replace(/\.spect\.html$/, ''); // 移除文件扩展名
+
+        // 如果 key 为空或已存在，使用文件名作为后备
+        if (!key || input[key])
+        {
+            key = file.name;
+        }
+
         // 使用绝对路径，因为文件可能在不同的目录中
         input[key] = resolve(file.path);
     });
@@ -123,11 +136,23 @@ function extractTestInfo(htmlContent, fileName)
 }
 
 // 生成测试配置文件
-// 从父目录（项目根目录）开始扫描，包含所有测试文件
+// 从根目录开始扫描，包含所有测试文件
 function generateTestConfig()
 {
-    // 从父目录（项目根目录）开始扫描
-    const testFiles = findSpectHtmlFiles(__dirname, __parentDir, TEST_FILE_PATTERN, EXCLUDE_PATTERNS);
+    // 从根目录开始扫描
+    const testFiles = findSpectHtmlFiles(testWebDir, __dirname, TEST_FILE_PATTERN, EXCLUDE_PATTERNS);
+
+    // 生成 rollupOptions.input，用于获取每个文件对应的 key
+    const input = getSpectHtmlFiles();
+    // 创建一个映射：文件路径 -> input key
+    const pathToKeyMap = new Map();
+    Object.entries(input).forEach(([key, path]) =>
+    {
+        if (key !== 'main')
+        {
+            pathToKeyMap.set(resolve(path), key);
+        }
+    });
 
     const tests = testFiles.map((file) =>
     {
@@ -135,9 +160,17 @@ function generateTestConfig()
         const fileName = file.relativePath.split('/').pop() || file.name;
         const testInfo = extractTestInfo(htmlContent, fileName);
 
-        // 使用相对于 test_web 目录的路径（用于浏览器中加载）
-        // 这样无论文件在哪个目录，都能正确加载
-        const htmlFile = file.relativeToBase;
+        // 在 vite 开发模式下，使用相对于 root 的实际文件路径
+        // root 现在是根目录，所以我们需要使用相对于根目录的路径
+        // 例如：test_web/depth-attachment-canvas-readpixels.spect.html
+        // 或者：packages/webgpu/test_web/depth-attachment-canvas-readpixels.spect.html
+        let htmlFile = file.relativePath;
+
+        // 确保路径以 / 开头
+        if (!htmlFile.startsWith('/'))
+        {
+            htmlFile = '/' + htmlFile;
+        }
 
         return {
             name: testInfo.name,
@@ -162,7 +195,7 @@ export interface TestInfo
 export const tests: TestInfo[] = ${JSON.stringify(tests, null, 4)};
 `;
 
-    const configPath = join(__dirname, 'test-config.ts');
+    const configPath = join(testWebDir, 'test-config.ts');
     writeFileSync(configPath, configContent, 'utf-8');
 
     return tests;
@@ -191,12 +224,43 @@ export default defineConfig({
     publicDir: false,
     server: {
         port: 3001,
-        open: true,
+        open: '/test.html',
     },
     build: {
-        outDir: 'dist',
+        outDir: resolve(__dirname, 'test_dist'),
         rollupOptions: {
             input: getSpectHtmlFiles(),
+            output: {
+                // 确保输出文件名不包含路径分隔符
+                entryFileNames: (chunkInfo) =>
+                {
+                    // 使用 chunk 的 name 作为文件名，确保不包含路径分隔符
+                    const name = chunkInfo.name || 'chunk';
+
+                    return `${name.replace(/[/\\]/g, '-')}.js`;
+                },
+                chunkFileNames: (chunkInfo) =>
+                {
+                    const name = chunkInfo.name || 'chunk';
+
+                    return `chunks/${name.replace(/[/\\]/g, '-')}-[hash].js`;
+                },
+                assetFileNames: (assetInfo) =>
+                {
+                    // 对于 HTML 文件，使用原始名称（不包含路径分隔符）
+                    if (assetInfo.name && assetInfo.name.endsWith('.html'))
+                    {
+                        const name = assetInfo.name.replace(/[/\\]/g, '-');
+
+                        return name;
+                    }
+
+                    // 其他资源文件
+                    const name = assetInfo.name || 'asset';
+
+                    return `assets/${name.replace(/[/\\]/g, '-')}-[hash][extname]`;
+                },
+            },
         },
     },
     // resolve: {
