@@ -15,6 +15,7 @@ interface TestInfo
     status: 'pending' | 'pass' | 'fail';
     error?: string;
     testName?: string; // 用于匹配 postMessage 中的 testName
+    dirPath?: string; // 目录路径（相对于根目录）
     iframe?: HTMLIFrameElement;
 }
 
@@ -26,12 +27,19 @@ function initializeTests(): TestInfo[]
         description: config.description,
         htmlFile: config.htmlFile,
         testName: config.testName,
+        dirPath: config.dirPath,
         status: 'pending' as const,
     }));
 }
 
 // 定义所有测试
 const tests: TestInfo[] = initializeTests();
+
+// 筛选状态：是否只显示失败的测试
+let showFailuresOnly = false;
+
+// 目录展开状态：记录哪些目录是展开的
+const expandedDirs = new Set<string>();
 
 // 更新统计信息
 function updateSummary()
@@ -52,6 +60,173 @@ function updateSummary()
     if (statPending) statPending.textContent = pending.toString();
 }
 
+// 目录树节点接口
+interface DirNode
+{
+    name: string; // 目录名称（最后一级）
+    fullPath: string; // 完整路径
+    level: number; // 层级深度
+    tests: TestInfo[]; // 该目录下的测试
+    children: Map<string, DirNode>; // 子目录
+}
+
+// 构建目录树
+function buildDirTree(filteredTests: TestInfo[]): DirNode
+{
+    const root: DirNode = {
+        name: '',
+        fullPath: '.',
+        level: 0,
+        tests: [],
+        children: new Map(),
+    };
+
+    filteredTests.forEach((test) =>
+    {
+        const dirPath = test.dirPath || '.';
+        if (dirPath === '.')
+        {
+            root.tests.push(test);
+        }
+        else
+        {
+            const parts = dirPath.split('/');
+            let current = root;
+
+            parts.forEach((part, index) =>
+            {
+                if (!current.children.has(part))
+                {
+                    current.children.set(part, {
+                        name: part,
+                        fullPath: parts.slice(0, index + 1).join('/'),
+                        level: index + 1,
+                        tests: [],
+                        children: new Map(),
+                    });
+                }
+                current = current.children.get(part)!;
+            });
+
+            current.tests.push(test);
+        }
+    });
+
+    return root;
+}
+
+// 递归收集所有目录路径
+function collectAllDirPaths(node: DirNode, paths: Set<string>)
+{
+    node.children.forEach((child) =>
+    {
+        paths.add(child.fullPath);
+        collectAllDirPaths(child, paths);
+    });
+}
+
+// 递归渲染目录节点
+function renderDirNode(node: DirNode, parentElement: HTMLElement)
+{
+    // 排序：先显示本项目的（test_web），再显示其他项目的
+    const sortedChildren = Array.from(node.children.values()).sort((a, b) =>
+    {
+        const isAProject = a.fullPath === 'test_web' || a.fullPath.startsWith('test_web/');
+        const isBProject = b.fullPath === 'test_web' || b.fullPath.startsWith('test_web/');
+
+        if (isAProject && !isBProject) return -1;
+        if (!isAProject && isBProject) return 1;
+
+        return a.name.localeCompare(b.name);
+    });
+
+    // 渲染子目录
+    sortedChildren.forEach((child) =>
+    {
+        const isExpanded = expandedDirs.has(child.fullPath);
+
+        // 目录标题
+        const dirHeader = document.createElement('div');
+        dirHeader.className = 'test-dir-header';
+        dirHeader.style.cursor = 'pointer';
+        dirHeader.style.paddingLeft = `${8 + child.level * 16}px`; // 根据层级缩进
+        dirHeader.onclick = () => toggleDir(child.fullPath);
+
+        const icon = document.createElement('span');
+        icon.className = 'dir-icon';
+        icon.textContent = isExpanded ? '▼' : '▶';
+        icon.style.marginRight = '6px';
+        icon.style.display = 'inline-block';
+        icon.style.width = '10px';
+        icon.style.fontSize = '9px';
+
+        const dirName = document.createElement('span');
+        dirName.textContent = child.name;
+
+        dirHeader.appendChild(icon);
+        dirHeader.appendChild(dirName);
+
+        parentElement.appendChild(dirHeader);
+
+        // 如果目录展开，显示测试项和子目录
+        if (isExpanded)
+        {
+            // 渲染该目录下的测试
+            child.tests.forEach((test) =>
+            {
+                const testIndex = tests.indexOf(test);
+                const testItem = document.createElement('div');
+                testItem.className = 'test-item';
+                testItem.style.marginLeft = `${8 + (child.level + 1) * 16}px`; // 测试项缩进
+
+                const statusClass = test.status;
+                const statusText = test.status === 'pending' ? '待测试' : test.status === 'pass' ? '通过' : '失败';
+
+                testItem.innerHTML = `
+                    <div class="test-header">
+                        <div class="test-title">${test.name}</div>
+                        <div class="test-status ${statusClass}">${statusText}</div>
+                        <button class="btn btn-primary" onclick="openTest(${testIndex})">查看</button>
+                    </div>
+                    <div class="test-description">${test.description}</div>
+                    ${test.status === 'fail' && test.error ? `<div class="test-error">${test.error}</div>` : ''}
+                `;
+
+                parentElement.appendChild(testItem);
+            });
+
+            // 递归渲染子目录
+            renderDirNode(child, parentElement);
+        }
+    });
+
+    // 渲染根目录下的测试（如果有）
+    if (node.level === 0 && node.tests.length > 0)
+    {
+        node.tests.forEach((test) =>
+        {
+            const testIndex = tests.indexOf(test);
+            const testItem = document.createElement('div');
+            testItem.className = 'test-item';
+
+            const statusClass = test.status;
+            const statusText = test.status === 'pending' ? '待测试' : test.status === 'pass' ? '通过' : '失败';
+
+            testItem.innerHTML = `
+                <div class="test-header">
+                    <div class="test-title">${test.name}</div>
+                    <div class="test-status ${statusClass}">${statusText}</div>
+                    <button class="btn btn-primary" onclick="openTest(${testIndex})">查看</button>
+                </div>
+                <div class="test-description">${test.description}</div>
+                ${test.status === 'fail' && test.error ? `<div class="test-error">${test.error}</div>` : ''}
+            `;
+
+            parentElement.appendChild(testItem);
+        });
+    }
+}
+
 // 渲染测试列表
 function renderTestList()
 {
@@ -60,26 +235,16 @@ function renderTestList()
 
     testList.innerHTML = '';
 
-    tests.forEach((test, index) =>
-    {
-        const testItem = document.createElement('div');
-        testItem.className = 'test-item';
+    // 根据筛选条件过滤测试
+    const filteredTests = showFailuresOnly
+        ? tests.filter(test => test.status === 'fail')
+        : tests;
 
-        const statusClass = test.status;
-        const statusText = test.status === 'pending' ? '待测试' : test.status === 'pass' ? '通过' : '失败';
+    // 构建目录树
+    const dirTree = buildDirTree(filteredTests);
 
-        testItem.innerHTML = `
-            <div class="test-header">
-                <div class="test-title">${test.name}</div>
-                <div class="test-status ${statusClass}">${statusText}</div>
-                <button class="btn btn-primary" onclick="openTest(${index})">查看</button>
-            </div>
-            <div class="test-description">${test.description}</div>
-            ${test.status === 'fail' && test.error ? `<div class="test-error">${test.error}</div>` : ''}
-        `;
-
-        testList.appendChild(testItem);
-    });
+    // 递归渲染目录树
+    renderDirNode(dirTree, testList);
 
     updateSummary();
 }
@@ -193,9 +358,45 @@ function runAllTests()
     }
 }
 
+// 切换目录展开/收拢状态
+function toggleDir(dirPath: string)
+{
+    if (expandedDirs.has(dirPath))
+    {
+        expandedDirs.delete(dirPath);
+    }
+    else
+    {
+        expandedDirs.add(dirPath);
+    }
+    renderTestList();
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () =>
 {
+    // 构建目录树以收集所有目录路径
+    const dirTree = buildDirTree(tests);
+    const allDirPaths = new Set<string>();
+    collectAllDirPaths(dirTree, allDirPaths);
+
+    // 默认展开所有目录
+    allDirPaths.forEach((dirPath) =>
+    {
+        expandedDirs.add(dirPath);
+    });
+
+    // 绑定筛选复选框事件
+    const filterCheckbox = document.getElementById('filter-failures') as HTMLInputElement;
+    if (filterCheckbox)
+    {
+        filterCheckbox.addEventListener('change', (e) =>
+        {
+            showFailuresOnly = (e.target as HTMLInputElement).checked;
+            renderTestList();
+        });
+    }
+
     renderTestList();
     runAllTests();
 });

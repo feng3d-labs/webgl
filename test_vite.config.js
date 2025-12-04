@@ -172,15 +172,38 @@ function generateTestConfig()
             htmlFile = '/' + htmlFile;
         }
 
+        // 提取目录路径（相对于根目录）
+        // 例如：test_web/depth-attachment-canvas-readpixels.spect.html -> test_web
+        // 例如：packages/webgpu/test_web/depth-attachment-canvas-readpixels.spect.html -> packages/webgpu/test_web
+        const dirPath = file.relativePath.split('/').slice(0, -1).join('/') || '.';
+
         return {
             name: testInfo.name,
             description: testInfo.description,
-            htmlFile, // 使用相对于 test_web 的路径
+            htmlFile, // 使用相对于根目录的路径
             testName: testInfo.testName,
+            dirPath, // 目录路径
         };
     });
 
     // 生成 TypeScript 配置文件
+    // 将 JSON 字符串转换为使用单引号的格式
+    const testsJson = JSON.stringify(tests, null, 4);
+    let testsWithSingleQuotes = testsJson
+        .replace(/"([^"]+)":/g, '$1:') // 移除属性名的引号
+        .replace(/"/g, "'"); // 将字符串值的双引号替换为单引号
+
+    // 确保每个对象的最后一个属性后面都有逗号
+    // 匹配格式：属性值后面没有逗号，直接是换行和闭合大括号
+    // 先处理所有对象（包括最后一个），然后再处理数组结尾
+    testsWithSingleQuotes = testsWithSingleQuotes.replace(/([^,\n])\n {4}\}/g, '$1,\n    }');
+    // 在最后一个对象后面确保有尾随逗号（如果还没有的话）
+    // 匹配格式：\n    }\n] 并替换为 \n    },\n]
+    testsWithSingleQuotes = testsWithSingleQuotes.replace(/(\n {4}\})\n\]/g, '$1,\n]');
+    // 清理可能出现的重复分号和多余的逗号行
+    testsWithSingleQuotes = testsWithSingleQuotes.replace(/;;/g, ';');
+    testsWithSingleQuotes = testsWithSingleQuotes.replace(/\n,\n\]/g, ',\n]');
+
     const configContent = `// 此文件由构建工具自动生成，请勿手动编辑
 // 此文件包含所有 .spect.html 测试文件的配置信息
 
@@ -190,9 +213,10 @@ export interface TestInfo
     description: string;
     htmlFile: string;
     testName: string;
+    dirPath: string; // 目录路径（相对于根目录）
 }
 
-export const tests: TestInfo[] = ${JSON.stringify(tests, null, 4)};
+export const tests: TestInfo[] = ${testsWithSingleQuotes};
 `;
 
     const configPath = join(testWebDir, 'test-config.ts');
