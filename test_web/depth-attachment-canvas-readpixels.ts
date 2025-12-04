@@ -85,7 +85,7 @@ function readPixelColor(webgl: WebGL, textureView: TextureView, x: number, y: nu
 {
     // 使用 webgl.readPixels 读取像素
     const result = webgl.readPixels({
-        textureView,
+        texture: textureView.texture,
         origin: [x, y],
         copySize: [1, 1],
     });

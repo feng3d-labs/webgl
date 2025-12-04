@@ -46,16 +46,24 @@ export class WebGL
         const result = readPixels(this._gl, glReadPixels);
 
         // 设置纹理格式信息
-        const texture = glReadPixels.textureView.texture;
-        if ('context' in texture)
+        const texture = glReadPixels.texture;
+        if (texture)
         {
-            // CanvasTexture: 默认使用 rgba8unorm
-            glReadPixels.format = 'rgba8unorm';
+            if ('context' in texture)
+            {
+                // CanvasTexture: 默认使用 rgba8unorm
+                glReadPixels.format = 'rgba8unorm';
+            }
+            else if ('descriptor' in texture)
+            {
+                // Texture: 从描述符获取格式
+                glReadPixels.format = texture.descriptor.format || 'rgba8unorm';
+            }
         }
-        else if ('descriptor' in texture)
+        else
         {
-            // Texture: 从描述符获取格式
-            glReadPixels.format = texture.descriptor.format || 'rgba8unorm';
+            // 如果没有指定纹理，默认使用 rgba8unorm
+            glReadPixels.format = 'rgba8unorm';
         }
 
         glReadPixels.result = result;

@@ -8,9 +8,8 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
     if (gl instanceof WebGL2RenderingContext)
     {
-        const { textureView, origin, copySize } = readPixels;
+        const { texture, origin, copySize } = readPixels;
         const [width, height] = copySize;
-        const texture = textureView.texture;
 
         // 检查是否是 CanvasTexture
         if ('context' in texture)
@@ -56,11 +55,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
             const bufferSize = bytesPerRow * height;
             bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
 
-            const frameBuffer: RenderPassDescriptor = {
-                colorAttachments: [
-                    { view: textureView },
-                ],
-            };
+            const frameBuffer: RenderPassDescriptor = { colorAttachments: [{ view: { texture } }] };
 
             const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
             gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
