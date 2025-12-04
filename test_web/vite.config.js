@@ -21,12 +21,12 @@ export default defineConfig({
             },
         },
     },
-    resolve: {
-        alias: {
-            '@feng3d/webgl': resolve(__dirname, '../src'),
-            '@feng3d/render-api': resolve(__dirname, '../packages/render-api/src'),
-        },
-    },
+    // resolve: {
+    //     alias: {
+    //         '@feng3d/webgl': resolve(__dirname, '../src'),
+    //         '@feng3d/render-api': resolve(__dirname, '../packages/render-api/src'),
+    //     },
+    // },
     plugins: [
         shaderToString(),
     ],

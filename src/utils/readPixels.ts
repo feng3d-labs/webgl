@@ -41,9 +41,6 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
                 ? gl.drawingBufferHeight - origin[1] - 1
                 : gl.drawingBufferHeight - origin[1] - height;
 
-            // 添加调试信息
-            console.log(`readPixels CanvasTexture: origin=(${origin[0]}, ${origin[1]}), copySize=(${width}, ${height}), glY=${glY}, drawingBufferHeight=${gl.drawingBufferHeight}`);
-
             gl.readPixels(origin[0], glY, width, height, gl[format], gl[type], bufferData, 0);
         }
         else

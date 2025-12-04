@@ -78,7 +78,7 @@ function renderTestList()
 }
 
 // 打开测试页面
-function openTest(index: number)
+export function openTest(index: number)
 {
     const test = tests[index];
     if (test)
