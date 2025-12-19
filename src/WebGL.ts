@@ -46,9 +46,10 @@ export class WebGL
         const result = readPixels(this._gl, glReadPixels);
 
         // 设置纹理格式信息
-        const texture = glReadPixels.texture;
-        if (texture)
+        const textureView = glReadPixels.textureView;
+        if (textureView)
         {
+            const texture = textureView.texture;
             if ('context' in texture)
             {
                 // CanvasTexture: 默认使用 rgba8unorm
@@ -62,7 +63,7 @@ export class WebGL
         }
         else
         {
-            // 如果没有指定纹理，默认使用 rgba8unorm
+            // 如果没有指定纹理视图，默认使用 rgba8unorm
             glReadPixels.format = 'rgba8unorm';
         }
 

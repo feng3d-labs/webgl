@@ -1,4 +1,4 @@
-import { CanvasTexture, ReadPixels, RenderPassDescriptor, Texture, TextureDescriptor, TextureFormat } from '@feng3d/render-api';
+import { CanvasTexture, ReadPixels, RenderPassDescriptor, Texture, TextureFormat } from '@feng3d/render-api';
 import { deleteFramebuffer, getGLFramebuffer } from '../caches/getGLFramebuffer';
 import { getGLTextureFormats } from '../caches/getGLTextureFormats';
 
@@ -8,14 +8,13 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
     if (gl instanceof WebGL2RenderingContext)
     {
-        const { texture, origin, copySize } = readPixels;
+        const { textureView, origin, copySize } = readPixels;
         const [width, height] = copySize;
 
-        // 检查是否是 CanvasTexture
-        if ('context' in texture)
+        // 未指定纹理视图时，从画布读取
+        if (!textureView)
         {
-            // CanvasTexture: 从默认 framebuffer（画布）读取
-            const canvasTexture = texture as CanvasTexture;
+            // 从默认 framebuffer（画布）读取
             const textureFormat: TextureFormat = 'rgba8unorm'; // 画布默认格式
             const { format, type } = getGLTextureFormats(textureFormat);
             const bytesPerPixel = Texture.getTextureBytesPerPixel(textureFormat);
@@ -42,11 +41,38 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
             gl.readPixels(origin[0], glY, width, height, gl[format], gl[type], bufferData, 0);
         }
+        else if ('context' in textureView.texture)
+        {
+            // CanvasTexture: 从默认 framebuffer（画布）读取
+            const canvasTexture = textureView.texture as CanvasTexture;
+            const textureFormat: TextureFormat = 'rgba8unorm'; // 画布默认格式
+            const { format, type } = getGLTextureFormats(textureFormat);
+            const bytesPerPixel = Texture.getTextureBytesPerPixel(textureFormat);
+            const DataConstructor = Texture.getTextureDataConstructor(textureFormat);
+
+            const bytesPerRow = width * bytesPerPixel;
+            const bufferSize = bytesPerRow * height;
+            bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
+
+            // 绑定到默认 framebuffer（画布）
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+            // 设置读取缓冲区（默认 framebuffer 使用 BACK 缓冲区）
+            gl.readBuffer(gl.BACK);
+
+            // 读取像素（注意：WebGL 的坐标系是左下角为原点，需要翻转 y 坐标）
+            const glY = height === 1
+                ? gl.drawingBufferHeight - origin[1] - 1
+                : gl.drawingBufferHeight - origin[1] - height;
+
+            gl.readPixels(origin[0], glY, width, height, gl[format], gl[type], bufferData, 0);
+        }
         else
         {
             // Texture: 从纹理 framebuffer 读取
             const attachmentPoint: GLAttachmentPoint = 'COLOR_ATTACHMENT0';
-            const descriptor = (texture as Texture).descriptor;
+            const texture = textureView.texture as Texture;
+            const descriptor = texture.descriptor;
             const { format, type } = getGLTextureFormats(descriptor.format);
             const bytesPerPixel = Texture.getTextureBytesPerPixel(descriptor.format);
             const DataConstructor = Texture.getTextureDataConstructor(descriptor.format);
@@ -55,7 +81,8 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
             const bufferSize = bytesPerRow * height;
             bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
 
-            const frameBuffer: RenderPassDescriptor = { colorAttachments: [{ view: { texture } }] };
+            // 使用传入的 textureView 创建 framebuffer，支持纹理数组的特定层
+            const frameBuffer: RenderPassDescriptor = { colorAttachments: [{ view: textureView }] };
 
             const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
             gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
