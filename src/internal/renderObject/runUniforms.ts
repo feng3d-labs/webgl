@@ -118,13 +118,23 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
         webGLProgram.uniformBlocks.forEach((uniformBlock) =>
         {
             const { name, index } = uniformBlock;
-            const uniformData = bindingResources[name] as TypedArray | BufferBinding;
+            // 优先使用块名查找，如果找不到则尝试使用实例名（首字母小写）
+            let uniformData = bindingResources[name] as TypedArray | BufferBinding;
+            if (uniformData === undefined)
+            {
+                const instanceName = name.charAt(0).toLowerCase() + name.slice(1);
+                uniformData = bindingResources[instanceName] as TypedArray | BufferBinding;
+            }
+            if (uniformData === undefined)
+            {
+                throw new Error(`没有找到 UniformBlock "${name}" 的数据，请检查 bindingResources 中是否包含 "${name}" 或 "${name.charAt(0).toLowerCase() + name.slice(1)}" 键。`);
+            }
 
             //
             let typedArray = uniformData as TypedArray;
             if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
             {
-                const bufferBinding = bindingResources[name] as BufferBinding;
+                const bufferBinding = uniformData as BufferBinding;
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
