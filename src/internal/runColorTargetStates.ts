@@ -1,4 +1,4 @@
-import { BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState } from '@feng3d/render-api';
+import { BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState, defaultBlendComponent } from '@feng3d/render-api';
 
 export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
 {
@@ -13,9 +13,9 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
         const color: BlendComponent = blend.color;
         const alpha: BlendComponent = blend.alpha;
 
-        const colorOperation: GLBlendEquation = getGLBlendEquation(color?.operation) || 'FUNC_ADD';
-        const colorSrcFactor: GLBlendFactor = getGLBlendFactor(color?.srcFactor, color?.operation) || 'SRC_ALPHA';
-        const colorDstFactor: GLBlendFactor = getGLBlendFactor(color?.dstFactor, color?.operation) || 'ONE_MINUS_SRC_ALPHA';
+        const colorOperation: GLBlendEquation = getGLBlendEquation(color?.operation ?? defaultBlendComponent.operation);
+        const colorSrcFactor: GLBlendFactor = getGLBlendFactor(color?.srcFactor ?? defaultBlendComponent.srcFactor, color?.operation);
+        const colorDstFactor: GLBlendFactor = getGLBlendFactor(color?.dstFactor ?? defaultBlendComponent.dstFactor, color?.operation);
         //
         const alphaOperation: GLBlendEquation = getGLBlendEquation(alpha?.operation) || colorOperation;
         const alphaSrcFactor: GLBlendFactor = getGLBlendFactor(alpha?.srcFactor, color?.operation) || colorSrcFactor;
