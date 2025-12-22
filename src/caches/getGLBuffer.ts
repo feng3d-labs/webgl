@@ -1,5 +1,5 @@
 import { effect, Effect, reactive } from '@feng3d/reactivity';
-import { Buffer } from '@feng3d/render-api';
+import { Buffer, shared } from '@feng3d/render-api';
 
 declare global
 {
@@ -63,7 +63,18 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
             }
             gl.bufferSubData(gl[target], bufferOffset, data);
         });
-        r_buffer.writeBuffers = null;
+
+        if (!shared.isRunWebGPU)
+        {
+            reactive(buffer).writeBuffers = null;
+        }
+        else
+        {
+            setTimeout(() =>
+            {
+                reactive(buffer).writeBuffers = null;
+            }, 0);
+        }
     }));
 
     //
