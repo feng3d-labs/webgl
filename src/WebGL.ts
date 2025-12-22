@@ -1,4 +1,4 @@
-import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, shared, Submit, Texture } from '@feng3d/render-api';
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, renderState, Submit, Texture } from '@feng3d/render-api';
 
 import { deleteBuffer } from './caches/getGLBuffer';
 import { getGLCanvasContext } from './caches/getGLCanvasContext';
@@ -25,7 +25,7 @@ export class WebGL
 
     constructor(canvasContext?: CanvasContext)
     {
-        shared.isRunWebGL = true;
+        renderState.isRunWebGL = true;
         //
         this._renderingContext = canvasContext;
         this._gl = getGLCanvasContext(this._renderingContext) as any;
