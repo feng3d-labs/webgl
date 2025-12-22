@@ -1,6 +1,5 @@
-import { UnReadonly } from '@feng3d/reactivity';
+import { effect, Effect, reactive } from '@feng3d/reactivity';
 import { Buffer } from '@feng3d/render-api';
-import { watcher } from '@feng3d/watcher';
 
 declare global
 {
@@ -27,8 +26,28 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
     gl.bindBuffer(gl[target], webGLBuffer);
     gl.bufferData(gl[target], size, gl[usage]);
 
-    const writeBuffer = () =>
+    const r_buffer = reactive(buffer);
+
+    const effects: Effect[] = [];
+
+    // 监听 data 变化
+    effects.push(effect(() =>
     {
+        r_buffer.data;
+
+        if (!buffer.data) return;
+
+        const writeBuffers = buffer.writeBuffers || [];
+        writeBuffers.unshift({ data: new Uint8Array(buffer.data) });
+        r_buffer.writeBuffers = writeBuffers;
+    }));
+
+    // 监听 writeBuffers 变化
+    effects.push(effect(() =>
+    {
+        // 触发响应式依赖，监听 writeBuffers 数组变化
+        r_buffer.writeBuffers?.forEach(() => { });
+
         const writeBuffers = buffer.writeBuffers;
 
         if (!writeBuffers) return;
@@ -44,30 +63,13 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
             }
             gl.bufferSubData(gl[target], bufferOffset, data);
         });
-        (buffer as UnReadonly<Buffer>).writeBuffers = null;
-    };
-
-    const dataChange = () =>
-    {
-        if (!buffer.data) return;
-
-        const writeBuffers = buffer.writeBuffers || [];
-        writeBuffers.unshift({ data: new Uint8Array(buffer.data) });
-        (buffer as UnReadonly<Buffer>).writeBuffers = writeBuffers;
-    };
-
-    dataChange();
-    writeBuffer();
-
-    //
-    watcher.watch(buffer, 'data', dataChange);
-    watcher.watch(buffer, 'writeBuffers', writeBuffer);
+        r_buffer.writeBuffers = null;
+    }));
 
     //
     webGLBuffer.destroy = () =>
     {
-        watcher.unwatch(buffer, 'data', dataChange);
-        watcher.unwatch(buffer, 'writeBuffers', writeBuffer);
+        effects.forEach((eff) => eff.stop());
     };
 
     return webGLBuffer;
