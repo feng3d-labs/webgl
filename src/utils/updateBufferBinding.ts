@@ -1,6 +1,5 @@
-import { reactive, UnReadonly } from '@feng3d/reactivity';
+import { effect, reactive, UnReadonly } from '@feng3d/reactivity';
 import { Buffer, BufferBinding, BufferBindingInfo } from '@feng3d/render-api';
-import { watcher } from '@feng3d/watcher';
 
 /**
  *
@@ -45,18 +44,25 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     const buffer = Buffer.getBuffer(uniformData.bufferView.buffer);
     const offset = uniformData.bufferView.byteOffset;
 
+    const r_uniformData = reactive(uniformData);
+
     //
     bufferBindingInfo.items.forEach((v) =>
     {
         const { paths, offset: itemInfoOffset, size: itemInfoSize, Cls } = v;
-        const update = () =>
+
+        // 使用 effect 替代 watcher，与 WebGPU 保持一致
+        effect(() =>
         {
             let value: any = uniformData.value;
+            let r_value: any = r_uniformData.value; // 监听
+
             if (value === undefined) return;
 
             for (let i = 0; i < paths.length; i++)
             {
                 value = value[paths[i]];
+                r_value = r_value[paths[i]]; // 监听
                 if (value === undefined)
                 {
                     if (!hasDefautValue)
@@ -85,9 +91,6 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             const writeBuffers = buffer.writeBuffers ?? [];
             writeBuffers.push({ data: data, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) / data.BYTES_PER_ELEMENT });
             reactive(buffer).writeBuffers = writeBuffers;
-        };
-
-        update();
-        watcher.watchchain(uniformData, ['value', ...paths].join('.'), update, undefined, false);
+        });
     });
 }
