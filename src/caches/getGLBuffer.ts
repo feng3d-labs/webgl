@@ -1,5 +1,5 @@
 import { effect, Effect, reactive } from '@feng3d/reactivity';
-import { Buffer, renderState } from '@feng3d/render-api';
+import { Buffer, renderState, WriteBuffer } from '@feng3d/render-api';
 
 declare global
 {
@@ -26,6 +26,17 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
     gl.bindBuffer(gl[target], webGLBuffer);
     gl.bufferData(gl[target], size, gl[usage]);
 
+    const doWriteBuffer = (writeBuffer: WriteBuffer) =>
+    {
+        const bufferOffset = writeBuffer.bufferOffset ?? 0;
+        let data = writeBuffer.data;
+        if (writeBuffer.size)
+        {
+            data = new Uint8Array(data.buffer, data.byteOffset, writeBuffer.size * data.BYTES_PER_ELEMENT);
+        }
+        gl.bufferSubData(gl[target], bufferOffset, data);
+    };
+
     const r_buffer = reactive(buffer);
 
     const effects: Effect[] = [];
@@ -37,9 +48,8 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
 
         if (!buffer.data) return;
 
-        const writeBuffers = buffer.writeBuffers || [];
-        writeBuffers.unshift({ data: new Uint8Array(buffer.data) });
-        r_buffer.writeBuffers = writeBuffers;
+        gl.bindBuffer(gl[target], webGLBuffer);
+        doWriteBuffer({ data: new Uint8Array(buffer.data) });
     }));
 
     // 监听 writeBuffers 变化
@@ -53,16 +63,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
         if (!writeBuffers) return;
 
         gl.bindBuffer(gl[target], webGLBuffer);
-        writeBuffers.forEach((writeBuffer) =>
-        {
-            const bufferOffset = writeBuffer.bufferOffset ?? 0;
-            let data = writeBuffer.data;
-            if (writeBuffer.size)
-            {
-                data = new Uint8Array(data.buffer, data.byteOffset, writeBuffer.size * data.BYTES_PER_ELEMENT);
-            }
-            gl.bufferSubData(gl[target], bufferOffset, data);
-        });
+        writeBuffers.forEach(doWriteBuffer);
 
         if (!renderState.isRunWebGPU)
         {
