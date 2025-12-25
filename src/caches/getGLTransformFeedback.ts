@@ -1,5 +1,5 @@
 import { Buffer } from '@feng3d/render-api';
-import { TransformFeedback } from '../data/TransformFeedbackPass';
+import { TransformFeedback } from '@feng3d/render-api';
 import { getGLBuffer } from './getGLBuffer';
 
 export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)

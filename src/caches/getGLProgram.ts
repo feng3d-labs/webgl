@@ -1,6 +1,6 @@
 import { BufferBindingInfo, GLVertexAttributeTypes, RenderPipeline } from '@feng3d/render-api';
 import { getWebGLUniformType, GLUniformBufferType, GLUniformType, isWebGLUniformTextureType } from '../const/GLUniformType';
-import { TransformFeedbackPipeline, TransformFeedbackVaryings } from '../data/TransformFeedbackPass';
+import { TransformFeedbackPipeline, TransformFeedbackVaryings } from '@feng3d/render-api';
 
 declare global
 {

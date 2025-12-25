@@ -1,4 +1,4 @@
-import { TransformFeedback } from '../data/TransformFeedbackPass';
+import { TransformFeedback } from '@feng3d/render-api';
 import { getGLTransformFeedback } from '../caches/getGLTransformFeedback';
 import { GLDrawMode } from '../caches/getGLDrawMode';
 

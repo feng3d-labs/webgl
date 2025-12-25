@@ -1,5 +1,5 @@
-import { CanvasContext, IndicesDataTypes, VertexData, RenderPipeline, Submit, VertexAttributes } from '@feng3d/render-api';
-import { TransformFeedback, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
+import { CanvasContext, IndicesDataTypes, RenderPipeline, Submit, TransformFeedback, TransformFeedbackPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
 import { getShaderSource } from './utility';
 

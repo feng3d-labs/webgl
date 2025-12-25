@@ -1,7 +1,7 @@
 import { Buffer, CanvasContext, ChainMap, IndicesDataTypes, RenderPassDescriptor, RenderPipeline, Sampler, Texture, VertexAttributes } from '@feng3d/render-api';
 import { defaultWebGLContextAttributes } from '../data/polyfills/CanvasContext';
 import { Renderbuffer } from '../data/Renderbuffer';
-import { TransformFeedback } from '../data/TransformFeedbackPass';
+import { TransformFeedback } from '@feng3d/render-api';
 import { Capabilities } from './Capabilities';
 
 declare global

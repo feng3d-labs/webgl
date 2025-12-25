@@ -1,6 +1,6 @@
 import { reactive } from '@feng3d/reactivity';
-import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexData } from '@feng3d/render-api';
-import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from '@feng3d/webgl';
+import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 (function ()

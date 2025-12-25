@@ -1,4 +1,4 @@
-import { TransformFeedbackObject } from '../data/TransformFeedbackPass';
+import { TransformFeedbackObject } from '@feng3d/render-api';
 import { getGLDrawMode, GLDrawMode } from '../caches/getGLDrawMode';
 import { runTransformFeedbackPipeline } from './runTransformFeedbackPipeline';
 import { runVertexArray } from './renderObject/runVertexArray';

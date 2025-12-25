@@ -9,7 +9,7 @@ import { deleteSampler } from './caches/getGLSampler';
 import { deleteTexture } from './caches/getGLTexture';
 import { deleteTransformFeedback } from './caches/getGLTransformFeedback';
 import { Renderbuffer } from './data/Renderbuffer';
-import { TransformFeedback } from './data/TransformFeedbackPass';
+import { TransformFeedback } from '@feng3d/render-api';
 import { runSubmit } from './internal/runSubmit';
 import { readPixels } from './utils/readPixels';
 

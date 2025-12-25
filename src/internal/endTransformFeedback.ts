@@ -1,4 +1,4 @@
-import { TransformFeedback } from '../data/TransformFeedbackPass';
+import { TransformFeedback } from '@feng3d/render-api';
 
 export function endTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
