@@ -7,6 +7,3 @@
 [submodule "packages/tsl"]
 	path = packages/tsl
 	url = https://github.com/feng3d-labs/tsl.git
-[submodule "packages/cli"]
-	path = packages/cli
-	url = https://gitee.com/feng3d/cli.git
