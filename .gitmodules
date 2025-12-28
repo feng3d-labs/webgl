@@ -1,9 +1,9 @@
 [submodule "packages/render-api"]
 	path = packages/render-api
-	url = https://gitee.com/feng3d/render-api.git
+	url = https://github.com/feng3d-labs/render-api.git
 [submodule "packages/webgpu"]
 	path = packages/webgpu
-	url = https://gitee.com/feng3d/webgpu.git
+	url = https://github.com/feng3d-labs/webgpu.git
 [submodule "packages/tsl"]
 	path = packages/tsl
-	url = https://gitee.com/feng3d/tsl.git
+	url = https://github.com/feng3d-labs/tsl.git

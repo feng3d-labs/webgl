@@ -56,7 +56,7 @@ const formatMap: { [key: string]: GLTextureFormats } = {
     rgba8snorm: undefined,
     rgba8uint: { internalformat: 'RGBA8UI', format: 'RGBA_INTEGER', type: 'UNSIGNED_BYTE' },
     rgba8sint: undefined,
-    bgra8unorm: { internalformat: 'RGBA8', format: 'RGBA', type: 'UNSIGNED_BYTE' }, // WebGL不支持bgra8unorm，但WebGPU支持。navigator.gpu.getPreferredCanvasFormat() 返回的是 bgra8unorm, 暂时使用RGBA8代替，解决一部分问题。（参考 示例 https://gitee.com/feng3d/tsl/tree/master/examples/src/fractalCube/index.ts）
+    bgra8unorm: { internalformat: 'RGBA8', format: 'RGBA', type: 'UNSIGNED_BYTE' }, // WebGL不支持bgra8unorm，但WebGPU支持。navigator.gpu.getPreferredCanvasFormat() 返回的是 bgra8unorm, 暂时使用RGBA8代替，解决一部分问题。（参考 示例 https://github.com/feng3d-labs/tsl/tree/master/examples/src/fractalCube/index.ts）
     'bgra8unorm-srgb': undefined,
     rgb9e5ufloat: { internalformat: 'RGB9_E5', format: 'RGB', type: 'HALF_FLOAT' },
     rgb10a2uint: undefined,
