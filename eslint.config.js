@@ -16,7 +16,6 @@ export default [
             '**/public/**',          // 忽略所有 public 目录
             '**/coverage/**',        // 忽略所有 coverage 目录
             '**/.git/**',            // 忽略所有 .git 目录
-            '**/packages/**',        // 忽略所有 packages 目录
         ],
     },
     // 使用 ESLint 推荐配置
@@ -83,6 +82,7 @@ export default [
             'padding-line-between-statements': [   // 语句之间的空行规则
                 'warn',
                 { 'blankLine': 'always', 'prev': '*', 'next': 'return' },  // return 前需要空行
+                { 'blankLine': 'always', 'prev': ['const', 'let', 'var'], 'next': '*' },  // 变量声明后需要空行
                 { 'blankLine': 'any', 'prev': ['const', 'let', 'var'], 'next': ['const', 'let', 'var'] },  // 变量声明之间可以没有空行
             ],
 
@@ -126,6 +126,9 @@ export default [
                 'after': true,                    // 箭头后需要空格
             }],
             'block-spacing': ['warn', 'always'],  // 块级代码需要空格
+            'brace-style': ['warn', 'allman', {   // 大括号风格
+                'allowSingleLine': false,         // 不允许单行大括号
+            }],
             'comma-spacing': ['warn', {           // 逗号空格规则
                 'before': false,                  // 逗号前不允许空格
                 'after': true,                    // 逗号后需要空格
