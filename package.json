@@ -21,6 +21,7 @@
     "postdocs": "node scripts/postdocs.js && cd examples && vite build --outDir ../public",
     "clean": "rimraf \"{lib,dist,public}\"",
     "build": "vite build",
+    "types": "tsc",
     "watch": "tsc -w",
     "test": "vitest",
     "lint": "eslint . --ext .js,.ts --max-warnings 0",
