@@ -46,9 +46,9 @@ jobs:
         CURRENT_VERSION=$(node -p "require('./package.json').version")
         PUBLISHED_VERSION=$(npm view . version 2>/dev/null || echo "0.0.0")
         if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
-          echo "::set-output name=publish::true"
+          echo "publish=true" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=publish::false"
+          echo "publish=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Publish to npm
