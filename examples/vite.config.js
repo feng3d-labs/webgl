@@ -13,6 +13,9 @@ export default defineConfig({
         outDir: 'public',
     },
     base: './',
+    define: {
+        __DEV__: 'true',
+    },
     plugins: [
         shaderToString(),
     ],
