@@ -47,6 +47,7 @@ export const HalfFloat: { encodeFloat16AsInt16: (value: number) => number, Float
     let sign;
     let exp;
     let frac;
+
     HalfFloat.encodeFloat16AsInt16 = function (value: number): number
     {
         // Inf unhandled here
@@ -96,10 +97,12 @@ export const HalfFloat: { encodeFloat16AsInt16: (value: number) => number, Float
      * @param numArray: javaScript number Array
      */
     let i;
+
     HalfFloat.Float16Array = function (numArray: number[]): Int16Array
     {
         const float16Array = new Int16Array(new ArrayBuffer(2 * numArray.length));
         const tmpArray = new Array(numArray.length);
+
         for (i = 0; i < numArray.length; ++i)
         {
             tmpArray[i] = HalfFloat.encodeFloat16AsInt16(numArray[i]);

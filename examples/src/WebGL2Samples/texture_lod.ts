@@ -6,6 +6,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -18,6 +19,7 @@ import { getShaderSource, loadImage } from './utility';
     let scale = 1.0;
     let mouseDown = false;
     let lastMouseY = 0;
+
     window.onmousedown = function (event)
     {
         mouseDown = true;
@@ -122,6 +124,7 @@ import { getShaderSource, loadImage } from './utility';
     const imageUrl = '../../assets/img/Di-3d.png';
     const textures: Texture[] = new Array(Corners.MAX);
     const samplers: Sampler[] = new Array(Corners.MAX);
+
     loadImage(imageUrl, function (image)
     {
         textures[Corners.TOP_LEFT] = {
@@ -215,6 +218,7 @@ import { getShaderSource, loadImage } from './utility';
         };
 
         const lodBiasArray = [0.0, 0.0, 0.0, 0.0];
+
         lodBiasArray[Corners.BOTTOM_LEFT] = 3.5;
         lodBiasArray[Corners.BOTTOM_RIGHT] = 4.0;
         for (let i = 0; i < Corners.MAX; ++i)

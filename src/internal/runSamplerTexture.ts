@@ -16,6 +16,7 @@ export function runSamplerTexture(gl: WebGLRenderingContext, uniformInfo: Unifor
     gl.uniform1i(location, textureID);
     //
     const webGLTexture = getGLTexture(gl, texture);
+
     gl.activeTexture(gl[`TEXTURE${textureID}`]);
     // 绑定纹理
     gl.bindTexture(gl[textureTarget], webGLTexture);

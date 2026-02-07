@@ -16,6 +16,7 @@ export function runBlitFramebuffer(gl: WebGLRenderingContext, blitFramebuffer: B
         draw.colorAttachments.forEach((item, i) =>
         {
             const clearValue = draw.colorAttachments[i]?.clearValue;
+
             if (clearValue)
             {
                 gl.clearBufferfv(gl.COLOR, i, clearValue as any);

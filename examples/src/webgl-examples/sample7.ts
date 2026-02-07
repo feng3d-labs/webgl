@@ -108,6 +108,7 @@ async function main()
     {
         now *= 0.001; // convert to seconds
         const deltaTime = now - then;
+
         then = now;
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
@@ -284,6 +285,7 @@ async function loadTexture(url: string)
     // use it immediately. When the image has finished downloading
     // we'll update the texture with the contents of the image.
     const img = new Image();
+
     img.src = url;
     await img.decode();
 
@@ -359,6 +361,7 @@ function drawScene(canvas: HTMLCanvasElement, deltaTime: number)
         [0, 1, 0]); // axis to rotate around (X)
 
     const normalMatrix = mat4.create();
+
     mat4.invert(normalMatrix, modelViewMatrix);
     mat4.transpose(normalMatrix, normalMatrix);
 

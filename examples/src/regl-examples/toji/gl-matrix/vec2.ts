@@ -13,6 +13,7 @@ import * as glMatrix from './common';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(2);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[0] = 0;
@@ -31,6 +32,7 @@ export function create()
 export function clone(a)
 {
     const out = new glMatrix.ARRAY_TYPE(2);
+
     out[0] = a[0];
     out[1] = a[1];
 
@@ -47,6 +49,7 @@ export function clone(a)
 export function fromValues(x, y)
 {
     const out = new glMatrix.ARRAY_TYPE(2);
+
     out[0] = x;
     out[1] = y;
 
@@ -358,6 +361,7 @@ export function normalize(out, a)
     const x = a[0];
     const y = a[1];
     let len = x * x + y * y;
+
     if (len > 0)
     {
     // TODO: evaluate use of glm_invsqrt here?
@@ -393,6 +397,7 @@ export function dot(a, b)
 export function cross(out, a, b)
 {
     const z = a[0] * b[1] - a[1] * b[0];
+
     out[0] = out[1] = 0;
     out[2] = z;
 
@@ -412,6 +417,7 @@ export function lerp(out, a, b, t)
 {
     const ax = a[0];
     const ay = a[1];
+
     out[0] = ax + t * (b[0] - ax);
     out[1] = ay + t * (b[1] - ay);
 
@@ -429,6 +435,7 @@ export function random(out, scale)
 {
     scale = scale || 1.0;
     const r = glMatrix.RANDOM() * 2.0 * Math.PI;
+
     out[0] = Math.cos(r) * scale;
     out[1] = Math.sin(r) * scale;
 
@@ -447,6 +454,7 @@ export function transformMat2(out, a, m)
 {
     const x = a[0];
     const y = a[1];
+
     out[0] = m[0] * x + m[2] * y;
     out[1] = m[1] * x + m[3] * y;
 
@@ -465,6 +473,7 @@ export function transformMat2d(out, a, m)
 {
     const x = a[0];
     const y = a[1];
+
     out[0] = m[0] * x + m[2] * y + m[4];
     out[1] = m[1] * x + m[3] * y + m[5];
 
@@ -484,6 +493,7 @@ export function transformMat3(out, a, m)
 {
     const x = a[0];
     const y = a[1];
+
     out[0] = m[0] * x + m[3] * y + m[6];
     out[1] = m[1] * x + m[4] * y + m[7];
 
@@ -504,6 +514,7 @@ export function transformMat4(out, a, m)
 {
     const x = a[0];
     const y = a[1];
+
     out[0] = m[0] * x + m[4] * y + m[12];
     out[1] = m[1] * x + m[5] * y + m[13];
 
@@ -547,6 +558,7 @@ export function angle(a, b)
     const y2 = b[1];
 
     let len1 = x1 * x1 + y1 * y1;
+
     if (len1 > 0)
     {
     // TODO: evaluate use of glm_invsqrt here?
@@ -554,6 +566,7 @@ export function angle(a, b)
     }
 
     let len2 = x2 * x2 + y2 * y2;
+
     if (len2 > 0)
     {
     // TODO: evaluate use of glm_invsqrt here?
@@ -677,6 +690,7 @@ export const forEach = (function ()
     {
         let i; let
             l;
+
         if (!stride)
         {
             stride = 2;

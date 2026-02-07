@@ -8,6 +8,7 @@ import { getShaderSource } from './utility';
 {
     // -- Init Canvas
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;

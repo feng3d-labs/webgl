@@ -9,6 +9,7 @@ export type gPartial<T> = {
 };
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;

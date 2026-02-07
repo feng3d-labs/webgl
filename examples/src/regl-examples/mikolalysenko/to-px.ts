@@ -25,6 +25,7 @@ export function toPX(str)
 
     // detect number of units
     const parts = parseUnit(str);
+
     if (!isNaN(parts[0]) && parts[1])
     {
         const px = toPX(parts[1]);

@@ -11,6 +11,7 @@ export function getSize(element)
     }
 
     let temporary = false;
+
     if (!element.parentNode)
     {
         temporary = true;

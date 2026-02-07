@@ -6,6 +6,7 @@ import * as bunny from './mikolalysenko/bunny';
 import * as mat4 from './stackgl/gl-mat4';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -15,14 +16,20 @@ const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antial
 
 const positions = bunny.positions.reduce((pv: number[], cv: number[]) =>
 {
-    cv.forEach((v) => { pv.push(v); });
+    cv.forEach((v) =>
+    {
+        pv.push(v);
+    });
 
     return pv;
 }, []);
 
 const indices = bunny.cells.reduce((pv: number[], cv: number[]) =>
 {
-    cv.forEach((v) => { pv.push(v); });
+    cv.forEach((v) =>
+    {
+        pv.push(v);
+    });
 
     return pv;
 }, []);

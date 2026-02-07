@@ -3,6 +3,7 @@ import { RenderObject, RenderPipeline, Submit, VertexAttributes } from '@feng3d/
 import { WebGL } from '@feng3d/webgl';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -70,6 +71,7 @@ function getRenderObject(batchId: number)
 }
 
 const renderObjects: RenderObject[] = [];
+
 for (let i = 0; i < offsets.length; i++)
 {
     renderObjects.push(getRenderObject(i));
@@ -98,6 +100,7 @@ function draw()
         batchId = i;
         //
         const ro = renderObjects[i];
+
         reactive(ro.bindingResources).color = { value: [
             Math.sin(0.02 * ((0.1 + Math.sin(batchId)) * tick + 3.0 * batchId)),
             Math.cos(0.02 * (0.02 * tick + 0.1 * batchId)),

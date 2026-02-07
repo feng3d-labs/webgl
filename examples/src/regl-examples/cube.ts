@@ -6,6 +6,7 @@ import * as mat4 from './stackgl/gl-mat4';
 (async () =>
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -42,21 +43,30 @@ import * as mat4 from './stackgl/gl-mat4';
 
     const positions = cubePosition.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
 
     const uvs = cubeUv.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
 
     const indices = cubeElements.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
@@ -116,6 +126,7 @@ import * as mat4 from './stackgl/gl-mat4';
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
+
         reactive(renderObject.bindingResources).view = {
             value: mat4.lookAt([],
                 [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
@@ -136,6 +147,7 @@ import * as mat4 from './stackgl/gl-mat4';
     }
 
     const img = new Image();
+
     img.src = '../../assets/peppers.png';
     await img.decode();
 
@@ -147,6 +159,7 @@ import * as mat4 from './stackgl/gl-mat4';
             sources: [{ image: img }],
         }, sampler: { minFilter: 'linear' },
     };
+
     reactive(renderObject.bindingResources).tex = diffuse;
 
     draw();

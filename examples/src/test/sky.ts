@@ -30,6 +30,7 @@ async function main()
 {
     const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
     const devicePixelRatio = window.devicePixelRatio || 1;
+
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
@@ -76,6 +77,7 @@ async function main()
     };
 
     const folderSky = gui.addFolder('Sky');
+
     folderSky.add(r_parameters, 'elevation', 0, 10, 0.1);
     folderSky.add(r_parameters, 'azimuth', -180, 180, 0.1);
     folderSky.add(r_parameters, 'cameraRotationX', -180, 180, 0.1);
@@ -88,6 +90,7 @@ async function main()
         const theta = (r_parameters.azimuth) / 180 * Math.PI;
 
         const sun = setFromSphericalCoords(1, phi, theta);
+
         reactive(renderObject.bindingResources).sunPosition = { value: sun };
     });
 
@@ -114,12 +117,15 @@ async function main()
         const modelMatrix = mat4.fromValues(10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1);
 
         const cameraMatrix = mat4.create();
+
         mat4.rotateX(cameraMatrix, cameraMatrix, cameraRotationX);
         mat4.rotateY(cameraMatrix, cameraMatrix, cameraRotationY);
         const viewMatrix = mat4.create();
+
         mat4.invert(viewMatrix, cameraMatrix);
 
         const modelViewMatrix = mat4.create();
+
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
 
         reactive(renderObject.bindingResources).modelMatrix = { value: modelMatrix as Float32Array };

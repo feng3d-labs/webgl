@@ -6,6 +6,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -54,6 +55,7 @@ import { getShaderSource, loadImage } from './utility';
     const imageUrl = '../../assets/img/Di-3d.png';
     let texture: Texture;
     let sampler: Sampler;
+
     loadImage(imageUrl, function (image)
     {
         texture = {
@@ -83,6 +85,7 @@ import { getShaderSource, loadImage } from './utility';
             0.0, 0.0, 0.5, 0.0,
             0.0, 0.0, 0.0, 1.0,
         ]);
+
         renderObjects.push({
             pipeline: program,
             bindingResources: {

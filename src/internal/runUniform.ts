@@ -18,6 +18,7 @@ export function runUniform(gl: WebGLRenderingContext, type: GLUniformBufferType,
         data = data.toArray();
     }
     const location = uniformInfo.location;
+
     switch (type)
     {
         case 'BOOL':

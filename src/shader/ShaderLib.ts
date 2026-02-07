@@ -97,9 +97,11 @@ export class ShaderLib
         const includeRegExp = /#include<(.+)>/g;
         //
         let match = includeRegExp.exec(shaderCode);
+
         while (match)
         {
             let moduleshader = this.shaderConfig.modules[match[1]];
+
             if (!moduleshader)
             {
                 console.error(`无法找到着色器 ${match[1]}`);
@@ -132,9 +134,11 @@ export class ShaderLib
     getMacroCode(variables: string[], valueObj: object)
     {
         let macroHeader = '';
+
         variables.forEach((macroName) =>
         {
             const value = valueObj[macroName];
+
             if (typeof value === 'boolean')
             {
                 value && (macroHeader += `#define ${macroName}\n`);

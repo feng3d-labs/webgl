@@ -11,6 +11,7 @@ export function runVertexArray(gl: WebGLRenderingContext, material: RenderPipeli
     if (!vertices && !indices) return;
 
     let webGLVertexArrayObject: WebGLVertexArrayObject;
+
     if (gl instanceof WebGL2RenderingContext)
     {
         webGLVertexArrayObject = gl._vertexArrays.get([material, vertices, indices]);
@@ -32,10 +33,12 @@ export function runVertexArray(gl: WebGLRenderingContext, material: RenderPipeli
     shaderResult.attributes.forEach((activeInfo) =>
     {
         const { name, location } = activeInfo;
+
         // 处理 WebGL 内置属性 gl_VertexID 等
         if (location < 0) return;
 
         const attribute = vertices[name];
+
         if (!attribute)
         {
             console.error(`缺少顶点 ${name} 数据！`);

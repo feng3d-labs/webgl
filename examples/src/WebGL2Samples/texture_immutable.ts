@@ -7,6 +7,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -73,6 +74,7 @@ import { getShaderSource, loadImage } from './utility';
     const { texture3D, sampler3D } = create3DTexture();
 
     const imageUrl = '../../assets/img/Di-3d.png';
+
     loadImage(imageUrl, function (image)
     {
         const matrix = new Float32Array([
@@ -157,6 +159,7 @@ import { getShaderSource, loadImage } from './utility';
 
         const SIZE = 32;
         const data = new Uint8Array(SIZE * SIZE * SIZE);
+
         for (let k = 0; k < SIZE; ++k)
         {
             for (let j = 0; j < SIZE; ++j)

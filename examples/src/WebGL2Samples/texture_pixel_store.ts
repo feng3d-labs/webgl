@@ -5,6 +5,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -51,9 +52,11 @@ import { getShaderSource, loadImage } from './utility';
     {
         // use canvas to get the pixel data array of the image
         const canvas = document.createElement('canvas');
+
         canvas.width = image.width;
         canvas.height = image.height;
         const ctx = canvas.getContext('2d');
+
         ctx.drawImage(image, 0, 0);
         const imageData = ctx.getImageData(0, 0, image.width, image.height);
         const pixels = new Uint8Array(imageData.data.buffer);

@@ -56,11 +56,13 @@ export function getGLProgram(gl: WebGLRenderingContext, material: RenderPipeline
 {
     const shaderKey = getKey(material);
     let result = gl._programs[shaderKey];
+
     if (result) return result;
 
     const vertex = material.vertex.glsl || material.vertex.code;
     let fragment = undefined;
     const fragmentState = (material as RenderPipeline).fragment;
+
     if (fragmentState)
     {
         fragment = fragmentState.glsl || fragmentState.code;
@@ -86,6 +88,7 @@ export function deleteProgram(gl: WebGLRenderingContext, material: RenderPipelin
 {
     const shaderKey = getKey(material);
     const result = gl._programs[shaderKey];
+
     if (result)
     {
         delete gl._programs[shaderKey];
@@ -98,6 +101,7 @@ function getKey(material: RenderPipeline | TransformFeedbackPipeline)
     const vertex = material.vertex.glsl || material.vertex.code;
     let fragment = undefined;
     const fragmentState = (material as RenderPipeline).fragment;
+
     if (fragmentState)
     {
         fragment = fragmentState.glsl || fragmentState.code;
@@ -121,18 +125,21 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
     // 获取属性信息
     const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
     const attributes: GLAttributeInfo[] = [];
+
     for (let i = 0; i < numAttributes; i++)
     {
         const activeInfo = gl.getActiveAttrib(program, i);
         const { name, size, type } = activeInfo;
         const location = gl.getAttribLocation(program, name);
         const typeString = getGLAttributeType(type as any);
+
         attributes.push({ name, size, type: typeString, location });
     }
     // 获取uniform信息
     const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     const uniforms: GLUniformInfo[] = [];
     let textureID = 0;
+
     for (let i = 0; i < numUniforms; i++)
     {
         const activeInfo = gl.getActiveUniform(program, i);
@@ -143,10 +150,12 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         const reg = /(\w+)/g;
 
         const names = [name];
+
         if (size > 1)
         {
             console.assert(name.substring(name.length - 3) === '[0]');
             const baseName = name.substring(0, name.length - 3);
+
             for (let j = 1; j < size; j++)
             {
                 names[j] = `${baseName}[${j}]`;
@@ -154,11 +163,13 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
         }
 
         const items: UniformItemInfo[] = [];
+
         for (let j = 0; j < names.length; j++)
         {
             const name = names[j];
             let result: RegExpExecArray = reg.exec(name);
             const paths: string[] = [];
+
             while (result)
             {
                 paths.push(result[1]);
@@ -188,9 +199,11 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
             // 获取包含的统一变量列表。
             const uniformIndices: Uint32Array = gl.getActiveUniformBlockParameter(program, i, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
             const uniformList: GLUniformInfo[] = [];
+
             for (let i = 0; i < uniformIndices.length; i++)
             {
                 const unifrom = uniforms[uniformIndices[i]];
+
                 unifrom.inBlock = true;
                 uniformList.push(unifrom);
             }
@@ -209,6 +222,7 @@ function getWebGLProgram(gl: WebGLRenderingContext, vshader: string, fshader: st
 
             return info;
         });
+
         program.uniformBlocks = uniformBlockActiveInfos;
     }
 
@@ -262,6 +276,7 @@ export interface UniformBlockInfo
 function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: string)
 {
     let shader = gl._shaders[code];
+
     if (shader) return shader;
 
     shader = gl.createShader(gl[type]);
@@ -272,9 +287,11 @@ function getWebGLShader(gl: WebGLRenderingContext, type: ShaderType, code: strin
 
     // 检查编译结果
     const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+
     if (!compiled)
     {
         const error = gl.getShaderInfoLog(shader);
+
         gl.deleteShader(shader);
         throw `Failed to compile shader: ${error}`;
     }
@@ -308,9 +325,11 @@ function createLinkProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader,
 
     // 检查结果
     const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+
     if (!linked)
     {
         const error = gl.getProgramInfoLog(program);
+
         gl.deleteProgram(program);
         gl.deleteShader(fragmentShader);
         gl.deleteShader(vertexShader);
@@ -335,14 +354,17 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
     let structName: string;
 
     const items: { paths: string[], offset: number, size: number, Cls: Float32ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor }[] = [];
+
     uniformBlock.uniforms.forEach((uniformInfo) =>
     {
         const uniformBufferType = uniformInfo.type as GLUniformBufferType;
         const alignSize = uniformBufferTypeAlignSizeMap[uniformBufferType];
+
         console.assert(!!alignSize, `没有找到 ${uniformBufferType} 统一缓冲类型对应的对齐与尺寸。`);
 
         //
         const currentstructName = uniformInfo.name.substring(0, uniformInfo.name.lastIndexOf('.'));
+
         if (structName !== currentstructName)
         {
             currentSize = roundUp(16, currentSize); // 结构体之间对齐
@@ -355,11 +377,13 @@ function getBufferBindingInfo(uniformBlock: UniformBlockInfo): BufferBindingInfo
             currentSize = roundUp(alignSize.align, currentSize); // 结构体成员对齐
             const itemInfoOffset = currentSize;
             const itemInfoSize = alignSize.size;
+
             //
             currentSize += alignSize.size;
             const Cls = alignSize.clsType;
             //
             const paths = itemInfo.paths.slice(1);
+
             //
             items.push({ paths, offset: itemInfoOffset, size: itemInfoSize, Cls });
         });

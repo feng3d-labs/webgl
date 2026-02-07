@@ -8,6 +8,7 @@ export const EPSILON = 0.000001;
 export function create()
 {
     const out = new Float32Array(3);
+
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -24,6 +25,7 @@ export function create()
 export function clone(a)
 {
     const out = new Float32Array(3);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -66,6 +68,7 @@ export function angle(a, b)
 export function fromValues(x, y, z)
 {
     const out = new Float32Array(3);
+
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -446,6 +449,7 @@ export function normalize(out, a)
     const y = a[1];
     const z = a[2];
     let len = x * x + y * y + z * z;
+
     if (len > 0)
     {
         // TODO: evaluate use of glm_invsqrt here?
@@ -505,6 +509,7 @@ export function lerp(out, a, b, t)
     const ax = a[0];
     const ay = a[1];
     const az = a[2];
+
     out[0] = ax + t * (b[0] - ax);
     out[1] = ay + t * (b[1] - ay);
     out[2] = az + t * (b[2] - az);
@@ -547,6 +552,7 @@ export function transformMat4(out, a, m)
 {
     const x = a[0]; const y = a[1]; const z = a[2];
     let w = m[3] * x + m[7] * y + m[11] * z + m[15];
+
     w = w || 1.0;
     out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
     out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
@@ -567,6 +573,7 @@ export function transformMat3(out, a, m)
 {
     const x = a[0]; const y = a[1]; const
         z = a[2];
+
     out[0] = x * m[0] + y * m[3] + z * m[6];
     out[1] = x * m[1] + y * m[4] + z * m[7];
     out[2] = x * m[2] + y * m[5] + z * m[8];
@@ -688,6 +695,7 @@ export function rotateZ(out, a, b, c)
 }
 
 const vec = create();
+
 /**
  * Perform some operation over an array of vec3s.
  *
@@ -704,6 +712,7 @@ export function forEach(a, stride, offset, count, fn, arg)
 {
     let i; let
         l;
+
     if (!stride)
     {
         stride = 3;

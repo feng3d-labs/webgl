@@ -15,6 +15,7 @@ declare global
 export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: BufferTarget, usage: BufferUsage = 'STATIC_DRAW')
 {
     let webGLBuffer = gl._bufferMap.get(buffer);
+
     if (webGLBuffer) return webGLBuffer;
 
     webGLBuffer = gl.createBuffer();
@@ -30,6 +31,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
     {
         const bufferOffset = writeBuffer.bufferOffset ?? 0;
         let data = writeBuffer.data;
+
         if (writeBuffer.size)
         {
             data = new Uint8Array(data.buffer, data.byteOffset, writeBuffer.size * data.BYTES_PER_ELEMENT);
@@ -56,7 +58,8 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
     effects.push(effect(() =>
     {
         // 触发响应式依赖，监听 writeBuffers 数组变化
-        r_buffer.writeBuffers?.forEach(() => { });
+        r_buffer.writeBuffers?.forEach(() =>
+        { });
 
         const writeBuffers = buffer.writeBuffers;
 
@@ -90,6 +93,7 @@ export function getGLBuffer(gl: WebGLRenderingContext, buffer: Buffer, target: B
 export function deleteBuffer(gl: WebGLRenderingContext, buffer: Buffer)
 {
     const webGLBuffer = gl._bufferMap.get(buffer);
+
     if (webGLBuffer)
     {
         gl._bufferMap.delete(buffer);

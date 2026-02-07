@@ -11,6 +11,7 @@ function mouseButtons(ev)
         else if ('which' in ev)
         {
             const b = ev.which;
+
             if (b === 2)
             {
                 return 4;
@@ -27,6 +28,7 @@ function mouseButtons(ev)
         else if ('button' in ev)
         {
             const b = ev.button;
+
             if (b === 1)
             {
                 return 4;

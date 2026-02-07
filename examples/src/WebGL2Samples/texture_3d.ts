@@ -7,6 +7,7 @@ import { getShaderSource } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -69,6 +70,7 @@ import { getShaderSource } from './utility';
 
     const SIZE = 32;
     const data = new Uint8Array(SIZE * SIZE * SIZE);
+
     for (let k = 0; k < SIZE; ++k)
     {
         for (let j = 0; j < SIZE; ++j)
@@ -170,6 +172,7 @@ import { getShaderSource } from './utility';
     };
 
     const renderPassObjects: RenderObject[] = [];
+
     for (let i = 0; i < Corners.MAX; ++i)
     {
         renderPassObjects.push({

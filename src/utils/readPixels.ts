@@ -22,6 +22,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
             const bytesPerRow = width * bytesPerPixel;
             const bufferSize = bytesPerRow * height;
+
             bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
 
             // 绑定到默认 framebuffer（画布）
@@ -52,6 +53,7 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
             const bytesPerRow = width * bytesPerPixel;
             const bufferSize = bytesPerRow * height;
+
             bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
 
             // 绑定到默认 framebuffer（画布）
@@ -79,12 +81,14 @@ export function readPixels(gl: WebGLRenderingContext, readPixels: ReadPixels)
 
             const bytesPerRow = width * bytesPerPixel;
             const bufferSize = bytesPerRow * height;
+
             bufferData = new DataConstructor(bufferSize / DataConstructor.BYTES_PER_ELEMENT);
 
             // 使用传入的 textureView 创建 framebuffer，支持纹理数组的特定层
             const frameBuffer: RenderPassDescriptor = { colorAttachments: [{ view: textureView }] };
 
             const webGLFramebuffer = getGLFramebuffer(gl, frameBuffer);
+
             gl.bindFramebuffer(gl.FRAMEBUFFER, webGLFramebuffer);
 
             gl.readBuffer(gl[attachmentPoint]);

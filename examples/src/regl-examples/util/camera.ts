@@ -30,6 +30,7 @@ export function createCamera(props)
 
     let prevX = 0;
     let prevY = 0;
+
     mouseChange(function (buttons, x, y)
     {
         if (buttons & 1)
@@ -53,6 +54,7 @@ export function createCamera(props)
     function damp(x)
     {
         const xd = x * 0.9;
+
         if (Math.abs(xd) < 0.1)
         {
             return 0;

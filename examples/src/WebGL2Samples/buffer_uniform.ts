@@ -6,6 +6,7 @@ import { getShaderSource } from './utility';
 {
     // --Init Canvas
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -27,6 +28,7 @@ import { getShaderSource } from './utility';
     ]);
 
     const useSharedElementBuffer = true;
+
     if (useSharedElementBuffer)
     {
         // 共享元素缓冲区。模拟与其他模型的不同顶点索引数据公用一个大缓冲区。
@@ -34,6 +36,7 @@ import { getShaderSource } from './utility';
         // 模拟随机偏移。
         const randomOffset = Math.ceil(Math.random() * (elementBuffer.byteLength - elementData.byteLength) / Uint16Array.BYTES_PER_ELEMENT) * Uint16Array.BYTES_PER_ELEMENT;
         const elementData1 = new Uint16Array(elementBuffer, randomOffset, elementData.length);
+
         elementData1.set(elementData);
         elementData = elementData1;
     }
@@ -47,6 +50,7 @@ import { getShaderSource } from './utility';
     ]);
 
     const useSharedVertexBuffer = true;
+
     if (useSharedVertexBuffer)
     {
         // 共享顶点缓冲区。模拟与其他模型的不同顶点数据公用一个大缓冲区。
@@ -54,6 +58,7 @@ import { getShaderSource } from './utility';
         // 模拟随机偏移。
         const randomOffset = Math.ceil(Math.random() * (vertexBuffer.byteLength - vertices.byteLength) / Float32Array.BYTES_PER_ELEMENT) * Float32Array.BYTES_PER_ELEMENT;
         const vertices1 = new Float32Array(vertexBuffer, randomOffset, vertices.length);
+
         vertices1.set(vertices);
         vertices = vertices1;
     }
@@ -113,6 +118,7 @@ import { getShaderSource } from './utility';
 
     // 是否使用共用缓冲区。
     let useSharedBuffer = true;
+
     if (useSharedBuffer)
     {
         // 3 个统一块共用一个缓冲区。256字节对齐。
@@ -124,6 +130,7 @@ import { getShaderSource } from './utility';
             const result = sizes.reduce((result, b) =>
             {
                 const start = Math.ceil(result.total / 256) * 256;
+
                 result.ranges.push({ offset: start, size: b });
                 result.total = start + b;
 
@@ -161,6 +168,7 @@ import { getShaderSource } from './utility';
     const submit: Submit = { commandEncoders: [{ passEncoders: [rp] }] };
 
     let uTime = 0;
+
     function render()
     {
         uTime += 0.01;

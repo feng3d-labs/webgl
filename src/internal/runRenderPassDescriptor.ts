@@ -7,6 +7,7 @@ export function runRenderPassDescriptor(gl: WebGLRenderingContext, passDescripto
 
     //
     const framebuffer = getGLFramebuffer(gl, passDescriptor);
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
     //
@@ -14,10 +15,12 @@ export function runRenderPassDescriptor(gl: WebGLRenderingContext, passDescripto
     //
     const clearValue = colorAttachment?.clearValue ?? [0, 0, 0, 0];
     const loadOp = colorAttachment?.loadOp ?? 'clear';
+
     gl.clearColor(clearValue[0], clearValue[1], clearValue[2], clearValue[3]);
 
     //
     const depthStencilAttachment = passDescriptor.depthStencilAttachment;
+
     if (depthStencilAttachment)
     {
         const depthClearValue = depthStencilAttachment.depthClearValue ?? 1;

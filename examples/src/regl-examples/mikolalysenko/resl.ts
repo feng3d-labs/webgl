@@ -60,6 +60,7 @@ export function resl(config)
     checkType(config, configParameters, 'config');
 
     const manifest = config.manifest;
+
     if (typeof manifest !== 'object' || !manifest)
     {
         raise('missing manifest');
@@ -70,6 +71,7 @@ export function resl(config)
         if (name in config)
         {
             const func = config[name];
+
             if (typeof func !== 'function')
             {
                 raise(`invalid callback "${name}"`);
@@ -82,6 +84,7 @@ export function resl(config)
     }
 
     const onDone = getFunction('onDone');
+
     if (!onDone)
     {
         raise('missing onDone() callback');
@@ -141,6 +144,7 @@ export function resl(config)
             if (xhr.readyState > 2 && loader.state === STATE_DATA)
             {
                 let response;
+
                 if (request.type === 'binary')
                 {
                     response = xhr.response;
@@ -297,6 +301,7 @@ export function resl(config)
         {
             let canPlay = false;
             let loadedMetaData = false;
+
             element.addEventListener('loadedmetadata', function ()
             {
                 loadedMetaData = true;
@@ -384,6 +389,7 @@ export function resl(config)
     const pending = Object.keys(manifest).map(function (name)
     {
         let request = manifest[name];
+
         if (typeof request === 'string')
         {
             request = {
@@ -400,6 +406,7 @@ export function resl(config)
         function getParameter(prop, accepted, init)
         {
             let value = init;
+
             if (prop in request)
             {
                 value = request[prop];
@@ -415,6 +422,7 @@ export function resl(config)
         function getString(prop, required, init)
         {
             let value = init;
+
             if (prop in request)
             {
                 value = request[prop];
@@ -436,6 +444,7 @@ export function resl(config)
             if (name in request.parser)
             {
                 const result = request.parser[name];
+
                 if (typeof result !== 'function')
                 {
                     raise(`invalid parser callback ${name} for asset "${name}"`);
@@ -448,6 +457,7 @@ export function resl(config)
         }
 
         let parser = {};
+
         if ('parser' in request)
         {
             if (typeof request.parser === 'function')
@@ -524,6 +534,7 @@ export function resl(config)
 
         let progress = 0;
         let numReady = 0;
+
         pending.forEach(function (loader)
         {
             if (loader.ready)

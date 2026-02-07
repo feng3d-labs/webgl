@@ -13,6 +13,7 @@ import * as glMatrix from './common';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[0] = 0;
@@ -33,6 +34,7 @@ export function create()
 export function clone(a)
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -53,6 +55,7 @@ export function clone(a)
 export function fromValues(x, y, z, w)
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -408,6 +411,7 @@ export function normalize(out, a)
     const z = a[2];
     const w = a[3];
     let len = x * x + y * y + z * z + w * w;
+
     if (len > 0)
     {
         len = 1 / Math.sqrt(len);
@@ -447,6 +451,7 @@ export function lerp(out, a, b, t)
     const ay = a[1];
     const az = a[2];
     const aw = a[3];
+
     out[0] = ax + t * (b[0] - ax);
     out[1] = ay + t * (b[1] - ay);
     out[2] = az + t * (b[2] - az);
@@ -473,6 +478,7 @@ export function random(out, scale)
         v4;
     let s1; let
         s2;
+
     do
     {
         v1 = glMatrix.RANDOM() * 2 - 1;
@@ -487,6 +493,7 @@ export function random(out, scale)
     } while (s2 >= 1);
 
     const d = Math.sqrt((1 - s1) / s2);
+
     out[0] = scale * v1;
     out[1] = scale * v2;
     out[2] = scale * v3 * d;
@@ -507,6 +514,7 @@ export function transformMat4(out, a, m)
 {
     const x = a[0]; const y = a[1]; const z = a[2]; const
         w = a[3];
+
     out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
     out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
     out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
@@ -650,6 +658,7 @@ export const forEach = (function ()
     {
         let i; let
             l;
+
         if (!stride)
         {
             stride = 4;

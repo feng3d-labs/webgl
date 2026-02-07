@@ -5,6 +5,7 @@ import { runColorTargetStates } from './runColorTargetStates';
 export function runProgram(gl: WebGLRenderingContext, material: RenderPipeline)
 {
     const program = getGLProgram(gl, material);
+
     gl.useProgram(program);
 
     //

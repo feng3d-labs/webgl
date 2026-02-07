@@ -17,9 +17,11 @@ export function runPrimitiveState(gl: WebGLRenderingContext, primitive?: Primiti
     if (cullFace !== 'none')
     {
         const glCullMode = cullFaceMap[cullFace];
+
         console.assert(!!glCullMode, `接收到错误值，请从 ${Object.keys(cullFaceMap).toString()} 中取值！`);
 
         const glFrontFace = frontFaceMap[frontFace];
+
         console.assert(!!glFrontFace, `接收到错误 IFrontFace 值，请从 ${Object.keys(frontFaceMap).toString()} 中取值！`);
 
         //

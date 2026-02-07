@@ -5,6 +5,7 @@ import { getShaderSource } from './utility';
 
 // -- Init Canvas
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -54,6 +55,7 @@ const ro: RenderObject = {
     vertices: vertexArray.vertices,
     draw: { __type__: 'DrawVertex', firstVertex: 0, vertexCount: 3 },
 };
+
 renderObjects.push(ro);
 
 const occlusionQuery: OcclusionQuery = {

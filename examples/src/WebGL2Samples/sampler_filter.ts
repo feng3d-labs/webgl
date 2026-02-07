@@ -4,6 +4,7 @@ import { WebGL } from '@feng3d/webgl';
 import { getShaderSource, loadImage } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -96,6 +97,7 @@ const vertexArray: { vertices?: VertexAttributes } = {
 // -- Initialize samplers
 
 const samplers: Sampler[] = new Array(Corners.MAX);
+
 for (let i = 0; i < Corners.MAX; ++i)
 {
     samplers[i] = { addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge', addressModeW: 'clamp-to-edge' };
@@ -121,6 +123,7 @@ reactive(samplers[Corners.BOTTOM_LEFT]).mipmapFilter = 'linear';
 
 const imageUrl = '../../assets/img/Di-3d.png';
 let texture: Texture;
+
 loadImage(imageUrl, function (image)
 {
     texture = {

@@ -48,6 +48,7 @@ proto.lookAt = function (eye, center, up)
 proto.pan = function (dpan)
 {
     const d = this.distance;
+
     scratch0[0] = -d * (dpan[0] || 0);
     scratch0[1] = d * (dpan[1] || 0);
     scratch0[2] = d * (dpan[2] || 0);
@@ -69,6 +70,7 @@ function quatFromVec(out, da)
     const x = da[0];
     const y = da[1];
     let s = x * x + y * y;
+
     if (s > 1.0)
     {
         s = 1.0;
@@ -99,6 +101,7 @@ export function createOrbitCamera(eye, target, up)
     target = target || [0, 0, 0];
     up = up || [0, 1, 0];
     const camera = new OrbitCamera(quat.create(), vec3.create(), 1.0);
+
     camera.lookAt(eye, target, up);
 
     return camera;

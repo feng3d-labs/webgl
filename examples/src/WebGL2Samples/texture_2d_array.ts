@@ -6,6 +6,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.height = window.innerHeight;
     canvas.width = canvas.height * 960 / 540;
@@ -48,6 +49,7 @@ import { getShaderSource, loadImage } from './utility';
 
     let texture: Texture;
     let sampler: Sampler;
+
     loadImage('../../assets/img/di-animation-array.jpg', function (image)
     {
         const NUM_IMAGES = 3;
@@ -57,9 +59,11 @@ import { getShaderSource, loadImage } from './utility';
         };
         // use canvas to get the pixel data array of the image
         const canvas = document.createElement('canvas');
+
         canvas.width = IMAGE_SIZE.width;
         canvas.height = IMAGE_SIZE.height * NUM_IMAGES;
         const ctx = canvas.getContext('2d');
+
         ctx.drawImage(image, 0, 0);
         const imageData = ctx.getImageData(0, 0, IMAGE_SIZE.width, IMAGE_SIZE.height * NUM_IMAGES);
         const pixels = new Uint8Array(imageData.data.buffer);
@@ -101,6 +105,7 @@ import { getShaderSource, loadImage } from './utility';
         };
 
         let frame = 0;
+
         (function render()
         {
             // -- Render

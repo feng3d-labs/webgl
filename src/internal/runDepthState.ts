@@ -7,6 +7,7 @@ export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthSte
     if (!hasDepthAttachment)
     {
         gl.disable(gl.DEPTH_TEST);
+
         return;
     }
 
@@ -14,6 +15,7 @@ export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthSte
     {
         const depthCompare = getGLCompareFunction(depthStencil.depthCompare ?? 'less');
         const depthWriteEnabled = depthStencil.depthWriteEnabled ?? true;
+
         //
         gl.enable(gl.DEPTH_TEST);
         //
@@ -25,6 +27,7 @@ export function runDepthState(gl: WebGLRenderingContext, depthStencil?: DepthSte
         {
             const factor = depthStencil.depthBiasSlopeScale ?? 0;
             const units = depthStencil.depthBias ?? 0;
+
             //
             gl.enable(gl.POLYGON_OFFSET_FILL);
             gl.polygonOffset(factor, units);

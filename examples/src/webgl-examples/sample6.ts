@@ -87,6 +87,7 @@ async function main()
     {
         now *= 0.001; // convert to seconds
         const deltaTime = now - then;
+
         then = now;
 
         const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
@@ -216,6 +217,7 @@ async function loadTexture(url: string)
     // use it immediately. When the image has finished downloading
     // we'll update the texture with the contents of the image.
     const img = new Image();
+
     img.src = url;
     await img.decode();
 
@@ -231,6 +233,7 @@ async function loadTexture(url: string)
     };
 
     let sampler: Sampler = {};
+
     if (generateMipmap)
     {
         sampler = { addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge', minFilter: 'linear' };

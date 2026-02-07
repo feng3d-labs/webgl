@@ -6,6 +6,7 @@ export type GLSamplerCompareMode = 'NONE' | 'COMPARE_REF_TO_TEXTURE';
 export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
 {
     let webGLSampler = gl._samplers.get(sampler);
+
     if (webGLSampler) return webGLSampler;
 
     if (gl instanceof WebGL2RenderingContext)
@@ -43,6 +44,7 @@ export function deleteSampler(gl: WebGLRenderingContext, sampler?: Sampler)
     if (gl instanceof WebGL2RenderingContext)
     {
         const webGLSampler = gl._samplers.get(sampler);
+
         gl._samplers.delete(sampler);
         gl.deleteSampler(webGLSampler);
     }
@@ -93,6 +95,7 @@ export type GLTextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST'
 export function getIGLTextureMinFilter(minFilter: IFilterMode = 'nearest', mipmapFilter?: IFilterMode): GLTextureMinFilter
 {
     let glMinFilter: GLTextureMinFilter;
+
     if (minFilter === 'linear')
     {
         if (mipmapFilter === 'linear')

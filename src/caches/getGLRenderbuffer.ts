@@ -3,6 +3,7 @@ import { Renderbuffer } from '../data/Renderbuffer';
 export function getGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: Renderbuffer, sampleCount?: 4)
 {
     let webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
+
     if (webGLRenderbuffer) return webGLRenderbuffer;
 
     webGLRenderbuffer = gl.createRenderbuffer();
@@ -26,6 +27,7 @@ export function getGLRenderbuffer(gl: WebGLRenderingContext, renderbuffer: Rende
 export function deleteRenderbuffer(gl: WebGLRenderingContext, renderbuffer: Renderbuffer)
 {
     const webGLRenderbuffer = gl._renderbuffers.get(renderbuffer);
+
     gl._renderbuffers.delete(renderbuffer);
     //
     gl.deleteRenderbuffer(webGLRenderbuffer);

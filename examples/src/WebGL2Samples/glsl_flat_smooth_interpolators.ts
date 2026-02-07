@@ -5,6 +5,7 @@ import { GlTFLoader, Primitive } from './third-party/gltf-loader';
 import { getShaderSource } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -117,17 +118,21 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
 
     // -- Render preparation
     const translate = vec3.create();
+
     vec3.set(translate, 0, -18, -60);
     const scale = vec3.create();
     const s = 0.3;
+
     vec3.set(scale, s, s, s);
     const modelView = mat4.create();
+
     mat4.translate(modelView, modelView, translate);
     mat4.scale(modelView, modelView, scale);
 
     const rotatationSpeedY = 0.01;
 
     const perspective = mat4.create();
+
     mat4.perspective(perspective, 0.785, 1, 1, 1000);
 
     const localMV = mat4.create();

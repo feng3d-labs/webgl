@@ -33,6 +33,7 @@ export const defaultTexturePixelStore: GLTexturePixelStore = {
 export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     let webGLTexture = gl._textures.get(texture);
+
     if (webGLTexture) return webGLTexture;
 
     // 创建纹理
@@ -69,15 +70,18 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                 const xoffset = textureOrigin?.[0];
                 const yoffset = textureOrigin?.[1];
                 const zoffset = textureOrigin?.[2];
+
                 if (gl instanceof WebGL2RenderingContext)
                 {
                     const imageSource = v as TextureImageSource;
+
                     if (imageSource.image)
                     {
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
                         const pixelStore: GLTexturePixelStore = {};
+
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -88,6 +92,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
                             const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
+
                             if (width && height)
                             {
                                 gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], image);
@@ -116,6 +121,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         //
                         const pixelStore: GLTexturePixelStore = {};
+
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -127,6 +133,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
                             const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
+
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], data, offset);
                         }
                         else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
@@ -142,12 +149,14 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                 else
                 {
                     const imageSource = v as TextureImageSource;
+
                     if (imageSource.image)
                     {
                         const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                         //
                         const pixelStore: GLTexturePixelStore = {};
+
                         pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                         pixelStore.unpackFlipY = flipY || false;
@@ -158,6 +167,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
                             const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
+
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], gl[format], gl[type], image);
                         }
                         else
@@ -175,6 +185,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         //
                         const pixelStore: GLTexturePixelStore = {};
+
                         pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
                         pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
                         pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -186,6 +197,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                         if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
                             const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
+
                             console.assert(offset === 0, `WebGL1中ITextureDataLayout.offset必须为0`);
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], width, height, 0, gl[format], gl[type], data);
                         }
@@ -236,6 +248,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
             }
         }
     };
+
     createTexture();
 
     const updateSources = () =>
@@ -249,6 +262,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     const updateTexture = () =>
     {
         const { writeTextures } = texture;
+
         if (!writeTextures || writeTextures.length === 0) return;
 
         const descriptor = texture.descriptor;
@@ -271,12 +285,14 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
             // 处理图片资源
             const imageSource = v as TextureImageSource;
+
             if (imageSource.image)
             {
                 const { image, imageOrigin, flipY, premultipliedAlpha } = imageSource;
 
                 //
                 const pixelStore: GLTexturePixelStore = {};
+
                 pixelStore.unpackSkipPixels = imageOrigin?.[0] || 0;
                 pixelStore.unpackSkipRows = imageOrigin?.[1] || 0;
                 pixelStore.unpackFlipY = flipY || false;
@@ -336,6 +352,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
             //
             const pixelStore: GLTexturePixelStore = {};
+
             pixelStore.unpackSkipPixels = dataImageOrigin?.[0] || 0;
             pixelStore.unpackSkipRows = dataImageOrigin?.[1] || 0;
             pixelStore.unpackSkipImages = dataImageOrigin?.[2] || 0;
@@ -381,9 +398,11 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
             }
         });
     };
+
     updateTexture();
 
     const descriptor = texture.descriptor;
+
     watcher.watchs(descriptor, ['generateMipmap'], updateTexture);
     watcher.watch(texture, 'writeTextures', updateTexture);
 
@@ -403,6 +422,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
         webGLTexture.destroy();
     };
+
     watcher.watch(descriptor, 'size', resize);
 
     webGLTexture.destroy = () =>
@@ -425,6 +445,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 export function deleteTexture(gl: WebGLRenderingContext, texture: Texture)
 {
     const webGLTexture = gl._textures.get(texture);
+
     if (!webGLTexture) return;
 
     webGLTexture.destroy();

@@ -23,6 +23,7 @@ export function mouseWheelListen(element, callback?, noScroll?)
         let dz = ev.deltaZ || 0;
         const mode = ev.deltaMode;
         let scale = 1;
+
         switch (mode)
         {
             case 1:
@@ -40,6 +41,7 @@ export function mouseWheelListen(element, callback?, noScroll?)
             return callback(dx, dy, dz, ev);
         }
     };
+
     element.addEventListener('wheel', listener);
 
     return listener;

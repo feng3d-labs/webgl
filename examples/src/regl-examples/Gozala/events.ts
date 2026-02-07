@@ -40,7 +40,9 @@ EventEmitter.defaultMaxListeners = 10;
 EventEmitter.prototype.setMaxListeners = function (n)
 {
     if (!isNumber(n) || n < 0 || isNaN(n))
-    { throw TypeError('n must be a positive number'); }
+    {
+        throw TypeError('n must be a positive number');
+    }
     this._maxListeners = n;
 
     return this;
@@ -52,7 +54,9 @@ EventEmitter.prototype.emit = function (type)
     let listeners;
 
     if (!this._events)
-    { this._events = {}; }
+    {
+        this._events = {};
+    }
 
     // If there is no 'error' event listener then throw.
     if (type === 'error')
@@ -81,7 +85,9 @@ EventEmitter.prototype.emit = function (type)
     const handler = this._events[type];
 
     if (isUndefined(handler))
-    { return false; }
+    {
+        return false;
+    }
 
     if (isFunction(handler))
     {
@@ -113,7 +119,9 @@ EventEmitter.prototype.emit = function (type)
         listeners = handler.slice();
         len = listeners.length;
         for (i = 0; i < len; i++)
-        { listeners[i].apply(this, args); }
+        {
+            listeners[i].apply(this, args);
+        }
     }
 
     return true;
@@ -124,10 +132,14 @@ EventEmitter.prototype.addListener = function (type, listener)
     let m;
 
     if (!isFunction(listener))
-    { throw TypeError('listener must be a function'); }
+    {
+        throw TypeError('listener must be a function');
+    }
 
     if (!this._events)
-    { this._events = {}; }
+    {
+        this._events = {};
+    }
 
     // To avoid recursion in the case that type === "newListener"! Before
     // adding it to the listeners, first emit "newListener".
@@ -140,13 +152,19 @@ EventEmitter.prototype.addListener = function (type, listener)
 
     if (!this._events[type])
     // Optimize the case of one listener. Don't need the extra array object.
-    { this._events[type] = listener; }
+    {
+        this._events[type] = listener;
+    }
     else if (isObject(this._events[type]))
     // If we've already got an array, just append.
-    { this._events[type].push(listener); }
+    {
+        this._events[type].push(listener);
+    }
     else
     // Adding the second element, need to change to array.
-    { this._events[type] = [this._events[type], listener]; }
+    {
+        this._events[type] = [this._events[type], listener];
+    }
 
     // Check for listener leak
     if (isObject(this._events[type]) && !this._events[type].warned)
@@ -183,7 +201,9 @@ EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 EventEmitter.prototype.once = function (type, listener)
 {
     if (!isFunction(listener))
-    { throw TypeError('listener must be a function'); }
+    {
+        throw TypeError('listener must be a function');
+    }
 
     let fired = false;
 
@@ -212,13 +232,18 @@ EventEmitter.prototype.removeListener = function (type, listener)
     let i;
 
     if (!isFunction(listener))
-    { throw TypeError('listener must be a function'); }
+    {
+        throw TypeError('listener must be a function');
+    }
 
     if (!this._events || !this._events[type])
-    { return this; }
+    {
+        return this;
+    }
 
     const list = this._events[type];
     const length = list.length;
+
     position = -1;
 
     if (list === listener
@@ -226,7 +251,9 @@ EventEmitter.prototype.removeListener = function (type, listener)
     {
         delete this._events[type];
         if (this._events.removeListener)
-        { this.emit('removeListener', type, listener); }
+        {
+            this.emit('removeListener', type, listener);
+        }
     }
     else if (isObject(list))
     {
@@ -241,7 +268,9 @@ EventEmitter.prototype.removeListener = function (type, listener)
         }
 
         if (position < 0)
-        { return this; }
+        {
+            return this;
+        }
 
         if (list.length === 1)
         {
@@ -254,7 +283,9 @@ EventEmitter.prototype.removeListener = function (type, listener)
         }
 
         if (this._events.removeListener)
-        { this.emit('removeListener', type, listener); }
+        {
+            this.emit('removeListener', type, listener);
+        }
     }
 
     return this;
@@ -273,9 +304,13 @@ EventEmitter.prototype.removeAllListeners = function (type)
     if (!this._events.removeListener)
     {
         if (arguments.length === 0)
-        { this._events = {}; }
+        {
+            this._events = {};
+        }
         else if (this._events[type])
-        { delete this._events[type]; }
+        {
+            delete this._events[type];
+        }
 
         return this;
     }
@@ -304,7 +339,9 @@ EventEmitter.prototype.removeAllListeners = function (type)
     {
         // LIFO order
         while (listeners.length)
-        { this.removeListener(type, listeners[listeners.length - 1]); }
+        {
+            this.removeListener(type, listeners[listeners.length - 1]);
+        }
     }
     delete this._events[type];
 
@@ -314,12 +351,19 @@ EventEmitter.prototype.removeAllListeners = function (type)
 EventEmitter.prototype.listeners = function (type)
 {
     let ret;
+
     if (!this._events || !this._events[type])
-    { ret = []; }
+    {
+        ret = [];
+    }
     else if (isFunction(this._events[type]))
-    { ret = [this._events[type]]; }
+    {
+        ret = [this._events[type]];
+    }
     else
-    { ret = this._events[type].slice(); }
+    {
+        ret = this._events[type].slice();
+    }
 
     return ret;
 };
@@ -331,9 +375,13 @@ EventEmitter.prototype.listenerCount = function (type)
         const evlistener = this._events[type];
 
         if (isFunction(evlistener))
-        { return 1; }
+        {
+            return 1;
+        }
         else if (evlistener)
-        { return evlistener.length; }
+        {
+            return evlistener.length;
+        }
     }
 
     return 0;

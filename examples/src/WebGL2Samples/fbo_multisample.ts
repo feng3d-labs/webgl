@@ -4,6 +4,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import { getShaderSource } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -37,6 +38,7 @@ const vertexCount = 18;
 const data = new Float32Array(vertexCount * 2);
 let angle: number;
 const radius = 0.1;
+
 for (let i = 0; i < vertexCount; i++)
 {
     angle = Math.PI * 2 * i / vertexCount;
@@ -118,8 +120,10 @@ const renderPass1: RenderPass = {
 // Pass 2
 
 const scaleVector3 = vec3.create();
+
 vec3.set(scaleVector3, 8.0, 8.0, 8.0);
 const mvp = mat4.create();
+
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
 const renderPass2: RenderPass = {

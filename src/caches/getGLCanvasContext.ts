@@ -31,9 +31,11 @@ declare global
 export function getGLCanvasContext(canvasContext: CanvasContext)
 {
     let gl: WebGLRenderingContext = canvasContext['_gl'];
+
     if (gl) return gl;
 
     const canvas = typeof canvasContext.canvasId === 'string' ? document.getElementById(canvasContext.canvasId) as HTMLCanvasElement : canvasContext.canvasId;
+
     gl = canvasContext['_gl'] = getWebGLContext(canvas, canvasContext);
 
     canvasContext.webGLContextAttributes;
@@ -81,6 +83,7 @@ function getWebGLContext(canvas: HTMLCanvasElement | OffscreenCanvas, canvasCont
 
     // 使用用户提供参数获取WebGL上下文
     let gl = canvas.getContext(canvasContext.webGLcontextId || 'webgl2', contextAttributes);
+
     gl || console.warn(`无法使用用户提供参数获取指定WebGL上下文`, contextAttributes);
 
     gl = canvas.getContext('webgl2', contextAttributes)

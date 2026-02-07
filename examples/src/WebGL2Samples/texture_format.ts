@@ -6,6 +6,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -40,6 +41,7 @@ import { getShaderSource, loadImage } from './utility';
     {
         const row = Math.floor(i / 3);
         const col = i % 3;
+
         viewport[i] = {
             x: windowSize.x * col / 3.0,
             y: windowSize.y * row / 3.0,
@@ -138,6 +140,7 @@ import { getShaderSource, loadImage } from './utility';
         const textures: Texture[] = new Array(TextureTypes.MAX);
         const samplers: Sampler[] = new Array(TextureTypes.MAX);
         let i = 0;
+
         for (i = 0; i < TextureTypes.MAX; ++i)
         {
             textures[i] = {

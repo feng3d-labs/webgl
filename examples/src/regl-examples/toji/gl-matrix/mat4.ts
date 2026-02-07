@@ -13,6 +13,7 @@ import * as glMatrix from './common';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(16);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[1] = 0;
@@ -45,6 +46,7 @@ export function create()
 export function clone(a)
 {
     const out = new glMatrix.ARRAY_TYPE(16);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -119,6 +121,7 @@ export function copy(out, a)
 export function fromValues(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
 {
     const out = new glMatrix.ARRAY_TYPE(16);
+
     out[0] = m00;
     out[1] = m01;
     out[2] = m02;
@@ -420,6 +423,7 @@ export function multiply(out, a, b)
     // Cache only the current line of the second matrix
     let b0 = b[0]; let b1 = b[1]; let b2 = b[2]; let
         b3 = b[3];
+
     out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
     out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
     out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
@@ -539,7 +543,10 @@ export function rotate(out, a, rad, axis)
         z = axis[2];
     let len = Math.sqrt(x * x + y * y + z * z);
 
-    if (len < glMatrix.EPSILON) { return null; }
+    if (len < glMatrix.EPSILON)
+    {
+        return null;
+    }
 
     len = 1 / len;
     x *= len;
@@ -806,7 +813,10 @@ export function fromRotation(out, rad, axis)
         z = axis[2];
     let len = Math.sqrt(x * x + y * y + z * z);
 
-    if (len < glMatrix.EPSILON) { return null; }
+    if (len < glMatrix.EPSILON)
+    {
+        return null;
+    }
 
     len = 1 / len;
     x *= len;
@@ -1018,6 +1028,7 @@ export function fromQuat2(out, a)
         aw = a[7];
 
     const magnitude = bx * bx + by * by + bz * bz + bw * bw;
+
     // Only scale if it makes sense
     if (magnitude > 0)
     {
@@ -1336,6 +1347,7 @@ export function frustum(out, left, right, bottom, top, near, far)
     const rl = 1 / (right - left);
     const tb = 1 / (top - bottom);
     const nf = 1 / (near - far);
+
     out[0] = (near * 2) * rl;
     out[1] = 0;
     out[2] = 0;
@@ -1371,6 +1383,7 @@ export function perspective(out, fovy, aspect, near, far)
 {
     const f = 1.0 / Math.tan(fovy / 2); let
         nf;
+
     out[0] = f / aspect;
     out[1] = 0;
     out[2] = 0;
@@ -1457,6 +1470,7 @@ export function ortho(out, left, right, bottom, top, near, far)
     const lr = 1 / (left - right);
     const bt = 1 / (bottom - top);
     const nf = 1 / (near - far);
+
     out[0] = -2 * lr;
     out[1] = 0;
     out[2] = 0;
@@ -1597,6 +1611,7 @@ export function targetTo(out, eye, target, up)
     let z2 = eyez - target[2];
 
     let len = z0 * z0 + z1 * z1 + z2 * z2;
+
     if (len > 0)
     {
         len = 1 / Math.sqrt(len);

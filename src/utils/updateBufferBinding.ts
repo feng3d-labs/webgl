@@ -17,6 +17,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     if (bufferBindingInfoMap.has(uniformData))
     {
         const preVariableInfo = bufferBindingInfoMap.get(uniformData);
+
         if (preVariableInfo.size !== bufferBindingInfo.size)
         {
             console.warn(`updateBufferBinding 出现一份数据对应多个 variableInfo`, { uniformData, bufferBindingInfo, preVariableInfo });
@@ -31,6 +32,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
     const size = bufferBindingInfo.size;
     // 是否存在默认值。
     const hasDefautValue = !!uniformData.bufferView;
+
     if (!hasDefautValue)
     {
         (uniformData as UnReadonly<BufferBinding>).bufferView = new Uint8Array(size);
@@ -75,6 +77,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             }
 
             let data: Int16Array | Int32Array | Uint32Array | Float32Array;
+
             if (typeof value === 'number')
             {
                 data = new Cls([value]);
@@ -89,6 +92,7 @@ export function updateBufferBinding(bufferBindingInfo: BufferBindingInfo, unifor
             }
 
             const writeBuffers = buffer.writeBuffers ?? [];
+
             writeBuffers.push({ data: data, bufferOffset: offset + itemInfoOffset, size: Math.min(itemInfoSize, data.byteLength) / data.BYTES_PER_ELEMENT });
             reactive(buffer).writeBuffers = writeBuffers;
         });

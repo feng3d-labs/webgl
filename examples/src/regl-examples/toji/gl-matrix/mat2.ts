@@ -13,6 +13,7 @@ import * as glMatrix from './common';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[1] = 0;
@@ -33,6 +34,7 @@ export function create()
 export function clone(a)
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -86,6 +88,7 @@ export function identity(out)
 export function fromValues(m00, m01, m10, m11)
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     out[0] = m00;
     out[1] = m01;
     out[2] = m10;
@@ -128,6 +131,7 @@ export function transpose(out, a)
     if (out === a)
     {
         const a1 = a[1];
+
         out[1] = a[2];
         out[2] = a1;
     }
@@ -182,6 +186,7 @@ export function adjoint(out, a)
 {
     // Caching this value is nessecary if out == a
     const a0 = a[0];
+
     out[0] = a[3];
     out[1] = -a[1];
     out[2] = -a[2];
@@ -215,6 +220,7 @@ export function multiply(out, a, b)
         a3 = a[3];
     const b0 = b[0]; const b1 = b[1]; const b2 = b[2]; const
         b3 = b[3];
+
     out[0] = a0 * b0 + a2 * b1;
     out[1] = a1 * b0 + a3 * b1;
     out[2] = a0 * b2 + a2 * b3;
@@ -237,6 +243,7 @@ export function rotate(out, a, rad)
         a3 = a[3];
     const s = Math.sin(rad);
     const c = Math.cos(rad);
+
     out[0] = a0 * c + a2 * s;
     out[1] = a1 * c + a3 * s;
     out[2] = a0 * -s + a2 * c;
@@ -259,6 +266,7 @@ export function scale(out, a, v)
         a3 = a[3];
     const v0 = v[0]; const
         v1 = v[1];
+
     out[0] = a0 * v0;
     out[1] = a1 * v0;
     out[2] = a2 * v1;
@@ -282,6 +290,7 @@ export function fromRotation(out, rad)
 {
     const s = Math.sin(rad);
     const c = Math.cos(rad);
+
     out[0] = c;
     out[1] = s;
     out[2] = -s;

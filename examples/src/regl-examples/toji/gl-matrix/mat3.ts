@@ -13,6 +13,7 @@ import * as glMatrix from './common';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(9);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[1] = 0;
@@ -60,6 +61,7 @@ export function fromMat4(out, a)
 export function clone(a)
 {
     const out = new glMatrix.ARRAY_TYPE(9);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -112,6 +114,7 @@ export function copy(out, a)
 export function fromValues(m00, m01, m02, m10, m11, m12, m20, m21, m22)
 {
     const out = new glMatrix.ARRAY_TYPE(9);
+
     out[0] = m00;
     out[1] = m01;
     out[2] = m02;
@@ -190,6 +193,7 @@ export function transpose(out, a)
     {
         const a01 = a[1]; const a02 = a[2]; const
             a12 = a[5];
+
         out[1] = a[3];
         out[2] = a[6];
         out[3] = a01;

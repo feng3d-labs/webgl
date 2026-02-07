@@ -31,6 +31,7 @@ import { getShaderSource, loadImage } from './utility';
     });
 
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -60,6 +61,7 @@ import { getShaderSource, loadImage } from './utility';
     const glTFLoader = new GlTFLoader();
     let curScene;
     const gltfUrl = '../../assets/gltf/plane.gltf';
+
     glTFLoader.loadGLTF(gltfUrl, function (glTF)
     {
         curScene = glTF.scenes[glTF.defaultScene];
@@ -77,9 +79,11 @@ import { getShaderSource, loadImage } from './utility';
 
                 // -- Initialize buffer
                 const vertices = primitive.vertexBuffer;
+
                 vertexBuffer = vertices;
 
                 const indices = primitive.indices;
+
                 indicesBuffer = indices;
 
                 // -- VertexAttribPointer
@@ -100,6 +104,7 @@ import { getShaderSource, loadImage } from './utility';
 
         // -- Init Texture
         const imageUrl = '../../assets/img/heightmap.jpg';
+
         loadImage(imageUrl, function (image)
         {
             // -- Init 2D Texture
@@ -129,18 +134,24 @@ import { getShaderSource, loadImage } from './utility';
     const modelMatrix = mat4.create();
 
     const eyeVec3 = vec3.create();
+
     vec3.set(eyeVec3, 4, 3, 1);
     const centerVec3 = vec3.create();
+
     vec3.set(centerVec3, 0, 0.5, 0);
     const upVec3 = vec3.create();
+
     vec3.set(upVec3, 0, 1, 0);
 
     const viewMatrix = mat4.create();
+
     mat4.lookAt(viewMatrix, eyeVec3, centerVec3, upVec3);
 
     const mvMatrix = mat4.create();
+
     mat4.multiply(mvMatrix, viewMatrix, modelMatrix);
     const perspectiveMatrix = mat4.create();
+
     mat4.perspective(perspectiveMatrix, 0.785, 1, 1, 1000);
 
     // -- Mouse Behaviour
@@ -170,6 +181,7 @@ import { getShaderSource, loadImage } from './utility';
         const deltaY = newY - lastMouseY;
 
         const m = mat4.create();
+
         mat4.rotateX(m, m, deltaX / 100.0);
         mat4.rotateY(m, m, deltaY / 100.0);
 
@@ -181,6 +193,7 @@ import { getShaderSource, loadImage } from './utility';
     };
 
     const localMV = mat4.create();
+
     function render()
     {
         const renderObjects: RenderPassObject[] = [];
@@ -202,6 +215,7 @@ import { getShaderSource, loadImage } from './utility';
         mat4.rotateZ(mvMatrix, mvMatrix, orientation[2] * Math.PI);
 
         let i; let len;
+
         for (const mid in curScene.meshes)
         {
             mesh = curScene.meshes[mid];
@@ -241,6 +255,7 @@ function getIVertexFormat(numComponents: 1 | 2 | 3 | 4, type: GLVertexAttributeT
     for (const key in vertexFormatMap)
     {
         const element = vertexFormatMap[key];
+
         if (
             element.numComponents === numComponents
             && element.type === type

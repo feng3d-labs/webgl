@@ -11,12 +11,14 @@ import { getGLTextureTarget } from './getGLTextureTarget';
 export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: RenderPassDescriptor)
 {
     const view = passDescriptor?.colorAttachments?.[0]?.view || passDescriptor?.depthStencilAttachment?.view;
+
     if (!view) return null;
 
     // 检查是否是 CanvasTexture，如果是，返回 null（使用默认 framebuffer）
     if ('texture' in view)
     {
         const texture = view.texture;
+
         if ('context' in texture)
         {
             // CanvasTexture: 使用默认 framebuffer（画布）
@@ -25,6 +27,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
     }
 
     let webGLFramebuffer = gl._framebuffers.get(passDescriptor);
+
     if (webGLFramebuffer) return webGLFramebuffer;
 
     const sampleCount = passDescriptor.sampleCount;
@@ -35,10 +38,12 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
 
     // 处理颜色附件
     const drawBuffers: number[] = [];
+
     passDescriptor.colorAttachments?.forEach((item, i) =>
     {
         const view = item.view as (TextureView | Renderbuffer);
         const attachment = gl[`COLOR_ATTACHMENT${i}`];
+
         drawBuffers.push(attachment);
         if ('texture' in view)
         {
@@ -78,6 +83,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
         else
         {
             const renderbuffer = getGLRenderbuffer(gl, view, sampleCount);
+
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, renderbuffer);
         }
     });
@@ -93,6 +99,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
 
     // 处理深度模板附件
     const depthStencilAttachment = passDescriptor.depthStencilAttachment;
+
     if (depthStencilAttachment)
     {
         // 如果有 view，使用纹理作为深度附件
@@ -143,9 +150,11 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             if (colorAttachment?.view)
             {
                 const view = colorAttachment.view;
+
                 if ('texture' in view)
                 {
                     const texture = view.texture;
+
                     if ('descriptor' in texture)
                     {
                         width = texture.descriptor.size[0];
@@ -156,6 +165,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
 
             // 创建深度 renderbuffer
             const depthRenderbuffer = gl.createRenderbuffer();
+
             gl.bindRenderbuffer(gl.RENDERBUFFER, depthRenderbuffer);
             if (gl instanceof WebGL2RenderingContext)
             {
@@ -171,6 +181,7 @@ export function getGLFramebuffer(gl: WebGLRenderingContext, passDescriptor: Rend
             // 将 renderbuffer 存储到 framebuffer 的缓存中，以便后续清理
             // 使用 Map 存储 framebuffer 到 renderbuffer 的映射
             const glAny = gl as any;
+
             if (!glAny._framebufferDepthRenderbuffers)
             {
                 glAny._framebufferDepthRenderbuffers = new Map();
@@ -199,13 +210,16 @@ export function deleteFramebuffer(gl: WebGLRenderingContext, passDescriptor: Ren
     }
 
     const webGLFramebuffer = gl._framebuffers.get(passDescriptor);
+
     gl._framebuffers.delete(passDescriptor);
 
     // 删除关联的深度 renderbuffer（如果存在）
     const glAny = gl as any;
+
     if (glAny._framebufferDepthRenderbuffers && webGLFramebuffer)
     {
         const depthRenderbuffer = glAny._framebufferDepthRenderbuffers.get(webGLFramebuffer);
+
         if (depthRenderbuffer)
         {
             gl.deleteRenderbuffer(depthRenderbuffer);

@@ -124,11 +124,13 @@ export class GlTFLoader
     _getBufferViewData(json, bufferViewID, callback)
     {
         const bufferViewData = this._bufferViews[bufferViewID];
+
         if (!bufferViewData)
         {
             // load bufferView for the first time
             const bufferView = json.bufferViews[bufferViewID];
             const bufferData = this._buffers[bufferView.buffer];
+
             if (bufferData)
             {
                 // buffer already loaded
@@ -143,17 +145,20 @@ export class GlTFLoader
                 // console.log("pending Task: wait for buffer to load bufferView " + bufferViewID);
                 this._pendingTasks++;
                 let bufferTask = this._bufferTasks[bufferView.buffer];
+
                 if (!bufferTask)
                 {
                     this._bufferTasks[bufferView.buffer] = [];
                     bufferTask = this._bufferTasks[bufferView.buffer];
                 }
                 const loader = this;
+
                 bufferTask.push(function (newBufferData)
                 {
                     // share same bufferView
                     // hierarchy needs to be post processed in the renderer
                     let curBufferViewData = loader._bufferViews[bufferViewID];
+
                     if (!curBufferViewData)
                     {
                         console.log(`create new BufferView Data for ${bufferViewID}`);
@@ -204,6 +209,7 @@ export class GlTFLoader
         for (const sceneID in json.scenes)
         {
             const newScene = new Scene();
+
             this.glTF.scenes[sceneID] = newScene;
 
             const scene = json.scenes[sceneID];
@@ -258,12 +264,15 @@ export class GlTFLoader
 
         // Iterate through every mesh within node
         const meshes = node.meshes;
+
         if (meshes)
         {
             const meshLen = meshes.length;
+
             for (let m = 0; m < meshLen; ++m)
             {
                 const newMesh = new Mesh();
+
                 newScene.meshes.push(newMesh);
 
                 const meshName = meshes[m];
@@ -278,6 +287,7 @@ export class GlTFLoader
                 for (let p = 0; p < primitiveLen; ++p)
                 {
                     const newPrimitive = new Primitive();
+
                     newMesh.primitives.push(newPrimitive);
 
                     const primitive = primitives[p];
@@ -295,10 +305,12 @@ export class GlTFLoader
         // Go through all the children recursively
         const children = node.children;
         const childreLen = children.length;
+
         for (let c = 0; c < childreLen; ++c)
         {
             const childName = children[c];
             const childNode = json.nodes[childName];
+
             this._parseNode(json, childNode, newScene, curMatrix);
         }
     }
@@ -312,6 +324,7 @@ export class GlTFLoader
         newPrimitive.indicesComponentType = IDrawElementType2Name[accessor.componentType];
 
         const loader = this;
+
         this._getBufferViewData(json, accessor.bufferView, function (bufferViewData)
         {
             newPrimitive.indices = _getAccessorData(bufferViewData, accessor) as any;
@@ -440,6 +453,7 @@ export class GlTFLoader
                 if (loader._bufferTasks[b])
                 {
                     let i; let len;
+
                     for (i = 0, len = loader._bufferTasks[b].length; i < len; ++i)
                     {
                         (loader._bufferTasks[b][i])(resource);
@@ -534,6 +548,7 @@ function _getBaseUri(uri)
 
     let basePath = '';
     const i = uri.lastIndexOf('/');
+
     if (i !== -1)
     {
         basePath = uri.substring(0, i + 1);
@@ -548,6 +563,7 @@ function _loadJSON(src, callback)
     // http://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
 
     const xobj = new XMLHttpRequest();
+
     xobj.overrideMimeType('application/json');
     xobj.open('GET', src, true);
     xobj.onreadystatechange = function ()
@@ -564,6 +580,7 @@ function _loadJSON(src, callback)
 function _loadArrayBuffer(url, callback)
 {
     const xobj = new XMLHttpRequest();
+
     xobj.responseType = 'arraybuffer';
     xobj.open('GET', url, true);
     xobj.onreadystatechange = function ()
@@ -572,6 +589,7 @@ function _loadArrayBuffer(url, callback)
             && xobj.status === 200)
         { // Status OK
             const arrayBuffer = xobj.response;
+
             if (arrayBuffer && callback)
             {
                 callback(arrayBuffer);

@@ -3,6 +3,7 @@ import { BlitFramebuffer, BlitFramebufferItem, WebGL } from '@feng3d/webgl';
 import { getShaderSource, loadImage } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -127,6 +128,7 @@ loadImage('../../assets/img/Di-3d.png', (image) =>
     const blitFramebuffers: BlitFramebufferItem[] = [];
     const TILE = 4;
     const BORDER = 2;
+
     for (let j = 0; j < TILE; j++)
     {
         for (let i = 0; i < TILE; i++)

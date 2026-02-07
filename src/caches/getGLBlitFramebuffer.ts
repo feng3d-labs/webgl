@@ -23,6 +23,7 @@ export function getGLBlitFramebuffer(copyTextureToTexture: CopyTextureToTexture)
 
     //
     let mask: 'COLOR_BUFFER_BIT' | 'DEPTH_BUFFER_BIT' | 'STENCIL_BUFFER_BIT';
+
     if (sourceAspect === 'all')
     {
         mask = 'COLOR_BUFFER_BIT';

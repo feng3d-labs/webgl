@@ -22,9 +22,11 @@ export function fit(canvas, parent?, scale?)
         const p = resize.parent || canvas.parentNode;
         let width: number;
         let height: number;
+
         if (typeof p === 'function')
         {
             const dims = p(scratch) || scratch;
+
             width = dims[0];
             height = dims[1];
         }
@@ -32,6 +34,7 @@ export function fit(canvas, parent?, scale?)
             if (p && p !== document.body)
             {
                 const psize = size(p);
+
                 width = psize[0] | 0;
                 height = psize[1] | 0;
             }

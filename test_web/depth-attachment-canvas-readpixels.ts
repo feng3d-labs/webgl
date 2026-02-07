@@ -110,6 +110,7 @@ async function testWithoutDepthAttachment()
         if (!gl)
         {
             const errorMessage = '错误: 无法获取 WebGL2 上下文';
+
             statusDiv.textContent = errorMessage;
             statusDiv.className = 'status fail';
             testResults.test1 = { passed: false, message: errorMessage };
@@ -160,6 +161,7 @@ async function testWithoutDepthAttachment()
         if (isGreen)
         {
             const message = '后绘制的绿色三角形（更远）覆盖了先绘制的红色三角形（更靠近）（深度测试被禁用）';
+
             statusDiv.textContent = `✓ 测试通过: ${message}`;
             statusDiv.className = 'status pass';
             testResults.test1 = { passed: true, message };
@@ -167,6 +169,7 @@ async function testWithoutDepthAttachment()
         else
         {
             const message = `中心点颜色为 (${r}, ${g}, ${b}, ${a})，期望为绿色`;
+
             statusDiv.textContent = `✗ 测试失败: ${message}`;
             statusDiv.className = 'status fail';
             testResults.test1 = { passed: false, message };
@@ -175,6 +178,7 @@ async function testWithoutDepthAttachment()
     catch (error)
     {
         const errorMessage = error instanceof Error ? error.message : String(error);
+
         statusDiv.textContent = `错误: ${errorMessage}`;
         statusDiv.className = 'status fail';
         testResults.test1 = { passed: false, message: errorMessage };
@@ -195,6 +199,7 @@ async function testWithDepthAttachment()
         if (!gl)
         {
             const errorMessage = '错误: 无法获取 WebGL2 上下文';
+
             statusDiv.textContent = errorMessage;
             statusDiv.className = 'status fail';
             testResults.test2 = { passed: false, message: errorMessage };
@@ -248,6 +253,7 @@ async function testWithDepthAttachment()
         if (isRed)
         {
             const message = '更靠近的红色三角形覆盖了更远的绿色三角形（深度测试启用）';
+
             statusDiv.textContent = `✓ 测试通过: ${message}`;
             statusDiv.className = 'status pass';
             testResults.test2 = { passed: true, message };
@@ -255,6 +261,7 @@ async function testWithDepthAttachment()
         else
         {
             const message = `中心点颜色为 (${r}, ${g}, ${b}, ${a})，期望为红色`;
+
             statusDiv.textContent = `✗ 测试失败: ${message}`;
             statusDiv.className = 'status fail';
             testResults.test2 = { passed: false, message };
@@ -263,6 +270,7 @@ async function testWithDepthAttachment()
     catch (error)
     {
         const errorMessage = error instanceof Error ? error.message : String(error);
+
         statusDiv.textContent = `错误: ${errorMessage}`;
         statusDiv.className = 'status fail';
         testResults.test2 = { passed: false, message: errorMessage };
@@ -323,6 +331,7 @@ document.addEventListener('DOMContentLoaded', async () =>
     catch (error)
     {
         const errorMessage = error instanceof Error ? error.message : String(error);
+
         // 确保即使出错也记录结果
         if (!testResults.test1.message)
         {

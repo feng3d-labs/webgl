@@ -5,6 +5,7 @@ import { WebGL } from '@feng3d/webgl';
 const init = async (canvas: HTMLCanvasElement) =>
 {
     const devicePixelRatio = window.devicePixelRatio || 1;
+
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
@@ -93,6 +94,7 @@ const init = async (canvas: HTMLCanvasElement) =>
 };
 
 let webglCanvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
+
 if (!webglCanvas)
 {
     webglCanvas = document.createElement('canvas');

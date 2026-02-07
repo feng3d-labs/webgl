@@ -24,6 +24,7 @@ export function mouseListen(element?, callback?)
     function updateMods(ev)
     {
         let changed = false;
+
         if ('altKey' in ev)
         {
             changed = changed || ev.altKey !== mods.alt;
@@ -52,6 +53,7 @@ export function mouseListen(element?, callback?)
     {
         const nextX = mouse.x(ev);
         const nextY = mouse.y(ev);
+
         if ('buttons' in ev)
         {
             nextButtons = ev.buttons | 0;
@@ -202,7 +204,10 @@ export function mouseListen(element?, callback?)
 
     Object.defineProperties(result, {
         enabled: {
-            get() { return attached; },
+            get()
+            {
+                return attached;
+            },
             set(f)
             {
                 if (f)
@@ -217,19 +222,31 @@ export function mouseListen(element?, callback?)
             enumerable: true,
         },
         buttons: {
-            get() { return buttonState; },
+            get()
+            {
+                return buttonState;
+            },
             enumerable: true,
         },
         x: {
-            get() { return x; },
+            get()
+            {
+                return x;
+            },
             enumerable: true,
         },
         y: {
-            get() { return y; },
+            get()
+            {
+                return y;
+            },
             enumerable: true,
         },
         mods: {
-            get() { return mods; },
+            get()
+            {
+                return mods;
+            },
             enumerable: true,
         },
     });

@@ -112,6 +112,7 @@ function main()
     {
         now *= 0.001; // convert to seconds
         const deltaTime = now - then;
+
         then = now;
 
         if (copyVideo)
@@ -393,6 +394,7 @@ function drawScene(canvas: HTMLCanvasElement, deltaTime: number)
         [0, 1, 0]); // axis to rotate around (X)
 
     const normalMatrix = mat4.create();
+
     mat4.invert(normalMatrix, modelViewMatrix);
     mat4.transpose(normalMatrix, normalMatrix);
 

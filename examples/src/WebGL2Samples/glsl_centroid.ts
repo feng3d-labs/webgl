@@ -4,6 +4,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import { getShaderSource } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -159,6 +160,7 @@ const passEncoders: PassEncoder[] = [];
 
 // Pass 1
 const IDENTITY = mat4.create();
+
 for (let i = 0; i < VIEWPORTS.MAX; ++i)
 {
     // render buffers
@@ -171,6 +173,7 @@ for (let i = 0; i < VIEWPORTS.MAX; ++i)
             draw: { __type__: 'DrawVertex', vertexCount },
         }],
     };
+
     passEncoders.push(rp);
 }
 
@@ -188,8 +191,10 @@ const ro: RenderObject = {
 
 const scaleVector3 = vec3.create();
 const invScaleFactor = 0.8 / scaleFactor;
+
 vec3.set(scaleVector3, invScaleFactor, invScaleFactor, invScaleFactor);
 const mvp = mat4.create();
+
 mat4.scale(mvp, IDENTITY, scaleVector3);
 
 for (let i = 0; i < VIEWPORTS.MAX; ++i)

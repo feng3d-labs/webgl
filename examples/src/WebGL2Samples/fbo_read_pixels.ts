@@ -3,6 +3,7 @@ import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -178,6 +179,7 @@ let result = webgl.readPixels({
     origin: [0, 0],
     copySize: [w, h],
 });
+
 data.set(new Uint8Array(result.buffer), 0);
 result = webgl.readPixels({
     textureView: frameBuffer.colorAttachments[1].view,

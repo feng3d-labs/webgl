@@ -4,6 +4,7 @@ import { WebGL } from '@feng3d/webgl';
 import { getShaderSource, loadImage } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -120,6 +121,7 @@ reactive(samplers[Corners.BOTTOM_LEFT]).addressModeV = 'clamp-to-edge';
 
 const imageUrl = '../../assets/img/Di-3d.png';
 let texture: Texture;
+
 loadImage(imageUrl, function (image)
 {
     texture = {

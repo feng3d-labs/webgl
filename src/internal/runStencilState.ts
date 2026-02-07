@@ -3,6 +3,7 @@ import { CompareFunction, DepthStencilState, StencilOperation } from '@feng3d/re
 export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthStencilState)
 {
     const { stencilFront, stencilBack } = { ...depthStencil };
+
     //
     if (stencilFront || stencilBack)
     {
@@ -18,6 +19,7 @@ export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthS
             const fail = getGLStencilOp(stencilFront.failOp);
             const zfail = getGLStencilOp(stencilFront.depthFailOp);
             const zpass = getGLStencilOp(stencilFront.passOp);
+
             //
             gl.stencilFuncSeparate(gl.FRONT, gl[func], ref, readMask);
             gl.stencilOpSeparate(gl.FRONT, gl[fail], gl[zfail], gl[zpass]);
@@ -29,6 +31,7 @@ export function runStencilState(gl: WebGLRenderingContext, depthStencil?: DepthS
             const fail = getGLStencilOp(stencilBack.failOp);
             const zfail = getGLStencilOp(stencilBack.depthFailOp);
             const zpass = getGLStencilOp(stencilBack.passOp);
+
             //
             gl.stencilFuncSeparate(gl.BACK, gl[func], ref, readMask);
             gl.stencilOpSeparate(gl.BACK, gl[fail], gl[zfail], gl[zpass]);

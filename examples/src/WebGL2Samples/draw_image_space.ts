@@ -3,6 +3,7 @@ import { WebGL } from '@feng3d/webgl';
 import { getShaderSource } from './utility';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
@@ -69,6 +70,7 @@ loadImage('../../assets/img/Di-3d.png', (img) =>
 function loadImage(url: string, onload: (img: HTMLImageElement) => void)
 {
     const img = new Image();
+
     img.src = url;
     img.onload = function ()
     {

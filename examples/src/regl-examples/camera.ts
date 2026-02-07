@@ -6,6 +6,7 @@ import * as bunny from './mikolalysenko/bunny';
 import { createCamera } from './util/camera';
 
 const canvas = document.createElement('canvas');
+
 canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;

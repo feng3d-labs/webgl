@@ -5,6 +5,7 @@ import { getGLBuffer } from './getGLBuffer';
 export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
     let webGLTransformFeedback = gl._transforms.get(transformFeedback);
+
     if (webGLTransformFeedback) return webGLTransformFeedback;
 
     if (gl instanceof WebGL2RenderingContext)
@@ -19,6 +20,7 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
             const buffer = Buffer.getBuffer(data.buffer);
 
             const webGLBuffer = getGLBuffer(gl, buffer, 'TRANSFORM_FEEDBACK_BUFFER', 'STREAM_COPY');
+
             gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, index, webGLBuffer);
         });
 
@@ -32,6 +34,7 @@ export function getGLTransformFeedback(gl: WebGLRenderingContext, transformFeedb
 export function deleteTransformFeedback(gl: WebGLRenderingContext, transformFeedback: TransformFeedback)
 {
     const webGLTransformFeedback = gl._transforms.get(transformFeedback);
+
     if (!webGLTransformFeedback) return;
 
     gl._transforms.delete(transformFeedback);

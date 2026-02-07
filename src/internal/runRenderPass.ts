@@ -17,6 +17,7 @@ export function runRenderPass(gl: WebGLRenderingContext, renderPass: RenderPass,
 
     // 处理不被遮挡查询
     const occlusionQuery = getGLRenderOcclusionQuery(gl, renderPass.renderPassObjects);
+
     //
     occlusionQuery.init();
 
@@ -71,12 +72,15 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
     if (!descriptor) return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight };
 
     const colorAttachments = descriptor.colorAttachments;
+
     if (colorAttachments)
     {
         const view = colorAttachments[0]?.view;
+
         if (view)
         {
             const texture = view.texture;
+
             // 检查是否是 CanvasTexture
             if ('context' in texture)
             {
@@ -85,6 +89,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
                 const canvas = typeof canvasTexture.context.canvasId === 'string'
                     ? document.getElementById(canvasTexture.context.canvasId) as HTMLCanvasElement
                     : canvasTexture.context.canvasId;
+
                 if (canvas)
                 {
                     return { width: canvas.width, height: canvas.height };
@@ -103,12 +108,15 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
     }
 
     const depthStencilAttachment = descriptor.depthStencilAttachment;
+
     if (depthStencilAttachment)
     {
         const view = depthStencilAttachment.view;
+
         if (view)
         {
             const texture = view.texture;
+
             // 检查是否是 CanvasTexture
             if ('context' in texture)
             {
@@ -117,6 +125,7 @@ function getGLRenderPassAttachmentSize(gl: WebGLRenderingContext, descriptor: Re
                 const canvas = typeof canvasTexture.context.canvasId === 'string'
                     ? document.getElementById(canvasTexture.context.canvasId) as HTMLCanvasElement
                     : canvasTexture.context.canvasId;
+
                 if (canvas)
                 {
                     return { width: canvas.width, height: canvas.height };

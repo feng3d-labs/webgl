@@ -4,6 +4,7 @@ const isOpera = (/Opera/).test(ua);
 const maybeFirefox = !(/like Gecko/).test(ua) && !isOpera;
 
 let i;
+
 export const output = {
     0: isOSX ? '<menu>' : '<UNK>',
     1: '<mouse 1>',

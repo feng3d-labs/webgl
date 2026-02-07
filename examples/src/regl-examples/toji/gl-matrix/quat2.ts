@@ -18,6 +18,7 @@ import * as mat4 from './mat4';
 export function create()
 {
     const dq = new glMatrix.ARRAY_TYPE(8);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         dq[0] = 0;
@@ -43,6 +44,7 @@ export function create()
 export function clone(a)
 {
     const dq = new glMatrix.ARRAY_TYPE(8);
+
     dq[0] = a[0];
     dq[1] = a[1];
     dq[2] = a[2];
@@ -72,6 +74,7 @@ export function clone(a)
 export function fromValues(x1, y1, z1, w1, x2, y2, z2, w2)
 {
     const dq = new glMatrix.ARRAY_TYPE(8);
+
     dq[0] = x1;
     dq[1] = y1;
     dq[2] = z1;
@@ -100,6 +103,7 @@ export function fromValues(x1, y1, z1, w1, x2, y2, z2, w2)
 export function fromRotationTranslationValues(x1, y1, z1, w1, x2, y2, z2)
 {
     const dq = new glMatrix.ARRAY_TYPE(8);
+
     dq[0] = x1;
     dq[1] = y1;
     dq[2] = z1;
@@ -107,6 +111,7 @@ export function fromRotationTranslationValues(x1, y1, z1, w1, x2, y2, z2)
     const ax = x2 * 0.5;
     const ay = y2 * 0.5;
     const az = z2 * 0.5;
+
     dq[4] = ax * w1 + ay * z1 - az * y1;
     dq[5] = ay * w1 + az * x1 - ax * z1;
     dq[6] = az * w1 + ax * y1 - ay * x1;
@@ -133,6 +138,7 @@ export function fromRotationTranslation(out, q, t)
     const by = q[1];
     const bz = q[2];
     const bw = q[3];
+
     out[0] = bx;
     out[1] = by;
     out[2] = bz;
@@ -201,8 +207,10 @@ export function fromMat4(out, a)
 {
     // TODO Optimize this
     const outer = quat.create();
+
     mat4.getRotation(outer, a);
     const t = new glMatrix.ARRAY_TYPE(3);
+
     mat4.getTranslation(t, a);
     fromRotationTranslation(out, outer, t);
 
@@ -349,6 +357,7 @@ export function getTranslation(out, a)
     const by = -a[1];
     const bz = -a[2];
     const bw = a[3];
+
     out[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2;
     out[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2;
     out[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2;
@@ -377,6 +386,7 @@ export function translate(out, a, v)
     const ay2 = a[5];
     const az2 = a[6];
     const aw2 = a[7];
+
     out[0] = ax1;
     out[1] = ay1;
     out[2] = az1;
@@ -411,6 +421,7 @@ export function rotateX(out, a, rad)
     const ay1 = ay * bw + aw * by + az * bx - ax * bz;
     const az1 = az * bw + aw * bz + ax * by - ay * bx;
     const aw1 = aw * bw - ax * bx - ay * by - az * bz;
+
     quat.rotateX(out, a, rad);
     bx = out[0];
     by = out[1];
@@ -446,6 +457,7 @@ export function rotateY(out, a, rad)
     const ay1 = ay * bw + aw * by + az * bx - ax * bz;
     const az1 = az * bw + aw * bz + ax * by - ay * bx;
     const aw1 = aw * bw - ax * bx - ay * by - az * bz;
+
     quat.rotateY(out, a, rad);
     bx = out[0];
     by = out[1];
@@ -481,6 +493,7 @@ export function rotateZ(out, a, rad)
     const ay1 = ay * bw + aw * by + az * bx - ax * bz;
     const az1 = az * bw + aw * bz + ax * by - ay * bx;
     const aw1 = aw * bw - ax * bx - ay * by - az * bz;
+
     quat.rotateZ(out, a, rad);
     bx = out[0];
     by = out[1];
@@ -593,6 +606,7 @@ export function rotateAroundAxis(out, a, axis, rad)
     const ay1 = a[1];
     const az1 = a[2];
     const aw1 = a[3];
+
     out[0] = ax1 * bw + aw1 * bx + ay1 * bz - az1 * by;
     out[1] = ay1 * bw + aw1 * by + az1 * bx - ax1 * bz;
     out[2] = az1 * bw + aw1 * bz + ax1 * by - ay1 * bx;
@@ -602,6 +616,7 @@ export function rotateAroundAxis(out, a, axis, rad)
     const ay = a[5];
     const az = a[6];
     const aw = a[7];
+
     out[4] = ax * bw + aw * bx + ay * bz - az * by;
     out[5] = ay * bw + aw * by + az * bx - ax * bz;
     out[6] = az * bw + aw * bz + ax * by - ay * bx;
@@ -659,6 +674,7 @@ export function multiply(out, a, b)
     const by0 = b[1];
     const bz0 = b[2];
     const bw0 = b[3];
+
     out[0] = ax0 * bw0 + aw0 * bx0 + ay0 * bz0 - az0 * by0;
     out[1] = ay0 * bw0 + aw0 * by0 + az0 * bx0 - ax0 * bz0;
     out[2] = az0 * bw0 + aw0 * bz0 + ax0 * by0 - ay0 * bx0;
@@ -723,6 +739,7 @@ export const dot = quat.dot;
 export function lerp(out, a, b, t)
 {
     const mt = 1 - t;
+
     if (dot(a, b) < 0) t = -t;
 
     out[0] = a[0] * mt + b[0] * t;
@@ -747,6 +764,7 @@ export function lerp(out, a, b, t)
 export function invert(out, a)
 {
     const sqlen = squaredLength(a);
+
     out[0] = -a[0] / sqlen;
     out[1] = -a[1] / sqlen;
     out[2] = -a[2] / sqlen;
@@ -822,6 +840,7 @@ export const sqrLen = squaredLength;
 export function normalize(out, a)
 {
     let magnitude = squaredLength(a);
+
     if (magnitude > 0)
     {
         magnitude = Math.sqrt(magnitude);

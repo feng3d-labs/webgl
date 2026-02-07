@@ -7,9 +7,11 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
     if (!renderObjects) return defautRenderOcclusionQuery;
     if (!(gl instanceof WebGL2RenderingContext)) return defautRenderOcclusionQuery;
     let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects['_GLRenderOcclusionQuery'];
+
     if (renderOcclusionQuery) return renderOcclusionQuery;
 
     const occlusionQueryObjects: OcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === 'OcclusionQuery') as any;
+
     if (occlusionQueryObjects.length === 0)
     {
         renderObjects['_GLRenderOcclusionQuery'] = defautRenderOcclusionQuery;
@@ -52,7 +54,9 @@ interface GLRenderOcclusionQuery
     resolve: (renderPass: RenderPass) => void
 }
 
-const defautRenderOcclusionQuery = { init: () => { }, resolve: () => { } };
+const defautRenderOcclusionQuery = { init: () =>
+{ }, resolve: () =>
+{ } };
 
 export function getGLOcclusionQueryStep(gl: WebGL2RenderingContext, occlusionQuery: OcclusionQuery)
 {

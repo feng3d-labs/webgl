@@ -10,6 +10,7 @@ import * as vec3 from './stackgl/gl-vec3';
 (async () =>
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -18,6 +19,7 @@ import * as vec3 from './stackgl/gl-vec3';
     const webgl = new WebGL({ canvasId: 'glcanvas' });
 
     const camera = attachCamera(canvas);
+
     window.addEventListener('resize', fit(canvas), false);
 
     // configure intial camera view.
@@ -135,28 +137,40 @@ import * as vec3 from './stackgl/gl-vec3';
 
     const positions = position.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
 
     const uvs = uv.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
 
     const normals = normal.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
 
     const indices = elements.reduce((pv: number[], cv: number[]) =>
     {
-        cv.forEach((v) => { pv.push(v); });
+        cv.forEach((v) =>
+        {
+            pv.push(v);
+        });
 
         return pv;
     }, []);
@@ -244,6 +258,7 @@ import * as vec3 from './stackgl/gl-vec3';
         const g = [0.0, -4.0, 0.0]; // gravity force vector.
 
         const windForce = [Math.sin(tick / 2.0), Math.cos(tick / 3.0), Math.sin(tick / 1.0)];
+
         vec3.normalize(windForce, windForce);
         vec3.scale(windForce, windForce, 20.6);
 
@@ -275,6 +290,7 @@ import * as vec3 from './stackgl/gl-vec3';
         const d = [];
         let v0; let
             v1;
+
         //
         // Attempt to satisfy the constraints by running a couple of iterations.
         //
@@ -329,6 +345,7 @@ import * as vec3 from './stackgl/gl-vec3';
 
             // compute face normal.
             const n0 = [0.0, 0.0, 0.0];
+
             vec3.cross(n0, v0, v1);
             vec3.normalize(n0, n0);
 
@@ -350,13 +367,19 @@ import * as vec3 from './stackgl/gl-vec3';
           */
         const positions = position.reduce((pv: number[], cv: number[]) =>
         {
-            cv.forEach((v) => { pv.push(v); });
+            cv.forEach((v) =>
+            {
+                pv.push(v);
+            });
 
             return pv;
         }, []);
         const normals = normal.reduce((pv: number[], cv: number[]) =>
         {
-            cv.forEach((v) => { pv.push(v); });
+            cv.forEach((v) =>
+            {
+                pv.push(v);
+            });
 
             return pv;
         }, []);
@@ -386,6 +409,7 @@ import * as vec3 from './stackgl/gl-vec3';
     }
 
     const img = new Image();
+
     img.src = '../../assets/cloth.png';
     await img.decode();
 
@@ -398,6 +422,7 @@ import * as vec3 from './stackgl/gl-vec3';
             sources: [{ image: img }],
         }, sampler: { minFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' },
     };
+
     reactive(renderObject.bindingResources).texture = diffuse;
 
     draw();

@@ -33,10 +33,12 @@ export function attach(element, listener?)
             position.prev[0] = position[0];
             position.prev[1] = position[1];
             const bounds = element.getBoundingClientRect();
+
             position[0] = e.clientX - bounds.left;
             position[1] = e.clientY - bounds.top;
             position.emit('move', e);
         };
+
     listener.addEventListener('mousemove', handler, false);
 
     return position;

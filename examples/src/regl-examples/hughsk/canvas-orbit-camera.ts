@@ -57,6 +57,7 @@ export function attachCamera(canvas, opts?)
         if (opts.scale && (mbut.middle || (mbut.left && !ctrl && alt)))
         {
             const d = mpos.y - mpos.prevY;
+
             if (!d) return;
 
             camera.distance *= Math.exp(d / height);

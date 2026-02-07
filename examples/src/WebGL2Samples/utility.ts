@@ -6,6 +6,7 @@ export function getShaderSource(id: string)
 export function loadImage(url: string, onload: (img: HTMLImageElement) => void)
 {
     const img = new Image();
+
     img.src = url;
     img.onload = function ()
     {

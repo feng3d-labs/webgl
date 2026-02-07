@@ -21,6 +21,7 @@ export function runDrawIndexed(gl: WebGLRenderingContext, drawMode: GLDrawMode, 
         else
         {
             const extension = gl.getExtension('ANGLE_instanced_arrays');
+
             extension.drawElementsInstancedANGLE(gl[drawMode], indexCount, type, offset, instanceCount);
         }
     }

@@ -17,6 +17,7 @@ export function runDrawVertex(gl: WebGLRenderingContext, drawMode: GLDrawMode, d
         else
         {
             const extension = gl.getExtension('ANGLE_instanced_arrays');
+
             extension.drawArraysInstancedANGLE(gl[drawMode], firstVertex, vertexCount, instanceCount);
         }
     }

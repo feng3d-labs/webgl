@@ -68,6 +68,7 @@ const files = {
 function extractQuery()
 {
     const p = window.location.search.indexOf('?q=');
+
     if (p !== -1)
     {
         return window.location.search.substr(3);
@@ -84,6 +85,7 @@ const filterInput = document.getElementById('filterInput') as HTMLInputElement;
 const clearFilterButton = document.getElementById('clearFilterButton') as HTMLAnchorElement;
 
 const expandButton = document.getElementById('expandButton') as HTMLSpanElement;
+
 expandButton.addEventListener('click', function (event)
 {
     panel.classList.toggle('collapsed');
@@ -100,9 +102,11 @@ if ((/(iPad|iPhone|iPod)/g).test(navigator.userAgent))
 }
 
 const container = document.createElement('div');
+
 content.appendChild(container);
 
 const button = document.createElement('div');
+
 button.id = 'button';
 button.textContent = 'View source';
 button.addEventListener('click', function (event)
@@ -120,6 +124,7 @@ for (const key in files)
     const section = files[key];
 
     const header = document.createElement('h2');
+
     header.textContent = key;
     header.setAttribute('data-category', key);
     container.appendChild(header);
@@ -130,6 +135,7 @@ for (const key in files)
         (function (file)
         {
             const link = document.createElement('a');
+
             link.className = 'link';
             link.textContent = file;
             link.href = `src/${key}/${file}.html`;
@@ -196,6 +202,7 @@ clearFilterButton.addEventListener('click', function (e)
 function updateFilter()
 {
     const v = filterInput.value;
+
     if (v !== '')
     {
         window.history.replaceState({}, '', `?q=${v}${window.location.hash}`);

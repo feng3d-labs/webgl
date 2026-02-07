@@ -69,6 +69,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
     webGLProgram.uniforms.forEach((uniformInfo) =>
     {
         const { name, type, items, isTexture, inBlock } = uniformInfo;
+
         if (inBlock) return;
 
         items.forEach((v) =>
@@ -76,6 +77,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
             const { paths } = v;
 
             let uniformData = bindingResources[paths[0]];
+
             for (let i = 1; i < paths.length; i++)
             {
                 uniformData = uniformData[paths[i]];
@@ -86,10 +88,12 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
             if (isTexture)
             {
                 const isSamplerTexture = uniformData && typeof uniformData === 'object' && 'texture' in uniformData;
+
                 if (!isSamplerTexture)
                 {
                     // 尝试从展开的格式中获取
                     const expandedData = getSamplerTextureFromExpanded(bindingResources, paths[0]);
+
                     if (expandedData)
                     {
                         uniformData = expandedData;
@@ -120,9 +124,11 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
             const { name, index } = uniformBlock;
             // 优先使用块名查找，如果找不到则尝试使用实例名（首字母小写）
             let uniformData = bindingResources[name] as TypedArray | BufferBinding;
+
             if (uniformData === undefined)
             {
                 const instanceName = name.charAt(0).toLowerCase() + name.slice(1);
+
                 uniformData = bindingResources[instanceName] as TypedArray | BufferBinding;
             }
             if (uniformData === undefined)
@@ -132,9 +138,11 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
 
             //
             let typedArray = uniformData as TypedArray;
+
             if (!(typedArray.buffer && typedArray.BYTES_PER_ELEMENT))
             {
                 const bufferBinding = uniformData as BufferBinding;
+
                 updateBufferBinding(uniformBlock.bufferBindingInfo, bufferBinding);
                 typedArray = bufferBinding.bufferView;
             }
@@ -147,6 +155,7 @@ export function runUniforms(gl: WebGLRenderingContext, pipeline: RenderPipeline,
 
             //
             const webGLBuffer = getGLBuffer(gl, buffer, 'UNIFORM_BUFFER', 'DYNAMIC_DRAW');
+
             gl.bindBufferRange(gl.UNIFORM_BUFFER, index, webGLBuffer, offset, size);
         });
     }

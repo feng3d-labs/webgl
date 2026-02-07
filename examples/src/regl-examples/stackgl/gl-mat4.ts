@@ -8,6 +8,7 @@
 export function create()
 {
     const out = new Float32Array(16);
+
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -37,6 +38,7 @@ export function create()
 export function clone(a)
 {
     const out = new Float32Array(16);
+
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -306,6 +308,7 @@ export function multiply(out, a, b)
     // Cache only the current line of the second matrix
     let b0 = b[0]; let b1 = b[1]; let b2 = b[2]; let
         b3 = b[3];
+
     out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
     out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
     out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
@@ -420,7 +423,10 @@ export function rotate(out, a, rad, axis)
     let x = axis[0]; let y = axis[1]; let z = axis[2];
     let len = Math.sqrt(x * x + y * y + z * z);
 
-    if (Math.abs(len) < 0.000001) { return null; }
+    if (Math.abs(len) < 0.000001)
+    {
+        return null;
+    }
 
     len = 1 / len;
     x *= len;
@@ -951,6 +957,7 @@ export function frustum(out, left, right, bottom, top, near, far)
     const rl = 1 / (right - left);
     const tb = 1 / (top - bottom);
     const nf = 1 / (near - far);
+
     out[0] = (near * 2) * rl;
     out[1] = 0;
     out[2] = 0;
@@ -985,6 +992,7 @@ export function perspective(out, fovy, aspect, near, far)
 {
     const f = 1.0 / Math.tan(fovy / 2);
     const nf = 1 / (near - far);
+
     out[0] = f / aspect;
     out[1] = 0;
     out[2] = 0;
@@ -1062,6 +1070,7 @@ export function ortho(out, left, right, bottom, top, near, far)
     const lr = 1 / (left - right);
     const bt = 1 / (bottom - top);
     const nf = 1 / (near - far);
+
     out[0] = -2 * lr;
     out[1] = 0;
     out[2] = 0;

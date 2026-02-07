@@ -22,6 +22,7 @@ export type GLUniformBufferType = keyof typeof webGLUniformBufferTypeValue;
 export function getWebGLUniformType(value: number): GLUniformType
 {
     const result = webGLUniformValueType[value];
+
     console.assert(!!result);
 
     return result;

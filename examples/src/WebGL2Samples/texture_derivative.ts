@@ -8,6 +8,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -129,6 +130,7 @@ import { getShaderSource, loadImage } from './utility';
     const imageUrl = '../../assets/img/Di-3d.png';
     let texture: Texture;
     let sampler: Sampler;
+
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -163,9 +165,11 @@ import { getShaderSource, loadImage } from './utility';
 
     const mvMatrix = mat4.create();
     const translate = vec3.create();
+
     vec3.set(translate, 0, 0, -10);
     mat4.translate(mvMatrix, modelMatrix, translate);
     const perspectiveMatrix = mat4.create();
+
     mat4.perspective(perspectiveMatrix, 0.785, 1, 1, 1000);
 
     // -- Mouse Behaviour
@@ -200,6 +204,7 @@ import { getShaderSource, loadImage } from './utility';
         mat4.rotateY(m, m, deltaY / 100.0);
 
         const scale = vec3.create();
+
         vec3.set(scale, (1 + deltaX / 1000.0), (1 + deltaX / 1000.0), (1 + deltaX / 1000.0));
         mat4.scale(m, m, scale);
 

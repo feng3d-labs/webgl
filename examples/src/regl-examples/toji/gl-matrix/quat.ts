@@ -16,6 +16,7 @@ import * as vec4 from './vec4';
 export function create()
 {
     const out = new glMatrix.ARRAY_TYPE(4);
+
     if (glMatrix.ARRAY_TYPE !== Float32Array)
     {
         out[0] = 0;
@@ -56,6 +57,7 @@ export function setAxisAngle(out, axis, rad)
 {
     rad = rad * 0.5;
     const s = Math.sin(rad);
+
     out[0] = s * axis[0];
     out[1] = s * axis[1];
     out[2] = s * axis[2];
@@ -81,6 +83,7 @@ export function getAxisAngle(outAxis, q)
 {
     const rad = Math.acos(q[3]) * 2.0;
     const s = Math.sin(rad / 2.0);
+
     if (s > glMatrix.EPSILON)
     {
         outAxis[0] = q[0] / s;
@@ -374,10 +377,15 @@ export function fromMat3(out, m)
     {
     // |w| <= 1/2
         let i = 0;
+
         if (m[4] > m[0])
-        { i = 1; }
+        {
+            i = 1;
+        }
         if (m[8] > m[i * 3 + i])
-        { i = 2; }
+        {
+            i = 2;
+        }
         const j = (i + 1) % 3;
         const k = (i + 2) % 3;
 
@@ -405,6 +413,7 @@ export function fromMat3(out, m)
 export function fromEuler(out, x, y, z)
 {
     const halfToRad = 0.5 * Math.PI / 180.0;
+
     x *= halfToRad;
     y *= halfToRad;
     z *= halfToRad;
@@ -606,11 +615,14 @@ export const rotationTo = (function ()
     return function (out, a, b)
     {
         const dot = vec3.dot(a, b);
+
         if (dot < -0.999999)
         {
             vec3.cross(tmpvec3, xUnitVec3, a);
             if (vec3.len(tmpvec3) < 0.000001)
-            { vec3.cross(tmpvec3, yUnitVec3, a); }
+            {
+                vec3.cross(tmpvec3, yUnitVec3, a);
+            }
             vec3.normalize(tmpvec3, tmpvec3);
             setAxisAngle(out, tmpvec3, Math.PI);
 

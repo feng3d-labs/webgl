@@ -32,6 +32,7 @@ export function getGLRenderPassDescriptorWithMultisample(sourcePassDescriptor: R
                 width: textureSize[0],
                 height: textureSize[1],
             };
+
             renderbuffers.push(renderbuffer);
 
             const colorAttachment: RenderPassColorAttachment = {

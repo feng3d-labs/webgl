@@ -21,6 +21,7 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
         else
         {
             const extension = gl.getExtension('ANGLE_instanced_arrays');
+
             extension.vertexAttribDivisorANGLE(location, 1);
         }
     }
@@ -31,12 +32,14 @@ export function runVertexAttribute(gl: WebGLRenderingContext, location: number, 
 
     //
     const buffer = Buffer.getBuffer(data.buffer);
+
     if (!buffer.label)
     {
         reactive(buffer).label = (`顶点数据 ${autoVertexIndex++}`);
     }
 
     const webGLBuffer = getGLBuffer(gl, buffer, 'ARRAY_BUFFER', 'STATIC_DRAW');
+
     gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
     //

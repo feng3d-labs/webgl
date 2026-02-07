@@ -121,12 +121,15 @@ export function snoise(v: [number, number, number])
     // vec3 x0 =   v - i + dot(i, vec3(C.x, C.x, C.x) );
     const temp0 = vec3.create();
     const temp3 = vec3.dot(v, [C[1], C[1], C[1]]);
+
     vec3.add(temp0, [temp3, temp3, temp3], v);
     let i = [Math.floor(temp0[0]), Math.floor(temp0[1]), Math.floor(temp0[2])];
     const temp1 = vec3.create();
+
     vec3.subtract(temp1, v, i);
     const temp2 = vec3.dot(i, [C[0], C[0], C[0]]);
     const x0 = vec3.create();
+
     vec3.add(x0, [temp2, temp2, temp2], temp1);
 
     // vec3 g = step(vec3(x0.y, x0.z, x0.x), vec3(x0.x, x0.y, x0.z));
@@ -142,14 +145,19 @@ export function snoise(v: [number, number, number])
     // vec3 x2 = x0 - i2 + vec3(C.y, C.y, C.y); // 2.0*C.x = 1/3 = C.y
     // vec3 x3 = x0 - vec3(D.y, D.y, D.y);      // -1.0+3.0*C.x = -0.5 = -D.y
     const temp4 = vec3.create();
+
     vec3.subtract(temp4, x0, i1);
     const x1 = vec3.create();
+
     vec3.add(x1, [C[0], C[0], C[0]], temp4);
     const temp5 = vec3.create();
+
     vec3.subtract(temp5, x0, i2);
     const x2 = vec3.create();
+
     vec3.add(x2, [C[1], C[1], C[1]], temp5);
     const x3 = vec3.create();
+
     vec3.subtract(x3, x0, [D[1], D[1], D[1]]);
 
     // i = mod289(i);
@@ -159,6 +167,7 @@ export function snoise(v: [number, number, number])
     //                + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
     i = mod289_vec3(i);
     let p = permute_vec4([i[2] + 0.0, i[2] + i1[2], i[2] + i2[2], i[2] + 1.0]);
+
     p[0] += i[1] + 0.0;
     p[1] += i[1] + i1[1];
     p[2] += i[1] + i2[1];
@@ -251,6 +260,7 @@ export function snoise(v: [number, number, number])
         Math.floor(b1[3]) * 2.0 + 1.0,
     ];
     const sh = step_vec4(h, [0.0, 0.0, 0.0, 0.0]);
+
     sh[0] = -sh[0];
     sh[1] = -sh[1];
     sh[2] = -sh[2];
@@ -286,6 +296,7 @@ export function snoise(v: [number, number, number])
     // p2 *= norm.z;
     // p3 *= norm.w;
     const norm = taylorInvSqrt_vec4([vec3.dot(p0, p0), vec3.dot(p1, p1), vec3.dot(p2, p2), vec3.dot(p3, p3)]);
+
     p0 = [p0[0] * norm[0], p0[1] * norm[0], p0[2] * norm[0]];
     p1 = [p1[0] * norm[1], p1[1] * norm[1], p1[2] * norm[1]];
     p2 = [p2[0] * norm[2], p2[1] * norm[2], p2[2] * norm[2]];
@@ -304,6 +315,7 @@ export function snoise(v: [number, number, number])
         0.0,
         0.0,
     ]);
+
     m[0] *= m[0];
     m[1] *= m[1];
     m[2] *= m[2];

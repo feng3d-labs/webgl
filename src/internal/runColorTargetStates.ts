@@ -4,10 +4,12 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
 {
     //
     const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
+
     gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
 
     //
     const blend = targets?.[0]?.blend;
+
     if (blend)
     {
         const color: BlendComponent = blend.color;
@@ -23,9 +25,11 @@ export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readon
 
         // 当混合系数用到了混合常量值时设置混合常量值。
         const constantColor = BlendState.getBlendConstantColor(blend);
+
         if (constantColor)
         {
             const constantColor = blend.constantColor ?? [0, 0, 0, 0];
+
             gl.blendColor(constantColor[0], constantColor[1], constantColor[2], constantColor[3]);
         }
 

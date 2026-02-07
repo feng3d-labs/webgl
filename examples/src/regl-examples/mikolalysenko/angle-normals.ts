@@ -22,6 +22,7 @@ export function angleNormals(cells: number[][], positions: number[][])
 
     // Allocate normal array
     const normals: number[][] = new Array(numVerts);
+
     for (let i = 0; i < numVerts; ++i)
     {
         normals[i] = [0, 0, 0];
@@ -62,6 +63,7 @@ export function angleNormals(cells: number[][], positions: number[][])
         let ny = abz * bcx - abx * bcz;
         let nz = abx * bcy - aby * bcx;
         const nl = hypot(nx, ny, nz);
+
         nx /= nl;
         ny /= nl;
         nz /= nl;
@@ -79,6 +81,7 @@ export function angleNormals(cells: number[][], positions: number[][])
             Math.pow(n[0], 2)
             + Math.pow(n[1], 2)
             + Math.pow(n[2], 2));
+
         if (l < 1e-8)
         {
             n[0] = 1;

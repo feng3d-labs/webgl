@@ -14,6 +14,7 @@ async function main()
 {
     const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
     const devicePixelRatio = window.devicePixelRatio || 1;
+
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
@@ -109,8 +110,10 @@ async function main()
     function render()
     {
         let now = Date.now();
+
         now *= 0.001; // convert to seconds
         const deltaTime = now - then;
+
         then = now;
 
         const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);

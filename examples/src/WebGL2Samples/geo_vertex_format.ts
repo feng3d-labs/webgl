@@ -8,6 +8,7 @@ import { getShaderSource, loadImage } from './utility';
 (function ()
 {
     const canvas = document.createElement('canvas');
+
     canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
@@ -164,6 +165,7 @@ import { getShaderSource, loadImage } from './utility';
     const imageUrl = '../../assets/img/Di-3d.png';
     let texture: Texture;
     let sampler: Sampler;
+
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
@@ -192,13 +194,16 @@ import { getShaderSource, loadImage } from './utility';
 
     const viewMatrix = mat4.create();
     const translate = vec3.create();
+
     vec3.set(translate, 0, 0, -10);
     mat4.translate(viewMatrix, modelMatrix, translate);
     const perspectiveMatrix = mat4.create();
+
     mat4.perspective(perspectiveMatrix, 0.785, 1, 1, 1000);
     const viewProj = mat4.create();
 
     const modelInvTrans = mat4.create();
+
     mat4.transpose(modelInvTrans, modelMatrix);
     mat4.invert(modelInvTrans, modelInvTrans);
 
