@@ -12,10 +12,11 @@ export class Capabilities
     get maxAnisotropy()
     {
         if (this._maxAnisotropy) return this._maxAnisotropy;
-        this._maxAnisotropy = this._gl.getExtension("EXT_texture_filter_anisotropic") ? this._gl.getParameter(this._gl.getExtension("EXT_texture_filter_anisotropic").MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
+        this._maxAnisotropy = this._gl.getExtension('EXT_texture_filter_anisotropic') ? this._gl.getParameter(this._gl.getExtension('EXT_texture_filter_anisotropic').MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
 
-return this._maxAnisotropy;
+        return this._maxAnisotropy;
     }
+
     private _maxAnisotropy: number;
 
     /**
@@ -26,8 +27,9 @@ return this._maxAnisotropy;
         if (this._maxTextures) return this._maxTextures;
         this._maxTextures = this._gl.getParameter(this._gl.MAX_TEXTURE_IMAGE_UNITS);
 
-return this._maxTextures;
+        return this._maxTextures;
     }
+
     private _maxTextures: number;
 
     /**
@@ -38,8 +40,9 @@ return this._maxTextures;
         if (this._maxVertexTextures) return this._maxVertexTextures;
         this._maxVertexTextures = this._gl.getParameter(this._gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 
-return this._maxVertexTextures;
+        return this._maxVertexTextures;
     }
+
     private _maxVertexTextures: number;
 
     /**
@@ -50,8 +53,9 @@ return this._maxVertexTextures;
         if (this._maxTextureSize) return this._maxTextureSize;
         this._maxTextureSize = this._gl.getParameter(this._gl.MAX_TEXTURE_SIZE);
 
-return this._maxTextureSize;
+        return this._maxTextureSize;
     }
+
     private _maxTextureSize: number;
 
     /**
@@ -62,8 +66,9 @@ return this._maxTextureSize;
         if (this._maxCubemapSize) return this._maxCubemapSize;
         this._maxCubemapSize = this._gl.getParameter(this._gl.MAX_CUBE_MAP_TEXTURE_SIZE);
 
-return this._maxCubemapSize;
+        return this._maxCubemapSize;
     }
+
     private _maxCubemapSize: number;
 
     /**
@@ -74,8 +79,9 @@ return this._maxCubemapSize;
         if (this._maxAttributes) return this._maxAttributes;
         this._maxAttributes = this._gl.getParameter(this._gl.MAX_VERTEX_ATTRIBS);
 
-return this._maxAttributes;
+        return this._maxAttributes;
     }
+
     private _maxAttributes: number;
 
     /**
@@ -86,8 +92,9 @@ return this._maxAttributes;
         if (this._maxVertexUniforms) return this._maxVertexUniforms;
         this._maxVertexUniforms = this._gl.getParameter(this._gl.MAX_VERTEX_UNIFORM_VECTORS);
 
-return this._maxVertexUniforms;
+        return this._maxVertexUniforms;
     }
+
     private _maxVertexUniforms: number;
 
     /**
@@ -98,8 +105,9 @@ return this._maxVertexUniforms;
         if (this._maxVaryings) return this._maxVaryings;
         this._maxVaryings = this._gl.getParameter(this._gl.MAX_VARYING_VECTORS);
 
-return this._maxVaryings;
+        return this._maxVaryings;
     }
+
     private _maxVaryings: number;
 
     /**
@@ -110,8 +118,9 @@ return this._maxVaryings;
         if (this._maxFragmentUniforms) return this._maxFragmentUniforms;
         this._maxFragmentUniforms = this._gl.getParameter(this._gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
-return this._maxFragmentUniforms;
+        return this._maxFragmentUniforms;
     }
+
     private _maxFragmentUniforms: number;
 
     /**
@@ -122,8 +131,9 @@ return this._maxFragmentUniforms;
         if (this._vertexTextures) return this._vertexTextures;
         this._vertexTextures = this.maxVertexTextures > 0;
 
-return this._vertexTextures;
+        return this._vertexTextures;
     }
+
     private _vertexTextures: boolean;
 
     /**
@@ -132,10 +142,11 @@ return this._vertexTextures;
     get floatFragmentTextures()
     {
         if (this._floatFragmentTextures) return this._floatFragmentTextures;
-        this._floatFragmentTextures = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension("OES_texture_float");
+        this._floatFragmentTextures = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension('OES_texture_float');
 
-return this._floatFragmentTextures;
+        return this._floatFragmentTextures;
     }
+
     private _floatFragmentTextures: boolean;
 
     /**
@@ -146,8 +157,9 @@ return this._floatFragmentTextures;
         if (this._floatVertexTextures) return this._floatVertexTextures;
         this._floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
-return this._floatVertexTextures;
+        return this._floatVertexTextures;
     }
+
     private _floatVertexTextures: boolean;
 
     /**
@@ -158,9 +170,10 @@ return this._floatVertexTextures;
         if (this._maxPrecision) return this._maxPrecision;
         this._maxPrecision = _getMaxPrecision(this._gl, this._precision);
 
-return this._maxPrecision;
+        return this._maxPrecision;
     }
-    private _maxPrecision: "highp" | "mediump" | "lowp";
+
+    private _maxPrecision: 'highp' | 'mediump' | 'lowp';
 
     /**
      *
@@ -170,8 +183,9 @@ return this._maxPrecision;
         if (this._maxSamples) return this._maxSamples;
         this._maxSamples = this._gl instanceof WebGL2RenderingContext ? this._gl.getParameter(this._gl.MAX_SAMPLES) : 0;
 
-return this._maxSamples;
+        return this._maxSamples;
     }
+
     private _maxSamples: number;
 
     /**
@@ -182,8 +196,9 @@ return this._maxSamples;
         if (this._stencilBits) return this._stencilBits;
         this._stencilBits = this._gl.getParameter(this._gl.STENCIL_BITS);
 
-return this._stencilBits;
+        return this._stencilBits;
     }
+
     private _stencilBits: number;
 
     /**
@@ -192,36 +207,37 @@ return this._stencilBits;
     get vaoAvailable()
     {
         if (this._vaoAvailable) return this._vaoAvailable;
-        this._vaoAvailable = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension("OES_vertex_array_object");
+        this._vaoAvailable = this._gl instanceof WebGL2RenderingContext || !!this._gl.getExtension('OES_vertex_array_object');
 
-return this._vaoAvailable;
+        return this._vaoAvailable;
     }
+
     private _vaoAvailable: boolean;
 
-    constructor(private _gl: WebGLRenderingContext | WebGL2RenderingContext, private _precision: "highp" | "mediump" | "lowp" = "highp")
+    constructor(private _gl: WebGLRenderingContext | WebGL2RenderingContext, private _precision: 'highp' | 'mediump' | 'lowp' = 'highp')
     {
     }
 }
 
-function _getMaxPrecision(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: "highp" | "mediump" | "lowp" = "highp")
+function _getMaxPrecision(gl: WebGLRenderingContext | WebGL2RenderingContext, precision: 'highp' | 'mediump' | 'lowp' = 'highp')
 {
-    if (precision === "highp")
+    if (precision === 'highp')
     {
         if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0
             && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0)
         {
-            return "highp";
+            return 'highp';
         }
-        precision = "mediump";
+        precision = 'mediump';
     }
-    if (precision === "mediump")
+    if (precision === 'mediump')
     {
         if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0
             && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0)
         {
-            return "mediump";
+            return 'mediump';
         }
     }
 
-    return "lowp";
+    return 'lowp';
 }

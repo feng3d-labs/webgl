@@ -1,7 +1,7 @@
-import { reactive } from "@feng3d/reactivity";
-import { RenderObject, RenderPass, Sampler, Texture } from "@feng3d/render-api";
-import { SamplerTexture, WebGL } from "@feng3d/webgl";
-import { mat4 } from "gl-matrix";
+import { reactive } from '@feng3d/reactivity';
+import { RenderObject, RenderPass, Sampler, Texture } from '@feng3d/render-api';
+import { SamplerTexture, WebGL } from '@feng3d/webgl';
+import { mat4 } from 'gl-matrix';
 
 let cubeRotation = 0.0;
 // will set to true when video can be copied to texture
@@ -14,9 +14,9 @@ main();
 //
 function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
 
     // Here's where we call the routine that builds all the
     // objects we'll be drawing.
@@ -24,11 +24,11 @@ function main()
 
     const texture = initTexture();
 
-    const video = setupVideo("../../Firefox.mp4");
+    const video = setupVideo('../../Firefox.mp4');
 
     const renderObject: RenderObject = {
         pipeline: {
-            primitive: { topology: "triangle-list" },
+            primitive: { topology: 'triangle-list' },
             vertex: {
                 code: `
         attribute vec4 aVertexPosition;
@@ -70,24 +70,24 @@ function main()
           gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
         }
       ` },
-            depthStencil: { depthCompare: "less-equal" }
+            depthStencil: { depthCompare: 'less-equal' },
         },
         vertices: {
             aVertexPosition: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.position,
             },
             aVertexNormal: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.normal,
             },
             aTextureCoord: {
-                format: "float32x2",
+                format: 'float32x2',
                 data: buffers.textureCoord,
             },
         },
         indices: buffers.indices,
-        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
         bindingResources: { uSampler: texture },
     };
 
@@ -95,11 +95,11 @@ function main()
         descriptor: {
             colorAttachments: [{
                 clearValue: [0.0, 0.0, 0.0, 1.0],
-                loadOp: "clear",
+                loadOp: 'clear',
             }],
             depthStencilAttachment: {
                 depthClearValue: 1.0,
-                depthLoadOp: "clear",
+                depthLoadOp: 'clear',
             },
         },
         renderPassObjects: [renderObject],
@@ -121,9 +121,9 @@ function main()
 
         const { projectionMatrix, modelViewMatrix, normalMatrix } = drawScene(canvas, deltaTime);
 
-        reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
-        reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
-        reactive(renderObject.bindingResources).uNormalMatrix = normalMatrix;
+        reactive(renderObject.bindingResources).uProjectionMatrix = { value: projectionMatrix as Float32Array };
+        reactive(renderObject.bindingResources).uModelViewMatrix = { value: modelViewMatrix as Float32Array };
+        reactive(renderObject.bindingResources).uNormalMatrix = { value: normalMatrix as Float32Array };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
@@ -134,7 +134,7 @@ function main()
 
 function setupVideo(url: string)
 {
-    const video = document.createElement("video");
+    const video = document.createElement('video');
 
     let playing = false;
     let timeupdate = false;
@@ -146,13 +146,13 @@ function setupVideo(url: string)
     // Waiting for these 2 events ensures
     // there is data in the video
 
-    video.addEventListener("playing", function ()
+    video.addEventListener('playing', function ()
     {
         playing = true;
         checkReady();
     }, true);
 
-    video.addEventListener("timeupdate", function ()
+    video.addEventListener('timeupdate', function ()
     {
         timeupdate = true;
         checkReady();
@@ -322,11 +322,13 @@ function initBuffers()
 function initTexture(): SamplerTexture
 {
     const texture: Texture = {
-        size: [1, 1],
-        format: "rgba8unorm",
-        sources: [{ __type__: "TextureDataSource", size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
+        descriptor: {
+            size: [1, 1],
+            format: 'rgba8unorm',
+        },
+        sources: [{ __type__: 'TextureDataSource', size: [1, 1], data: new Uint8Array([0, 0, 255, 255]) }],
     };
-    const sampler: Sampler = { addressModeU: "clamp-to-edge", addressModeV: "clamp-to-edge", minFilter: "linear" };
+    const sampler: Sampler = { addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge', minFilter: 'linear' };
 
     return { texture, sampler };
 }
@@ -337,9 +339,9 @@ function initTexture(): SamplerTexture
 function updateTexture(texture: Texture, video: HTMLVideoElement)
 {
     // 修改纹理尺寸
-    if (texture.size[0] !== video.videoWidth || texture.size[1] !== video.videoHeight)
+    if (texture.descriptor.size[0] !== video.videoWidth || texture.descriptor.size[1] !== video.videoHeight)
     {
-        reactive(texture).size = [video.videoWidth, video.videoHeight];
+        reactive(texture.descriptor).size = [video.videoWidth, video.videoHeight];
     }
 
     reactive(texture).sources = [{ image: video }];

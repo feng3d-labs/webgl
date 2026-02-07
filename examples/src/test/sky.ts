@@ -1,11 +1,11 @@
-import { effect, reactive } from "@feng3d/reactivity";
-import { CanvasContext, RenderObject, Submit } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { GUI } from "dat.gui";
-import { mat4 } from "gl-matrix";
+import { effect, reactive } from '@feng3d/reactivity';
+import { CanvasContext, RenderObject, Submit } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { GUI } from 'dat.gui';
+import { mat4 } from 'gl-matrix';
 
-import sky_frag from "./sky_frag.glsl";
-import sky_vert from "./sky_vert.glsl";
+import sky_frag from './sky_frag.glsl';
+import sky_vert from './sky_vert.glsl';
 
 const parameters: {
     readonly elevation: number,
@@ -28,11 +28,14 @@ main();
 //
 async function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
 
     const gui: GUI = new GUI();
 
-    const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+    const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 
     const webgl = new WebGL(renderingContext);
 
@@ -43,40 +46,40 @@ async function main()
     const renderObject: RenderObject = {
         pipeline: {
             vertex: {
-                code: sky_vert
+                code: sky_vert,
             }, fragment: {
-                code: sky_frag
+                code: sky_frag,
             },
-            primitive: { topology: "triangle-list" },
-            depthStencil: { depthCompare: "less-equal" }
+            primitive: { topology: 'triangle-list' },
+            depthStencil: { depthCompare: 'less-equal' },
         },
         vertices: {
             position: {
-                format: "float32x3",
+                format: 'float32x3',
                 data: buffers.position,
             },
         },
         indices: buffers.indices,
-        draw: { __type__: "DrawIndexed", firstIndex: 0, indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', firstIndex: 0, indexCount: 36 },
         bindingResources: {
-            modelMatrix: [10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1],
-            modelViewMatrix: [-3853.8425, -4464.3149, 8075.7534, 0, 0.0000, 8751.7734, 4838.0225, 0, -9227.5615, 1864.4976, -3372.7957, 0, -0.0000, -0.4583, -2.5568, 1],
-            projectionMatrix: [1.2071, 0, 0, 0, 0, 2.4142, 0, 0, 0, 0, -1.0002, -1, 0, 0, -0.2000, 0],
-            cameraPosition: [1.8602, 1.6380, -0.7769],
-            sunPosition: [0.0000, 0.0349, -0.9994],
-            rayleigh: 2,
-            turbidity: 10,
-            mieCoefficient: 0.0050,
-            up: [0, 1, 0],
-            mieDirectionalG: 0.2,
+            modelMatrix: { value: [10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 10000, 0, 0, 0, 0, 1] },
+            modelViewMatrix: { value: [-3853.8425, -4464.3149, 8075.7534, 0, 0.0000, 8751.7734, 4838.0225, 0, -9227.5615, 1864.4976, -3372.7957, 0, -0.0000, -0.4583, -2.5568, 1] },
+            projectionMatrix: { value: [1.2071, 0, 0, 0, 0, 2.4142, 0, 0, 0, 0, -1.0002, -1, 0, 0, -0.2000, 0] },
+            cameraPosition: { value: [1.8602, 1.6380, -0.7769] },
+            sunPosition: { value: [0.0000, 0.0349, -0.9994] },
+            rayleigh: { value: 2 },
+            turbidity: { value: 10 },
+            mieCoefficient: { value: 0.0050 },
+            up: { value: [0, 1, 0] },
+            mieDirectionalG: { value: 0.2 },
         },
     };
 
-    const folderSky = gui.addFolder("Sky");
-    folderSky.add(r_parameters, "elevation", 0, 90, 0.1);
-    folderSky.add(r_parameters, "azimuth", -180, 180, 0.1);
-    folderSky.add(r_parameters, "cameraRotationX", -180, 180, 0.1);
-    folderSky.add(r_parameters, "cameraRotationY", -180, 180, 0.1);
+    const folderSky = gui.addFolder('Sky');
+    folderSky.add(r_parameters, 'elevation', 0, 10, 0.1);
+    folderSky.add(r_parameters, 'azimuth', -180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationX', -180, 180, 0.1);
+    folderSky.add(r_parameters, 'cameraRotationY', -180, 180, 0.1);
     folderSky.open();
 
     effect(() =>
@@ -85,7 +88,7 @@ async function main()
         const theta = (r_parameters.azimuth) / 180 * Math.PI;
 
         const sun = setFromSphericalCoords(1, phi, theta);
-        reactive(renderObject.bindingResources).sunPosition = sun;
+        reactive(renderObject.bindingResources).sunPosition = { value: sun };
     });
 
     effect(() =>
@@ -119,10 +122,10 @@ async function main()
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
 
-        reactive(renderObject.bindingResources).modelMatrix = modelMatrix;
-        reactive(renderObject.bindingResources).modelViewMatrix = modelViewMatrix;
-        reactive(renderObject.bindingResources).projectionMatrix = projectionMatrix;
-        reactive(renderObject.bindingResources).cameraPosition = [0, 0, 0];
+        reactive(renderObject.bindingResources).modelMatrix = { value: modelMatrix as Float32Array };
+        reactive(renderObject.bindingResources).modelViewMatrix = { value: modelViewMatrix as Float32Array };
+        reactive(renderObject.bindingResources).projectionMatrix = { value: projectionMatrix as Float32Array };
+        reactive(renderObject.bindingResources).cameraPosition = { value: [0, 0, 0] };
     });
 
     const submit: Submit = {
@@ -131,13 +134,13 @@ async function main()
                 // 绘制
                 {
                     descriptor: {
-                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: "clear" }],
-                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: "clear" },
+                        colorAttachments: [{ clearValue: [0.5, 0.5, 0.5, 1.0], loadOp: 'clear' }],
+                        depthStencilAttachment: { depthClearValue: 1.0, depthLoadOp: 'clear' },
                     },
                     renderPassObjects: [renderObject],
                 },
-            ]
-        }]
+            ],
+        }],
     };
 
     // Draw the scene repeatedly

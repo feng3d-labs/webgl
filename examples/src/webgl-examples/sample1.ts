@@ -1,5 +1,5 @@
-import { Submit } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { Submit } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
 const init = async (canvas: HTMLCanvasElement) =>
 {
@@ -7,7 +7,7 @@ const init = async (canvas: HTMLCanvasElement) =>
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
-    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" }); // 初始化WebGL
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' }); // 初始化WebGL
 
     const submit: Submit = { // 一次GPU提交
         commandEncoders: [ // 命令编码列表
@@ -40,28 +40,28 @@ const init = async (canvas: HTMLCanvasElement) =>
                                     ` },
                             },
                             vertices: {
-                                position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: "float32x2" }, // 顶点坐标数据
+                                position: { data: new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]), format: 'float32x2' }, // 顶点坐标数据
                             },
                             indices: new Uint16Array([0, 1, 2]), // 顶点索引数据
-                            draw: { __type__: "DrawIndexed", indexCount: 3 }, // 绘制命令
-                            bindingResources: { color: [1, 0, 0, 1] }, // Uniform 颜色值。
-                        }]
+                            draw: { __type__: 'DrawIndexed', indexCount: 3 }, // 绘制命令
+                            bindingResources: { color: { value: [1, 0, 0, 1] } }, // Uniform 颜色值。
+                        }],
                     },
-                ]
-            }
+                ],
+            },
         ],
     };
 
     webgl.submit(submit); // 提交GPU执行
 };
 
-let webglCanvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+let webglCanvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 if (!webglCanvas)
 {
-    webglCanvas = document.createElement("canvas");
-    webglCanvas.id = "webgpu";
-    webglCanvas.style.width = "400px";
-    webglCanvas.style.height = "300px";
+    webglCanvas = document.createElement('canvas');
+    webglCanvas.id = 'webgpu';
+    webglCanvas.style.width = '400px';
+    webglCanvas.style.height = '300px';
     document.body.appendChild(webglCanvas);
 }
 init(webglCanvas);

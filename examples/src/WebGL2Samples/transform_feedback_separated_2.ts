@@ -1,23 +1,23 @@
-import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
-import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
-import { reactive } from "@feng3d/reactivity";
+import { reactive } from '@feng3d/reactivity';
+import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { getShaderSource } from "./utility";
+import { getShaderSource } from './utility';
 
 (function ()
 {
     // -- Init Canvas
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
-    canvas.addEventListener("webglcontextlost", function (event)
+    canvas.addEventListener('webglcontextlost', function (event)
     {
         event.preventDefault();
     }, false);
@@ -64,7 +64,7 @@ import { getShaderSource } from "./utility";
     // Transform feedback objects track output buffer state
     const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexData[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -84,18 +84,18 @@ import { getShaderSource } from "./utility";
         vertexArrays[i] = [];
         vertexArrays[i][0] = {
             vertices: {
-                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
-                a_velocity: { data: vertexBuffers[i][VELOCITY_LOCATION], format: "float32x2" },
-                a_spawntime: { data: vertexBuffers[i][SPAWNTIME_LOCATION], format: "float32" },
-                a_lifetime: { data: vertexBuffers[i][LIFETIME_LOCATION], format: "float32" },
-                a_ID: { data: vertexBuffers[i][ID_LOCATION], format: "float32" },
-            }
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: 'float32x2' },
+                a_velocity: { data: vertexBuffers[i][VELOCITY_LOCATION], format: 'float32x2' },
+                a_spawntime: { data: vertexBuffers[i][SPAWNTIME_LOCATION], format: 'float32' },
+                a_lifetime: { data: vertexBuffers[i][LIFETIME_LOCATION], format: 'float32' },
+                a_ID: { data: vertexBuffers[i][ID_LOCATION], format: 'float32' },
+            },
         };
 
         vertexArrays[i][1] = {
             vertices: {
-                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
-            }
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: 'float32x2' },
+            },
         };
 
         // Set up output
@@ -105,29 +105,29 @@ import { getShaderSource } from "./utility";
                 { index: 1, data: vertexBuffers[i][VELOCITY_LOCATION] },
                 { index: 2, data: vertexBuffers[i][SPAWNTIME_LOCATION] },
                 { index: 3, data: vertexBuffers[i][LIFETIME_LOCATION] },
-            ]
+            ],
         };
     }
 
     function initProgram(): [TransformFeedbackPipeline, RenderPipeline]
     {
         const transformFeedbackPipeline: TransformFeedbackPipeline = {
-            vertex: { code: getShaderSource("vs-emit") },
-            transformFeedbackVaryings: { varyings: ["v_position", "v_velocity", "v_spawntime", "v_lifetime"], bufferMode: "SEPARATE_ATTRIBS" },
+            vertex: { code: getShaderSource('vs-emit') },
+            transformFeedbackVaryings: { varyings: ['v_position', 'v_velocity', 'v_spawntime', 'v_lifetime'], bufferMode: 'SEPARATE_ATTRIBS' },
         };
 
         const program: RenderPipeline = {
-            vertex: { code: getShaderSource("vs-draw") },
+            vertex: { code: getShaderSource('vs-draw') },
             fragment: {
-                code: getShaderSource("fs-draw"),
+                code: getShaderSource('fs-draw'),
                 targets: [{
                     blend: {
-                        color: { srcFactor: "src-alpha", dstFactor: "one" },
-                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
-                    }
-                }]
+                        color: { srcFactor: 'src-alpha', dstFactor: 'one' },
+                        alpha: { srcFactor: 'src-alpha', dstFactor: 'one' },
+                    },
+                }],
             },
-            primitive: { topology: "point-list" },
+            primitive: { topology: 'point-list' },
         };
 
         return [transformFeedbackPipeline, program];
@@ -138,33 +138,33 @@ import { getShaderSource } from "./utility";
         vertices: null,
         transformFeedback: null,
         uniforms: {
-            u_acceleration: [0.0, ACCELERATION],
+            u_acceleration: { value: [0.0, ACCELERATION] },
         },
-        draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
+        draw: { __type__: 'DrawVertex', vertexCount: NUM_PARTICLES },
     };
 
     const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: program,
         bindingResources: {
-            u_color: [0.0, 1.0, 1.0, 1.0],
+            u_color: { value: [0.0, 1.0, 1.0, 1.0] },
         },
-        draw: { __type__: "DrawVertex", vertexCount: NUM_PARTICLES },
+        draw: { __type__: 'DrawVertex', vertexCount: NUM_PARTICLES },
     };
 
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type__: "TransformFeedbackPass",
+                    __type__: 'TransformFeedbackPass',
                     transformFeedbackObjects: [transformRO],
                 },
                 {
-                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
                     renderPassObjects: [renderRO],
-                }
-            ]
-        }]
+                },
+            ],
+        }],
     };
 
     function transform()
@@ -176,7 +176,7 @@ import { getShaderSource } from "./utility";
         transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
         transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        reactive(transformRO.uniforms).u_time = time;
+        reactive(transformRO.uniforms).u_time = { value: time };
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

@@ -1,22 +1,22 @@
-import { reactive } from "@feng3d/reactivity";
-import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, VertexAttributes, VertexDataTypes } from "@feng3d/render-api";
-import { TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, WebGL } from "@feng3d/webgl";
-import { getShaderSource } from "./utility";
+import { reactive } from '@feng3d/reactivity';
+import { CanvasContext, IndicesDataTypes, RenderObject, RenderPipeline, Submit, TransformFeedback, TransformFeedbackObject, TransformFeedbackPipeline, VertexAttributes, VertexData } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { getShaderSource } from './utility';
 
 (function ()
 {
     // -- Init Canvas
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
     // -- Init WebGL Context
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
-    canvas.addEventListener("webglcontextlost", function (event)
+    canvas.addEventListener('webglcontextlost', function (event)
     {
         event.preventDefault();
     }, false);
@@ -71,7 +71,7 @@ import { getShaderSource } from "./utility";
     // Transform feedback objects track output buffer state
     const transformFeedbacks: TransformFeedback[] = [];
 
-    const vertexBuffers: VertexDataTypes[][] = new Array(vertexArrays.length);
+    const vertexBuffers: VertexData[][] = new Array(vertexArrays.length);
 
     for (let i = 0; i < 2; ++i)
     {
@@ -85,46 +85,46 @@ import { getShaderSource } from "./utility";
         vertexArrays[i] = [];
         vertexArrays[i][0] = {
             vertices: {
-                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2" },
-                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32" },
-            }
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: 'float32x2' },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: 'float32' },
+            },
         };
         vertexArrays[i][1] = {
             vertices: {
-                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: "float32x2", stepMode: "instance" },
-                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: "float32", stepMode: "instance" },
-                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: "float32x2" },
-                a_color: { data: vertexBuffers[i][COLOR_LOCATION], format: "float32x3", stepMode: "instance" },
-            }
+                a_offset: { data: vertexBuffers[i][OFFSET_LOCATION], format: 'float32x2', stepMode: 'instance' },
+                a_rotation: { data: vertexBuffers[i][ROTATION_LOCATION], format: 'float32', stepMode: 'instance' },
+                a_position: { data: vertexBuffers[i][POSITION_LOCATION], format: 'float32x2' },
+                a_color: { data: vertexBuffers[i][COLOR_LOCATION], format: 'float32x3', stepMode: 'instance' },
+            },
         };
 
         transformFeedbacks[i] = {
             bindBuffers: [
                 { index: 0, data: vertexBuffers[i][OFFSET_LOCATION] },
                 { index: 1, data: vertexBuffers[i][ROTATION_LOCATION] },
-            ]
+            ],
         };
     }
 
     function initPrograms()
     {
         const programTransform: TransformFeedbackPipeline = {
-            vertex: { code: getShaderSource("vs-emit") },
-            transformFeedbackVaryings: { varyings: ["v_offset", "v_rotation"], bufferMode: "SEPARATE_ATTRIBS" },
+            vertex: { code: getShaderSource('vs-emit') },
+            transformFeedbackVaryings: { varyings: ['v_offset', 'v_rotation'], bufferMode: 'SEPARATE_ATTRIBS' },
         };
 
         // Setup program for draw shader
         const programDraw: RenderPipeline = {
-            vertex: { code: getShaderSource("vs-draw") }, fragment: {
-                code: getShaderSource("fs-draw"),
+            vertex: { code: getShaderSource('vs-draw') }, fragment: {
+                code: getShaderSource('fs-draw'),
                 targets: [{
                     blend: {
-                        color: { srcFactor: "src-alpha", dstFactor: "one" },
-                        alpha: { srcFactor: "src-alpha", dstFactor: "one" },
-                    }
-                }]
+                        color: { srcFactor: 'src-alpha', dstFactor: 'one' },
+                        alpha: { srcFactor: 'src-alpha', dstFactor: 'one' },
+                    },
+                }],
             },
-            primitive: { topology: "triangle-list" },
+            primitive: { topology: 'triangle-list' },
         };
 
         const programs: [TransformFeedbackPipeline, RenderPipeline] = [programTransform, programDraw];
@@ -137,29 +137,29 @@ import { getShaderSource } from "./utility";
         vertices: null,
         transformFeedback: null,
         uniforms: {},
-        draw: { __type__: "DrawVertex", vertexCount: NUM_INSTANCES },
+        draw: { __type__: 'DrawVertex', vertexCount: NUM_INSTANCES },
     };
 
     const renderRO: RenderObject = {
         viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height - 10 },
         pipeline: programs[PROGRAM_DRAW],
         bindingResources: {},
-        draw: { __type__: "DrawVertex", vertexCount: 3, instanceCount: NUM_INSTANCES },
+        draw: { __type__: 'DrawVertex', vertexCount: 3, instanceCount: NUM_INSTANCES },
     };
 
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    __type__: "TransformFeedbackPass",
+                    __type__: 'TransformFeedbackPass',
                     transformFeedbackObjects: [transformRO],
                 },
                 {
-                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+                    descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
                     renderPassObjects: [renderRO],
-                }
-            ]
-        }]
+                },
+            ],
+        }],
     };
 
     function transform()
@@ -171,7 +171,7 @@ import { getShaderSource } from "./utility";
         transformRO.vertices = vertexArrays[currentSourceIdx][0].vertices;
         transformRO.transformFeedback = transformFeedbacks[destinationIdx];
 
-        reactive(transformRO.uniforms).u_time = time;
+        reactive(transformRO.uniforms).u_time = { value: time };
 
         // Ping pong the buffers
         currentSourceIdx = (currentSourceIdx + 1) % 2;

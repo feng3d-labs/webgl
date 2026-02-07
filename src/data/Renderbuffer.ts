@@ -87,12 +87,12 @@ export interface Renderbuffer
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/renderbufferStorage
  */
-export type RenderbufferInternalformat = "RGBA4" | "RGB565" | "RGB5_A1" | "DEPTH_COMPONENT16" | "STENCIL_INDEX8" | "DEPTH_STENCIL" // WebGL1
-    | "R8" | "R8UI" | "R8I" | "R16UI" | "R16I" | "R32UI" | "R32I" | "RG8" | "RG8UI" | "RG8I" // WebGL2
-    | "RG16UI" | "RG16I" | "RG32UI" | "RG32I" | "RGB8" | "RGBA8" | "SRGB8_ALPHA8" | "RGB10_A2" // WebGL2
-    | "RGBA8UI" | "RGBA8I" | "RGB10_A2UI" | "RGBA16UI" | "RGBA16I" | "RGBA32I" | "RGBA32UI" // WebGL2
-    | "DEPTH_COMPONENT24" | "DEPTH_COMPONENT32F" | "DEPTH24_STENCIL8" | "DEPTH32F_STENCIL8" // WebGL2
-    | "RGBA32F_EXT" | "RGB32F_EXT" // WEBGL_color_buffer_float extension
-    | "SRGB8_ALPHA8_EXT" // EXT_sRGB extension
-    | "R16F" | "RG16F" | "RGBA16F" | "R32F" | "RG32F" | "RGBA32F" | "R11F_G11F_B10F" //  WebGL 2 EXT_color_buffer_float
+export type RenderbufferInternalformat = 'RGBA4' | 'RGB565' | 'RGB5_A1' | 'DEPTH_COMPONENT16' | 'STENCIL_INDEX8' | 'DEPTH_STENCIL' // WebGL1
+    | 'R8' | 'R8UI' | 'R8I' | 'R16UI' | 'R16I' | 'R32UI' | 'R32I' | 'RG8' | 'RG8UI' | 'RG8I' // WebGL2
+    | 'RG16UI' | 'RG16I' | 'RG32UI' | 'RG32I' | 'RGB8' | 'RGBA8' | 'SRGB8_ALPHA8' | 'RGB10_A2' // WebGL2
+    | 'RGBA8UI' | 'RGBA8I' | 'RGB10_A2UI' | 'RGBA16UI' | 'RGBA16I' | 'RGBA32I' | 'RGBA32UI' // WebGL2
+    | 'DEPTH_COMPONENT24' | 'DEPTH_COMPONENT32F' | 'DEPTH24_STENCIL8' | 'DEPTH32F_STENCIL8' // WebGL2
+    | 'RGBA32F_EXT' | 'RGB32F_EXT' // WEBGL_color_buffer_float extension
+    | 'SRGB8_ALPHA8_EXT' // EXT_sRGB extension
+    | 'R16F' | 'RG16F' | 'RGBA16F' | 'R32F' | 'RG32F' | 'RGBA32F' | 'R11F_G11F_B10F' //  WebGL 2 EXT_color_buffer_float
     ;

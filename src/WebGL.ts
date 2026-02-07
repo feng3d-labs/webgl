@@ -1,17 +1,17 @@
-import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, Submit, Texture } from "@feng3d/render-api";
+import { Buffer, CanvasContext, ReadPixels, RenderPassDescriptor, RenderPipeline, Sampler, renderState, Submit, Texture } from '@feng3d/render-api';
 
-import { RunWebGL } from "./RunWebGL";
-import { deleteBuffer } from "./caches/getGLBuffer";
-import { getGLCanvasContext } from "./caches/getGLCanvasContext";
-import { deleteFramebuffer } from "./caches/getGLFramebuffer";
-import { deleteProgram } from "./caches/getGLProgram";
-import { deleteRenderbuffer } from "./caches/getGLRenderbuffer";
-import { deleteSampler } from "./caches/getGLSampler";
-import { deleteTexture } from "./caches/getGLTexture";
-import { deleteTransformFeedback } from "./caches/getGLTransformFeedback";
-import { Renderbuffer } from "./data/Renderbuffer";
-import { TransformFeedback } from "./data/TransformFeedbackPass";
-import { readPixels } from "./utils/readPixels";
+import { deleteBuffer } from './caches/getGLBuffer';
+import { getGLCanvasContext } from './caches/getGLCanvasContext';
+import { deleteFramebuffer } from './caches/getGLFramebuffer';
+import { deleteProgram } from './caches/getGLProgram';
+import { deleteRenderbuffer } from './caches/getGLRenderbuffer';
+import { deleteSampler } from './caches/getGLSampler';
+import { deleteTexture } from './caches/getGLTexture';
+import { deleteTransformFeedback } from './caches/getGLTransformFeedback';
+import { Renderbuffer } from './data/Renderbuffer';
+import { TransformFeedback } from '@feng3d/render-api';
+import { runSubmit } from './internal/runSubmit';
+import { readPixels } from './utils/readPixels';
 
 /**
  * WEBGL 对象。
@@ -20,13 +20,14 @@ import { readPixels } from "./utils/readPixels";
  */
 export class WebGL
 {
-    private _runWebGL: RunWebGL = new RunWebGL();
     private _renderingContext: CanvasContext;
     private _gl: WebGLRenderingContext;
 
-    constructor(renderingContext?: CanvasContext)
+    constructor(canvasContext?: CanvasContext)
     {
-        this._renderingContext = renderingContext;
+        renderState.isRunWebGL = true;
+        //
+        this._renderingContext = canvasContext;
         this._gl = getGLCanvasContext(this._renderingContext) as any;
     }
 
@@ -38,14 +39,38 @@ export class WebGL
      */
     submit(submit: Submit)
     {
-        this._runWebGL.runSubmit(this._gl, submit);
+        runSubmit(this._gl, submit);
     }
 
     readPixels(glReadPixels: ReadPixels)
     {
-        glReadPixels.result = readPixels(this._gl, glReadPixels);
+        const result = readPixels(this._gl, glReadPixels);
 
-        return glReadPixels.result;
+        // 设置纹理格式信息
+        const textureView = glReadPixels.textureView;
+        if (textureView)
+        {
+            const texture = textureView.texture;
+            if ('context' in texture)
+            {
+                // CanvasTexture: 默认使用 rgba8unorm
+                glReadPixels.format = 'rgba8unorm';
+            }
+            else if ('descriptor' in texture)
+            {
+                // Texture: 从描述符获取格式
+                glReadPixels.format = texture.descriptor.format || 'rgba8unorm';
+            }
+        }
+        else
+        {
+            // 如果没有指定纹理视图，默认使用 rgba8unorm
+            glReadPixels.format = 'rgba8unorm';
+        }
+
+        glReadPixels.result = result;
+
+        return result;
     }
 
     deleteFramebuffer(passDescriptor: RenderPassDescriptor)

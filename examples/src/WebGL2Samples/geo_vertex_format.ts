@@ -1,26 +1,26 @@
-import { reactive } from "@feng3d/reactivity";
-import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4, vec3 } from "gl-matrix";
-import { HalfFloat } from "./third-party/HalfFloatUtility";
-import { getShaderSource, loadImage } from "./utility";
+import { reactive } from '@feng3d/reactivity';
+import { CanvasContext, RenderObject, RenderPass, RenderPipeline, Sampler, Texture, VertexAttributes } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4, vec3 } from 'gl-matrix';
+import { HalfFloat } from './third-party/HalfFloatUtility';
+import { getShaderSource, loadImage } from './utility';
 
 (function ()
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = canvas.width;
     document.body.appendChild(canvas);
 
-    const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2", webGLContextAttributes: { antialias: false } };
+    const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2', webGLContextAttributes: { antialias: false } };
     const webgl = new WebGL(rc);
 
     // -- Init program
     const program: RenderPipeline = {
-        vertex: { code: getShaderSource("vs") }, fragment: { code: getShaderSource("fs") },
+        vertex: { code: getShaderSource('vs') }, fragment: { code: getShaderSource('fs') },
         depthStencil: {},
-        primitive: { topology: "triangle-list", cullFace: "back" },
+        primitive: { topology: 'triangle-list', cullFace: 'back' },
     };
 
     // -- Init geometries
@@ -59,7 +59,7 @@ import { getShaderSource, loadImage } from "./utility";
         -1.0, -1.0, -1.0,
         -1.0, -1.0, 1.0,
         -1.0, 1.0, 1.0,
-        -1.0, 1.0, -1.0
+        -1.0, 1.0, -1.0,
     ]);
 
     const normals = HalfFloat.Float16Array([
@@ -97,7 +97,7 @@ import { getShaderSource, loadImage } from "./utility";
         1, 0, 0,
         1, 0, 0,
         1, 0, 0,
-        1, 0, 0
+        1, 0, 0,
     ]);
 
     const texCoords = HalfFloat.Float16Array([
@@ -135,7 +135,7 @@ import { getShaderSource, loadImage } from "./utility";
         0.0, 0.0,
         0.0, 1.0,
         1.0, 1.0,
-        1.0, 0.0
+        1.0, 0.0,
     ]);
 
     // Element buffer
@@ -146,38 +146,40 @@ import { getShaderSource, loadImage } from "./utility";
         8, 9, 10, 8, 10, 11, // top
         12, 13, 14, 12, 14, 15, // bottom
         16, 17, 18, 16, 18, 19, // right
-        20, 21, 22, 20, 22, 23 // left
+        20, 21, 22, 20, 22, 23, // left
     ];
 
     // -- Init VertexArray
 
     const vertexArray: { vertices?: VertexAttributes } = {
         vertices: {
-            a_position: { data: positions, format: "float32x3" },
-            a_normal: { data: normals, format: "float16x4", arrayStride: 6 }, // 由于不支持类型 "float16x3"，则需要设置 arrayStride 为6，表示每次间隔3个半浮点数。
-            a_texCoord: { data: texCoords, format: "float16x2" },
+            a_position: { data: positions, format: 'float32x3' },
+            a_normal: { data: normals, format: 'float16x4', arrayStride: 6 }, // 由于不支持类型 "float16x3"，则需要设置 arrayStride 为6，表示每次间隔3个半浮点数。
+            a_texCoord: { data: texCoords, format: 'float16x2' },
         },
     };
 
     // -- Init Texture
 
-    const imageUrl = "../../assets/img/Di-3d.png";
+    const imageUrl = '../../assets/img/Di-3d.png';
     let texture: Texture;
     let sampler: Sampler;
     loadImage(imageUrl, function (image)
     {
         // -- Init 2D Texture
         texture = {
-            format: "rgba8unorm",
-            mipLevelCount: 1,
-            size: [512, 512],
+            descriptor: {
+                format: 'rgba8unorm',
+                mipLevelCount: 1,
+                size: [512, 512],
+            },
             sources: [{ image, flipY: false }],
         };
         sampler = {
-            minFilter: "nearest",
-            magFilter: "nearest",
-            addressModeU: "clamp-to-edge",
-            addressModeV: "clamp-to-edge",
+            minFilter: 'nearest',
+            magFilter: 'nearest',
+            addressModeU: 'clamp-to-edge',
+            addressModeV: 'clamp-to-edge',
         };
 
         requestAnimationFrame(render);
@@ -205,18 +207,18 @@ import { getShaderSource, loadImage } from "./utility";
     const ro: RenderObject = {
         pipeline: program,
         bindingResources: {
-            u_model: modelMatrix,
-            u_modelInvTrans: modelInvTrans,
-            u_lightPosition: lightPosition,
-            u_ambient: 0.1,
+            u_model: { value: modelMatrix as Float32Array },
+            u_modelInvTrans: { value: modelInvTrans as Float32Array },
+            u_lightPosition: { value: lightPosition },
+            u_ambient: { value: 0.1 },
         },
         vertices: vertexArray.vertices,
         indices: new Uint16Array(cubeVertexIndices),
-        draw: { __type__: "DrawIndexed", indexCount: 36 },
+        draw: { __type__: 'DrawIndexed', indexCount: 36 },
     };
 
     const rp: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        descriptor: { colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: [ro],
     };
 
@@ -233,7 +235,7 @@ import { getShaderSource, loadImage } from "./utility";
         mat4.multiply(viewProj, perspectiveMatrix, viewMatrix);
 
         //
-        reactive(ro.bindingResources).u_viewProj = viewProj;
+        reactive(ro.bindingResources).u_viewProj = { value: viewProj as Float32Array };
         reactive(ro.bindingResources).s_tex2D = { texture, sampler };
 
         webgl.submit({ commandEncoders: [{ passEncoders: [rp] }] });

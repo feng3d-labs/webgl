@@ -1,26 +1,26 @@
-import { RenderPass } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4 } from "gl-matrix";
+import { RenderPass } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4 } from 'gl-matrix';
 
 main();
 
 function main()
 {
-    const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
     const { projectionMatrix, modelViewMatrix } = drawScene(canvas);
 
-    const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
 
     const renderPass: RenderPass = {
         descriptor: {
             colorAttachments: [{
                 clearValue: [0, 0, 0, 1],
-                loadOp: "clear",
+                loadOp: 'clear',
             }],
             depthStencilAttachment: {
                 depthClearValue: 1.0,
-                depthLoadOp: "clear",
+                depthLoadOp: 'clear',
             },
         },
         renderPassObjects: [{
@@ -39,24 +39,24 @@ function main()
             void main() {
                 gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
             }` },
-                primitive: { topology: "triangle-strip" },
-                depthStencil: { depthCompare: "less-equal" }
+                primitive: { topology: 'triangle-strip' },
+                depthStencil: { depthCompare: 'less-equal' },
             },
             vertices: {
                 aVertexPosition: {
-                    format: "float32x2",
+                    format: 'float32x2',
                     data: new Float32Array([
                         1.0, 1.0,
                         -1.0, 1.0,
                         1.0, -1.0,
                         -1.0, -1.0,
                     ]),
-                }
+                },
             },
-            draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
+            draw: { __type__: 'DrawVertex', firstVertex: 0, vertexCount: 4 },
             bindingResources: {
-                uProjectionMatrix: projectionMatrix,
-                uModelViewMatrix: modelViewMatrix,
+                uProjectionMatrix: { value: projectionMatrix as Float32Array },
+                uModelViewMatrix: { value: modelViewMatrix as Float32Array },
             },
         }],
     };

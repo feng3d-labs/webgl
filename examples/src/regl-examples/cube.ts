@@ -1,17 +1,17 @@
-import { RenderObject, Submit } from "@feng3d/render-api";
-import { SamplerTexture, WebGL } from "@feng3d/webgl";
-import * as mat4 from "./stackgl/gl-mat4";
-import { reactive } from "@feng3d/reactivity";
+import { reactive } from '@feng3d/reactivity';
+import { RenderObject, Submit } from '@feng3d/render-api';
+import { SamplerTexture, WebGL } from '@feng3d/webgl';
+import * as mat4 from './stackgl/gl-mat4';
 
 (async () =>
 {
-    const canvas = document.createElement("canvas");
-    canvas.id = "glcanvas";
+    const canvas = document.createElement('canvas');
+    canvas.id = 'glcanvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
 
-    const webgl = new WebGL({ canvasId: "glcanvas" });
+    const webgl = new WebGL({ canvasId: 'glcanvas' });
 
     const cubePosition = [
         [-0.5, +0.5, +0.5], [+0.5, +0.5, +0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5], // positive z face.
@@ -19,7 +19,7 @@ import { reactive } from "@feng3d/reactivity";
         [+0.5, +0.5, -0.5], [-0.5, +0.5, -0.5], [-0.5, -0.5, -0.5], [+0.5, -0.5, -0.5], // negative z face
         [-0.5, +0.5, -0.5], [-0.5, +0.5, +0.5], [-0.5, -0.5, +0.5], [-0.5, -0.5, -0.5], // negative x face.
         [-0.5, +0.5, -0.5], [+0.5, +0.5, -0.5], [+0.5, +0.5, +0.5], [-0.5, +0.5, +0.5], // top face
-        [-0.5, -0.5, -0.5], [+0.5, -0.5, -0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5] // bottom face
+        [-0.5, -0.5, -0.5], [+0.5, -0.5, -0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5], // bottom face
     ];
 
     const cubeUv = [
@@ -28,7 +28,7 @@ import { reactive } from "@feng3d/reactivity";
         [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // negative z face.
         [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // negative x face.
         [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // top face
-        [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0] // bottom face
+        [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // bottom face
     ];
 
     const cubeElements = [
@@ -37,7 +37,7 @@ import { reactive } from "@feng3d/reactivity";
         [10, 9, 8], [10, 8, 11], // negative z face.
         [14, 13, 12], [14, 12, 15], // negative x face.
         [18, 17, 16], [18, 16, 19], // top face.
-        [20, 21, 22], [23, 20, 22] // bottom face
+        [20, 21, 22], [23, 20, 22], // bottom face
     ];
 
     const positions = cubePosition.reduce((pv: number[], cv: number[]) =>
@@ -67,11 +67,11 @@ import { reactive } from "@feng3d/reactivity";
 
     const renderObject: RenderObject = {
         vertices: {
-            position: { data: new Float32Array(positions), format: "float32x3" },
-            uv: { data: new Float32Array(uvs), format: "float32x2" },
+            position: { data: new Float32Array(positions), format: 'float32x3' },
+            uv: { data: new Float32Array(uvs), format: 'float32x2' },
         },
         indices: new Uint16Array(indices),
-        draw: { __type__: "DrawIndexed", indexCount: indices.length },
+        draw: { __type__: 'DrawIndexed', indexCount: indices.length },
         bindingResources: {},
         pipeline: {
             vertex: {
@@ -94,17 +94,18 @@ import { reactive } from "@feng3d/reactivity";
                 targets: [{ blend: {} }],
             },
             depthStencil: { depthWriteEnabled: true },
-        }
+        },
     };
 
     const submit: Submit = {
         commandEncoders: [{
             passEncoders: [
                 {
-                    renderPassObjects: [renderObject]
-                }
-            ]
-        }]
+                    descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
+                    renderPassObjects: [renderObject],
+                },
+            ],
+        }],
     };
 
     function draw()
@@ -115,16 +116,19 @@ import { reactive } from "@feng3d/reactivity";
         viewportHeight = canvas.height = canvas.clientHeight;
 
         const t = 0.01 * tick;
-        reactive(renderObject.bindingResources).view = mat4.lookAt([],
-            [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-            [0, 0.0, 0],
-            [0, 1, 0]);
-        reactive(renderObject.bindingResources).projection
-            = mat4.perspective([],
+        reactive(renderObject.bindingResources).view = {
+            value: mat4.lookAt([],
+                [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
+                [0, 0.0, 0],
+                [0, 1, 0]),
+        };
+        reactive(renderObject.bindingResources).projection = {
+            value: mat4.perspective([],
                 Math.PI / 4,
                 viewportWidth / viewportHeight,
                 0.01,
-                10);
+                1000),
+        };
 
         webgl.submit(submit);
 
@@ -132,14 +136,16 @@ import { reactive } from "@feng3d/reactivity";
     }
 
     const img = new Image();
-    img.src = "../../assets/peppers.png";
+    img.src = '../../assets/peppers.png';
     await img.decode();
 
     const diffuse: SamplerTexture = {
         texture: {
-            size: [img.width, img.height],
-            sources: [{ image: img }]
-        }, sampler: { minFilter: "linear" }
+            descriptor: {
+                size: [img.width, img.height],
+            },
+            sources: [{ image: img }],
+        }, sampler: { minFilter: 'linear' },
     };
     reactive(renderObject.bindingResources).tex = diffuse;
 

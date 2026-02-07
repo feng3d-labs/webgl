@@ -1,7 +1,7 @@
-import { IAddressMode, IFilterMode, Sampler } from "@feng3d/render-api";
-import { getIGLCompareFunction } from "../runs/runDepthState";
+import { IAddressMode, IFilterMode, Sampler } from '@feng3d/render-api';
+import { getGLCompareFunction } from '../runs/getGLCompareFunction';
 
-export type GLSamplerCompareMode = "NONE" | "COMPARE_REF_TO_TEXTURE";
+export type GLSamplerCompareMode = 'NONE' | 'COMPARE_REF_TO_TEXTURE';
 
 export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
 {
@@ -20,8 +20,8 @@ export function getGLSampler(gl: WebGLRenderingContext, sampler?: Sampler)
         const wrapR: GLTextureWrap = getIGLTextureWrap(sampler.addressModeW);
         const lodMinClamp = sampler.lodMinClamp || 0;
         const lodMaxClamp = sampler.lodMaxClamp || 16;
-        const compareMode: GLSamplerCompareMode = sampler.compare ? "COMPARE_REF_TO_TEXTURE" : "NONE";
-        const compare = getIGLCompareFunction(sampler.compare ?? "less-equal");
+        const compareMode: GLSamplerCompareMode = sampler.compare ? 'COMPARE_REF_TO_TEXTURE' : 'NONE';
+        const compare = getGLCompareFunction(sampler.compare ?? 'less-equal');
 
         //
         gl.samplerParameteri(webGLSampler, gl.TEXTURE_MIN_FILTER, gl[minFilter]);
@@ -58,9 +58,9 @@ export function deleteSampler(gl: WebGLRenderingContext, sampler?: Sampler)
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type GLTextureWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
+export type GLTextureWrap = 'REPEAT' | 'CLAMP_TO_EDGE' | 'MIRRORED_REPEAT';
 
-export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
+export function getIGLTextureWrap(addressMode: IAddressMode = 'repeat')
 {
     const textureWrap: GLTextureWrap = addressModeMap[addressMode];
 
@@ -70,9 +70,9 @@ export function getIGLTextureWrap(addressMode: IAddressMode = "repeat")
 }
 
 const addressModeMap: { [key: string]: GLTextureWrap } = {
-    "clamp-to-edge": "CLAMP_TO_EDGE",
-    repeat: "REPEAT",
-    "mirror-repeat": "MIRRORED_REPEAT",
+    'clamp-to-edge': 'CLAMP_TO_EDGE',
+    repeat: 'REPEAT',
+    'mirror-repeat': 'MIRRORED_REPEAT',
 };
 
 /**
@@ -88,39 +88,39 @@ const addressModeMap: { [key: string]: GLTextureWrap } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type GLTextureMinFilter = "LINEAR" | "NEAREST" | "NEAREST_MIPMAP_NEAREST" | "LINEAR_MIPMAP_NEAREST" | "NEAREST_MIPMAP_LINEAR" | "LINEAR_MIPMAP_LINEAR";
+export type GLTextureMinFilter = 'LINEAR' | 'NEAREST' | 'NEAREST_MIPMAP_NEAREST' | 'LINEAR_MIPMAP_NEAREST' | 'NEAREST_MIPMAP_LINEAR' | 'LINEAR_MIPMAP_LINEAR';
 
-export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipmapFilter?: IFilterMode): GLTextureMinFilter
+export function getIGLTextureMinFilter(minFilter: IFilterMode = 'nearest', mipmapFilter?: IFilterMode): GLTextureMinFilter
 {
     let glMinFilter: GLTextureMinFilter;
-    if (minFilter === "linear")
+    if (minFilter === 'linear')
     {
-        if (mipmapFilter === "linear")
+        if (mipmapFilter === 'linear')
         {
-            glMinFilter = "LINEAR_MIPMAP_LINEAR";
+            glMinFilter = 'LINEAR_MIPMAP_LINEAR';
         }
-        else if (mipmapFilter === "nearest")
+        else if (mipmapFilter === 'nearest')
         {
-            glMinFilter = "LINEAR_MIPMAP_NEAREST";
+            glMinFilter = 'LINEAR_MIPMAP_NEAREST';
         }
         else
         {
-            glMinFilter = "LINEAR";
+            glMinFilter = 'LINEAR';
         }
     }
     else
     {
-        if (mipmapFilter === "linear")
+        if (mipmapFilter === 'linear')
         {
-            glMinFilter = "NEAREST_MIPMAP_LINEAR";
+            glMinFilter = 'NEAREST_MIPMAP_LINEAR';
         }
-        else if (mipmapFilter === "nearest")
+        else if (mipmapFilter === 'nearest')
         {
-            glMinFilter = "NEAREST_MIPMAP_NEAREST";
+            glMinFilter = 'NEAREST_MIPMAP_NEAREST';
         }
         else
         {
-            glMinFilter = "NEAREST";
+            glMinFilter = 'NEAREST';
         }
     }
 
@@ -135,9 +135,9 @@ export function getIGLTextureMinFilter(minFilter: IFilterMode = "nearest", mipma
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter
  */
-export type GLTextureMagFilter = "LINEAR" | "NEAREST";
+export type GLTextureMagFilter = 'LINEAR' | 'NEAREST';
 
-export function getIGLTextureMagFilter(magFilter: IFilterMode = "nearest")
+export function getIGLTextureMagFilter(magFilter: IFilterMode = 'nearest')
 {
     const glMagFilter: GLTextureMagFilter = magFilterMap[magFilter];
 
@@ -147,6 +147,6 @@ export function getIGLTextureMagFilter(magFilter: IFilterMode = "nearest")
 }
 
 const magFilterMap: { [key: string]: GLTextureMagFilter } = {
-    nearest: "NEAREST",
-    linear: "LINEAR",
+    nearest: 'NEAREST',
+    linear: 'LINEAR',
 };

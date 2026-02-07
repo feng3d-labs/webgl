@@ -1,51 +1,91 @@
-import { IBlendFactor, IBlendOperation } from "@feng3d/render-api";
+import { BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState, defaultBlendComponent } from '@feng3d/render-api';
 
-export function getIGLBlendEquation(operation?: IBlendOperation)
+export function runColorTargetStates(gl: WebGLRenderingContext, targets?: readonly ColorTargetState[])
+{
+    //
+    const colorMask = targets?.[0]?.writeMask || [true, true, true, true];
+    gl.colorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
+
+    //
+    const blend = targets?.[0]?.blend;
+    if (blend)
+    {
+        const color: BlendComponent = blend.color;
+        const alpha: BlendComponent = blend.alpha;
+
+        const colorOperation: GLBlendEquation = getGLBlendEquation(color?.operation ?? defaultBlendComponent.operation);
+        const colorSrcFactor: GLBlendFactor = getGLBlendFactor(color?.srcFactor ?? defaultBlendComponent.srcFactor, color?.operation);
+        const colorDstFactor: GLBlendFactor = getGLBlendFactor(color?.dstFactor ?? defaultBlendComponent.dstFactor, color?.operation);
+        //
+        const alphaOperation: GLBlendEquation = getGLBlendEquation(alpha?.operation) || colorOperation;
+        const alphaSrcFactor: GLBlendFactor = getGLBlendFactor(alpha?.srcFactor, color?.operation) || colorSrcFactor;
+        const alphaDstFactor: GLBlendFactor = getGLBlendFactor(alpha?.dstFactor, color?.operation) || colorDstFactor;
+
+        // 当混合系数用到了混合常量值时设置混合常量值。
+        const constantColor = BlendState.getBlendConstantColor(blend);
+        if (constantColor)
+        {
+            const constantColor = blend.constantColor ?? [0, 0, 0, 0];
+            gl.blendColor(constantColor[0], constantColor[1], constantColor[2], constantColor[3]);
+        }
+
+        //
+        gl.enable(gl.BLEND);
+        gl.blendEquationSeparate(gl[colorOperation], gl[alphaOperation]);
+        gl.blendFuncSeparate(gl[colorSrcFactor], gl[colorDstFactor], gl[alphaSrcFactor], gl[alphaDstFactor]);
+    }
+    else
+    {
+        gl.disable(gl.BLEND);
+    }
+}
+
+function getGLBlendEquation(operation?: BlendOperation)
 {
     if (!operation) return undefined;
 
-    const glBlendEquation: IGLBlendEquation = operationMap[operation];
+    const glBlendEquation: GLBlendEquation = operationMap[operation];
 
     console.assert(!!glBlendEquation, `接收到错误值，请从 ${Object.keys(operationMap).toString()} 中取值！`);
 
     return glBlendEquation;
 }
 
-const operationMap: { [key: string]: IGLBlendEquation } = {
-    add: "FUNC_ADD",
-    subtract: "FUNC_SUBTRACT",
-    "reverse-subtract": "FUNC_REVERSE_SUBTRACT",
-    min: "MIN",
-    max: "MAX",
+const operationMap: { [key: string]: GLBlendEquation } = {
+    add: 'FUNC_ADD',
+    subtract: 'FUNC_SUBTRACT',
+    'reverse-subtract': 'FUNC_REVERSE_SUBTRACT',
+    min: 'MIN',
+    max: 'MAX',
 };
 
-export function getIGLBlendFactor(blendFactor: IBlendFactor, operation: IBlendOperation)
+function getGLBlendFactor(blendFactor: BlendFactor, operation: BlendOperation)
 {
     if (!blendFactor) return undefined;
 
-    if (operation === "max" || operation === "min") blendFactor = "one";
+    if (operation === 'max' || operation === 'min') blendFactor = 'one';
 
-    const glBlendFactor: IGLBlendFactor = blendFactorMap[blendFactor];
+    const glBlendFactor: GLBlendFactor = blendFactorMap[blendFactor];
 
     console.assert(!!glBlendFactor, `接收到错误值，请从 ${Object.keys(blendFactorMap).toString()} 中取值！`);
 
     return glBlendFactor;
 }
 
-const blendFactorMap: { [key: string]: IGLBlendFactor } = {
-    zero: "ZERO",
-    one: "ONE",
-    src: "SRC_COLOR",
-    "one-minus-src": "ONE_MINUS_SRC_COLOR",
-    "src-alpha": "SRC_ALPHA",
-    "one-minus-src-alpha": "ONE_MINUS_SRC_ALPHA",
-    dst: "DST_COLOR",
-    "one-minus-dst": "ONE_MINUS_DST_COLOR",
-    "dst-alpha": "DST_ALPHA",
-    "one-minus-dst-alpha": "ONE_MINUS_DST_ALPHA",
-    "src-alpha-saturated": "SRC_ALPHA_SATURATE",
-    constant: "CONSTANT_COLOR",
-    "one-minus-constant": "ONE_MINUS_CONSTANT_COLOR",
+const blendFactorMap: { [key: string]: GLBlendFactor } = {
+    zero: 'ZERO',
+    one: 'ONE',
+    src: 'SRC_COLOR',
+    'one-minus-src': 'ONE_MINUS_SRC_COLOR',
+    'src-alpha': 'SRC_ALPHA',
+    'one-minus-src-alpha': 'ONE_MINUS_SRC_ALPHA',
+    dst: 'DST_COLOR',
+    'one-minus-dst': 'ONE_MINUS_DST_COLOR',
+    'dst-alpha': 'DST_ALPHA',
+    'one-minus-dst-alpha': 'ONE_MINUS_DST_ALPHA',
+    'src-alpha-saturated': 'SRC_ALPHA_SATURATE',
+    constant: 'CONSTANT_COLOR',
+    'one-minus-constant': 'ONE_MINUS_CONSTANT_COLOR',
 };
 
 /**
@@ -73,7 +113,7 @@ const blendFactorMap: { [key: string]: IGLBlendFactor } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc
  */
-export type IGLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR" | "DST_COLOR" | "ONE_MINUS_DST_COLOR" | "SRC_ALPHA" | "ONE_MINUS_SRC_ALPHA" | "DST_ALPHA" | "ONE_MINUS_DST_ALPHA" | "SRC_ALPHA_SATURATE" | "CONSTANT_COLOR" | "ONE_MINUS_CONSTANT_COLOR" | "CONSTANT_ALPHA" | "ONE_MINUS_CONSTANT_ALPHA";
+type GLBlendFactor = 'ZERO' | 'ONE' | 'SRC_COLOR' | 'ONE_MINUS_SRC_COLOR' | 'DST_COLOR' | 'ONE_MINUS_DST_COLOR' | 'SRC_ALPHA' | 'ONE_MINUS_SRC_ALPHA' | 'DST_ALPHA' | 'ONE_MINUS_DST_ALPHA' | 'SRC_ALPHA_SATURATE' | 'CONSTANT_COLOR' | 'ONE_MINUS_CONSTANT_COLOR' | 'CONSTANT_ALPHA' | 'ONE_MINUS_CONSTANT_ALPHA';
 
 /**
  * 混合方法
@@ -102,4 +142,4 @@ export type IGLBlendFactor = "ZERO" | "ONE" | "SRC_COLOR" | "ONE_MINUS_SRC_COLOR
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendEquation
  */
-export type IGLBlendEquation = "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT" | "MIN" | "MAX";
+type GLBlendEquation = 'FUNC_ADD' | 'FUNC_SUBTRACT' | 'FUNC_REVERSE_SUBTRACT' | 'MIN' | 'MAX';

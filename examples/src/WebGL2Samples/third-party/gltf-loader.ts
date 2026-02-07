@@ -1,4 +1,4 @@
-import { mat4, quat, vec3 } from "gl-matrix";
+import { mat4, quat, vec3 } from 'gl-matrix';
 
 type IVertexDataTypes =
     | Float32Array
@@ -21,7 +21,7 @@ class Scene
         // not 1-1 to meshes in json file
         // each mesh with a different node hierarchy is a new instance
         this.meshes = [];
-        //this.meshes = {};
+        // this.meshes = {};
     }
 }
 
@@ -33,7 +33,7 @@ class Mesh
 
     constructor()
     {
-        this.meshID = ""; // mesh id name in glTF json meshes
+        this.meshID = ''; // mesh id name in glTF json meshes
         this.primitives = [];
     }
 }
@@ -48,6 +48,7 @@ export class Primitive
     attributes: {
         [key: string]: { size: 1 | 2 | 3 | 4, type?: number, stride: number, offset: number },
     };
+
     constructor()
     {
         this.mode = 4; // default: gl.TRIANGLES
@@ -74,7 +75,7 @@ export class GlTFModel
 
     constructor()
     {
-        this.defaultScene = "";
+        this.defaultScene = '';
         this.scenes = {};
 
         this.json = null;
@@ -131,7 +132,7 @@ export class GlTFLoader
             if (bufferData)
             {
                 // buffer already loaded
-                //console.log("dependent buffer ready, create bufferView" + bufferViewID);
+                // console.log("dependent buffer ready, create bufferView" + bufferViewID);
                 this._bufferViews[bufferViewID] = bufferData.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
                 callback(bufferViewData);
             }
@@ -139,7 +140,7 @@ export class GlTFLoader
             {
                 // buffer not yet loaded
                 // add pending task to _bufferTasks
-                //console.log("pending Task: wait for buffer to load bufferView " + bufferViewID);
+                // console.log("pending Task: wait for buffer to load bufferView " + bufferViewID);
                 this._pendingTasks++;
                 let bufferTask = this._bufferTasks[bufferView.buffer];
                 if (!bufferTask)
@@ -174,14 +175,15 @@ export class GlTFLoader
         {
             // no need to load buffer from file
             // use cached ones
-            //console.log("use cached bufferView " + bufferViewID);
+            // console.log("use cached bufferView " + bufferViewID);
             callback(bufferViewData);
         }
     }
+
     _checkComplete()
     {
         if (this._bufferRequested === this._bufferLoaded
-            // && other resources finish loading
+        // && other resources finish loading
         )
         {
             this._loadDone = true;
@@ -232,7 +234,7 @@ export class GlTFLoader
 
         const curMatrix = mat4.create();
 
-        if (node.hasOwnProperty("matrix"))
+        if (node.hasOwnProperty('matrix'))
         {
             // matrix
             for (let i = 0; i < 16; ++i)
@@ -240,7 +242,7 @@ export class GlTFLoader
                 curMatrix[i] = node.matrix[i];
             }
             mat4.multiply(curMatrix, matrix, curMatrix);
-            //mat4.multiply(curMatrix, curMatrix, matrix);
+            // mat4.multiply(curMatrix, curMatrix, matrix);
         }
         else
         {
@@ -336,7 +338,7 @@ export class GlTFLoader
                 bufferViewData,
                 0,
                 bufferView.byteLength / ComponentType2ByteSize[firstAccessor.componentType],
-                firstAccessor.componentType
+                firstAccessor.componentType,
             );
 
             for (const attributeName in primitive.attributes)
@@ -389,12 +391,12 @@ export class GlTFLoader
 
                 // for vertexAttribPointer
                 newPrimitive.attributes[attributeName] = {
-                    //GLuint program location,
+                    // GLuint program location,
                     size: Type2NumOfComponent[accessor.type],
                     type: accessor.componentType,
-                    //GLboolean normalized
+                    // GLboolean normalized
                     stride: accessor.byteStride,
-                    offset: accessor.byteOffset
+                    offset: accessor.byteOffset,
                 };
             }
 
@@ -414,7 +416,7 @@ export class GlTFLoader
 
         this.onload = callback || ((glTF) =>
         {
-            console.log("glTF model loaded.");
+            console.log('glTF model loaded.');
             console.log(glTF);
         });
 
@@ -474,7 +476,7 @@ const ComponentType2ByteSize = {
     5121: 1, // UNSIGNED_BYTE
     5122: 2, // SHORT
     5123: 2, // UNSIGNED_SHORT
-    5126: 4 // FLOAT
+    5126: 4, // FLOAT
 };
 
 const Type2NumOfComponent = {
@@ -484,22 +486,22 @@ const Type2NumOfComponent = {
     VEC4: 4,
     MAT2: 4,
     MAT3: 9,
-    MAT4: 16
+    MAT4: 16,
 };
 
 const IDrawElementType2Name = {
-    5121: "UNSIGNED_BYTE",
-    5123: "UNSIGNED_SHORT",
-    5124: "UNSIGNED_INT",
+    5121: 'UNSIGNED_BYTE',
+    5123: 'UNSIGNED_SHORT',
+    5124: 'UNSIGNED_INT',
 };
 
 export const Attributes = [
-    "POSITION",
-    "NORMAL",
-    "TEXCOORD",
-    "COLOR",
-    "JOINT",
-    "WEIGHT"
+    'POSITION',
+    'NORMAL',
+    'TEXCOORD',
+    'COLOR',
+    'JOINT',
+    'WEIGHT',
 ];
 
 // ------ Scope limited private util functions---------------
@@ -522,7 +524,7 @@ function _getAccessorData(bufferViewData, accessor)
         bufferViewData,
         accessor.byteOffset,
         accessor.count * Type2NumOfComponent[accessor.type],
-        accessor.componentType
+        accessor.componentType,
     );
 }
 
@@ -530,8 +532,8 @@ function _getBaseUri(uri)
 {
     // https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Source/Core/getBaseUri.js
 
-    let basePath = "";
-    const i = uri.lastIndexOf("/");
+    let basePath = '';
+    const i = uri.lastIndexOf('/');
     if (i !== -1)
     {
         basePath = uri.substring(0, i + 1);
@@ -546,8 +548,8 @@ function _loadJSON(src, callback)
     // http://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
 
     const xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("application/json");
-    xobj.open("GET", src, true);
+    xobj.overrideMimeType('application/json');
+    xobj.open('GET', src, true);
     xobj.onreadystatechange = function ()
     {
         if (xobj.readyState === 4 // Request finished, response ready
@@ -562,8 +564,8 @@ function _loadJSON(src, callback)
 function _loadArrayBuffer(url, callback)
 {
     const xobj = new XMLHttpRequest();
-    xobj.responseType = "arraybuffer";
-    xobj.open("GET", url, true);
+    xobj.responseType = 'arraybuffer';
+    xobj.open('GET', url, true);
     xobj.onreadystatechange = function ()
     {
         if (xobj.readyState === 4 // Request finished, response ready

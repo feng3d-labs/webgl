@@ -1,18 +1,18 @@
-import { RenderPassObject, OcclusionQuery, RenderPass } from "@feng3d/render-api";
+import { RenderPassObject, OcclusionQuery, RenderPass } from '@feng3d/render-api';
 
-import "../data/polyfills/OcclusionQuery";
+import '../data/polyfills/OcclusionQuery';
 
 export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjects?: readonly RenderPassObject[])
 {
     if (!renderObjects) return defautRenderOcclusionQuery;
     if (!(gl instanceof WebGL2RenderingContext)) return defautRenderOcclusionQuery;
-    let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects["_GLRenderOcclusionQuery"];
+    let renderOcclusionQuery: GLRenderOcclusionQuery = renderObjects['_GLRenderOcclusionQuery'];
     if (renderOcclusionQuery) return renderOcclusionQuery;
 
-    const occlusionQueryObjects: OcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === "OcclusionQuery") as any;
+    const occlusionQueryObjects: OcclusionQuery[] = renderObjects.filter((cv) => cv.__type__ === 'OcclusionQuery') as any;
     if (occlusionQueryObjects.length === 0)
     {
-        renderObjects["_GLRenderOcclusionQuery"] = defautRenderOcclusionQuery;
+        renderObjects['_GLRenderOcclusionQuery'] = defautRenderOcclusionQuery;
 
         return defautRenderOcclusionQuery;
     }
@@ -41,7 +41,7 @@ export function getGLRenderOcclusionQuery(gl: WebGLRenderingContext, renderObjec
         });
     };
 
-    renderObjects["_GLRenderOcclusionQuery"] = renderOcclusionQuery = { init, resolve };
+    renderObjects['_GLRenderOcclusionQuery'] = renderOcclusionQuery = { init, resolve };
 
     return renderOcclusionQuery;
 }

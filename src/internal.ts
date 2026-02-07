@@ -1,2 +1,2 @@
-export * from "./caches/getGLTexture";
+export * from './caches/getGLTexture';
 

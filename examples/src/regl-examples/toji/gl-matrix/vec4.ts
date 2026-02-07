@@ -1,4 +1,4 @@
-import * as glMatrix from "./common";
+import * as glMatrix from './common';
 
 /**
  * 4 Dimensional Vector
@@ -12,16 +12,16 @@ import * as glMatrix from "./common";
  */
 export function create()
 {
-  const out = new glMatrix.ARRAY_TYPE(4);
-  if (glMatrix.ARRAY_TYPE !== Float32Array)
-  {
-    out[0] = 0;
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-  }
+    const out = new glMatrix.ARRAY_TYPE(4);
+    if (glMatrix.ARRAY_TYPE !== Float32Array)
+    {
+        out[0] = 0;
+        out[1] = 0;
+        out[2] = 0;
+        out[3] = 0;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -32,13 +32,13 @@ export function create()
  */
 export function clone(a)
 {
-  const out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
+    const out = new glMatrix.ARRAY_TYPE(4);
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -52,13 +52,13 @@ export function clone(a)
  */
 export function fromValues(x, y, z, w)
 {
-  const out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  out[3] = w;
+    const out = new glMatrix.ARRAY_TYPE(4);
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
 
-  return out;
+    return out;
 }
 
 /**
@@ -70,12 +70,12 @@ export function fromValues(x, y, z, w)
  */
 export function copy(out, a)
 {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -90,12 +90,12 @@ export function copy(out, a)
  */
 export function set(out, x, y, z, w)
 {
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  out[3] = w;
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
 
-  return out;
+    return out;
 }
 
 /**
@@ -108,12 +108,12 @@ export function set(out, x, y, z, w)
  */
 export function add(out, a, b)
 {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
+    out[3] = a[3] + b[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -126,12 +126,12 @@ export function add(out, a, b)
  */
 export function subtract(out, a, b)
 {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
+    out[3] = a[3] - b[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -144,12 +144,12 @@ export function subtract(out, a, b)
  */
 export function multiply(out, a, b)
 {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
-  out[2] = a[2] * b[2];
-  out[3] = a[3] * b[3];
+    out[0] = a[0] * b[0];
+    out[1] = a[1] * b[1];
+    out[2] = a[2] * b[2];
+    out[3] = a[3] * b[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -162,12 +162,12 @@ export function multiply(out, a, b)
  */
 export function divide(out, a, b)
 {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
-  out[2] = a[2] / b[2];
-  out[3] = a[3] / b[3];
+    out[0] = a[0] / b[0];
+    out[1] = a[1] / b[1];
+    out[2] = a[2] / b[2];
+    out[3] = a[3] / b[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -179,12 +179,12 @@ export function divide(out, a, b)
  */
 export function ceil(out, a)
 {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
-  out[2] = Math.ceil(a[2]);
-  out[3] = Math.ceil(a[3]);
+    out[0] = Math.ceil(a[0]);
+    out[1] = Math.ceil(a[1]);
+    out[2] = Math.ceil(a[2]);
+    out[3] = Math.ceil(a[3]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -196,12 +196,12 @@ export function ceil(out, a)
  */
 export function floor(out, a)
 {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
-  out[2] = Math.floor(a[2]);
-  out[3] = Math.floor(a[3]);
+    out[0] = Math.floor(a[0]);
+    out[1] = Math.floor(a[1]);
+    out[2] = Math.floor(a[2]);
+    out[3] = Math.floor(a[3]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -214,12 +214,12 @@ export function floor(out, a)
  */
 export function min(out, a, b)
 {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
-  out[2] = Math.min(a[2], b[2]);
-  out[3] = Math.min(a[3], b[3]);
+    out[0] = Math.min(a[0], b[0]);
+    out[1] = Math.min(a[1], b[1]);
+    out[2] = Math.min(a[2], b[2]);
+    out[3] = Math.min(a[3], b[3]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -232,12 +232,12 @@ export function min(out, a, b)
  */
 export function max(out, a, b)
 {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
-  out[2] = Math.max(a[2], b[2]);
-  out[3] = Math.max(a[3], b[3]);
+    out[0] = Math.max(a[0], b[0]);
+    out[1] = Math.max(a[1], b[1]);
+    out[2] = Math.max(a[2], b[2]);
+    out[3] = Math.max(a[3], b[3]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -249,12 +249,12 @@ export function max(out, a, b)
  */
 export function round(out, a)
 {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
-  out[2] = Math.round(a[2]);
-  out[3] = Math.round(a[3]);
+    out[0] = Math.round(a[0]);
+    out[1] = Math.round(a[1]);
+    out[2] = Math.round(a[2]);
+    out[3] = Math.round(a[3]);
 
-  return out;
+    return out;
 }
 
 /**
@@ -267,12 +267,12 @@ export function round(out, a)
  */
 export function scale(out, a, b)
 {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
+    out[0] = a[0] * b;
+    out[1] = a[1] * b;
+    out[2] = a[2] * b;
+    out[3] = a[3] * b;
 
-  return out;
+    return out;
 }
 
 /**
@@ -286,12 +286,12 @@ export function scale(out, a, b)
  */
 export function scaleAndAdd(out, a, b, scale)
 {
-  out[0] = a[0] + (b[0] * scale);
-  out[1] = a[1] + (b[1] * scale);
-  out[2] = a[2] + (b[2] * scale);
-  out[3] = a[3] + (b[3] * scale);
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
+    out[2] = a[2] + (b[2] * scale);
+    out[3] = a[3] + (b[3] * scale);
 
-  return out;
+    return out;
 }
 
 /**
@@ -303,12 +303,12 @@ export function scaleAndAdd(out, a, b, scale)
  */
 export function distance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
-  const z = b[2] - a[2];
-  const w = b[3] - a[3];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
+    const z = b[2] - a[2];
+    const w = b[3] - a[3];
 
-  return Math.sqrt(x * x + y * y + z * z + w * w);
+    return Math.sqrt(x * x + y * y + z * z + w * w);
 }
 
 /**
@@ -320,12 +320,12 @@ export function distance(a, b)
  */
 export function squaredDistance(a, b)
 {
-  const x = b[0] - a[0];
-  const y = b[1] - a[1];
-  const z = b[2] - a[2];
-  const w = b[3] - a[3];
+    const x = b[0] - a[0];
+    const y = b[1] - a[1];
+    const z = b[2] - a[2];
+    const w = b[3] - a[3];
 
-  return x * x + y * y + z * z + w * w;
+    return x * x + y * y + z * z + w * w;
 }
 
 /**
@@ -336,12 +336,12 @@ export function squaredDistance(a, b)
  */
 export function length(a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
-  const w = a[3];
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
+    const w = a[3];
 
-  return Math.sqrt(x * x + y * y + z * z + w * w);
+    return Math.sqrt(x * x + y * y + z * z + w * w);
 }
 
 /**
@@ -352,12 +352,12 @@ export function length(a)
  */
 export function squaredLength(a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
-  const w = a[3];
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
+    const w = a[3];
 
-  return x * x + y * y + z * z + w * w;
+    return x * x + y * y + z * z + w * w;
 }
 
 /**
@@ -369,12 +369,12 @@ export function squaredLength(a)
  */
 export function negate(out, a)
 {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  out[2] = -a[2];
-  out[3] = -a[3];
+    out[0] = -a[0];
+    out[1] = -a[1];
+    out[2] = -a[2];
+    out[3] = -a[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -386,12 +386,12 @@ export function negate(out, a)
  */
 export function inverse(out, a)
 {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
-  out[2] = 1.0 / a[2];
-  out[3] = 1.0 / a[3];
+    out[0] = 1.0 / a[0];
+    out[1] = 1.0 / a[1];
+    out[2] = 1.0 / a[2];
+    out[3] = 1.0 / a[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -403,21 +403,21 @@ export function inverse(out, a)
  */
 export function normalize(out, a)
 {
-  const x = a[0];
-  const y = a[1];
-  const z = a[2];
-  const w = a[3];
-  let len = x * x + y * y + z * z + w * w;
-  if (len > 0)
-  {
-    len = 1 / Math.sqrt(len);
-    out[0] = x * len;
-    out[1] = y * len;
-    out[2] = z * len;
-    out[3] = w * len;
-  }
+    const x = a[0];
+    const y = a[1];
+    const z = a[2];
+    const w = a[3];
+    let len = x * x + y * y + z * z + w * w;
+    if (len > 0)
+    {
+        len = 1 / Math.sqrt(len);
+        out[0] = x * len;
+        out[1] = y * len;
+        out[2] = z * len;
+        out[3] = w * len;
+    }
 
-  return out;
+    return out;
 }
 
 /**
@@ -429,7 +429,7 @@ export function normalize(out, a)
  */
 export function dot(a, b)
 {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 }
 
 /**
@@ -443,16 +443,16 @@ export function dot(a, b)
  */
 export function lerp(out, a, b, t)
 {
-  const ax = a[0];
-  const ay = a[1];
-  const az = a[2];
-  const aw = a[3];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
-  out[2] = az + t * (b[2] - az);
-  out[3] = aw + t * (b[3] - aw);
+    const ax = a[0];
+    const ay = a[1];
+    const az = a[2];
+    const aw = a[3];
+    out[0] = ax + t * (b[0] - ax);
+    out[1] = ay + t * (b[1] - ay);
+    out[2] = az + t * (b[2] - az);
+    out[3] = aw + t * (b[3] - aw);
 
-  return out;
+    return out;
 }
 
 /**
@@ -464,35 +464,35 @@ export function lerp(out, a, b, t)
  */
 export function random(out, scale)
 {
-  scale = scale || 1.0;
+    scale = scale || 1.0;
 
-  // Marsaglia, George. Choosing a Point from the Surface of a
-  // Sphere. Ann. Math. Statist. 43 (1972), no. 2, 645--646.
-  // http://projecteuclid.org/euclid.aoms/1177692644;
-  let v1; let v2; let v3; let
-    v4;
-  let s1; let
-    s2;
-  do
-  {
-    v1 = glMatrix.RANDOM() * 2 - 1;
-    v2 = glMatrix.RANDOM() * 2 - 1;
-    s1 = v1 * v1 + v2 * v2;
-  } while (s1 >= 1);
-  do
-  {
-    v3 = glMatrix.RANDOM() * 2 - 1;
-    v4 = glMatrix.RANDOM() * 2 - 1;
-    s2 = v3 * v3 + v4 * v4;
-  } while (s2 >= 1);
+    // Marsaglia, George. Choosing a Point from the Surface of a
+    // Sphere. Ann. Math. Statist. 43 (1972), no. 2, 645--646.
+    // http://projecteuclid.org/euclid.aoms/1177692644;
+    let v1; let v2; let v3; let
+        v4;
+    let s1; let
+        s2;
+    do
+    {
+        v1 = glMatrix.RANDOM() * 2 - 1;
+        v2 = glMatrix.RANDOM() * 2 - 1;
+        s1 = v1 * v1 + v2 * v2;
+    } while (s1 >= 1);
+    do
+    {
+        v3 = glMatrix.RANDOM() * 2 - 1;
+        v4 = glMatrix.RANDOM() * 2 - 1;
+        s2 = v3 * v3 + v4 * v4;
+    } while (s2 >= 1);
 
-  const d = Math.sqrt((1 - s1) / s2);
-  out[0] = scale * v1;
-  out[1] = scale * v2;
-  out[2] = scale * v3 * d;
-  out[3] = scale * v4 * d;
+    const d = Math.sqrt((1 - s1) / s2);
+    out[0] = scale * v1;
+    out[1] = scale * v2;
+    out[2] = scale * v3 * d;
+    out[3] = scale * v4 * d;
 
-  return out;
+    return out;
 }
 
 /**
@@ -505,14 +505,14 @@ export function random(out, scale)
  */
 export function transformMat4(out, a, m)
 {
-  const x = a[0]; const y = a[1]; const z = a[2]; const
-    w = a[3];
-  out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
-  out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
-  out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
-  out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
+    const x = a[0]; const y = a[1]; const z = a[2]; const
+        w = a[3];
+    out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
+    out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
+    out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
+    out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
 
-  return out;
+    return out;
 }
 
 /**
@@ -525,24 +525,24 @@ export function transformMat4(out, a, m)
  */
 export function transformQuat(out, a, q)
 {
-  const x = a[0]; const y = a[1]; const
-    z = a[2];
-  const qx = q[0]; const qy = q[1]; const qz = q[2]; const
-    qw = q[3];
+    const x = a[0]; const y = a[1]; const
+        z = a[2];
+    const qx = q[0]; const qy = q[1]; const qz = q[2]; const
+        qw = q[3];
 
-  // calculate quat * vec
-  const ix = qw * x + qy * z - qz * y;
-  const iy = qw * y + qz * x - qx * z;
-  const iz = qw * z + qx * y - qy * x;
-  const iw = -qx * x - qy * y - qz * z;
+    // calculate quat * vec
+    const ix = qw * x + qy * z - qz * y;
+    const iy = qw * y + qz * x - qx * z;
+    const iz = qw * z + qx * y - qy * x;
+    const iw = -qx * x - qy * y - qz * z;
 
-  // calculate result * inverse quat
-  out[0] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-  out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-  out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-  out[3] = a[3];
+    // calculate result * inverse quat
+    out[0] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+    out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+    out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+    out[3] = a[3];
 
-  return out;
+    return out;
 }
 
 /**
@@ -553,7 +553,7 @@ export function transformQuat(out, a, q)
  */
 export function str(a)
 {
-  return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
+    return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 }
 
 /**
@@ -565,7 +565,7 @@ export function str(a)
  */
 export function exactEquals(a, b)
 {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 }
 
 /**
@@ -577,12 +577,12 @@ export function exactEquals(a, b)
  */
 export function equals(a, b)
 {
-  const a0 = a[0]; const a1 = a[1]; const a2 = a[2]; const
-    a3 = a[3];
-  const b0 = b[0]; const b1 = b[1]; const b2 = b[2]; const
-    b3 = b[3];
+    const a0 = a[0]; const a1 = a[1]; const a2 = a[2]; const
+        a3 = a[3];
+    const b0 = b[0]; const b1 = b[1]; const b2 = b[2]; const
+        b3 = b[3];
 
-  return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
+    return (Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
     && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1))
     && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2))
     && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)));
@@ -644,38 +644,38 @@ export const sqrLen = squaredLength;
  */
 export const forEach = (function ()
 {
-  const vec = create();
+    const vec = create();
 
-  return function (a, stride, offset, count, fn, arg)
-  {
-    let i; let
-      l;
-    if (!stride)
+    return function (a, stride, offset, count, fn, arg)
     {
-      stride = 4;
-    }
+        let i; let
+            l;
+        if (!stride)
+        {
+            stride = 4;
+        }
 
-    if (!offset)
-    {
-      offset = 0;
-    }
+        if (!offset)
+        {
+            offset = 0;
+        }
 
-    if (count)
-    {
-      l = Math.min((count * stride) + offset, a.length);
-    }
-    else
-    {
-      l = a.length;
-    }
+        if (count)
+        {
+            l = Math.min((count * stride) + offset, a.length);
+        }
+        else
+        {
+            l = a.length;
+        }
 
-    for (i = offset; i < l; i += stride)
-    {
-      vec[0] = a[i]; vec[1] = a[i + 1]; vec[2] = a[i + 2]; vec[3] = a[i + 3];
-      fn(vec, vec, arg);
-      a[i] = vec[0]; a[i + 1] = vec[1]; a[i + 2] = vec[2]; a[i + 3] = vec[3];
-    }
+        for (i = offset; i < l; i += stride)
+        {
+            vec[0] = a[i]; vec[1] = a[i + 1]; vec[2] = a[i + 2]; vec[3] = a[i + 3];
+            fn(vec, vec, arg);
+            a[i] = vec[0]; a[i + 1] = vec[1]; a[i + 2] = vec[2]; a[i + 3] = vec[3];
+        }
 
-    return a;
-  };
+        return a;
+    };
 })();

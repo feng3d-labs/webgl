@@ -1,7 +1,7 @@
-import { Texture, TextureDataSource, TextureImageSource, TextureSize } from "@feng3d/render-api";
-import { watcher } from "@feng3d/watcher";
-import { getGLTextureFormats } from "./getGLTextureFormats";
-import { getGLTextureTarget } from "./getGLTextureTarget";
+import { Texture, TextureDataSource, TextureImageSource, TextureSize } from '@feng3d/render-api';
+import { watcher } from '@feng3d/watcher';
+import { getGLTextureFormats } from './getGLTextureFormats';
+import { getGLTextureTarget } from './getGLTextureTarget';
 
 declare global
 {
@@ -19,7 +19,7 @@ export const defaultTexturePixelStore: GLTexturePixelStore = {
     unpackAlignment: 4,
     unpackFlipY: false,
     unpackPremulAlpha: false,
-    unpackColorSpaceConversion: "BROWSER_DEFAULT_WEBGL",
+    unpackColorSpaceConversion: 'BROWSER_DEFAULT_WEBGL',
     packRowLength: 0,
     packSkipPixels: 0,
     packSkipRows: 0,
@@ -38,8 +38,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     // 创建纹理
     const createTexture = () =>
     {
-        const target = getGLTextureTarget(texture.dimension);
-        const { internalformat, format, type } = getGLTextureFormats(texture.format);
+        const descriptor = texture.descriptor;
+
+        const target = getGLTextureTarget(descriptor.dimension);
+        const { internalformat, format, type } = getGLTextureFormats(descriptor.format);
 
         webGLTexture = gl.createTexture(); // Create a texture object
         gl._textures.set(texture, webGLTexture);
@@ -47,11 +49,12 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         gl.bindTexture(gl[target], webGLTexture);
 
         //
-        const { sources, generateMipmap } = texture;
+        const { sources } = texture;
+        const generateMipmap = descriptor.generateMipmap;
 
         // 设置纹理尺寸
-        const [width, height, depth] = texture.size;
-        const mipLevelCount = texture.mipLevelCount || 1;
+        const [width, height, depth] = descriptor.size;
+        const mipLevelCount = descriptor.mipLevelCount || 1;
 
         if (sources)
         {
@@ -82,9 +85,9 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         setTexturePixelStore(gl, pixelStore);
 
-                        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                        if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
+                            const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
                             if (width && height)
                             {
                                 gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], image);
@@ -94,7 +97,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                                 gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], gl[format], gl[type], image);
                             }
                         }
-                        else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                        else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
                         {
                             gl.texImage3D(gl[target], mipLevel, gl[internalformat], width, height, depth, 0, gl[format], gl[type], image);
                         }
@@ -121,12 +124,12 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         setTexturePixelStore(gl, pixelStore);
 
-                        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                        if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
+                            const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[internalformat], width, height, 0, gl[format], gl[type], data, offset);
                         }
-                        else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                        else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
                         {
                             gl.texImage3D(gl[target], mipLevel, gl[internalformat], width, height, depth, 0, gl[format], gl[type], data, offset);
                         }
@@ -152,9 +155,9 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         setTexturePixelStore(gl, pixelStore);
 
-                        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                        if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
+                            const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], gl[format], gl[type], image);
                         }
                         else
@@ -180,9 +183,9 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                         setTexturePixelStore(gl, pixelStore);
 
-                        if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                        if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                         {
-                            const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(zoffset) : target;
+                            const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(zoffset) : target;
                             console.assert(offset === 0, `WebGL1中ITextureDataLayout.offset必须为0`);
                             gl.texImage2D(gl[bindTarget], mipLevel, gl[format], width, height, 0, gl[format], gl[type], data);
                         }
@@ -204,11 +207,11 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         {
             if (gl instanceof WebGL2RenderingContext)
             {
-                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                 {
                     gl.texStorage2D(gl[target], mipLevelCount, gl[internalformat], width, height);
                 }
-                else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
                 {
                     gl.texStorage3D(gl[target], mipLevelCount, gl[internalformat], width, height, depth);
                 }
@@ -219,7 +222,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
             }
             else
             {
-                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                 {
                     for (let i = 0; i < mipLevelCount; i++)
                     {
@@ -240,7 +243,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         webGLTexture.destroy();
     };
 
-    watcher.watch(texture, "sources", updateSources);
+    watcher.watch(texture, 'sources', updateSources);
 
     // 更新纹理
     const updateTexture = () =>
@@ -248,8 +251,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         const { writeTextures } = texture;
         if (!writeTextures || writeTextures.length === 0) return;
 
-        const target = getGLTextureTarget(texture.dimension);
-        const { format, type } = getGLTextureFormats(texture.format);
+        const descriptor = texture.descriptor;
+
+        const target = getGLTextureTarget(descriptor.dimension);
+        const { format, type } = getGLTextureFormats(descriptor.format);
 
         gl.bindTexture(gl[target], webGLTexture);
 
@@ -281,9 +286,9 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
                 if (gl instanceof WebGL2RenderingContext)
                 {
-                    if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+                    if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                     {
-                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                        const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                         if (width && height)
                         {
@@ -294,7 +299,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                             gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, gl[format], gl[type], image);
                         }
                     }
-                    else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                    else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
                     {
                         gl.texSubImage3D(gl[target], mipLevel, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], image);
                     }
@@ -306,10 +311,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
                 // 处理 WebGL1
                 else
                 {
-                    // eslint-disable-next-line no-lonely-if
-                    if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+
+                    if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                     {
-                        const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                        const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                         gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, gl[format], gl[type], image);
                     }
@@ -341,14 +346,14 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
             if (gl instanceof WebGL2RenderingContext)
             {
-                // eslint-disable-next-line no-lonely-if
-                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+
+                if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                 {
-                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                    const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                     gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data, offset);
                 }
-                else if (target === "TEXTURE_3D" || target === "TEXTURE_2D_ARRAY")
+                else if (target === 'TEXTURE_3D' || target === 'TEXTURE_2D_ARRAY')
                 {
                     gl.texSubImage3D(gl[target], mipLevel, xoffset, yoffset, zoffset, width, height, depthOrArrayLayers, gl[format], gl[type], data, offset);
                 }
@@ -360,10 +365,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
             // 处理 WebGL1
             else
             {
-                // eslint-disable-next-line no-lonely-if
-                if (target === "TEXTURE_2D" || target === "TEXTURE_CUBE_MAP")
+
+                if (target === 'TEXTURE_2D' || target === 'TEXTURE_CUBE_MAP')
                 {
-                    const bindTarget = target === "TEXTURE_CUBE_MAP" ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
+                    const bindTarget = target === 'TEXTURE_CUBE_MAP' ? getTextureCubeMapTarget(depthOrArrayLayers) : target;
 
                     gl.texSubImage2D(gl[bindTarget], mipLevel, xoffset, yoffset, width, height, gl[format], gl[type], data);
 
@@ -378,8 +383,9 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
     };
     updateTexture();
 
-    watcher.watchs(texture, ["generateMipmap"], updateTexture);
-    watcher.watch(texture, "writeTextures", updateTexture);
+    const descriptor = texture.descriptor;
+    watcher.watchs(descriptor, ['generateMipmap'], updateTexture);
+    watcher.watch(texture, 'writeTextures', updateTexture);
 
     // 监听纹理尺寸发生变化
     const resize = (newValue: TextureSize, oldValue: TextureSize) =>
@@ -397,7 +403,7 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
 
         webGLTexture.destroy();
     };
-    watcher.watch(texture, "size", resize);
+    watcher.watch(descriptor, 'size', resize);
 
     webGLTexture.destroy = () =>
     {
@@ -405,10 +411,10 @@ export function getGLTexture(gl: WebGLRenderingContext, texture: Texture)
         gl.deleteTexture(webGLTexture);
         gl._textures.delete(texture);
         //
-        watcher.unwatchs(texture, ["generateMipmap"], updateTexture);
-        watcher.unwatch(texture, "sources", updateSources);
-        watcher.unwatch(texture, "writeTextures", updateTexture);
-        watcher.unwatch(texture, "size", resize);
+        watcher.unwatchs(descriptor, ['generateMipmap'], updateTexture);
+        watcher.unwatch(texture, 'sources', updateSources);
+        watcher.unwatch(texture, 'writeTextures', updateTexture);
+        watcher.unwatch(descriptor, 'size', resize);
         //
         delete webGLTexture.destroy;
     };
@@ -522,7 +528,7 @@ interface GLTexturePixelStore
      *
      * 默认为 "BROWSER_DEFAULT_WEBGL" 。
      */
-    unpackColorSpaceConversion?: "BROWSER_DEFAULT_WEBGL" | "NONE";
+    unpackColorSpaceConversion?: 'BROWSER_DEFAULT_WEBGL' | 'NONE';
 
     /**
      * Number of pixels in a row.
@@ -626,12 +632,12 @@ function getTextureCubeMapTarget(depthOrArrayLayers: number)
 }
 
 const textureCubeMapTargetMap: GLTextureCubeMapTarget[] = [
-    "TEXTURE_CUBE_MAP_POSITIVE_X",
-    "TEXTURE_CUBE_MAP_NEGATIVE_X",
-    "TEXTURE_CUBE_MAP_POSITIVE_Y",
-    "TEXTURE_CUBE_MAP_NEGATIVE_Y",
-    "TEXTURE_CUBE_MAP_POSITIVE_Z",
-    "TEXTURE_CUBE_MAP_NEGATIVE_Z",
+    'TEXTURE_CUBE_MAP_POSITIVE_X',
+    'TEXTURE_CUBE_MAP_NEGATIVE_X',
+    'TEXTURE_CUBE_MAP_POSITIVE_Y',
+    'TEXTURE_CUBE_MAP_NEGATIVE_Y',
+    'TEXTURE_CUBE_MAP_POSITIVE_Z',
+    'TEXTURE_CUBE_MAP_NEGATIVE_Z',
 ];
 
 /**
@@ -647,9 +653,9 @@ const textureCubeMapTargetMap: GLTextureCubeMapTarget[] = [
  * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
  */
 type GLTextureCubeMapTarget =
-    | "TEXTURE_CUBE_MAP_POSITIVE_X"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_X"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Y"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Y"
-    | "TEXTURE_CUBE_MAP_POSITIVE_Z"
-    | "TEXTURE_CUBE_MAP_NEGATIVE_Z";
+    | 'TEXTURE_CUBE_MAP_POSITIVE_X'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_X'
+    | 'TEXTURE_CUBE_MAP_POSITIVE_Y'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_Y'
+    | 'TEXTURE_CUBE_MAP_POSITIVE_Z'
+    | 'TEXTURE_CUBE_MAP_NEGATIVE_Z';

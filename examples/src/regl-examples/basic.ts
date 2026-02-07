@@ -1,5 +1,5 @@
-import { RenderObject } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { RenderObject } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
 /**
  * 让T中以及所有键值中的所有键都是可选的
@@ -8,13 +8,13 @@ export type gPartial<T> = {
     [P in keyof T]?: T[P] | gPartial<T[P]>;
 };
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas" });
+const webgl = new WebGL({ canvasId: 'glcanvas' });
 
 const renderObject: RenderObject = {
     vertices: {
@@ -22,13 +22,13 @@ const renderObject: RenderObject = {
             data: new Float32Array([
                 -1, 0,
                 0, -1,
-                1, 1
+                1, 1,
             ]),
-            format: "float32x2",
+            format: 'float32x2',
         },
     },
-    draw: { __type__: "DrawVertex", vertexCount: 3 },
-    bindingResources: { color: [1, 0, 0, 1] },
+    draw: { __type__: 'DrawVertex', vertexCount: 3 },
+    bindingResources: { color: { value: [1, 0, 0, 1] } },
     pipeline: {
         vertex: {
             code: `
@@ -62,10 +62,10 @@ function draw()
             passEncoders: [
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { depthClearValue: 1 } },
-                    renderPassObjects: [renderObject]
-                }
-            ]
-        }]
+                    renderPassObjects: [renderObject],
+                },
+            ],
+        }],
     });
 
     requestAnimationFrame(draw);

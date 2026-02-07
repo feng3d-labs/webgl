@@ -1,92 +1,92 @@
 const files = {
-    "webgl-examples": [
-        "sample1",
-        "sample2",
-        "sample3",
-        "sample4",
-        "sample5",
-        "sample6",
-        "sample7",
-        "sample8",
+    'webgl-examples': [
+        'sample1',
+        'sample2',
+        'sample3',
+        'sample4',
+        'sample5',
+        'sample6',
+        'sample7',
+        'sample8',
     ],
-    "test":[
-        "fractalCube",
-        "RenderObjectChanges",
-        "sky",
+    'test': [
+        'fractalCube',
+        'RenderObjectChanges',
+        'sky',
     ],
-    "regl-examples": [
-        "basic",
-        "batch",
-        "bunny",
-        "camera",
-        "cloth",
-        "cube",
+    'regl-examples': [
+        'basic',
+        'batch',
+        'bunny',
+        'camera',
+        'cloth',
+        'cube',
     ],
     WebGL2Samples: [
-        "draw_image_space",
-        "draw_instanced",
-        "draw_primitive_restart",
-        "draw_range_arrays",
-        "fbo_blit",
-        "fbo_multisample",
-        "fbo_new_blend_equation",
-        "fbo_rtt_draw_buffers",
-        "fbo_rtt_texture_array",
-        "fbo_rtt_depth_texture",
-        "fbo_read_pixels",
-        "sampler_object",
-        "sampler_filter",
-        "sampler_wrap",
-        "glsl_centroid",
-        "glsl_flat_smooth_interpolators",
-        "glsl_non_square_matrix",
-        "query_occlusion",
-        "draw_instanced_ubo",
-        "buffer_copy",
-        "buffer_uniform",
-        "texture_2d_array",
-        "texture_3d",
-        "texture_derivative",
-        "texture_fetch",
-        "texture_format",
-        "texture_grad",
-        "texture_immutable",
-        "texture_integer",
-        "texture_lod",
-        "texture_offset",
-        "texture_pixel_store",
-        "texture_srgb",
-        "texture_vertex",
-        "transform_feedback_interleaved",
-        "transform_feedback_separated",
-        "transform_feedback_separated_2",
-        "transform_feedback_instanced",
-        "geo_vertex_format",
+        'draw_image_space',
+        'draw_instanced',
+        'draw_primitive_restart',
+        'draw_range_arrays',
+        'fbo_blit',
+        'fbo_multisample',
+        'fbo_new_blend_equation',
+        'fbo_rtt_draw_buffers',
+        'fbo_rtt_texture_array',
+        'fbo_rtt_depth_texture',
+        'fbo_read_pixels',
+        'sampler_object',
+        'sampler_filter',
+        'sampler_wrap',
+        'glsl_centroid',
+        'glsl_flat_smooth_interpolators',
+        'glsl_non_square_matrix',
+        'query_occlusion',
+        'draw_instanced_ubo',
+        'buffer_copy',
+        'buffer_uniform',
+        'texture_2d_array',
+        'texture_3d',
+        'texture_derivative',
+        'texture_fetch',
+        'texture_format',
+        'texture_grad',
+        'texture_immutable',
+        'texture_integer',
+        'texture_lod',
+        'texture_offset',
+        'texture_pixel_store',
+        'texture_srgb',
+        'texture_vertex',
+        'transform_feedback_interleaved',
+        'transform_feedback_separated',
+        'transform_feedback_separated_2',
+        'transform_feedback_instanced',
+        'geo_vertex_format',
     ],
 };
 
 function extractQuery()
 {
-    const p = window.location.search.indexOf("?q=");
+    const p = window.location.search.indexOf('?q=');
     if (p !== -1)
     {
         return window.location.search.substr(3);
     }
 
-    return "";
+    return '';
 }
 
-const panel = document.getElementById("panel") as HTMLDivElement;
-const content = document.getElementById("content") as HTMLDivElement;
-const viewer = document.getElementById("viewer") as HTMLIFrameElement;
+const panel = document.getElementById('panel') as HTMLDivElement;
+const content = document.getElementById('content') as HTMLDivElement;
+const viewer = document.getElementById('viewer') as HTMLIFrameElement;
 
-const filterInput = document.getElementById("filterInput") as HTMLInputElement;
-const clearFilterButton = document.getElementById("clearFilterButton") as HTMLAnchorElement;
+const filterInput = document.getElementById('filterInput') as HTMLInputElement;
+const clearFilterButton = document.getElementById('clearFilterButton') as HTMLAnchorElement;
 
-const expandButton = document.getElementById("expandButton") as HTMLSpanElement;
-expandButton.addEventListener("click", function (event)
+const expandButton = document.getElementById('expandButton') as HTMLSpanElement;
+expandButton.addEventListener('click', function (event)
 {
-    panel.classList.toggle("collapsed");
+    panel.classList.toggle('collapsed');
     event.preventDefault();
 });
 
@@ -96,20 +96,20 @@ if ((/(iPad|iPhone|iPod)/g).test(navigator.userAgent))
 {
     viewer.style.width = getComputedStyle(viewer).width;
     viewer.style.height = getComputedStyle(viewer).height;
-    viewer.setAttribute("scrolling", "no");
+    viewer.setAttribute('scrolling', 'no');
 }
 
-const container = document.createElement("div");
+const container = document.createElement('div');
 content.appendChild(container);
 
-const button = document.createElement("div");
-button.id = "button";
-button.textContent = "View source";
-button.addEventListener("click", function (event)
+const button = document.createElement('div');
+button.id = 'button';
+button.textContent = 'View source';
+button.addEventListener('click', function (event)
 {
     window.open(`https://github.com/feng3d-labs/webgl/tree/master/examples/src/${selected}.ts`);
 }, false);
-button.style.display = "none";
+button.style.display = 'none';
 document.body.appendChild(button);
 
 const links: { [name: string]: HTMLAnchorElement } = {};
@@ -119,22 +119,22 @@ for (const key in files)
 {
     const section = files[key];
 
-    const header = document.createElement("h2");
+    const header = document.createElement('h2');
     header.textContent = key;
-    header.setAttribute("data-category", key);
+    header.setAttribute('data-category', key);
     container.appendChild(header);
 
     for (let i = 0; i < section.length; i++)
     {
-        // eslint-disable-next-line no-loop-func
+
         (function (file)
         {
-            const link = document.createElement("a");
-            link.className = "link";
+            const link = document.createElement('a');
+            link.className = 'link';
             link.textContent = file;
             link.href = `src/${key}/${file}.html`;
-            link.setAttribute("target", "viewer");
-            link.addEventListener("click", function (event)
+            link.setAttribute('target', 'viewer');
+            link.addEventListener('click', function (event)
             {
                 if (event.button === 0)
                 {
@@ -156,20 +156,20 @@ function loadFile(file)
 
 function selectFile(file)
 {
-    if (selected !== null) links[selected].classList.remove("selected");
+    if (selected !== null) links[selected].classList.remove('selected');
 
-    links[file].classList.add("selected");
+    links[file].classList.add('selected');
 
     window.location.hash = file;
     viewer.focus();
 
-    button.style.display = "";
-    panel.classList.toggle("collapsed");
+    button.style.display = '';
+    panel.classList.toggle('collapsed');
 
     selected = file;
 }
 
-if (window.location.hash !== "")
+if (window.location.hash !== '')
 {
     loadFile(window.location.hash.substring(1));
 }
@@ -181,14 +181,14 @@ else
 
 // filter
 
-filterInput.addEventListener("input", function (e)
+filterInput.addEventListener('input', function (e)
 {
     updateFilter();
 });
 
-clearFilterButton.addEventListener("click", function (e)
+clearFilterButton.addEventListener('click', function (e)
 {
-    filterInput.value = "";
+    filterInput.value = '';
     updateFilter();
     e.preventDefault();
 });
@@ -196,16 +196,16 @@ clearFilterButton.addEventListener("click", function (e)
 function updateFilter()
 {
     const v = filterInput.value;
-    if (v !== "")
+    if (v !== '')
     {
-        window.history.replaceState({}, "", `?q=${v}${window.location.hash}`);
+        window.history.replaceState({}, '', `?q=${v}${window.location.hash}`);
     }
     else
     {
-        window.history.replaceState({}, "", window.location.pathname + window.location.hash);
+        window.history.replaceState({}, '', window.location.pathname + window.location.hash);
     }
 
-    const exp = new RegExp(v, "gi");
+    const exp = new RegExp(v, 'gi');
 
     for (const key in files)
     {
@@ -228,7 +228,7 @@ function filterExample(file, exp)
 
     if (res && res.length > 0)
     {
-        link.classList.remove("filtered");
+        link.classList.remove('filtered');
 
         for (let i = 0; i < res.length; i++)
         {
@@ -239,7 +239,7 @@ function filterExample(file, exp)
     }
     else
     {
-        link.classList.add("filtered");
+        link.classList.add('filtered');
         // link.innerHTML = file;
     }
 }
@@ -256,7 +256,7 @@ function layoutList()
         {
             const file = `${key}/${section[i]}`;
 
-            if (!links[file].classList.contains("filtered"))
+            if (!links[file].classList.contains('filtered'))
             {
                 collapsed = false;
                 break;
@@ -267,11 +267,11 @@ function layoutList()
 
         if (collapsed)
         {
-            element.classList.add("filtered");
+            element.classList.add('filtered');
         }
         else
         {
-            element.classList.remove("filtered");
+            element.classList.remove('filtered');
         }
     }
 }

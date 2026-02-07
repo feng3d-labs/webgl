@@ -1,4 +1,4 @@
-import { Sampler, Texture } from "@feng3d/render-api";
+import { Sampler, Texture } from '@feng3d/render-api';
 
 /**
  * 采样纹理。

@@ -1,14 +1,13 @@
 // @ts-nocheck
 
-import { vec3 } from "gl-matrix";
+import { vec3 } from 'gl-matrix';
 
-/* eslint-disable camelcase */
 function step(edge, x)
 {
     return [
         (x[0] < edge[0]) ? 0.0 : 1.0,
         (x[1] < edge[1]) ? 0.0 : 1.0,
-        (x[2] < edge[2]) ? 0.0 : 1.0
+        (x[2] < edge[2]) ? 0.0 : 1.0,
     ];
 }
 
@@ -18,7 +17,7 @@ function step_vec4(edge, x)
         (x[0] < edge[0]) ? 0.0 : 1.0,
         (x[1] < edge[1]) ? 0.0 : 1.0,
         (x[2] < edge[2]) ? 0.0 : 1.0,
-        (x[3] < edge[3]) ? 0.0 : 1.0
+        (x[3] < edge[3]) ? 0.0 : 1.0,
     ];
 }
 
@@ -27,7 +26,7 @@ function min(x, y)
     return [
         y[0] < x[0] ? y[0] : x[0],
         y[1] < x[1] ? y[1] : x[1],
-        y[2] < x[2] ? y[2] : x[2]
+        y[2] < x[2] ? y[2] : x[2],
     ];
 }
 
@@ -36,7 +35,7 @@ function max(x, y)
     return [
         y[0] > x[0] ? y[0] : x[0],
         y[1] > x[1] ? y[1] : x[1],
-        y[2] > x[2] ? y[2] : x[2]
+        y[2] > x[2] ? y[2] : x[2],
     ];
 }
 
@@ -46,7 +45,7 @@ function max_vec4(x, y)
         y[0] > x[0] ? y[0] : x[0],
         y[1] > x[1] ? y[1] : x[1],
         y[2] > x[2] ? y[2] : x[2],
-        y[3] > x[3] ? y[3] : x[3]
+        y[3] > x[3] ? y[3] : x[3],
     ];
 }
 
@@ -75,7 +74,7 @@ function mod289_vec3(x)
     return [
         x[0] - Math.floor(x[0] * temp) * 289.0,
         x[1] - Math.floor(x[1] * temp) * 289.0,
-        x[2] - Math.floor(x[2] * temp) * 289.0
+        x[2] - Math.floor(x[2] * temp) * 289.0,
     ];
 }
 
@@ -87,7 +86,7 @@ function mod289_vec4(x)
         x[0] - Math.floor(x[0] * temp) * 289.0,
         x[1] - Math.floor(x[1] * temp) * 289.0,
         x[2] - Math.floor(x[2] * temp) * 289.0,
-        x[3] - Math.floor(x[3] * temp) * 289.0
+        x[3] - Math.floor(x[3] * temp) * 289.0,
     ];
 }
 
@@ -97,7 +96,7 @@ function permute_vec4(x)
         ((x[0] * 34.0) + 1.0) * x[0],
         ((x[1] * 34.0) + 1.0) * x[1],
         ((x[2] * 34.0) + 1.0) * x[2],
-        ((x[3] * 34.0) + 1.0) * x[3]
+        ((x[3] * 34.0) + 1.0) * x[3],
     ]);
 }
 
@@ -107,7 +106,7 @@ function taylorInvSqrt_vec4(r)
         1.79284291400159 - 0.85373472095314 * r[0],
         1.79284291400159 - 0.85373472095314 * r[1],
         1.79284291400159 - 0.85373472095314 * r[2],
-        1.79284291400159 - 0.85373472095314 * r[3]
+        1.79284291400159 - 0.85373472095314 * r[3],
     ];
 }
 
@@ -182,7 +181,7 @@ export function snoise(v: [number, number, number])
     const ns = [
         0.28571430,
         -0.92857140,
-        0.14285715
+        0.14285715,
     ];
 
     // vec4 j = p - 49.0f * floor(p * ns.z * ns.z);  //  mod(p,7*7)
@@ -190,7 +189,7 @@ export function snoise(v: [number, number, number])
         p[0] - 49.0 * Math.floor(p[0] * ns[2] * ns[2]),
         p[1] - 49.0 * Math.floor(p[1] * ns[2] * ns[2]),
         p[2] - 49.0 * Math.floor(p[2] * ns[2] * ns[2]),
-        p[3] - 49.0 * Math.floor(p[3] * ns[2] * ns[2])
+        p[3] - 49.0 * Math.floor(p[3] * ns[2] * ns[2]),
     ];
 
     // vec4 x_ = floor(j * ns.z);
@@ -199,13 +198,13 @@ export function snoise(v: [number, number, number])
         Math.floor(j[0] * ns[2]),
         Math.floor(j[1] * ns[2]),
         Math.floor(j[2] * ns[2]),
-        Math.floor(j[3] * ns[2])
+        Math.floor(j[3] * ns[2]),
     ];
     const y_ = [
         Math.floor(j[0] - 7.0 * x_[0]),
         Math.floor(j[1] - 7.0 * x_[1]),
         Math.floor(j[2] - 7.0 * x_[2]),
-        Math.floor(j[3] - 7.0 * x_[3])
+        Math.floor(j[3] - 7.0 * x_[3]),
     ];
 
     // vec4 x = x_ *ns.x + vec4(ns.y, ns.y, ns.y, ns.y);
@@ -215,19 +214,19 @@ export function snoise(v: [number, number, number])
         x_[0] * ns[0] + ns[1],
         x_[1] * ns[0] + ns[1],
         x_[2] * ns[0] + ns[1],
-        x_[3] * ns[0] + ns[1]
+        x_[3] * ns[0] + ns[1],
     ];
     const y = [
         y_[0] * ns[0] + ns[1],
         y_[1] * ns[0] + ns[1],
         y_[2] * ns[0] + ns[1],
-        y_[3] * ns[0] + ns[1]
+        y_[3] * ns[0] + ns[1],
     ];
     const h = [
         1.0 - Math.abs(x[0]) - Math.abs(y[0]),
         1.0 - Math.abs(x[1]) - Math.abs(y[1]),
         1.0 - Math.abs(x[2]) - Math.abs(y[2]),
-        1.0 - Math.abs(x[3]) - Math.abs(y[3])
+        1.0 - Math.abs(x[3]) - Math.abs(y[3]),
     ];
 
     // vec4 b0 = vec4( vec2(x.x, x.y), vec2(y.x, y.y) );
@@ -243,13 +242,13 @@ export function snoise(v: [number, number, number])
         Math.floor(b0[0]) * 2.0 + 1.0,
         Math.floor(b0[1]) * 2.0 + 1.0,
         Math.floor(b0[2]) * 2.0 + 1.0,
-        Math.floor(b0[3]) * 2.0 + 1.0
+        Math.floor(b0[3]) * 2.0 + 1.0,
     ];
     const s1 = [
         Math.floor(b1[0]) * 2.0 + 1.0,
         Math.floor(b1[1]) * 2.0 + 1.0,
         Math.floor(b1[2]) * 2.0 + 1.0,
-        Math.floor(b1[3]) * 2.0 + 1.0
+        Math.floor(b1[3]) * 2.0 + 1.0,
     ];
     const sh = step_vec4(h, [0.0, 0.0, 0.0, 0.0]);
     sh[0] = -sh[0];
@@ -263,13 +262,13 @@ export function snoise(v: [number, number, number])
         b0[0] + s0[0] * sh[0],
         b0[2] + s0[2] * sh[0],
         b0[1] + s0[1] * sh[1],
-        b0[3] + s0[3] * sh[1]
+        b0[3] + s0[3] * sh[1],
     ];
     const a1 = [
         b1[0] + s1[0] * sh[2],
         b1[2] + s1[2] * sh[2],
         b1[1] + s1[1] * sh[3],
-        b1[3] + s1[3] * sh[3]
+        b1[3] + s1[3] * sh[3],
     ];
 
     // vec3 p0 = vec3(a0.x, a0.y, h.x);
@@ -298,12 +297,12 @@ export function snoise(v: [number, number, number])
         0.6 - vec3.dot(x0, x0),
         0.6 - vec3.dot(x1, x1),
         0.6 - vec3.dot(x2, x2),
-        0.6 - vec3.dot(x3, x3)
+        0.6 - vec3.dot(x3, x3),
     ], [
         0.0,
         0.0,
         0.0,
-        0.0
+        0.0,
     ]);
     m[0] *= m[0];
     m[1] *= m[1];
@@ -316,11 +315,11 @@ export function snoise(v: [number, number, number])
         m[0] * m[0],
         m[1] * m[1],
         m[2] * m[2],
-        m[3] * m[3]
+        m[3] * m[3],
     ], [
         vec3.dot(p0, x0),
         vec3.dot(p1, x1),
         vec3.dot(p2, x2),
-        vec3.dot(p3, x3)
+        vec3.dot(p3, x3),
     ]);
 }

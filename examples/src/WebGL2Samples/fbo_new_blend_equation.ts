@@ -1,22 +1,22 @@
-import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { CanvasContext, RenderObject, RenderPass, RenderPassObject, RenderPipeline, Sampler, Texture, VertexAttributes, Viewport } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { getShaderSource, loadImage } from "./utility";
+import { getShaderSource, loadImage } from './utility';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = Math.min(window.innerWidth, window.innerHeight);
 canvas.height = canvas.width;
 document.body.appendChild(canvas);
 
-const renderingContext: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+const renderingContext: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 const webgl = new WebGL(renderingContext);
 
 // -- Divide viewport
 
 const windowSize = {
     x: canvas.width,
-    y: canvas.height
+    y: canvas.height,
 };
 
 const Corners = {
@@ -24,7 +24,7 @@ const Corners = {
     TOP_RIGHT: 1,
     BOTTOM_RIGHT: 2,
     BOTTOM_LEFT: 3,
-    MAX: 4
+    MAX: 4,
 };
 
 const viewport = new Array(Corners.MAX);
@@ -33,35 +33,35 @@ viewport[Corners.BOTTOM_LEFT] = {
     x: 0,
     y: 0,
     z: windowSize.x / 2,
-    w: windowSize.y / 2
+    w: windowSize.y / 2,
 };
 
 viewport[Corners.BOTTOM_RIGHT] = {
     x: windowSize.x / 2,
     y: 0,
     z: windowSize.x / 2,
-    w: windowSize.y / 2
+    w: windowSize.y / 2,
 };
 
 viewport[Corners.TOP_RIGHT] = {
     x: windowSize.x / 2,
     y: windowSize.y / 2,
     z: windowSize.x / 2,
-    w: windowSize.y / 2
+    w: windowSize.y / 2,
 };
 
 viewport[Corners.TOP_LEFT] = {
     x: 0,
     y: windowSize.y / 2,
     z: windowSize.x / 2,
-    w: windowSize.y / 2
+    w: windowSize.y / 2,
 };
 
 // -- Initialize program
 
 const program: RenderPipeline = {
-    vertex: { code: getShaderSource("vs") },
-    fragment: { code: getShaderSource("fs"), targets: [{ blend: {} }] },
+    vertex: { code: getShaderSource('vs') },
+    fragment: { code: getShaderSource('fs'), targets: [{ blend: {} }] },
 };
 
 // -- Initialize buffer
@@ -71,7 +71,7 @@ const positions = new Float32Array([
     1.0, 1.0,
     1.0, 1.0,
     -1.0, 1.0,
-    -1.0, -1.0
+    -1.0, -1.0,
 ]);
 
 const texcoords = new Float32Array([
@@ -80,31 +80,33 @@ const texcoords = new Float32Array([
     1.0, 0.0,
     1.0, 0.0,
     0.0, 0.0,
-    0.0, 1.0
+    0.0, 1.0,
 ]);
 
 // -- Initilize vertex array
 const vertexArray: { vertices?: VertexAttributes } = {
     vertices: {
-        position: { data: positions, format: "float32x2" },
-        textureCoordinates: { data: texcoords, format: "float32x2" },
-    }
+        position: { data: positions, format: 'float32x2' },
+        textureCoordinates: { data: texcoords, format: 'float32x2' },
+    },
 };
 
 // -- Load texture then render
 const sampler: Sampler = {
-    minFilter: "linear",
-    magFilter: "linear"
+    minFilter: 'linear',
+    magFilter: 'linear',
 };
-const imageUrl = "../../assets/img/Di-3d.png";
+const imageUrl = '../../assets/img/Di-3d.png';
 let texture: Texture;
 loadImage(imageUrl, function (image)
 {
     texture = {
-        size: [image.width, image.height],
+        descriptor: {
+            size: [image.width, image.height],
+            format: 'rgba8unorm',
+            generateMipmap: true,
+        },
         sources: [{ image, mipLevel: 0 }],
-        format: "rgba8unorm",
-        generateMipmap: true,
     };
 
     render();
@@ -116,19 +118,19 @@ function render()
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        0.0, 0.0, 0.0, 1.0,
     ]);
 
     const renderObject: RenderObject = {
         pipeline: program,
-        bindingResources: { mvp: matrix, diffuse: { texture, sampler } },
+        bindingResources: { mvp: { value: matrix }, diffuse: { texture, sampler } },
         vertices: vertexArray.vertices,
-        draw: { __type__: "DrawVertex", vertexCount: 6 },
+        draw: { __type__: 'DrawVertex', vertexCount: 6 },
     };
 
     const renderObjects: RenderPassObject[] = [];
     const renderPass: RenderPass = {
-        descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: "clear" }] },
+        descriptor: { colorAttachments: [{ clearValue: [0.5, 0.0, 0.0, 1.0], loadOp: 'clear' }] },
         renderPassObjects: renderObjects,
     };
 
@@ -138,7 +140,7 @@ function render()
 
         if (i === Corners.TOP_LEFT)
         {
-            //pass
+            // pass
         }
         else if (i === Corners.TOP_RIGHT)
         {
@@ -161,11 +163,11 @@ function render()
                                 ...program.fragment.targets[0],
                                 blend: {
                                     ...program.fragment.targets[0].blend,
-                                    color: { ...program.fragment.targets[0].blend.color, operation: "min" },
-                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "min" },
+                                    color: { ...program.fragment.targets[0].blend.color, operation: 'min' },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: 'min' },
                                 },
-                            }]
-                        }
+                            }],
+                        },
                     },
                 });
         }
@@ -182,11 +184,11 @@ function render()
                                 ...program.fragment.targets[0],
                                 blend: {
                                     ...program.fragment.targets[0].blend,
-                                    color: { ...program.fragment.targets[0].blend.color, operation: "max" },
-                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: "max" },
+                                    color: { ...program.fragment.targets[0].blend.color, operation: 'max' },
+                                    alpha: { ...program.fragment.targets[0].blend.alpha, operation: 'max' },
                                 },
-                            }]
-                        }
+                            }],
+                        },
                     },
                 });
         }

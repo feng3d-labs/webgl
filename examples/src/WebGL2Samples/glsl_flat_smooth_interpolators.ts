@@ -1,28 +1,28 @@
-import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4, vec3 } from "gl-matrix";
-import { GlTFLoader, Primitive } from "./third-party/gltf-loader";
-import { getShaderSource } from "./utility";
+import { CanvasContext, IndicesDataTypes, RenderPass, RenderPassObject, RenderPipeline, VertexAttributes, VertexFormat, Viewport } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4, vec3 } from 'gl-matrix';
+import { GlTFLoader, Primitive } from './third-party/gltf-loader';
+import { getShaderSource } from './utility';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const rc: CanvasContext = { canvasId: "glcanvas", webGLcontextId: "webgl2" };
+const rc: CanvasContext = { canvasId: 'glcanvas', webGLcontextId: 'webgl2' };
 const webgl = new WebGL(rc);
 
 // -- Divide viewport
 const canvasSize = {
     x: canvas.width,
-    y: canvas.height
+    y: canvas.height,
 };
 
 const VIEWPORTS = {
     LEFT: 0,
     RIGHT: 1,
-    MAX: 2
+    MAX: 2,
 };
 
 const viewport: Viewport[] = new Array(VIEWPORTS.MAX);
@@ -31,31 +31,31 @@ viewport[VIEWPORTS.LEFT] = {
     x: 0,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
-    height: canvasSize.x / 2
+    height: canvasSize.x / 2,
 };
 
 viewport[VIEWPORTS.RIGHT] = {
     x: canvasSize.x / 2,
     y: canvasSize.y - canvasSize.x / 2 - 50,
     width: canvasSize.x / 2,
-    height: canvasSize.x / 2
+    height: canvasSize.x / 2,
 };
 
 // -- Initialize program
 const programs: RenderPipeline[] = [
     {
-        vertex: { code: getShaderSource("vs-flat") }, fragment: { code: getShaderSource("fs-flat") },
-        depthStencil: { depthCompare: "less-equal" },
-        primitive: { topology: "triangle-list" },
+        vertex: { code: getShaderSource('vs-flat') }, fragment: { code: getShaderSource('fs-flat') },
+        depthStencil: { depthCompare: 'less-equal' },
+        primitive: { topology: 'triangle-list' },
     },
     {
-        vertex: { code: getShaderSource("vs-smooth") }, fragment: { code: getShaderSource("fs-smooth") },
-        depthStencil: { depthCompare: "less-equal" },
-        primitive: { topology: "triangle-list" },
-    }
+        vertex: { code: getShaderSource('vs-smooth') }, fragment: { code: getShaderSource('fs-smooth') },
+        depthStencil: { depthCompare: 'less-equal' },
+        primitive: { topology: 'triangle-list' },
+    },
 ];
 // -- Load gltf then render
-const gltfUrl = "../../assets/gltf/di_model_tri.gltf";
+const gltfUrl = '../../assets/gltf/di_model_tri.gltf';
 const glTFLoader = new GlTFLoader();
 
 glTFLoader.loadGLTF(gltfUrl, function (glTF)
@@ -102,12 +102,12 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
             vertexArray = {
                 vertices: {
                     position: {
-                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[positionInfo.size],
-                        arrayStride: positionInfo.stride, offset: positionInfo.offset
+                        data: vertices, format: (['float32', 'float32x2', 'float32x3', 'float32x4'] as VertexFormat[])[positionInfo.size],
+                        arrayStride: positionInfo.stride, offset: positionInfo.offset,
                     },
                     normal: {
-                        data: vertices, format: (["float32", "float32x2", "float32x3", "float32x4"] as VertexFormat[])[normalInfo.size],
-                        arrayStride: normalInfo.stride, offset: normalInfo.offset
+                        data: vertices, format: (['float32', 'float32x2', 'float32x3', 'float32x4'] as VertexFormat[])[normalInfo.size],
+                        arrayStride: normalInfo.stride, offset: normalInfo.offset,
                     },
                 },
             };
@@ -140,8 +140,8 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
         const renderObjects: RenderPassObject[] = [];
         const rp: RenderPass = {
             descriptor: {
-                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: "clear" }],
-                depthStencilAttachment: { depthLoadOp: "clear" }
+                colorAttachments: [{ clearValue: [0.0, 0.0, 0.0, 1.0], loadOp: 'clear' }],
+                depthStencilAttachment: { depthLoadOp: 'clear' },
             },
             renderPassObjects: renderObjects,
         };
@@ -172,12 +172,12 @@ glTFLoader.loadGLTF(gltfUrl, function (glTF)
                             viewport: viewport[i],
                             pipeline: programs[i],
                             bindingResources: {
-                                mvp: localMVP,
-                                mvNormal: localMVNormal,
+                                mvp: { value: localMVP as Float32Array },
+                                mvNormal: { value: localMVNormal as Float32Array },
                             },
                             vertices: vertexArray.vertices,
                             indices,
-                            draw: { __type__: "DrawIndexed", indexCount: primitive.indices.length, firstIndex: 0 },
+                            draw: { __type__: 'DrawIndexed', indexCount: primitive.indices.length, firstIndex: 0 },
                         });
                 }
             }

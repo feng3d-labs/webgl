@@ -1,7 +1,7 @@
-import { reactive } from "@feng3d/reactivity";
-import { RenderPass, RenderObject } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
-import { mat4 } from "gl-matrix";
+import { reactive } from '@feng3d/reactivity';
+import { RenderPass, RenderObject } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
+import { mat4 } from 'gl-matrix';
 
 let squareRotation = 0.0;
 
@@ -12,14 +12,14 @@ main();
 //
 function main()
 {
-  const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
+    const canvas = document.querySelector('#glcanvas') as HTMLCanvasElement;
 
-  const webgl = new WebGL({ canvasId: "glcanvas", webGLcontextId: "webgl" });
+    const webgl = new WebGL({ canvasId: 'glcanvas', webGLcontextId: 'webgl' });
 
-  const renderObject: RenderObject = {
-    pipeline: {
-      vertex: {
-        code: `
+    const renderObject: RenderObject = {
+        pipeline: {
+            vertex: {
+                code: `
         attribute vec4 aVertexPosition;
         attribute vec4 aVertexColor;
     
@@ -33,73 +33,73 @@ function main()
           vColor = aVertexColor;
         }
       ` }, fragment: {
-        code: `
+                code: `
         varying lowp vec4 vColor;
     
         void main(void) {
           gl_FragColor = vColor;
         }
       ` },
-      depthStencil: { depthCompare: "less-equal" },
-      primitive: { topology: "triangle-strip" },
-    },
-    vertices: {
-      aVertexPosition: {
-        format: "float32x2",
-        data: new Float32Array([
-          1.0, 1.0,
-          -1.0, 1.0,
-          1.0, -1.0,
-          -1.0, -1.0,
-        ]),
-      },
-      aVertexColor: {
-        format: "float32x4",
-        data: new Float32Array([
-          1.0, 1.0, 1.0, 1.0, // white
-          1.0, 0.0, 0.0, 1.0, // red
-          0.0, 1.0, 0.0, 1.0, // green
-          0.0, 0.0, 1.0, 1.0, // blue
-        ]),
-      },
-    },
-    draw: { __type__: "DrawVertex", firstVertex: 0, vertexCount: 4 },
-    bindingResources: {},
-  };
+            depthStencil: { depthCompare: 'less-equal' },
+            primitive: { topology: 'triangle-strip' },
+        },
+        vertices: {
+            aVertexPosition: {
+                format: 'float32x2',
+                data: new Float32Array([
+                    1.0, 1.0,
+                    -1.0, 1.0,
+                    1.0, -1.0,
+                    -1.0, -1.0,
+                ]),
+            },
+            aVertexColor: {
+                format: 'float32x4',
+                data: new Float32Array([
+                    1.0, 1.0, 1.0, 1.0, // white
+                    1.0, 0.0, 0.0, 1.0, // red
+                    0.0, 1.0, 0.0, 1.0, // green
+                    0.0, 0.0, 1.0, 1.0, // blue
+                ]),
+            },
+        },
+        draw: { __type__: 'DrawVertex', firstVertex: 0, vertexCount: 4 },
+        bindingResources: {},
+    };
 
-  const renderPass: RenderPass = {
-    descriptor: {
-      colorAttachments: [{
-        clearValue: [0.0, 0.0, 0.0, 1.0],
-        loadOp: "clear",
-      }],
-      depthStencilAttachment: {
-        depthClearValue: 1.0,
-        depthLoadOp: "clear",
-      },
-    },
-    renderPassObjects: [renderObject],
-  };
+    const renderPass: RenderPass = {
+        descriptor: {
+            colorAttachments: [{
+                clearValue: [0.0, 0.0, 0.0, 1.0],
+                loadOp: 'clear',
+            }],
+            depthStencilAttachment: {
+                depthClearValue: 1.0,
+                depthLoadOp: 'clear',
+            },
+        },
+        renderPassObjects: [renderObject],
+    };
 
-  let then = 0;
+    let then = 0;
 
-  // Draw the scene repeatedly
-  function render(now: number)
-  {
-    now *= 0.001; // convert to seconds
-    const deltaTime = now - then;
-    then = now;
+    // Draw the scene repeatedly
+    function render(now: number)
+    {
+        now *= 0.001; // convert to seconds
+        const deltaTime = now - then;
+        then = now;
 
-    const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
+        const { projectionMatrix, modelViewMatrix } = drawScene(canvas, deltaTime);
 
-    reactive(renderObject.bindingResources).uProjectionMatrix = projectionMatrix;
-    reactive(renderObject.bindingResources).uModelViewMatrix = modelViewMatrix;
+        reactive(renderObject.bindingResources).uProjectionMatrix = { value: projectionMatrix as Float32Array };
+        reactive(renderObject.bindingResources).uModelViewMatrix = { value: modelViewMatrix as Float32Array };
 
-    webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
+        webgl.submit({ commandEncoders: [{ passEncoders: [renderPass] }] });
 
+        requestAnimationFrame(render);
+    }
     requestAnimationFrame(render);
-  }
-  requestAnimationFrame(render);
 }
 
 //
@@ -107,45 +107,45 @@ function main()
 //
 function drawScene(canvas: HTMLCanvasElement, deltaTime: number)
 {
-  // Create a perspective matrix, a special matrix that is
-  // used to simulate the distortion of perspective in a camera.
-  // Our field of view is 45 degrees, with a width/height
-  // ratio that matches the display size of the canvas
-  // and we only want to see objects between 0.1 units
-  // and 100 units away from the camera.
+    // Create a perspective matrix, a special matrix that is
+    // used to simulate the distortion of perspective in a camera.
+    // Our field of view is 45 degrees, with a width/height
+    // ratio that matches the display size of the canvas
+    // and we only want to see objects between 0.1 units
+    // and 100 units away from the camera.
 
-  const fieldOfView = 45 * Math.PI / 180; // in radians
-  const aspect = canvas.clientWidth / canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
-  const projectionMatrix = mat4.create();
+    const fieldOfView = 45 * Math.PI / 180; // in radians
+    const aspect = canvas.clientWidth / canvas.clientHeight;
+    const zNear = 0.1;
+    const zFar = 100.0;
+    const projectionMatrix = mat4.create();
 
-  // note: glmatrix.js always has the first argument
-  // as the destination to receive the result.
-  mat4.perspective(projectionMatrix,
-    fieldOfView,
-    aspect,
-    zNear,
-    zFar);
+    // note: glmatrix.js always has the first argument
+    // as the destination to receive the result.
+    mat4.perspective(projectionMatrix,
+        fieldOfView,
+        aspect,
+        zNear,
+        zFar);
 
-  // Set the drawing position to the "identity" point, which is
-  // the center of the scene.
-  const modelViewMatrix = mat4.create();
+    // Set the drawing position to the "identity" point, which is
+    // the center of the scene.
+    const modelViewMatrix = mat4.create();
 
-  // Now move the drawing position a bit to where we want to
-  // start drawing the square.
+    // Now move the drawing position a bit to where we want to
+    // start drawing the square.
 
-  mat4.translate(modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0]); // amount to translate
-  mat4.rotate(modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to rotate
-    squareRotation, // amount to rotate in radians
-    [0, 0, 1]); // axis to rotate around
+    mat4.translate(modelViewMatrix, // destination matrix
+        modelViewMatrix, // matrix to translate
+        [-0.0, 0.0, -6.0]); // amount to translate
+    mat4.rotate(modelViewMatrix, // destination matrix
+        modelViewMatrix, // matrix to rotate
+        squareRotation, // amount to rotate in radians
+        [0, 0, 1]); // axis to rotate around
 
-  // Update the rotation for the next draw
+    // Update the rotation for the next draw
 
-  squareRotation += deltaTime;
+    squareRotation += deltaTime;
 
-  return { projectionMatrix, modelViewMatrix };
+    return { projectionMatrix, modelViewMatrix };
 }

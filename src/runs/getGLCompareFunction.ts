@@ -1,6 +1,6 @@
-import { CompareFunction } from "@feng3d/render-api";
+import { CompareFunction } from '@feng3d/render-api';
 
-export function getIGLCompareFunction(depthCompare: CompareFunction)
+export function getGLCompareFunction(depthCompare: CompareFunction)
 {
     const glDepthCompare: GLCompareFunction = depthCompareMap[depthCompare];
 
@@ -10,14 +10,14 @@ export function getIGLCompareFunction(depthCompare: CompareFunction)
 }
 
 const depthCompareMap: { [key: string]: GLCompareFunction } = {
-    never: "NEVER",
-    less: "LESS",
-    equal: "EQUAL",
-    "less-equal": "LEQUAL",
-    greater: "GREATER",
-    "not-equal": "NOTEQUAL",
-    "greater-equal": "GEQUAL",
-    always: "ALWAYS",
+    never: 'NEVER',
+    less: 'LESS',
+    equal: 'EQUAL',
+    'less-equal': 'LEQUAL',
+    greater: 'GREATER',
+    'not-equal': 'NOTEQUAL',
+    'greater-equal': 'GEQUAL',
+    always: 'ALWAYS',
 };
 
 /**
@@ -36,4 +36,4 @@ const depthCompareMap: { [key: string]: GLCompareFunction } = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/depthFunc
  */
-export type GLCompareFunction = "NEVER" | "LESS" | "EQUAL" | "LEQUAL" | "GREATER" | "NOTEQUAL" | "GEQUAL" | "ALWAYS";
+export type GLCompareFunction = 'NEVER' | 'LESS' | 'EQUAL' | 'LEQUAL' | 'GREATER' | 'NOTEQUAL' | 'GEQUAL' | 'ALWAYS';

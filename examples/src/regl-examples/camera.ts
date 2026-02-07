@@ -1,20 +1,20 @@
-import { RenderObject } from "@feng3d/render-api";
-import { WebGL } from "@feng3d/webgl";
+import { RenderObject } from '@feng3d/render-api';
+import { WebGL } from '@feng3d/webgl';
 
-import { angleNormals } from "./mikolalysenko/angle-normals";
-import * as bunny from "./mikolalysenko/bunny";
-import { createCamera } from "./util/camera";
+import { angleNormals } from './mikolalysenko/angle-normals';
+import * as bunny from './mikolalysenko/bunny';
+import { createCamera } from './util/camera';
 
-const canvas = document.createElement("canvas");
-canvas.id = "glcanvas";
+const canvas = document.createElement('canvas');
+canvas.id = 'glcanvas';
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
-const webgl = new WebGL({ canvasId: "glcanvas", webGLContextAttributes: { antialias: true } });
+const webgl = new WebGL({ canvasId: 'glcanvas', webGLContextAttributes: { antialias: true } });
 
 const camera = createCamera({
-    center: [0, 2.5, 0]
+    center: [0, 2.5, 0],
 });
 
 const positions = bunny.positions.flat();
@@ -23,11 +23,11 @@ const normals = angleNormals(bunny.cells, bunny.positions).flat();
 
 const renderObject: RenderObject = {
     vertices: {
-        position: { data: new Float32Array(positions), format: "float32x3" },
-        normal: { data: new Float32Array(normals), format: "float32x3" },
+        position: { data: new Float32Array(positions), format: 'float32x3' },
+        normal: { data: new Float32Array(normals), format: 'float32x3' },
     },
     indices: new Uint16Array(indices),
-    draw: { __type__: "DrawIndexed", indexCount: indices.length },
+    draw: { __type__: 'DrawIndexed', indexCount: indices.length },
     bindingResources: {},
     pipeline: {
         vertex: {
@@ -48,7 +48,7 @@ const renderObject: RenderObject = {
             targets: [{ blend: {} }],
         },
         depthStencil: { depthWriteEnabled: true },
-    }
+    },
 };
 
 function draw()
@@ -63,10 +63,10 @@ function draw()
             passEncoders: [
                 {
                     descriptor: { colorAttachments: [{ clearValue: [0, 0, 0, 1] }] },
-                    renderPassObjects: [renderObject]
-                }
-            ]
-        }]
+                    renderPassObjects: [renderObject],
+                },
+            ],
+        }],
     });
 
     requestAnimationFrame(draw);

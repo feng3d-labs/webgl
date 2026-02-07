@@ -1,6 +1,6 @@
-import { TextureLike } from "@feng3d/render-api";
+import { TextureLike } from '@feng3d/render-api';
 
-declare module "@feng3d/render-api"
+declare module '@feng3d/render-api'
 {
     /**
      * 被操作的纹理相关信息。

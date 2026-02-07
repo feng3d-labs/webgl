@@ -1,4 +1,4 @@
-import { TextureDimension } from "@feng3d/render-api";
+import { TextureDimension } from '@feng3d/render-api';
 
 /**
  * 纹理绑定点。
@@ -13,9 +13,9 @@ import { TextureDimension } from "@feng3d/render-api";
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindTexture
  */
-export type GLTextureTarget = "TEXTURE_2D" | "TEXTURE_CUBE_MAP" | "TEXTURE_3D" | "TEXTURE_2D_ARRAY";
+export type GLTextureTarget = 'TEXTURE_2D' | 'TEXTURE_CUBE_MAP' | 'TEXTURE_3D' | 'TEXTURE_2D_ARRAY';
 
-export function getGLTextureTarget(dimension: TextureDimension = "2d")
+export function getGLTextureTarget(dimension: TextureDimension = '2d')
 {
     const target: GLTextureTarget = dimensionMap[dimension];
 
@@ -25,10 +25,10 @@ export function getGLTextureTarget(dimension: TextureDimension = "2d")
 }
 
 const dimensionMap: { [key: string]: GLTextureTarget } = {
-    "1d": undefined,
-    "2d": "TEXTURE_2D",
-    "2d-array": "TEXTURE_2D_ARRAY",
-    cube: "TEXTURE_CUBE_MAP",
-    "cube-array": undefined,
-    "3d": "TEXTURE_3D",
+    '1d': undefined,
+    '2d': 'TEXTURE_2D',
+    '2d-array': 'TEXTURE_2D_ARRAY',
+    cube: 'TEXTURE_CUBE_MAP',
+    'cube-array': undefined,
+    '3d': 'TEXTURE_3D',
 };

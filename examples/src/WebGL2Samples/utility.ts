@@ -1,6 +1,6 @@
 export function getShaderSource(id: string)
 {
-    return document.getElementById(id).textContent.replace(/^\s+|\s+$/g, "");
+    return document.getElementById(id).textContent.replace(/^\s+|\s+$/g, '');
 }
 
 export function loadImage(url: string, onload: (img: HTMLImageElement) => void)
