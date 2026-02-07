@@ -23,6 +23,9 @@ export default defineConfig({
         port: 3001,
         open: '/test.html',
     },
+    define: {
+        __DEV__: 'true',
+    },
     build: {
         outDir: resolve(__dirname, 'test_dist'),
         rollupOptions: {

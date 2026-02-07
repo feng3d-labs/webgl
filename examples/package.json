@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@feng3d/reactivity": "^1.0.4",
-    "@feng3d/webgl": "0.0.4",
+    "@feng3d/webgl": "*",
     "dat.gui": "^0.7.9",
     "gl-matrix": "^3.4.3"
   }

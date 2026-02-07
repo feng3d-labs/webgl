@@ -59,12 +59,13 @@
     "vite": "6.3.5",
     "vitest": "3.1.3",
     "concurrently": "9.1.2",
+    "fast-glob": "^3.3.2",
     "husky": "9.1.7",
     "lint-staged": "15.2.10"
   },
   "dependencies": {
     "@feng3d/reactivity": "1.0.12",
-    "@feng3d/render-api": "0.0.13",
+    "@feng3d/render-api": "0.1.0",
     "@feng3d/watcher": "0.8.14"
   },
   "lint-staged": {
