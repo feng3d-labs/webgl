@@ -55,7 +55,7 @@ jobs:
       if: steps.check-npm-version.outputs.publish == 'true'
       run: |
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-        npm run release -- --access public
+        npm run release
 
     - name: Create git tag
       if: steps.check-npm-version.outputs.publish == 'true'
